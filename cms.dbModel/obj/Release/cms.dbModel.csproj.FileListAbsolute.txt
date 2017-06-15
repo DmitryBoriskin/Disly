@@ -1,0 +1,5 @@
+C:\Users\D-Boriskin\documents\visual studio 2013\Projects\Disly\cms.dbModel\bin\Release\cms.dbModel.dll
+C:\Users\D-Boriskin\documents\visual studio 2013\Projects\Disly\cms.dbModel\bin\Release\cms.dbModel.pdb
+C:\Users\D-Boriskin\documents\visual studio 2013\Projects\Disly\cms.dbModel\obj\Release\cms.dbModel.dll
+C:\Users\D-Boriskin\documents\visual studio 2013\Projects\Disly\cms.dbModel\obj\Release\cms.dbModel.pdb
+C:\Users\D-Boriskin\documents\visual studio 2013\Projects\Disly\cms.dbModel\obj\Release\cms.dbModel.csprojResolveAssemblyReference.cache

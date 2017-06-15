@@ -1,0 +1,52 @@
+﻿@model PhotoAlbumsViewModel
+@{
+    FilterViewModel model = ViewBag.Filter;
+}
+
+@using (Html.BeginForm())
+{
+    <div id="Buttons">
+        @if (Model.UserResolution.Write)
+        {
+            @Html.ActionLink("Создать", "Create", "photoalbums", new { @id=@Guid.NewGuid() }, new { @class="Button BtnCreate" })
+        }
+    </div>
+
+    <div id="Content">
+        <div id="TitleBlock">@ViewBag.Title</div>
+        @if (Model.UserResolution.Read)
+        {
+            if(Model.List != null)
+            {
+                foreach(PhotoAlbumsModel Item in Model.List)
+                {
+                    <div class="ListItem User">
+                        @if (@Item.Preview != string.Empty && @Item.Preview != null)
+                        {                            
+                            <a class="LI_Imege" href="admin/photoalbums/edit/@Item.Id/">
+                                <img class="photo-preview" src="@Item.Preview" alt="">
+                            </a>
+                        }
+                        @Html.ActionLink(Item.Title, "edit", "photoalbums", new { @id=Item.Id }, new { @class= "LI_Caption" })
+                        <div class="LI_Date">
+                            <span>Дата публикации: </span> @Convert.ToDateTime(Item.Date).ToString("dd MMMM yyyy")
+                        </div>
+                    </div>
+
+                }
+            }
+        }
+        else { <p>У Вас нет прав на просмотр фотоальбомов.</p>}
+
+
+    </div>
+
+    @*<div id="DopInfo">
+        <div class="DopCaption">Фильтр</div>
+        @Html.Partial("Partial/Filter", model)
+        @Html.TextBoxFor(m => Model.SearchLine, new { @class = "uc_input", @placeholder = "Поиск", @MaxLength = "512", @data_help = "Поиск по названию новости." })
+        @Html.TextBoxFor(m => Model.Begin, new { @class = "uc_input", type = "date", @title = "Дата публикации с" })
+        @Html.TextBoxFor(m => Model.End, new { @class = "uc_input", type = "date", @title = "по" })
+        <button type="submit" class="btn btn-primary">Найти</button>
+    </div>*@
+}

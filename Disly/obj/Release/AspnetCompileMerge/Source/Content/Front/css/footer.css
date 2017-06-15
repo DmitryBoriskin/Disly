@@ -1,0 +1,46 @@
+footer {
+	background-color: #001626;
+	color: #8FA4B2;
+}
+
+.footer-panel-item {
+	background-color: #001F36;
+	display: inline-block;
+	height: 87px;
+	width: 100%;
+	text-align: center;
+	vertical-align: middle;
+	padding-top: 33px;
+	padding-bottom: 25px;
+	margin-bottom: 10px;
+	margin-top: 10px;
+	font-size: 12px;
+	margin-top: 19px;
+	margin-bottom: 20px;
+}
+
+/*ÐžÑ‚ÑÑƒÐ¿ Ð´Ð»Ñ ÑÑÑ‹Ð»Ð¾Ðº*/
+.footer-panel-item div {
+	margin-bottom: 3%;
+}
+
+
+#footer-hr{
+	border: none; 
+    color: #0072C6; 
+    background-color: #0072C6; 
+    height: 3px; 
+    width: 100%;
+    margin-top: 42px;
+    margin-bottom: 16px;
+}
+
+.footer-block{
+	display: inline-block;
+	height: 87px;
+	width: 100%;
+	vertical-align: middle;
+	padding-bottom: 25px;
+	margin-bottom: 10px;
+	font-size: 15px;
+}

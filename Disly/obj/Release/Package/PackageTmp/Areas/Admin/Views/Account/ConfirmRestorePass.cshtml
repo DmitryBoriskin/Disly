@@ -1,0 +1,28 @@
+﻿@model RestoreModel
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_login.cshtml";
+}
+
+<div class="WelcomeContentLeft">
+    <div class="LoginCaption">@ViewBag.Title</div>
+    @using (Html.BeginForm("ToLoginRestorePass", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+    {
+        @Html.AntiForgeryToken()
+        <div>
+
+            <div class="WelcomeInfo">
+                На указанный адрес выслан пароль для входа в систему.
+            </div>
+            <div class="WelcomeBtn">
+                <input id="LoginButton" class="RegButton" type="submit" value="Перейти к авторизации" />
+                <span class="icon-right-4"></span>
+            </div>
+        </div>
+    }
+</div>
+<div class="WelcomeContentRight">
+    Восстановление пароля производится по адресу электронной почты.<br />
+    <br /> Чтобы восстановить пароль, введите в поле адрес электронной почты, с которой Вы регистрировались в системе. Если адрес введен правильно, новый пароль будет автоматически выслан на указанный адрес почты.<br />
+    <br /> В случае утраты адреса почты, или невозможности зайти в неё, обратитесь к администратору сайта <a href="@ViewBag.SiteAdress">@ViewBag.SiteAdress</a>
+
+</div>

@@ -1,0 +1,45 @@
+﻿@model VideoViewModel
+
+@using (Html.BeginForm())
+{
+    <div id="Buttons">
+        @if (Model.UserResolution.Write)
+        {            
+            @Html.ActionLink("Создать", "create", new { area = "Admin", controller = "video", id = @Guid.NewGuid() }, new { @class = "Button BtnCreate" })
+        }
+    </div>   
+
+
+    <div id="Content">
+        @if (Model.UserResolution.Read)
+        {
+            if (Model.List != null)
+            {
+                foreach (cmsVideoModel Item in Model.List)
+                {
+                <div class="ListItem User">
+                    @if (@Item.PreviewUrl != string.Empty && @Item.PreviewUrl != null)
+                    {
+                        <a class="LI_Imege" href="/video/edit/@Item.Id/">
+                            <img src="@Item.PreviewUrl" alt="">
+                        </a>
+                    }
+                    <div class="fileinfo">
+                        <div class="fileinfo_date">Дата:<span>@Convert.ToDateTime(Item.Date).ToString("dd.MM.yyyy hh:mm:ss")</span></div>
+                        <div class="fileinfo_kategory">Категория:<span>Видео</span></div>
+                    </div>                    
+                    @Html.ActionLink(@Item.Title, "edit", new { area = "Admin", controller = "video", id = @Item.Id }, new { @class = "videolist_title" })
+
+                </div>
+                }
+            }
+        }
+        else
+        {
+        <p>У Вас нет прав на чтение новостей.</p>
+        }
+
+    </div>
+   
+}
+

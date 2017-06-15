@@ -1,0 +1,41 @@
+C:\Users\D-Boriskin\documents\visual studio 2013\Projects\Disly\cms.dbModel\bin\Debug\cms.dbModel.dll
+C:\Users\D-Boriskin\documents\visual studio 2013\Projects\Disly\cms.dbModel\bin\Debug\cms.dbModel.pdb
+C:\Users\D-Boriskin\documents\visual studio 2013\Projects\Disly\cms.dbModel\obj\Debug\cms.dbModel.dll
+C:\Users\D-Boriskin\documents\visual studio 2013\Projects\Disly\cms.dbModel\obj\Debug\cms.dbModel.pdb
+D:\Новая папка\cms.dbModel\bin\Debug\cms.dbModel.dll
+D:\Новая папка\cms.dbModel\bin\Debug\cms.dbModel.pdb
+D:\Новая папка\cms.dbModel\obj\Debug\cms.dbModel.csprojResolveAssemblyReference.cache
+D:\Новая папка\cms.dbModel\obj\Debug\cms.dbModel.dll
+D:\Новая папка\cms.dbModel\obj\Debug\cms.dbModel.pdb
+D:\DislyMVC\cms.dbModel\bin\Debug\cms.dbModel.dll
+D:\DislyMVC\cms.dbModel\bin\Debug\cms.dbModel.pdb
+D:\DislyMVC\cms.dbModel\obj\Debug\cms.dbModel.csprojResolveAssemblyReference.cache
+D:\DislyMVC\cms.dbModel\obj\Debug\cms.dbModel.dll
+D:\DislyMVC\cms.dbModel\obj\Debug\cms.dbModel.pdb
+F:\DislyMVC\cms.dbModel\bin\Debug\cms.dbModel.dll
+F:\DislyMVC\cms.dbModel\bin\Debug\cms.dbModel.pdb
+F:\DislyMVC\cms.dbModel\obj\Debug\cms.dbModel.csprojResolveAssemblyReference.cache
+F:\DislyMVC\cms.dbModel\obj\Debug\cms.dbModel.dll
+F:\DislyMVC\cms.dbModel\obj\Debug\cms.dbModel.pdb
+D:\d-boriskin\YandexDisk\YandexDisk\DislyMVC\cms.dbModel\bin\Debug\cms.dbModel.dll
+D:\d-boriskin\YandexDisk\YandexDisk\DislyMVC\cms.dbModel\bin\Debug\cms.dbModel.pdb
+D:\d-boriskin\YandexDisk\YandexDisk\DislyMVC\cms.dbModel\obj\Debug\cms.dbModel.csprojResolveAssemblyReference.cache
+D:\d-boriskin\YandexDisk\YandexDisk\DislyMVC\cms.dbModel\obj\Debug\cms.dbModel.dll
+D:\d-boriskin\YandexDisk\YandexDisk\DislyMVC\cms.dbModel\obj\Debug\cms.dbModel.pdb
+C:\Users\a-korkin\YandexDisk\DislyMVC\cms.dbModel\bin\Debug\cms.dbModel.dll
+C:\Users\a-korkin\YandexDisk\DislyMVC\cms.dbModel\bin\Debug\cms.dbModel.pdb
+C:\Users\a-korkin\YandexDisk\DislyMVC\cms.dbModel\bin\Debug\System.Web.Mvc.dll
+C:\Users\a-korkin\YandexDisk\DislyMVC\cms.dbModel\bin\Debug\System.Web.Razor.dll
+C:\Users\a-korkin\YandexDisk\DislyMVC\cms.dbModel\bin\Debug\System.Web.WebPages.Razor.dll
+C:\Users\a-korkin\YandexDisk\DislyMVC\cms.dbModel\bin\Debug\System.Web.WebPages.dll
+C:\Users\a-korkin\YandexDisk\DislyMVC\cms.dbModel\bin\Debug\Microsoft.Web.Infrastructure.dll
+C:\Users\a-korkin\YandexDisk\DislyMVC\cms.dbModel\bin\Debug\System.Web.WebPages.Deployment.dll
+C:\Users\a-korkin\YandexDisk\DislyMVC\cms.dbModel\bin\Debug\System.Web.Mvc.xml
+C:\Users\a-korkin\YandexDisk\DislyMVC\cms.dbModel\bin\Debug\System.Web.Razor.xml
+C:\Users\a-korkin\YandexDisk\DislyMVC\cms.dbModel\bin\Debug\System.Web.WebPages.Razor.xml
+C:\Users\a-korkin\YandexDisk\DislyMVC\cms.dbModel\bin\Debug\System.Web.WebPages.xml
+C:\Users\a-korkin\YandexDisk\DislyMVC\cms.dbModel\bin\Debug\Microsoft.Web.Infrastructure.xml
+C:\Users\a-korkin\YandexDisk\DislyMVC\cms.dbModel\bin\Debug\System.Web.WebPages.Deployment.xml
+C:\Users\a-korkin\YandexDisk\DislyMVC\cms.dbModel\obj\Debug\cms.dbModel.csprojResolveAssemblyReference.cache
+C:\Users\a-korkin\YandexDisk\DislyMVC\cms.dbModel\obj\Debug\cms.dbModel.dll
+C:\Users\a-korkin\YandexDisk\DislyMVC\cms.dbModel\obj\Debug\cms.dbModel.pdb

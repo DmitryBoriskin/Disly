@@ -1,0 +1,152 @@
+﻿@model PageViewModel
+<div class="container">
+
+
+    <nav id="menu" class="navbar">
+
+
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+          <span class="sr-only">Toggle navigation</span>
+      </button>
+
+      <ul class="nav navbar-nav ">
+        <li class="activeable @(Request.RawUrl=="/" ? "active" : "")">
+            <a class="navbar-brand navbar-left" href="/">
+                <i class="fa fa-hashtag hashtag"></i>&nbsp;ОБРАЗОВАНИЕ В ЧУВАШИИ
+            </a>
+        </li>
+    </ul>
+</div>
+
+<div id="navbar" class="navbar-collapse collapse">
+   <ul class="nav navbar-nav">
+
+    @foreach (var item in Model.PageMenu)
+    {
+
+        //if (item.F_Menu != "main" && item.B_Disabled != false && item.B_Deleted == false)
+        //{
+        //    continue;
+        //}
+
+        if (item.Menu == "top_menu")
+        {
+            String path;
+            String alias;
+
+            path = item.Path + "/" + item.Alias;
+            alias = "/" + item.Alias;
+
+            <li class="activeable @(Request.RawUrl.Contains(@alias) ? "active" : "")">
+                <a href="@item.Path@item.Alias">@item.Title</a>
+            </li>
+        }
+
+
+
+
+        //if (item.Url == null)
+        //{
+
+        //}
+        //else
+        //{
+        //    path = item.Url;
+        //    alias = item.Url;
+        //}
+
+    }
+    </ul>
+<ul class="nav navbar-nav navbar-right menu-icon">
+    <li class="compare-number">
+        <a href="/compare">
+            <i class="bar-icon active icon-list-add"></i>&nbsp;<span >4</span>
+        </a>
+    </li>
+    <li class="like-number">
+        <a href="#">
+            <i class="fa fa-heart active heart-icon"></i>&nbsp;<span >2</span>
+        </a>
+    </li>
+    <li class="divider-vertical"></li>
+    <li>
+        <a href="#" data-toggle="dropdown" class="dropdown-toggle">
+            @* <img src="~/content/img/geo.png" id="geo-img"> *@
+            <i class="fa fa-map-marker fa-lg"></i>
+            Чебоксары
+            <i class="fa fa-caret-down"></i>
+
+        </a>
+        <div class="dropdown-menu city-menu">
+          <div class="row">
+            <div class="col-xs-3">
+                <div class="head">
+                    ГОРОДА
+                </div>
+                <hr>
+                <ul class="list-group" >
+                    <li class="list-group-item active">г.Чебоксары</li>
+                    <li class="list-group-item">г.Новочебоксарск</li>
+                    <li class="list-group-item">г.Канаш</li>
+                    <li class="list-group-item">г.Алатырь</li>
+                    <li class="list-group-item">г.Шумерля</li>
+                </ul>
+
+            </div>
+
+
+            <div class="col-xs-9">
+                <div class="head">
+                    РАЙОНЫ
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-xs-4">
+                        <ul class="list-group" >
+                            <li class="list-group-item">Алатырский</li>
+                            <li class="list-group-item">Аликовский</li>
+                            <li class="list-group-item">Батыревский</li>
+                            <li class="list-group-item">Вурнарский</li>
+                            <li class="list-group-item">Ибресинский</li>
+                            <li class="list-group-item">Канашский</li>
+                            <li class="list-group-item">Козловский</li>
+                        </ul>
+                    </div>
+                    <div class="col-xs-4">
+                        <ul class="list-group" >
+                            <li class="list-group-item">Комсомольский</li>
+                            <li class="list-group-item">Красноармейский</li>
+                            <li class="list-group-item">Красночетайский</li>
+                            <li class="list-group-item">Мариинско-Посадский</li>
+                            <li class="list-group-item">Моргашский</li>
+                            <li class="list-group-item">Порецкий</li>
+                            <li class="list-group-item">Урмарский</li>
+                        </ul>
+                    </div>
+
+                    <div class="col-xs-4">
+                        <ul class="list-group" >
+                            <li class="list-group-item">Цивильский</li>
+                            <li class="list-group-item">Чебоксарский</li>
+                            <li class="list-group-item">Шемуршинский</li>
+                            <li class="list-group-item">Шумерлинский</li>
+                            <li class="list-group-item">Ядринский</li>
+                            <li class="list-group-item">Яльчиковский</li>
+                            <li class="list-group-item">Янтиковский</li>
+                        </ul>
+                    </div>
+
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</li>
+</ul>
+</div>
+</nav>
+
+
+</div>

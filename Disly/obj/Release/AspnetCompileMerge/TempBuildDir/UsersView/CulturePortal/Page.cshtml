@@ -1,0 +1,46 @@
+﻿@{ 
+    Layout = "~/Views/Shared/_Layout_Culture.cshtml";
+}
+
+
+<div id="page">
+    <div class="page_wr">
+        @Html.Partial("Partial/PagePathPartial")
+
+        <div class="row page_type">
+            <div class="col-md-12 title"><h1>@Model.PageInfo.Title</h1></div>
+
+            @if (Model.PageMenuChild == null)
+            {
+                <div class="col-md-12">
+                    <div class="bottom_line">                        
+                        @if (Model.PageInfo.Logo != null)
+                        {
+                            <img class="map_img" src="@Model.PageInfo.Logo" />
+                        }
+                        @Html.Raw(@Model.PageInfo.Text)
+                    </div>                    
+                </div>
+
+            }
+            else
+            {
+                <div class="col-md-9">
+                    <div class="bottom_line">
+                        @if (Model.PageInfo.Logo != null)
+                        {
+                            <img class="map_img" src="@Model.PageInfo.Logo" />
+                        }
+                        @Html.Raw(@Model.PageInfo.Text)
+                    </div>                    
+                </div>
+                <div class="col-md-3">
+                    @Html.Partial("~/Views/Shared/Partial/PageChildMenu.cshtml")
+                </div>
+            }
+
+
+        </div>
+    </div>
+    
+</div>

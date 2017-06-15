@@ -1,0 +1,85 @@
+﻿@model PhotoAlbumsViewModel
+@{
+    FilterViewModel model = ViewBag.Filter;
+    SectionGroupModel[] section = model.Sections;
+    string actionName = ViewBag.ActionName;
+}
+
+@Html.Partial("Partial/Confirm")
+@Html.Partial("Partial/Frame")
+@using (Html.BeginForm(actionName, "PhotoAlbums", FormMethod.Post, new { enctype="multipart/form-data" }))
+{
+    <div id="Buttons">
+        @if (ViewBag.ActionName == "create")
+        {
+            if (Model.UserResolution.Change)
+            {
+                <button type="submit" name="action" value="create-btn" class="BtnCreate">Сохранить</button>
+            }
+            <button type="submit" name="action" value="cancel-btn" class="BtnCancel">Закрыть</button>
+        }
+        else
+        {
+            if (Model.UserResolution.Change)
+            {
+                <button type="submit" name="action" value="update-btn" class="BtnSave">Сохранить</button>
+            }
+            <button type="submit" name="action" value="cancel-btn" class="BtnCancel">Закрыть</button>
+            if (Model.UserResolution.Delete)
+            {
+                <button type="submit" name="action" value="delete-btn" class="BtnDelete">Удалить</button>
+            }
+
+        }
+    </div>
+    if (Model.UserResolution.Read)
+    {
+        <div id="Content">
+            <div id="TitleBlock">@ViewBag.Title</div>
+            @Html.ValidationSummary(false, "", new { @class = "alert alert-danger" })
+            @Html.TextBoxFor(m => m.Item.Title, new { @class = "uc_input", @title = "Наименование фотоальбома", @required="" })
+            @*@Html.TextBoxFor(m => m.Item.Preview, new { @class = "uc_input", @title = "Превью" })*@
+            @Html.TextAreaFor(m => m.Item.Desc, new { @class = "uc_input", @title = "Описание" })
+            @Html.TextBoxFor(m => m.Item.Author, new { @class = "uc_input", @title = "Автор" })
+            
+            <div class="form-group">
+                <label for="Item_Desc">Фотографии (.jpg, .jpeg, .png, .gif):</label>
+                <input name="uploadPhoto" type="file" multiple="" />
+            </div>
+
+            @if(Model.PhotoList != null)
+            {
+                <ul class="photoalbum">
+                    @foreach(PhotosModel photo in Model.PhotoList)
+                    {
+                        <li>
+                            <img title="123" src="@photo.Preview" alt="@photo.Title" />
+                            <div class="delPhoto" data-id="@photo.Id"></div>
+                            @*<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>*@
+                        </li>
+                    }
+                </ul>
+            }
+        </div>
+        <div id="DopInfo">
+            @Html.TextBoxFor(m => m.Item.Date, new { @class = "uc_input", @type = "date", @title = "Дата публикации", @Value = ViewBag.Date })            
+            @*@Html.DropDownListFor(m => m.Item.Type, new SelectList(section[0].Items, "Alias", "Title", 0), new { @class = "uc_input", @title = section[0].Title, @required = "" })
+            @Html.DropDownListFor(m => m.Item.Category, new SelectList(section[1].Items, "Alias", "Title", 0), new { @class = "uc_input", @title = section[1].Title, @required = "" })*@
+
+            
+            @if((ViewBag.ActionName != "create" && ViewBag.Message != "Запись удалена") && Model.Item != null)
+            {
+                @Html.ActionLink("Журнал изменений", "log", "services", new { @id=Model.Item.Id }, new { @id = "LogLists", @class="Button PopUpFrame icon-archive", @data_class="LogList" })
+            }
+        </div>
+
+    }
+    else {
+        <div id="Content"><p>У Вас недостаточно прав.</p></div>
+    }
+
+    if (ViewBag.Message != null)
+    {
+        @Html.Partial("Partial/modal")
+    }
+}

@@ -1,0 +1,64 @@
+﻿@model SettingsViewModel
+
+@Html.Partial("Partial/Confirm")
+@Html.Partial("Partial/Frame")
+@using (Html.BeginForm())
+{
+    if (Model.UserResolution.Read)
+    {
+        @Html.AntiForgeryToken()
+        @* Содержимое страницы *@
+        <div id="Content">
+            <div id="TitleBlock">@ViewBag.Title</div>
+
+            @Html.ValidationSummary(false, "", new { @class = "alert alert-danger" })
+
+            @Html.TextBoxFor(m => m.siteSettings.Title, new { @class = "uc_input", maxlength = "128", required = "", title = "Название портала" })
+            @Html.TextAreaFor(m => m.siteSettings.Info, new { @class = "uc_input", @id = "editor1", @title = "Информация" })
+            <input style="visibility:hidden; height:0;width:0;" id="fakesiteSettings_MailFromAlias" type="text" name="fakesiteSettings.MailFromAlias" />
+            <input style="visibility:hidden;height:0;width:0;" id="fakesiteSettings_MailPass" type="password" name="fakesiteSettings.MailPass" />
+        </div>
+        @* //Содержимое страницы *@
+
+        @* Блок DopInfo *@
+        <div id="DopInfo">
+            <div class="GroupBlock Rules Open" title="Настройки почты">
+                @Html.TextBoxFor(m => m.siteSettings.MailServer, new { @class = "uc_input", maxlength = "128", @title = "Сервер исходящей почты", @data_help = "Данный" })
+                <div class="row">
+                    <div class="col-md-4">
+                        @Html.TextBoxFor(m => m.siteSettings.MailPort, new { @class = "uc_input", maxlength = "128", @title = "Порт"})
+                    </div>
+                    <div class="col-md-8">
+                        @Html.CheckBoxFor(m => m.siteSettings.SSL, new { @class = "uc_input", @title = "Использовать SSL" })
+                    </div>
+                </div>                
+
+                @Html.TextBoxFor(m => m.siteSettings.MailFrom, new { @class = "uc_input", type = "email", maxlength = "128", @title = "E-Mail для исходящей почты" })
+                @Html.TextBoxFor(m => m.siteSettings.MailFromAlias, new { @class = "uc_input", maxlength = "128", autocomplete = "off", @title = "Название почтового ящика" })
+                @Html.TextBoxFor(m => m.siteSettings.MailPass, new { @class = "uc_input", type = "password", maxlength = "128", autocomplete = "off", @title = "Пароль от почтового ящика", @data_help = "Данное поле заполняется в том случае, если необходимо поменять пароль, иначе поле должно быть пыстым." })
+                @Html.TextBoxFor(m => m.siteSettings.MailTo, new { @class = "uc_input", type = "email", maxlength = "128", @title = "E-Mail адрес администратора" })
+            </div>
+            <div class="GroupBlock" title="Мета теги">
+                @Html.TextAreaFor(m => m.siteSettings.Keyw, new { @class = "uc_input", rows = "3", @title = "Ключевые слова", @data_help = "Данный тег используется при создании краткого описания страницы, используется поисковыми системами для индексации, а также при создании аннотации в выдаче по запросу. При отсутствии тега поисковые системы выдают в аннотации первую строку документа или отрывок, содержащий ключевые слова." })
+                @Html.TextAreaFor(m => m.siteSettings.Desc, new { @class = "uc_input", rows = "3", @title = "Краткое описание", @data_help = "Данный метатег поисковые системы используют для того, чтобы определить релевантность ссылки. При формировании данного тега необходимо использовать только те слова, которые содержатся в самом документе. Использование тех слов, которых нет на странице, не рекомендуется. Рекомендованное количество слов в данном теге — не более десяти." })
+            </div>
+
+            <a id="LogLists" class="Button PopUpFrame icon-archive" data-class="LogList" title="Журнал изменений" href="/admin/services/log/@Model.siteSettings.Guid">Журнал изменений</a>
+        </div>
+        @* // Блок DopInfo *@
+
+        @* Блок кнопок *@
+        <div id="Buttons">
+            @if (Model.UserResolution.Change)
+            {
+                <span id="BtnSave" class="BtnSave"><input type="submit" value="Сохранить"></span>
+            }
+        </div>
+        @* //Блок кнопок *@
+    }
+    else
+    {
+        <div id="Content"><p>У вас недостаточно прав.</p></div>
+    }
+
+}
