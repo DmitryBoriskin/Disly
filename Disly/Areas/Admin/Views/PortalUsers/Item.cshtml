@@ -20,9 +20,12 @@
                 @Html.TextBoxFor(m => m.Item.Birthday, new { @data_type = "date", @title = "Дата рождения", @value = "" })
             </div>
             <div class="col-xs-4">
+                @Html.TextBoxFor(m => m.Item.Birthday, new { @data_type = "datetime", @title = "Дата c временем", @value = "" })
+            </div>
+            <div class="col-xs-4">
                 @Html.CheckBoxFor(m => Model.Item.Sex, new { @type = "checkbox", @title = "Укажите пол", @data_toggle = "toggle", @data_on = "мужской", @data_off = "женский"})
             </div>
-        </div>
+        </div>        
         @Html.TextBoxFor(m => m.Item.Post, new { type = "text", maxlength = "128", @placeholder = "Должность" })
         <br />
         <div class="group-block rules open" title="Контакты">
