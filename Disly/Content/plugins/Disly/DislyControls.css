@@ -54,7 +54,7 @@ input:focus, textarea:focus {
     margin-top: 2px !important;
 }
 /* Поля обязательные для заполнения, не имеющие значения */
-.uc_input[required]:invalid {
+input[required]:invalid {
     background: #fcf8e3;
 }
 /* --- Подсказка к полям --- */

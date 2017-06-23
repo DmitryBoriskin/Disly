@@ -39,3 +39,8 @@ C:\Users\a-korkin\YandexDisk\DislyMVC\cms.dbModel\bin\Debug\System.Web.WebPages.
 C:\Users\a-korkin\YandexDisk\DislyMVC\cms.dbModel\obj\Debug\cms.dbModel.csprojResolveAssemblyReference.cache
 C:\Users\a-korkin\YandexDisk\DislyMVC\cms.dbModel\obj\Debug\cms.dbModel.dll
 C:\Users\a-korkin\YandexDisk\DislyMVC\cms.dbModel\obj\Debug\cms.dbModel.pdb
+D:\Git\DislyMVC\cms.dbModel\bin\Debug\cms.dbModel.dll
+D:\Git\DislyMVC\cms.dbModel\bin\Debug\cms.dbModel.pdb
+D:\Git\DislyMVC\cms.dbModel\obj\Debug\cms.dbModel.csprojResolveAssemblyReference.cache
+D:\Git\DislyMVC\cms.dbModel\obj\Debug\cms.dbModel.dll
+D:\Git\DislyMVC\cms.dbModel\obj\Debug\cms.dbModel.pdb
