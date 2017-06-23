@@ -39,18 +39,31 @@
             var $toggleTitle = $('<label for="' + this.$element.attr('id') + '">').html(this.options.title + ':');
             this.$element.before($toggleTitle);
         }
+
+
         if (this.options.help) {
             this.$element.wrap('<div class="input-group"></div>');
             this.$element.after('<div class="input-group-addon"><div class="icon-help-circled" data-toggle="popover" data-placement="auto bottom" data-content="' + this.options.help + '"></div></div>');
 
             this.$element.next().find('div').popover();
         }
+        if (this.options.type == 'date' || this.options.type == 'datetime') {
+            this.$element.wrap('<div class="input-group"></div>');
+            this.$element.after('<div class="input-group-addon"><div><input style="width:70px;" class="form-control" placeholder="00:00" data-mask="99:99" ></div></div>');
+
+            this.$element.next().find('div').popover();
+        }
 
         this.$element.addClass('form-control');
 
-        if (this.options.type == 'date') {
+        if (this.options.type == 'date' || this.options.type == 'datetime') {
             this.$element.attr('value', this.$element.attr('value').replace(/(\d+).(\d+).(\d+) (\d+:\d+:\d+)/, '$1.$2.$3'));
             this.$element.attr('data-mask', '99.99.9999');
+        }
+
+        if (this.options.type == 'datetime') {
+            //this.$element.attr('value', this.$element.attr('value').replace(/(\d+).(\d+).(\d+) (\d+:\d+:\d+)/, '$1.$2.$3'));
+            //this.$element.attr('data-mask', '99.99.9999');
         }
     }
 
