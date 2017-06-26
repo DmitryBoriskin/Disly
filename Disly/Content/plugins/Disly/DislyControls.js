@@ -33,15 +33,12 @@
     }
 
     inputText.prototype.render = function () {
-        this.$element.wrap('<div class="form-group">');
-
-        
+        this.$element.wrap('<div class="form-group">');        
 
         if (this.options.title) {
             var $toggleTitle = $('<label for="' + this.$element.attr('id') + '">').html(this.options.title + ':');
             this.$element.before($toggleTitle);
         }
-
 
         if (this.options.type == 'date' || this.options.type == 'datetime' || this.options.help) {
             this.$element.wrap('<div class="input-group"></div>');
@@ -56,14 +53,14 @@
         if (this.options.type == 'date' || this.options.type == 'datetime')
         {
             var $InputTime = $('<input style="width:70px;" class="form-control" placeholder="00:00">')
-
             $InputTime.attr('value', this.$element.attr('value').replace(/(\d+).(\d+).(\d+) (\d+):(\d+):(\d+)/, '$4:$5'));
             $InputTime.attr('data-mask', '99:99');
 
             var $InputDate = $('<input data-type="date" class="form-control" value="">');
             $InputDate.attr('value', this.$element.attr('value').replace(/(\d+).(\d+).(\d+) (\d+:\d+:\d+)/, '$1.$2.$3'));
             $InputDate.attr('data-mask', '99.99.9999');
-            //this.$element.hide();
+
+            this.$element.hide();
             this.$element.after($InputTime);
             this.$element.after($InputDate);
             
@@ -73,34 +70,21 @@
             else {
                 $InputTime.wrap('<div class="input-group-addon"><div></div></div>');
             }
+            var $TargetInput = this.$element;
 
-            $InputTime.keyup(function () {
-                alert($InputTime.val());
-                this.$element.attr('value', $InputDate.val() + ' ' + $InputTime.val());
+            $InputDate.keyup(function () {
+                SpotDate();                
             });
-
-            //$InputTime.bind({
-            //    change: function () {
-            //        alert($InputDate.attr('value') + ' ' + $InputTime.attr('value'));
-            //        change = 1;
-            //        SpotDate();
-            //    }
-            //    //keyup: function () {
-            //    //    change = 1;
-            //    //    SpotDate();
-            //    //}
-            //});
-
-            function SpotDate() {
-                
-
-
-                //alert($InputDate.attr('value') + ' ' + $InputTime.attr('value'));
-                
-                //this.$element.attr('value',$InputDate.attr('value') + ' ' + $InputTime.attr('value'));
+            $InputTime.keyup(function () {                
+                SpotDate();
+            });
+            $InputDate.datepicker()
+                .on("input change", function (e) {
+                    SpotDate();
+                });
+            function SpotDate() {                                
+                $TargetInput.attr('value', $InputDate.val() + ' ' + $InputTime.val()+':00');                
             }
-
-            
         }
 
 
