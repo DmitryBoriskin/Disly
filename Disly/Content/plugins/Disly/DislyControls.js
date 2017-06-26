@@ -74,22 +74,28 @@
                 $InputTime.wrap('<div class="input-group-addon"><div></div></div>');
             }
 
-            $InputTime.bind({
-                change: function () {
-                    
-                    change = 1;
-                    SpotDate();
-                }
-                //keyup: function () {
-                //    change = 1;
-                //    SpotDate();
-                //}
+            $InputTime.keyup(function () {
+                alert($InputTime.val());
+                this.$element.attr('value', $InputDate.val() + ' ' + $InputTime.val());
             });
+
+            //$InputTime.bind({
+            //    change: function () {
+            //        alert($InputDate.attr('value') + ' ' + $InputTime.attr('value'));
+            //        change = 1;
+            //        SpotDate();
+            //    }
+            //    //keyup: function () {
+            //    //    change = 1;
+            //    //    SpotDate();
+            //    //}
+            //});
 
             function SpotDate() {
                 
 
-                alert($InputDate.attr('value') + ' ' + $InputTime.attr('value'));
+
+                //alert($InputDate.attr('value') + ' ' + $InputTime.attr('value'));
                 
                 //this.$element.attr('value',$InputDate.attr('value') + ' ' + $InputTime.attr('value'));
             }

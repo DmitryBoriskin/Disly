@@ -1,0 +1,226 @@
+08:02:48 | При установлении соединения с SQL Server произошла ошибка, связанная с сетью или с определенным экземпляром. Сервер не найден или недоступен. Убедитесь, что имя экземпляра указано правильно и что на SQL Server разрешены удаленные соединения. (provider: Named Pipes Provider, error: 40 - Не удалось открыть подключение к SQL Server)
+
+Exception:
+System.Data.SqlClient.SqlException (0x80131904): При установлении соединения с SQL Server произошла ошибка, связанная с сетью или с определенным экземпляром. Сервер не найден или недоступен. Убедитесь, что имя экземпляра указано правильно и что на SQL Server разрешены удаленные соединения. (provider: Named Pipes Provider, error: 40 - Не удалось открыть подключение к SQL Server) ---> System.ComponentModel.Win32Exception (0x80004005): Не найден сетевой путь
+   в System.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, UInt32 waitForMultipleObjectsTimeout, Boolean allowCreate, Boolean onlyOneCheckConnection, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   в System.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   в System.Data.ProviderBase.DbConnectionFactory.TryGetConnection(DbConnection owningConnection, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal oldConnection, DbConnectionInternal& connection)
+   в System.Data.ProviderBase.DbConnectionInternal.TryOpenConnectionInternal(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   в System.Data.ProviderBase.DbConnectionClosed.TryOpenConnection(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   в System.Data.SqlClient.SqlConnection.TryOpenInner(TaskCompletionSource`1 retry)
+   в System.Data.SqlClient.SqlConnection.TryOpen(TaskCompletionSource`1 retry)
+   в System.Data.SqlClient.SqlConnection.Open()
+   в LinqToDB.Data.DataConnection.get_Connection() в i:\linq2db\Source\Data\DataConnection.cs:строка 487
+   в LinqToDB.Data.DataConnection.CreateCommand() в i:\linq2db\Source\Data\DataConnection.cs:строка 556
+   в LinqToDB.Data.DataConnection.get_Command() в i:\linq2db\Source\Data\DataConnection.cs:строка 550
+   в LinqToDB.Data.DataConnection.AddParameter(ICollection`1 parms, String name, SqlParameter parm) в i:\linq2db\Source\Data\DataConnection.Linq.cs:строка 142
+   в LinqToDB.Data.DataConnection.GetParameters(IQueryContext query, PreparedQuery pq) в i:\linq2db\Source\Data\DataConnection.Linq.cs:строка 132
+   в LinqToDB.Data.DataConnection.LinqToDB.IDataContext.SetQuery(IQueryContext queryContext) в i:\linq2db\Source\Data\DataConnection.Linq.cs:строка 351
+   в LinqToDB.Linq.Query`1.SetCommand(IDataContext dataContext, Expression expr, Object[] parameters, Int32 idx, Boolean clearQueryHints) в i:\linq2db\Source\Linq\Query.cs:строка 402
+   в LinqToDB.Linq.Query`1.<RunQuery>d__11.MoveNext() в i:\linq2db\Source\Linq\Query.cs:строка 369
+   в LinqToDB.Linq.Query`1.<Map>d__6a.MoveNext() в i:\linq2db\Source\Linq\Query.cs:строка 1177
+   в System.Linq.Enumerable.FirstOrDefault[TSource](IEnumerable`1 source)
+   в LinqToDB.Linq.Builder.FirstSingleBuilder.FirstSingleContext.<>c__DisplayClass12`1.<BuildQuery>b__b(QueryContext ctx, IDataContextInfo db, Expression expr, Object[] ps) в i:\linq2db\Source\Linq\Builder\FirstSingleBuilder.cs:строка 97
+   в LinqToDB.Linq.ExpressionQuery`1.System.Linq.IQueryProvider.Execute[TResult](Expression expression) в i:\linq2db\Source\Linq\ExpressionQuery.cs:строка 142
+   в System.Linq.Queryable.FirstOrDefault[TSource](IQueryable`1 source)
+   в cms.dbase.FrontRepository.getView(String siteId, String siteSection) в C:\Users\aleksandr-mikhailov\Source\Repos\Disly\cms.dbase\Repository\FrontRepository.cs:строка 48
+   в Disly.Controllers.RootController.OnActionExecuting(ActionExecutingContext filterContext) в C:\Users\aleksandr-mikhailov\Source\Repos\Disly\Disly\Controllers\_RootController.cs:строка 36
+   в System.Web.Mvc.Controller.System.Web.Mvc.IActionFilter.OnActionExecuting(ActionExecutingContext filterContext)
+   в System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.InvokeActionMethodFilterAsynchronouslyRecursive(Int32 filterIndex)
+   в System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass30.<BeginInvokeActionMethodWithFilters>b__2e(AsyncCallback asyncCallback, Object asyncState)
+   в System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.CallBeginDelegate(AsyncCallback callback, Object callbackState)
+   в System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.Begin(AsyncCallback callback, Object state, Int32 timeout)
+   в System.Web.Mvc.Async.AsyncControllerActionInvoker.BeginInvokeActionMethodWithFilters(ControllerContext controllerContext, IList`1 filters, ActionDescriptor actionDescriptor, IDictionary`2 parameters, AsyncCallback callback, Object state)
+   в System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass1e.<BeginInvokeAction>b__16(AsyncCallback asyncCallback, Object asyncState)
+   в System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.CallBeginDelegate(AsyncCallback callback, Object callbackState)
+   в System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.Begin(AsyncCallback callback, Object state, Int32 timeout)
+   в System.Web.Mvc.Async.AsyncControllerActionInvoker.BeginInvokeAction(ControllerContext controllerContext, String actionName, AsyncCallback callback, Object state)
+   в System.Web.Mvc.Controller.<BeginExecuteCore>b__1c(AsyncCallback asyncCallback, Object asyncState, ExecuteCoreState innerState)
+   в System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncVoid`1.CallBeginDelegate(AsyncCallback callback, Object callbackState)
+   в System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.Begin(AsyncCallback callback, Object state, Int32 timeout)
+   в System.Web.Mvc.Controller.BeginExecuteCore(AsyncCallback callback, Object state)
+   в System.Web.Mvc.Controller.<BeginExecute>b__14(AsyncCallback asyncCallback, Object callbackState, Controller controller)
+   в System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncVoid`1.CallBeginDelegate(AsyncCallback callback, Object callbackState)
+   в System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.Begin(AsyncCallback callback, Object state, Int32 timeout)
+   в System.Web.Mvc.Controller.BeginExecute(RequestContext requestContext, AsyncCallback callback, Object state)
+   в System.Web.Mvc.Controller.System.Web.Mvc.Async.IAsyncController.BeginExecute(RequestContext requestContext, AsyncCallback callback, Object state)
+   в System.Web.Mvc.MvcHandler.<BeginProcessRequest>b__3(AsyncCallback asyncCallback, Object asyncState, ProcessRequestState innerState)
+   в System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncVoid`1.CallBeginDelegate(AsyncCallback callback, Object callbackState)
+   в System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.Begin(AsyncCallback callback, Object state, Int32 timeout)
+   в System.Web.Mvc.MvcHandler.BeginProcessRequest(HttpContextBase httpContext, AsyncCallback callback, Object state)
+   в System.Web.Mvc.MvcHandler.BeginProcessRequest(HttpContext httpContext, AsyncCallback callback, Object state)
+   в System.Web.Mvc.MvcHandler.System.Web.IHttpAsyncHandler.BeginProcessRequest(HttpContext context, AsyncCallback cb, Object extraData)
+   в System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   в System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+ClientConnectionId:00000000-0000-0000-0000-000000000000
+Error Number: 53, State: 0, Class: 20
+При установлении соединения с SQL Server произошла ошибка, связанная с сетью или с определенным экземпляром. Сервер не найден или недоступен. Убедитесь, что имя экземпляра указано правильно и что на SQL Server разрешены удаленные соединения. (provider: Named Pipes Provider, error: 40 - Не удалось открыть подключение к SQL Server)
+Не найден сетевой путь
+
+StackTrace:
+   в System.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, UInt32 waitForMultipleObjectsTimeout, Boolean allowCreate, Boolean onlyOneCheckConnection, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   в System.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   в System.Data.ProviderBase.DbConnectionFactory.TryGetConnection(DbConnection owningConnection, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal oldConnection, DbConnectionInternal& connection)
+   в System.Data.ProviderBase.DbConnectionInternal.TryOpenConnectionInternal(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   в System.Data.ProviderBase.DbConnectionClosed.TryOpenConnection(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   в System.Data.SqlClient.SqlConnection.TryOpenInner(TaskCompletionSource`1 retry)
+   в System.Data.SqlClient.SqlConnection.TryOpen(TaskCompletionSource`1 retry)
+   в System.Data.SqlClient.SqlConnection.Open()
+   в LinqToDB.Data.DataConnection.get_Connection() в i:\linq2db\Source\Data\DataConnection.cs:строка 487
+   в LinqToDB.Data.DataConnection.CreateCommand() в i:\linq2db\Source\Data\DataConnection.cs:строка 556
+   в LinqToDB.Data.DataConnection.get_Command() в i:\linq2db\Source\Data\DataConnection.cs:строка 550
+   в LinqToDB.Data.DataConnection.AddParameter(ICollection`1 parms, String name, SqlParameter parm) в i:\linq2db\Source\Data\DataConnection.Linq.cs:строка 142
+   в LinqToDB.Data.DataConnection.GetParameters(IQueryContext query, PreparedQuery pq) в i:\linq2db\Source\Data\DataConnection.Linq.cs:строка 132
+   в LinqToDB.Data.DataConnection.LinqToDB.IDataContext.SetQuery(IQueryContext queryContext) в i:\linq2db\Source\Data\DataConnection.Linq.cs:строка 351
+   в LinqToDB.Linq.Query`1.SetCommand(IDataContext dataContext, Expression expr, Object[] parameters, Int32 idx, Boolean clearQueryHints) в i:\linq2db\Source\Linq\Query.cs:строка 402
+   в LinqToDB.Linq.Query`1.<RunQuery>d__11.MoveNext() в i:\linq2db\Source\Linq\Query.cs:строка 369
+   в LinqToDB.Linq.Query`1.<Map>d__6a.MoveNext() в i:\linq2db\Source\Linq\Query.cs:строка 1177
+   в System.Linq.Enumerable.FirstOrDefault[TSource](IEnumerable`1 source)
+   в LinqToDB.Linq.Builder.FirstSingleBuilder.FirstSingleContext.<>c__DisplayClass12`1.<BuildQuery>b__b(QueryContext ctx, IDataContextInfo db, Expression expr, Object[] ps) в i:\linq2db\Source\Linq\Builder\FirstSingleBuilder.cs:строка 97
+   в LinqToDB.Linq.ExpressionQuery`1.System.Linq.IQueryProvider.Execute[TResult](Expression expression) в i:\linq2db\Source\Linq\ExpressionQuery.cs:строка 142
+   в System.Linq.Queryable.FirstOrDefault[TSource](IQueryable`1 source)
+   в cms.dbase.FrontRepository.getView(String siteId, String siteSection) в C:\Users\aleksandr-mikhailov\Source\Repos\Disly\cms.dbase\Repository\FrontRepository.cs:строка 48
+   в Disly.Controllers.RootController.OnActionExecuting(ActionExecutingContext filterContext) в C:\Users\aleksandr-mikhailov\Source\Repos\Disly\Disly\Controllers\_RootController.cs:строка 36
+   в System.Web.Mvc.Controller.System.Web.Mvc.IActionFilter.OnActionExecuting(ActionExecutingContext filterContext)
+   в System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.InvokeActionMethodFilterAsynchronouslyRecursive(Int32 filterIndex)
+   в System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass30.<BeginInvokeActionMethodWithFilters>b__2e(AsyncCallback asyncCallback, Object asyncState)
+   в System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.CallBeginDelegate(AsyncCallback callback, Object callbackState)
+   в System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.Begin(AsyncCallback callback, Object state, Int32 timeout)
+   в System.Web.Mvc.Async.AsyncControllerActionInvoker.BeginInvokeActionMethodWithFilters(ControllerContext controllerContext, IList`1 filters, ActionDescriptor actionDescriptor, IDictionary`2 parameters, AsyncCallback callback, Object state)
+   в System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass1e.<BeginInvokeAction>b__16(AsyncCallback asyncCallback, Object asyncState)
+   в System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.CallBeginDelegate(AsyncCallback callback, Object callbackState)
+   в System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.Begin(AsyncCallback callback, Object state, Int32 timeout)
+   в System.Web.Mvc.Async.AsyncControllerActionInvoker.BeginInvokeAction(ControllerContext controllerContext, String actionName, AsyncCallback callback, Object state)
+   в System.Web.Mvc.Controller.<BeginExecuteCore>b__1c(AsyncCallback asyncCallback, Object asyncState, ExecuteCoreState innerState)
+   в System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncVoid`1.CallBeginDelegate(AsyncCallback callback, Object callbackState)
+   в System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.Begin(AsyncCallback callback, Object state, Int32 timeout)
+   в System.Web.Mvc.Controller.BeginExecuteCore(AsyncCallback callback, Object state)
+   в System.Web.Mvc.Controller.<BeginExecute>b__14(AsyncCallback asyncCallback, Object callbackState, Controller controller)
+   в System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncVoid`1.CallBeginDelegate(AsyncCallback callback, Object callbackState)
+   в System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.Begin(AsyncCallback callback, Object state, Int32 timeout)
+   в System.Web.Mvc.Controller.BeginExecute(RequestContext requestContext, AsyncCallback callback, Object state)
+   в System.Web.Mvc.Controller.System.Web.Mvc.Async.IAsyncController.BeginExecute(RequestContext requestContext, AsyncCallback callback, Object state)
+   в System.Web.Mvc.MvcHandler.<BeginProcessRequest>b__3(AsyncCallback asyncCallback, Object asyncState, ProcessRequestState innerState)
+   в System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncVoid`1.CallBeginDelegate(AsyncCallback callback, Object callbackState)
+   в System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.Begin(AsyncCallback callback, Object state, Int32 timeout)
+   в System.Web.Mvc.MvcHandler.BeginProcessRequest(HttpContextBase httpContext, AsyncCallback callback, Object state)
+   в System.Web.Mvc.MvcHandler.BeginProcessRequest(HttpContext httpContext, AsyncCallback callback, Object state)
+   в System.Web.Mvc.MvcHandler.System.Web.IHttpAsyncHandler.BeginProcessRequest(HttpContext context, AsyncCallback cb, Object extraData)
+   в System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   в System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+
+08:09:46 | При установлении соединения с SQL Server произошла ошибка, связанная с сетью или с определенным экземпляром. Сервер не найден или недоступен. Убедитесь, что имя экземпляра указано правильно и что на SQL Server разрешены удаленные соединения. (provider: Named Pipes Provider, error: 40 - Не удалось открыть подключение к SQL Server)
+
+Exception:
+System.Data.SqlClient.SqlException (0x80131904): При установлении соединения с SQL Server произошла ошибка, связанная с сетью или с определенным экземпляром. Сервер не найден или недоступен. Убедитесь, что имя экземпляра указано правильно и что на SQL Server разрешены удаленные соединения. (provider: Named Pipes Provider, error: 40 - Не удалось открыть подключение к SQL Server) ---> System.ComponentModel.Win32Exception (0x80004005): Не найден сетевой путь
+   в System.Data.SqlClient.SqlInternalConnectionTds..ctor(DbConnectionPoolIdentity identity, SqlConnectionString connectionOptions, SqlCredential credential, Object providerInfo, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance, SqlConnectionString userConnectionOptions, SessionData reconnectSessionData, DbConnectionPool pool, String accessToken, Boolean applyTransientFaultHandling)
+   в System.Data.SqlClient.SqlConnectionFactory.CreateConnection(DbConnectionOptions options, DbConnectionPoolKey poolKey, Object poolGroupProviderInfo, DbConnectionPool pool, DbConnection owningConnection, DbConnectionOptions userOptions)
+   в System.Data.ProviderBase.DbConnectionFactory.CreatePooledConnection(DbConnectionPool pool, DbConnection owningObject, DbConnectionOptions options, DbConnectionPoolKey poolKey, DbConnectionOptions userOptions)
+   в System.Data.ProviderBase.DbConnectionPool.CreateObject(DbConnection owningObject, DbConnectionOptions userOptions, DbConnectionInternal oldConnection)
+   в System.Data.ProviderBase.DbConnectionPool.UserCreateRequest(DbConnection owningObject, DbConnectionOptions userOptions, DbConnectionInternal oldConnection)
+   в System.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, UInt32 waitForMultipleObjectsTimeout, Boolean allowCreate, Boolean onlyOneCheckConnection, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   в System.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   в System.Data.ProviderBase.DbConnectionFactory.TryGetConnection(DbConnection owningConnection, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal oldConnection, DbConnectionInternal& connection)
+   в System.Data.ProviderBase.DbConnectionInternal.TryOpenConnectionInternal(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   в System.Data.ProviderBase.DbConnectionClosed.TryOpenConnection(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   в System.Data.SqlClient.SqlConnection.TryOpenInner(TaskCompletionSource`1 retry)
+   в System.Data.SqlClient.SqlConnection.TryOpen(TaskCompletionSource`1 retry)
+   в System.Data.SqlClient.SqlConnection.Open()
+   в LinqToDB.Data.DataConnection.get_Connection() в i:\linq2db\Source\Data\DataConnection.cs:строка 487
+   в LinqToDB.Data.DataConnection.CreateCommand() в i:\linq2db\Source\Data\DataConnection.cs:строка 556
+   в LinqToDB.Data.DataConnection.get_Command() в i:\linq2db\Source\Data\DataConnection.cs:строка 550
+   в LinqToDB.DataProvider.DataProviderBase.InitCommand(DataConnection dataConnection, CommandType commandType, String commandText, DataParameter[] parameters) в i:\linq2db\Source\DataProvider\DataProviderBase.cs:строка 88
+   в LinqToDB.Data.DataConnection.InitCommand(CommandType commandType, String sql, DataParameter[] parameters, List`1 queryHints) в i:\linq2db\Source\Data\DataConnection.cs:строка 533
+   в LinqToDB.Data.DataConnection.LinqToDB.IDataContext.ExecuteReader(Object query) в i:\linq2db\Source\Data\DataConnection.Linq.cs:строка 261
+   в LinqToDB.Linq.Query`1.RunQuery[TE](QueryContext ctx, IDataContextInfo dataContextInfo, Expression expr, Object[] parameters, Func`6 mapper) в i:\linq2db\Source\Linq\Query.cs:строка 1076
+   в LinqToDB.Linq.Query`1.<>c__DisplayClass50.<SetElementQuery>b__4f(QueryContext ctx, IDataContextInfo db, Expression expr, Object[] ps) в i:\linq2db\Source\Linq\Query.cs:строка 1058
+   в LinqToDB.Linq.ExpressionQuery`1.System.Linq.IQueryProvider.Execute[TResult](Expression expression) в i:\linq2db\Source\Linq\ExpressionQuery.cs:строка 142
+   в System.Linq.Queryable.Any[TSource](IQueryable`1 source)
+   в cms.dbase.cmsRepository.getUsersGroupList() в C:\Users\aleksandr-mikhailov\Source\Repos\Disly\cms.dbase\Repository\cmsRepository.cs:строка 740
+   в Disly.Areas.Admin.Controllers.PortalUsersController.OnActionExecuting(ActionExecutingContext filterContext) в C:\Users\aleksandr-mikhailov\Source\Repos\Disly\Disly\Areas\Admin\Controllers\PortalUsersController.cs:строка 23
+   в System.Web.Mvc.Controller.System.Web.Mvc.IActionFilter.OnActionExecuting(ActionExecutingContext filterContext)
+   в System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.InvokeActionMethodFilterAsynchronouslyRecursive(Int32 filterIndex)
+   в System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass30.<BeginInvokeActionMethodWithFilters>b__2e(AsyncCallback asyncCallback, Object asyncState)
+   в System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.CallBeginDelegate(AsyncCallback callback, Object callbackState)
+   в System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.Begin(AsyncCallback callback, Object state, Int32 timeout)
+   в System.Web.Mvc.Async.AsyncControllerActionInvoker.BeginInvokeActionMethodWithFilters(ControllerContext controllerContext, IList`1 filters, ActionDescriptor actionDescriptor, IDictionary`2 parameters, AsyncCallback callback, Object state)
+   в System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass1e.<BeginInvokeAction>b__16(AsyncCallback asyncCallback, Object asyncState)
+   в System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.CallBeginDelegate(AsyncCallback callback, Object callbackState)
+   в System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.Begin(AsyncCallback callback, Object state, Int32 timeout)
+   в System.Web.Mvc.Async.AsyncControllerActionInvoker.BeginInvokeAction(ControllerContext controllerContext, String actionName, AsyncCallback callback, Object state)
+   в System.Web.Mvc.Controller.<BeginExecuteCore>b__1c(AsyncCallback asyncCallback, Object asyncState, ExecuteCoreState innerState)
+   в System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncVoid`1.CallBeginDelegate(AsyncCallback callback, Object callbackState)
+   в System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.Begin(AsyncCallback callback, Object state, Int32 timeout)
+   в System.Web.Mvc.Controller.BeginExecuteCore(AsyncCallback callback, Object state)
+   в System.Web.Mvc.Controller.<BeginExecute>b__14(AsyncCallback asyncCallback, Object callbackState, Controller controller)
+   в System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncVoid`1.CallBeginDelegate(AsyncCallback callback, Object callbackState)
+   в System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.Begin(AsyncCallback callback, Object state, Int32 timeout)
+   в System.Web.Mvc.Controller.BeginExecute(RequestContext requestContext, AsyncCallback callback, Object state)
+   в System.Web.Mvc.Controller.System.Web.Mvc.Async.IAsyncController.BeginExecute(RequestContext requestContext, AsyncCallback callback, Object state)
+   в System.Web.Mvc.MvcHandler.<BeginProcessRequest>b__3(AsyncCallback asyncCallback, Object asyncState, ProcessRequestState innerState)
+   в System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncVoid`1.CallBeginDelegate(AsyncCallback callback, Object callbackState)
+   в System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.Begin(AsyncCallback callback, Object state, Int32 timeout)
+   в System.Web.Mvc.MvcHandler.BeginProcessRequest(HttpContextBase httpContext, AsyncCallback callback, Object state)
+   в System.Web.Mvc.MvcHandler.BeginProcessRequest(HttpContext httpContext, AsyncCallback callback, Object state)
+   в System.Web.Mvc.MvcHandler.System.Web.IHttpAsyncHandler.BeginProcessRequest(HttpContext context, AsyncCallback cb, Object extraData)
+   в System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   в System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+ClientConnectionId:00000000-0000-0000-0000-000000000000
+Error Number: 53, State: 0, Class: 20
+При установлении соединения с SQL Server произошла ошибка, связанная с сетью или с определенным экземпляром. Сервер не найден или недоступен. Убедитесь, что имя экземпляра указано правильно и что на SQL Server разрешены удаленные соединения. (provider: Named Pipes Provider, error: 40 - Не удалось открыть подключение к SQL Server)
+Не найден сетевой путь
+
+StackTrace:
+   в System.Data.SqlClient.SqlInternalConnectionTds..ctor(DbConnectionPoolIdentity identity, SqlConnectionString connectionOptions, SqlCredential credential, Object providerInfo, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance, SqlConnectionString userConnectionOptions, SessionData reconnectSessionData, DbConnectionPool pool, String accessToken, Boolean applyTransientFaultHandling)
+   в System.Data.SqlClient.SqlConnectionFactory.CreateConnection(DbConnectionOptions options, DbConnectionPoolKey poolKey, Object poolGroupProviderInfo, DbConnectionPool pool, DbConnection owningConnection, DbConnectionOptions userOptions)
+   в System.Data.ProviderBase.DbConnectionFactory.CreatePooledConnection(DbConnectionPool pool, DbConnection owningObject, DbConnectionOptions options, DbConnectionPoolKey poolKey, DbConnectionOptions userOptions)
+   в System.Data.ProviderBase.DbConnectionPool.CreateObject(DbConnection owningObject, DbConnectionOptions userOptions, DbConnectionInternal oldConnection)
+   в System.Data.ProviderBase.DbConnectionPool.UserCreateRequest(DbConnection owningObject, DbConnectionOptions userOptions, DbConnectionInternal oldConnection)
+   в System.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, UInt32 waitForMultipleObjectsTimeout, Boolean allowCreate, Boolean onlyOneCheckConnection, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   в System.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   в System.Data.ProviderBase.DbConnectionFactory.TryGetConnection(DbConnection owningConnection, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal oldConnection, DbConnectionInternal& connection)
+   в System.Data.ProviderBase.DbConnectionInternal.TryOpenConnectionInternal(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   в System.Data.ProviderBase.DbConnectionClosed.TryOpenConnection(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   в System.Data.SqlClient.SqlConnection.TryOpenInner(TaskCompletionSource`1 retry)
+   в System.Data.SqlClient.SqlConnection.TryOpen(TaskCompletionSource`1 retry)
+   в System.Data.SqlClient.SqlConnection.Open()
+   в LinqToDB.Data.DataConnection.get_Connection() в i:\linq2db\Source\Data\DataConnection.cs:строка 487
+   в LinqToDB.Data.DataConnection.CreateCommand() в i:\linq2db\Source\Data\DataConnection.cs:строка 556
+   в LinqToDB.Data.DataConnection.get_Command() в i:\linq2db\Source\Data\DataConnection.cs:строка 550
+   в LinqToDB.DataProvider.DataProviderBase.InitCommand(DataConnection dataConnection, CommandType commandType, String commandText, DataParameter[] parameters) в i:\linq2db\Source\DataProvider\DataProviderBase.cs:строка 88
+   в LinqToDB.Data.DataConnection.InitCommand(CommandType commandType, String sql, DataParameter[] parameters, List`1 queryHints) в i:\linq2db\Source\Data\DataConnection.cs:строка 533
+   в LinqToDB.Data.DataConnection.LinqToDB.IDataContext.ExecuteReader(Object query) в i:\linq2db\Source\Data\DataConnection.Linq.cs:строка 261
+   в LinqToDB.Linq.Query`1.RunQuery[TE](QueryContext ctx, IDataContextInfo dataContextInfo, Expression expr, Object[] parameters, Func`6 mapper) в i:\linq2db\Source\Linq\Query.cs:строка 1076
+   в LinqToDB.Linq.Query`1.<>c__DisplayClass50.<SetElementQuery>b__4f(QueryContext ctx, IDataContextInfo db, Expression expr, Object[] ps) в i:\linq2db\Source\Linq\Query.cs:строка 1058
+   в LinqToDB.Linq.ExpressionQuery`1.System.Linq.IQueryProvider.Execute[TResult](Expression expression) в i:\linq2db\Source\Linq\ExpressionQuery.cs:строка 142
+   в System.Linq.Queryable.Any[TSource](IQueryable`1 source)
+   в cms.dbase.cmsRepository.getUsersGroupList() в C:\Users\aleksandr-mikhailov\Source\Repos\Disly\cms.dbase\Repository\cmsRepository.cs:строка 740
+   в Disly.Areas.Admin.Controllers.PortalUsersController.OnActionExecuting(ActionExecutingContext filterContext) в C:\Users\aleksandr-mikhailov\Source\Repos\Disly\Disly\Areas\Admin\Controllers\PortalUsersController.cs:строка 23
+   в System.Web.Mvc.Controller.System.Web.Mvc.IActionFilter.OnActionExecuting(ActionExecutingContext filterContext)
+   в System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.InvokeActionMethodFilterAsynchronouslyRecursive(Int32 filterIndex)
+   в System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass30.<BeginInvokeActionMethodWithFilters>b__2e(AsyncCallback asyncCallback, Object asyncState)
+   в System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.CallBeginDelegate(AsyncCallback callback, Object callbackState)
+   в System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.Begin(AsyncCallback callback, Object state, Int32 timeout)
+   в System.Web.Mvc.Async.AsyncControllerActionInvoker.BeginInvokeActionMethodWithFilters(ControllerContext controllerContext, IList`1 filters, ActionDescriptor actionDescriptor, IDictionary`2 parameters, AsyncCallback callback, Object state)
+   в System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass1e.<BeginInvokeAction>b__16(AsyncCallback asyncCallback, Object asyncState)
+   в System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.CallBeginDelegate(AsyncCallback callback, Object callbackState)
+   в System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.Begin(AsyncCallback callback, Object state, Int32 timeout)
+   в System.Web.Mvc.Async.AsyncControllerActionInvoker.BeginInvokeAction(ControllerContext controllerContext, String actionName, AsyncCallback callback, Object state)
+   в System.Web.Mvc.Controller.<BeginExecuteCore>b__1c(AsyncCallback asyncCallback, Object asyncState, ExecuteCoreState innerState)
+   в System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncVoid`1.CallBeginDelegate(AsyncCallback callback, Object callbackState)
+   в System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.Begin(AsyncCallback callback, Object state, Int32 timeout)
+   в System.Web.Mvc.Controller.BeginExecuteCore(AsyncCallback callback, Object state)
+   в System.Web.Mvc.Controller.<BeginExecute>b__14(AsyncCallback asyncCallback, Object callbackState, Controller controller)
+   в System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncVoid`1.CallBeginDelegate(AsyncCallback callback, Object callbackState)
+   в System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.Begin(AsyncCallback callback, Object state, Int32 timeout)
+   в System.Web.Mvc.Controller.BeginExecute(RequestContext requestContext, AsyncCallback callback, Object state)
+   в System.Web.Mvc.Controller.System.Web.Mvc.Async.IAsyncController.BeginExecute(RequestContext requestContext, AsyncCallback callback, Object state)
+   в System.Web.Mvc.MvcHandler.<BeginProcessRequest>b__3(AsyncCallback asyncCallback, Object asyncState, ProcessRequestState innerState)
+   в System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncVoid`1.CallBeginDelegate(AsyncCallback callback, Object callbackState)
+   в System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.Begin(AsyncCallback callback, Object state, Int32 timeout)
+   в System.Web.Mvc.MvcHandler.BeginProcessRequest(HttpContextBase httpContext, AsyncCallback callback, Object state)
+   в System.Web.Mvc.MvcHandler.BeginProcessRequest(HttpContext httpContext, AsyncCallback callback, Object state)
+   в System.Web.Mvc.MvcHandler.System.Web.IHttpAsyncHandler.BeginProcessRequest(HttpContext context, AsyncCallback cb, Object extraData)
+   в System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   в System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+
