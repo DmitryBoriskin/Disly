@@ -19,23 +19,23 @@ public class Mailer
         /// <summary>
         /// Контекст доступа к базе данных
         /// </summary>
-        protected dbRepository _repository { get; private set; }
-        
-
-        protected SettingsViewModel model = new SettingsViewModel();
+        //protected dbRepository _repository { get; private set; }
+        //protected SettingsViewModel model = new SettingsViewModel();
     
+        protected string server = String.Empty;
+        protected int port = 25;
+        protected bool ssl = false;
 
         protected string maillist = String.Empty;
         protected string mailfrom = String.Empty;
+        protected string mailname = String.Empty;
+        protected string password = String.Empty;
+
         protected string theme = "Обратная связь";
         protected string text = String.Empty;
         protected string styles = String.Empty;
-        protected string mailname = String.Empty;
-        protected string server = String.Empty;
-        protected string password = String.Empty;
-        protected bool ssl = false;
-
-        protected string attechments = String.Empty;
+    
+    protected string attechments = String.Empty;
         protected string results = String.Empty;
         protected string dublicate = String.Empty;
 
@@ -75,6 +75,11 @@ public class Mailer
             set { server = value; }
             get { return server; }
         }
+        public int Port
+        {
+            set { port = value; }
+            get { return port; }
+        }
 
         public string Password
         {
@@ -102,69 +107,79 @@ public class Mailer
 
         public void MailFromSettings()
         {
-            try {
+        //    try {
 
-                _repository = new dbRepository("cmsdbConnection");
-                SettingsViewModel model = new SettingsViewModel()
-                {
-                    siteSettings = _repository.getCmsSettings()
-                };
-                string MailServer = model.siteSettings.MailServer;
-                string MailFrom = model.siteSettings.MailFrom;
-                string MailFromAlias = model.siteSettings.MailFromAlias;
-                MailFromAlias = (MailFromAlias != String.Empty) ? MailFromAlias : Settings.MailAdresName;
-                string MailPass = model.siteSettings.MailPass;
-                string MailTo = model.siteSettings.MailTo;
+        //        _repository = new dbRepository("cmsdbConnection");
+        //        SettingsViewModel model = new SettingsViewModel()
+        //        {
+        //            siteSettings = _repository.getCmsSettings()
+        //        };
+        //        string MailServer = model.siteSettings.MailServer;
+        //        string MailFrom = model.siteSettings.MailFrom;
+        //        string MailFromAlias = model.siteSettings.MailFromAlias;
+        //        MailFromAlias = (MailFromAlias != String.Empty) ? MailFromAlias : Settings.MailAdresName;
+        //        string MailPass = model.siteSettings.MailPass;
+        //        string MailTo = model.siteSettings.MailTo;
 
-                if (MailFrom == null || MailServer == null || MailPass == null)
-                {
-                    MailFrom = Settings.MailFrom;
-                    MailServer = Settings.mailServer;
-                    MailPass = Settings.mailPWD;
-                }
-
-
-                if (mailfrom == String.Empty || server == String.Empty || password == String.Empty)
-                {
-                    mailfrom = MailFrom;
-                    server = MailServer;
-                    password = MailPass;
-                }
-                if (mailname == String.Empty) mailname = MailFromAlias;
-                if (maillist == String.Empty) maillist = MailTo;
+        //        if (MailFrom == null || MailServer == null || MailPass == null)
+        //        {
+        //            MailFrom = Settings.MailFrom;
+        //            MailServer = Settings.mailServer;
+        //            MailPass = Settings.mailPWD;
+        //        }
 
 
-                if (mailfrom == null || server == null || password == null)
-                {
-                    mailname = Settings.MailAdresName;
-                    mailfrom = Settings.MailFrom;
-                    server = Settings.mailServer;
-                    password = Settings.mailPWD;
-                }
+        //        if (mailfrom == String.Empty || server == String.Empty || password == String.Empty)
+        //        {
+        //            mailfrom = MailFrom;
+        //            server = MailServer;
+        //            password = MailPass;
+        //        }
+        //        if (mailname == String.Empty) mailname = MailFromAlias;
+        //        if (maillist == String.Empty) maillist = MailTo;
 
-        }
-            catch {
-                mailname = Settings.MailAdresName;
-                mailfrom = Settings.MailFrom;
+
+        //        if (mailfrom == null || server == null || password == null)
+        //        {
+        //            mailname = Settings.MailAdresName;
+        //            mailfrom = Settings.MailFrom;
+        //            server = Settings.mailServer;
+        //            password = Settings.mailPWD;
+        //        }
+
+        //}
+        //    catch {
+        //        mailname = Settings.MailAdresName;
+        //        mailfrom = Settings.MailFrom;
+        //        server = Settings.mailServer;
+        //        password = Settings.mailPWD;
+        //    }      
+
+            if (mailfrom == String.Empty || server == String.Empty || password == String.Empty)
+            {
                 server = Settings.mailServer;
-                password = Settings.mailPWD;
-            }      
-        
+                port = Settings.mailServerPort;
+                ssl = Settings.mailServerSSL;
+                mailname = Settings.MailAdresName;
+                mailfrom = Settings.mailUser;
+                server = Settings.mailServer;
+                password = Settings.mailPass;
+            }
         }
 
 
         public void MailToSettings()
         {
-            _repository = new dbRepository("cmsdbConnection");
-            Guid GeneralUser= Guid.Parse("00000000-0000-0000-0000-000000000000");
+            //_repository = new dbRepository("cmsdbConnection");
+            //Guid GeneralUser= Guid.Parse("00000000-0000-0000-0000-000000000000");
 
-            UsersViewModel model = new UsersViewModel()
-            {
-                User = _repository.getUser(GeneralUser)
-            };
+            //UsersViewModel model = new UsersViewModel()
+            //{
+            //    User = _repository.getUser(GeneralUser)
+            //};
 
-            if (model.User.C_EMail.ToString() != String.Empty)
-                maillist = maillist + ";" + model.User.C_EMail.ToString();
+            //if (model.User.C_EMail.ToString() != String.Empty)
+            //    maillist = maillist + ";" + model.User.C_EMail.ToString();
 
             if(maillist==string.Empty) maillist= Settings.MailTo;
         }
@@ -174,8 +189,8 @@ public class Mailer
             MailFromSettings();
 
             //Авторизация на SMTP сервере
-            SmtpClient Smtp = new SmtpClient(server, 25);
-            Smtp.EnableSsl = isSsl;
+            SmtpClient Smtp = new SmtpClient(server, port);
+            Smtp.EnableSsl = ssl;
             Smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
             Smtp.UseDefaultCredentials = false;
             Smtp.Credentials = new NetworkCredential(mailfrom, password);

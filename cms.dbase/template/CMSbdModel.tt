@@ -8,7 +8,7 @@
 	DefaultConfiguration = "CMSdb";
 	GenerateConstructors = true;
 	
-	LoadSqlServerMetadata("Data Source=boriskiny.ru;Initial Catalog=Disly;User ID=Disly_Admin;Password=Disly_db;");
+	LoadSqlServerMetadata("Data Source=chuvashia.com;Initial Catalog=DislyMVC;User ID=Disly_Dev;Password=Disly_pass;");
 	
 	//Tables = Tables.Where(p => p.Value.TableName.StartsWith("Orgs")).ToDictionary(p => p.Key, p => p.Value);
 	//Procedures = Procedures.Where(p => p.Value.ProcedureName.StartsWith("cms_")).ToDictionary(p => p.Key, p => p.Value);

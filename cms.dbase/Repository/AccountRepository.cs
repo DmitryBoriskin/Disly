@@ -47,8 +47,9 @@ namespace cms.dbase
                         Surname = s.c_surname,
                         Name = s.c_name,
                         Patronymic = s.c_patronymic,
-                        Disabled = s.b_disabled,
-                        Deleted = s.b_deleted
+                        CountError = (s.n_error_count >= 5),
+                        LockDate = s.d_try_login,
+                        Disabled = s.b_disabled
                     });
                 if (!data.Any()) { return null; }
                 else { return data.First(); }
@@ -70,8 +71,7 @@ namespace cms.dbase
                         Surname = s.c_surname,
                         Name = s.c_name,
                         Patronymic = s.c_patronymic,
-                        Disabled = s.b_disabled,
-                        Deleted = s.b_deleted
+                        Disabled = s.b_disabled
 
                     });
                 if (!data.Any()) { return null; }
@@ -80,7 +80,25 @@ namespace cms.dbase
         }
 
         /// <summary>
-        /// Списка сайтов, доступных пользователю
+        /// Проверка существования пользователя
+        /// </summary>
+        /// <param name="Code"></param>
+        /// <returns></returns>
+        public override bool getCmsAccountCode(Guid Code)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                 bool result = false;
+
+                int count = db.cms_userss.Where(w => w.с_change_pass_code == Code).Count();
+                if (count > 0) result = true;
+
+                return result;
+            }
+        }
+
+        /// <summary>
+        /// Список сайтов, доступных пользователю
         /// </summary>
         /// <returns></returns>
         public override DomainList[] getUserDomains(Guid Id)
@@ -141,30 +159,116 @@ namespace cms.dbase
                     .Set(u => u.c_hash, NewHash)
                     .Update();
 
-                insertLog(id, id, "change_pass", IP);
+                // Логирование
+                insertLog(id, IP, "change_pass", id, String.Empty, "Users", "Восстановление пароля");
             }
+        }
 
+        public override void changePasByCode(Guid Code, string Salt, string Hash, string IP)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                string logTitle = db.cms_userss.Where(w => w.с_change_pass_code == Code).Select(s => s.c_surname + " " + s.c_name).First().ToString();
+                Guid accountId = db.cms_userss.Where(w => w.с_change_pass_code == Code).Select(s => s.id).First();
+                var data = db.cms_userss.Where(w => w.с_change_pass_code == Code);
+
+                Guid? change_pass_code = null;
+
+                if (data != null)
+                {
+                    data.Where(w => w.с_change_pass_code == Code)
+                    .Set(p => p.c_salt, Salt)
+                    .Set(p => p.c_hash, Hash)
+                    .Set(p => p.n_error_count, 0)
+                    .Set(u => u.с_change_pass_code, change_pass_code)
+                    .Update();
+
+                    // логирование
+                    insertLog(accountId, IP, "change_pass", accountId, String.Empty, "Users", logTitle);
+                }
+            }
         }
 
 
+        public override void SuccessLogin(Guid id, string IP)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                Guid? change_pass_code = null;
+
+                var data = db.cms_userss.Where(w => w.id == id)
+                        .Set(u => u.n_error_count, 0)
+                        .Set(u => u.d_try_login, DateTime.Now)
+                        .Set(u => u.с_change_pass_code, change_pass_code)
+                        .Update();
+
+                // Логирование
+                insertLog(id, IP, "login", id, String.Empty, "Users", "Авторизация в CMS");
+            }
+        }
         /// <summary>
-        /// Запись логов
+        /// Записываем неудачную попытку входа
         /// </summary>
-        /// <param name="PageId"></param>
-        /// <param name="UserId"></param>
-        /// <param name="Action"></param>
+        /// <param name="id"></param>
         /// <param name="IP"></param>
-        public override void insertLog(Guid PageId, Guid UserId, string Action, string IP)
+        public override int FailedLogin(Guid id, string IP)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                int Num = db.cms_userss.Where(w => w.id == id).ToArray().First().n_error_count + 1;
+
+                var data = db.cms_userss.Where(w => w.id == id)
+                        .Set(u => u.n_error_count, Num)
+                        .Set(u => u.d_try_login, DateTime.Now)
+                        .Update();
+
+                // Логирование
+                insertLog(id, IP, "failed_login", id, String.Empty, "Users", "Неудачная попытка входа");
+
+                if (Num == 5)
+                {
+                    // Логирование
+                    insertLog(id, IP, "account_lockout", id, String.Empty, "Users", "Блокировка аккаунта");
+                }
+
+                return Num;
+            }
+        }
+        /// <summary>
+        /// записываем код востановления пароля
+        /// </summary>
+        /// <param name="id">id аккаунта</param>
+        /// <param name="Code">код восстановления</param>
+        /// <param name="IP"></param>
+        public override void setRestorePassCode(Guid id, Guid Code, string IP)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                DateTime? ErrorDate = null;
+
+                var data = db.cms_userss.Where(w => w.id == id)
+                    .Set(u => u.с_change_pass_code, Code)
+                    .Update();
+
+                // Логирование
+                insertLog(id, IP, "reqest_change_pass", id, String.Empty, "Users", "Восстановление пароля");
+            }
+        }
+
+        public override void insertLog(Guid UserId, string IP, string Action, Guid PageId, string Site, string Section, string PageName)
         {
             using (var db = new CMSdb(_context))
             {
                 db.cms_logs.Insert(() => new cms_log
                 {
-                    f_page = PageId,
-                    f_user = UserId,
                     d_date = DateTime.Now,
-                    f_action = Action,
-                    c_ip = IP
+                    f_page = PageId,
+                    c_page_name = PageName,
+                    f_section = Section,
+                    f_site = Site,
+                    f_user = UserId,
+                    c_ip = IP,
+                    f_action = Action
                 });
             }
         }

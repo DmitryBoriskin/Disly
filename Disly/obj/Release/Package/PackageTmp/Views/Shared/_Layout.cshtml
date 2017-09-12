@@ -1,53 +1,75 @@
 ﻿@{
     ViewBag.Version = "1.0.1";
 }
+
 <!DOCTYPE html>
+
 <html>
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="keywords" content="@ViewBag.keywords">
     <meta name="description" content="@ViewBag.description">
-
-
-    @* <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css"> *@
-
-
-
-    <link href="/content/Front/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
-    <link href="/content/Front/css/Style.css" rel="stylesheet" type="text/css" />
-    <link href="/content/Front/css/simplelightbox.min.css" rel="stylesheet" type="text/css" />
-    <link rel="stylesheet" href="/content/css/fontello.css"><!--[if IE 7]><link rel="stylesheet" href="/content/css/fontello-ie7.css"><![endif]-->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
-
-
     <title> @ViewBag.Title </title>
+    <link href="/Content/decor/chuvashia/favicon.ico" rel="shortcut icon">
+    <link href="/Content/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/Content/decor/chuvashia/styles.css" rel="stylesheet">
+    <link href="/Content/decor/chuvashia/map.css" rel="stylesheet">
+    <script type="text/javascript" src="/Content/plugins/jquery/jquery.js"></script>
+    <script type="text/javascript" src="/scripts/map.js"></script>
 </head>
 
 <body>
-    <div id="@ViewBag.background_id">@*background-layer-main*@
-        <header>
-            @Html.Partial("menu")
-        </header>
+    <div class="container">
+        <div class="row top-info">
+            <div class="col-xs-6 date-info">
+                <strong>Сегодня:</strong> @DateTime.Now.ToString("dd MMMM yyyy, dddd HH:mm")
+            </div>
+            <div class="col-xs-6 for-user">
+                <a title="" href="">Реклама на портале</a>
+                <a title="" href="">Правообладателям</a>
+            </div>
+        </div>
+        <div class="body-block">
+            <header>
+                <div class="site-gid">
 
-        @RenderBody()
+                </div>
+                <div class="row">
+                    <div class="col-xs-5 logo-block">
+                        <a title="" href="">
+                            <img alt="" title="" src="/Content/decor/chuvashia/chuvashia-logo.png" />
+                        </a>
+                    </div>
+                    <div class="col-xs-3 weather-block"></div>
+                    <div class="col-xs-4 exchange-block"></div>
+                </div>
+            </header>
+            <div class="main-menu-block">
+                <nav></nav>
+            </div>
+            <div class="content-block">
+                @RenderBody()
+            </div>
+            <footer>
+                <div class="row">
+                    <div class="col-xs-4">
+                        © Chuvashia.com, 2001-@DateTime.Now.ToString("yyyy")
+                        <div>
+                            Если какая-либо информация окажется неверной, устаревшей или просто отсутствует — просьба писать на internet@asoft.ru
+                        </div>
+                    </div>
+                    <div class="col-xs-6">
+                        <div class="row">
+                            <div class="col-xs-4">1</div>
+                            <div class="col-xs-4">2</div>
+                            <div class="col-xs-4">3</div>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </div>
     </div>
-    @Html.Partial("footer")
-    @*<div class="pege-path">
-        @Html.Partial("Partial/PagePathPartial")
-    </div>*@
-
-
-    <script src="/content/Front/js/jquery-2.2.1.min.js" type="text/javascript"></script>
-    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
-    <script src="/content/Front/js/simple-lightbox.js" type="text/javascript"></script>
-    <script src="/content/Front/js/bootstrap.min.js" type="text/javascript"></script>
-    <script src="/content/Front/js/salvattore.min.js"></script>
-    <script src="/content/Front/js/main.js?version=@ViewBag.Version" type="text/javascript"></script>
-    <script src="/content/Front/js/cookie.js?version=@ViewBag.Version" type="text/javascript"></script>
-    <script src="/content/Front/js/button.js?version=@ViewBag.Version" type="text/javascript"></script>
-    <script src="/content/Front/js/design.js?version=@ViewBag.Version" type="text/javascript"></script>
-
 </body>
 
 

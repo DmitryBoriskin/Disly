@@ -1,71 +1,33 @@
 ﻿@model cmsMenuViewModel
 
-@Html.Partial("Partial/Confirm")
-@Html.Partial("Partial/Frame")
-@using (Html.BeginForm())
-{
-    <div id="Buttons">        
-        @if (ViewBag.ActionName == "create")
-        {
-            <button type="submit" name="action" value="create-btn" class="BtnCreate">Сохранить</button>
-            <button type="submit" name="action" value="cancel-btn" class="BtnCancel">Закрыть</button>
-        }
-        else
-        {
-            <button type="submit" name="action" value="update-btn" class="BtnSave">Сохранить</button>
-            <button type="submit" name="action" value="cancel-btn" class="BtnCancel">Закрыть</button>
-            <button type="submit" name="action" value="delete-btn" class="BtnDelete">Удалить</button>
-        }
+<div class="content">
+    <h1>@ViewBag.Title</h1>
+    <div class="row">
+        <div class="col-xs-8">
+            @Html.TextBoxFor(m => m.Item.Title, new { @class = "uc_input", @required = "", @title = "Название", @placeholder = "Название", @MaxLength = "512" })
+        </div>
+        <div class="col-xs-4">
+            @Html.TextBoxFor(m => m.Item.Alias, new { @class = "uc_input", @required = "", @Title = "Псевдоним", @placeholder = "Псевдоним", @MaxLength = "16", @data_help = "Уникальное имя раздела, по которому будут раздаваться права пользователям на данный раздел." })
+        </div>
     </div>
+    @Html.TextAreaFor(m => m.Item.Desc, new { @class = "uc_input", @type = "editor", @height = "300", @title = "Краткое описание раздела" })
+</div>
 
-        @* Содержимое страницы *@
-        <div id="Content">
-            <div id="TitleBlock">@ViewBag.Title</div>
-            <div class="row">
-                <div class="col-xs-8">
-                    @Html.TextBoxFor(m => Model.cmsMenuItem.Title, new { @class = "uc_input", @required = "", @title = "Название", @placeholder = "Название", @MaxLength = "512" })
-                </div>
-                <div class="col-xs-4">
-                    @Html.TextBoxFor(m => Model.cmsMenuItem.Alias, new { @class = "uc_input", @required = "", @Title = "Псевдоним", @placeholder = "Псевдоним", @MaxLength = "16", @data_help = "Уникальное имя раздела, по которому будут раздаваться права пользователям на данный раздел." })
-                </div>
-            </div>
-            @Html.TextBoxFor(m => Model.cmsMenuItem.Url, new { @class = "uc_input", @required = "", @title = "URL адрес страницы", @placeholder = "Адрес страницы", @MaxLength = "512", @data_help = "URL адрес, по которому находится данный раздел." })
-            <div class="row">
-                <div class="col-xs-6">
-                    @Html.DropDownListFor(m => m.cmsMenuItem.Group, new SelectList(Model.MenuType, "value", "text", 0), new { @class = "uc_input", @required = "", @title = "Группа", @data_help = "Определяет, в каком разделе будет отображен данный пункт меню." })
-                </div>
-                <div class="col-xs-6">
-                    @Html.TextBoxFor(m => Model.cmsMenuItem.Class, new { @class = "uc_input", @title = "Иконка", @placeholder = "Иконка", @MaxLength = "32", @data_help = "В данное поле вписывается class элемента, в котором хранится символ из шрифта Fontello" })
-                </div>
-            </div>
-            @Html.TextAreaFor(m => Model.cmsMenuItem.Desc, new { @class = "uc_input", @title = "Краткое описание раздела", @rows = "6" })
-        </div>
-        @* //Содержимое страницы *@
-
-        @* Блок DopInfo *@
-        <div id="DopInfo">
-            <div class="DopCaption icon-layers">Список справочников</div>
-            @if (Model.Sections != null)
-            {
-                <div class="sections-group_list Sortable ui-sortable" data-service="/Admin/Services/ChangePermit?group=sectionGroup">
-                    @foreach (SectionGroupModel group in Model.Sections)
-                    {
-                        <div class="sections-group" data-id="@group.Guid">
-                            <span class="icon-database"></span>
-                            <a class="PopUpFrame" title="Настройки справочника" href="/admin/Services/SectionGroup?id=@group.Guid">@group.Title</a>
-                        </div>
-                    }
-                </div>
-            }
-            @if(Model.cmsMenuItem != null) {
-                @Html.ActionLink("Добавить справочник", "SectionGroup", "Services", new { @sectionId = @Model.cmsMenuItem.Alias }, new { @id = "NewGroup", @class = "Button PopUpFrame icon-user-add", @title = "Создание справочника" })
-            }
-        </div>
-        @* // Блок DopInfo *@
-    
-    
-    if (ViewBag.Message != null)
+<div class="dop_info-block">
+    <div class="dop-caption icon-layers">Доп. параметры</div>
+    @Html.DropDownListFor(m => m.Item.Group, new SelectList(Model.MenuType, "value", "text", 0), new { @class = "uc_input", @required = "", @title = "Группа", @data_help = "Определяет, в каком разделе будет отображен данный пункт меню." })
+    @Html.TextBoxFor(m => m.Item.Class, new { @class = "uc_input", @title = "Иконка", @placeholder = "Иконка", @MaxLength = "32", @data_help = "В данное поле вписывается class элемента, в котором хранится символ из шрифта Fontello" })
+    @if (Model.Item != null)
     {
-        @Html.Partial("Partial/modal")
+        @Html.ActionLink("Журнал изменений", "log", "services", new { @id =  Model.Item.id }, new { @id = "LogLists", @class = "button pop-up_frame icon-archive", @data_class = "LogList", @title = "Журнал изменений" })
     }
-}
+</div>
+
+<div class="buttons">
+    <button type="submit" name="action" value="save-btn" data-primary="true" class="button icon-create">Сохранить</button>
+    @if (Model.Item != null)
+    {
+        <button type="submit" name="action" value="delete-btn" class="button icon-delete">Удалить</button>
+    }
+    <button type="submit" name="action" value="cancel-btn" class="button icon-cancel">Закрыть</button>
+</div>

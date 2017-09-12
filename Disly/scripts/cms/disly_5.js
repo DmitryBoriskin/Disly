@@ -16,12 +16,7 @@ $(document).ready(function () {
     $(".menu-block").mCustomScrollbar();
     // Полоса прокрутки
     $('.scrollbar').mCustomScrollbar();
-
-    // Панель авторизации пользователя
-    $('.account-info').click(function () {
-        $('.admin-settings').toggle();
-    });
-
+    
     // События Кнопок
     $('input[type=submit], .button').bind({
         mousedown: function () {
@@ -64,6 +59,21 @@ $(document).ready(function () {
             }
         }
     });
+    // показываем preloader при клике на ссылку
+    //$('a').click(function () {
+    //    var $load_bg = $("<div/>", { "class": "load_page" });
+    //    $load_bg.bind({
+    //        mousedown: function () { return false; },
+    //        selectstart: function () { return false; }
+    //    });
+
+    //    $('body').append($load_bg);
+    //});
+
+    // Панель авторизации пользователя    
+    $('.account-info').click(function () {
+        $('.admin-settings').toggle();
+    });
     
     // Показывает в модальном окне фрейм
     $('a.pop-up_frame').mousedown(function () {
@@ -86,7 +96,7 @@ $(document).ready(function () {
     $('input[data-type=date').datepicker({ onSelect: function (dateText, inst) { $(this).attr('value', dateText); } });
     // инициализаация TinyMCE
     $('textarea[type=editor]').each(function () {
-        InitTinyMCE($(this).attr('id'), 0, 300, "/UserFiles/");
+        InitTinyMCE_new($(this).attr('id'), 0, 300, "/UserFiles/");
     });
     $('textarea[type=liteeditor]').each(function () {
         InitLiteTinyMCE($(this).attr('id'), 0, 300);
@@ -102,7 +112,6 @@ $(document).ready(function () {
         $(this).mask($(this).attr('data-mask'));
     });
     
-
 
     // Изменение приоритета
     if ($(".sortable").length > 0) $('.sortable').each(function () {
@@ -162,13 +171,8 @@ function requiredTest() {
 function load_page() {
     var $load_bg = $('div.load_page');
     setTimeout(function () {
-        $load_bg.css('opacity', '1');
-
-        var interhellopreloader = setInterval(function () {
-            $load_bg.css('opacity', $load_bg.css('opacity') - 0.05);
-            if ($load_bg.css('opacity') <= 0.05) { clearInterval(interhellopreloader); $load_bg.remove(); }
-        }, 6);
-    }, 1000);
+        $load_bg.fadeOut();
+    }, 300);
 };
 
 // Очищаем модальное окно
@@ -297,7 +301,7 @@ function setCursor()
 function InitTinyMCE(id, _width, _height, directory) {
     tinymce.init({
         selector: "textarea#" + id,
-        theme: "modern",
+        //theme: "modern",
         add_unload_trigger: false,
         schema: "html5",
         plugins: [["anchor nonbreaking paste hr searchreplace  textcolor charmap  link autolink image media table visualblocks code fullscreen contextmenu"]],
@@ -345,5 +349,64 @@ function InitLiteTinyMCE(id, _width, _height) {
         width: _width,
         height: _height,
         menubar: false
+    });
+}
+
+
+// TinyMCE новая версия
+function InitTinyMCE_new(id, _width, _height, directory) {
+    tinymce.init({
+        selector: "textarea#" + id,
+        //theme: "modern",
+        add_unload_trigger: false,
+        schema: "html5",
+        plugins: [["anchor nonbreaking paste hr searchreplace  textcolor charmap  link autolink image media table visualblocks code fullscreen contextmenu"]],
+        toolbar: 'undo redo | styleselect fontsizeselect | bold italic underline superscript subscript | forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist | outdent indent | table | link image media | removeformat code',
+        contextmenu: "copy paste | link image",
+        extended_valid_elements: "code",
+        invalid_elements: "script,!--",
+        convert_urls: false,
+        relative_urls: false,
+        image_advtab: true,
+        cleanup: false,
+        statusbar: false,
+        language: 'ru',
+        menubar: false,
+        verify_html: false,
+        width: _width,
+        height: _height,
+
+        automatic_uploads: true,
+        images_upload_url: 'http://' + window.location.hostname +(location.port ? ':'+location.port: '')+ '/Admin/Services/GetFile/',
+        file_picker_callback: function(cb, value, meta) {
+            var input = document.createElement('input');
+            input.setAttribute('type', 'file');
+            input.setAttribute('accept', 'image/*');
+            input.onchange = function() {
+                var file = this.files[0];
+      
+                var reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = function () {
+                    var id = 'blobid' + (new Date()).getTime();
+                    var blobCache =  tinymce.activeEditor.editorUpload.blobCache;
+                    var base64 = reader.result.split(',')[1];
+                    var blobInfo = blobCache.create(id, file, base64);
+                    blobCache.add(blobInfo);
+
+                    cb(blobInfo.blobUri(), { title: file.name });
+                };
+            };
+    
+            input.click();
+        }
+
+        //,file_picker_callback: function (field_name, url, type, win) {
+        //    var cmsURL = "http://" + window.location.hostname + "/FileManager/?cmd=edit&path=" + directory;
+        //    $('div#Canvas').after('<div id="Opacity"></div><iframe id="FileManager" src="' + cmsURL + '">Ваш браузер не поддерживает плавающие фреймы!</iframe>');
+
+        //    $('iframe#FileManager').bind('load', function () { FileManagerLoad(field_name); });
+        //    if (win.getImageData) win.getImageData();
+        //}
     });
 }

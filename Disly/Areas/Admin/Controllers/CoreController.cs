@@ -36,7 +36,6 @@ namespace Disly.Areas.Admin.Controllers
             string _ControllerName = filterContext.RouteData.Values["Controller"].ToString().ToLower();
             string _ActionName = filterContext.RouteData.Values["Action"].ToString().ToLower();
             Guid _PageId;
-            ViewBag.CtrlName = _ControllerName;
 
             try { Domain = _cmsRepository.getSiteId(Request.Url.Host.ToLower().Replace("www.", "")); }
             catch

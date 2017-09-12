@@ -1,47 +1,42 @@
-﻿@model ServicesViewsModel
+﻿@{Layout = "~/Areas/Admin/Views/Shared/_popUp.cshtml";}
+@model cmsLogModel[]
 
-@using (Html.BeginForm())
-{
-    <div>
-        @if (Model.getLogList != null)
-        {
 
-        <div id="LogListTitle">
-            <div class="HeadLogItem">
-                <div class="DateBlock HeadBlock">
+<div>
+    @if (Model != null)
+    {
+        <div id="log-list_title">
+            <div class="log-item_head">
+                <div class="date-col head-block">
                     Дата
-                </div><div class="ActionBlock HeadBlock">
+                </div>
+                <div class="action-col head-block">
                     Действие
-                </div><div class="UserBlock HeadBlock">
+                </div>
+                <div class="user-col head-block">
                     Пользователь
                 </div>
             </div>
         </div>
-
-        <div id="LogList" class="Scrollbar">
-            @foreach (cmsLogModel ItemLog in Model.getLogList)
-            {
-                <div class="LogItem">
-                    <div class="DateBlock">
-                        @ItemLog.Date
-                    </div><div class="ActionBlock">
-                        @ItemLog.Action
-                    </div><div class="UserBlock">
-                        <a target="_blank" title="" href="/Users/edit/@ItemLog.UserId">@ItemLog.Surname @ItemLog.Name</a>
-                    </div>
-                </div>
-            }
-        </div>
-        }
-        else
+    <div class="scrollbar log-list">
+        @foreach (cmsLogModel ItemLog in Model)
         {
-            <div id="LogListTitle">
-                <div class="LogItem">Нету записей в логах</div>
+            <div class="log-item">
+                <div class="date-col">
+                    @ItemLog.Date
+                </div><div class="action-col">
+                    @ItemLog.Action
+                </div><div class="user-col">
+                    <a target="_blank" title="" href="/Users/edit/@ItemLog.UserId">@ItemLog.Surname @ItemLog.Name</a>
+                </div>
             </div>
-       }
+        }
     </div>
-}
-
-@Styles.Render("~/bundles/popUp_css")
-@Scripts.Render("~/bundles/jquery")
-@Scripts.Render("~/bundles/popUp_js")
+    }
+    else
+    {
+        <div id="log-list_title">
+            <div class="alert alert-danger" role="alert">Журнал изменений для этой записи пуст.</div>
+        </div>
+    }
+</div>

@@ -15,9 +15,10 @@ namespace cms.dbModel.entity
         public string Group { get; set; }        
         public string Surname { get; set; }
         public string Name { get; set; }        
-        public string Patronymic { get; set; }                        
+        public string Patronymic { get; set; }
+        public bool CountError { get; set; }
+        public DateTime? LockDate { get; set; }
         public bool Disabled { get; set; }
-        public bool Deleted { get; set; }
         public DomainList[] Domains { get; set; }
     }
 

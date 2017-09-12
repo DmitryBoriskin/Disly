@@ -1,105 +1,95 @@
-﻿@model UsersViewModel
+﻿@{
+    Layout = "~/Areas/Admin/Views/Shared/_popUp.cshtml";
+}
+@model UsersGroupModel
 
-@using (Html.BeginForm())
-{
-    <div>
-        @if (ViewBag.SuccesAlert != null)
-        {
-            <div class="alert alert-success" role="alert">@ViewBag.SuccesAlert</div>
-        }
-        @if (ViewBag.DankerAlert != null)
-        {
-            <div class="alert alert-danger">@ViewBag.DankerAlert</div>
-        }
+<div>
+    @if (ViewBag.SuccesAlert != null)
+    {
+        <div class="alert alert-success" role="alert">@ViewBag.SuccesAlert</div>
+    }
+    @if (ViewBag.DankerAlert != null)
+    {
+        <div class="alert alert-danger">@ViewBag.DankerAlert</div>
+    }
 
-        @Html.ValidationSummary(false, "", new { @class = "alert alert-danger" })
-        <div style="overflow:hidden">
-            <div class="col-xs-4">
-                @if (ViewBag.ActionName == "groupcreate")
-                {
-                    @Html.TextBoxFor(m => m.GroupItem.C_Alias, new { @class = "uc_input", @title = "Название группы (на английском)" })
-                }
-                else
-                {
-                    @Html.TextBoxFor(m => m.GroupItem.C_Alias, new { @class = "uc_input", @title = "Название группы (на английском)", @readonly = "readonly" })
-                }
-
-            </div>
-            <div class="col-xs-4">
-                @Html.TextBoxFor(m => m.GroupItem.C_GroupName, new { @class = "uc_input", @title = "Отображаемое имя" })
-            </div>
-            <div class="col-xs-4">
-                <div id="Buttons" class="ButtonsFrame">
-                    @if (ViewBag.ActionName == "groupcreate")
-                    {
-                        <button type="submit" name="action" value="create-btn-group-user" class="BtnCreate">Создать</button>
-                        @*<button type="submit" name="action" value="cancel-btn-group-user" class="BtnCancel">Закрыть</button>*@
-                    }
-                    else
-                    {
-                        <button type="submit" name="action" value="update-btn-group-user" class="BtnSave">Сохранить</button>
-                        @*<button type="submit" name="action" value="cancel-btn-group-user" class="BtnCancel">Закрыть</button>*@
-                        <button type="submit" name="action" value="delete-btn-group-user" class="BtnDelete">Удалить</button>
-                    }
-                </div>
-            </div>
-            @if (ViewBag.ActionName != "groupcreate")
+    @Html.ValidationSummary(false, "", new { @class = "alert alert-danger" })
+    <div style="overflow:hidden">
+        <div class="col-xs-3">
+            @if (Model == null)
             {
-                <div class="col-xs-12">
-                    <div id="UserGroupResolutions">
-                        <div id="PagesListTitle">
-                            <div class="HeadItem">
-                                <div class="CB_Block HeadBlock">
-                                    Удаление
-                                </div><div class="CB_Block HeadBlock">
-                                    Изменение
-                                </div><div class="CB_Block HeadBlock">
-                                    Создание
-                                </div><div class="CB_Block HeadBlock">
-                                    Просмотр
-                                </div><div class="PageName HeadBlock">
-                                    Раздел CMS
-                                </div>
+                @Html.TextBoxFor(m => m.Alias, new { @class = "uc_input", @title = "Название группы (на английском)" })
+            }
+            else
+            {
+                @Html.TextBoxFor(m => m.Alias, new { @class = "uc_input", @title = "Название группы (на английском)", @readonly = "readonly" })
+            }
+
+        </div>
+        <div class="col-xs-4">
+            @Html.TextBoxFor(m => m.GroupName, new { @class = "uc_input", @title = "Отображаемое имя" })
+        </div>
+        <div class="col-xs-5">
+            <div id="Buttons" class="ButtonsFrame">
+                <button type="submit" name="action" value="save-group-user" class="button icon-save">Сохранить</button>
+                @if (Model != null)
+                {
+                    <button type="submit" name="action" value="delete-btn-group-user" class="button icon-delete">Удалить</button>
+                }
+            </div>
+        </div>
+        @if (Model != null)
+        {
+            <div class="col-xs-12">
+                <div id="UserGroupResolutions">
+                    <div id="PagesListTitle">
+                        <div class="HeadItem">
+                            <div class="CB_Block HeadBlock">
+                                Удаление
+                            </div><div class="CB_Block HeadBlock">
+                                Изменение
+                            </div><div class="CB_Block HeadBlock">
+                                Создание
+                            </div><div class="CB_Block HeadBlock">
+                                Просмотр
+                            </div><div class="PageName HeadBlock">
+                                Раздел CMS
                             </div>
                         </div>
-                        <div id="PagesList" class="Scrollbar">
-                            @foreach (ResolutionsTemplatesModel Resolut in Model.ResolutionsTemplatesList)
-                            {
-                                <div class="TableItem">
-                                    <div class="CB_Block">
-                                        <span data-user="@Resolut.UserGroupId" data-url="@Resolut.MenuId" data-action="delete">
-                                            <input id="ctl17" type="checkbox" name="ctl17" checked="@Resolut.Delete" }>
-                                        </span>
-                                    </div>
-                                    <div class="CB_Block">
-                                        <span data-user="@Resolut.UserGroupId" data-url="@Resolut.MenuId" data-action="change">
-                                            <input id="ctl17" type="checkbox" name="ctl17" checked="@Resolut.Change" }>
-                                        </span>
-                                    </div>
-                                    <div class="CB_Block">
-                                        <span data-user="@Resolut.UserGroupId" data-url="@Resolut.MenuId" data-action="write">
-                                            <input id="ctl17" type="checkbox" name="ctl17" checked="@Resolut.Write" }>
-                                        </span>
-                                    </div>
-                                    <div class="CB_Block">
-                                        <span data-user="@Resolut.UserGroupId" data-url="@Resolut.MenuId" data-action="read">
-                                            <input id="ctl17" type="checkbox" name="ctl17" checked="@Resolut.Read" }>
-                                        </span>
-                                    </div>
-                                    <div class="PageName HeadBlock">@Resolut.MenuTitle</div>
+                    </div>
+                    <div id="PagesList" class="Scrollbar">
+                        @foreach (ResolutionsModel Resolut in Model.GroupResolutions)
+                        {
+                            <div class="TableItem">
+                                <div class="CB_Block">
+                                    <span data-user="@Resolut.UserId" data-url="@Resolut.MenuId" data-action="delete">
+                                        <input id="ctl17" type="checkbox" name="ctl17" checked="@Resolut.Delete" }>
+                                    </span>
                                 </div>
+                                <div class="CB_Block">
+                                    <span data-user="@Resolut.UserId" data-url="@Resolut.MenuId" data-action="change">
+                                        <input id="ctl17" type="checkbox" name="ctl17" checked="@Resolut.Change" }>
+                                    </span>
+                                </div>
+                                <div class="CB_Block">
+                                    <span data-user="@Resolut.UserId" data-url="@Resolut.MenuId" data-action="write">
+                                        <input id="ctl17" type="checkbox" name="ctl17" checked="@Resolut.Write" }>
+                                    </span>
+                                </div>
+                                <div class="CB_Block">
+                                    <span data-user="@Resolut.UserId" data-url="@Resolut.MenuId" data-action="read">
+                                        <input id="ctl17" type="checkbox" name="ctl17" checked="@Resolut.Read" }>
+                                    </span>
+                                </div>
+                                <div class="PageName HeadBlock">@Resolut.Title</div>
+                            </div>
 
-                            }
+                        }
 
-                        </div>
                     </div>
                 </div>
-            }
-        </div>
+            </div>
+        }
     </div>
-}
-@Styles.Render("~/bundles/popUp_css")
-@Scripts.Render("~/bundles/jquery")
-@Scripts.Render("~/bundles/popUp_js")
-
+</div>
 

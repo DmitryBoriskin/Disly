@@ -1,11 +1,9 @@
 ﻿$(document).ready(function () {
     var frameHeight = $(document).height();
-    if (top != self) window.top.IframeSize(frameHeight);
 
     // Инициализация полосы прокрутки
     if ($(".Scrollbar").length > 0) $(".Scrollbar").mCustomScrollbar();
-
-
+    
 
     //назначение прав отдельному пользователю
     $('#UserResolutions .CB_Block input[type="checkbox"]').change(function () {

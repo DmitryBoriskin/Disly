@@ -113,133 +113,142 @@ a:hover:after {
     text-decoration:none;
 }
 
-
-/* Поля ввода */
-.form-group {
-    margin: 5px 0;
-}
-.form-group label { 
-    font: 11px verdana; 
-    font-weight: normal; 
-    margin: 7px 0 3px; 
-    color: #999999;
-}
-input.form-control, 
-textarea.form-control { 
-    font: 13px 'Verdana'; 
-    width:100%; 
-    padding: 6px 14px; 
-    resize: none; 
-    -webkit-box-sizing: border-box; 
-    -moz-box-sizing: border-box; 
-    box-sizing: border-box; 
-    border-radius: 4px; 
-    border: solid 1px #dae1e6; 
-    outline: none; 
-    background: #fff; 
-}
-input:focus, textarea:focus { 
-    border-color: #66afe9; 
-    outline: 0;
-}
-.form-group:last-child { 
-    margin-bottom: 10px; 
-}
-.form-control { 
-    height: 30px;
-    box-shadow: none; 
-    -webkit-box-shadow: none;  
-}
-.form-control:focus { 
-    box-shadow: none; 
-    -webkit-box-shadow: none; 
-}
-
-.tooltip-inner { width: 400px; }
-.checkbox-inline input{ margin-top: 2px!important;}
-
-input.form-control[type='checkbox'] {
-    display: none;
-}
-
-/* Кнопки */
-#Buttons button {
+/**/
+.HeadItem {
     overflow: hidden;
-    display: block;
-    position: relative;
-    float: left;
-    margin: 5px 10px;
-    padding: 6px;
-    background: #005c99;
-    border:none;
-    outline: none;
-    border-radius: 4px;
-    -moz-border-radius: 4px;
-    -webkit-border-radius: 4px;
-    color: #ffffff;
-    font-size: 13px;
-    text-transform: uppercase;
-    cursor: pointer;
+    font: bold 12px Verdana;
+    color: #172833;
+    padding: 10px;
+    border-bottom: solid 1px #dae1e6;
 }
-#Buttons button:hover {
-    background: #006bb3;
-}
-
-/* ------ AllUsers ------- */
-
-div.ListItem.User a {font-size:15px;font-weight:normal;}
-.sitelinks td span { color: #555; font-size: 14px; }
-.delete-sitelink { cursor: pointer; color: #555; }
-
-#PagesList {
-    height: 150px;
+.TableItem {
     overflow:hidden;
 }
-/*Чекбоксы для назначения прав*/
-div.ListItem.User{font-family:'ubuntu';font-size:14px;padding:10px 5px;border-top:solid 1px #dedede;border-bottom:solid 1px transparent;}
-div.ListItem.User:first-child{border-top:solid 1px transparent;}
-div.ListItem.User a.LI_Caption{color: #428bca;text-decoration: none;font-size:15px;font-weight:normal;}
-
-#PagesList{overflow:hidden;height:400px;}
-#PagesList .mCSB_scrollTools .mCSB_dragger .mCSB_dragger_bar{background-color:#85afcc !important;}
-#PagesList .mCSB_inside > .mCSB_container{margin-right:0 !important;}
-
- .CB_Block{float:right;width:80px;padding:0 4px;text-align:center;}
- .PageName{overflow:hidden;}
-
- .HeadItem{overflow:hidden;font:bold 12px Verdana;color:#172833;padding:10px;border-bottom:solid 1px #dae1e6;}
- .TableItem{overflow:hidden;font:normal 13px Verdana;color:#172833;padding: 6px 10px;border-top:solid 1px #dae1e6;}
- .TableItem:nth-child(2n){background:#f5f8fa;}
-/* // -- AllUsers  ------- */
-
-/* ------ Sites ------- */
-.delete-domain { width: 60px; cursor: pointer; color: #555; }
-.delete-domain span {
-    cursor: pointer;
+.CB_Block {
+    float: right;
+    width: 80px;
+    padding: 0 4px;
+    text-align: center;
 }
-.icon-icon-trash-2:before {
-    content:'\eb85';
+
+
+
+
+/* -------- ChangePass -------- */
+.change-pass_form {
+    padding: 0 10px;
 }
-/* // -- Sites  ------- */
+.list-item {
+    overflow: hidden;
+    padding: 5px 0;
+}
+.li-caption {
+    font-size: 1.3em;
+}
+.li-desc {
+    padding: 0 0 3px;
+}
+.li-desc span {
+    font-weight: 500;
+}
+/* // -------- ChangePass -------- */
 
 /* -------- Log  ------ */
-#LogList{height:400px; overflow:hidden; }
-#LogList .mCSB_scrollTools .mCSB_dragger .mCSB_dragger_bar{background-color:#85afcc !important;}
-#LogList .mCSB_inside > .mCSB_container{margin-right:0 !important;}
+.log-list {
+    height:400px;
+    overflow:hidden;
+}
+.log-list .mCSB_scrollTools .mCSB_dragger .mCSB_dragger_bar {
+    background-color: #85afcc !important;
+}
+.log-list .mCSB_inside > .mCSB_container {
+    margin-right:0 !important;
+}
 
-.HeadLogItem{overflow:hidden;font:bold 12px Verdana;color:#172833;padding:10px;border-bottom:solid 1px #dae1e6;}
-.LogItem{overflow:hidden;font:normal 13px Verdana;color:#172833;padding:10px;border-top:solid 1px #dae1e6;}
-.LogItem:nth-child(2n){background:#f5f8fa;}
+.log-item_head {
+    overflow: hidden;
+    font: bold 12px Verdana;
+    color: #172833;
+    padding: 10px;
+    border-bottom: solid 1px #dae1e6;
+}
+.log-item {
+    overflow: hidden;
+    font: normal 13px Verdana;
+    color: #172833;
+    padding: 10px;
+    border-top: solid 1px #dae1e6;
+}
+.log-item:nth-child(2n) {
+    background: #f5f8fa;
+}
 
-.LogItem a{color:#176599;text-decoration:underline;}
-.DateBlock{float:left;width:200px;}
-.ActionBlock{float:right;width:250px;}
-.UserBlock{overflow:hidden;}
+.log-item a {
+    color: #176599;
+    text-decoration: underline;
+}
+.date-col {
+    float: left;
+    width: 200px;
+}
+.action-col {
+    float: right;
+    width: 250px;
+}
+.user-col {
+    overflow: hidden;
+}
 /* // ----- Log  -------*/
 
 
+/* ----------- Кнопки управления контентом ----------- */
+.button {
+    overflow:hidden;
+    display:block;
+    position:relative;
+    float:left;
+    margin:10px;
+    padding: 9px 20px 9px 9px;
+    background: #005c99;
+    border:none;
+    outline:none;
+    border-radius:4px;
+    -moz-border-radius:4px;
+    -webkit-border-radius:4px;
+    color:#ffffff;
+    font-size: 12px;
+    line-height: 16px;
+    text-transform:uppercase;
+    cursor:pointer;
+}
+.button:hover,
+a.button:hover {
+    background:#006bb3;
+    text-decoration: none;
+    color: #ffffff;
+}
+.button:before {
+    font-family:'fontello';
+    padding: 5px 9px;
+    font-size: 16px;
+    color: #85afcc;
+    min-width: 1px;
+    min-height: 16px;
+}
+a.button  {
+    float: none;
+}
+.button.green {
+    background: #00baa4;
+}
+.button.green:hover {
+    background: #01ad99;
+}
+
 /* mvc errors */
-.validation-summary-valid { display: none; }
+.validation-summary-valid {
+    display: none;
+}
 
 /* Шрифтовые иконки fontello */
 [class^="icon-"]:before,
@@ -255,4 +264,32 @@ div.ListItem.User a.LI_Caption{color: #428bca;text-decoration: none;font-size:15
 [class^="icon-"]:hover:after,
 [class*=" icon-"]:hover:after {
     text-decoration: none;
+}
+
+/* Кнопки */
+.icon-new:before { 
+    content: '\ea19';
+}
+.icon-create:before {
+    content: '\ef01'; 
+}
+.icon-save:before { 
+    content: '\ead2'; 
+}
+.icon-delete:before { 
+    content: '\ef34';
+    font-size: 13px;
+    padding: 7px 12px; 
+}
+.icon-cancel:before { 
+    content: '\eb68'; 
+}
+.icon-export:before { 
+    content: '\ea30';
+}
+.icon-import:before { 
+    content: '\ea2f';
+}
+.icon-recovery:before { 
+    content: '\f054';
 }

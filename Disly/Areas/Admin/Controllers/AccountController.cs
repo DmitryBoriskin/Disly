@@ -2,6 +2,8 @@
 using cms.dbModel.entity;
 using Disly.Areas.Admin.Models;
 using System;
+using System.IO;
+using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
@@ -14,6 +16,7 @@ namespace Disly.Areas.Admin.Controllers
         protected bool _IsAuthenticated = System.Web.HttpContext.Current.User.Identity.IsAuthenticated;
         protected AccountRepository _accountRepository;
         protected cmsRepository _cmsRepository;
+        protected int maxLoginError = 5;
 
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
@@ -22,32 +25,42 @@ namespace Disly.Areas.Admin.Controllers
             _accountRepository = new AccountRepository("cmsdbConnection");
             _cmsRepository = new cmsRepository("cmsdbConnection");
             //SettingsModel Settings = _cmsRepository.getCmsSettings();
+            
 
             #region Метатеги
             ViewBag.Title = "Авторизация";
             ViewBag.Description = "";
             ViewBag.KeyWords = "";
-
-            ViewBag.SiteName = "Имя сайта";//Settings.Title;
-            ViewBag.SiteURL = "site";//Settings.Url;
             #endregion
         }
 
         /// <summary>
-        /// Сраница по умолчанию
+        /// Сраница по умолчанию (Авторизация в CMS)
         /// </summary>
         /// <returns></returns>
         public ActionResult LogIn()
         {
+            // Авторизованного пользователя направляем на главную страницу
             if (_IsAuthenticated) return RedirectToAction("", "Main");
-            else return View();
-        }
+            else
+            {
+                string UID = RequestUserInfo.CookiesValue(".ASPXAUTHMORE");
+                
+                if (UID != string.Empty)
+                {
+                    AccountModel AccountInfo = _accountRepository.getCmsAccount(new Guid(UID));
+                    // Если пользователь найден
+                    if (AccountInfo != null)
+                    {
+                        FormsAuthentication.SetAuthCookie(AccountInfo.id.ToString(), false);
+                        return RedirectToAction("Index", "Main");
+                    }
+                }
 
-        /// <summary>
-        /// Авторизация в CMS
-        /// </summary>
-        /// <param name="model"></param>
-        /// <returns></returns>
+                return View();
+            }
+        }
+        
         [HttpPost]
         public ActionResult LogIn(LogInModel model)
         {
@@ -62,27 +75,88 @@ namespace Disly.Areas.Admin.Controllers
 
                 AccountModel AccountInfo = _accountRepository.getCmsAccount(_login);
 
-                string Salt = string.Empty;
-                string Hash = string.Empty;
-
+                // Если пользователь найден
                 if (AccountInfo != null)
                 {
-                    Salt = AccountInfo.Salt;
-                    Hash = AccountInfo.Hash;
-                }
-                
-                Cripto password = new Cripto(Salt, Hash);
-                if (password.Verify(_pass.ToCharArray()))
-                {
-                    FormsAuthentication.SetAuthCookie(AccountInfo.id.ToString(), _remember);
-                    _accountRepository.insertLog(AccountInfo.id, AccountInfo.id, "login", RequestUserInfo.IP);
+                    if (AccountInfo.Disabled)
+                    {
+                        // Оповещение о блокировке
+                        ModelState.AddModelError("", "Пользователь заблокирован и не имеет прав на доступ в систему администрирования");
+                    }
+                    else if (AccountInfo.CountError && AccountInfo.LockDate.Value.AddMinutes(15) >= DateTime.Now)
+                    {
+                        // Оповещение о блокировке
+                        ModelState.AddModelError("", "После " + maxLoginError + " неудачных попыток авторизации Ваш пользователь временно заблокирован.");
+                        ModelState.AddModelError("", "————");
+                        ModelState.AddModelError("", "Вы можете повторить попытку через " + (AccountInfo.LockDate.Value.AddMinutes(16) - DateTime.Now).Minutes + " минут");
+                    }
+                    else
+                    {
+                        // Проверка на совпадение пароля
+                        Cripto password = new Cripto(AccountInfo.Salt, AccountInfo.Hash);
+                        if (password.Verify(_pass.ToCharArray()))
+                        {
+                            // Удачная попытка, Авторизация
+                            FormsAuthentication.SetAuthCookie(AccountInfo.id.ToString(), _remember);
 
-                    return RedirectToAction("Index", "Main");
+                            HttpCookie MyCookie = new HttpCookie(".ASPXAUTHMORE");
+                            MyCookie.Value = HttpUtility.UrlEncode(AccountInfo.id.ToString(), System.Text.Encoding.UTF8);
+                            MyCookie.Domain = "." + Settings.BaseURL;
+                            Response.Cookies.Add(MyCookie);
+
+
+                            // Записываем данные об авторизации пользователя
+                            _accountRepository.SuccessLogin(AccountInfo.id, RequestUserInfo.IP);
+
+                            return RedirectToAction("Index", "Main");
+                        }
+                        else
+                        {
+                            // Неудачная попытка
+                            // Записываем данные о попытке авторизации и плучаем кол-во неудавшихся попыток входа
+                            int attemptNum = _accountRepository.FailedLogin(AccountInfo.id, RequestUserInfo.IP);
+                            if (attemptNum == maxLoginError)
+                            {
+                                #region Оповещение о блокировке
+                                // Формируем код востановления пароля
+                                Guid RestoreCode = Guid.NewGuid();
+                                _accountRepository.setRestorePassCode(AccountInfo.id, RestoreCode, RequestUserInfo.IP);
+
+                                // оповещение на e-mail
+                                string Massege = String.Empty;
+                                Mailer Letter = new Mailer();
+                                Letter.Theme = "Блокировка пользователя";
+                                Massege = "<p>Уважаемый " + AccountInfo.Surname + " " + AccountInfo.Name + ", в системе администрирования сайта " + Request.Url.Host + " было 5 неудачных попыток ввода пароля.<br />В целях безопасности, ваш аккаунт заблокирован.</p>";
+                                Massege += "<p>Для восстановления прав доступа мы сформировали для Вас ссылку, перейдя по которой, Вы сможете ввести новый пароль для вашего аккаунта и учетная запись будет разблокирована.</p>";
+                                Massege += "<p>Если вы вспомнили пароль и хотите ещё раз пропробовать авторизоваться, то подождите 15 минут. Спустя это время, система позволит Вам сделать ещё попытку.</p>";
+                                Massege += "<p><a href=\"http://" + Request.Url.Host + "/Admin/Account/ChangePass/" + RestoreCode + "/\">http://" + Request.Url.Host + "/Admin/Account/ChangePass/" + RestoreCode + "/</a></p>";
+                                Massege += "<p>С уважением, администрация сайта!</p>";
+                                Massege += "<hr><i><span style=\"font-size:11px\">Это сообщение отпралено роботом, на него не надо отвечать</i></span>";
+                                Letter.MailTo = AccountInfo.Mail;
+                                Letter.Text = Massege;
+                                string ErrorText = Letter.SendMail();
+                                #endregion
+                                ModelState.AddModelError("", "После " + maxLoginError + " неудачных попыток авторизации Ваш пользователь временно заблокирован.");
+                                ModelState.AddModelError("", "Вам на почту отправлено сообщение с инструкцией по разблокировки и смене пароля.");
+                                ModelState.AddModelError("", "---");
+                                ModelState.AddModelError("", "Если вы хотите попробовать ещё раз, подождите 15 минут.");
+                            }
+                            else
+                            {
+                                // Оповещение об ошибке
+                                string attemptCount = (maxLoginError - attemptNum == 1) ? "Осталась 1 попытка" : "Осталось " + (maxLoginError - attemptNum) + " попытки";
+                                ModelState.AddModelError("", "Пара логин и пароль не подходят.");
+                                ModelState.AddModelError("", attemptCount + " ввода пароля.");
+                            }
+                        }
+                    }
                 }
-                else
-                {
-                    ModelState.AddModelError("", "Пара логин и пароль не подходят. Попробуйте ещё раз");
+                else {
+                    // Оповещение о неверном логине
+                    ModelState.AddModelError("", "Такой пользователь не зарегистрирован в системе.");
+                    ModelState.AddModelError("", "Проверьте правильность вводимых данных.");
                 }
+
 
                 return View();
             }
@@ -98,24 +172,14 @@ namespace Disly.Areas.Admin.Controllers
         /// <returns></returns>
         public ActionResult RestorePass()
         {
-            ViewBag.Title = "Напомнить пароль";
-            ViewBag.SiteAdress = Request.Url.Authority.Substring(0, Request.Url.Authority.IndexOf(":"));
-
+            // Авторизованного пользователя направляем на главную страницу
             if (_IsAuthenticated) return RedirectToAction("", "Main");
             else return View();
         }
 
-        /// <summary>
-        /// Форма "Напомнить пароль"
-        /// </summary>
-        /// <param name="model"></param>
-        /// <returns>отправляем письмо пользователю с новым паролем</returns>
         [HttpPost]
         public ActionResult RestorePass(RestoreModel model)
         {
-            ViewBag.Title = "Напомнить пароль";
-            ViewBag.SiteAdress = Request.Url.Authority.Substring(0, Request.Url.Authority.IndexOf(":"));
-
             try
             {
                 string _login = model.Email;
@@ -135,29 +199,25 @@ namespace Disly.Areas.Admin.Controllers
                 // существует ли адрес
                 if (AccountInfo != null)
                 {
-                    string newPass = Membership.GeneratePassword(8, 0);
-
-                    Cripto pass = new Cripto(newPass.ToCharArray());
-                    string NewSalt = pass.Salt;
-                    string NewHash = pass.Hash;
-                    _accountRepository.changePasswordUser(AccountInfo.id, NewSalt, NewHash, RequestUserInfo.IP);
+                    // Формируем код востановления пароля
+                    Guid RestoreCode = Guid.NewGuid();
+                    _accountRepository.setRestorePassCode(AccountInfo.id, RestoreCode, RequestUserInfo.IP);
 
                     #region оповещение на e-mail
-                    //string ErrorText = "";
-                    //string Massege = String.Empty;
-                    //Mailer Letter = new Mailer();
-                    //Letter.Theme = "Изменение пароля";
-                    //Massege = "<p>Уважаемый " + AccountInfo.Surname + " " + AccountInfo.Name + "</p>";
-                    //Massege += "<p>Ваш пароль на сайте был изменен</p>";
-                    //Massege += "<p>Ваш новый пароль:<b>" + newPass + "</b></p>";
-                    //Massege += "<p>С уважением, администрация портала!</p>";
-                    //Massege += "<hr><span style=\"font-size:11px\">Это сообщение отпралено роботом, на него не надо отвечать</span>";
-                    //Letter.MailTo = AccountInfo.Mail;
-                    //Letter.Text = Massege;
-                    //ErrorText = Letter.SendMail();
+                    string Massege = String.Empty;
+                    Mailer Letter = new Mailer();
+                    Letter.Theme = "Изменение пароля";
+                    Massege = "<p>Уважаемый " + AccountInfo.Surname + " " + AccountInfo.Name + ", Вы отправили запрос на смену пароля на сайте " + Request.Url.Host + ".</p>";
+                    Massege += "<p>Для вас сформирована ссылка, перейдя по которой, Вы сможете ввести новый пароль для вашего аккаунта.</p>";
+                    Massege += "<p><a href=\"http://" + Request.Url.Host + "/Admin/Account/ChangePass/" + RestoreCode + "/\">http://" + Request.Url.Host + "/Admin/Account/ChangePass/" + RestoreCode + "/</a></p>";
+                    Massege += "<p>С уважением, администрация сайта!</p>";
+                    Massege += "<hr><i><span style=\"font-size:11px\">Это сообщение отпралено роботом, на него не надо отвечать</i></span>";
+                    Letter.MailTo = AccountInfo.Mail;
+                    Letter.Text = Massege;
+                    string ErrorText = Letter.SendMail();
                     #endregion
 
-                    return RedirectToAction("ConfirmRestorePass", "Account");
+                    return RedirectToAction("MsgSendMail", "Account");
                 }
                 else
                 {
@@ -176,26 +236,76 @@ namespace Disly.Areas.Admin.Controllers
         /// Форма "Изменить пароль"
         /// </summary>
         /// <returns></returns>
-        public ActionResult ConfirmRestorePass()
+        public ActionResult ChangePass(Guid id)
         {
-            ViewBag.Title = "Напомнить пароль";
-            ViewBag.SiteAdress = Request.Url.Authority.Substring(0, Request.Url.Authority.IndexOf(":"));
+            // Авторизованного пользователя направляем на главную страницу
+            if (_IsAuthenticated) 
+                return RedirectToAction("", "Main");
 
+            string ViewName = "~/Areas/Admin/Views/ChangePass.cshtml";
+
+            // Проверка кода востановления пароля
+            if (!_accountRepository.getCmsAccountCode(id))
+                ViewName = "~/Areas/Admin/Views/MsgFailRestore.cshtml";
+
+
+            return View(ViewName);
+        }
+        
+        [HttpPost]
+        public ActionResult ChangePass(Guid id,PasswordModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                string NewPass = model.Password;
+
+                Cripto pass = new Cripto(NewPass.ToCharArray());
+                string NewSalt = pass.Salt;
+                string NewHash = pass.Hash;
+
+                _accountRepository.changePasByCode(id, NewSalt, NewHash, RequestUserInfo.IP);
+
+                return RedirectToAction("MsgResult", "Account");
+            }
+            else
+            {
+                ModelState.AddModelError("", "Ошибки в заполнении формы.");
+            }
+
+            return View();
+        }
+        
+        /// <summary>
+        /// Сообщение об отправке письма для смены пароля
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult MsgSendMail()
+        {
+            // Авторизованного пользователя направляем на главную страницу
+            if (_IsAuthenticated) return RedirectToAction("", "Main");
             return View();
         }
 
         /// <summary>
-        /// Форма "Изменить пароль"
+        /// Сообщение о некоректности кода востановления пароля
         /// </summary>
-        /// <param name="model"></param>
         /// <returns></returns>
-        [HttpPost]
-        public ActionResult ToLoginRestorePass()
+        public ActionResult MsgFailRestore()
         {
-            ViewBag.Title = "Напомнить пароль";
-            ViewBag.SiteAdress = Request.Url.Authority.Substring(0, Request.Url.Authority.IndexOf(":"));
-
-            return RedirectToAction("LogIn", "Account");
+            // Авторизованного пользователя направляем на главную страницу
+            if (_IsAuthenticated) return RedirectToAction("", "Main");
+            return View();
+        }
+        
+        /// <summary>
+        /// Сообщение о смене пароля
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult MsgResult()
+        {
+            // Авторизованного пользователя направляем на главную страницу
+            if (_IsAuthenticated) return RedirectToAction("", "Main");
+            return View();
         }
 
         /// <summary>
@@ -205,11 +315,17 @@ namespace Disly.Areas.Admin.Controllers
         public ActionResult logOff()
         {
             AccountModel AccountInfo = _accountRepository.getCmsAccount(new Guid(User.Identity.Name));
-            _accountRepository.insertLog(AccountInfo.id, AccountInfo.id, "log_off", RequestUserInfo.IP);
+            _accountRepository.insertLog(AccountInfo.id, RequestUserInfo.IP, "log_off", AccountInfo.id, "", "account","");
+
+            HttpCookie MyCookie = new HttpCookie(".ASPXAUTHMORE");
+            MyCookie.Expires = DateTime.Now.AddDays(-1d);
+            MyCookie.Value = HttpUtility.UrlEncode("", System.Text.Encoding.UTF8);
+            MyCookie.Domain = "." + Settings.BaseURL;
+            Response.Cookies.Add(MyCookie);
             FormsAuthentication.SignOut();
+
 
             return RedirectToAction("LogIn", "Account");
         }
-
     }
 }

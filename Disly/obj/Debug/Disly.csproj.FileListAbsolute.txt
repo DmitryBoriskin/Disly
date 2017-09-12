@@ -336,7 +336,6 @@ C:\Users\a-korkin\YandexDisk\DislyMVC\Disly\bin\ru\System.Web.Mvc.resources.dll
 C:\Users\a-korkin\YandexDisk\DislyMVC\Disly\obj\Debug\Disly.csprojResolveAssemblyReference.cache
 C:\Users\a-korkin\YandexDisk\DislyMVC\Disly\obj\Debug\Disly.dll
 C:\Users\a-korkin\YandexDisk\DislyMVC\Disly\obj\Debug\Disly.pdb
-D:\Git\DislyMVC\Disly\bin\Disly.dll.config
 D:\Git\DislyMVC\Disly\bin\Disly.dll
 D:\Git\DislyMVC\Disly\bin\Disly.pdb
 D:\Git\DislyMVC\Disly\bin\Antlr3.Runtime.dll
@@ -421,3 +420,8 @@ C:\Users\aleksandr-mikhailov\Source\Repos\Disly\Disly\bin\ru\System.Web.Mvc.reso
 C:\Users\aleksandr-mikhailov\Source\Repos\Disly\Disly\obj\Debug\Disly.csprojResolveAssemblyReference.cache
 C:\Users\aleksandr-mikhailov\Source\Repos\Disly\Disly\obj\Debug\Disly.dll
 C:\Users\aleksandr-mikhailov\Source\Repos\Disly\Disly\obj\Debug\Disly.pdb
+D:\Git\DislyMVC\Disly\bin\Disly.dll.config
+D:\Git\DislyMVC\Disly\bin\System.Web.Mvc.dll
+D:\Git\DislyMVC\Disly\bin\cms.dbase.dll.config
+D:\Git\DislyMVC\Disly\bin\System.Web.Mvc.xml
+D:\Git\DislyMVC\Disly\bin\ru\System.Web.Mvc.resources.dll

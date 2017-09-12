@@ -20,9 +20,9 @@ using LinqToDB.Mapping;
 namespace cms.dbase.models
 {
 	/// <summary>
-	/// Database       : Disly
-	/// Data Source    : boriskiny.ru
-	/// Server Version : 11.00.2100
+	/// Database       : DislyMVC
+	/// Data Source    : chuvashia.com
+	/// Server Version : 11.00.3000
 	/// </summary>
 	public partial class CMSdb : LinqToDB.Data.DataConnection
 	{
@@ -488,14 +488,13 @@ namespace cms.dbase.models
 		[Column, NotNull    ] public string    c_name       { get; set; } // nvarchar(128)
 		[Column,    Nullable] public string    c_patronymic { get; set; } // nvarchar(128)
 		[Column,    Nullable] public DateTime? d_birthday   { get; set; } // datetime
-		[Column,    Nullable] public bool?     b_sex        { get; set; } // bit
+		[Column, NotNull    ] public bool      b_sex        { get; set; } // bit
 		[Column,    Nullable] public string    c_photo      { get; set; } // nvarchar(512)
 		[Column,    Nullable] public string    c_adres      { get; set; } // nvarchar(1024)
 		[Column,    Nullable] public string    c_phone      { get; set; } // nvarchar(32)
 		[Column,    Nullable] public string    c_mobile     { get; set; } // nvarchar(32)
 		[Column,    Nullable] public string    c_contacts   { get; set; } // nvarchar(max)
 		[Column, NotNull    ] public bool      b_disabled   { get; set; } // bit
-		[Column, NotNull    ] public bool      b_deleted    { get; set; } // bit
 	}
 
 	[Table(Schema="dbo", Name="cms_user_site_link")]
@@ -524,24 +523,26 @@ namespace cms.dbase.models
 	[Table(Schema="dbo", Name="cms_users")]
 	public partial class cms_users
 	{
-		[PrimaryKey, NotNull    ] public Guid      id           { get; set; } // uniqueidentifier
-		[Column,        Nullable] public string    c_email      { get; set; } // nvarchar(128)
-		[Column,        Nullable] public string    c_salt       { get; set; } // nvarchar(32)
-		[Column,        Nullable] public string    c_hash       { get; set; } // nvarchar(128)
-		[Column,        Nullable] public string    f_group      { get; set; } // varchar(32)
-		[Column,        Nullable] public string    c_post       { get; set; } // nvarchar(1024)
-		[Column,     NotNull    ] public string    c_surname    { get; set; } // nvarchar(128)
-		[Column,     NotNull    ] public string    c_name       { get; set; } // nvarchar(128)
-		[Column,        Nullable] public string    c_patronymic { get; set; } // nvarchar(128)
-		[Column,        Nullable] public DateTime? d_birthday   { get; set; } // datetime
-		[Column,     NotNull    ] public bool      b_sex        { get; set; } // bit
-		[Column,        Nullable] public string    c_photo      { get; set; } // nvarchar(512)
-		[Column,        Nullable] public string    c_adres      { get; set; } // nvarchar(1024)
-		[Column,        Nullable] public string    c_phone      { get; set; } // nvarchar(32)
-		[Column,        Nullable] public string    c_mobile     { get; set; } // nvarchar(32)
-		[Column,        Nullable] public string    c_contacts   { get; set; } // nvarchar(max)
-		[Column,     NotNull    ] public bool      b_disabled   { get; set; } // bit
-		[Column,     NotNull    ] public bool      b_deleted    { get; set; } // bit
+		[PrimaryKey, NotNull    ] public Guid      id                 { get; set; } // uniqueidentifier
+		[Column,        Nullable] public string    c_email            { get; set; } // nvarchar(128)
+		[Column,        Nullable] public string    c_salt             { get; set; } // nvarchar(32)
+		[Column,        Nullable] public string    c_hash             { get; set; } // nvarchar(128)
+		[Column,        Nullable] public Guid?     с_change_pass_code { get; set; } // uniqueidentifier
+		[Column,        Nullable] public string    f_group            { get; set; } // varchar(32)
+		[Column,        Nullable] public string    c_post             { get; set; } // nvarchar(1024)
+		[Column,     NotNull    ] public string    c_surname          { get; set; } // nvarchar(128)
+		[Column,     NotNull    ] public string    c_name             { get; set; } // nvarchar(128)
+		[Column,        Nullable] public string    c_patronymic       { get; set; } // nvarchar(128)
+		[Column,        Nullable] public DateTime? d_birthday         { get; set; } // datetime
+		[Column,     NotNull    ] public bool      b_sex              { get; set; } // bit
+		[Column,        Nullable] public string    c_photo            { get; set; } // nvarchar(512)
+		[Column,        Nullable] public string    c_adres            { get; set; } // nvarchar(1024)
+		[Column,        Nullable] public string    c_phone            { get; set; } // nvarchar(32)
+		[Column,        Nullable] public string    c_mobile           { get; set; } // nvarchar(32)
+		[Column,        Nullable] public string    c_contacts         { get; set; } // nvarchar(max)
+		[Column,     NotNull    ] public DateTime  d_try_login        { get; set; } // datetime
+		[Column,     NotNull    ] public int       n_error_count      { get; set; } // int
+		[Column,     NotNull    ] public bool      b_disabled         { get; set; } // bit
 
 		#region Associations
 
@@ -576,16 +577,16 @@ namespace cms.dbase.models
 		#region Associations
 
 		/// <summary>
-		/// fk_user_group_resolutions_BackReference
-		/// </summary>
-		[Association(ThisKey="c_alias", OtherKey="f_user_group", CanBeNull=true, IsBackReference=true)]
-		public IEnumerable<cms_resolutions_templates> fkusergroupresolutionss { get; set; }
-
-		/// <summary>
 		/// fk_users_group_BackReference
 		/// </summary>
 		[Association(ThisKey="c_alias", OtherKey="f_group", CanBeNull=true, IsBackReference=true)]
 		public IEnumerable<cms_users> fkusersgroups { get; set; }
+
+		/// <summary>
+		/// fk_user_group_resolutions_BackReference
+		/// </summary>
+		[Association(ThisKey="c_alias", OtherKey="f_user_group", CanBeNull=true, IsBackReference=true)]
+		public IEnumerable<cms_resolutions_templates> fkusergroupresolutionss { get; set; }
 
 		#endregion
 	}

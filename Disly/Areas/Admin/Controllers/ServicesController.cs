@@ -3,6 +3,8 @@ using Disly.Areas.Admin.Models;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -243,6 +245,35 @@ namespace Disly.Areas.Admin.Controllers
             }
 
             return Content(Result.ToString());
+        }
+        
+        [HttpPost]
+        public ActionResult GetFile()
+        {
+            Response.ContentType = "application/json";
+
+            if (Request.Files.Count > 0)
+            {
+                HttpPostedFileBase file = Request.Files[0];
+                //file.SaveAs(Server.MapPath("/Content/temp/" + file.FileName));
+
+                using (Image image = Image.FromStream(file.InputStream))
+                {
+                    using (MemoryStream m = new MemoryStream())
+                    {
+                        image.Save(m, image.RawFormat);
+                        byte[] imageBytes = m.ToArray();
+
+                        // Convert byte[] to Base64 String
+                        string base64String = "data:image/png;base64," + Convert.ToBase64String(imageBytes);
+                        return Content("{ \"location\": \"" + base64String + "\" }");
+                    }
+                }
+
+                //return Content("{ \"location\": \"/Content/temp/" + file.FileName + "\" }");
+            }
+
+            return Content("");
         }
     }
 }

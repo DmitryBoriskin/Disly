@@ -51,9 +51,10 @@ public class Settings
     //public static string VideoEncoderProcces = ConfigurationManager.AppSettings["VideoEncoderProcces"];
 
     public static string mailServer = ConfigurationManager.AppSettings["mailServer"];
-    public static string mailUSR = ConfigurationManager.AppSettings["mailUSR"];
-    public static string mailPWD = ConfigurationManager.AppSettings["mailPWD"];
-    public static string MailFrom = ConfigurationManager.AppSettings["MailFrom"];
+    public static int mailServerPort = Convert.ToInt32(ConfigurationManager.AppSettings["MailServerPort"]);
+    public static bool mailServerSSL = Convert.ToBoolean(ConfigurationManager.AppSettings["MailServerSSL"]);
+    public static string mailUser = ConfigurationManager.AppSettings["mailFrom"];
+    public static string mailPass = ConfigurationManager.AppSettings["mailPass"];
     public static string mailEncoding = ConfigurationManager.AppSettings["mailEncoding"];
     public static string MailAdresName = ConfigurationManager.AppSettings["MailAdresName"];
     public static string MailTo = ConfigurationManager.AppSettings["MailTo"];

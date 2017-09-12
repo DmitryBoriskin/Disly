@@ -109,7 +109,7 @@ namespace cms.dbase
                         Site = s.f_site,
                         Section = s.f_section,
                         Date = s.d_date,
-                        Action = s.c_action_name +" "+s.c_section_name
+                        Action = s.c_action_name
                     }).
                     Take(100);
 
@@ -512,7 +512,7 @@ namespace cms.dbase
         {
             using (var db = new CMSdb(_context))
             {
-                var query = db.cms_sv_userss.Where(w => w.b_deleted == false);
+                var query = db.cms_sv_userss.Where(w => w.id != null);
                 if (!disabeld)
                 {
                     query = query.Where(w => w.b_disabled == !disabeld);
@@ -586,6 +586,7 @@ namespace cms.dbase
                         Adres = s.c_adres,
                         Phone = s.c_phone,
                         Mobile = s.c_mobile,
+                        Contacts = s.c_contacts,
                         Disabled = s.b_disabled
                     });
 

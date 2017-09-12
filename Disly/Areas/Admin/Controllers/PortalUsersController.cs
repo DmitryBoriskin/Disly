@@ -128,6 +128,7 @@ namespace Disly.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        [ValidateInput(false)]
         [MultiButton(MatchFormKey = "action", MatchFormValue = "save-btn")]
         public ActionResult Save(Guid Id, PortalUsersViewModel back_model)
         {

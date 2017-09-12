@@ -189,7 +189,7 @@
     }
 
     inputFile.prototype.create = function () {
-        var $PreviewBlock = $("<div/>", { "class": "preview row" });
+        var $PreviewBlock = $("<div/>", { "class": "preview" });
         var $Wrap = $("<div/>", { "class": "wrap_info" });
         this.$element.css('display', 'none');
 
@@ -272,6 +272,7 @@
 
         $file.DislyFile('create');
     })
+
 
     $(document).on('change.bs.inputFile', 'input:file', function (e) {
         var File = $(this)[0].files[0];

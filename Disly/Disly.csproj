@@ -121,6 +121,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Areas\Admin\Views\Account\MsgFailRestore.cshtml">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="Areas\Admin\Views\Account\MsgSendMail.cshtml">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="Content\css\styles_popUp.css" />
     <Content Include="Content\css\styles.css" />
     <Content Include="Content\css\styles_login.css" />
@@ -128,6 +134,7 @@
     <Content Include="Content\decor\chuvashia\bg.png" />
     <Content Include="Content\decor\chuvashia\chuvashia-logo.png" />
     <Content Include="Content\decor\chuvashia\favicon.ico" />
+    <Content Include="Content\decor\chuvashia\map.css" />
     <Content Include="Content\decor\chuvashia\styles.css" />
     <Content Include="Content\favicon.ico" />
     <Content Include="Content\fonts\fontello\fontello.css" />
@@ -142,6 +149,8 @@
     <Content Include="Content\fonts\Ubuntu\ubuntu_700italic.svg" />
     <Content Include="Content\fonts\Ubuntu\ubuntu_italic.svg" />
     <Content Include="Content\fonts\Ubuntu\ubuntu_regular.svg" />
+    <Content Include="Content\img\MapRF.svg" />
+    <Content Include="Content\img\preloader_planet.svg" />
     <Content Include="Content\img\preloader.svg" />
     <Content Include="Content\plugins\bootstrap\css\bootstrap-theme.css" />
     <Content Include="Content\plugins\bootstrap\css\bootstrap-theme.min.css" />
@@ -205,6 +214,7 @@
     <Content Include="Content\plugins\tinymce\plugins\legacyoutput\plugin.min.js" />
     <Content Include="Content\plugins\tinymce\plugins\link\plugin.min.js" />
     <Content Include="Content\plugins\tinymce\plugins\lists\plugin.min.js" />
+    <Content Include="Content\plugins\tinymce\plugins\disly_media\plugin.min.js" />
     <Content Include="Content\plugins\tinymce\plugins\media\moxieplayer.swf" />
     <Content Include="Content\plugins\tinymce\plugins\media\plugin.min.js" />
     <Content Include="Content\plugins\tinymce\plugins\nonbreaking\plugin.min.js" />
@@ -249,7 +259,6 @@
     <Content Include="Content\plugins\tinymce\skins\lightgray\fonts\tinymce.woff" />
     <Content Include="Areas\Admin\Views\web.config" />
     <Content Include="Areas\Admin\Web.config" />
-    <Content Include="Areas\Admin\Views\Account\ConfirmRestorePass.cshtml" />
     <Content Include="Areas\Admin\Views\Account\LogIn.cshtml" />
     <Content Include="Areas\Admin\Views\Account\LogOff.cshtml" />
     <Content Include="Areas\Admin\Views\Account\RestorePass.cshtml" />
@@ -270,7 +279,9 @@
     <Content Include="scripts\uc_script.js" />
     <Content Include="UC_params.txt" />
     <Content Include="Userfiles\chuvashia\styles.css" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
@@ -307,6 +318,7 @@
     <Compile Include="Models\PageViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Cripto.cs" />
+    <Compile Include="Properties\Mailer.cs" />
     <Compile Include="Properties\RequestUserInfo.cs" />
     <Compile Include="Properties\SiteLogger.cs" />
     <Compile Include="Properties\SiteSettings.cs">
@@ -389,6 +401,10 @@
     <Content Include="Areas\Admin\Views\Services\LogUser.cshtml" />
     <Content Include="Areas\Admin\Views\Shared\Templates\Pager\Default.cshtml" />
     <Content Include="Areas\Admin\Views\Image\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\Services\GetFile.cshtml" />
+    <Content Include="Areas\Admin\Views\Account\ChangePass.cshtml" />
+    <Content Include="Areas\Admin\Views\Account\MsgResult.cshtml" />
+    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -399,6 +415,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Content\plugins\tinymce\plugins\colorpicker\" />
     <Folder Include="Logs\" />
     <Folder Include="Views\Core\" />
   </ItemGroup>

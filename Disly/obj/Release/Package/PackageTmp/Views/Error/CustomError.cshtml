@@ -1,8 +1,10 @@
 ﻿@{
-    Layout = null;
+    Layout = "~/Areas/Admin/Views/Shared/_login.cshtml";
 }
 
-<h1>@Model.Title.ToString()</h1>  @*в модели ничего не приходит*@ 
-<div>Ошибка @Model.HttpCode.ToString()</div>
-<hr />
-<div>@Model.Message</div>
+<div class="WelcomeContentLeft">
+    <div class="LoginCaption">@Model.Title.ToString() @Model.HttpCode.ToString()</div>
+</div>
+<div class="WelcomeContentRight">
+    @Html.Raw(Model.Message)
+</div>

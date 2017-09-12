@@ -12,40 +12,24 @@
     <link href="/Content/favicon.ico" rel="shortcut icon">
 
     <link href="Content/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
-    <link href="Content/plugins/mCustomScrollbar/jquery.mCustomScrollbar.css" rel="stylesheet" />
-    <link href="Content/plugins/bootstrap/css/bootstrap-select.css" rel="stylesheet" />
-    <link href="Content/plugins/Disly/DislyControls.css" rel="stylesheet" />
-    <link href="Content/css/styles.css" rel="stylesheet" />
-
-    <!--<link href="~/bundles/css" rel="stylesheet" />-->
-    <!--@Styles.Render("~/bundles/css")
-    @Scripts.Render("~/bundles/jquery")-->
+    <link href="/Content/plugins/Disly/DislyControls.css" rel="stylesheet">
 
     <script src="Content/plugins/jquery/jquery.js"></script>
-    <script src="Content/plugins/jquery/jquery.ui.js"></script>
-    <script src="/Content/plugins/jquery/jquery.history.js"></script>
-    <script src="/Content/plugins/tinymce/tinymce.min.js"></script>
-
-    <script src="Content/plugins/bootstrap/js/bootstrap.min.js"></script>
-    <script src="Content/plugins/bootstrap/js/bootstrap-toggle.min.js"></script>
-    <script src="Content/plugins/bootstrap/js/bootstrap-select.js"></script>
-    <script src="Content/plugins/mCustomScrollbar/jquery.mCustomScrollbar.js"></script>
-    <script src="Content/plugins/jquery/jquery.mask.min.js"></script>
-    <script src="Content/plugins/Disly/DislyControls.js"></script>
-    <script src="scripts/cms/disly_5.js"></script>
-    <!--@Scripts.Render("~/bundles/script")-->
+    <script type="text/javascript" src="/Content/plugins/Disly/DislyControls.js"></script>
 </head>
 <body>
-    <!-- test -->
-    <div class="container">
-        <input type="file" name="file1" id="test_file" title="Файл" data-url="/Userfiles/4787589.jpg" data-size="234kb" data-name="blabla" data-help="Первый Изменение пароля пользователя Изменение пароля пользователя Изменение пароля пользователяИзменение пароля пользователя Изменение пароля пользователя Изменение пароля пользователя Изменение пароля пользователя Изменение пароля пользователяИзменение пароля пользователя Изменение пароля пользователя Изменение пароля пользователя Изменение пароля пользователя Изменение пароля пользователя" />
-        <div>--------</div>
-        <input type="file" id="test_file2" title="Выбор файла" data-help="Изменение пароля пользователя Изменение пароля пользователя Изменение пароля пользователяИзменение пароля пользователя Изменение пароля пользователя Изменение пароля пользователя Изменение пароля пользователя Изменение пароля пользователяИзменение пароля пользователя Изменение пароля пользователя Изменение пароля пользователя Изменение пароля пользователя Изменение пароля пользователя" />
-        <input type="file" id="test_file3" data-size="" value="" />
-        <div class="row">
-            <div class="col-md-6">
-                <input type="file" id="test_file4" data-help="Изменение пароля пользователя Изменение пароля пользователя Изменение пароля пользователяИзменение пароля пользователя Изменение пароля пользователя Изменение пароля пользователя Изменение пароля пользователя Изменение пароля пользователяИзменение пароля пользователя Изменение пароля пользователя Изменение пароля пользователя Изменение пароля пользователя Изменение пароля пользователя" value="" />
-            </div>
+    <div>
+        <input id="Pic" type = "file" Title = "Картинка" />
+    </div>
+    <div>
+        <input id="Foto" type="file" Title="Картинка" data-name = "google" data-size = "2кБ" data-url = "https://www.google.ru/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png" data-help = "размер фотографии должен быть не менне 400 точек по ширине и пропорции картинки - 4х3" />
+    </div>
+    <div>
+        <div class="col-xs-6">
+            <input id="Pic" type="file" Title="Картинка" />
+        </div>
+        <div class="col-xs-6">
+            <input id="Foto" type="file" Title="Картинка" data-name="google" data-size="230" data-url="https://www.google.ru/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png" data-help="размер фотографии должен быть не менне 400 точек по ширине и пропорции картинки - 4х3" />
         </div>
     </div>
 </body>

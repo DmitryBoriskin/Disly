@@ -1,0 +1,21 @@
+﻿
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>CMS Disly | @ViewBag.Title</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Language" content="ru" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link href="/Content/favicon.ico" rel="shortcut icon">
+    @Styles.Render("~/bundles/popUp_css")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/popUp_js")
+</head>
+<body>
+    @using (Html.BeginForm())
+    {
+        @RenderBody()
+    }
+</body>
+</html>
