@@ -1,3 +1,4 @@
 *.config
 *.tt
 *~
+/cms.dbase/template/CMSbdModel.tt
