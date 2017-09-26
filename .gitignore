@@ -1,6 +1,7 @@
 *.config
 *.tt
 *~
+*/Logs/
 */bin/
 */obj/
 
