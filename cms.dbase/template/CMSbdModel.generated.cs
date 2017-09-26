@@ -807,12 +807,6 @@ namespace cms.dbase.models
 		[Association(ThisKey="id", OtherKey="f_people", CanBeNull=true, IsBackReference=true)]
 		public IEnumerable<content_people_org_link> fkcontentpeopleorglinks { get; set; }
 
-		/// <summary>
-		/// fk_content_people_department_link_BackReference
-		/// </summary>
-		[Association(ThisKey="id", OtherKey="f_people", CanBeNull=true, IsBackReference=true)]
-		public IEnumerable<content_people_department_link> fkcontentpeopledepartmentlinks { get; set; }
-
 		#endregion
 	}
 
@@ -825,16 +819,16 @@ namespace cms.dbase.models
 		#region Associations
 
 		/// <summary>
-		/// fk_content_people_department_link
-		/// </summary>
-		[Association(ThisKey="f_people", OtherKey="id", CanBeNull=false, KeyName="fk_content_people_department_link", BackReferenceName="fkcontentpeopledepartmentlinks")]
-		public content_people fkcontentpeopledepartmentlink { get; set; }
-
-		/// <summary>
 		/// fk_content_department_people_link
 		/// </summary>
 		[Association(ThisKey="f_department", OtherKey="id", CanBeNull=false, KeyName="fk_content_department_people_link", BackReferenceName="fkcontentdepartmentpeoplelinks")]
 		public content_departments fkcontentdepartmentpeoplelink { get; set; }
+
+		/// <summary>
+		/// fk_content_people_org_department_link
+		/// </summary>
+		[Association(ThisKey="f_people", OtherKey="id", CanBeNull=false, KeyName="fk_content_people_org_department_link", BackReferenceName="fkcontentpeopleorgdepartmentlinks")]
+		public content_people_org_link fkcontentpeopleorgdepartmentlink { get; set; }
 
 		#endregion
 	}
@@ -842,8 +836,9 @@ namespace cms.dbase.models
 	[Table(Schema="dbo", Name="content_people_org_link")]
 	public partial class content_people_org_link
 	{
-		[Column, NotNull] public Guid f_org    { get; set; } // uniqueidentifier
-		[Column, NotNull] public Guid f_people { get; set; } // uniqueidentifier
+		[PrimaryKey, NotNull] public Guid id       { get; set; } // uniqueidentifier
+		[Column,     NotNull] public Guid f_org    { get; set; } // uniqueidentifier
+		[Column,     NotNull] public Guid f_people { get; set; } // uniqueidentifier
 
 		#region Associations
 
@@ -858,6 +853,12 @@ namespace cms.dbase.models
 		/// </summary>
 		[Association(ThisKey="f_org", OtherKey="id", CanBeNull=false, KeyName="FK_content_org_people_link", BackReferenceName="contentorgpeoplelinks")]
 		public content_orgs contentorgpeoplelink { get; set; }
+
+		/// <summary>
+		/// fk_content_people_org_department_link_BackReference
+		/// </summary>
+		[Association(ThisKey="id", OtherKey="f_people", CanBeNull=true, IsBackReference=true)]
+		public IEnumerable<content_people_department_link> fkcontentpeopleorgdepartmentlinks { get; set; }
 
 		#endregion
 	}
@@ -1218,6 +1219,12 @@ namespace cms.dbase.models
 		}
 
 		public static content_people Find(this ITable<content_people> table, Guid id)
+		{
+			return table.FirstOrDefault(t =>
+				t.id == id);
+		}
+
+		public static content_people_org_link Find(this ITable<content_people_org_link> table, Guid id)
 		{
 			return table.FirstOrDefault(t =>
 				t.id == id);

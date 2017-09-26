@@ -7,7 +7,7 @@
 	DataContextName	 = "CMSdb";
 	DefaultConfiguration = "CMSdb";
 	GenerateConstructors = true;
-	
+	 
 	LoadSqlServerMetadata("Data Source=chuvashia.com;Initial Catalog=DislyMVC;User ID=Disly_Dev;Password=Disly_pass;");
 	
 	//Tables = Tables.Where(p => p.Value.TableName.StartsWith("Orgs")).ToDictionary(p => p.Key, p => p.Value);
