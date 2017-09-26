@@ -1,4 +1,14 @@
-*.config
+*~
+*/Logs/
+*/bin/
+*/obj/
 *.tt
+<<<<<<< HEAD
 *~
 /cms.dbase/template/CMSbdModel.tt
+=======
+Web.config
+Web.Release.config
+Web.Debug.config
+
+>>>>>>> 4c7aa3c31757ac7e5f08e404c737c7cbbcbf4ea9
