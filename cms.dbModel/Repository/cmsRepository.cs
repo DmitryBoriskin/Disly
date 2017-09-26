@@ -48,5 +48,9 @@ namespace cms.dbModel
         public abstract UsersGroupModel getUsersGroup(string alias);
 
         public abstract ResolutionsModel[] getGroupResolutions(string alias);
+        
+        // Материалы
+        public abstract MaterialsList getMaterialsList(FilterParams filtr);
+        public abstract MaterialsModel getMaterial(Guid id);
     }
 }

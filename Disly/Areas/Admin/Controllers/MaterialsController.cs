@@ -12,7 +12,10 @@ using System.Web.Mvc;
 namespace Disly.Areas.Admin.Controllers
 {
     public class MaterialsController : CoreController
-    {        
+    {
+        MaterialsViewModel model;
+        FilterParams filter;
+        
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             base.OnActionExecuting(filterContext);
@@ -23,14 +26,14 @@ namespace Disly.Areas.Admin.Controllers
             ViewBag.HttpKeys = Request.QueryString.AllKeys;
             ViewBag.Query = Request.QueryString;
 
-            #region Filter
-            FilterViewModel filter = new FilterViewModel()
-            {
-                Sections = _repository.getSectionsGroup(ViewBag.ControllerName)
-            };
+            filter = getFilter();
 
-            ViewBag.Filter = filter; 
-            #endregion
+             model = new MaterialsViewModel()
+            {
+                Account = AccountInfo,
+                Settings = SettingsInfo,
+                UserResolution = UserResolutionInfo
+            };
 
             #region Метатеги
             ViewBag.Title = UserResolutionInfo.Title;
@@ -42,227 +45,145 @@ namespace Disly.Areas.Admin.Controllers
         // GET: Materials
         public ActionResult Index(string category, string type)
         {
-            MaterialsViewModel model = new MaterialsViewModel()
-            {
-                List = _repository.getSearchCmsMaterial(Domain, null, null, null, category, type),
-                Account = AccountInfo,
-                Settings = SettingsInfo,
-                UserResolution = UserResolutionInfo
-            };
+            // Наполняем модель данными
+            model.List = _cmsRepository.getMaterialsList(filter);
+
             return View(model);
         }
+        
         /// <summary>
-        /// Поиск в списке
+        /// Форма редактирования записи
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult Item(Guid Id)
+        {
+            model.Item = _cmsRepository.getMaterial(Id);
+
+            return View("Item", model);
+        }
+
+
+        /// <summary>
+        /// Формируем строку фильтра
+        /// </summary>
+        /// <param name="title_serch">Поиск по названию</param>
+        /// <returns></returns>
+        [HttpPost]
+        [MultiButton(MatchFormKey = "action", MatchFormValue = "search-btn")]
+        public ActionResult Search(string filter, bool enabeld, string size)
+        {
+            string query = HttpUtility.UrlDecode(Request.Url.Query);
+            query = addFiltrParam(query, "filter", filter);
+            if (enabeld) query = addFiltrParam(query, "enabeld", String.Empty);
+            else query = addFiltrParam(query, "enabeld", enabeld.ToString().ToLower());
+
+            query = addFiltrParam(query, "page", String.Empty);
+            query = addFiltrParam(query, "size", size);
+
+            return Redirect(StartUrl + query);
+        }
+
+        /// <summary>
+        /// Очищаем фильтр
         /// </summary>
         /// <returns></returns>
         [HttpPost]
-        public ActionResult Index(string SearchLine, DateTime? Begin, DateTime? End, MaterialsViewModel searchList, string category, string type)
+        [MultiButton(MatchFormKey = "action", MatchFormValue = "clear-btn")]
+        public ActionResult ClearFiltr()
         {
-            searchList = new MaterialsViewModel()
-            {
-                Account = AccountInfo,
-                Settings = SettingsInfo,
-                UserResolution = UserResolutionInfo,
-
-                List = _repository.getSearchCmsMaterial(Domain, SearchLine, Begin, End, category, type)
-            };
-
-            return View(searchList);
+            return Redirect(StartUrl);
         }
-
-        [HttpGet]
-        public ActionResult Create(Guid id)
+        
+        [HttpPost]
+        [MultiButton(MatchFormKey = "action", MatchFormValue = "insert-btn")]
+        public ActionResult Insert()
         {
-            MaterialsViewModel model = new MaterialsViewModel()
-            {
-                Account = AccountInfo,
-                Settings = SettingsInfo,
-                UserResolution = UserResolutionInfo
-            };
-            
-            ViewBag.Date = DateTime.Now.ToString("yyyy-MM-dd"); // Convert.ToDateTime(Model.Item.Date).ToString("yyyy-MM-dd")
-            return View("Item", model);
+            //  При создании записи сбрасываем номер страницы
+            string query = HttpUtility.UrlDecode(Request.Url.Query);
+            query = addFiltrParam(query, "page", String.Empty);
+
+            return Redirect(StartUrl + "Item/" + Guid.NewGuid() + "/" + query);
         }
 
         [HttpPost]
         [ValidateInput(false)]
-        [MultiButton(MatchFormKey = "action", MatchFormValue = "create-btn")]
-        public ActionResult Create(Guid id,MaterialsViewModel model, HttpPostedFileBase upload)
+        [MultiButton(MatchFormKey = "action", MatchFormValue = "save-btn")]
+        public ActionResult Save(Guid Id, PortalUsersViewModel back_model)
         {
-            ViewBag.BtnName = "Создать";
-
-            model.Item.Site = Domain;
-            model.Item.Year = model.Item.Date.ToString("yyyy");
-            model.Item.Month = model.Item.Date.ToString("MM");
-            model.Item.Day = model.Item.Date.ToString("dd");
-
-            //int org = RequestUrl.HostName().ToString().IndexOf(".", 0);
-            //model.Item.Org = RequestUrl.HostName().Substring(0, org);            
+            ErrorMassege userMassege = new ErrorMassege();
+            userMassege.title = "Информация";
 
             if (ModelState.IsValid)
             {
-                #region Изображение
-                if (upload != null)
-                {                    
-                    #region добавление изображения
-                    string Path = ConfigurationManager.AppSettings["Root"] + Domain + ConfigurationManager.AppSettings["News"] + model.Item.Year + "/" + model.Item.Month + "/";
-                    if (upload != null && upload.ContentLength > 0)
-                        try
-                        {
-                            model.Item.Photo = Files.SaveImageResize(upload, Path, 253, 168);
-                        }
-                        catch (Exception ex)
-                        {
-                            ViewBag.Message = "Произошла ошибка: " + ex.Message.ToString();
-                        }
-                    else
-                    {
-                        ViewBag.Message = "Вы не выбрали файл.";
-                    }
-                    #endregion
-                }                
-                #endregion
-                
-                if (model.Item.Alias == null) { model.Item.Alias = Transliteration.Translit(model.Item.Title.ToString()); }
-                _repository.insCmsMaterials(id, model.Item);
-                _repository.insertLog(id, AccountInfo.id, "insert", RequestUserInfo.IP);
+                //if (_cmsRepository.check_user(Id))
+                //{
+                //    _cmsRepository.updateUser(Id, back_model.Item, AccountInfo.id, RequestUserInfo.IP);
+                //    userMassege.info = "Запись обновлена";
+                //}
+                //else if (!_cmsRepository.check_user(back_model.Item.EMail))
+                //{
+                //    char[] _pass = back_model.Password.Password.ToCharArray();
+                //    Cripto password = new Cripto(_pass);
+                //    string NewSalt = password.Salt;
+                //    string NewHash = password.Hash;
 
-                ViewBag.Message = "Запись добавлена";
-                ViewBag.backurl = id;
-            }
+                //    back_model.Item.Salt = NewSalt;
+                //    back_model.Item.Hash = NewHash;
 
-            model = new MaterialsViewModel()
-            {
-                Account = AccountInfo,
-                Settings = SettingsInfo,
-                UserResolution = UserResolutionInfo
-            };
+                //    _cmsRepository.createUser(Id, back_model.Item, AccountInfo.id, RequestUserInfo.IP);
 
-            return View("Item", model);
-        }               
+                //    userMassege.info = "Запись добавлена";
+                //}
+                //else
+                //{
+                //    userMassege.info = "Пользователь с таким EMail адресом уже существует.";
+                //}
 
-        [HttpGet]
-        public ActionResult Edit(Guid id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            MaterialsViewModel model = new MaterialsViewModel()
-            {
-                Item = _repository.getCmsMaterial(Domain, id),                
-                Account = AccountInfo,
-                Settings = SettingsInfo,
-                UserResolution = UserResolutionInfo
-            };
-            if (model.Item != null)
-            {
-                ViewBag.Date = Convert.ToDateTime(model.Item.Date).ToString("yyyy-MM-dd");
-                ViewBag.Photo = model.Item.Photo;
-                ViewBag.PhotoName = Path.GetFileName(model.Item.Photo);
-                try
-                {
-                    ViewBag.PhotoSize = Files.FileAnliz.Size(model.Item.Photo);
-                }
-                catch
-                {
-                    ViewBag.PhotoSize = "";
-                }
-            }
-            else { Response.Redirect("/Error/"); }
-
-
-            return View("Item", model);
-        }
-
-        [HttpPost]
-        [ValidateInput(false)]
-        [MultiButton(MatchFormKey = "action", MatchFormValue = "update-btn")]
-        public ActionResult Edit(Guid id, MaterialsViewModel model, HttpPostedFileBase upload)
-        {
-            ViewBag.BtnName = "Сохранить";
-
-            model.Item.Site = Domain;
-            if (ModelState.IsValid)
-            {
-
-                #region Изображение
-                MaterialsViewModel ActualModel = new MaterialsViewModel()
-                {
-                    Item = _repository.getCmsMaterial(Domain,id)
+                userMassege.buttons = new ErrorMassegeBtn[]{
+                    new ErrorMassegeBtn { url = StartUrl + Request.Url.Query, text = "вернуться в список" },
+                    new ErrorMassegeBtn { url = "#", text = "ок", action = "false" }
                 };
-
-                if (upload != null)
-                {
-                    if (System.IO.File.Exists(Server.MapPath(ActualModel.Item.Photo)))
-                    {
-                        System.IO.File.Delete(Server.MapPath(ActualModel.Item.Photo));
-                    }
-                    #region обновление изображения
-                    string Path = ConfigurationManager.AppSettings["Root"] + Domain + ConfigurationManager.AppSettings["News"]+ ActualModel.Item.Year+"/" + ActualModel.Item.Month+"/";
-                    if (upload != null && upload.ContentLength > 0)
-                        try
-                        {
-                            model.Item.Photo = Files.SaveImageResize(upload, Path, 253, 168);                            
-                        }
-                        catch (Exception ex)
-                        {
-                            ViewBag.Message = "Произошла ошибка: " + ex.Message.ToString();
-                        }
-                    else
-                    {
-                        ViewBag.Message = "Вы не выбрали файл.";
-                    }
-                    #endregion
-                }
-                else
-                {
-                    //добавление нового изображения не происходит                    
-                    model.Item.Photo = ActualModel.Item.Photo;
-                }
-                #endregion
-
-
-                _repository.setCmsMaterials(id, model.Item);
-                _repository.insertLog(id, AccountInfo.id, "update", RequestUserInfo.IP);
-                ViewBag.Message = "Запись сохранена";
-                ViewBag.backurl = id;  
-                
-                
-                                  
-            }            
-            model = new MaterialsViewModel()
+            }
+            else
             {
-                Account = AccountInfo,
-                Settings = SettingsInfo,
-                UserResolution = UserResolutionInfo,
-                Item = _repository.getCmsMaterial(Domain, id)
-            };
-            return View("Item", model);
-        }
-           
-        [HttpPost]
-        [MultiButton(MatchFormKey = "action", MatchFormValue = "delete-btn")]
-        public ActionResult Delete(Guid id)
-        {
-            ViewBag.Message = "Запись удалена";
-            ViewBag.backurl = id;
-            MaterialsViewModel model = new MaterialsViewModel()
-            {
-                Account = AccountInfo,
-                Settings = SettingsInfo,
-                UserResolution = UserResolutionInfo
-            };
-            _repository.delCmsMaterials(Domain, id);
-            _repository.insertLog(id, AccountInfo.id, "delete", RequestUserInfo.IP);
+                userMassege.info = "Ошибка в заполнении формы. Поля в которых допушены ошибки - помечены цветом.";
+
+                userMassege.buttons = new ErrorMassegeBtn[]{
+                    new ErrorMassegeBtn { url = "#", text = "ок", action = "false" }
+                };
+            }
+
+            //model.Item = _cmsRepository.getUser(Id);
+            model.ErrorInfo = userMassege;
+
             return View("Item", model);
         }
 
         [HttpPost]
         [MultiButton(MatchFormKey = "action", MatchFormValue = "cancel-btn")]
-        public ActionResult Cancel(Guid id)
+        public ActionResult Cancel()
         {
-            return RedirectToAction("", "materials");
+            return Redirect(StartUrl + Request.Url.Query);
+        }
+
+        [HttpPost]
+        [MultiButton(MatchFormKey = "action", MatchFormValue = "delete-btn")]
+        public ActionResult Delete(Guid Id)
+        {
+            //_cmsRepository.deleteUser(Id, AccountInfo.id, RequestUserInfo.IP);
+
+            // записываем информацию о результатах
+            ErrorMassege userMassege = new ErrorMassege();
+            userMassege.title = "Информация";
+            userMassege.info = "Запись Удалена";
+            userMassege.buttons = new ErrorMassegeBtn[]{
+                new ErrorMassegeBtn { url = "#", text = "ок", action = "false" }
+            };
+
+            //model.Item = _cmsRepository.getUser(Id);
+            model.ErrorInfo = userMassege;
+
+            return View("Item", model);
         }
     }
 }

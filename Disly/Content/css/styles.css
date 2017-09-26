@@ -130,7 +130,7 @@ a:hover:after {
 
 .canvas{
     min-width:1000px;
-    min-height: 600px;
+    min-height: 98%;
     margin:0;
     background: #ffffff;
 }
@@ -551,12 +551,12 @@ a.link-close:before {
     background: #f5f8fa;
 }
 div.dop-caption {
-    overflow:hidden;
-    display:block;
-    padding: 0 5px 10px;
-    font: 20px Ubuntu;
-    color: #2e5066;
-}
+        overflow: hidden;
+        display: block;
+        padding: 0 5px 10px;
+        font: 20px Ubuntu;
+        color: #2e5066;
+    }
 
 div.dop-caption:before { 
     font-family:'fontello';
@@ -833,23 +833,38 @@ a.button  {
 .icon-share:before { content:'\e872'; }             /* Карта сайта */
 .icon-megaphone:before { content:'\e836'; }         /* Пресс-центр */
 .icon-location-5:before { content:'\eda4'; }        /* Отделения и участки */
-.icon-flow-tree:before { content:'\ea10'; }         /* Баннеры */
+/* Баннеры */
+.icon-flow-tree:before,
+.icon-picture:before {
+    content: '\ea10';
+}
 .icon-contacts:before { content:'\eb7c'; }          /* Контакты */
 .icon-universal-access:before { content:'\efc8'; }  /* Вакансии */
 .icon-info-circled:before { content:'\e84d'; }      /* F.A.Q. */
 .icon-basket-2:before { content:'\eb9a'; }          /* Каталог продукции */
 .icon-comment-1:before { content:'\ea3d'; }         /* Обратная связь */
+.icon-mail:before {
+    content: '\e826';
+}
 .icon-cog:before { content:'\e8a4'; }               /* Настройки сайта */
 .icon-folder-open:before { content:'\e89a'; }       /* Файлер */
 .icon-user-3:before { content:'\eceb'; }            /* Пользователи, Персоны */
-.icon-list-add:before { content:'\eaa8'; }          /* Дополнительные услуги */
+.icon-medkit:before {
+    content: '\e97a';
+}
+.icon-list-add:before {
+    content: '\eaa8';
+}          /* Дополнительные услуги */
 .icon-doc-text:before { content:'\e88d'; }          /* Закупки */
 .icon-megaphone:before { content:'\e94c'; }         /* Пресс-центр */
 .icon-docs:before { content:'\e88c'; }              /* Документы */
-.icon-newspaper-2:before { content:'\eda7'; }       /* Статьи */
+.icon-calendar:before {
+    content: '\e8a9';
+}
+.icon-newspaper-2:before { content: '\eda7'; }      /* Статьи */
 .icon-sitemap:before { content:'\e972'; }           /* Структура cms */
 .icon-clipboard:before { content:'\ead3'; }         /* Опросы */
-.icon-th-list-3:before { content:'\ed84'; }         /* Опросы */
+.icon-th-list-3:before { content:'\ed84'; }         /* Голосования */
 .icon-calc:before { content:'\e99d'; }              /* Опросы */
 
 .icon-menu:before {
@@ -883,4 +898,14 @@ a.button  {
 }
 .icon-layers:before {
     content: '\eead';
+}
+.row {
+    margin-left: -5px;
+    margin-right: -5px;
+}
+
+[class^=col],
+[class^=col] {
+    padding-left: 5px;
+    padding-right: 5px;
 }

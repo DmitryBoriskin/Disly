@@ -25,8 +25,8 @@
 
     <div class="dop_info-block">
         <div class="dop-caption">Фильтр</div>
-        @Html.TextBox("filter", Request.QueryString["filter"], new { @class = "uc_input", @title = "Поиск", @placeholder = "Поиск по ФИО и E-Mail", @MaxLength = "512" })
-        @Html.CheckBox("enabeld", String.IsNullOrEmpty(Request.QueryString["enabeld"]), new { @class = "uc_input", @title = "Отображать", @data_on = "Все записи", @data_off = "Только запрещенные", @data_width = "270" })
+        @Html.TextBox("searchtext", Request.QueryString["searchtext"], new { @class = "uc_input", @title = "Поиск", @placeholder = "Поиск по ФИО и E-Mail", @MaxLength = "512" })
+        @Html.CheckBox("disabled", String.IsNullOrEmpty(Request.QueryString["disabled"]), new { @class = "uc_input", @title = "Отображать", @data_on = "Все записи", @data_off = "Только запрещенные", @data_width = "270" })
         <div class="row">
             <div class="col-md-6"><button type="submit" name="action" value="search-btn" class="button btn-primary">Применить</button></div>
             <div class="col-md-6"><button type="submit" name="action" value="clear-btn" class="button btn-default">Сбросить</button></div>

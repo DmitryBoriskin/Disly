@@ -9,6 +9,7 @@ using System.Web.Security;
 using System.Linq;
 using System.Collections.Specialized;
 using System.Text.RegularExpressions;
+using System.Web;
 
 namespace Disly.Areas.Admin.Controllers
 {
@@ -23,16 +24,17 @@ namespace Disly.Areas.Admin.Controllers
               
         public string Domain;
         public string StartUrl;
+        public int defaultpageSize = 20;
         public AccountModel AccountInfo;
         public SettingsModel SettingsInfo;
         public ResolutionsModel UserResolutionInfo;//права пользователей
         public cmsLogModel[] LogInfo;
         public SitesModel SiteInfo;
-
+        
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             base.OnActionExecuting(filterContext);
-
+            
             string _ControllerName = filterContext.RouteData.Values["Controller"].ToString().ToLower();
             string _ActionName = filterContext.RouteData.Values["Action"].ToString().ToLower();
             Guid _PageId;
@@ -96,7 +98,7 @@ namespace Disly.Areas.Admin.Controllers
             _accountRepository = new AccountRepository("cmsdbConnection");
             _cmsRepository = new cmsRepository("cmsdbConnection");
         }
-
+        
         public string addFiltrParam(string query, string name, string val)
         {
             //string search_Param = @"\b" + name + @"=[\w]*[\b]*&?";
@@ -117,6 +119,46 @@ namespace Disly.Areas.Admin.Controllers
             query = query.Replace("?&", "?").Replace("&&", "&");
 
             return query;
+        }
+
+        public FilterParams getFilter(int defaultPageSize = 20)
+        {
+
+            string return_url = HttpUtility.UrlDecode(Request.Url.Query);
+            // если в URL номер страницы равен значению по умолчанию - удаляем его из URL
+            return_url = (Convert.ToInt32(Request.QueryString["page"]) == 1) ? addFiltrParam(return_url, "page", String.Empty) : return_url;
+            return_url = (Convert.ToInt32(Request.QueryString["size"]) == defaultpageSize) ? addFiltrParam(return_url, "size", String.Empty) : return_url;
+            return_url = (Convert.ToBoolean(Request.QueryString["disabled"]) == false) ? addFiltrParam(return_url, "disabled", String.Empty) : return_url;
+            return_url = String.IsNullOrEmpty(Request.QueryString["searchtext"]) ? addFiltrParam(return_url, "searchtext", String.Empty) : return_url;
+
+            // Если парамметры из адресной строки равны значениям по умолчанию - удаляем их из URL
+            if (return_url.ToLower() != HttpUtility.UrlDecode(Request.Url.Query).ToLower())
+                Response.Redirect(StartUrl + return_url);
+
+
+            DateTime? DateNull = new DateTime?();
+
+            FilterParams result = new FilterParams()
+            {
+                Page = (Convert.ToInt32(Request.QueryString["page"]) > 0) ? Convert.ToInt32(Request.QueryString["page"]) : 1,
+                Size = (Convert.ToInt32(Request.QueryString["size"]) > 0) ? Convert.ToInt32(Request.QueryString["size"]) : defaultPageSize,
+                Type = (String.IsNullOrEmpty(Request.QueryString["type"])) ? String.Empty : Request.QueryString["type"],
+                Categoty = (String.IsNullOrEmpty(Request.QueryString["category"])) ? String.Empty : Request.QueryString["category"],
+                Group = (String.IsNullOrEmpty(Request.QueryString["group"])) ? String.Empty : Request.QueryString["group"],
+                Lang = (String.IsNullOrEmpty(Request.QueryString["lang"])) ? String.Empty : Request.QueryString["lang"],
+                Date = (String.IsNullOrEmpty(Request.QueryString["date"])) ? DateNull : DateTime.Parse(Request.QueryString["date"]),
+                DateEnd = (String.IsNullOrEmpty(Request.QueryString["dateend"])) ? DateNull : DateTime.Parse(Request.QueryString["dateend"]),
+                SearchText = (String.IsNullOrEmpty(Request.QueryString["searchtext"])) ? String.Empty : Request.QueryString["searchtext"],
+                Disabled = (String.IsNullOrEmpty(Request.QueryString["disabled"])) ? false : Convert.ToBoolean(Request.QueryString["disabled"])
+            };
+            
+            if (result.Date != DateNull && result.DateEnd == DateNull)
+            {
+                DateTime OneDay = (DateTime)result.Date;
+                result.DateEnd = OneDay.AddDays(1);
+            }
+
+            return result;
         }
 
         [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = true)]

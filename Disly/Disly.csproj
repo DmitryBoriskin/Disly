@@ -150,6 +150,7 @@
     <Content Include="Content\fonts\Ubuntu\ubuntu_italic.svg" />
     <Content Include="Content\fonts\Ubuntu\ubuntu_regular.svg" />
     <Content Include="Content\img\MapRF.svg" />
+    <Content Include="Content\img\nophoto.jpg" />
     <Content Include="Content\img\preloader_planet.svg" />
     <Content Include="Content\img\preloader.svg" />
     <Content Include="Content\plugins\bootstrap\css\bootstrap-theme.css" />
@@ -292,19 +293,22 @@
     <Compile Include="Areas\Admin\Controllers\MainController.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Areas\Admin\Controllers\ServicesController.cs" />
+    <Compile Include="Areas\Admin\Controllers\MaterialsController.cs" />
     <Compile Include="Areas\Admin\Controllers\PortalUsersController.cs" />
+    <Compile Include="Areas\Admin\Controllers\ServicesController.cs" />
     <Compile Include="Areas\Admin\Controllers\ImageController.cs" />
+    <Compile Include="Areas\Admin\Controllers\SiteMapController.cs" />
     <Compile Include="Areas\Admin\Controllers\SitesController.cs" />
     <Compile Include="Areas\Admin\Controllers\TemplatesController.cs" />
     <Compile Include="Areas\Admin\Models\AccountModel.cs" />
     <Compile Include="Areas\Admin\Controllers\CoreController.cs" />
     <Compile Include="Areas\Admin\Models\cmsMenuViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\FiltrModel.cs.cs" />
     <Compile Include="Areas\Admin\Models\FrontModulesModel.cs" />
     <Compile Include="Areas\Admin\Models\MainViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\MaterialsViewModel.cs" />
     <Compile Include="Areas\Admin\Models\ServicesViewsModel.cs" />
     <Compile Include="Areas\Admin\Models\PortalUsersViewModel.cs" />
-    <Compile Include="Areas\Admin\Models\FiltrModel.cs" />
     <Compile Include="Areas\Admin\Models\SitesViewModel.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\PressController.cs" />
@@ -404,6 +408,10 @@
     <Content Include="Areas\Admin\Views\Services\GetFile.cshtml" />
     <Content Include="Areas\Admin\Views\Account\ChangePass.cshtml" />
     <Content Include="Areas\Admin\Views\Account\MsgResult.cshtml" />
+    <Content Include="Areas\Admin\Views\SiteMap\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\SiteMap\Item.cshtml" />
+    <Content Include="Areas\Admin\Views\Materials\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\Materials\Item.cshtml" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>

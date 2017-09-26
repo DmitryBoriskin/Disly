@@ -61,6 +61,8 @@
     <Compile Include="entity\cms\cmsMenuModel.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="entity\cms\MaterialsModel.cs" />
+    <Compile Include="entity\FilterParams.cs" />
     <Compile Include="entity\SettingsModel.cs">
       <SubType>Code</SubType>
     </Compile>

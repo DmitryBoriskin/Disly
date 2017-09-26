@@ -513,9 +513,9 @@ namespace cms.dbase
             using (var db = new CMSdb(_context))
             {
                 var query = db.cms_sv_userss.Where(w => w.id != null);
-                if (!disabeld)
+                if (disabeld)
                 {
-                    query = query.Where(w => w.b_disabled == !disabeld);
+                    query = query.Where(w => w.b_disabled == disabeld);
                 }
                 if (group != String.Empty)
                 {
@@ -779,6 +779,81 @@ namespace cms.dbase
 
                 if (!data.Any()) { return null; }
                 else { return data.ToArray(); }
+            }
+        }
+        #endregion
+
+        #region Materials
+        public override MaterialsList getMaterialsList(FilterParams filtr)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var query = db.content_materialss.Where(w => w.id != null);
+                query = query.OrderByDescending(o => o.d_date);
+                
+                if (query.Any())
+                {
+                    int ItemCount = query.Count();
+
+                    var List = query
+                        .Select(s => new MaterialsModel
+                        {
+                            Id = s.id,
+                            Title = s.c_title,
+                            Alias = s.c_alias,
+                            Preview = s.c_preview,
+                            Text = s.c_text,
+                            Url = s.c_url,
+                            UrlName = s.c_url_name,
+                            Date = s.d_date,
+                            Keyw = s.c_keyw,
+                            Desc = s.c_desc,
+                            Disabled = s.b_disabled
+                        }).
+                        Skip(filtr.Size * (filtr.Page - 1)).
+                        Take(filtr.Size);
+
+                    MaterialsModel[] materialsInfo = List.ToArray();
+
+                    return new MaterialsList
+                    {
+                        Data = materialsInfo,
+                        Pager = new Pager
+                        {
+                            page = filtr.Page,
+                            size = filtr.Size,
+                            items_count = ItemCount,
+                            page_count = (ItemCount % filtr.Size > 0) ? (ItemCount / filtr.Size) + 1 : ItemCount / filtr.Size
+                        }
+                    };
+                }
+                return null;
+            }
+        }
+        public override MaterialsModel getMaterial(Guid id)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var data = db.content_materialss.
+                    Where(w => w.id == id).
+                    Select(s => new MaterialsModel
+                    {
+                        Id = s.id,
+                        Title = s.c_title,
+                        Alias = s.c_alias,
+                        Preview = s.c_preview,
+                        Text = s.c_text,
+                        Url = s.c_url,
+                        UrlName = s.c_url_name,
+                        Date = s.d_date,
+                        Keyw = s.c_keyw,
+                        Desc = s.c_desc,
+                        Disabled = s.b_disabled
+                    });
+
+
+                if (!data.Any()) { return null; }
+                else { return data.First(); }
             }
         }
         #endregion
