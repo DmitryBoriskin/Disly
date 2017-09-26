@@ -508,20 +508,21 @@ namespace cms.dbase
             }
         }
         
-        public override UsersList getUsersList(string[] filtr, string group, bool disabeld, int page, int size)
+        public override UsersList getUsersList(FilterParams filtr)
         {
             using (var db = new CMSdb(_context))
             {
+                //string[] filtr, string group, bool disabeld, int page, int size
                 var query = db.cms_sv_userss.Where(w => w.id != null);
-                if (disabeld)
+                if ((bool)filtr.Disabled)
                 {
-                    query = query.Where(w => w.b_disabled == disabeld);
+                    query = query.Where(w => w.b_disabled == filtr.Disabled);
                 }
-                if (group != String.Empty)
+                if (filtr.Group != String.Empty)
                 {
-                    query = query.Where(w => w.f_group == group);
+                    query = query.Where(w => w.f_group == filtr.Group);
                 }
-                foreach (string param in filtr)
+                foreach (string param in filtr.SearchText.Split(' '))
                 {
                     if (param != String.Empty)
                     {
@@ -547,8 +548,8 @@ namespace cms.dbase
                             Disabled = s.b_disabled
 
                         }).
-                        Skip(size * (page - 1)).
-                        Take(size);
+                        Skip(filtr.Size * (filtr.Page - 1)).
+                        Take(filtr.Size);
 
                     UsersModel[] usersInfo = List.ToArray();
 
@@ -556,10 +557,10 @@ namespace cms.dbase
                     {
                         Data = usersInfo,
                         Pager = new Pager { 
-                            page = page, 
-                            size = size, 
+                            page = filtr.Page, 
+                            size = filtr.Size, 
                             items_count = ItemCount, 
-                            page_count = (ItemCount % size > 0) ? (ItemCount / size) + 1 : ItemCount / size 
+                            page_count = (ItemCount % filtr.Size > 0) ? (ItemCount / filtr.Size) + 1 : ItemCount / filtr.Size 
                         }
                     };
                 }

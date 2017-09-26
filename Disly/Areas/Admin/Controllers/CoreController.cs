@@ -24,7 +24,6 @@ namespace Disly.Areas.Admin.Controllers
               
         public string Domain;
         public string StartUrl;
-        public int defaultpageSize = 20;
         public AccountModel AccountInfo;
         public SettingsModel SettingsInfo;
         public ResolutionsModel UserResolutionInfo;//права пользователей
@@ -123,18 +122,26 @@ namespace Disly.Areas.Admin.Controllers
 
         public FilterParams getFilter(int defaultPageSize = 20)
         {
-
             string return_url = HttpUtility.UrlDecode(Request.Url.Query);
             // если в URL номер страницы равен значению по умолчанию - удаляем его из URL
-            return_url = (Convert.ToInt32(Request.QueryString["page"]) == 1) ? addFiltrParam(return_url, "page", String.Empty) : return_url;
-            return_url = (Convert.ToInt32(Request.QueryString["size"]) == defaultpageSize) ? addFiltrParam(return_url, "size", String.Empty) : return_url;
-            return_url = (Convert.ToBoolean(Request.QueryString["disabled"]) == false) ? addFiltrParam(return_url, "disabled", String.Empty) : return_url;
+            try
+            {
+                return_url = (Convert.ToInt32(Request.QueryString["page"]) == 1) ? addFiltrParam(return_url, "page", String.Empty) : return_url;
+            }
+            catch {
+                return_url = addFiltrParam(return_url, "page", String.Empty);
+            }
+            try {
+                return_url = (Convert.ToInt32(Request.QueryString["size"]) == defaultPageSize) ? addFiltrParam(return_url, "size", String.Empty) : return_url;
+            }
+            catch {
+                return_url = addFiltrParam(return_url, "size", String.Empty);
+            }                
+            return_url = (!Convert.ToBoolean(Request.QueryString["disabled"])) ? addFiltrParam(return_url, "disabled", String.Empty) : return_url;
             return_url = String.IsNullOrEmpty(Request.QueryString["searchtext"]) ? addFiltrParam(return_url, "searchtext", String.Empty) : return_url;
-
             // Если парамметры из адресной строки равны значениям по умолчанию - удаляем их из URL
             if (return_url.ToLower() != HttpUtility.UrlDecode(Request.Url.Query).ToLower())
                 Response.Redirect(StartUrl + return_url);
-
 
             DateTime? DateNull = new DateTime?();
 
@@ -154,8 +161,7 @@ namespace Disly.Areas.Admin.Controllers
             
             if (result.Date != DateNull && result.DateEnd == DateNull)
             {
-                DateTime OneDay = (DateTime)result.Date;
-                result.DateEnd = OneDay.AddDays(1);
+                result.DateEnd = ((DateTime)result.Date).AddDays(1);
             }
 
             return result;
