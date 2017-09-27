@@ -28,6 +28,12 @@
         </div>
 
     </div>
+    <div class="buttons">
+        @if (Model.UserResolution.Write)
+        {
+            <button type="submit" name="action" value="insert-btn" class="button icon-create">Создать</button>            
+        }
+    </div>
 }
 else
 {
