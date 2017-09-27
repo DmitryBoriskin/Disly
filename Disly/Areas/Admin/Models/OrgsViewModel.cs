@@ -12,5 +12,6 @@ namespace Disly.Areas.Admin.Models
         public OrgsModel[] OrgList { get; set; }
         public StructureModel StructureItem { get; set; }
         public Departments DepartmentItem { get; set; }
+
     }
 }

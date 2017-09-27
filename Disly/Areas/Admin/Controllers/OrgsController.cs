@@ -42,6 +42,7 @@ namespace Disly.Areas.Admin.Controllers
             filter = getFilter();
             model.OrgList = _cmsRepository.getOrgs(filter);
             return View(model);
+
         }
     }
 }

@@ -859,6 +859,19 @@ namespace cms.dbase
         }
         #endregion
 
+        public override OrgsModel[] getOrgs(FilterParams filtr) {
+            using (var db = new CMSdb(_context))
+            {
+                var data = db.content_orgss.AsQueryable();
+                var list = data.Select(s => new OrgsModel() {
+                    Id=s.id,
+                    Title=s.c_title
+                });
+                if (list.Any()) return list.ToArray();
+                return null;
+            }
+        }
+
         #region Person
         public override UsersList getPersonList(FilterParams filtr)
         {

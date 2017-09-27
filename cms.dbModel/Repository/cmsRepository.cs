@@ -56,6 +56,7 @@ namespace cms.dbModel
         // Персоны
         public abstract UsersList getPersonList(FilterParams filtr);
 
+
         //Orgs
         public abstract OrgsModel[] getOrgs(FilterParams filtr);
     }
