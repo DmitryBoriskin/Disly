@@ -644,7 +644,7 @@ namespace cms.dbase.models
 		[Column,     NotNull    ] public bool      b_annually   { get; set; } // bit
 		[Column,     NotNull    ] public string    c_title      { get; set; } // varchar(512)
 		[Column,        Nullable] public string    c_preview    { get; set; } // varchar(1024)
-		[Column,        Nullable] public string    c_text       { get; set; } // varchar(512)
+		[Column,        Nullable] public string    c_text       { get; set; } // varchar(4096)
 		[Column,        Nullable] public string    c_place      { get; set; } // varchar(512)
 		[Column,        Nullable] public string    c_organizer  { get; set; } // varchar(1024)
 		[Column,        Nullable] public string    c_url        { get; set; } // varchar(1024)

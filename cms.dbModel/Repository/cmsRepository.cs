@@ -36,7 +36,7 @@ namespace cms.dbModel
         public abstract bool check_user(string email);
         public abstract void check_usergroup(Guid id, string group, Guid UserId, string IP);
         
-        public abstract UsersList getUsersList(string[] filtr, string group, bool disabeld, int page, int size);
+        public abstract UsersList getUsersList(FilterParams filtr);
         public abstract UsersModel getUser(Guid id);
         public abstract bool createUser(Guid id, UsersModel Item, Guid UserId, string IP);
         public abstract bool updateUser(Guid id, UsersModel Item, Guid UserId, string IP);
@@ -61,5 +61,12 @@ namespace cms.dbModel
         public abstract bool insertCmsEvent(EventModel eventData);
         public abstract bool deleteCmsEvent(Guid id);
         #endregion
+
+        // Персоны
+        public abstract UsersList getPersonList(FilterParams filtr);
+
+
+        //Orgs
+        public abstract OrgsModel[] getOrgs(FilterParams filtr);
     }
 }

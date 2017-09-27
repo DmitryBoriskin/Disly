@@ -11,10 +11,10 @@
   </PropertyGroup>
   <ItemGroup>
     <File Include="Areas/Admin/Views/Account/ChangePass.cshtml">
-      <publishTime>07/08/2017 11:18:25</publishTime>
+      <publishTime>08/07/2017 11:18:25</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Account/LogIn.cshtml">
-      <publishTime>06/07/2017 12:11:53</publishTime>
+      <publishTime>07/06/2017 12:11:53</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Account/LogOff.cshtml">
       <publishTime>05/22/2017 13:19:11</publishTime>
@@ -35,16 +35,22 @@
       <publishTime>05/22/2017 13:19:24</publishTime>
     </File>
     <File Include="Areas/Admin/Views/cmsMenu/Item.cshtml">
-      <publishTime>05/22/2017 13:19:24</publishTime>
+      <publishTime>09/18/2017 15:14:53</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Image/Index.cshtml">
       <publishTime>05/31/2017 16:50:33</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Main/Index.cshtml">
-      <publishTime>06/07/2017 16:20:43</publishTime>
+      <publishTime>07/06/2017 16:20:43</publishTime>
+    </File>
+    <File Include="Areas/Admin/Views/Materials/Index.cshtml">
+      <publishTime>09/26/2017 13:02:42</publishTime>
+    </File>
+    <File Include="Areas/Admin/Views/Materials/Item.cshtml">
+      <publishTime>09/19/2017 12:27:54</publishTime>
     </File>
     <File Include="Areas/Admin/Views/PortalUsers/Index.cshtml">
-      <publishTime>05/22/2017 13:20:01</publishTime>
+      <publishTime>09/26/2017 12:01:41</publishTime>
     </File>
     <File Include="Areas/Admin/Views/PortalUsers/Item.cshtml">
       <publishTime>08/10/2017 21:30:48</publishTime>
@@ -91,6 +97,12 @@
     <File Include="Areas/Admin/Views/Shared/_popUp.cshtml">
       <publishTime>05/22/2017 13:20:45</publishTime>
     </File>
+    <File Include="Areas/Admin/Views/SiteMap/Index.cshtml">
+      <publishTime>09/18/2017 16:15:04</publishTime>
+    </File>
+    <File Include="Areas/Admin/Views/SiteMap/Item.cshtml">
+      <publishTime>05/22/2017 13:20:46</publishTime>
+    </File>
     <File Include="Areas/Admin/Views/Sites/Domains.cshtml">
       <publishTime>05/22/2017 13:21:33</publishTime>
     </File>
@@ -119,25 +131,25 @@
       <publishTime>05/22/2017 13:13:09</publishTime>
     </File>
     <File Include="bin/cms.dbase.dll">
-      <publishTime>08/09/2017 22:45:32</publishTime>
+      <publishTime>09/26/2017 20:59:40</publishTime>
     </File>
     <File Include="bin/cms.dbase.dll.config">
-      <publishTime>05/22/2017 13:10:32</publishTime>
+      <publishTime>05/22/2017 13:02:04</publishTime>
     </File>
     <File Include="bin/cms.dbase.pdb">
-      <publishTime>08/09/2017 22:45:32</publishTime>
+      <publishTime>09/26/2017 20:59:40</publishTime>
     </File>
     <File Include="bin/cms.dbModel.dll">
-      <publishTime>08/09/2017 22:45:31</publishTime>
+      <publishTime>09/26/2017 20:59:39</publishTime>
     </File>
     <File Include="bin/cms.dbModel.pdb">
-      <publishTime>08/09/2017 22:45:31</publishTime>
+      <publishTime>09/26/2017 20:59:39</publishTime>
     </File>
     <File Include="bin/Disly.dll">
-      <publishTime>09/09/2017 22:19:48</publishTime>
+      <publishTime>09/26/2017 20:59:41</publishTime>
     </File>
     <File Include="bin/Disly.pdb">
-      <publishTime>09/09/2017 22:19:49</publishTime>
+      <publishTime>09/26/2017 20:59:41</publishTime>
     </File>
     <File Include="bin/EntityFramework.dll">
       <publishTime>05/22/2017 13:30:29</publishTime>
@@ -206,7 +218,7 @@
       <publishTime>05/22/2017 13:13:42</publishTime>
     </File>
     <File Include="Content/css/styles.css">
-      <publishTime>07/10/2017 14:40:34</publishTime>
+      <publishTime>09/19/2017 10:29:28</publishTime>
     </File>
     <File Include="Content/css/styles_login.css">
       <publishTime>07/07/2017 08:10:41</publishTime>
@@ -391,11 +403,14 @@
     <File Include="Content/img/MapRF.svg">
       <publishTime>07/12/2017 13:14:53</publishTime>
     </File>
+    <File Include="Content/img/nophoto.jpg">
+      <publishTime>09/19/2017 11:59:33</publishTime>
+    </File>
     <File Include="Content/img/preloader.svg">
-      <publishTime>06/07/2017 12:11:37</publishTime>
+      <publishTime>07/06/2017 12:11:37</publishTime>
     </File>
     <File Include="Content/img/preloader_planet.svg">
-      <publishTime>06/07/2017 12:11:01</publishTime>
+      <publishTime>07/06/2017 12:11:01</publishTime>
     </File>
     <File Include="Content/plugins/bootstrap/config.json">
       <publishTime>05/22/2017 13:17:07</publishTime>
@@ -734,7 +749,7 @@
       <publishTime>08/10/2017 22:14:16</publishTime>
     </File>
     <File Include="scripts/cms/disly_5_login.js">
-      <publishTime>06/07/2017 10:46:02</publishTime>
+      <publishTime>07/06/2017 10:46:02</publishTime>
     </File>
     <File Include="scripts/cms/disly_5_popup.js">
       <publishTime>05/22/2017 13:12:37</publishTime>
@@ -803,7 +818,7 @@
       <publishTime>05/22/2017 13:09:46</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>08/09/2017 22:45:38</publishTime>
+      <publishTime>09/11/2017 11:57:35</publishTime>
     </File>
   </ItemGroup>
 </Project>

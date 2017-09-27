@@ -54,11 +54,27 @@
         {
             var $InputTime = $('<input style="width:70px;" class="form-control" placeholder="00:00">')
             $InputTime.attr('value', this.$element.attr('value').replace(/(\d+).(\d+).(\d+) (\d+):(\d+):(\d+)/, '$4:$5'));
-            $InputTime.attr('data-mask', '99:99');
+            $InputTime.mask('Hh:Mm', {
+                'translation': {
+                    H: { pattern: /[0-2]/ },
+                    h: { pattern: /[0-9]/ },
+                    M: { pattern: /[0-5]/ },
+                    m: { pattern: /[0-9]/ }
+                },
+                'placeholder:': '00:00'
+            });
+
+            //$InputTime.attr('data-mask', '99:99');
 
             var $InputDate = $('<input data-type="date" class="form-control" value="">');
             $InputDate.attr('value', this.$element.attr('value').replace(/(\d+).(\d+).(\d+) (\d+:\d+:\d+)/, '$1.$2.$3'));
             $InputDate.attr('data-mask', '99.99.9999');
+
+
+            if (this.$element.attr('required') == 'required') {
+                $InputDate.attr('required', 'required');
+            }
+
 
             this.$element.hide();
             this.$element.after($InputTime);
@@ -83,7 +99,7 @@
                     SpotDate();
                 });
             function SpotDate() {                                
-                $TargetInput.attr('value', $InputDate.val() + ' ' + $InputTime.val()+':00');                
+                $TargetInput.attr('value', $InputDate.val() + ' ' + $InputTime.val());                //+':00'
             }
         }
         this.$element.addClass('form-control');

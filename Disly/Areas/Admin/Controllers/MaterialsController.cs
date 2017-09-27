@@ -15,7 +15,9 @@ namespace Disly.Areas.Admin.Controllers
     {
         MaterialsViewModel model;
         FilterParams filter;
-        
+
+        int page_size = 40;
+
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             base.OnActionExecuting(filterContext);
@@ -25,9 +27,7 @@ namespace Disly.Areas.Admin.Controllers
 
             ViewBag.HttpKeys = Request.QueryString.AllKeys;
             ViewBag.Query = Request.QueryString;
-
-            filter = getFilter();
-
+            
              model = new MaterialsViewModel()
             {
                 Account = AccountInfo,
@@ -45,6 +45,8 @@ namespace Disly.Areas.Admin.Controllers
         // GET: Materials
         public ActionResult Index(string category, string type)
         {
+            // Наполняем фильтр значениями
+            filter = getFilter(page_size);
             // Наполняем модель данными
             model.List = _cmsRepository.getMaterialsList(filter);
 
@@ -70,13 +72,13 @@ namespace Disly.Areas.Admin.Controllers
         /// <returns></returns>
         [HttpPost]
         [MultiButton(MatchFormKey = "action", MatchFormValue = "search-btn")]
-        public ActionResult Search(string filter, bool enabeld, string size)
+        public ActionResult Search(string searchtext, bool disabled, string size, DateTime? date, DateTime? dateend)
         {
             string query = HttpUtility.UrlDecode(Request.Url.Query);
-            query = addFiltrParam(query, "filter", filter);
-            if (enabeld) query = addFiltrParam(query, "enabeld", String.Empty);
-            else query = addFiltrParam(query, "enabeld", enabeld.ToString().ToLower());
-
+            query = addFiltrParam(query, "searchtext", searchtext);
+            query = addFiltrParam(query, "disabled", disabled.ToString().ToLower());
+            query = (date == null) ? addFiltrParam(query, "date", String.Empty): addFiltrParam(query, "date", ((DateTime)date).ToString("dd.MM.yyyy").ToLower());
+            query = (dateend == null) ? addFiltrParam(query, "dateend", String.Empty): addFiltrParam(query, "dateend", ((DateTime)dateend).ToString("dd.MM.yyyy").ToString().ToLower());
             query = addFiltrParam(query, "page", String.Empty);
             query = addFiltrParam(query, "size", size);
 

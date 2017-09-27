@@ -10,12 +10,8 @@ namespace Disly.Areas.Admin.Controllers
     {
         PortalUsersViewModel model;
         FilterParams filter;
-        //
-        //string filter =  String.Empty;
-        //string group =  String.Empty;
-        //bool enabeld = true;
-        //int page =  1;
-        //int page_size = 40;
+
+        int page_size = 40;
 
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
@@ -28,8 +24,7 @@ namespace Disly.Areas.Admin.Controllers
                 UserResolution = UserResolutionInfo,
                 GroupList = _cmsRepository.getUsersGroupList()
             };
-            filter = getFilter(40);
-
+            
             #region Метатеги
             ViewBag.Title = UserResolutionInfo.Title;
             ViewBag.Description = "";
@@ -43,34 +38,10 @@ namespace Disly.Areas.Admin.Controllers
         /// <returns></returns>
         public ActionResult Index()
         {
-            // 
-            //string return_url = ViewBag.urlQuery = HttpUtility.UrlDecode(Request.Url.Query);
-
-            #region Получаем значения фильров из адресной строки
-            //// если в URL номер страницы равен значению по умолчанию - удаляем его из URL
-            //return_url = (Convert.ToInt32(Request.QueryString["page"]) == page) ? addFiltrParam(return_url, "page", String.Empty) : return_url;
-            //// записываем в переменную значение "page" из URL
-            //page = (Convert.ToInt32(Request.QueryString["page"]) > 0) ? Convert.ToInt32(Request.QueryString["page"]) : page;
-            //// если в URL кол-во записей на странице равно значению по умолчанию - удаляем его из URL
-            //return_url = (Convert.ToInt32(Request.QueryString["size"]) == page_size) ? addFiltrParam(return_url, "size", String.Empty) : return_url;
-            //// записываем в переменную значение "size" из URL
-            //page_size = (Convert.ToInt32(Request.QueryString["size"]) > 0) ? Convert.ToInt32(Request.QueryString["size"]) : page_size;
-            //// записываем в переменную значение "filter" из URL
-            //filter = String.IsNullOrEmpty(Request.QueryString["filter"]) ? String.Empty : Request.QueryString["filter"];
-            //// записываем в переменную значение "group" из URL
-            //group = String.IsNullOrEmpty(Request.QueryString["group"]) ? String.Empty : Request.QueryString["group"];
-            //// записываем в переменную значение "enabeld" из URL
-            //enabeld = String.IsNullOrEmpty(Request.QueryString["enabeld"]);
-            //// разделяем значения из переменной "filter" по словам
-            //string[] SearchParams = filter.Split(' ');
-
-            //// Если парамметры из адресной строки равны значениям по умолчанию - удаляем их из URL
-            //if (return_url.ToLower() != HttpUtility.UrlDecode(Request.Url.Query).ToLower())
-            //    return Redirect(StartUrl + return_url);
-            #endregion
-
+            // Наполняем фильтр значениями
+            filter = getFilter(page_size);
             // Наполняем модель данными
-            model.List = _cmsRepository.getUsersList(filter.SearchText.Split(' '), filter.Group, (bool)filter.Disabled, filter.Page, filter.Size);
+            model.List = _cmsRepository.getUsersList(filter);
 
             return View(model);
         }
@@ -94,10 +65,10 @@ namespace Disly.Areas.Admin.Controllers
         /// <returns></returns>
         [HttpPost]
         [MultiButton(MatchFormKey = "action", MatchFormValue = "search-btn")]
-        public ActionResult Search(string filter, bool disabled, string size)
+        public ActionResult Search(string searchtext, bool disabled, string size)
         {
             string query = HttpUtility.UrlDecode(Request.Url.Query);
-            if (String.IsNullOrEmpty(Request.QueryString["searchtext"])) query = addFiltrParam(query, "searchtext", filter);
+            query = addFiltrParam(query, "searchtext", searchtext);
             query = addFiltrParam(query, "disabled", disabled.ToString().ToLower());
             query = addFiltrParam(query, "page", String.Empty);
             query = addFiltrParam(query, "size", size);

@@ -280,9 +280,6 @@
     <Content Include="scripts\uc_script.js" />
     <Content Include="UC_params.txt" />
     <Content Include="Userfiles\chuvashia\styles.css" />
-    <Content Include="Web.config">
-      <SubType>Designer</SubType>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
@@ -295,6 +292,8 @@
     </Compile>
     <Compile Include="Areas\Admin\Controllers\EventsController.cs" />
     <Compile Include="Areas\Admin\Controllers\MaterialsController.cs" />
+    <Compile Include="Areas\Admin\Controllers\PersonController.cs" />
+    <Compile Include="Areas\Admin\Controllers\OrgsController.cs" />
     <Compile Include="Areas\Admin\Controllers\PortalUsersController.cs" />
     <Compile Include="Areas\Admin\Controllers\ServicesController.cs" />
     <Compile Include="Areas\Admin\Controllers\ImageController.cs" />
@@ -307,6 +306,7 @@
     <Compile Include="Areas\Admin\Models\FiltrModel.cs.cs" />
     <Compile Include="Areas\Admin\Models\FrontModulesModel.cs" />
     <Compile Include="Areas\Admin\Models\MainViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\OrgsViewModel.cs" />
     <Compile Include="Areas\Admin\Models\EventsViewModel.cs" />
     <Compile Include="Areas\Admin\Models\MaterialsViewModel.cs" />
     <Compile Include="Areas\Admin\Models\ServicesViewsModel.cs" />
@@ -332,7 +332,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\web.config" />
+    <Content Include="Views\web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="packages.config" />
     <Content Include="Areas\Admin\Views\Shared\_Layout.cshtml" />
     <Content Include="Content\fonts\fontello\fontello.eot" />
@@ -414,10 +416,9 @@
     <Content Include="Areas\Admin\Views\SiteMap\Item.cshtml" />
     <Content Include="Areas\Admin\Views\Materials\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Materials\Item.cshtml" />
-    <Content Include="Areas\Admin\Views\Events\Index.cshtml" />
-    <Content Include="Areas\Admin\Views\Events\Item.cshtml" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Web.config" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -428,7 +429,6 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Content\plugins\tinymce\plugins\colorpicker\" />
-    <Folder Include="Logs\" />
     <Folder Include="Views\Core\" />
   </ItemGroup>
   <ItemGroup>
