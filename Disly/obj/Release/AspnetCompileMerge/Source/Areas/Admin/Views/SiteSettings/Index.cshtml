@@ -1,0 +1,39 @@
+﻿@model SitesViewModel
+
+@Html.Partial("Partial/Confirm")
+@Html.Partial("Partial/Frame")
+@using (Html.BeginForm())
+{
+    if (Model.UserResolution.Read)
+    {
+        <div id="Buttons">
+            @if (Model.UserResolution.Change)
+            {
+            <button type="submit" name="action" value="update-btn" class="BtnSave">Сохранить</button>
+            }
+        </div>
+        
+        <div id="Content">
+            <div id="TitleBlock">@ViewBag.Title</div>
+            @Html.ValidationSummary(false, "", new { @class = "alert alert-danger" })
+            <div class="row">
+                <div class="col-xs-6">
+                    @Html.TextBoxFor(m => m.Site.C_Name, new { @class = "uc_input", maxlength = "512", required = "", title = "Имя сайта" })
+                </div>
+                <div class="col-xs-6">
+                    @Html.TextBoxFor(m => m.Site.C_Domain, new { @class = "uc_input", maxlength = "64", required = "", title = "Название сайта (название на латинском для имени основного домена)" })
+                </div>
+            </div>
+        </div>
+
+        <div id="DopInfo">
+            @Html.ActionLink("Пользователи сайта", "Index", "Users", new { @siteId = Model.Site.C_Domain }, new { @class = "Button icon-user", @title = "Пользователи сайта" })
+            <a id="LogLists" class="Button PopUpFrame icon-archive" data-class="LogList" title="Журнал изменений" href="/admin/services/log/@Model.Site.Id">Журнал изменений</a>
+        </div>
+    }
+    else
+    {
+        <div id="Content"><p>У вас недостаточно прав.</p></div>
+    }
+
+}

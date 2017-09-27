@@ -1,0 +1,18 @@
+.breadcrumb > li + li:before {
+     content: "\2022"  !important;
+     color: #999 !important;
+}
+
+.breadcrumb .active {
+	color: #999;
+	text-decoration: none !important;
+}
+
+.breadcrumb-list{
+	font-size: 10px;
+	margin-left: -24px !important;
+	margin-top: -7px !important;
+	margin-bottom: 30px !important;
+	padding-top: 13px;
+	text-transform: uppercase;
+}

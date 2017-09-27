@@ -1,0 +1,67 @@
+﻿@model SitesViewModel
+
+@Html.Partial("Partial/Confirm")
+@Html.Partial("Partial/Frame")
+@using (Html.BeginForm())
+{
+    <div id="Buttons">
+        @if (ViewBag.ActionName == "create")
+        {
+            if (Model.UserResolution.Change)
+            {
+                <button type="submit" name="action" value="create-btn" class="BtnCreate">Сохранить</button>
+            }
+            <button type="submit" name="action" value="cancel-btn" class="BtnCancel">Закрыть</button>
+        }
+        else
+        {
+            if (Model.UserResolution.Change)
+            {
+                <button type="submit" name="action" value="update-btn" class="BtnSave">Сохранить</button>
+            }
+            <button type="submit" name="action" value="cancel-btn" class="BtnCancel">Закрыть</button>
+            if (Model.UserResolution.Delete)
+            {
+                <button type="submit" name="action" value="delete-btn" class="BtnDelete">Удалить</button>
+            }
+        }
+    </div>
+
+        @* Содержимое страницы *@
+        <div id="Content">
+            <div id="TitleBlock">@ViewBag.Title</div>
+            @Html.ValidationSummary(false, "", new { @class = "alert alert-danger" })
+            <div class="row">
+                <div class="col-xs-8">
+                    @Html.TextBoxFor(m => Model.Site.C_Name, new { @class = "uc_input", @required = "", @title = "Название организации", @placeholder = "Название организации", @MaxLength = "512", @data_help = "Наименование организации." })
+                </div>
+                <div class="col-xs-4">
+                    @Html.TextBoxFor(m => Model.Site.C_Domain, new { @class = "uc_input", @required = "", @title = "Название сайта", @placeholder = "Название сайта", @MaxLength = "64", @data_help = "Название сайта в адресной строке." })    
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12">
+                    @Html.DropDownListFor(m => Model.User.Id, new SelectList(Model.Users, "Id", "C_FullName", 0), new { @class = "uc_input", @title = "Администратор сайта" })
+                    @Html.HiddenFor(m => Model.User.F_Group, new { @value = Model.User.F_Group })
+                    @Html.HiddenFor(m => Model.User.C_Surname, new { @value = Model.User.C_Surname })
+                    @Html.HiddenFor(m => Model.User.C_Name, new { @value = Model.User.C_Name })
+                </div>
+                <div class="col-xs-7 col-md-6 col-lg-4">
+                    @Html.ActionLink("Добавить пользователя", "Create", "users", new { @id= @Guid.NewGuid() }, new { @class="Button", @target="_blank" })
+                </div>
+            </div>
+        </div>
+        @* //Содержимое страницы *@
+
+        @* Блок DopInfo *@
+        <div id="DopInfo">
+            <div></div>
+        </div>
+        @* // Блок DopInfo *@
+    
+    
+    if (ViewBag.Message != null)
+    {
+        @Html.Partial("Partial/modal")
+    }
+}

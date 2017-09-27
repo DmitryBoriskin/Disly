@@ -1,0 +1,30 @@
+C:\Users\D-Boriskin\documents\visual studio 2013\Projects\Disly\cms.dbase\bin\Release\cms.dbase.dll.config
+C:\Users\D-Boriskin\documents\visual studio 2013\Projects\Disly\cms.dbase\bin\Release\cms.dbase.dll
+C:\Users\D-Boriskin\documents\visual studio 2013\Projects\Disly\cms.dbase\bin\Release\cms.dbase.pdb
+C:\Users\D-Boriskin\documents\visual studio 2013\Projects\Disly\cms.dbase\bin\Release\cms.dbModel.dll
+C:\Users\D-Boriskin\documents\visual studio 2013\Projects\Disly\cms.dbase\bin\Release\EntityFramework.dll
+C:\Users\D-Boriskin\documents\visual studio 2013\Projects\Disly\cms.dbase\bin\Release\EntityFramework.SqlServer.dll
+C:\Users\D-Boriskin\documents\visual studio 2013\Projects\Disly\cms.dbase\bin\Release\linq2db.dll
+C:\Users\D-Boriskin\documents\visual studio 2013\Projects\Disly\cms.dbase\bin\Release\cms.dbModel.pdb
+C:\Users\D-Boriskin\documents\visual studio 2013\Projects\Disly\cms.dbase\bin\Release\EntityFramework.xml
+C:\Users\D-Boriskin\documents\visual studio 2013\Projects\Disly\cms.dbase\bin\Release\EntityFramework.SqlServer.xml
+C:\Users\D-Boriskin\documents\visual studio 2013\Projects\Disly\cms.dbase\bin\Release\linq2db.pdb
+C:\Users\D-Boriskin\documents\visual studio 2013\Projects\Disly\cms.dbase\bin\Release\ru\EntityFramework.resources.dll
+C:\Users\D-Boriskin\documents\visual studio 2013\Projects\Disly\cms.dbase\obj\Release\cms.dbase.csprojResolveAssemblyReference.cache
+C:\Users\D-Boriskin\documents\visual studio 2013\Projects\Disly\cms.dbase\obj\Release\cms.dbase.dll
+C:\Users\D-Boriskin\documents\visual studio 2013\Projects\Disly\cms.dbase\obj\Release\cms.dbase.pdb
+D:\Git\DislyMVC\cms.dbase\bin\Release\cms.dbase.dll.config
+D:\Git\DislyMVC\cms.dbase\bin\Release\cms.dbase.dll
+D:\Git\DislyMVC\cms.dbase\bin\Release\cms.dbase.pdb
+D:\Git\DislyMVC\cms.dbase\bin\Release\cms.dbModel.dll
+D:\Git\DislyMVC\cms.dbase\bin\Release\EntityFramework.dll
+D:\Git\DislyMVC\cms.dbase\bin\Release\EntityFramework.SqlServer.dll
+D:\Git\DislyMVC\cms.dbase\bin\Release\linq2db.dll
+D:\Git\DislyMVC\cms.dbase\bin\Release\cms.dbModel.pdb
+D:\Git\DislyMVC\cms.dbase\bin\Release\EntityFramework.xml
+D:\Git\DislyMVC\cms.dbase\bin\Release\EntityFramework.SqlServer.xml
+D:\Git\DislyMVC\cms.dbase\bin\Release\linq2db.pdb
+D:\Git\DislyMVC\cms.dbase\bin\Release\ru\EntityFramework.resources.dll
+D:\Git\DislyMVC\cms.dbase\obj\Release\cms.dbase.csprojResolveAssemblyReference.cache
+D:\Git\DislyMVC\cms.dbase\obj\Release\cms.dbase.dll
+D:\Git\DislyMVC\cms.dbase\obj\Release\cms.dbase.pdb

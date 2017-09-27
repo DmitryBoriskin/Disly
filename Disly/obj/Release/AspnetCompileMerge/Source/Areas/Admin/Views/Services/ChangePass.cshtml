@@ -1,0 +1,53 @@
+﻿@model UsersViewModel
+
+@using (Html.BeginForm())
+{
+    <div>
+        <div id="PagesPass">
+            <div class="col-xs-12">
+                <div id="UserInfo">
+                    <div class="ListItem User">
+                        <a class="LI_Caption">@Model.User.C_Surname  @Model.User.C_Name</a>
+                        <div class="LI_Desc">
+                            <span>E-Mail: </span> @Model.User.C_EMail
+                        </div>
+                    </div>
+                </div>
+                @if (ViewBag.SuccesAlert != null)
+                {
+                    <div class="alert alert-success" role="alert">@ViewBag.SuccesAlert</div>
+                }
+                @if (ViewBag.DankerAlert != null)
+                {
+                    <div class="alert alert-danger">@ViewBag.DankerAlert</div>
+                }
+                @Html.ValidationSummary(false, "", new { @class = "alert alert-danger" })
+
+            </div>
+            <div class="col-xs-6">
+                @Html.TextBoxFor(m => Model.ChangePass.Password, new { @class = "uc_input", type = "pass", minlength = "6", maxlength = "16", autocomplete = "off", @title = "Новый пароль" })
+            </div>
+            <div class="col-xs-6">
+                @Html.TextBoxFor(m => Model.ChangePass.PasswordConfirm, new { @class = "uc_input", type = "pass", minlength = "6", maxlength = "16", autocomplete = "off", @title = "Подтверждение пароля" })
+            </div>
+            <div class="col-xs-12">
+                <p>Пароль должен содержать от 6 до 16 символов.</p>
+                <p>В нем должны содержаться строчные и прописные латинские буквы, цифры, а так же разрешено использовать спецсимволы.</p>
+            </div>
+            <div class="col-xs-12">
+                <button type="submit" name="action" value="password-update" class="BtnChange">Изменить</button>
+            </div>
+
+            @*@if (Model.UserResolution.Read)
+            {   
+            }
+            else
+            {
+                <p>У вас недостаточно прав</p>
+            }*@
+        </div>
+    </div>
+}
+@Styles.Render("~/bundles/popUp_css")
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/popUp_js")

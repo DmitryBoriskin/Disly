@@ -1,0 +1,119 @@
+
+li.activeable {
+	margin-right: 3px;
+}
+
+/* MENU */
+#menu {
+	background-color: #FFF;
+	height: 55px;
+	width: 100%;
+	margin-top: 15px;
+
+	border-radius: 0px;
+	-webkit-box-shadow: 9px 9px 16px -12px rgba(0,0,0,0.75);
+	-moz-box-shadow: 9px 9px 16px -12px rgba(0,0,0,0.75);
+	box-shadow: 9px 9px 16px -12px rgba(0,0,0,0.75);
+}
+
+/*Ссылки навбара*/
+#menu a{
+	text-decoration: none !important;
+	color: #262626;
+}
+
+/*Хештег в навбаре*/
+.hashtag {
+	color: #0072C6;
+	font-size: 15px !important;
+	transform: scale(0.7,1);
+}
+
+ /*Пункты навбара*/
+#menu li{
+	padding-top: 4px;
+	border-bottom-width: 0px;
+	border-top-width: 0px;
+	border-left-width: 0px;
+	border-right-width: 0px;
+	border-style: solid;
+	border-color:  #0072C6;
+	height: 55px;
+	font-size: 14px;
+}
+
+
+
+
+/*Убрать бутстраповский бакгроунд для кнопок меню*/
+#menu a:hover,#menu a:active{
+	background-color: transparent;
+}
+
+/*Добавить бордер на хувер и активный класс кнопок в навбаре*/
+#menu .activeable.active, #menu .activeable:hover{
+	border-bottom-width: 4px;
+}
+
+/*Логотип навбара*/
+.navbar-brand {
+	font-weight: bold;
+	font-size: 14px;
+}
+
+/*Значок маркера*/
+#menu .fa-map-marker {
+
+	color: #B3B3B3;
+}
+
+/*Значек списка*/
+#menu .fa-caret-down{
+
+	color: #0072C6;
+}
+
+
+
+.city-menu{
+	width: 830px;
+	background-color: #0072C6;
+	color: #FFF;
+	padding-left: 30px;
+	padding-top: 30px;
+	/* padding-bottom: 30px; */
+	padding-right: 80px;
+	font-size: 14px;
+}
+
+.city-menu .list-group-item{
+	background-color: #0072C6;
+	padding-left: 10px;
+	padding-top: 0px;
+	height:auto !important;
+}
+
+
+.city-menu .list-group-item.active{
+	background-color: #0065AD;
+	border-radius: 5px;
+}
+
+.city-menu .list-group-item:hover{
+	background-color: #1A80CC;
+	border-radius: 5px;
+}
+
+
+.city-menu hr{
+	border-color: #0065AD;
+	margin-top: 6px;
+	margin-bottom: 6px;
+}
+
+.city-menu .head {
+	text-transform: uppercase;
+	font-weight: bold;
+	font-size: 13px;
+}
+

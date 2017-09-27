@@ -1,0 +1,90 @@
+﻿
+<div id="content" class="container text-center">
+	<div id="header-title">
+		<h1 id="header-h1" class="normal-bold"> ОБРАЗОВАТЕЛЬНЫЕ УЧРЕЖДЕНИЯ</h1>
+			<h2 id="header-h2"  class="normal-bold"> Чувашской Республики</h2>
+		</div>
+		<hr id="header-hr">
+		<div id="header-panel row">
+			<h2 id="header-type"  class="normal-bold"> ВЫБЕРИТЕ ВИД ОБРАЗОВАНИЯ</h2>
+			<div class="col-xs-3">
+				<a href="/list/kindergarten">
+					<div class="header-panel-item" id="blue-panel"> 
+						<div class="header-panel-item-background" > </div>
+						<div class="header-panel-item-inner">
+							<img src="~/content/Front/img/horse.png" id="horse-img">
+							<br>
+							<br>
+							ДОШКОЛЬНОЕ
+						</div>
+					</div>
+				</a>
+			</div>
+			<div class="col-xs-3">
+				<a href="/list/school">
+					<div class="header-panel-item" id="green-panel">
+						<div class="header-panel-item-background" ></div>
+						<div class="header-panel-item-inner">
+							<img src="~/content/Front/img/bag.png" id="bag-img">
+							<br>
+							<br>
+							ОБЩЕОБРАЗОВАТЕЛЬНОЕ 
+						</div>
+					</div>
+				</a>
+			</div>
+			<div class="col-xs-3">
+				<a href="/list/university">
+					<div class="header-panel-item" id="yellow-panel">
+						<div class="header-panel-item-background"></div>
+						<div class="header-panel-item-inner">
+							<img src="~/content/Front/img/univer.png" id="univer-img">
+							<br>
+							<br>
+							ПРОФЕССИОНАЛЬНОЕ
+						</div>
+					</div>
+				</a>
+			</div>
+			<div class="col-xs-3">
+				<a href="/list/additional">
+					<div class="header-panel-item" id="purple-panel">
+						<div class="header-panel-item-background" ></div>
+						<div class="header-panel-item-inner">
+							<img src="~/content/Front/img/books.png" id="books-img">
+							<br>
+							<br>
+							ДОПОЛНИТЕЛЬНОЕ ОБРАЗОВАНИЕ 
+						</div>
+					</div>
+				</a>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12">
+				<h2 id="header-search"  class="normal-bold"> ИЛИ ВОСПОЛЬЗУЙТЕСЬ ПОИСКОМ ПО НАИМЕНОВАНИЮ </h2>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-md-12">
+				<div id="search-input"> 
+					<div class="input-group stylish-input-group">
+						<form method="get" action="/list">
+							<input autocomplete="off" name='keyword' id="input-search" type="text" class="form-control"  placeholder="Введите полное или краткое наименование организации..." >
+							<span class="input-group-addon">
+								<button type="submit">
+									<img src="~/content/Front/img/search.png">
+								</button>  
+							</span>
+							<ul id="autocomplete" class="list-group autocomplete-group" >
+							</ul>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+	</div>
+

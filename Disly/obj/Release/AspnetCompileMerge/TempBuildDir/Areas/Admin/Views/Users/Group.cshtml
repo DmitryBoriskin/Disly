@@ -1,0 +1,111 @@
+﻿@model UsersViewModel
+
+@using (Html.BeginForm())
+{
+    <div id="UpFrame" class="container" >
+        <div class="row">
+            @if (ViewBag.SuccesAlert != null)
+            {
+                <div class="alert alert-success" role="alert">@ViewBag.SuccesAlert</div>
+            }
+            @if (ViewBag.DankerAlert != null)
+            {
+                <div class="alert alert-danger">@ViewBag.DankerAlert</div>
+            }
+            
+            @Html.ValidationSummary(false, "", new { @class = "alert alert-danger" })
+            <div class="col-xs-4">                
+                @if (ViewBag.ActionName == "groupcreate")
+                {
+                    @Html.TextBoxFor(m => m.GroupItem.C_Alias, new { @class = "uc_input", @title = "Название группы (на английском)" })
+                }
+                else
+                {
+                    @Html.TextBoxFor(m => m.GroupItem.C_Alias, new { @class = "uc_input", @title = "Название группы (на английском)" , @readonly = "readonly" })
+                }
+
+            </div>
+            <div class="col-xs-4">
+                @Html.TextBoxFor(m => m.GroupItem.C_GroupName, new { @class = "uc_input", @title = "Отображаемое имя" })
+            </div>
+            <div class="col-xs-4">
+                <div id="Buttons" class="ButtonsFrame">
+                    @if (ViewBag.ActionName == "groupcreate")
+                    {
+                        <button type="submit" name="action" value="create-btn-group-user" class="BtnCreate">Создать</button>
+                        @*<button type="submit" name="action" value="cancel-btn-group-user" class="BtnCancel">Закрыть</button>*@
+                    }
+                    else
+                    {
+                        <button type="submit" name="action" value="update-btn-group-user" class="BtnSave">Сохранить</button>
+                        @*<button type="submit" name="action" value="cancel-btn-group-user" class="BtnCancel">Закрыть</button>*@
+                        <button type="submit" name="action" value="delete-btn-group-user" class="BtnDelete">Удалить</button>
+                    }
+                </div>
+            </div>
+                @if (ViewBag.ActionName != "groupcreate")
+                {
+                    <div class="col-xs-12">
+                        <div id="UserGroupResolutions">
+                            <div id="PagesListTitle">
+                                <div class="HeadItem">
+                                    <div class="CB_Block HeadBlock">
+                                        Удаление
+                                    </div><div class="CB_Block HeadBlock">
+                                        Изменение
+                                    </div><div class="CB_Block HeadBlock">
+                                        Создание
+                                    </div><div class="CB_Block HeadBlock">
+                                        Просмотр
+                                    </div><div class="PageName HeadBlock">
+                                        Раздел CMS
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="PagesList">
+
+                                @foreach (ResolutionsTemplatesModel Resolut in Model.ResolutionsTemplatesList)
+                                {
+                                    <div class="TableItem">
+                                        <div class="CB_Block">
+                                            <span data-user="@Resolut.UserGroupId" data-url="@Resolut.MenuId" data-action="delete">
+                                                <input id="ctl17" type="checkbox" name="ctl17" checked="@Resolut.Delete" }>
+                                            </span>
+                                        </div>
+                                        <div class="CB_Block">
+                                            <span data-user="@Resolut.UserGroupId" data-url="@Resolut.MenuId" data-action="change">
+                                                <input id="ctl17" type="checkbox" name="ctl17" checked="@Resolut.Change" }>
+                                            </span>
+                                        </div>
+                                        <div class="CB_Block">
+                                            <span data-user="@Resolut.UserGroupId" data-url="@Resolut.MenuId" data-action="write">
+                                                <input id="ctl17" type="checkbox" name="ctl17" checked="@Resolut.Write" }>
+                                            </span>
+                                        </div>
+                                        <div class="CB_Block">
+                                            <span data-user="@Resolut.UserGroupId" data-url="@Resolut.MenuId" data-action="read">
+                                                <input id="ctl17" type="checkbox" name="ctl17" checked="@Resolut.Delete" }>
+                                            </span>
+                                        </div>
+                                        <div class="PageName HeadBlock">@Resolut.MenuTitle</div>
+                                    </div>
+
+                                }
+
+                            </div>
+                        </div>
+                    </div>
+                            }
+                        </div>
+                    </div>
+                }
+@Styles.Render("~/bundles/css")
+<link type="text/css" href="/Content/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+<link type="text/css" href="/Content/plugins/mCustomScrollbar/jquery.mCustomScrollbar.css" rel="stylesheet" />
+@Scripts.Render("~/bundles/jquery")
+<script type="text/javascript" src="/Content/plugins/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript"  src="/Scripts/uc_script.js"></script>
+<script type="text/javascript" src="/Content/plugins/mCustomScrollbar/jquery.mCustomScrollbar.js"></script>
+<script type="text/javascript" src="/Scripts/Script.js"></script>
+
+
