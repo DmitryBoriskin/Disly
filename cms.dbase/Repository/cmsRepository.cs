@@ -1011,7 +1011,7 @@ namespace cms.dbase
                         Url = s.c_url,
                         UrlName = s.c_url_name,
                         Date = s.d_date,
-                        DateBegin =s.d_date_begin,
+                        DateBegin = s.d_date_begin,
                         DateEnd = s.d_date_end,
                         Annually = s.b_annually,
                         KeyW = s.c_keyw,
@@ -1041,7 +1041,7 @@ namespace cms.dbase
 
                     cdEvent = new content_events
                     {
-                        id=eventData.Id,
+                        id = eventData.Id,
                         c_alias = eventData.Alias,
                         c_title = eventData.Title,
                         c_text = eventData.Text,
@@ -1111,7 +1111,7 @@ namespace cms.dbase
                     }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 //write to log ex
                 return false;
@@ -1143,6 +1143,91 @@ namespace cms.dbase
             {
                 //write to log ex
                 return false;
+            }
+        }
+        #endregion
+
+        public override OrgsModel[] getOrgs(FilterParams filtr) {
+            using (var db = new CMSdb(_context))
+            {
+                var data = db.content_orgss.AsQueryable();
+                var list = data.Select(s => new OrgsModel() {
+                    Id=s.id,
+                    Title=s.c_title
+                });
+                if (list.Any()) return list.ToArray();
+                return null;
+            }
+        }
+
+        #region Person
+        public override UsersList getPersonList(FilterParams filtr)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var query = db.content_peoples.Where(w => w.id != null);
+                //if (filtr.Group != String.Empty)
+                //{
+                //    query = query.Where(w => w.f_group == filtr.Group);
+                //}
+                foreach (string param in filtr.SearchText.Split(' '))
+                {
+                    if (param != String.Empty)
+                    {
+                        query = query.Where(w => w.c_surname.Contains(param) || w.c_name.Contains(param) || w.c_patronymic.Contains(param));
+                    }
+                }
+
+                query = query.OrderBy(o => new { o.c_surname, o.c_name });
+
+                if (query.Any())
+                {
+                    int ItemCount = query.Count();
+
+                    var List = query.
+                        Select(s => new UsersModel
+                        {
+                            Id = s.id,
+                            Surname = s.c_surname,
+                            Name = s.c_name,
+                        }).
+                        Skip(filtr.Size * (filtr.Page - 1)).
+                        Take(filtr.Size);
+
+                    UsersModel[] usersInfo = List.ToArray();
+
+                    return new UsersList
+                    {
+                        Data = usersInfo,
+                        Pager = new Pager
+                        {
+                            page = filtr.Page,
+                            size = filtr.Size,
+                            items_count = ItemCount,
+                            page_count = (ItemCount % filtr.Size > 0) ? (ItemCount / filtr.Size) + 1 : ItemCount / filtr.Size
+                        }
+                    };
+                }
+                return null;
+            }
+        }
+        public override UsersModel getPerson(Guid id)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var data = db.content_peoples.
+                    Where(w => w.id == id).
+                    Select(s => new UsersModel
+                    {
+                        Id = s.id,
+                        Surname = s.c_surname,
+                        Name = s.c_name,
+                        Patronymic = s.c_patronymic
+                    });
+
+
+                if (!data.Any()) { return null; }
+                else { return data.First(); }
             }
         }
         #endregion

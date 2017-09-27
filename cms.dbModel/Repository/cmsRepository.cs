@@ -53,20 +53,20 @@ namespace cms.dbModel
         public abstract MaterialsList getMaterialsList(FilterParams filtr);
         public abstract MaterialsModel getMaterial(Guid id);
 
-        #region Events
+
+        // Events
         public abstract EventsList getEventsList(FilterParams filtr);
         public abstract EventModel getEvent(Guid id);
 
         public abstract bool updateCmsEvent(EventModel eventData);
         public abstract bool insertCmsEvent(EventModel eventData);
         public abstract bool deleteCmsEvent(Guid id);
-        #endregion
-
-        // Персоны
-        public abstract UsersList getPersonList(FilterParams filtr);
-
 
         //Orgs
         public abstract OrgsModel[] getOrgs(FilterParams filtr);
+        
+        // Персоны
+        public abstract UsersList getPersonList(FilterParams filtr);
+        public abstract UsersModel getPerson(Guid id);
     }
 }

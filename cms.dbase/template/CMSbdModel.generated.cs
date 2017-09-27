@@ -46,6 +46,7 @@ namespace cms.dbase.models
 		public ITable<cms_users>                      cms_userss                      { get { return this.GetTable<cms_users>(); } }
 		public ITable<cms_users_group>                cms_users_groups                { get { return this.GetTable<cms_users_group>(); } }
 		public ITable<content_departments>            content_departmentss            { get { return this.GetTable<content_departments>(); } }
+		public ITable<content_departments_phone>      content_departments_phones      { get { return this.GetTable<content_departments_phone>(); } }
 		public ITable<content_events>                 content_eventss                 { get { return this.GetTable<content_events>(); } }
 		public ITable<content_events_link>            content_events_links            { get { return this.GetTable<content_events_link>(); } }
 		public ITable<content_materials>              content_materialss              { get { return this.GetTable<content_materials>(); } }
@@ -631,6 +632,32 @@ namespace cms.dbase.models
 		[Association(ThisKey="id", OtherKey="f_department", CanBeNull=true, IsBackReference=true)]
 		public IEnumerable<content_people_department_link> fkcontentdepartmentpeoplelinks { get; set; }
 
+		/// <summary>
+		/// FK_content_departments_phone_content_departments_BackReference
+		/// </summary>
+		[Association(ThisKey="id", OtherKey="f_department", CanBeNull=true, IsBackReference=true)]
+		public IEnumerable<content_departments_phone> contentdepartmentsphonecontentdepartmentss { get; set; }
+
+		#endregion
+	}
+
+	[Table(Schema="dbo", Name="content_departments_phone")]
+	public partial class content_departments_phone
+	{
+		[PrimaryKey, Identity   ] public int    id           { get; set; } // int
+		[Column,     NotNull    ] public Guid   f_department { get; set; } // uniqueidentifier
+		[Column,        Nullable] public string c_key        { get; set; } // nvarchar(256)
+		[Column,        Nullable] public string c_val        { get; set; } // nvarchar(256)
+		[Column,     NotNull    ] public int    n_sort       { get; set; } // int
+
+		#region Associations
+
+		/// <summary>
+		/// FK_content_departments_phone_content_departments
+		/// </summary>
+		[Association(ThisKey="f_department", OtherKey="id", CanBeNull=false, KeyName="FK_content_departments_phone_content_departments", BackReferenceName="contentdepartmentsphonecontentdepartmentss")]
+		public content_departments contentdepartmentsphonecontentdepartments { get; set; }
+
 		#endregion
 	}
 
@@ -820,16 +847,16 @@ namespace cms.dbase.models
 		#region Associations
 
 		/// <summary>
-		/// fk_content_department_people_link
-		/// </summary>
-		[Association(ThisKey="f_department", OtherKey="id", CanBeNull=false, KeyName="fk_content_department_people_link", BackReferenceName="fkcontentdepartmentpeoplelinks")]
-		public content_departments fkcontentdepartmentpeoplelink { get; set; }
-
-		/// <summary>
 		/// fk_content_people_org_department_link
 		/// </summary>
 		[Association(ThisKey="f_people", OtherKey="id", CanBeNull=false, KeyName="fk_content_people_org_department_link", BackReferenceName="fkcontentpeopleorgdepartmentlinks")]
 		public content_people_org_link fkcontentpeopleorgdepartmentlink { get; set; }
+
+		/// <summary>
+		/// fk_content_department_people_link
+		/// </summary>
+		[Association(ThisKey="f_department", OtherKey="id", CanBeNull=false, KeyName="fk_content_department_people_link", BackReferenceName="fkcontentdepartmentpeoplelinks")]
+		public content_departments fkcontentdepartmentpeoplelink { get; set; }
 
 		#endregion
 	}
@@ -884,6 +911,7 @@ namespace cms.dbase.models
 		/// сортировка
 		/// </summary>
 		[Column,     NotNull    ] public int    n_sort          { get; set; } // int
+		[Column,        Nullable] public Guid?  uui_parent      { get; set; } // uniqueidentifier
 
 		#region Associations
 
@@ -1194,6 +1222,12 @@ namespace cms.dbase.models
 		}
 
 		public static content_departments Find(this ITable<content_departments> table, Guid id)
+		{
+			return table.FirstOrDefault(t =>
+				t.id == id);
+		}
+
+		public static content_departments_phone Find(this ITable<content_departments_phone> table, int id)
 		{
 			return table.FirstOrDefault(t =>
 				t.id == id);
