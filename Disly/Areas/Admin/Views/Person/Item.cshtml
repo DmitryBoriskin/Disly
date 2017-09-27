@@ -1,0 +1,29 @@
+﻿@model PortalUsersViewModel
+
+@if (Model.UserResolution.Write)
+{
+    <div class="content">
+        <h1>@Model.UserResolution.Title</h1>
+        
+    </div>
+    
+    <div class="dop_info-block">
+        <div class="dop-caption">Настройки</div>
+    </div>
+}
+else
+{
+    <div class="content"><p>У вас недостаточно прав.</p></div>
+}
+
+<div class="buttons">
+    @if ((Model.Item != null && Model.UserResolution.Change) || (Model.Item == null && Model.UserResolution.Write))
+    {
+        <button type="submit" name="action" value="save-btn" data-primary="true" class="button icon-create">Сохранить</button>
+    }
+    @if (Model.Item != null && Model.UserResolution.Delete)
+    {
+        <button type="submit" name="action" value="delete-btn" class="button icon-delete">Удалить</button>
+    }
+    <button type="submit" name="action" value="cancel-btn" class="button icon-cancel">Закрыть</button>
+</div>

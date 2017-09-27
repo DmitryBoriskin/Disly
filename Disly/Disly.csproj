@@ -291,6 +291,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Areas\Admin\Controllers\MaterialsController.cs" />
+    <Compile Include="Areas\Admin\Controllers\PersonController.cs" />
     <Compile Include="Areas\Admin\Controllers\PortalUsersController.cs" />
     <Compile Include="Areas\Admin\Controllers\ServicesController.cs" />
     <Compile Include="Areas\Admin\Controllers\ImageController.cs" />
@@ -411,6 +412,8 @@
     <Content Include="Areas\Admin\Views\SiteMap\Item.cshtml" />
     <Content Include="Areas\Admin\Views\Materials\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Materials\Item.cshtml" />
+    <Content Include="Areas\Admin\Views\Person\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\Person\Item.cshtml" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Web.config" />
