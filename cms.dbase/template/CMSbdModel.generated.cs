@@ -637,23 +637,22 @@ namespace cms.dbase.models
 	[Table(Schema="dbo", Name="content_events")]
 	public partial class content_events
 	{
-		[PrimaryKey, NotNull    ] public Guid      id           { get; set; } // uniqueidentifier
-		[Identity               ] public int       num          { get; set; } // int
-		[Column,     NotNull    ] public DateTime  d_date       { get; set; } // datetime
-		[Column,        Nullable] public DateTime? d_date_end   { get; set; } // datetime
-		[Column,     NotNull    ] public bool      b_annually   { get; set; } // bit
-		[Column,     NotNull    ] public string    c_title      { get; set; } // varchar(512)
-		[Column,        Nullable] public string    c_preview    { get; set; } // varchar(1024)
-		[Column,        Nullable] public string    c_text       { get; set; } // varchar(4096)
-		[Column,        Nullable] public string    c_place      { get; set; } // varchar(512)
-		[Column,        Nullable] public string    c_organizer  { get; set; } // varchar(1024)
-		[Column,        Nullable] public string    c_url        { get; set; } // varchar(1024)
-		[Column,        Nullable] public string    c_url_name   { get; set; } // varchar(512)
-		[Column,        Nullable] public string    c_alias      { get; set; } // varchar(512)
-		[Column,        Nullable] public string    c_desc       { get; set; } // varchar(1024)
-		[Column,        Nullable] public string    c_keyw       { get; set; } // varchar(512)
-		[Column,     NotNull    ] public bool      b_disabled   { get; set; } // bit
-		[Column,     NotNull    ] public DateTime  d_date_begin { get; set; } // datetime
+		[PrimaryKey, NotNull    ] public Guid      id          { get; set; } // uniqueidentifier
+		[Identity               ] public int       num         { get; set; } // int
+		[Column,     NotNull    ] public DateTime  d_date      { get; set; } // datetime
+		[Column,        Nullable] public DateTime? d_date_end  { get; set; } // datetime
+		[Column,     NotNull    ] public bool      b_annually  { get; set; } // bit
+		[Column,     NotNull    ] public string    c_title     { get; set; } // varchar(512)
+		[Column,        Nullable] public string    c_preview   { get; set; } // varchar(1024)
+		[Column,        Nullable] public string    c_text      { get; set; } // varchar(512)
+		[Column,        Nullable] public string    c_place     { get; set; } // varchar(512)
+		[Column,        Nullable] public string    c_organizer { get; set; } // varchar(1024)
+		[Column,        Nullable] public string    c_url       { get; set; } // varchar(1024)
+		[Column,        Nullable] public string    c_url_name  { get; set; } // varchar(512)
+		[Column,        Nullable] public string    c_alias     { get; set; } // varchar(512)
+		[Column,        Nullable] public string    c_desc      { get; set; } // varchar(1024)
+		[Column,        Nullable] public string    c_keyw      { get; set; } // varchar(512)
+		[Column,     NotNull    ] public bool      b_disabled  { get; set; } // bit
 
 		#region Associations
 
@@ -814,8 +813,8 @@ namespace cms.dbase.models
 	[Table(Schema="dbo", Name="content_people_department_link")]
 	public partial class content_people_department_link
 	{
-		[PrimaryKey(1), NotNull] public Guid f_department { get; set; } // uniqueidentifier
-		[PrimaryKey(2), NotNull] public Guid f_people     { get; set; } // uniqueidentifier
+		[Column, NotNull] public Guid f_department { get; set; } // uniqueidentifier
+		[Column, NotNull] public Guid f_people     { get; set; } // uniqueidentifier
 
 		#region Associations
 
@@ -880,10 +879,6 @@ namespace cms.dbase.models
 		[Column,        Nullable] public string c_keyw          { get; set; } // nvarchar(512)
 		[Column,     NotNull    ] public bool   b_disabled      { get; set; } // bit
 		[Column,     NotNull    ] public bool   b_disabled_menu { get; set; } // bit
-		/// <summary>
-		/// сортировка
-		/// </summary>
-		[Column,     NotNull    ] public int    n_sort          { get; set; } // int
 
 		#region Associations
 
@@ -1227,13 +1222,6 @@ namespace cms.dbase.models
 		{
 			return table.FirstOrDefault(t =>
 				t.id == id);
-		}
-
-		public static content_people_department_link Find(this ITable<content_people_department_link> table, Guid f_department, Guid f_people)
-		{
-			return table.FirstOrDefault(t =>
-				t.f_department == f_department &&
-				t.f_people     == f_people);
 		}
 
 		public static content_people_org_link Find(this ITable<content_people_org_link> table, Guid id)

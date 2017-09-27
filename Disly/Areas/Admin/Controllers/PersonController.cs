@@ -20,7 +20,8 @@ namespace Disly.Areas.Admin.Controllers
             {
                 Account = AccountInfo,
                 Settings = SettingsInfo,
-                UserResolution = UserResolutionInfo
+                UserResolution = UserResolutionInfo,
+                GroupList = _cmsRepository.getUsersGroupList()
             };
             
             #region Метатеги
@@ -50,7 +51,7 @@ namespace Disly.Areas.Admin.Controllers
         /// <returns></returns>
         public ActionResult Item(Guid Id)
         {
-            model.Item = _cmsRepository.getUser(Id);            
+            model.Item = _cmsRepository.getPerson(Id);            
 
             return View("Item", model);
         }
@@ -63,11 +64,12 @@ namespace Disly.Areas.Admin.Controllers
         /// <returns></returns>
         [HttpPost]
         [MultiButton(MatchFormKey = "action", MatchFormValue = "search-btn")]
-        public ActionResult Search(string searchtext, bool disabled, string size)
+        public ActionResult Search(string searchtext, string group, bool disabled, string size)
         {
             string query = HttpUtility.UrlDecode(Request.Url.Query);
             query = addFiltrParam(query, "searchtext", searchtext);
             query = addFiltrParam(query, "disabled", disabled.ToString().ToLower());
+            query = addFiltrParam(query, "group", group);
             query = addFiltrParam(query, "page", String.Empty);
             query = addFiltrParam(query, "size", size);
             

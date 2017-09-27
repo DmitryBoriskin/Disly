@@ -290,7 +290,6 @@
     <Compile Include="Areas\Admin\Controllers\MainController.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Areas\Admin\Controllers\EventsController.cs" />
     <Compile Include="Areas\Admin\Controllers\MaterialsController.cs" />
     <Compile Include="Areas\Admin\Controllers\PersonController.cs" />
     <Compile Include="Areas\Admin\Controllers\OrgsController.cs" />
@@ -307,7 +306,6 @@
     <Compile Include="Areas\Admin\Models\FrontModulesModel.cs" />
     <Compile Include="Areas\Admin\Models\MainViewModel.cs" />
     <Compile Include="Areas\Admin\Models\OrgsViewModel.cs" />
-    <Compile Include="Areas\Admin\Models\EventsViewModel.cs" />
     <Compile Include="Areas\Admin\Models\MaterialsViewModel.cs" />
     <Compile Include="Areas\Admin\Models\ServicesViewsModel.cs" />
     <Compile Include="Areas\Admin\Models\PortalUsersViewModel.cs" />
@@ -416,6 +414,9 @@
     <Content Include="Areas\Admin\Views\SiteMap\Item.cshtml" />
     <Content Include="Areas\Admin\Views\Materials\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Materials\Item.cshtml" />
+    <Content Include="Areas\Admin\Views\Orgs\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\Person\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\Person\Item.cshtml" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Web.config" />
