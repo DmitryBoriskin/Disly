@@ -426,7 +426,6 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Content\plugins\tinymce\plugins\colorpicker\" />
-    <Folder Include="Logs\" />
     <Folder Include="Views\Core\" />
   </ItemGroup>
   <ItemGroup>
