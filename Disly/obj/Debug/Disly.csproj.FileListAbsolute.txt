@@ -425,7 +425,6 @@ D:\Git\DislyMVC\Disly\bin\System.Web.Mvc.dll
 D:\Git\DislyMVC\Disly\bin\cms.dbase.dll.config
 D:\Git\DislyMVC\Disly\bin\System.Web.Mvc.xml
 D:\Git\DislyMVC\Disly\bin\ru\System.Web.Mvc.resources.dll
-E:\ProjectsGit\MedPortal\Disly\bin\Disly.dll.config
 E:\ProjectsGit\MedPortal\Disly\bin\Disly.dll
 E:\ProjectsGit\MedPortal\Disly\bin\Disly.pdb
 E:\ProjectsGit\MedPortal\Disly\bin\Antlr3.Runtime.dll
