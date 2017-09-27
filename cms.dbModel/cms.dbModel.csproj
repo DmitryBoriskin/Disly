@@ -54,6 +54,7 @@
     <Compile Include="entity\cms\AccountModel.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="entity\cms\OrgsModel.cs" />
     <Compile Include="entity\cms\ServiceModels.cs" />
     <Compile Include="entity\cms\cmsLogModel.cs">
       <SubType>Code</SubType>

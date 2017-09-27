@@ -52,5 +52,8 @@ namespace cms.dbModel
         // Материалы
         public abstract MaterialsList getMaterialsList(FilterParams filtr);
         public abstract MaterialsModel getMaterial(Guid id);
+
+        //Orgs
+        public abstract OrgsModel[] getOrgs(FilterParams filtr);
     }
 }

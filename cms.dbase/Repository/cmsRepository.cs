@@ -858,5 +858,28 @@ namespace cms.dbase
             }
         }
         #endregion
+
+
+        #region Orgs
+        public override OrgsModel[] getOrgs(FilterParams filtr) {
+            using (var db = new CMSdb(_context))
+            {
+                var query = db.content_orgss.AsQueryable();
+                if (query.Any()) {
+                    var List = query.Select(s => new OrgsModel()
+                    {
+                        Id = s.id,
+                        Title = s.c_title
+                    });
+                    return List.ToArray();
+                }
+                return null;
+
+
+                
+                
+            }
+        }
+        #endregion
     }
 }
