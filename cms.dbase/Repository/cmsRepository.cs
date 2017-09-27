@@ -1067,6 +1067,7 @@ namespace cms.dbase
         }
         #endregion
 
+        #region Orgs
         public override OrgsModel[] getOrgs(FilterParams filtr) {
             using (var db = new CMSdb(_context))
             {
@@ -1079,6 +1080,7 @@ namespace cms.dbase
                 return null;
             }
         }
+        #endregion
 
         #region Person
         public override UsersList getPersonList(FilterParams filtr)
