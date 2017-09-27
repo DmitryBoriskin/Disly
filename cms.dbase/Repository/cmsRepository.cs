@@ -857,5 +857,213 @@ namespace cms.dbase
             }
         }
         #endregion
+
+        #region Events
+        public override EventsList getEventsList(FilterParams filtr)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var query = db.content_eventss.Where(w => w.id != null);
+                query = query.OrderByDescending(o => o.d_date);
+
+                if (query.Any())
+                {
+                    int ItemCount = query.Count();
+
+                    var List = query
+                        .Select(s => new EventModel
+                        {
+                            Id = s.id,
+                            Num = s.num,
+                            Title = s.c_title,
+                            Alias = s.c_alias,
+                            Place = s.c_place,
+                            EventMaker = s.c_organizer,
+                            Preview = s.c_preview,
+                            Text = s.c_text,
+                            Url = s.c_url,
+                            UrlName = s.c_url_name,
+                            Date = s.d_date,
+                            DateBegin = s.d_date_begin,
+                            DateEnd = s.d_date_end,
+                            Annually = s.b_annually,
+                            KeyW = s.c_keyw,
+                            Desc = s.c_desc,
+                            Disabled = s.b_disabled
+                        }).
+                        Skip(filtr.Size * (filtr.Page - 1)).
+                        Take(filtr.Size);
+
+                    EventModel[] eventsInfo = List.ToArray();
+
+                    return new EventsList
+                    {
+                        Data = eventsInfo,
+                        Pager = new Pager
+                        {
+                            page = filtr.Page,
+                            size = filtr.Size,
+                            items_count = ItemCount,
+                            page_count = (ItemCount % filtr.Size > 0) ? (ItemCount / filtr.Size) + 1 : ItemCount / filtr.Size
+                        }
+                    };
+                }
+                return null;
+            }
+        }
+        public override EventModel getEvent(Guid id)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var data = db.content_eventss.
+                    Where(w => w.id == id).
+                    Select(s => new EventModel
+                    {
+                        Id = s.id,
+                        Num = s.num,
+                        Title = s.c_title,
+                        Alias = s.c_alias,
+                        Place = s.c_place,
+                        EventMaker = s.c_organizer,
+                        Preview = s.c_preview,
+                        Text = s.c_text,
+                        Url = s.c_url,
+                        UrlName = s.c_url_name,
+                        Date = s.d_date,
+                        DateBegin =s.d_date_begin,
+                        DateEnd = s.d_date_end,
+                        Annually = s.b_annually,
+                        KeyW = s.c_keyw,
+                        Desc = s.c_desc,
+                        Disabled = s.b_disabled
+                    });
+
+
+                if (!data.Any()) { return null; }
+                else { return data.First(); }
+            }
+        }
+
+        public override bool insertCmsEvent(EventModel eventData)
+        {
+            try
+            {
+                using (var db = new CMSdb(_context))
+                {
+                    content_events cdEvent = db.content_eventss
+                                                .Where(p => p.id == eventData.Id)
+                                                .SingleOrDefault();
+                    if (cdEvent != null)
+                    {
+                        throw new Exception("Запись с таким Id уже существует");
+                    }
+
+                    cdEvent = new content_events
+                    {
+                        id=eventData.Id,
+                        c_alias = eventData.Alias,
+                        c_title = eventData.Title,
+                        c_text = eventData.Text,
+                        c_place = eventData.Place,
+                        c_organizer = eventData.EventMaker,
+                        c_preview = eventData.Preview,
+                        c_desc = eventData.Desc,
+                        c_keyw = eventData.KeyW,
+                        b_annually = eventData.Annually,
+                        b_disabled = eventData.Disabled,
+                        d_date = eventData.Date,
+                        d_date_begin = eventData.DateBegin,
+                        d_date_end = eventData.DateEnd,
+                        c_url = eventData.Url,
+                        c_url_name = eventData.UrlName,
+                    };
+
+                    using (var tran = db.BeginTransaction())
+                    {
+                        db.Insert(cdEvent);
+                        tran.Commit();
+                        return true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                //write to log ex
+                return false;
+            }
+        }
+        public override bool updateCmsEvent(EventModel eventData)
+        {
+            try
+            {
+                using (var db = new CMSdb(_context))
+                {
+                    content_events cdEvent = db.content_eventss
+                                                .Where(p => p.id == eventData.Id)
+                                                .SingleOrDefault();
+                    if (cdEvent == null)
+                    {
+                        throw new Exception("Запись с таким Id не найдена");
+                    }
+
+                    cdEvent.c_alias = eventData.Alias;
+                    cdEvent.c_title = eventData.Title;
+                    cdEvent.c_text = eventData.Text;
+                    cdEvent.c_place = eventData.Place;
+                    cdEvent.c_organizer = eventData.EventMaker;
+                    cdEvent.c_preview = eventData.Preview;
+                    cdEvent.c_desc = eventData.Desc;
+                    cdEvent.c_keyw = eventData.KeyW;
+                    cdEvent.b_annually = eventData.Annually;
+                    cdEvent.b_disabled = eventData.Disabled;
+                    cdEvent.d_date = eventData.Date;
+                    cdEvent.d_date_begin = eventData.DateBegin;
+                    cdEvent.d_date_end = eventData.DateEnd;
+                    cdEvent.c_url = eventData.Url;
+                    cdEvent.c_url_name = eventData.UrlName;
+
+                    using (var tran = db.BeginTransaction())
+                    {
+                        db.Update(cdEvent);
+                        tran.Commit();
+                        return true;
+                    }
+                }
+            }
+            catch(Exception ex)
+            {
+                //write to log ex
+                return false;
+            }
+        }
+        public override bool deleteCmsEvent(Guid id)
+        {
+            try
+            {
+                using (var db = new CMSdb(_context))
+                {
+                    content_events cdEvent = db.content_eventss
+                                                .Where(p => p.id == id)
+                                                .SingleOrDefault();
+                    if (cdEvent == null)
+                    {
+                        throw new Exception("Запись с таким Id не найдена");
+                    }
+
+                    using (var tran = db.BeginTransaction())
+                    {
+                        db.Delete(cdEvent);
+                        tran.Commit();
+                        return true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                //write to log ex
+                return false;
+            }
+        }
+        #endregion
     }
 }

@@ -389,15 +389,29 @@ a.link-close:before {
     border-bottom: solid 1px #dfe4ec;
     padding: 20px 0 18px;
 }
+.li-image{
+    text-align:center;
+    margin-bottom:10px;
+}
+.li-date{
+    font-weight:500;
+    font-size:0.9em;
+    text-align:center;
+    color:#284659;
+}
 .li-caption {
     font-size: 1.3em;
 }
+
 .li-desc {
-    padding: 0 0 3px;
+    margin-top:10px;
+    font-size:0.9em;
 }
 .li-desc span {
     font-weight: 500;
+    color:#284659;
 }
+
 .disabled,
 .disabled .li-caption,
 .disabled a,
