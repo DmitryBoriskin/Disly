@@ -468,3 +468,4 @@ E:\ProjectsGit\MedPortal\Disly\bin\ru\System.Web.Mvc.resources.dll
 E:\ProjectsGit\MedPortal\Disly\obj\Debug\Disly.csprojResolveAssemblyReference.cache
 E:\ProjectsGit\MedPortal\Disly\obj\Debug\Disly.dll
 E:\ProjectsGit\MedPortal\Disly\obj\Debug\Disly.pdb
+E:\ProjectsGit\MedPortal\Disly\bin\Disly.dll.config

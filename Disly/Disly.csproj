@@ -280,6 +280,7 @@
     <Content Include="scripts\uc_script.js" />
     <Content Include="UC_params.txt" />
     <Content Include="Userfiles\chuvashia\styles.css" />
+    <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
@@ -423,7 +424,6 @@
     <Content Include="Areas\Admin\Views\Events\Item.cshtml" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <Content Include="Views\_ViewStart.cshtml" />
-    <Content Include="Web.config" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
