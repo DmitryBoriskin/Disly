@@ -51,6 +51,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="entity\cms\EventsModel.cs" />
     <Compile Include="entity\cms\AccountModel.cs">
       <SubType>Code</SubType>
     </Compile>
