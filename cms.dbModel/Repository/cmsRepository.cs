@@ -62,16 +62,16 @@ namespace cms.dbModel
         public abstract bool insertCmsEvent(EventModel eventData);
         public abstract bool deleteCmsEvent(Guid id);
 
-        //Orgs
-        public abstract OrgsModel[] getOrgs(FilterParams filtr);
+        
         
         // Персоны
         public abstract UsersList getPersonList(FilterParams filtr);
         public abstract UsersModel getPerson(Guid id);
 
         //Orgs
-        //public abstract OrgsModel[] getOrgs(FilterParams filtr);
+        public abstract OrgsModel[] getOrgs(FilterParams filtr);
         public abstract OrgsModel getOrgItem(Guid id);
+        public abstract bool setOrgs(Guid id, OrgsModel model);
         public abstract StructureModel[] getStructureList(Guid id);
         public abstract StructureModel getStructure(Guid id);
         public abstract Departments[] getDepartmentsList(Guid id);

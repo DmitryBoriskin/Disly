@@ -98,8 +98,28 @@
                 .on("input change", function (e) {
                     SpotDate();
                 });
-            function SpotDate() {                                
-                $TargetInput.attr('value', $InputDate.val() + ' ' + $InputTime.val());                //+':00'
+            function SpotDate() {
+                var time = $InputTime.val();
+                var Length = time.length;                
+                if (Length == 5) {
+                    time = time + ':00';
+                }
+                if (Length == 4) {
+                    time = time + '0:00';
+                }
+                if (Length == 3) {
+                    time = time + '00:00';
+                }
+                if (Length == 2) {
+                    time = time + ':00:00';
+                }
+                if (Length == 1) {
+                    time = time + '0:00:00';
+                }
+                if (Length == 0) {
+                    time = time + '00:00:00';
+                }
+                $TargetInput.attr('value', $InputDate.val() + ' ' + time);                //
             }
         }
         this.$element.addClass('form-control');

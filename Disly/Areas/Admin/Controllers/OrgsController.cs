@@ -44,7 +44,7 @@ namespace Disly.Areas.Admin.Controllers
             return View(model);
         }
 
-
+        
         /// <summary>
         /// Формируем строку фильтра
         /// </summary>
@@ -88,6 +88,28 @@ namespace Disly.Areas.Admin.Controllers
             model.Item = _cmsRepository.getOrgItem(Id);    //+ список структур        
             return View("Item", model);
         }
+
+        [HttpPost]
+        [ValidateInput(false)]
+        [MultiButton(MatchFormKey = "action", MatchFormValue = "save-btn")]
+        public ActionResult Save(Guid id, OrgsViewModel back_model)
+        {
+            ErrorMassege userMassege = new ErrorMassege();
+            userMassege.title = "Информация";
+
+            if (ModelState.IsValid)
+            {
+                _cmsRepository.setOrgs(id, back_model.Item);
+                userMassege.info = "Запись сохранена";
+                userMassege.buttons = new ErrorMassegeBtn[]{
+                    new ErrorMassegeBtn { url = StartUrl + Request.Url.Query, text = "вернуться в список" },
+                    new ErrorMassegeBtn { url = "#", text = "ок", action = "false" }
+                };
+            }
+            model.ErrorInfo = userMassege;
+            return View("Item", model);
+        }
+
         // GET: Admin/Orgs/structure/{Guid}
         public ActionResult Structure(Guid id)
         {

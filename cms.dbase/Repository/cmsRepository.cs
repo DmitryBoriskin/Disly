@@ -1071,12 +1071,17 @@ namespace cms.dbase
 
 
         #region Orgs
-        
+
         public override OrgsModel[] getOrgs(FilterParams filtr)
         {
             using (var db = new CMSdb(_context))
             {
                 var data = db.content_orgss.AsQueryable();
+                if (filtr.SearchText != null)
+                {
+                    data = data.Where(w => (w.c_title.Contains(filtr.SearchText)));
+                }
+
                 var list = data.Select(s => new OrgsModel()
                 {
                     Id = s.id,
@@ -1101,6 +1106,22 @@ namespace cms.dbase
                 return null;
             }
         }
+
+        public override bool setOrgs(Guid id, OrgsModel model)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var data = db.content_orgss.Where(w => w.id == id);
+                if (data.Any())
+                {
+                    data.Set(s => s.c_title, model.Title)
+                        .Update();
+                    return true;
+                }
+                return false;                
+            }
+        }
+        
         public override StructureModel[] getStructureList(Guid id)
         {
             using (var db = new CMSdb(_context))
@@ -1224,24 +1245,36 @@ namespace cms.dbase
                     Title="Организации",
                     Url="/admin/orgs/"
                 });
+                #region item
                 if (type == "item")
                 {
                     var data = db.content_departmentss.Where(w => w.id == id).FirstOrDefault();
                     MyBread.Push(new BreadCrumb
                     {
                         Title = data.c_title,
-                        Url = "/admin/orgs/item/"+data.id
-                    });                    
+                        Url = "/admin/orgs/item/" + data.id
+                    });
                 }
+                #endregion
+                #region structure
                 if (type == "structure")
                 {
                     var data = db.content_org_structures.Where(w => w.id == id).FirstOrDefault();
+                    var ParentStructure = db.content_org_structures.Where(w => w.id == data.id).FirstOrDefault();
+
                     MyBread.Push(new BreadCrumb
                     {
                         Title = data.c_title,
                         Url = "/admin/orgs/item/" + data.f_ord
                     });
+                    MyBread.Push(new BreadCrumb
+                    {
+                        Title = ParentStructure.c_title,
+                        Url = "/admin/orgs/structure/" + ParentStructure.id
+                    });
                 }
+                #endregion
+                #region department
                 if (type == "department")
                 {
                     var data = db.content_departmentss.Where(w => w.id == id).FirstOrDefault();
@@ -1251,15 +1284,20 @@ namespace cms.dbase
                     MyBread.Push(new BreadCrumb
                     {
                         Title = ParentStructure.c_title,
-                        Url = "/admin/orgs/structure/" + data.id
+                        Url = "/admin/orgs/item/" + ParentOrg.id
                     });
-
+                    MyBread.Push(new BreadCrumb
+                    {
+                        Title = ParentStructure.c_title,
+                        Url = "/admin/orgs/structure/" + ParentStructure.id
+                    });
                     MyBread.Push(new BreadCrumb
                     {
                         Title = data.c_title,
                         Url = "/admin/orgs/department/" + data.id
                     });
-                }
+                } 
+                #endregion
                 return MyBread.Reverse().ToArray();
             }            
         }
