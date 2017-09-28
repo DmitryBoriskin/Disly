@@ -4,6 +4,7 @@
 {
     <div class="content">
         <h1>@ViewBag.Title</h1>
+        @Html.Partial("part/bread")
         @Html.TextBoxFor(m => m.StructureItem.Title, new { required = "", type = "text", maxlength = "256", title = "Название подразделения" })               
         <div class="group-block open" title="Телефон и e-mail">
             <div class="row">
@@ -54,7 +55,7 @@
                     <tr>
                         <td class="map_site_icon"></td>
                         <td>
-                            <a href="/admin/orgs/deparment/@item.Id">@item.Title</a>
+                            <a href="/admin/orgs/department/@item.Id">@item.Title</a>
                         </td>
                     </tr>
 

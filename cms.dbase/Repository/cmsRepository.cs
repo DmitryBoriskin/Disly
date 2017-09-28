@@ -1231,7 +1231,7 @@ namespace cms.dbase
                     {
                         Title = data.c_title,
                         Url = "/admin/orgs/item/"+data.id
-                    });
+                    });                    
                 }
                 if (type == "structure")
                 {
@@ -1239,19 +1239,29 @@ namespace cms.dbase
                     MyBread.Push(new BreadCrumb
                     {
                         Title = data.c_title,
-                        Url = "/admin/orgs/item/" + data.id
+                        Url = "/admin/orgs/item/" + data.f_ord
                     });
                 }
-                if (type == "deparment")
+                if (type == "department")
                 {
                     var data = db.content_departmentss.Where(w => w.id == id).FirstOrDefault();
+
+
+                    var ParentStructure = db.content_org_structures.Where(w => w.id == data.f_structure).FirstOrDefault();
+
+                    MyBread.Push(new BreadCrumb
+                    {
+                        Title = ParentStructure.c_title,
+                        Url = "/admin/orgs/structure/" + data.id
+                    });
+
                     MyBread.Push(new BreadCrumb
                     {
                         Title = data.c_title,
-                        Url = "/admin/orgs/item/" + data.id
+                        Url = "/admin/orgs/department/" + data.id
                     });
                 }
-                return MyBread.ToArray();
+                return MyBread.Reverse().ToArray();
             }            
         }
         /// <summary>

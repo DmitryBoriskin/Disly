@@ -428,9 +428,10 @@
     <Content Include="Areas\Admin\Views\Person\Item.cshtml" />
     <Content Include="Areas\Admin\Views\Orgs\Item.cshtml" />
     <Content Include="Areas\Admin\Views\Orgs\Structure.cshtml" />
-    <Content Include="Areas\Admin\Views\Orgs\Deparment.cshtml" />
+    <Content Include="Areas\Admin\Views\Orgs\Department.cshtml" />
     <Content Include="Areas\Admin\Views\Events\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Events\Item.cshtml" />
+    <Content Include="Areas\Admin\Views\Orgs\part\bread.cshtml" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <Content Include="Views\_ViewStart.cshtml" />
     <None Include="Web.Debug.config">

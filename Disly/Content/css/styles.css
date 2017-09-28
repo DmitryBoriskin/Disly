@@ -962,3 +962,5 @@ a.button  {
 .depart_phone_del:hover{text-decoration:none;}
 .depart_phone_del:before{content:'\ec5b';font-family:fontello;color:red;}
 .depart_phone_del:hover:before{color:#c50505;}
+
+.breadcrumb > li{display:inline;}

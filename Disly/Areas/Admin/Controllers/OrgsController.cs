@@ -93,6 +93,7 @@ namespace Disly.Areas.Admin.Controllers
         {
             ViewBag.Title = "Структурное подразделение";
             model.StructureItem = _cmsRepository.getStructure(id);//+ список подразделений      
+            model.BreadCrumbOrg = _cmsRepository.getBreadCrumbOrgs(id, ViewBag.ActionName);
             //model.StructureItem
             return View("Structure", model);
         }
@@ -105,11 +106,12 @@ namespace Disly.Areas.Admin.Controllers
         //[HttpPost]
         //public ActionResult()
         // GET: Admin/Orgs/department/{Guid}
-        public ActionResult Deparment(Guid id)
+        public ActionResult Department(Guid id)
         {
-            ViewBag.Title = "Отделение";
+            ViewBag.Title = "Отделение";            
             model.DepartmentItem=_cmsRepository.getDepartamentItem(id);
-            return View("Deparment", model);
+            model.BreadCrumbOrg = _cmsRepository.getBreadCrumbOrgs(id, ViewBag.ActionName);
+            return View("department", model);
         }
         
         /// <summary>
