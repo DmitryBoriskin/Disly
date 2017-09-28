@@ -64,8 +64,13 @@
          public ActionResult Item(Guid Id)
          {
              model.Item = _cmsRepository.getEvent(Id);
- 
-             return View("Item", model);
+            if (model.Item == null)
+                model.Item = new EventModel()
+                {
+                    Date = DateTime.Now,
+                    DateBegin = DateTime.Now
+                };
+            return View("Item", model);
          }
  
  
@@ -112,9 +117,7 @@
              string query = HttpUtility.UrlDecode(Request.Url.Query);
              query = addFiltrParam(query, "page", String.Empty);
  
-             var id = Guid.NewGuid();
-             ViewBag.ItemId = id;
-             return Redirect(StartUrl + "Item/" + id + "/" + query);
+             return Redirect(StartUrl + "Item/" + Guid.NewGuid() + "/" + query);
          }
  
          /// <summary>
@@ -161,9 +164,9 @@
                      new ErrorMassegeBtn { url = "#", text = "ок", action = "false" }
                  };
              }
- 
-             //model.Item = _cmsRepository.getUser(Id);
-             model.ErrorInfo = userMessage;
+
+            //model.Item = _cmsRepository.getEvent(Id);
+            model.ErrorInfo = userMessage;
  
              return View("Item", model);
          }
@@ -179,7 +182,7 @@
          [MultiButton(MatchFormKey = "action", MatchFormValue = "delete-btn")]
          public ActionResult Delete(Guid Id)
          {
-             //_cmsRepository.deleteUser(Id, AccountInfo.id, RequestUserInfo.IP);
+             //var res = _cmsRepository.deleteCmsEvent(Id);
  
              // записываем информацию о результатах
              ErrorMassege userMassege = new ErrorMassege();
@@ -189,7 +192,6 @@
                  new ErrorMassegeBtn { url = "#", text = "ок", action = "false" }
              };
  
-             //model.Item = _cmsRepository.getUser(Id);
              model.ErrorInfo = userMassege;
  
              return View("Item", model);

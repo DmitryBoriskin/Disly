@@ -11,9 +11,8 @@ namespace cms.dbModel.entity
 
     public class MaterialsModel
     {
-        [Required]
         public Guid Id { get; set; }
-        [Required(ErrorMessage = "Поле «Имя» не должно быть пустым.")]
+        [Required(ErrorMessage = "Поле «Заголовок» не должно быть пустым.")]
         public string Title { get; set; }
         public string Alias { get; set; }
         public string Preview { get; set; }
@@ -25,6 +24,8 @@ namespace cms.dbModel.entity
         public DateTime Date { get; set; }
         public string Keyw { get; set; }
         public string Desc { get; set; }
+        [Required]
+        public bool Important { get; set; }
         [Required]
         public bool Disabled { get; set; }
     }

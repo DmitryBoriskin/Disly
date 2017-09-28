@@ -60,7 +60,11 @@ namespace Disly.Areas.Admin.Controllers
         public ActionResult Item(Guid Id)
         {
             model.Item = _cmsRepository.getMaterial(Id);
-
+            if (model.Item == null)
+                model.Item = new MaterialsModel()
+                {
+                    Date = DateTime.Now
+                };
             return View("Item", model);
         }
 
@@ -110,53 +114,44 @@ namespace Disly.Areas.Admin.Controllers
         [HttpPost]
         [ValidateInput(false)]
         [MultiButton(MatchFormKey = "action", MatchFormValue = "save-btn")]
-        public ActionResult Save(Guid Id, PortalUsersViewModel back_model)
+        public ActionResult Save(Guid Id, MaterialsViewModel bindData)
         {
-            ErrorMassege userMassege = new ErrorMassege();
-            userMassege.title = "Информация";
+            ErrorMassege userMessage = new ErrorMassege();
+            userMessage.title = "Информация";
 
             if (ModelState.IsValid)
             {
-                //if (_cmsRepository.check_user(Id))
-                //{
-                //    _cmsRepository.updateUser(Id, back_model.Item, AccountInfo.id, RequestUserInfo.IP);
-                //    userMassege.info = "Запись обновлена";
-                //}
-                //else if (!_cmsRepository.check_user(back_model.Item.EMail))
-                //{
-                //    char[] _pass = back_model.Password.Password.ToCharArray();
-                //    Cripto password = new Cripto(_pass);
-                //    string NewSalt = password.Salt;
-                //    string NewHash = password.Hash;
+                var res = false;
+                var getMaterial = _cmsRepository.getMaterial(Id);
 
-                //    back_model.Item.Salt = NewSalt;
-                //    back_model.Item.Hash = NewHash;
+                bindData.Item.Id = Id;
+                //Определяем Insert или Update
+                if (getMaterial != null)
+                    res = _cmsRepository.updateCmsMaterial(bindData.Item);
+                else
+                    res = _cmsRepository.insertCmsMaterial(bindData.Item);
+                //Сообщение пользователю
+                if (res)
+                    userMessage.info = "Запись обновлена";
+                else
+                    userMessage.info = "Произошла ошибка";
 
-                //    _cmsRepository.createUser(Id, back_model.Item, AccountInfo.id, RequestUserInfo.IP);
-
-                //    userMassege.info = "Запись добавлена";
-                //}
-                //else
-                //{
-                //    userMassege.info = "Пользователь с таким EMail адресом уже существует.";
-                //}
-
-                userMassege.buttons = new ErrorMassegeBtn[]{
-                    new ErrorMassegeBtn { url = StartUrl + Request.Url.Query, text = "вернуться в список" },
-                    new ErrorMassegeBtn { url = "#", text = "ок", action = "false" }
-                };
+                userMessage.buttons = new ErrorMassegeBtn[]{
+                     new ErrorMassegeBtn { url = StartUrl + Request.Url.Query, text = "Вернуться в список" },
+                     new ErrorMassegeBtn { url = "#", text = "ок", action = "false" }
+                 };
             }
             else
             {
-                userMassege.info = "Ошибка в заполнении формы. Поля в которых допушены ошибки - помечены цветом.";
+                userMessage.info = "Ошибка в заполнении формы. Поля в которых допушены ошибки - помечены цветом.";
 
-                userMassege.buttons = new ErrorMassegeBtn[]{
-                    new ErrorMassegeBtn { url = "#", text = "ок", action = "false" }
-                };
+                userMessage.buttons = new ErrorMassegeBtn[]{
+                     new ErrorMassegeBtn { url = "#", text = "ок", action = "false" }
+                 };
             }
 
-            //model.Item = _cmsRepository.getUser(Id);
-            model.ErrorInfo = userMassege;
+            //model.Item = _cmsRepository.getEvent(Id);
+            model.ErrorInfo = userMessage;
 
             return View("Item", model);
         }
@@ -172,7 +167,7 @@ namespace Disly.Areas.Admin.Controllers
         [MultiButton(MatchFormKey = "action", MatchFormValue = "delete-btn")]
         public ActionResult Delete(Guid Id)
         {
-            //_cmsRepository.deleteUser(Id, AccountInfo.id, RequestUserInfo.IP);
+            //var res = _cmsRepository.deleteCmsMaterial(Id);
 
             // записываем информацию о результатах
             ErrorMassege userMassege = new ErrorMassege();
@@ -182,7 +177,6 @@ namespace Disly.Areas.Admin.Controllers
                 new ErrorMassegeBtn { url = "#", text = "ок", action = "false" }
             };
 
-            //model.Item = _cmsRepository.getUser(Id);
             model.ErrorInfo = userMassege;
 
             return View("Item", model);

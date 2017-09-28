@@ -393,11 +393,26 @@ a.link-close:before {
     font-size: 1.3em;
 }
 .li-desc {
-    padding: 0 0 3px;
+    margin-top:10px;
+    font-size:0.9em;
+}
+.li-divider{
+    border-top:1px solid rgb(245, 248, 250);
+    padding-top:5px;
 }
 .li-desc span {
     font-weight: 500;
 }
+.li-isNew{
+    margin-top: 6px;
+}
+.li-date{
+    margin-top: 6px;
+    background-color: rgb(245, 248, 250);
+    padding: 5px;
+    padding-left:10px;
+}
+
 .disabled,
 .disabled .li-caption,
 .disabled a,
