@@ -16,6 +16,8 @@ $(document).ready(function () {
     $(".menu-block").mCustomScrollbar();
     // Полоса прокрутки
     $('.scrollbar').mCustomScrollbar();
+
+
     
     // События Кнопок
     $('input[type=submit], .button').bind({
@@ -139,6 +141,23 @@ $(document).ready(function () {
             change = 1;
             requiredTest();
         }
+    });
+
+    //телефонные номер а отделениях
+    $('.depart_phone_del').click(function (e) {
+        e.preventDefault();
+        var idPhone = $(this).attr("data-id");
+        var $Container = $(this).parent().parent();
+        $.ajax({
+            type: "POST",
+            async: false,
+            url: "/admin/orgs/DelPhoneDepart",
+            data: { id: idPhone },
+            error: function () { alert("error"); },
+            success: function (data) {
+                $Container.remove();                
+            }
+        });
     });
 
     // валидация обязательных полей для заполнения 

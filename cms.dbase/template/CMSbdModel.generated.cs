@@ -58,6 +58,8 @@ namespace cms.dbase.models
 		public ITable<content_people_department_link> content_people_department_links { get { return this.GetTable<content_people_department_link>(); } }
 		public ITable<content_people_org_link>        content_people_org_links        { get { return this.GetTable<content_people_org_link>(); } }
 		public ITable<content_sitemap>                content_sitemaps                { get { return this.GetTable<content_sitemap>(); } }
+		public ITable<content_sv_people_department>   content_sv_people_departments   { get { return this.GetTable<content_sv_people_department>(); } }
+		public ITable<content_sv_people_org>          content_sv_people_orgs          { get { return this.GetTable<content_sv_people_org>(); } }
 		public ITable<front_modules>                  front_moduless                  { get { return this.GetTable<front_modules>(); } }
 		public ITable<front_page_views>               front_page_viewss               { get { return this.GetTable<front_page_views>(); } }
 		public ITable<front_section>                  front_sections                  { get { return this.GetTable<front_section>(); } }
@@ -938,6 +940,28 @@ namespace cms.dbase.models
 		public cms_sites fkcontentsitemapfromsites { get; set; }
 
 		#endregion
+	}
+
+	// View
+	[Table(Schema="dbo", Name="content_sv_people_department")]
+	public partial class content_sv_people_department
+	{
+		[Column, NotNull    ] public Guid   f_department { get; set; } // uniqueidentifier
+		[Column, NotNull    ] public Guid   id           { get; set; } // uniqueidentifier
+		[Column,    Nullable] public string c_surname    { get; set; } // varchar(64)
+		[Column,    Nullable] public string c_name       { get; set; } // varchar(64)
+		[Column,    Nullable] public string c_patronymic { get; set; } // varchar(64)
+	}
+
+	// View
+	[Table(Schema="dbo", Name="content_sv_people_org")]
+	public partial class content_sv_people_org
+	{
+		[Column, NotNull    ] public Guid   id           { get; set; } // uniqueidentifier
+		[Column, NotNull    ] public Guid   PeopleId     { get; set; } // uniqueidentifier
+		[Column,    Nullable] public string c_surname    { get; set; } // varchar(64)
+		[Column,    Nullable] public string c_name       { get; set; } // varchar(64)
+		[Column,    Nullable] public string c_patronymic { get; set; } // varchar(64)
 	}
 
 	[Table(Schema="dbo", Name="front_modules")]
