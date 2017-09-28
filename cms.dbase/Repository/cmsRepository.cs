@@ -1245,9 +1245,8 @@ namespace cms.dbase
                 if (type == "department")
                 {
                     var data = db.content_departmentss.Where(w => w.id == id).FirstOrDefault();
-
-
                     var ParentStructure = db.content_org_structures.Where(w => w.id == data.f_structure).FirstOrDefault();
+                    var ParentOrg = db.content_orgss.Where(w => w.id == ParentStructure.f_ord).FirstOrDefault();
 
                     MyBread.Push(new BreadCrumb
                     {

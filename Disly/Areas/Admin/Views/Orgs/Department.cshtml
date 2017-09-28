@@ -45,7 +45,14 @@
         <div class="group-block open" title="Описание">
             @Html.TextAreaFor(m => m.DepartmentItem.Text, new { type = "editor", title = "Текст", height = "100" })        
         </div>
-
+        <div class="child-list">
+            <div class="child-list_head">
+                <div class="row">
+                    <div class="col-lg-8"><h1>Врачи отделения</h1></div>
+                    <div class="col-lg-4 text-right"><a class="button icon-create green pull-right" href="#">Добавить</a></div>
+                </div>
+            </div>
+        </div>
         <div class="site_map_list">
             <table class="table table-striped">
                 <tr>
