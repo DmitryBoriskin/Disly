@@ -538,6 +538,9 @@ a.link-close:before {
 
 /* ------- // Users.aspx  ----------- */
 
+.child-list{}
+.child-list_head h1{display:inline-block;}
+
 
 
 /* Дополнительный блок */
