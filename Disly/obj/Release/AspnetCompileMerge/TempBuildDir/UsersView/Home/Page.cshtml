@@ -1,0 +1,21 @@
+﻿@model PageViewModel
+
+@*<h1>@ViewBag.Title</h1>*@
+
+
+<div class="container">
+    <div class="container">
+        <ul class="breadcrumb pull-left breadcrumb-list">
+            <li><a href="#">ГЛАВНАЯ</a></li>
+            <li><a class="active" href="#">@ViewBag.page_name</a></li>
+        </ul>
+    </div>
+    <div class="container">
+        <h1>@Model.PageInfo.Title</h1>
+        <div class="panel panel-default article-block">
+            <div class="text">
+                @Html.Raw(@Model.PageInfo.Text)
+            </div>            
+        </div>
+    </div>
+</div>

@@ -1,0 +1,15 @@
+﻿.grammar-modal{
+	top: 50%;
+}
+
+.modal {
+
+}
+
+.modal-backdrop.in{
+	opacity: .4;
+}
+
+.modal-backdrop{
+	background-color: #000;
+}

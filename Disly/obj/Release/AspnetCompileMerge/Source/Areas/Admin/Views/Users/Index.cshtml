@@ -1,0 +1,49 @@
+﻿@model UsersViewModel
+
+@Html.Partial("Partial/Confirm")
+@Html.Partial("Partial/Frame")
+@using (Html.BeginForm()) 
+{
+    @Html.AntiForgeryToken()
+    <div id="Buttons">
+        @if (Model.UserResolution.Write)
+        {
+            @Html.ActionLink("Создать", "Create", "users", new { @id= @Guid.NewGuid() }, new { @class="Button BtnCreate" })
+        }        
+    </div>
+
+    if (Model.UserResolution.Read)
+    {
+        <div id="Content">
+            <div id="TitleBlock">@ViewBag.Title</div>
+            @if (Model.getUsersList != null)
+            {
+                foreach (UsersModel user in Model.getUsersList)
+                {
+                    <div class="ListItem User">
+                        @Html.ActionLink(@user.C_Surname + " " + @user.C_Name, "Edit", "Users", new { id = @user.Id }, new { @title = "Перейти к редактированию" })
+                        <div>Группа: <span>@user.F_GroupName</span></div>
+                        <div>E-mail: <span>@user.C_EMail</span></div>
+                    </div>
+                }
+            }
+            else
+            {
+                <p>Нет пользователей.</p>
+            }
+        </div>
+
+        <div id="DopInfo">
+            <div class="DopCaption">Фильтр</div>
+            @Html.TextBoxFor(m => Model.searchSurname, new { @class = "uc_input", @placeholder = "Фамилия", @MaxLength = "128", @data_help = "Поиск по фамилии пользователя." })
+            @Html.TextBoxFor(m => Model.searchName, new { @class = "uc_input", @placeholder = "Имя", @MaxLength = "128", @data_help = "Поиск по имени пользователя." })
+            @Html.TextBoxFor(m => Model.searchEmail, new { @class = "uc_input", @placeholder = "Email", @MaxLength = "128", @data_help = "Поиск адресу электронной почты пользователя." })
+            <button type="submit" class="btn btn-primary">Найти</button>
+        </div>
+    }
+    else {<div id="Content"><p>У вас недостаточно прав.</p></div> }
+
+
+}
+
+  

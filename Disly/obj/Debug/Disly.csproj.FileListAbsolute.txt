@@ -1,0 +1,471 @@
+C:\Users\D-Boriskin\documents\visual studio 2013\Projects\Disly\Disly\obj\Debug\Disly.csprojResolveAssemblyReference.cache
+C:\Users\D-Boriskin\documents\visual studio 2013\Projects\Disly\Disly\bin\Disly.dll.config
+C:\Users\D-Boriskin\documents\visual studio 2013\Projects\Disly\Disly\bin\Disly.dll
+C:\Users\D-Boriskin\documents\visual studio 2013\Projects\Disly\Disly\bin\Disly.pdb
+C:\Users\D-Boriskin\documents\visual studio 2013\Projects\Disly\Disly\bin\Antlr3.Runtime.dll
+C:\Users\D-Boriskin\documents\visual studio 2013\Projects\Disly\Disly\bin\cms.dbase.dll
+C:\Users\D-Boriskin\documents\visual studio 2013\Projects\Disly\Disly\bin\cms.dbModel.dll
+C:\Users\D-Boriskin\documents\visual studio 2013\Projects\Disly\Disly\bin\EntityFramework.dll
+C:\Users\D-Boriskin\documents\visual studio 2013\Projects\Disly\Disly\bin\EntityFramework.SqlServer.dll
+C:\Users\D-Boriskin\documents\visual studio 2013\Projects\Disly\Disly\bin\Microsoft.Web.Infrastructure.dll
+C:\Users\D-Boriskin\documents\visual studio 2013\Projects\Disly\Disly\bin\Newtonsoft.Json.dll
+C:\Users\D-Boriskin\documents\visual studio 2013\Projects\Disly\Disly\bin\System.Web.Helpers.dll
+C:\Users\D-Boriskin\documents\visual studio 2013\Projects\Disly\Disly\bin\System.Web.Mvc.dll
+C:\Users\D-Boriskin\documents\visual studio 2013\Projects\Disly\Disly\bin\System.Web.Optimization.dll
+C:\Users\D-Boriskin\documents\visual studio 2013\Projects\Disly\Disly\bin\System.Web.Razor.dll
+C:\Users\D-Boriskin\documents\visual studio 2013\Projects\Disly\Disly\bin\System.Web.WebPages.Deployment.dll
+C:\Users\D-Boriskin\documents\visual studio 2013\Projects\Disly\Disly\bin\System.Web.WebPages.dll
+C:\Users\D-Boriskin\documents\visual studio 2013\Projects\Disly\Disly\bin\System.Web.WebPages.Razor.dll
+C:\Users\D-Boriskin\documents\visual studio 2013\Projects\Disly\Disly\bin\WebGrease.dll
+C:\Users\D-Boriskin\documents\visual studio 2013\Projects\Disly\Disly\bin\linq2db.dll
+C:\Users\D-Boriskin\documents\visual studio 2013\Projects\Disly\Disly\bin\cms.dbase.pdb
+C:\Users\D-Boriskin\documents\visual studio 2013\Projects\Disly\Disly\bin\cms.dbModel.pdb
+C:\Users\D-Boriskin\documents\visual studio 2013\Projects\Disly\Disly\bin\Antlr3.Runtime.pdb
+C:\Users\D-Boriskin\documents\visual studio 2013\Projects\Disly\Disly\bin\EntityFramework.xml
+C:\Users\D-Boriskin\documents\visual studio 2013\Projects\Disly\Disly\bin\EntityFramework.SqlServer.xml
+C:\Users\D-Boriskin\documents\visual studio 2013\Projects\Disly\Disly\bin\Newtonsoft.Json.xml
+C:\Users\D-Boriskin\documents\visual studio 2013\Projects\Disly\Disly\bin\System.Web.Helpers.xml
+C:\Users\D-Boriskin\documents\visual studio 2013\Projects\Disly\Disly\bin\System.Web.Optimization.xml
+C:\Users\D-Boriskin\documents\visual studio 2013\Projects\Disly\Disly\bin\System.Web.Razor.xml
+C:\Users\D-Boriskin\documents\visual studio 2013\Projects\Disly\Disly\bin\System.Web.WebPages.xml
+C:\Users\D-Boriskin\documents\visual studio 2013\Projects\Disly\Disly\bin\System.Web.WebPages.Deployment.xml
+C:\Users\D-Boriskin\documents\visual studio 2013\Projects\Disly\Disly\bin\System.Web.WebPages.Razor.xml
+C:\Users\D-Boriskin\documents\visual studio 2013\Projects\Disly\Disly\bin\System.Web.Mvc.xml
+C:\Users\D-Boriskin\documents\visual studio 2013\Projects\Disly\Disly\bin\linq2db.pdb
+C:\Users\D-Boriskin\documents\visual studio 2013\Projects\Disly\Disly\bin\ru\System.Web.Helpers.resources.dll
+C:\Users\D-Boriskin\documents\visual studio 2013\Projects\Disly\Disly\bin\ru\System.Web.Razor.resources.dll
+C:\Users\D-Boriskin\documents\visual studio 2013\Projects\Disly\Disly\bin\ru\System.Web.WebPages.resources.dll
+C:\Users\D-Boriskin\documents\visual studio 2013\Projects\Disly\Disly\bin\ru\System.Web.WebPages.Deployment.resources.dll
+C:\Users\D-Boriskin\documents\visual studio 2013\Projects\Disly\Disly\bin\ru\System.Web.WebPages.Razor.resources.dll
+C:\Users\D-Boriskin\documents\visual studio 2013\Projects\Disly\Disly\bin\ru\System.Web.Mvc.resources.dll
+C:\Users\D-Boriskin\documents\visual studio 2013\Projects\Disly\Disly\obj\Debug\Disly.dll
+C:\Users\D-Boriskin\documents\visual studio 2013\Projects\Disly\Disly\obj\Debug\Disly.pdb
+D:\Новая папка\Disly\bin\Disly.dll.config
+D:\Новая папка\Disly\bin\Disly.dll
+D:\Новая папка\Disly\bin\Disly.pdb
+D:\Новая папка\Disly\bin\Antlr3.Runtime.dll
+D:\Новая папка\Disly\bin\cms.dbase.dll
+D:\Новая папка\Disly\bin\cms.dbModel.dll
+D:\Новая папка\Disly\bin\EntityFramework.dll
+D:\Новая папка\Disly\bin\EntityFramework.SqlServer.dll
+D:\Новая папка\Disly\bin\Microsoft.Web.Infrastructure.dll
+D:\Новая папка\Disly\bin\Newtonsoft.Json.dll
+D:\Новая папка\Disly\bin\NLog.dll
+D:\Новая папка\Disly\bin\System.Web.Helpers.dll
+D:\Новая папка\Disly\bin\System.Web.Optimization.dll
+D:\Новая папка\Disly\bin\System.Web.Razor.dll
+D:\Новая папка\Disly\bin\System.Web.WebPages.Deployment.dll
+D:\Новая папка\Disly\bin\System.Web.WebPages.dll
+D:\Новая папка\Disly\bin\System.Web.WebPages.Razor.dll
+D:\Новая папка\Disly\bin\WebGrease.dll
+D:\Новая папка\Disly\bin\linq2db.dll
+D:\Новая папка\Disly\bin\cms.dbase.pdb
+D:\Новая папка\Disly\bin\cms.dbModel.pdb
+D:\Новая папка\Disly\bin\Antlr3.Runtime.pdb
+D:\Новая папка\Disly\bin\EntityFramework.xml
+D:\Новая папка\Disly\bin\EntityFramework.SqlServer.xml
+D:\Новая папка\Disly\bin\Newtonsoft.Json.xml
+D:\Новая папка\Disly\bin\NLog.xml
+D:\Новая папка\Disly\bin\System.Web.Helpers.xml
+D:\Новая папка\Disly\bin\System.Web.Optimization.xml
+D:\Новая папка\Disly\bin\System.Web.Razor.xml
+D:\Новая папка\Disly\bin\System.Web.WebPages.xml
+D:\Новая папка\Disly\bin\System.Web.WebPages.Deployment.xml
+D:\Новая папка\Disly\bin\System.Web.WebPages.Razor.xml
+D:\Новая папка\Disly\bin\linq2db.pdb
+D:\Новая папка\Disly\bin\ru\System.Web.Helpers.resources.dll
+D:\Новая папка\Disly\bin\ru\System.Web.Razor.resources.dll
+D:\Новая папка\Disly\bin\ru\System.Web.WebPages.resources.dll
+D:\Новая папка\Disly\bin\ru\System.Web.WebPages.Deployment.resources.dll
+D:\Новая папка\Disly\bin\ru\System.Web.WebPages.Razor.resources.dll
+D:\Новая папка\Disly\obj\Debug\Disly.csprojResolveAssemblyReference.cache
+D:\Новая папка\Disly\obj\Debug\Disly.dll
+D:\Новая папка\Disly\obj\Debug\Disly.pdb
+D:\DislyMVC\Disly\bin\Disly.dll.config
+D:\DislyMVC\Disly\bin\Disly.dll
+D:\DislyMVC\Disly\bin\Disly.pdb
+D:\DislyMVC\Disly\bin\Antlr3.Runtime.dll
+D:\DislyMVC\Disly\bin\cms.dbase.dll
+D:\DislyMVC\Disly\bin\cms.dbModel.dll
+D:\DislyMVC\Disly\bin\EntityFramework.dll
+D:\DislyMVC\Disly\bin\EntityFramework.SqlServer.dll
+D:\DislyMVC\Disly\bin\Microsoft.Web.Infrastructure.dll
+D:\DislyMVC\Disly\bin\Newtonsoft.Json.dll
+D:\DislyMVC\Disly\bin\NLog.dll
+D:\DislyMVC\Disly\bin\System.Web.Helpers.dll
+D:\DislyMVC\Disly\bin\System.Web.Optimization.dll
+D:\DislyMVC\Disly\bin\System.Web.Razor.dll
+D:\DislyMVC\Disly\bin\System.Web.WebPages.Deployment.dll
+D:\DislyMVC\Disly\bin\System.Web.WebPages.dll
+D:\DislyMVC\Disly\bin\System.Web.WebPages.Razor.dll
+D:\DislyMVC\Disly\bin\WebGrease.dll
+D:\DislyMVC\Disly\bin\linq2db.dll
+D:\DislyMVC\Disly\bin\cms.dbase.pdb
+D:\DislyMVC\Disly\bin\cms.dbModel.pdb
+D:\DislyMVC\Disly\bin\Antlr3.Runtime.pdb
+D:\DislyMVC\Disly\bin\EntityFramework.xml
+D:\DislyMVC\Disly\bin\EntityFramework.SqlServer.xml
+D:\DislyMVC\Disly\bin\Newtonsoft.Json.xml
+D:\DislyMVC\Disly\bin\NLog.xml
+D:\DislyMVC\Disly\bin\System.Web.Helpers.xml
+D:\DislyMVC\Disly\bin\System.Web.Optimization.xml
+D:\DislyMVC\Disly\bin\System.Web.Razor.xml
+D:\DislyMVC\Disly\bin\System.Web.WebPages.xml
+D:\DislyMVC\Disly\bin\System.Web.WebPages.Deployment.xml
+D:\DislyMVC\Disly\bin\System.Web.WebPages.Razor.xml
+D:\DislyMVC\Disly\bin\linq2db.pdb
+D:\DislyMVC\Disly\bin\ru\System.Web.Helpers.resources.dll
+D:\DislyMVC\Disly\bin\ru\System.Web.Razor.resources.dll
+D:\DislyMVC\Disly\bin\ru\System.Web.WebPages.resources.dll
+D:\DislyMVC\Disly\bin\ru\System.Web.WebPages.Deployment.resources.dll
+D:\DislyMVC\Disly\bin\ru\System.Web.WebPages.Razor.resources.dll
+D:\DislyMVC\Disly\obj\Debug\Disly.csprojResolveAssemblyReference.cache
+D:\DislyMVC\Disly\obj\Debug\Disly.dll
+D:\DislyMVC\Disly\obj\Debug\Disly.pdb
+H:\DislyMVC\Disly\bin\Disly.dll.config
+H:\DislyMVC\Disly\bin\Disly.dll
+H:\DislyMVC\Disly\bin\Disly.pdb
+H:\DislyMVC\Disly\bin\Antlr3.Runtime.dll
+H:\DislyMVC\Disly\bin\cms.dbase.dll
+H:\DislyMVC\Disly\bin\cms.dbModel.dll
+H:\DislyMVC\Disly\bin\EntityFramework.dll
+H:\DislyMVC\Disly\bin\EntityFramework.SqlServer.dll
+H:\DislyMVC\Disly\bin\Microsoft.Web.Infrastructure.dll
+H:\DislyMVC\Disly\bin\Newtonsoft.Json.dll
+H:\DislyMVC\Disly\bin\NLog.dll
+H:\DislyMVC\Disly\bin\System.Web.Helpers.dll
+H:\DislyMVC\Disly\bin\System.Web.Mvc.dll
+H:\DislyMVC\Disly\bin\System.Web.Optimization.dll
+H:\DislyMVC\Disly\bin\System.Web.Razor.dll
+H:\DislyMVC\Disly\bin\System.Web.WebPages.Deployment.dll
+H:\DislyMVC\Disly\bin\System.Web.WebPages.dll
+H:\DislyMVC\Disly\bin\System.Web.WebPages.Razor.dll
+H:\DislyMVC\Disly\bin\WebGrease.dll
+H:\DislyMVC\Disly\bin\linq2db.dll
+H:\DislyMVC\Disly\bin\cms.dbase.pdb
+H:\DislyMVC\Disly\bin\cms.dbModel.pdb
+H:\DislyMVC\Disly\bin\Antlr3.Runtime.pdb
+H:\DislyMVC\Disly\bin\EntityFramework.xml
+H:\DislyMVC\Disly\bin\EntityFramework.SqlServer.xml
+H:\DislyMVC\Disly\bin\Newtonsoft.Json.xml
+H:\DislyMVC\Disly\bin\NLog.xml
+H:\DislyMVC\Disly\bin\System.Web.Helpers.xml
+H:\DislyMVC\Disly\bin\System.Web.Optimization.xml
+H:\DislyMVC\Disly\bin\System.Web.Razor.xml
+H:\DislyMVC\Disly\bin\System.Web.WebPages.xml
+H:\DislyMVC\Disly\bin\System.Web.WebPages.Deployment.xml
+H:\DislyMVC\Disly\bin\System.Web.WebPages.Razor.xml
+H:\DislyMVC\Disly\bin\System.Web.Mvc.xml
+H:\DislyMVC\Disly\bin\linq2db.pdb
+H:\DislyMVC\Disly\bin\ru\System.Web.Helpers.resources.dll
+H:\DislyMVC\Disly\bin\ru\System.Web.Razor.resources.dll
+H:\DislyMVC\Disly\bin\ru\System.Web.WebPages.resources.dll
+H:\DislyMVC\Disly\bin\ru\System.Web.WebPages.Deployment.resources.dll
+H:\DislyMVC\Disly\bin\ru\System.Web.WebPages.Razor.resources.dll
+H:\DislyMVC\Disly\bin\ru\System.Web.Mvc.resources.dll
+H:\DislyMVC\Disly\obj\Debug\Disly.csprojResolveAssemblyReference.cache
+H:\DislyMVC\Disly\obj\Debug\Disly.dll
+H:\DislyMVC\Disly\obj\Debug\Disly.pdb
+F:\DislyMVC\Disly\bin\Disly.dll.config
+F:\DislyMVC\Disly\bin\Disly.dll
+F:\DislyMVC\Disly\bin\Disly.pdb
+F:\DislyMVC\Disly\bin\Antlr3.Runtime.dll
+F:\DislyMVC\Disly\bin\cms.dbase.dll
+F:\DislyMVC\Disly\bin\cms.dbModel.dll
+F:\DislyMVC\Disly\bin\EntityFramework.dll
+F:\DislyMVC\Disly\bin\EntityFramework.SqlServer.dll
+F:\DislyMVC\Disly\bin\Microsoft.Web.Infrastructure.dll
+F:\DislyMVC\Disly\bin\Newtonsoft.Json.dll
+F:\DislyMVC\Disly\bin\NLog.dll
+F:\DislyMVC\Disly\bin\System.Web.Helpers.dll
+F:\DislyMVC\Disly\bin\System.Web.Optimization.dll
+F:\DislyMVC\Disly\bin\System.Web.Razor.dll
+F:\DislyMVC\Disly\bin\System.Web.WebPages.Deployment.dll
+F:\DislyMVC\Disly\bin\System.Web.WebPages.dll
+F:\DislyMVC\Disly\bin\System.Web.WebPages.Razor.dll
+F:\DislyMVC\Disly\bin\WebGrease.dll
+F:\DislyMVC\Disly\bin\linq2db.dll
+F:\DislyMVC\Disly\bin\cms.dbase.pdb
+F:\DislyMVC\Disly\bin\cms.dbModel.pdb
+F:\DislyMVC\Disly\bin\Antlr3.Runtime.pdb
+F:\DislyMVC\Disly\bin\EntityFramework.xml
+F:\DislyMVC\Disly\bin\EntityFramework.SqlServer.xml
+F:\DislyMVC\Disly\bin\Newtonsoft.Json.xml
+F:\DislyMVC\Disly\bin\NLog.xml
+F:\DislyMVC\Disly\bin\System.Web.Helpers.xml
+F:\DislyMVC\Disly\bin\System.Web.Optimization.xml
+F:\DislyMVC\Disly\bin\System.Web.Razor.xml
+F:\DislyMVC\Disly\bin\System.Web.WebPages.xml
+F:\DislyMVC\Disly\bin\System.Web.WebPages.Deployment.xml
+F:\DislyMVC\Disly\bin\System.Web.WebPages.Razor.xml
+F:\DislyMVC\Disly\bin\linq2db.pdb
+F:\DislyMVC\Disly\bin\ru\System.Web.Helpers.resources.dll
+F:\DislyMVC\Disly\bin\ru\System.Web.Razor.resources.dll
+F:\DislyMVC\Disly\bin\ru\System.Web.WebPages.resources.dll
+F:\DislyMVC\Disly\bin\ru\System.Web.WebPages.Deployment.resources.dll
+F:\DislyMVC\Disly\bin\ru\System.Web.WebPages.Razor.resources.dll
+F:\DislyMVC\Disly\obj\Debug\Disly.csprojResolveAssemblyReference.cache
+F:\DislyMVC\Disly\obj\Debug\Disly.dll
+F:\DislyMVC\Disly\obj\Debug\Disly.pdb
+I:\DislyMVC\Disly\bin\Disly.dll.config
+I:\DislyMVC\Disly\bin\Disly.dll
+I:\DislyMVC\Disly\bin\Disly.pdb
+I:\DislyMVC\Disly\bin\Antlr3.Runtime.dll
+I:\DislyMVC\Disly\bin\cms.dbase.dll
+I:\DislyMVC\Disly\bin\cms.dbModel.dll
+I:\DislyMVC\Disly\bin\EntityFramework.dll
+I:\DislyMVC\Disly\bin\EntityFramework.SqlServer.dll
+I:\DislyMVC\Disly\bin\Microsoft.Web.Infrastructure.dll
+I:\DislyMVC\Disly\bin\Newtonsoft.Json.dll
+I:\DislyMVC\Disly\bin\NLog.dll
+I:\DislyMVC\Disly\bin\System.Web.Helpers.dll
+I:\DislyMVC\Disly\bin\System.Web.Mvc.dll
+I:\DislyMVC\Disly\bin\System.Web.Optimization.dll
+I:\DislyMVC\Disly\bin\System.Web.Razor.dll
+I:\DislyMVC\Disly\bin\System.Web.WebPages.Deployment.dll
+I:\DislyMVC\Disly\bin\System.Web.WebPages.dll
+I:\DislyMVC\Disly\bin\System.Web.WebPages.Razor.dll
+I:\DislyMVC\Disly\bin\WebGrease.dll
+I:\DislyMVC\Disly\bin\linq2db.dll
+I:\DislyMVC\Disly\bin\cms.dbase.pdb
+I:\DislyMVC\Disly\bin\cms.dbModel.pdb
+I:\DislyMVC\Disly\bin\Antlr3.Runtime.pdb
+I:\DislyMVC\Disly\bin\EntityFramework.xml
+I:\DislyMVC\Disly\bin\EntityFramework.SqlServer.xml
+I:\DislyMVC\Disly\bin\Newtonsoft.Json.xml
+I:\DislyMVC\Disly\bin\NLog.xml
+I:\DislyMVC\Disly\bin\System.Web.Helpers.xml
+I:\DislyMVC\Disly\bin\System.Web.Optimization.xml
+I:\DislyMVC\Disly\bin\System.Web.Razor.xml
+I:\DislyMVC\Disly\bin\System.Web.WebPages.xml
+I:\DislyMVC\Disly\bin\System.Web.WebPages.Deployment.xml
+I:\DislyMVC\Disly\bin\System.Web.WebPages.Razor.xml
+I:\DislyMVC\Disly\bin\System.Web.Mvc.xml
+I:\DislyMVC\Disly\bin\linq2db.pdb
+I:\DislyMVC\Disly\bin\ru\System.Web.Helpers.resources.dll
+I:\DislyMVC\Disly\bin\ru\System.Web.Razor.resources.dll
+I:\DislyMVC\Disly\bin\ru\System.Web.WebPages.resources.dll
+I:\DislyMVC\Disly\bin\ru\System.Web.WebPages.Deployment.resources.dll
+I:\DislyMVC\Disly\bin\ru\System.Web.WebPages.Razor.resources.dll
+I:\DislyMVC\Disly\bin\ru\System.Web.Mvc.resources.dll
+I:\DislyMVC\Disly\obj\Debug\Disly.csprojResolveAssemblyReference.cache
+I:\DislyMVC\Disly\obj\Debug\Disly.dll
+I:\DislyMVC\Disly\obj\Debug\Disly.pdb
+D:\d-boriskin\YandexDisk\YandexDisk\DislyMVC\Disly\bin\Disly.dll.config
+D:\d-boriskin\YandexDisk\YandexDisk\DislyMVC\Disly\bin\Disly.dll
+D:\d-boriskin\YandexDisk\YandexDisk\DislyMVC\Disly\bin\Disly.pdb
+D:\d-boriskin\YandexDisk\YandexDisk\DislyMVC\Disly\bin\Antlr3.Runtime.dll
+D:\d-boriskin\YandexDisk\YandexDisk\DislyMVC\Disly\bin\cms.dbase.dll
+D:\d-boriskin\YandexDisk\YandexDisk\DislyMVC\Disly\bin\cms.dbModel.dll
+D:\d-boriskin\YandexDisk\YandexDisk\DislyMVC\Disly\bin\EntityFramework.dll
+D:\d-boriskin\YandexDisk\YandexDisk\DislyMVC\Disly\bin\EntityFramework.SqlServer.dll
+D:\d-boriskin\YandexDisk\YandexDisk\DislyMVC\Disly\bin\Microsoft.Web.Infrastructure.dll
+D:\d-boriskin\YandexDisk\YandexDisk\DislyMVC\Disly\bin\Newtonsoft.Json.dll
+D:\d-boriskin\YandexDisk\YandexDisk\DislyMVC\Disly\bin\NLog.dll
+D:\d-boriskin\YandexDisk\YandexDisk\DislyMVC\Disly\bin\System.Web.Helpers.dll
+D:\d-boriskin\YandexDisk\YandexDisk\DislyMVC\Disly\bin\System.Web.Optimization.dll
+D:\d-boriskin\YandexDisk\YandexDisk\DislyMVC\Disly\bin\System.Web.Razor.dll
+D:\d-boriskin\YandexDisk\YandexDisk\DislyMVC\Disly\bin\System.Web.WebPages.Deployment.dll
+D:\d-boriskin\YandexDisk\YandexDisk\DislyMVC\Disly\bin\System.Web.WebPages.dll
+D:\d-boriskin\YandexDisk\YandexDisk\DislyMVC\Disly\bin\System.Web.WebPages.Razor.dll
+D:\d-boriskin\YandexDisk\YandexDisk\DislyMVC\Disly\bin\WebGrease.dll
+D:\d-boriskin\YandexDisk\YandexDisk\DislyMVC\Disly\bin\linq2db.dll
+D:\d-boriskin\YandexDisk\YandexDisk\DislyMVC\Disly\bin\cms.dbase.pdb
+D:\d-boriskin\YandexDisk\YandexDisk\DislyMVC\Disly\bin\cms.dbModel.pdb
+D:\d-boriskin\YandexDisk\YandexDisk\DislyMVC\Disly\bin\Antlr3.Runtime.pdb
+D:\d-boriskin\YandexDisk\YandexDisk\DislyMVC\Disly\bin\EntityFramework.xml
+D:\d-boriskin\YandexDisk\YandexDisk\DislyMVC\Disly\bin\EntityFramework.SqlServer.xml
+D:\d-boriskin\YandexDisk\YandexDisk\DislyMVC\Disly\bin\Newtonsoft.Json.xml
+D:\d-boriskin\YandexDisk\YandexDisk\DislyMVC\Disly\bin\NLog.xml
+D:\d-boriskin\YandexDisk\YandexDisk\DislyMVC\Disly\bin\System.Web.Helpers.xml
+D:\d-boriskin\YandexDisk\YandexDisk\DislyMVC\Disly\bin\System.Web.Optimization.xml
+D:\d-boriskin\YandexDisk\YandexDisk\DislyMVC\Disly\bin\System.Web.Razor.xml
+D:\d-boriskin\YandexDisk\YandexDisk\DislyMVC\Disly\bin\System.Web.WebPages.xml
+D:\d-boriskin\YandexDisk\YandexDisk\DislyMVC\Disly\bin\System.Web.WebPages.Deployment.xml
+D:\d-boriskin\YandexDisk\YandexDisk\DislyMVC\Disly\bin\System.Web.WebPages.Razor.xml
+D:\d-boriskin\YandexDisk\YandexDisk\DislyMVC\Disly\bin\linq2db.pdb
+D:\d-boriskin\YandexDisk\YandexDisk\DislyMVC\Disly\bin\ru\System.Web.Helpers.resources.dll
+D:\d-boriskin\YandexDisk\YandexDisk\DislyMVC\Disly\bin\ru\System.Web.Razor.resources.dll
+D:\d-boriskin\YandexDisk\YandexDisk\DislyMVC\Disly\bin\ru\System.Web.WebPages.resources.dll
+D:\d-boriskin\YandexDisk\YandexDisk\DislyMVC\Disly\bin\ru\System.Web.WebPages.Deployment.resources.dll
+D:\d-boriskin\YandexDisk\YandexDisk\DislyMVC\Disly\bin\ru\System.Web.WebPages.Razor.resources.dll
+D:\d-boriskin\YandexDisk\YandexDisk\DislyMVC\Disly\obj\Debug\Disly.csprojResolveAssemblyReference.cache
+D:\d-boriskin\YandexDisk\YandexDisk\DislyMVC\Disly\obj\Debug\Disly.dll
+D:\d-boriskin\YandexDisk\YandexDisk\DislyMVC\Disly\obj\Debug\Disly.pdb
+C:\Users\a-korkin\YandexDisk\DislyMVC\Disly\bin\Disly.dll.config
+C:\Users\a-korkin\YandexDisk\DislyMVC\Disly\bin\Disly.dll
+C:\Users\a-korkin\YandexDisk\DislyMVC\Disly\bin\Disly.pdb
+C:\Users\a-korkin\YandexDisk\DislyMVC\Disly\bin\Antlr3.Runtime.dll
+C:\Users\a-korkin\YandexDisk\DislyMVC\Disly\bin\cms.dbase.dll
+C:\Users\a-korkin\YandexDisk\DislyMVC\Disly\bin\cms.dbModel.dll
+C:\Users\a-korkin\YandexDisk\DislyMVC\Disly\bin\EntityFramework.dll
+C:\Users\a-korkin\YandexDisk\DislyMVC\Disly\bin\EntityFramework.SqlServer.dll
+C:\Users\a-korkin\YandexDisk\DislyMVC\Disly\bin\Microsoft.Web.Infrastructure.dll
+C:\Users\a-korkin\YandexDisk\DislyMVC\Disly\bin\Newtonsoft.Json.dll
+C:\Users\a-korkin\YandexDisk\DislyMVC\Disly\bin\NLog.dll
+C:\Users\a-korkin\YandexDisk\DislyMVC\Disly\bin\System.Web.Helpers.dll
+C:\Users\a-korkin\YandexDisk\DislyMVC\Disly\bin\System.Web.Mvc.dll
+C:\Users\a-korkin\YandexDisk\DislyMVC\Disly\bin\System.Web.Optimization.dll
+C:\Users\a-korkin\YandexDisk\DislyMVC\Disly\bin\System.Web.Razor.dll
+C:\Users\a-korkin\YandexDisk\DislyMVC\Disly\bin\System.Web.WebPages.Deployment.dll
+C:\Users\a-korkin\YandexDisk\DislyMVC\Disly\bin\System.Web.WebPages.dll
+C:\Users\a-korkin\YandexDisk\DislyMVC\Disly\bin\System.Web.WebPages.Razor.dll
+C:\Users\a-korkin\YandexDisk\DislyMVC\Disly\bin\WebGrease.dll
+C:\Users\a-korkin\YandexDisk\DislyMVC\Disly\bin\linq2db.dll
+C:\Users\a-korkin\YandexDisk\DislyMVC\Disly\bin\cms.dbase.pdb
+C:\Users\a-korkin\YandexDisk\DislyMVC\Disly\bin\cms.dbModel.pdb
+C:\Users\a-korkin\YandexDisk\DislyMVC\Disly\bin\Antlr3.Runtime.pdb
+C:\Users\a-korkin\YandexDisk\DislyMVC\Disly\bin\EntityFramework.xml
+C:\Users\a-korkin\YandexDisk\DislyMVC\Disly\bin\EntityFramework.SqlServer.xml
+C:\Users\a-korkin\YandexDisk\DislyMVC\Disly\bin\Newtonsoft.Json.xml
+C:\Users\a-korkin\YandexDisk\DislyMVC\Disly\bin\NLog.xml
+C:\Users\a-korkin\YandexDisk\DislyMVC\Disly\bin\System.Web.Helpers.xml
+C:\Users\a-korkin\YandexDisk\DislyMVC\Disly\bin\System.Web.Optimization.xml
+C:\Users\a-korkin\YandexDisk\DislyMVC\Disly\bin\System.Web.Razor.xml
+C:\Users\a-korkin\YandexDisk\DislyMVC\Disly\bin\System.Web.WebPages.xml
+C:\Users\a-korkin\YandexDisk\DislyMVC\Disly\bin\System.Web.WebPages.Deployment.xml
+C:\Users\a-korkin\YandexDisk\DislyMVC\Disly\bin\System.Web.WebPages.Razor.xml
+C:\Users\a-korkin\YandexDisk\DislyMVC\Disly\bin\System.Web.Mvc.xml
+C:\Users\a-korkin\YandexDisk\DislyMVC\Disly\bin\linq2db.pdb
+C:\Users\a-korkin\YandexDisk\DislyMVC\Disly\bin\ru\System.Web.Helpers.resources.dll
+C:\Users\a-korkin\YandexDisk\DislyMVC\Disly\bin\ru\System.Web.Razor.resources.dll
+C:\Users\a-korkin\YandexDisk\DislyMVC\Disly\bin\ru\System.Web.WebPages.resources.dll
+C:\Users\a-korkin\YandexDisk\DislyMVC\Disly\bin\ru\System.Web.WebPages.Deployment.resources.dll
+C:\Users\a-korkin\YandexDisk\DislyMVC\Disly\bin\ru\System.Web.WebPages.Razor.resources.dll
+C:\Users\a-korkin\YandexDisk\DislyMVC\Disly\bin\ru\System.Web.Mvc.resources.dll
+C:\Users\a-korkin\YandexDisk\DislyMVC\Disly\obj\Debug\Disly.csprojResolveAssemblyReference.cache
+C:\Users\a-korkin\YandexDisk\DislyMVC\Disly\obj\Debug\Disly.dll
+C:\Users\a-korkin\YandexDisk\DislyMVC\Disly\obj\Debug\Disly.pdb
+D:\Git\DislyMVC\Disly\bin\Disly.dll
+D:\Git\DislyMVC\Disly\bin\Disly.pdb
+D:\Git\DislyMVC\Disly\bin\Antlr3.Runtime.dll
+D:\Git\DislyMVC\Disly\bin\cms.dbase.dll
+D:\Git\DislyMVC\Disly\bin\cms.dbModel.dll
+D:\Git\DislyMVC\Disly\bin\EntityFramework.dll
+D:\Git\DislyMVC\Disly\bin\EntityFramework.SqlServer.dll
+D:\Git\DislyMVC\Disly\bin\Microsoft.Web.Infrastructure.dll
+D:\Git\DislyMVC\Disly\bin\Newtonsoft.Json.dll
+D:\Git\DislyMVC\Disly\bin\NLog.dll
+D:\Git\DislyMVC\Disly\bin\System.Web.Helpers.dll
+D:\Git\DislyMVC\Disly\bin\System.Web.Optimization.dll
+D:\Git\DislyMVC\Disly\bin\System.Web.Razor.dll
+D:\Git\DislyMVC\Disly\bin\System.Web.WebPages.Deployment.dll
+D:\Git\DislyMVC\Disly\bin\System.Web.WebPages.dll
+D:\Git\DislyMVC\Disly\bin\System.Web.WebPages.Razor.dll
+D:\Git\DislyMVC\Disly\bin\WebGrease.dll
+D:\Git\DislyMVC\Disly\bin\linq2db.dll
+D:\Git\DislyMVC\Disly\bin\cms.dbase.pdb
+D:\Git\DislyMVC\Disly\bin\cms.dbModel.pdb
+D:\Git\DislyMVC\Disly\bin\Antlr3.Runtime.pdb
+D:\Git\DislyMVC\Disly\bin\EntityFramework.xml
+D:\Git\DislyMVC\Disly\bin\EntityFramework.SqlServer.xml
+D:\Git\DislyMVC\Disly\bin\Newtonsoft.Json.xml
+D:\Git\DislyMVC\Disly\bin\NLog.xml
+D:\Git\DislyMVC\Disly\bin\System.Web.Helpers.xml
+D:\Git\DislyMVC\Disly\bin\System.Web.Optimization.xml
+D:\Git\DislyMVC\Disly\bin\System.Web.Razor.xml
+D:\Git\DislyMVC\Disly\bin\System.Web.WebPages.xml
+D:\Git\DislyMVC\Disly\bin\System.Web.WebPages.Deployment.xml
+D:\Git\DislyMVC\Disly\bin\System.Web.WebPages.Razor.xml
+D:\Git\DislyMVC\Disly\bin\linq2db.pdb
+D:\Git\DislyMVC\Disly\bin\ru\System.Web.Helpers.resources.dll
+D:\Git\DislyMVC\Disly\bin\ru\System.Web.Razor.resources.dll
+D:\Git\DislyMVC\Disly\bin\ru\System.Web.WebPages.resources.dll
+D:\Git\DislyMVC\Disly\bin\ru\System.Web.WebPages.Deployment.resources.dll
+D:\Git\DislyMVC\Disly\bin\ru\System.Web.WebPages.Razor.resources.dll
+D:\Git\DislyMVC\Disly\obj\Debug\Disly.csprojResolveAssemblyReference.cache
+D:\Git\DislyMVC\Disly\obj\Debug\Disly.dll
+D:\Git\DislyMVC\Disly\obj\Debug\Disly.pdb
+C:\Users\aleksandr-mikhailov\Source\Repos\Disly\Disly\bin\Disly.dll.config
+C:\Users\aleksandr-mikhailov\Source\Repos\Disly\Disly\bin\Disly.dll
+C:\Users\aleksandr-mikhailov\Source\Repos\Disly\Disly\bin\Disly.pdb
+C:\Users\aleksandr-mikhailov\Source\Repos\Disly\Disly\bin\Antlr3.Runtime.dll
+C:\Users\aleksandr-mikhailov\Source\Repos\Disly\Disly\bin\cms.dbase.dll
+C:\Users\aleksandr-mikhailov\Source\Repos\Disly\Disly\bin\cms.dbModel.dll
+C:\Users\aleksandr-mikhailov\Source\Repos\Disly\Disly\bin\EntityFramework.dll
+C:\Users\aleksandr-mikhailov\Source\Repos\Disly\Disly\bin\EntityFramework.SqlServer.dll
+C:\Users\aleksandr-mikhailov\Source\Repos\Disly\Disly\bin\Microsoft.Web.Infrastructure.dll
+C:\Users\aleksandr-mikhailov\Source\Repos\Disly\Disly\bin\Newtonsoft.Json.dll
+C:\Users\aleksandr-mikhailov\Source\Repos\Disly\Disly\bin\NLog.dll
+C:\Users\aleksandr-mikhailov\Source\Repos\Disly\Disly\bin\System.Web.Helpers.dll
+C:\Users\aleksandr-mikhailov\Source\Repos\Disly\Disly\bin\System.Web.Mvc.dll
+C:\Users\aleksandr-mikhailov\Source\Repos\Disly\Disly\bin\System.Web.Optimization.dll
+C:\Users\aleksandr-mikhailov\Source\Repos\Disly\Disly\bin\System.Web.Razor.dll
+C:\Users\aleksandr-mikhailov\Source\Repos\Disly\Disly\bin\System.Web.WebPages.Deployment.dll
+C:\Users\aleksandr-mikhailov\Source\Repos\Disly\Disly\bin\System.Web.WebPages.dll
+C:\Users\aleksandr-mikhailov\Source\Repos\Disly\Disly\bin\System.Web.WebPages.Razor.dll
+C:\Users\aleksandr-mikhailov\Source\Repos\Disly\Disly\bin\WebGrease.dll
+C:\Users\aleksandr-mikhailov\Source\Repos\Disly\Disly\bin\linq2db.dll
+C:\Users\aleksandr-mikhailov\Source\Repos\Disly\Disly\bin\cms.dbase.pdb
+C:\Users\aleksandr-mikhailov\Source\Repos\Disly\Disly\bin\cms.dbModel.pdb
+C:\Users\aleksandr-mikhailov\Source\Repos\Disly\Disly\bin\Antlr3.Runtime.pdb
+C:\Users\aleksandr-mikhailov\Source\Repos\Disly\Disly\bin\EntityFramework.xml
+C:\Users\aleksandr-mikhailov\Source\Repos\Disly\Disly\bin\EntityFramework.SqlServer.xml
+C:\Users\aleksandr-mikhailov\Source\Repos\Disly\Disly\bin\Newtonsoft.Json.xml
+C:\Users\aleksandr-mikhailov\Source\Repos\Disly\Disly\bin\NLog.xml
+C:\Users\aleksandr-mikhailov\Source\Repos\Disly\Disly\bin\System.Web.Helpers.xml
+C:\Users\aleksandr-mikhailov\Source\Repos\Disly\Disly\bin\System.Web.Optimization.xml
+C:\Users\aleksandr-mikhailov\Source\Repos\Disly\Disly\bin\System.Web.Razor.xml
+C:\Users\aleksandr-mikhailov\Source\Repos\Disly\Disly\bin\System.Web.WebPages.xml
+C:\Users\aleksandr-mikhailov\Source\Repos\Disly\Disly\bin\System.Web.WebPages.Deployment.xml
+C:\Users\aleksandr-mikhailov\Source\Repos\Disly\Disly\bin\System.Web.WebPages.Razor.xml
+C:\Users\aleksandr-mikhailov\Source\Repos\Disly\Disly\bin\System.Web.Mvc.xml
+C:\Users\aleksandr-mikhailov\Source\Repos\Disly\Disly\bin\linq2db.pdb
+C:\Users\aleksandr-mikhailov\Source\Repos\Disly\Disly\bin\ru\System.Web.Helpers.resources.dll
+C:\Users\aleksandr-mikhailov\Source\Repos\Disly\Disly\bin\ru\System.Web.Razor.resources.dll
+C:\Users\aleksandr-mikhailov\Source\Repos\Disly\Disly\bin\ru\System.Web.WebPages.resources.dll
+C:\Users\aleksandr-mikhailov\Source\Repos\Disly\Disly\bin\ru\System.Web.WebPages.Deployment.resources.dll
+C:\Users\aleksandr-mikhailov\Source\Repos\Disly\Disly\bin\ru\System.Web.WebPages.Razor.resources.dll
+C:\Users\aleksandr-mikhailov\Source\Repos\Disly\Disly\bin\ru\System.Web.Mvc.resources.dll
+C:\Users\aleksandr-mikhailov\Source\Repos\Disly\Disly\obj\Debug\Disly.csprojResolveAssemblyReference.cache
+C:\Users\aleksandr-mikhailov\Source\Repos\Disly\Disly\obj\Debug\Disly.dll
+C:\Users\aleksandr-mikhailov\Source\Repos\Disly\Disly\obj\Debug\Disly.pdb
+D:\Git\DislyMVC\Disly\bin\Disly.dll.config
+D:\Git\DislyMVC\Disly\bin\System.Web.Mvc.dll
+D:\Git\DislyMVC\Disly\bin\cms.dbase.dll.config
+D:\Git\DislyMVC\Disly\bin\System.Web.Mvc.xml
+D:\Git\DislyMVC\Disly\bin\ru\System.Web.Mvc.resources.dll
+E:\ProjectsGit\MedPortal\Disly\bin\Disly.dll.config
+E:\ProjectsGit\MedPortal\Disly\bin\Disly.dll
+E:\ProjectsGit\MedPortal\Disly\bin\Disly.pdb
+E:\ProjectsGit\MedPortal\Disly\bin\Antlr3.Runtime.dll
+E:\ProjectsGit\MedPortal\Disly\bin\cms.dbase.dll
+E:\ProjectsGit\MedPortal\Disly\bin\cms.dbModel.dll
+E:\ProjectsGit\MedPortal\Disly\bin\EntityFramework.dll
+E:\ProjectsGit\MedPortal\Disly\bin\EntityFramework.SqlServer.dll
+E:\ProjectsGit\MedPortal\Disly\bin\Microsoft.Web.Infrastructure.dll
+E:\ProjectsGit\MedPortal\Disly\bin\Newtonsoft.Json.dll
+E:\ProjectsGit\MedPortal\Disly\bin\NLog.dll
+E:\ProjectsGit\MedPortal\Disly\bin\System.Web.Helpers.dll
+E:\ProjectsGit\MedPortal\Disly\bin\System.Web.Mvc.dll
+E:\ProjectsGit\MedPortal\Disly\bin\System.Web.Optimization.dll
+E:\ProjectsGit\MedPortal\Disly\bin\System.Web.Razor.dll
+E:\ProjectsGit\MedPortal\Disly\bin\System.Web.WebPages.Deployment.dll
+E:\ProjectsGit\MedPortal\Disly\bin\System.Web.WebPages.dll
+E:\ProjectsGit\MedPortal\Disly\bin\System.Web.WebPages.Razor.dll
+E:\ProjectsGit\MedPortal\Disly\bin\WebGrease.dll
+E:\ProjectsGit\MedPortal\Disly\bin\linq2db.dll
+E:\ProjectsGit\MedPortal\Disly\bin\cms.dbase.pdb
+E:\ProjectsGit\MedPortal\Disly\bin\cms.dbModel.pdb
+E:\ProjectsGit\MedPortal\Disly\bin\Antlr3.Runtime.pdb
+E:\ProjectsGit\MedPortal\Disly\bin\EntityFramework.xml
+E:\ProjectsGit\MedPortal\Disly\bin\EntityFramework.SqlServer.xml
+E:\ProjectsGit\MedPortal\Disly\bin\Newtonsoft.Json.xml
+E:\ProjectsGit\MedPortal\Disly\bin\NLog.xml
+E:\ProjectsGit\MedPortal\Disly\bin\System.Web.Helpers.xml
+E:\ProjectsGit\MedPortal\Disly\bin\System.Web.Optimization.xml
+E:\ProjectsGit\MedPortal\Disly\bin\System.Web.Razor.xml
+E:\ProjectsGit\MedPortal\Disly\bin\System.Web.WebPages.xml
+E:\ProjectsGit\MedPortal\Disly\bin\System.Web.WebPages.Deployment.xml
+E:\ProjectsGit\MedPortal\Disly\bin\System.Web.WebPages.Razor.xml
+E:\ProjectsGit\MedPortal\Disly\bin\System.Web.Mvc.xml
+E:\ProjectsGit\MedPortal\Disly\bin\linq2db.pdb
+E:\ProjectsGit\MedPortal\Disly\bin\ru\System.Web.Helpers.resources.dll
+E:\ProjectsGit\MedPortal\Disly\bin\ru\System.Web.Razor.resources.dll
+E:\ProjectsGit\MedPortal\Disly\bin\ru\System.Web.WebPages.resources.dll
+E:\ProjectsGit\MedPortal\Disly\bin\ru\System.Web.WebPages.Deployment.resources.dll
+E:\ProjectsGit\MedPortal\Disly\bin\ru\System.Web.WebPages.Razor.resources.dll
+E:\ProjectsGit\MedPortal\Disly\bin\ru\System.Web.Mvc.resources.dll
+E:\ProjectsGit\MedPortal\Disly\obj\Debug\Disly.csprojResolveAssemblyReference.cache
+E:\ProjectsGit\MedPortal\Disly\obj\Debug\Disly.dll
+E:\ProjectsGit\MedPortal\Disly\obj\Debug\Disly.pdb

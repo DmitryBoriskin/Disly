@@ -1,0 +1,61 @@
+﻿@model SiteMapViewModel
+@{ 
+    FilterViewModel model = ViewBag.Filter;    
+}
+
+<form>
+    <div id="Buttons"></div>
+
+    <div id="Content">
+        <div id="TitleBlock">@ViewBag.Title</div>
+
+        @if (Model.UserResolution.Read)
+        {
+
+            <div id="CHPList_ListItems" class="SiteMap">
+                <div class="TreeRoot">
+                    <div class="TreeLink Now">
+                        @if (Model.UserResolution.Write){
+                            <a class="treeBtn New" href="/admin/sitemap/create/@Guid.NewGuid()?path=/"></a>                            
+                        }
+                        <span class="treeIcon"></span>                        
+                        @Html.ActionLink("Web-сайт","Index", new { area = "Admin", controller = "sitemap" }, new { @class = "treeUrl" })
+                    </div>
+                </div>
+
+                @if (Model.List !=null)
+                {
+                    <div class="TreeBranch Sortable ui-sortable" data-service="/SuteMap/Service/ChangePermit.ashx?group=SiteMap">
+                        @foreach (cmsSiteMapModel Item in Model.List)
+                        {
+                            <div class="TreeItem ui-sortable-handle" data-id="@Item.id">
+                                <div class="TreeLink">
+                                    @if (@Item.Type == "folder")
+                                    {
+                                        if (Model.UserResolution.Write){<a title="Добавить элемент в эту папку" class="treeBtn New" href="/admin/SiteMap/create/@Guid.NewGuid()?path=@Item.Path@Item.Alias/"></a>}
+                                        <span title="/admin/SiteMap/OpenFolder?path=@Item.Path@Item.Alias/" data-path="@Item.Path@Item.Alias/" class="treeIcon @Item.Type"></span>
+                                        @*<a class="treeUrl" href="/admin/sitemap/edit/@Item.id/">@Item.Title</a>*@
+                                        @Html.ActionLink(@Item.Title, "Edit", new { area = "Admin", controller = "sitemap", id = @Item.id }, new { @class = "treeUrl" })
+                                    }
+                                    else
+                                    {
+                                        <span class="treeIcon @Item.Type"></span>                                
+                                        @Html.ActionLink(@Item.Title, "Edit", new { area = "Admin", controller = "sitemap", id = @Item.id }, new { @class = "treeUrl" })
+                                    }
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+            </div>
+        }
+        else { <p>У вас недостаточно прав.</p>}
+
+    </div>
+
+    <div id="DopInfo">
+        <div class="DopCaption">Фильтр</div>
+        @Html.Partial("Partial/Filter", model )
+    </div>
+</form>
+

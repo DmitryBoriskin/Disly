@@ -1067,34 +1067,43 @@ namespace cms.dbase
         }
         #endregion
 
-        public override OrgsModel[] getOrgs(FilterParams filtr) {
+        #region Orgs
+        public override OrgsModel[] getOrgs(FilterParams filtr)
+        {
             using (var db = new CMSdb(_context))
             {
                 var data = db.content_orgss.AsQueryable();
-                var list = data.Select(s => new OrgsModel() {
-                    Id=s.id,
-                    Title=s.c_title
+                var list = data.Select(s => new OrgsModel()
+                {
+                    Id = s.id,
+                    Title = s.c_title
                 });
                 if (list.Any()) return list.ToArray();
                 return null;
             }
         }
+        #endregion
 
         #region Person
         public override UsersList getPersonList(FilterParams filtr)
         {
             using (var db = new CMSdb(_context))
             {
-                var query = db.content_peoples.Where(w => w.id != null);
-                //if (filtr.Group != String.Empty)
-                //{
-                //    query = query.Where(w => w.f_group == filtr.Group);
-                //}
+                //string[] filtr, string group, bool disabeld, int page, int size
+                var query = db.cms_sv_userss.Where(w => w.id != null);
+                if ((bool)filtr.Disabled)
+                {
+                    query = query.Where(w => w.b_disabled == filtr.Disabled);
+                }
+                if (filtr.Group != String.Empty)
+                {
+                    query = query.Where(w => w.f_group == filtr.Group);
+                }
                 foreach (string param in filtr.SearchText.Split(' '))
                 {
                     if (param != String.Empty)
                     {
-                        query = query.Where(w => w.c_surname.Contains(param) || w.c_name.Contains(param) || w.c_patronymic.Contains(param));
+                        query = query.Where(w => w.c_surname.Contains(param) || w.c_name.Contains(param) || w.c_patronymic.Contains(param) || w.c_email.Contains(param));
                     }
                 }
 
@@ -1110,6 +1119,11 @@ namespace cms.dbase
                             Id = s.id,
                             Surname = s.c_surname,
                             Name = s.c_name,
+                            EMail = s.c_email,
+                            Group = s.f_group,
+                            GroupName = s.f_group_name,
+                            Disabled = s.b_disabled
+
                         }).
                         Skip(filtr.Size * (filtr.Page - 1)).
                         Take(filtr.Size);
@@ -1131,18 +1145,77 @@ namespace cms.dbase
                 return null;
             }
         }
+
         public override UsersModel getPerson(Guid id)
+        {
+           return null;
+        }
+        #endregion
+
+        #region FeedBacks
+        public override FeedbacksList getFeedbacksList(FilterParams filtr)
         {
             using (var db = new CMSdb(_context))
             {
-                var data = db.content_peoples.
+                var query = db.content_feedbackss.Where(w => w.id != null);
+                query = query.OrderByDescending(o => o.d_date);
+
+                if (query.Any())
+                {
+                    int ItemCount = query.Count();
+
+                    var List = query
+                        .Select(s => new FeedbackModel
+                        {
+                            Id = s.id,
+                            Title = s.c_title,
+                            Text = s.c_text,
+                            Date = s.d_date,
+                            SenderName = s.c_sender_name,
+                            SenderEmail = s.c_sender_email,
+                            Answer = s.c_answer,
+                            Answerer = s.c_answerer,
+                            IsNew = s.b_new,
+                            Disabled = s.b_disabled
+                        }).
+                        Skip(filtr.Size * (filtr.Page - 1)).
+                        Take(filtr.Size);
+
+                    FeedbackModel[] eventsInfo = List.ToArray();
+
+                    return new FeedbacksList
+                    {
+                        Data = eventsInfo,
+                        Pager = new Pager
+                        {
+                            page = filtr.Page,
+                            size = filtr.Size,
+                            items_count = ItemCount,
+                            page_count = (ItemCount % filtr.Size > 0) ? (ItemCount / filtr.Size) + 1 : ItemCount / filtr.Size
+                        }
+                    };
+                }
+                return null;
+            }
+        }
+        public override FeedbackModel getFeedback(Guid id)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var data = db.content_feedbackss.
                     Where(w => w.id == id).
-                    Select(s => new UsersModel
+                    Select(s => new FeedbackModel
                     {
                         Id = s.id,
-                        Surname = s.c_surname,
-                        Name = s.c_name,
-                        Patronymic = s.c_patronymic
+                        Title = s.c_title,
+                        Text = s.c_text,
+                        Date = s.d_date,
+                        SenderName = s.c_sender_name,
+                        SenderEmail = s.c_sender_email,
+                        Answer = s.c_answer,
+                        Answerer = s.c_answerer,
+                        IsNew = s.b_new,
+                        Disabled = s.b_disabled
                     });
 
 
@@ -1150,7 +1223,115 @@ namespace cms.dbase
                 else { return data.First(); }
             }
         }
-        #endregion
 
+        public override bool insertCmsFeedback(FeedbackModel feedback)
+        {
+            try
+            {
+                using (var db = new CMSdb(_context))
+                {
+                    content_feedbacks cdFeedback = db.content_feedbackss
+                                                .Where(p => p.id == feedback.Id)
+                                                .SingleOrDefault();
+                    if (cdFeedback != null)
+                    {
+                        throw new Exception("Запись с таким Id уже существует");
+                    }
+
+                    cdFeedback = new content_feedbacks
+                    {
+                        id = feedback.Id,
+                        c_title = feedback.Title,
+                        c_text = feedback.Text,
+                        d_date= feedback.Date,
+                        c_sender_name = feedback.SenderName,
+                        c_sender_email = feedback.SenderEmail,
+                        c_answer = feedback.Answer,
+                        c_answerer = feedback.Answerer,
+                        b_new = feedback.IsNew,
+                        b_disabled = feedback.Disabled
+                    };
+
+                    using (var tran = db.BeginTransaction())
+                    {
+                        db.Insert(cdFeedback);
+                        tran.Commit();
+                        return true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                //write to log ex
+                return false;
+            }
+        }
+        public override bool updateCmsFeedback(FeedbackModel feedback)
+        {
+            try
+            {
+                using (var db = new CMSdb(_context))
+                {
+                    content_feedbacks cdFeedback = db.content_feedbackss
+                                                .Where(p => p.id == feedback.Id)
+                                                .SingleOrDefault();
+                    if (cdFeedback == null)
+                    {
+                        throw new Exception("Запись с таким Id не найдена");
+                    }
+
+                    cdFeedback.c_title = feedback.Title;
+                    cdFeedback.c_text = feedback.Text;
+                    cdFeedback.c_sender_email = feedback.SenderEmail;
+                    cdFeedback.c_sender_name = feedback.SenderName;
+                    cdFeedback.c_answer = feedback.Answer;
+                    cdFeedback.c_answerer = feedback.Answerer;
+                    cdFeedback.d_date = feedback.Date;
+                    cdFeedback.b_new = feedback.IsNew;
+                    cdFeedback.b_disabled = feedback.Disabled;
+                    
+                    using (var tran = db.BeginTransaction())
+                    {
+                        db.Update(cdFeedback);
+                        tran.Commit();
+                        return true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                //write to log ex
+                return false;
+            }
+        }
+        public override bool deleteCmsFeedback(Guid id)
+        {
+            try
+            {
+                using (var db = new CMSdb(_context))
+                {
+                    content_feedbacks cdfeedback = db.content_feedbackss
+                                                .Where(p => p.id == id)
+                                                .SingleOrDefault();
+                    if (cdfeedback == null)
+                    {
+                        throw new Exception("Запись с таким Id не найдена");
+                    }
+
+                    using (var tran = db.BeginTransaction())
+                    {
+                        db.Delete(cdfeedback);
+                        tran.Commit();
+                        return true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                //write to log ex
+                return false;
+            }
+        }
+        #endregion
     }
 }

@@ -1,0 +1,70 @@
+﻿@if(Model.PlaceCardList != null)
+{
+    int placecardCount = (Model.PlaceCardList.Length < 4) ? Model.PlaceCardList.Length : 4;
+    int rowsCount = 1;
+
+    if (ViewBag.PlaceCard != null && ViewBag.PlaceCard == "all") {
+        placecardCount = Model.PlaceCardList.Length;
+        rowsCount = Model.PlaceCardList.Length / 4;
+    }
+
+    <div class="header_title">
+        Афиша на сегодня
+    </div>
+    <div class="afisha_rss">
+        <a href="#" class="rss_lk">rss</a>
+    </div>
+    <div class="all_info">
+        <a href="/placecard/">Все афиши</a>
+    </div>
+
+    <div class="afisha_list">
+
+        @for(int j = 0; j < rowsCount; j++)
+        {
+            <div class="row">
+                @for (int i = 0; i < placecardCount; i++)
+                {
+                    string linkPath = @Model.PlaceCardList[i].DateStart.ToString("yyyy") +"/"+ @Model.PlaceCardList[i].DateStart.ToString("MM") + "/" + @Model.PlaceCardList[i].DateStart.ToString("dd") + "/" + @Model.PlaceCardList[i].Alias + "/";
+                    string filePath = @Model.PlaceCardList[i].Year + @Model.PlaceCardList[i].Month + @Model.PlaceCardList[i].Day + @Model.PlaceCardList[i].id;
+
+                        <a href="/placecard/@linkPath" class="col-md-3 afisha_lk">
+                            <div class="afisha_item">
+                                <div class="afisha_date">@Model.PlaceCardList[i].DateStart.ToString("dd.MM.yyyy") – @Model.PlaceCardList[i].DateEnd.ToString("dd.MM.yyyy")</div>
+                                @*<img src="UserFiles/Culture/fest.jpg" alt="XX Международный балетный фестиваль" title="XX Международный балетный фестиваль" />*@
+                                @if(@Model.PlaceCardList[i].Photo != null)
+                                {
+                                    <div class="afisha_img">
+                                        <img src="/UserFiles/Culture/@filePath/@Model.PlaceCardList[i].Photo" alt="@Model.PlaceCardList[i].Title" title="@Model.PlaceCardList[i].Title" />
+                                    </div>
+                                }
+                                <div class="afisha_title">@Model.PlaceCardList[i].Title</div>
+                                <div class="afisha_info"><span>Начало:</span>@Model.PlaceCardList[i].DateStart.ToString("HH:mm")</div>
+                                @if(@Model.PlaceCardList[i].Place != null)
+                                {
+                                    <div class="afisha_info"><span>Место:</span><div>@Model.PlaceCardList[i].Place</div></div>
+                                }
+                            </div>
+                        </a>
+                }
+            </div>
+        }
+        @*<a href="#" class="col-md-3 afisha_lk">
+            <div class="afisha_item">
+                <div class="afisha_date">30.03.2016 – 04.04.2016</div>
+                <div class="afisha_img">
+                    <img src="UserFiles/Culture/fest.jpg" alt="XX Международный балетный фестиваль" title="XX Международный балетный фестиваль" />
+                </div>
+                <div class="afisha_title">XX Международный балетный фестиваль</div>
+                <div class="afisha_info"><span>Начало:</span>18:30</div>
+                <div class="afisha_info"><span>Место:</span><div>Чувашский государственный театр оперы и балета</div></div>
+            </div>
+        </a>*@
+    </div>
+
+    <div class="col-md-12 action">
+        <div class="action_btn">
+            <a href="/" id="action_all_btn" class="action_all">Посмотреть все события на сегодня</a>
+        </div>
+    </div>
+}

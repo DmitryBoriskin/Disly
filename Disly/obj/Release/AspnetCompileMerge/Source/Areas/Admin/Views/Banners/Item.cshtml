@@ -1,0 +1,101 @@
+﻿@model BannersViewModel
+@{
+    FilterViewModel model = ViewBag.Filter;
+    SectionGroupModel[] section = model.Sections;
+    string actionName = ViewBag.ActionName;
+}
+
+@Html.Partial("Partial/Confirm")
+@Html.Partial("Partial/Frame")
+
+
+@using (Html.BeginForm(actionName, "Banners", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <div id="Buttons">
+        @if (ViewBag.ActionName == "create")
+        {
+            if (Model.UserResolution.Change)
+            {
+                <button type="submit" name="action" value="create-btn" class="BtnCreate">Сохранить</button>
+            }
+            <button type="submit" name="action" value="cancel-btn" class="BtnCancel">Закрыть</button>
+        }
+        else
+        {
+            if (Model.UserResolution.Change)
+            {
+                <button type="submit" name="action" value="update-btn" class="BtnSave">Сохранить</button>
+            }
+            <button type="submit" name="action" value="cancel-btn" class="BtnCancel">Закрыть</button>
+            if (Model.UserResolution.Delete)
+            {
+                <button type="submit" name="action" value="delete-btn" class="BtnDelete">Удалить</button>
+            }
+
+        }
+    </div>
+
+
+    if (Model.UserResolution.Read)
+    {
+        <div id="Content">
+            <div id="TitleBlock">@ViewBag.Title</div>
+            @Html.ValidationSummary(false, "", new { @class = "alert alert-danger" })
+            @Html.TextBoxFor(m => m.Item.Title, new { @class = "uc_input", @title = "Название" })   
+            
+            <div class="uc_fileupload Open">
+                <div class="uc_title">Фото</div>
+                <div class="uc_control">
+                    @if (ViewBag.Photo != null)
+                    {
+                        <input type="file" name="upload" id="Photo_input" accept=".jpg,.jpeg,.png,.gif,.svg" class="UnLook">
+                    }
+                    else
+                    {
+                        <input type="file" name="upload" id="Photo_input" accept=".jpg,.jpeg,.png,.gif,.svg" >
+                    }                    
+                    <input type="hidden" name="upload_base" value="@ViewBag.Photo">
+                    <div class="uc_preview">
+                        @if (ViewBag.Photo!=null)
+                        {
+                            <div class="uc_preview_img">
+                                <img src="@Url.Content(ViewBag.Photo)" />
+                            </div>
+                            <div class="uc_preview_info">
+                                <div class="uc_preview_name">@ViewBag.PhotoName<span>(@ViewBag.PhotoSize)</span></div>
+                                <div class="uc_preview_size"><span>Дата изменения:</span> 21.04.2016 / 02:53:29</div><div class="uc_preview_btn"><a class="uc_preview_Del" title="Удалить" href="">Удалить</a></div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+                               
+            @Html.TextAreaFor(m => m.Item.Text, new { @class = "uc_input", @title = "Текст" })
+            @Html.TextBoxFor(m => m.Item.Url, new { @class = "uc_input", @title = "Ссылка" })
+            @Html.CheckBoxFor(m => m.Item.Target, new { @class = "uc_input", @title = "Открывать в новом окне" })
+        </div>
+        <div id="DopInfo">
+            @Html.TextBoxFor(m => m.Item.Date, new { @class = "uc_input", @type = "date", @title = "Дата публикации", @Value = ViewBag.Date })
+            @Html.DropDownListFor(m => m.Item.Type, new SelectList(section[0].Items, "Alias", "Title", 0), new { @class = "uc_input", @title = section[0].Title, @required = "" })
+            @Html.DropDownListFor(m => m.Item.Section, new SelectList(section[1].Items, "Alias", "Title", 0), new { @class = "uc_input", @title = section[1].Title, @required = "" })
+
+                    
+            @Html.CheckBoxFor(m => m.Item.Disabled, new { @class = "uc_input", @title = "Запретить просмотр" })
+
+            @if (ViewBag.ActionName != "create" && ViewBag.Message != "Запись удалена")
+            {
+                <a id="LogLists" class="Button PopUpFrame icon-archive" data-class="LogList" title="Журнал изменений" href="/admin/services/log/@Model.Item.Id">Журнал изменений</a>
+            }
+        </div>
+
+    }
+    else
+    {
+        <div id="Content"><p>У Вас недостаточно прав.</p></div>
+    }
+
+    if (ViewBag.Message != null)
+    {
+        @Html.Partial("Partial/modal")
+    }
+}

@@ -1,0 +1,98 @@
+﻿
+<div id="page">
+    <div class="page_wr">
+        @Html.Partial("Partial/PagePathPartial")
+        <div class="row page_type">
+
+            <div class="col-md-12 title"><h1>@Model.PageInfo.Title</h1></div>
+            <div id="news" class="col-md-12">
+                <div class="press_type">
+
+                    <div class="press_type_links">
+                        <a class="press_type_lk press_type_act" href="#">Новости Культуры</a>
+                        <a class="press_type_lk" href="/presscentr/placecard/">Афиша</a>
+                        <a class="press_type_lk" href="#">События республики</a>
+                    </div>
+                    <div class="row">
+                        <div>
+                            <form role="form" class="form-inline col-md-12 filtr">
+                                <div id="filtr_category" class="form-group">
+                                    
+
+                                    <label for="Kategory" class="filtr_label">Категория</label>
+                                    <select class="form-control selectpicker">
+                                        <option>Новости</option>
+                                        <option>Фотоотчет</option>
+                                        <option>Видео</option>
+                                    </select>
+
+                                </div>
+                                <div class="form-group">                                   
+
+                                    <label for="date_publ">Дата публикации</label>
+                                    <div class='input-group' id='date_publ'>
+                                        <input id="filtr_data" type='text' class="form-control" placeholder="дд.мм.гггг" />
+                                        <span class="input-group-addon">
+                                            <span class="glyphicon glyphicon-calendar"></span>
+                                        </span>
+                                    </div>
+
+                                    <script type="text/javascript">
+                                        $(function () {
+                                            $('#date_publ').datetimepicker({
+                                                format: 'DD.MM.YYYY',
+                                                locale: 'ru'
+                                            });
+                                        });
+                                    </script>
+
+                                </div>
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <input id="filtr_text_search" class="form-control" placeholder="Поиск по названию" type="text" />
+                                    </div>                                    
+                                </div>
+                                <button type="submit" class="btn btn_culture">Применить</button>
+                                <div class="form-group">
+                                    <div class="filtr_close"></div>
+                                </div>
+                                
+                            </form>
+
+                        </div>
+
+
+
+                    </div>
+                    <div class="press_filtr">
+                     
+                    </div>
+
+                </div>
+
+                @if (Model.NewsList != null)
+                {
+                    foreach (cmsMaterialsModel Item in Model.NewsList)
+                    {
+                        <div class="news_item">
+                            @if (@Item.Photo != null)
+                            {
+                                <a href="/@ViewBag.Alias/@Item.Year/@Item.Month/@Item.Day/@Item.Alias" class="news_item_img"><img src="@Item.Photo" alt="@Item.Title" title="@Item.Title" /></a>
+                            }
+                            <div class="news_item_info">
+                                <div class="news_item_date"><span>@Item.Date.ToString("dd.MM.yyyy")</span></div>
+                                <a class="news_item_title" href="/@ViewBag.Alias/@Item.Year/@Item.Month/@Item.Day/@Item.Alias">@Item.Title</a>
+                                @if (Item.UrlName != null)
+                                {
+                                    <a class="news_item_source" href="@Item.Url" target="_blank"><span>Источник:</span> @Item.UrlName</a>
+                                }
+                                <a class="news_more" href="/@ViewBag.Alias/@Item.Year/@Item.Month/@Item.Day/@Item.Alias">Читать дальше</a>
+                            </div>                            
+                        </div>
+                    }
+                }
+            </div>
+        </div>        
+
+    </div>
+</div>

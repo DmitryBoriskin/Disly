@@ -1,0 +1,60 @@
+﻿@model PageViewsViewModel
+
+@Html.Partial("Partial/Confirm")
+@Html.Partial("Partial/Frame")
+@using (Html.BeginForm())
+{
+    <div id="Buttons">
+        @if (ViewBag.ActionName == "create")
+        {
+            if (Model.UserResolution.Change)
+            {
+                <button type="submit" name="action" value="create-btn" class="BtnCreate">Сохранить</button>
+            }
+            <button type="submit" name="action" value="cancel-btn" class="BtnCancel">Закрыть</button>
+        }
+        else
+        {
+            if (Model.UserResolution.Change)
+            {
+                <button type="submit" name="action" value="update-btn" class="BtnSave">Сохранить</button>
+            }
+            <button type="submit" name="action" value="cancel-btn" class="BtnCancel">Закрыть</button>
+            if (Model.UserResolution.Delete)
+            {
+                <button type="submit" name="action" value="delete-btn" class="BtnDelete">Удалить</button>
+            }
+        }
+    </div>
+
+    if (Model.UserResolution.Read)
+    {
+        <div id="Content">
+            <div id="TitleBlock">@ViewBag.Title</div>
+            @Html.ValidationSummary(false, "", new { @class = "alert alert-danger" })
+            @Html.TextBoxFor(m => m.Item.Title, new { @class = "uc_input", @title = "Название" })
+            @Html.TextBoxFor(m => m.Item.Url, new { @class = "uc_input", @title = "Ссылка на представление" })
+        </div>
+        <div id="DopInfo">
+            @Html.CheckBoxFor(m => m.Item.ReadOnly, new { @class = "uc_input", @title = "Только чтение" })
+            @if (ViewBag.ActionName != "create")
+            {
+                <a id="LogLists" class="Button PopUpFrame icon-archive" data-class="LogList" title="Журнал изменений" href="/services/log/@Model.Item.id">Журнал изменений</a>
+            }
+        </div>
+    }
+    else
+    {
+        <div id="Content"><p>У вас недостаточно прав.</p></div>
+    }
+
+
+    if (ViewBag.Message != null)
+    {
+        @Html.Partial("Partial/modal")
+    }
+
+
+}
+
+

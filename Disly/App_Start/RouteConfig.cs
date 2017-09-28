@@ -64,19 +64,7 @@ namespace Disly
                defaults: new { controller = "Documents", action = "Index", path = UrlParameter.Optional }
             );
 
-
-
-            // Обратная связь
-            routes.MapRoute(
-               name: "FeedBack",
-               url: "FeedBack/{*action}",
-               defaults: new { controller = "FeedBack", action = "Index", path = UrlParameter.Optional }
-            );
-
-
-
-
-            // Типовая страница (карта сайта)
+           // Типовая страница (карта сайта)
             routes.MapRoute(
                name: "Page",
                url: "{*path}",

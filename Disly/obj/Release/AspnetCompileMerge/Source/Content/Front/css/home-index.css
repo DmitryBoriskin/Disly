@@ -1,0 +1,206 @@
+
+#header-type{
+	font-size: 25px; 
+	margin-top: 53px; 
+	margin-bottom: 36px;
+}
+
+#horse-img{
+	padding-top: 55px;
+}
+
+#bag-img{
+	padding-top: 40px;
+}
+
+#univer-img{
+	padding-top: 50px;
+}
+
+#books-img{
+	padding-top: 67px;
+}
+
+#header-search{
+	font-size: 25px; 
+	margin-top:67px; 
+	margin-bottom:25px;
+}
+
+#minobr-block{
+	margin-top: -7px;
+}
+
+
+/* HEADER */
+#header-hr {
+	border: none; 
+    color: #FFF; /* ÃÂ¦ÃÂ²ÃÂµÃ‘â€š ÃÂ»ÃÂ¸ÃÂ½ÃÂ¸ÃÂ¸ ÃÂ´ÃÂ»Ã‘Â ÃÂ¾Ã‘ÂÃ‘â€šÃÂ°ÃÂ»Ã‘Å’ÃÂ½Ã‘â€¹Ã‘â€¦ ÃÂ±Ã‘â‚¬ÃÂ°Ã‘Æ’ÃÂ·ÃÂµÃ‘â‚¬ÃÂ¾ÃÂ² */
+    background-color: #FFF; /* ÃÂ¦ÃÂ²ÃÂµÃ‘â€š ÃÂ»ÃÂ¸ÃÂ½ÃÂ¸ÃÂ¸ ÃÂ´ÃÂ»Ã‘Â ÃÂ±Ã‘â‚¬ÃÂ°Ã‘Æ’ÃÂ·ÃÂµÃ‘â‚¬ÃÂ° Firefox ÃÂ¸ Opera */
+    height: 3px; 
+    width: 160px;
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+
+/* ****** */
+
+
+
+
+/* HEADER PANEL */
+
+#header-panel {
+}
+#header-panel a div div {
+    color: #FFF;
+}
+
+#header-panel a:hover div div {
+    color: #FFF;
+}
+
+#header-h1{
+	font-size: 60px;
+}
+#header-h2{
+	font-size: 40px;
+	margin-top: -20px;
+	margin-bottom: 61px;
+}
+
+.header-panel-item{
+	height: 279px;
+	width: 255px;
+	display: inline-block;
+	vertical-align: middle;
+	z-index: 3;
+	position: relative;
+	margin-right: 14px;
+	margin-left: 14px;	
+	border: 2px solid;
+}
+.header-panel-item-inner {
+	font-size: 20px;
+	font-weight: bold;
+	color: #FFF;
+}
+
+.header-panel-item-background{
+
+	opacity: 0.8; 
+	height: 100%;
+	width: 100%;
+	position: absolute;
+    display: block;
+    z-index: -1;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
+
+.header-panel-item img {
+	padding-top: 50px;
+}
+
+#blue-panel .header-panel-item-background {
+	background-color: #4CC0E2;
+}
+#blue-panel  {
+	border-color: #4CC0E2;
+} 
+
+#green-panel .header-panel-item-background{
+	background-color: #BBD036;
+}
+#green-panel {
+	border-color: #BBD036;
+} 
+
+#purple-panel .header-panel-item-background {
+	background-color: #B976AF;
+}
+#purple-panel  {
+	border-color: #B976AF;
+} 
+
+
+#yellow-panel .header-panel-item-background {
+	background-color: #FED939;
+}
+#yellow-panel {
+	border-color: #FED939;
+} 
+
+/* ÃËœÃâ€”ÃÅ“Ãâ€¢ÃÂÃâ€¢ÃÂÃËœÃâ€¢ ÃÅ¸ÃÂ ÃËœ ÃÂÃÂÃâ€™Ãâ€¢Ãâ€Ãâ€¢ÃÂÃËœÃËœ */
+.header-panel-item:hover {
+	border-color: #FFF !important;
+}
+
+/* *********** */
+
+
+
+
+/*Кнопка поиска на главной*/
+#search-input{
+	width: 1110px;
+	vertical-align: middle;
+	color: #FFF;
+	display: inline-block;
+	height: 45px;
+	padding-bottom: 200px;
+
+}
+#search-input input{
+	border-width: 0px;
+	height: 45px;
+	border-radius: 0px;
+	background-color: rgba(255, 255, 255, 0.3);
+	color: #FFF;
+	width: 1110px;
+	font-style: italic;
+}
+
+.stylish-input-group .input-group-addon{
+    background: transparent !important;
+    border-width: 0px;
+    top: 21px;
+    right: 32px;
+    position: absolute;
+    font-size: 16px;
+    font-style: italic;
+}
+.stylish-input-group .form-control{
+}
+.stylish-input-group button{
+    border:0px;
+    background:transparent;
+    border-radius: 0px;
+}
+
+::-webkit-input-placeholder {
+	color:#fff !important;
+	font-size: 16px;
+	font-style: italic;
+}
+::-moz-placeholder          {
+	color:#fff !important;
+	font-size: 16px;
+	font-style: italic;
+	}
+:-moz-placeholder           {
+	color:#fff !important;
+	font-size: 16px;
+	font-style: italic;
+	}/
+:-ms-input-placeholder      {
+	color:#fff !important;
+	font-size: 16px;
+	font-style: italic;
+}
+
+
+ 
