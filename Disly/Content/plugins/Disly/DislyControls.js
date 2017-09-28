@@ -119,7 +119,7 @@
                 if (Length == 0) {
                     time = time + '00:00:00';
                 }
-                $TargetInput.attr('value', $InputDate.val() + ' ' + time);                //
+                $TargetInput.attr('value', $InputDate.val() + ' ' + time); 
             }
         }
         this.$element.addClass('form-control');
