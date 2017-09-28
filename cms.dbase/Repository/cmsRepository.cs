@@ -860,9 +860,7 @@ namespace cms.dbase
         }
         #endregion
 
-        #region Events
-        public override EventsList getEventsList(FilterParams filtr)
-        {
+        public override OrgsModel[] getOrgs(FilterParams filtr) {
             using (var db = new CMSdb(_context))
             {
                 var query = db.content_eventss.Where(w => w.id != null);
@@ -1076,6 +1074,235 @@ namespace cms.dbase
             using (var db = new CMSdb(_context))
             {
                 var data = db.content_orgss.AsQueryable();
+                var list = data.Select(s => new OrgsModel()
+                {
+                    Id = s.id,
+                    Title = s.c_title
+                });
+                if (list.Any()) return list.ToArray();
+                return null;
+            }
+        }
+        public override OrgsModel getOrgItem(Guid id)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var data = db.content_orgss.Where(w => w.id == id)
+                            .Select(s => new OrgsModel {
+                                Id=s.id,
+                                Title=s.c_title,
+                                Structure=getStructureList(s.id)
+                            })
+                            .FirstOrDefault();
+                if (data != null) return data;
+                return null;
+            }
+        }
+        public override StructureModel[] getStructureList(Guid id)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var data = db.content_org_structures.Where(w => w.f_ord == id);
+                if (data.Any())
+                {
+                    var List = data
+                                .Select(s => new StructureModel() {
+                                    Id=s.id,
+                                    Title=s.c_title                                    
+                                });
+                    return List.ToArray();
+                }
+                return null;
+            }
+        }
+        public override StructureModel getStructure(Guid id)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var data = db.content_org_structures.Where(w => w.id == id);
+                if (data.Any())
+                {
+                    return data.Select(s => new StructureModel {
+                                Id=s.id,
+                                Title=s.c_title,
+                                Adress=s.c_adress,
+                                GeopointX=s.n_geopoint_x,
+                                GeopointY=s.n_geopoint_y,
+                                Phone=s.c_phone,
+                                PhoneReception=s.c_phone_reception,
+                                Fax=s.c_fax,
+                                Email=s.c_email,
+                                Routes=s.c_routes,
+                                Schedule=s.c_schedule,
+                                DirecorPost=s.c_director_post,
+                                Departments=getDepartmentsList(s.id)                                
+                                
+                                //f_direcor
+                    }).FirstOrDefault();
+                }
+                return new StructureModel();
+            }
+        }
+
+
+        
+        /// <summary>
+        /// Отделение
+        /// </summary>
+        /// <param name="id">идентификатор структурного подразделения</param>
+        /// <returns>отделения входящие в струкутрное подразделенеи</returns>
+        public override Departments[] getDepartmentsList(Guid id)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var data = db.content_departmentss.Where(w => w.f_structure == id);
+                if (data.Any())
+                {
+                    return data.Select(s => new Departments() {
+                        Id=s.id,
+                        Title=s.c_title
+                    }).ToArray();
+                }
+                return null;
+            }
+        }
+        /// <summary>
+        /// Возвращает департамент, если подходящего значения нет. то возвращает пустую модель Departments
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public override Departments getDepartamentItem(Guid id)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var data = db.content_departmentss.Where(w => w.id == id);
+                if (data.Any())
+                {
+                    return data.Select(s=> new Departments {
+                        Id=s.id,
+                        Title=s.c_title,
+                        Phones=getDepartmentsPhone(s.id),
+                        Peoples=getPeopleDepartment(s.id)
+                    }).First();
+                }
+                return new Departments();
+            }
+        }
+        /// <summary>
+        /// Телефонные номера департамента
+        /// </summary>
+        /// <param name="id">идентификатор отделения</param>
+        /// <returns></returns>
+        public override DepartmentsPhone[] getDepartmentsPhone(Guid id)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var data = db.content_departments_phones.Where(w => w.f_department == id);
+                if (data.Any()) return data
+                                        .Select(s=> new DepartmentsPhone() {
+                                            Id=s.id,
+                                            Label=s.c_key,
+                                            Value=s.c_val
+                                        })
+                                        .ToArray();
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Хлебные крошки раздела Orgs
+        /// </summary>
+        /// <param name="id">идентификатор элемента относительно которого нужно построить хлебные крошки</param>
+        /// <param name="type">тип раздела orgs- в качество него скорее всего будем брать action name</param>
+        /// <returns></returns>
+        public override BreadCrumb[] getBreadCrumbOrgs(Guid id, string type)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var MyBread = new Stack<BreadCrumb>();
+                MyBread.Push(new BreadCrumb {
+                    Title="Организации",
+                    Url="/admin/orgs/"
+                });
+                if (type == "item")
+                {
+                    var data = db.content_departmentss.Where(w => w.id == id).FirstOrDefault();
+                    MyBread.Push(new BreadCrumb
+                    {
+                        Title = data.c_title,
+                        Url = "/admin/orgs/item/"+data.id
+                    });
+                }
+                if (type == "structure")
+                {
+                    var data = db.content_org_structures.Where(w => w.id == id).FirstOrDefault();
+                    MyBread.Push(new BreadCrumb
+                    {
+                        Title = data.c_title,
+                        Url = "/admin/orgs/item/" + data.id
+                    });
+                }
+                if (type == "deparment")
+                {
+                    var data = db.content_departmentss.Where(w => w.id == id).FirstOrDefault();
+                    MyBread.Push(new BreadCrumb
+                    {
+                        Title = data.c_title,
+                        Url = "/admin/orgs/item/" + data.id
+                    });
+                }
+                return MyBread.ToArray();
+            }            
+        }
+        /// <summary>
+        /// Добавляет значение в список телефонов отдела
+        /// </summary>
+        /// <param name="idDepart"></param>
+        /// <param name="Label"></param>
+        /// <param name="Value"></param>
+        /// <returns></returns>
+        public override bool insDepartmentsPhone(Guid idDepart, string Label, string Value)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                int Sort = 1;
+                var data = db.content_departments_phones.Where(w => w.f_department == idDepart);
+                if (data.Any()) Sort = data.Max(m => m.n_sort) + 1;
+                db.content_departments_phones
+                   .Value(v => v.f_department, idDepart)
+                   .Value(v => v.c_key, Label)
+                   .Value(v => v.c_val, Value)
+                   .Value(v => v.n_sort, Sort)
+                   .Insert();
+                return true;
+            }
+        }
+        public override bool delDepartmentsPhone(int id)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var data = db.content_departments_phones.Where(w => w.id == id);
+                if (data.Any())
+                {
+                    data.Delete();
+                }
+            }
+            return true;
+        }
+        public override People[] getPeopleDepartment(Guid idDepart)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var data = db.content_sv_people_departments
+                           .Where(w => w.f_department == idDepart)
+                           .Select(s => new People() {
+                               Id=s.id,
+                               FIO= s.c_surname+" "+ s.c_name+" "+s.c_patronymic                               
+                           });
+                if (data.Any()) return data.ToArray();
+
+            }
+            return null;
                 var list = data.Select(s => new OrgsModel()
                 {
                     Id = s.id,

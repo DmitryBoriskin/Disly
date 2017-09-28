@@ -426,6 +426,9 @@
     <Content Include="Areas\Admin\Views\Orgs\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Person\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Person\Item.cshtml" />
+    <Content Include="Areas\Admin\Views\Orgs\Item.cshtml" />
+    <Content Include="Areas\Admin\Views\Orgs\Structure.cshtml" />
+    <Content Include="Areas\Admin\Views\Orgs\Deparment.cshtml" />
     <Content Include="Areas\Admin\Views\Events\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Events\Item.cshtml" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
