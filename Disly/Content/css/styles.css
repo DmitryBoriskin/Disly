@@ -807,6 +807,10 @@ a.button  {
 .icon-create:before {
     content: '\ef01'; 
 }
+.icon-create.green:before {
+    content: '\ef01'; 
+    color:#fff;
+}
 .icon-save:before { 
     content: '\ead2'; 
 }
@@ -826,6 +830,9 @@ a.button  {
 }
 .icon-recovery:before { 
     content: '\f054';
+}
+.icon-sort:before{
+    content: '\e96b';
 }
 
 /* Иконки меню */
@@ -909,3 +916,26 @@ a.button  {
     padding-left: 5px;
     padding-right: 5px;
 }
+
+/* Иконки вложенностей */
+.sort-element:before{
+    font-family: fontello;
+    margin-right: 10px;
+    color: rgb(32, 114, 170);
+}
+.sort-element.disabled:before{
+    color:#a1a1a1 !important;
+}
+
+.icon-site-folder:before {
+    content: '\e89b';
+}
+
+.icon-site-link:before {
+    content: '\f02d';
+}
+
+.icon-site-page:before {
+    content: '\e88d';
+}
+/*  */

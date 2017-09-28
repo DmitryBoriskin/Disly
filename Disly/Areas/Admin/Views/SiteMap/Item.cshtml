@@ -1,98 +1,113 @@
 ﻿@model SiteMapViewModel
-@{ 
-    FilterViewModel model = ViewBag.Filter;
-    SectionGroupModel[] section = model.Sections;
-    string actionName = ViewBag.ActionName;
-}
 
-@Html.Partial("Partial/Confirm")
-@Html.Partial("Partial/Frame")
-@using (Html.BeginForm(actionName, "SiteMap", new {@path=ViewBag.GetPath}, FormMethod.Post, new { enctype = "multipart/form-data"}))
+@using (Html.BeginForm("Item", "SiteMap", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
-    <div id="Buttons">
-        @if (ViewBag.ActionName == "create")
-        {
-            if (Model.UserResolution.Change)
-            {
-                <button type="submit" name="action" value="create-btn" class="BtnCreate">Сохранить</button>
-            }
-            <button type="submit" name="action" value="cancel-btn" class="BtnCancel">Закрыть</button>
-        }
-        else
-        {
-            if (Model.UserResolution.Change)
-            {
-                <button type="submit" name="action" value="update-btn" class="BtnSave">Сохранить</button>
-            }
-            <button type="submit" name="action" value="cancel-btn" class="BtnCancel">Закрыть</button>
-            if (Model.UserResolution.Delete)
-            {
-                <button type="submit" name="action" value="delete-btn" class="BtnDelete">Удалить</button>
-            }
-        }
-    </div>
-
     if (Model.UserResolution.Read)
     {
-        <div id="Content">
-            <div id="TitleBlock">@ViewBag.Title</div>
-            @Html.ValidationSummary(false, "", new { @class = "alert alert-danger" })
-            @Html.TextBoxFor(m => m.Item.Title, new { @class = "uc_input", @title = "Название" })
-            @Html.TextBoxFor(m => m.Item.Alias, new { @class = "uc_input", @title = "Алиас" })
-            @Html.TextBoxFor(m => m.Item.Url, new { @class = "uc_input", @title = "Ссылка" })
-            <div class="uc_fileupload Open">
-                <div class="uc_title">Фото</div>
-                <div class="uc_control">
-                    @if (ViewBag.Photo != null)
-                    {
-                        <input type="file" name="upload" id="Photo_input" accept=".jpg,.jpeg,.png,.gif,.svg" class="UnLook">
-                    }
-                    else
-                    {
-                        <input type="file" name="upload" id="Photo_input" accept=".jpg,.jpeg,.png,.gif,.svg">
-                    }
-                    <input type="hidden" name="upload_base" value="@ViewBag.Photo">
-                    <div class="uc_preview">
-                        @if (ViewBag.Photo != null)
+        <div class="content">
+            <h1>@ViewBag.Title</h1>
+            @Html.TextBoxFor(m => m.Item.Title, new { @title = "Название", @required = "" })
+            @Html.TextBoxFor(m => m.Item.Alias, new { @title = "Алиас" })
+            @Html.TextBoxFor(m => m.Item.Url, new { @title = "Ссылка" })
+
+            <div class="group-block" title="Текст">
+                @Html.TextAreaFor(m => m.Item.Text, new { @type = "editor", @height = "300" })
+            </div>
+
+            @if (Model.Childrens != null)
+            {
+                <div class="site_map_list">
+                    <table id="sm_list" class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th class="map_site_icon">&nbsp;</th>
+                                <th class="map_site_title">Название</th>
+                                <th class="map_site_attach">Вложения</th>
+                            </tr>
+                        </thead>
+                        <tbody data-service="/Admin/Services/ChangePermit?group=SiteMap">
+                            @foreach (var item in Model.Childrens)
+                            {
+                                <tr class="ui-sortable-handle" data-id="@item.Id">
+                                    @if (item.Alias != " ")
+                                    {
+                                        string disabled = item.Disabled ? "disabled" : String.Empty;
+
+                                        string _class = String.Empty;
+                                        if (!String.IsNullOrEmpty(item.Url))
+                                        {
+                                            _class = "icon-site-link";
+                                        }
+                                        else if (item.CountSibling == 0)
+                                        {
+                                            _class = "icon-site-page";
+                                        }
+                                        else
+                                        {
+                                            _class = "icon-site-folder";
+                                        }
+
+                                        <td class="map_site_icon disabled"></td>
+                                        <td class="@_class @disabled"><a href="/admin/sitemap/item/@item.Id">@item.Title</a></td>
+                                        <td class="sort-element @disabled">@item.CountSibling</td>
+                                    }
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+
+            <div class="row">
+                <div class="col-sm-5">
+                    <div class="bubble_but">
+                        @if (Model.UserResolution.Write && Model.Item != null)
                         {
-                            <div class="uc_preview_img">
-                                <img src="@Url.Content(ViewBag.Photo)" />
-                            </div>
-                            <div class="uc_preview_info">
-                                <div class="uc_preview_name">@ViewBag.PhotoName<span>(@ViewBag.PhotoSize)</span></div>
-                                <div class="uc_preview_size"><span>Дата изменения:</span> 21.04.2016 / 02:53:29</div><div class="uc_preview_btn"><a class="uc_preview_Del" title="Удалить" href="">Удалить</a></div>
-                            </div>
+                            <a class="button icon-create green" href="/admin/sitemap/item/@Guid.NewGuid()/?parent=@Model.Item.Id">Создать вложенность</a>
                         }
                     </div>
                 </div>
+                <div class="col-sm-5 right">
+                    @if (Model.Childrens != null && Model.Childrens.Count() > 1)
+                    {
+                        <a class="button icon-sort" id="sorting_element" title="Добавляет возможность сортировки элементов списка">Сортировать</a>
+                    }
+                </div>
             </div>
-            @Html.TextAreaFor(m => m.Item.Text, new { @class = "uc_input", @title = "Текст", @type= "editor", @height="300" })
+
         </div>
-        <div id="DopInfo">
-            @Html.DropDownListFor(m => m.Item.View, new SelectList(Model.MapView, "id", "Title", 0), new { @class = "uc_input", @title = "Шаблон", @data_help = "Шаблон страницы", @required = "" })
-            @Html.DropDownListFor(m => m.Item.Type, new SelectList(Model.MapType, "Alias", "TypeName", 0), new { @class = "uc_input", @title = "Тип", @data_help = "Тип страницы", @required = "" })
-            @Html.DropDownListFor(m => m.Item.Menu, new SelectList(section[1].Items, "Alias", "Title", 0), new { @class = "uc_input", @title = section[1].Title, @required = "" })
-            <div class="GroupBlock Open" title="Мета теги">
-                @Html.TextAreaFor(m => m.Item.Keyw, new { @class = "uc_input", @title = "Ключевые слова", @data_help = "Данный тег используется при создании краткого описания страницы, используется поисковыми системами для индексации, а также при создании аннотации в выдаче по запросу. При отсутствии тега поисковые системы выдают в аннотации первую строку документа или отрывок, содержащий ключевые слова." })
-                @Html.TextAreaFor(m => m.Item.Desc, new { @class = "uc_input", @title = "Краткое описание", @data_help = "Данный метатег поисковые системы используют для того, чтобы определить релевантность ссылки. При формировании данного тега необходимо использовать только те слова, которые содержатся в самом документе. Использование тех слов, которых нет на странице, не рекомендуется. Рекомендованное количество слов в данном теге — не более десяти." })
+        <div class="dop_info-block">
+            @Html.DropDownListFor(m => m.Item.FrontSection, new SelectList(Model.FrontSectionList, "value", "text", "page"), new { @title = "Шаблон", @class = "selectpicker", @data_help = "Выбор шаблона страницы", @required = "" })
+            <div class="group-block" title="Мета теги">
+                @Html.TextAreaFor(m => m.Item.Keyw, new { type = "text", title = "Ключевые слова", data_help = "Данный тег используется при создании краткого описания страницы, используется поисковыми системами для индексации, а также при создании аннотации в выдаче по запросу. При отсутствии тега поисковые системы выдают в аннотации первую строку документа или отрывок, содержащий ключевые слова." })
+                @Html.TextAreaFor(m => m.Item.Desc, new { type = "text", title = "Краткое описание", data_help = "Данный метатег поисковые системы используют для того, чтобы определить релевантность ссылки. При формировании данного тега необходимо использовать только те слова, которые содержатся в самом документе. Использование тех слов, которых нет на странице, не рекомендуется. Рекомендованное количество слов в данном теге — не более десяти." })
             </div>
-            @Html.CheckBoxFor(m => m.Item.Disabled, new { @class = "uc_input", @title = "Запретить просмотр" })
-            @if (ViewBag.ActionName != "create")
+            @Html.CheckBoxFor(m => m.Item.Disabled, new { @class = "checkbox", @title = "Запретить просмотр", @data_toggle = "toggle", @data_help = "Запретить просмотр", @data_off = "Доступ разрешён", @data_on = "Доступ запрещён", @data_onstyle = "danger", @data_offstyle = "success", @data_width = "248" })
+            @Html.CheckBoxFor(m => m.Item.DisabledMenu, new { @class = "checkbox", @title = "Запретить в меню", @data_toggle = "toggle", @data_help = "Запретить в меню", @data_off = "Доступ разрешён", @data_on = "Доступ запрещён", @data_onstyle = "danger", @data_offstyle = "success", @data_width = "248" })
+            @if (Model.Item != null)
             {
-                <a id="LogLists" class="Button PopUpFrame icon-archive" data-class="LogList" title="Журнал изменений" href="/admin/services/log/@Model.Item.id">Журнал изменений</a>
-            }        
+                @Html.ActionLink("Журнал изменений", "log", "services", new { @id = Model.Item.Id }, new { @id = "LogLists", @class = "button pop-up_frame icon-archive", @data_class = "LogList", @title = "Журнал изменений" })
+            }
         </div>
-        }
-        else
-        {
-            <div id = "Content" ><p> У Вас недостаточно прав.</p></div>
-        }
+    }
+    else
+    {
+        <div class="content">
+            <p>У Вас недостаточно прав.</p>
+        </div>
+    }
 
-
-        if (ViewBag.Message != null)
+    <div class="buttons">
+        @if ((Model.Item != null && Model.UserResolution.Change) || (Model.Item == null && Model.UserResolution.Write))
         {
-            @Html.Partial("Partial/modal")
+            <button type="submit" name="action" value="save-btn" data-primary="true" class="button icon-create">Сохранить</button>
         }
+        @if (Model.Item != null && Model.UserResolution.Delete)
+        {
+            <button type="submit" name="action" value="delete-btn" class="button icon-delete">Удалить</button>
+        }
+        <button type="submit" name="action" value="cancel-btn" class="button icon-cancel">Закрыть</button>
+    </div>
 }
 
 

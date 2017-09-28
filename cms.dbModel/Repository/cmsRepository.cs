@@ -52,5 +52,16 @@ namespace cms.dbModel
         // Материалы
         public abstract MaterialsList getMaterialsList(FilterParams filtr);
         public abstract MaterialsModel getMaterial(Guid id);
+
+        // Карта сайта
+        public abstract SiteMapList getSiteMapList(string site, FilterParams filtr);
+        public abstract SiteMapModel getSiteMapItem(Guid id);
+        public abstract int getCountSiblings(Guid id);
+        public abstract bool checkSiteMap(Guid id);
+        public abstract bool createSiteMapItem(Guid id, SiteMapModel item, Guid userId, string IP);
+        public abstract bool updateSiteMapItem(Guid id, SiteMapModel item, Guid userId, string IP);
+        public abstract Catalog_list[] getSiteMapFrontSectionList();
+        public abstract bool deleteSiteMapItem(Guid id, Guid userId, string IP);
+        public abstract SiteMapModel[] getSiteMapChildrens(Guid parent);
     }
 }

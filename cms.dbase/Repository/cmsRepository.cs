@@ -601,7 +601,7 @@ namespace cms.dbase
             using (var db = new CMSdb(_context))
             {
                 var data = db.cms_userss.Where(w => w.id == id);
-                if (data != null)
+                if (!data.Any())
                 {
                     db.cms_userss
                     .Value(p => p.id, id)
@@ -855,6 +855,300 @@ namespace cms.dbase
 
                 if (!data.Any()) { return null; }
                 else { return data.First(); }
+            }
+        }
+        #endregion
+
+        #region Карта сайта
+        /// <summary>
+        /// Получаем список записей карты сайта
+        /// </summary>
+        /// <returns></returns>
+        public override SiteMapList getSiteMapList(string site, FilterParams filtr)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var query = db.content_sitemaps
+                    .Where(w => w.f_site.Equals(site))
+                    .Where(w => !w.id.Equals(null))
+                    .Where(w => w.uui_parent.Equals(null))
+                    .Where(w => !w.c_alias.Equals(" "));
+
+                if (query.Any())
+                {
+                    int itemCount = query.Count();
+
+                    var list = query.Select(s => new SiteMapModel
+                    {
+                        Id = s.id,
+                        Site = s.f_site,
+                        FrontSection = s.f_front_section,
+                        Path = s.c_path,
+                        Alias = s.c_alias,
+                        Title = s.c_title,
+                        Text = s.c_text,
+                        Preview = s.c_preview,
+                        Url = s.c_url,
+                        Desc = s.c_desc,
+                        Keyw = s.c_keyw,
+                        Disabled = s.b_disabled,
+                        DisabledMenu = s.b_disabled_menu,
+                        Sort = s.n_sort,
+                        ParentId = s.uui_parent,
+                        CountSibling = getCountSiblings(s.id)
+                    }).Skip(filtr.Size * (filtr.Page - 1))
+                      .Take(filtr.Size);
+
+                    var siteMapList = list.OrderBy(o => o.Sort).ToArray();
+
+                    return new SiteMapList
+                    {
+                        Data = siteMapList,
+                        Pager = new Pager
+                        {
+                            page = filtr.Page,
+                            size = filtr.Size,
+                            items_count = itemCount,
+                            page_count = (itemCount % filtr.Size > 0) ? (itemCount / filtr.Size) + 1 : itemCount / filtr.Size
+                        }
+                    };
+                }
+                else
+                {
+                    return null;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Получаем единичную запись карты сайта
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public override SiteMapModel getSiteMapItem(Guid id)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var data = db.content_sitemaps
+                    .Where(w => w.id.Equals(id))
+                    .Select(s => new SiteMapModel
+                    {
+                        Id = s.id,
+                        Site = s.f_site,
+                        FrontSection = s.f_front_section,
+                        Path = s.c_path,
+                        Alias = s.c_alias,
+                        Title = s.c_title,
+                        Text = s.c_text,
+                        Preview = s.c_preview,
+                        Url = s.c_url,
+                        Desc = s.c_desc,
+                        Keyw = s.c_keyw,
+                        Disabled = s.b_disabled,
+                        DisabledMenu = s.b_disabled_menu,
+                        Sort = s.n_sort,
+                        ParentId = s.uui_parent,
+                        CountSibling = getCountSiblings(s.id)
+                    });
+
+                if (!data.Any()) { return null; }
+                else { return data.FirstOrDefault(); }
+            }
+        }
+        
+        /// <summary>
+        /// Получим кол-во дочерних элементов карты сайта
+        /// </summary>
+        /// <param name="domain"></param>
+        /// <param name="fullPath"></param>
+        /// <returns></returns>
+        public override int getCountSiblings(Guid id)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                int result = db.content_sitemaps
+                    .Where(w => w.uui_parent.Equals(id))
+                    .Count();
+
+                return result;
+            }
+        }
+
+        /// <summary>
+        /// Проверяем существование элемента карты сайта
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public override bool checkSiteMap(Guid id)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                int count = db.content_sitemaps.Where(w => w.id == id).Count();
+                bool result = count > 0 ? true : false;
+
+                return result;
+            }
+        }
+
+        /// <summary>
+        /// Создаём новый раздел в карте сайта
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="item"></param>
+        /// <param name="userId"></param>
+        /// <param name="IP"></param>
+        /// <returns></returns>
+        public override bool createSiteMapItem(Guid id, SiteMapModel item, Guid userId, string IP)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var data = db.content_sitemaps.Where(w => w.id.Equals(id));
+                if (!data.Any())
+                {
+                    var queryMaxSort = db.content_sitemaps
+                        .Where(w => w.c_path.Equals(item.Path))
+                        .Select(s => s.n_sort);
+
+                    int maxSort = queryMaxSort.Any() ? queryMaxSort.Max() + 1 : 1;
+
+                    db.content_sitemaps
+                        .Value(p => p.id, id)
+                        .Value(p => p.f_site, item.Site)
+                        .Value(p => p.f_front_section, item.FrontSection)
+                        .Value(p => p.c_path, item.Path)
+                        .Value(p => p.c_alias, item.Alias)
+                        .Value(p => p.c_title, item.Title)
+                        .Value(p => p.c_preview, item.Preview)
+                        .Value(p => p.c_url, item.Url)
+                        .Value(p => p.c_desc, item.Desc)
+                        .Value(p => p.c_keyw, item.Keyw)
+                        .Value(p => p.b_disabled, item.Disabled)
+                        .Value(p => p.b_disabled_menu, item.DisabledMenu)
+                        .Value(p => p.n_sort, maxSort)
+                        .Value(p => p.uui_parent, item.ParentId)
+                        .Insert();
+
+                    // логирование
+                    insertLog(userId, IP, "insert", id, String.Empty, "SiteMap", item.Title);
+
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Обновляем запись карты сайта
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="item"></param>
+        /// <param name="userId"></param>
+        /// <param name="IP"></param>
+        /// <returns></returns>
+        public override bool updateSiteMapItem(Guid id, SiteMapModel item, Guid userId, string IP)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var data = db.content_sitemaps.Where(w => w.id.Equals(id));
+
+                if (data.Any())
+                {
+                    data.Where(w => w.id.Equals(id))
+                        .Set(u => u.f_site, item.Site)
+                        .Set(u => u.f_front_section, item.FrontSection)
+                        .Set(u => u.c_path, item.Path)
+                        .Set(u => u.c_alias, item.Alias)
+                        .Set(u => u.c_title, item.Title)
+                        .Set(u => u.c_text, item.Text)
+                        .Set(u => u.c_preview, item.Preview)
+                        .Set(u => u.c_url, item.Url)
+                        .Set(u => u.c_desc, item.Desc)
+                        .Set(u => u.c_keyw, item.Keyw)
+                        .Set(u => u.b_disabled, item.Disabled)
+                        .Set(u => u.b_disabled_menu, item.DisabledMenu)
+                        .Update();
+
+                    // логирование
+                    insertLog(userId, IP, "update", id, String.Empty, "SiteMap", item.Title);
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Получаем список типов страниц
+        /// </summary>
+        /// <returns></returns>
+        public override Catalog_list[] getSiteMapFrontSectionList()
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var data = db.front_sections
+                    .Select(s => new Catalog_list
+                    {
+                        text = s.c_name,
+                        value = s.c_alias
+                    });
+
+                if (!data.Any()) { return null; }
+                else { return data.ToArray(); }
+            }
+        }
+
+        /// <summary>
+        /// Удаляем элемент карты сайта
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="userId"></param>
+        /// <param name="IP"></param>
+        /// <returns></returns>
+        public override bool deleteSiteMapItem(Guid id, Guid userId, string IP)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                string logTitle = db.content_sitemaps
+                    .Where(w => w.id.Equals(id))
+                    .Select(s => s.c_title).FirstOrDefault();
+                db.content_sitemaps.Where(w => w.id.Equals(id) || w.uui_parent.Equals(id)).Delete();
+                
+                // логирование
+                insertLog(userId, IP, "delete", id, String.Empty, "SiteMap", logTitle);
+                return true;
+            }
+        }
+
+        /// <summary>
+        /// Получаем список дочерних элементов для текущего
+        /// </summary>
+        /// <param name="parent"></param>
+        /// <returns></returns>
+        public override SiteMapModel[] getSiteMapChildrens(Guid parent)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var data = db.content_sitemaps
+                    .Where(w => w.uui_parent.Equals(parent))
+                    .OrderBy(o => o.n_sort)
+                    .Select(s => new SiteMapModel
+                    {
+                        Id = s.id,
+                        Path = s.c_path,
+                        Alias = s.c_alias,
+                        Title = s.c_title,
+                        Disabled = s.b_disabled,
+                        DisabledMenu = s.b_disabled_menu,
+                        Sort = s.n_sort,
+                        CountSibling = getCountSiblings(s.id)
+                    });
+                if (!data.Any()) { return null; }
+                else { return data.ToArray(); }
             }
         }
         #endregion

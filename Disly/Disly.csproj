@@ -309,7 +309,9 @@
     <Compile Include="Areas\Admin\Models\MaterialsViewModel.cs" />
     <Compile Include="Areas\Admin\Models\ServicesViewsModel.cs" />
     <Compile Include="Areas\Admin\Models\PortalUsersViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\SiteMapViewModel.cs" />
     <Compile Include="Areas\Admin\Models\SitesViewModel.cs" />
+    <Compile Include="Areas\Admin\Service\Transliteration.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\PressController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
