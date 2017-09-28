@@ -73,6 +73,18 @@ namespace cms.dbModel
         public abstract UsersList getPersonList(FilterParams filtr);
         public abstract UsersModel getPerson(Guid id);
 
+        //Orgs
+        //public abstract OrgsModel[] getOrgs(FilterParams filtr);
+        public abstract OrgsModel getOrgItem(Guid id);
+        public abstract StructureModel[] getStructureList(Guid id);
+        public abstract StructureModel getStructure(Guid id);
+        public abstract Departments[] getDepartmentsList(Guid id);
+        public abstract Departments getDepartamentItem(Guid id);
+        public abstract DepartmentsPhone[] getDepartmentsPhone(Guid id);
+        public abstract BreadCrumb[] getBreadCrumbOrgs(Guid id, string type);
+        public abstract bool insDepartmentsPhone(Guid idDepart, string Label, string Value);
+        public abstract bool delDepartmentsPhone(int id);
+        public abstract People[] getPeopleDepartment(Guid idDepart);
         //Feedbacks
         public abstract FeedbacksList getFeedbacksList(FilterParams filtr);
         public abstract FeedbackModel getFeedback(Guid id);
@@ -81,5 +93,16 @@ namespace cms.dbModel
         public abstract bool updateCmsFeedback(FeedbackModel eventData);
         public abstract bool deleteCmsFeedback(Guid id);
         
+
+        // Карта сайта
+        public abstract SiteMapList getSiteMapList(string site, FilterParams filtr);
+        public abstract SiteMapModel getSiteMapItem(Guid id);
+        public abstract int getCountSiblings(Guid id);
+        public abstract bool checkSiteMap(Guid id);
+        public abstract bool createSiteMapItem(Guid id, SiteMapModel item, Guid userId, string IP);
+        public abstract bool updateSiteMapItem(Guid id, SiteMapModel item, Guid userId, string IP);
+        public abstract Catalog_list[] getSiteMapFrontSectionList();
+        public abstract bool deleteSiteMapItem(Guid id, Guid userId, string IP);
+        public abstract SiteMapModel[] getSiteMapChildrens(Guid parent);
     }
 }

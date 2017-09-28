@@ -70,6 +70,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="entity\Pager.cs" />
+    <Compile Include="entity\SiteMapModel.cs" />
     <Compile Include="entity\SitesModel.cs">
       <SubType>Code</SubType>
     </Compile>

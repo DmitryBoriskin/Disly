@@ -1,4 +1,4 @@
-﻿@model MainViewModel
+﻿@model SiteMapViewModel
 
 @if (Model.UserResolution.Read)
 {
@@ -7,47 +7,78 @@
         <ol class="breadcrumb">
             <li><a href="/admin/sitemap/">Главная</a></li>
         </ol>
-        <div class="site_map_list">
-            @*@if (Model.List !=null)
-            {*@
-                    <div class="TreeBranch Sortable ui-sortable" data-service="/SuteMap/Service/ChangePermit.ashx?group=SiteMap">
-                        @*@foreach (cmsSiteMapModel Item in Model.List)
-                        {*@
-                            <div class="TreeItem ui-sortable-handle" data-id="@*@Item.id*@">
-                                <div class="TreeLink">
-                                    @*@if (@Item.Type == "folder")
+        @if (Model.List != null)
+        {
+            <div class="site_map_list">
+                <table id="sm_list" class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th class="map_site_icon">&nbsp;</th>
+                            <th class="map_site_title">Название</th>
+                            <th class="map_site_attach">Вложения</th>
+                        </tr>
+                    </thead>
+                    <tbody data-service="/Admin/Services/ChangePermit?group=SiteMap">
+                        @foreach (var item in Model.List.Data)
+                        {
+                            <tr class="ui-sortable-handle" data-id="@item.Id">
+                                @if (item.Alias != " ")
+                                {
+                                    string disabled = item.Disabled ? "disabled" : String.Empty;
+
+                                    string _class = String.Empty;
+                                    if (!String.IsNullOrEmpty(item.Url))
                                     {
-                                        if (Model.UserResolution.Write){<a title="Добавить элемент в эту папку" class="treeBtn New" href="/admin/SiteMap/create/@Guid.NewGuid()?path=@Item.Path@Item.Alias/"></a>}
-                                        <span title="/admin/SiteMap/OpenFolder?path=@Item.Path@Item.Alias/" data-path="@Item.Path@Item.Alias/" class="treeIcon @Item.Type"></span>
-                                        @Html.ActionLink(@Item.Title, "Edit", new { area = "Admin", controller = "sitemap", id = @Item.id }, new { @class = "treeUrl" })
+                                        _class = "icon-site-link";
+                                    }
+                                    else if (item.CountSibling == 0)
+                                    {
+                                        _class = "icon-site-page";
                                     }
                                     else
                                     {
-                                        <span class="treeIcon @Item.Type"></span>                                
-                                        @Html.ActionLink(@Item.Title, "Edit", new { area = "Admin", controller = "sitemap", id = @Item.id }, new { @class = "treeUrl" })
-                                    }*@
-                                </div>
-                            </div>
-                        @*}*@
-                    </div>
-                @*}*@
+                                        _class = "icon-site-folder";
+                                    }
+
+                                    <td class="map_site_icon disabled"></td>
+                                        <td class="@_class @disabled"><a href="/admin/sitemap/item/@item.Id">@item.Title</a></td>
+                                        <td class="sort-element @disabled">@item.CountSibling</td>
+                                }
+                            </tr>
+                        }
+                    </tbody>
+                </table>
             </div>
-       
+        }
+
+        <div class="row">
+            <div class="col-sm-5">
+                <div class="bubble_but">
+                    @if (Model.UserResolution.Write)
+                    {
+                        <a class="button icon-create green" href="/admin/sitemap/item/@Guid.NewGuid()/">Создать вложенность</a>
+                    }
+                </div>
+            </div>
+            <div class="col-sm-5 right">
+                @if (Model.List.Data != null && Model.List.Data.Count() > 1)
+                {
+                    <a class="button icon-sort" id="sorting_element" title="Добавляет возможность сортировки элементов списка">Сортировать</a>
+                }
+            </div>
+        </div>
 
     </div>
 
     <div class="dop_info-block">
         <div class="dop-caption">Меню</div>
-        @*@Html.Partial("Partial/Filter", model )*@
     </div>
-
-    <div class="buttons">
-        @if (Model.UserResolution.Write)
-        {
-            @*<button type="submit" name="action" value="insert-btn" class="button icon-create">Создать</button>*@
-        }
-    </div>
+    <div class="buttons"></div>
 }
 else
-{ <p>У вас недостаточно прав.</p>}
+{
+    <div class="content">
+        <p>У вас недостаточно прав.</p>
+    </div>
+}
 

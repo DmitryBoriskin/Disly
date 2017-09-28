@@ -553,6 +553,9 @@ a.link-close:before {
 
 /* ------- // Users.aspx  ----------- */
 
+.child-list{}
+.child-list_head h1{display:inline-block;}
+
 
 
 /* Дополнительный блок */
@@ -822,6 +825,10 @@ a.button  {
 .icon-create:before {
     content: '\ef01'; 
 }
+.icon-create.green:before {
+    content: '\ef01'; 
+    color:#fff;
+}
 .icon-save:before { 
     content: '\ead2'; 
 }
@@ -841,6 +848,9 @@ a.button  {
 }
 .icon-recovery:before { 
     content: '\f054';
+}
+.icon-sort:before{
+    content: '\e96b';
 }
 
 /* Иконки меню */
@@ -924,3 +934,48 @@ a.button  {
     padding-left: 5px;
     padding-right: 5px;
 }
+
+/* Иконки вложенностей */
+.sort-element:before{
+    font-family: fontello;
+    margin-right: 10px;
+    color: rgb(32, 114, 170);
+}
+.sort-element.disabled:before{
+    color:#a1a1a1 !important;
+}
+
+.icon-site-folder:before {
+    content: '\e89b';
+}
+
+.icon-site-link:before {
+    content: '\f02d';
+}
+
+.icon-site-page:before {
+    content: '\e88d';
+}
+/*  */
+}
+.icon-layers:before {
+    content: '\eead';
+}
+.row {
+    margin-left: -5px;
+    margin-right: -5px;
+}
+
+[class^=col],
+[class^=col] {
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+.depart_phone_wr{position:relative}
+.depart_phone_del{position:absolute;top:30px; right:7px;display:block;cursor:pointer;}
+.depart_phone_del:hover{text-decoration:none;}
+.depart_phone_del:before{content:'\ec5b';font-family:fontello;color:red;}
+.depart_phone_del:hover:before{color:#c50505;}
+
+.breadcrumb > li{display:inline;}

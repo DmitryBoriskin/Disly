@@ -1,21 +1,24 @@
-﻿using cms.dbModel.entity;
-using Disly.Areas.Admin.Models;
+﻿using Disly.Areas.Admin.Models;
 using System;
-using System.Collections.Generic;
 using System.Configuration;
-using System.IO;
-using System.Linq;
-using System.Net;
-using System.Web;
 using System.Web.Mvc;
+using Disly.Areas.Admin.Service;
 
 namespace Disly.Areas.Admin.Controllers
 {
     public class SiteMapController : CoreController
     {
-        MainViewModel model;
+        // Модель для вывода в представление
+        private SiteMapViewModel model;
 
-        string group = String.Empty;
+        // Фильтр
+        private FilterParams filter;
+
+        // Кол-во элементов на странице
+        int pageSize = 40;
+
+        // Доменное имя сайта
+        private string domain;
 
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
@@ -24,13 +27,22 @@ namespace Disly.Areas.Admin.Controllers
             ViewBag.ControllerName = (String)RouteData.Values["controller"];
             ViewBag.ActionName = RouteData.Values["action"].ToString().ToLower();
 
-            model = new MainViewModel()
+            model = new SiteMapViewModel
             {
-                DomainName = Domain,
                 Account = AccountInfo,
                 Settings = SettingsInfo,
-                UserResolution = UserResolutionInfo
+                UserResolution = UserResolutionInfo,
+                FrontSectionList = _cmsRepository.getSiteMapFrontSectionList()
             };
+
+            string _domain = HttpContext.Request.Url.Host.ToString().ToLower().Replace("www.", "").Replace("new.", "");
+
+            try { domain = _cmsRepository.getSiteId(_domain); }
+            catch
+            {
+                if (_domain != ConfigurationManager.AppSettings["BaseURL"]) filterContext.Result = Redirect("/Error/");
+                else domain = String.Empty;
+            }
 
             #region Метатеги
             ViewBag.Title = UserResolutionInfo.Title;
@@ -40,213 +52,124 @@ namespace Disly.Areas.Admin.Controllers
         }
 
         // GET: SiteMap
+        [HttpGet]
         public ActionResult Index()
         {
-            //SiteMapViewModel model = new SiteMapViewModel()
-            //{
-            //    List = _repository.getCmsSiteMap(Domain, "/"),              
-            //    Account = AccountInfo,
-            //    Settings = SettingsInfo,
-            //    UserResolution = UserResolutionInfo
-            //};
+            // Наполняем фильтр значениями
+            filter = getFilter(pageSize);
+
+            // Наполняем модель списка данными
+            model.List = _cmsRepository.getSiteMapList(domain, filter);
 
             return View(model);
         }
         
-        public ActionResult OpenFolder(string path)
+        [HttpGet]
+        public ActionResult Item(Guid id, Guid? parent)
         {
-            //SiteMapViewModel model = new SiteMapViewModel()
-            //{
-            //    List = _repository.getCmsSiteMap(Domain, path)
-            //};
-            return PartialView(model);
+            // текущий элемент карты сайта
+            model.Item = _cmsRepository.getSiteMapItem(id);
+
+            // список дочерних элементов
+            model.Childrens = _cmsRepository.getSiteMapChildrens(id);
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateInput(false)]
+        [MultiButton(MatchFormKey = "action", MatchFormValue = "save-btn")]
+        public ActionResult Item(Guid id, Guid? parent, SiteMapViewModel back_model)
+        {
+            ErrorMassege userMessage = new ErrorMassege();
+            userMessage.title = "Информация";
+
+            #region Данные необходимые для сохранения
+            back_model.Item.ParentId = parent; // родительский id
+
+            back_model.Item.Path = back_model.Item.ParentId.Equals(null) ? "/"
+                : _cmsRepository.getSiteMapItem((Guid)back_model.Item.ParentId).Path + _cmsRepository.getSiteMapItem((Guid)back_model.Item.ParentId).Alias;
+
+            back_model.Item.Site = domain;
+
+            if (String.IsNullOrEmpty(back_model.Item.Alias))
+            {
+                back_model.Item.Alias = Transliteration.Translit(back_model.Item.Title);
+            }
+            else
+            {
+                back_model.Item.Alias = Transliteration.Translit(back_model.Item.Alias);
+            }
+            #endregion
+
+            if (ModelState.IsValid)
+            {
+                if (_cmsRepository.checkSiteMap(id))
+                {
+                    _cmsRepository.updateSiteMapItem(id, back_model.Item, AccountInfo.id, RequestUserInfo.IP);
+                    userMessage.info = "Запись обновлена";
+                }
+                else
+                {
+                    _cmsRepository.createSiteMapItem(id, back_model.Item, AccountInfo.id, RequestUserInfo.IP);
+                    userMessage.info = "Запись добавлена";
+                }
+            }
+            else
+            {
+                userMessage.info = "Ошибка в заполнении формы. Поля в которых допушены ошибки - помечены цветом.";
+
+                userMessage.buttons = new ErrorMassegeBtn[]{
+                    new ErrorMassegeBtn { url = "#", text = "ок", action = "false" }
+                };
+            }
+
+            model.Item = _cmsRepository.getSiteMapItem(id);
+            model.ErrorInfo = userMessage;
+
+            return View(model);
         }
         
-        [HttpGet]        
-        public ActionResult Create(Guid id)
+        [HttpPost]
+        [MultiButton(MatchFormKey = "action", MatchFormValue = "cancel-btn")]
+        public ActionResult Cancel(Guid id)
         {
-            //ViewBag.GetPath = Request.Params["path"];
-            //SiteMapViewModel model = new SiteMapViewModel()
-            //{
-            //    Account = AccountInfo,
-            //    Settings = SettingsInfo,
-            //    UserResolution = UserResolutionInfo,
-            //    MapView = _repository.getCmsPageViewsSelec(),
-            //    MapType = _repository.getSiteMapType()
-            //    //MapView= _repository.getCmsPageViewsSelec()
-            //    //Item = _repository.getCmsSiteMap(id)
-            //};
-            return View("Item", model);
+            // получим родительский элемент для перехода
+            var parent = _cmsRepository.getSiteMapItem(id).ParentId;
+
+            if (parent != null)
+            {
+                return RedirectToAction("Item", new { id = parent });
+            }
+            return Redirect(StartUrl + Request.Url.Query);
         }
-        
-        //[HttpPost]
-        //[ValidateInput(false)]
-        //[MultiButton(MatchFormKey = "action", MatchFormValue = "create-btn")]
-        //public ActionResult Create(Guid id, SiteMapViewModel model, HttpPostedFileBase upload)
-        //{
-        //    string path = string.Empty;
-        //    try
-        //    {
-        //        path = Request.Params["path"].Replace("//", "/");
-        //    }
-        //    catch { }
-        //    model.Item.Site = Domain;
 
-        //    if (ModelState.IsValid)
-        //    {
-        //        #region Изображение
-        //        if (upload != null)
-        //        {
-        //            #region добавление изображения
-        //            string PathFile = ConfigurationManager.AppSettings["Root"] + Domain + ConfigurationManager.AppSettings["SiteMap"] + model.Item.Alias + "/";
-        //            if (upload != null && upload.ContentLength > 0)
-        //                try
-        //                {
-        //                    model.Item.Logo = Files.SaveImageResize(upload, PathFile, 350, 233);
-        //                }
-        //                catch (Exception ex)
-        //                {
-        //                    ViewBag.Message = "Произошла ошибка: " + ex.Message.ToString();
-        //                }
-        //            else
-        //            {
-        //                ViewBag.Message = "Вы не выбрали файл.";
-        //            }
-        //            #endregion
-        //        }
-        //        #endregion
+        [HttpPost]
+        [MultiButton(MatchFormKey = "action", MatchFormValue = "delete-btn")]
+        public ActionResult Delete(Guid id)
+        {
+            model.Item = _cmsRepository.getSiteMapItem(id);
 
+            _cmsRepository.deleteSiteMapItem(id, AccountInfo.id, RequestUserInfo.IP);
 
-        //        if (model.Item.Alias == null) { model.Item.Alias = Transliteration.Translit(model.Item.Title.ToString()); }
-        //        _repository.insCmsSiteMap(id, path, model.Item);
-        //        _repository.insertLog(id, AccountInfo.id, "insert", RequestUserInfo.IP);
-        //        ViewBag.Message = "Запись добавлена";
-        //        ViewBag.backurl = id;
-        //    }
-        //    else { }
-        //    model = new SiteMapViewModel()
-        //    {
-        //        MapType = _repository.getSiteMapType(),
-        //        MapView = _repository.getCmsPageViewsSelec(),
-        //        Account = AccountInfo,
-        //        Settings = SettingsInfo,
-        //        UserResolution = UserResolutionInfo
-        //    };
-        //    return View("Item", model);                  
-        //}
+            // записываем информацию о результатах
+            ErrorMassege userMassege = new ErrorMassege();
+            userMassege.title = "Информация";
+            userMassege.info = "Запись Удалена";
+            userMassege.buttons = new ErrorMassegeBtn[]{
+                new ErrorMassegeBtn { url = "#", text = "ок", action = "false" }
+            };
+            
+            model.ErrorInfo = userMassege;
 
-        //// GET: SiteMap/edit/id
-        //[HttpGet]
-        //public ActionResult Edit(Guid id)
-        //{
-        //    if (id == null) { return new HttpStatusCodeResult(HttpStatusCode.BadRequest); }
-
-        //    SiteMapViewModel model = new SiteMapViewModel()
-        //    {
-        //        Item = _repository.getCmsSiteMap(Domain, id),
-        //        MapType = _repository.getSiteMapType(),
-        //        MapView = _repository.getCmsPageViewsSelec(),
-        //        Account = AccountInfo,
-        //        Settings = SettingsInfo,       
-        //        UserResolution = UserResolutionInfo
-        //    };            
-        //    if (model.Item != null){
-        //        ViewBag.Photo = model.Item.Logo;
-        //        ViewBag.PhotoName = Path.GetFileName(model.Item.Logo);
-        //        try
-        //        {
-        //            ViewBag.PhotoSize = Files.FileAnliz.Size(model.Item.Logo);
-        //        }
-        //        catch
-        //        {
-        //            ViewBag.PhotoSize = "";
-        //        }
-        //    }
-        //    else{ Response.Redirect("/Error/"); }
-
-        //    return View("Item", model);
-        //}
-
-        //[HttpPost]
-        //[ValidateInput(false)]
-        //[MultiButton(MatchFormKey = "action", MatchFormValue = "update-btn")]
-        //public ActionResult Edit(Guid id, SiteMapViewModel model, HttpPostedFileBase upload)
-        //{
-        //    ViewBag.BtnName = "Сохранить";
-        //    model.Item.Site = Domain;
-
-        //    if (ModelState.IsValid)
-        //    {
-        //        #region Изображение
-        //        SiteMapViewModel ActualModel = new SiteMapViewModel()
-        //        {
-        //            Item = _repository.getCmsSiteMap(Domain, id)
-        //        };
-
-        //        if (upload != null)
-        //        {
-        //            if (System.IO.File.Exists(Server.MapPath(ActualModel.Item.Logo)))
-        //            {
-        //                System.IO.File.Delete(Server.MapPath(ActualModel.Item.Logo));
-        //            }
-        //            #region обновление изображения
-        //            string Path = ConfigurationManager.AppSettings["Root"] + Domain + ConfigurationManager.AppSettings["SiteMap"] + ActualModel.Item.Alias + "/";
-        //            if (upload != null && upload.ContentLength > 0)
-        //                try
-        //                {
-        //                    model.Item.Logo = Files.SaveImageResize(upload, Path, 350, 233);
-        //                }
-        //                catch (Exception ex)
-        //                {
-        //                    ViewBag.Message = "Произошла ошибка: " + ex.Message.ToString();
-        //                }
-        //            else
-        //            {
-        //                ViewBag.Message = "Вы не выбрали файл.";
-        //            }
-        //            #endregion
-        //        }
-        //        else
-        //        {
-        //            //добавление нового изображения не происходит                    
-        //            model.Item.Logo = ActualModel.Item.Logo;
-        //        }
-        //        #endregion
-                
-        //        _repository.setCmsSiteMap(id, model.Item);
-        //        _repository.insertLog(id, AccountInfo.id, "update", RequestUserInfo.IP);
-        //        ViewBag.Message = "Запись сохранена";
-        //        ViewBag.backurl = id;
-        //    }
-        //    model = new SiteMapViewModel()
-        //    {
-        //        MapType = _repository.getSiteMapType(),
-        //        MapView = _repository.getCmsPageViewsSelec(),
-        //        Item = _repository.getCmsSiteMap(Domain, id),
-        //        Account = AccountInfo,
-        //        Settings = SettingsInfo,
-        //        UserResolution = UserResolutionInfo
-
-        //    };
-        //    return View("Item", model);
-
-        //}
-                
-        //[HttpPost]
-        //[MultiButton(MatchFormKey = "action", MatchFormValue = "delete-btn")]
-        //public ActionResult Delete(Guid id)
-        //{
-        //    _repository.delCmsSiteMap(Domain, id);
-        //    _repository.insertLog(id, AccountInfo.id, "delete", RequestUserInfo.IP);
-        //    return RedirectToAction("", (String)RouteData.Values["controller"]);
-        //}
-
-        //[HttpPost]
-        //[MultiButton(MatchFormKey = "action", MatchFormValue = "cancel-btn")]
-        //public ActionResult Cancel(Guid id)
-        //{
-        //    return RedirectToAction("", "sitemap");
-        //}
-
+            if (model.Item.ParentId.Equals(null))
+            {
+                return Redirect(StartUrl + Request.Url.Query);
+            }
+            else
+            {
+                return RedirectToAction("Item", new { model.Item.ParentId });
+            }
+        }
     }
 }
