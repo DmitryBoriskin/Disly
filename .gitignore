@@ -1,4 +1,5 @@
 *~
+.vs/
 */Logs/
 */bin/
 */obj/
@@ -6,6 +7,3 @@ cms.dbase/template/CMSbdModel.tt
 Web.config
 Web.Release.config
 Web.Debug.config
-.vs/
-Disly.vssscc
-Disly.v12.suo
