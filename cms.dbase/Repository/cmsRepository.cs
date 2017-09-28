@@ -1090,20 +1090,20 @@ namespace cms.dbase
             using (var db = new CMSdb(_context))
             {
                 //string[] filtr, string group, bool disabeld, int page, int size
-                var query = db.cms_sv_userss.Where(w => w.id != null);
-                if ((bool)filtr.Disabled)
-                {
-                    query = query.Where(w => w.b_disabled == filtr.Disabled);
-                }
-                if (filtr.Group != String.Empty)
-                {
-                    query = query.Where(w => w.f_group == filtr.Group);
-                }
+                var query = db.content_peoples.Where(w => w.id != null);
+                //if ((bool)filtr.Disabled)
+                //{
+                //    query = query.Where(w => w.b_disabled == filtr.Disabled);
+                //}
+                //if (filtr.Group != String.Empty)
+                //{
+                //    query = query.Where(w => w.f_group == filtr.Group);
+                //}
                 foreach (string param in filtr.SearchText.Split(' '))
                 {
                     if (param != String.Empty)
                     {
-                        query = query.Where(w => w.c_surname.Contains(param) || w.c_name.Contains(param) || w.c_patronymic.Contains(param) || w.c_email.Contains(param));
+                        query = query.Where(w => w.c_surname.Contains(param) || w.c_name.Contains(param) || w.c_patronymic.Contains(param));
                     }
                 }
 
@@ -1118,11 +1118,11 @@ namespace cms.dbase
                         {
                             Id = s.id,
                             Surname = s.c_surname,
-                            Name = s.c_name,
-                            EMail = s.c_email,
-                            Group = s.f_group,
-                            GroupName = s.f_group_name,
-                            Disabled = s.b_disabled
+                            Name = s.c_name
+                            //EMail = s.c_email,
+                            //Group = s.f_group,
+                            //GroupName = s.f_group_name,
+                            //Disabled = s.b_disabled
 
                         }).
                         Skip(filtr.Size * (filtr.Page - 1)).
