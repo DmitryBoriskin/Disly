@@ -68,5 +68,14 @@ namespace cms.dbModel
         // Персоны
         public abstract UsersList getPersonList(FilterParams filtr);
         public abstract UsersModel getPerson(Guid id);
+
+        //Feedbacks
+        public abstract FeedbacksList getFeedbacksList(FilterParams filtr);
+        public abstract FeedbackModel getFeedback(Guid id);
+        
+        public abstract bool insertCmsFeedback(FeedbackModel eventData);
+        public abstract bool updateCmsFeedback(FeedbackModel eventData);
+        public abstract bool deleteCmsFeedback(Guid id);
+        
     }
 }

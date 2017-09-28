@@ -49,6 +49,7 @@ namespace cms.dbase.models
 		public ITable<content_departments_phone>      content_departments_phones      { get { return this.GetTable<content_departments_phone>(); } }
 		public ITable<content_events>                 content_eventss                 { get { return this.GetTable<content_events>(); } }
 		public ITable<content_events_link>            content_events_links            { get { return this.GetTable<content_events_link>(); } }
+		public ITable<content_feedbacks>              content_feedbackss              { get { return this.GetTable<content_feedbacks>(); } }
 		public ITable<content_materials>              content_materialss              { get { return this.GetTable<content_materials>(); } }
 		public ITable<content_materials_link>         content_materials_links         { get { return this.GetTable<content_materials_link>(); } }
 		public ITable<content_org_structure>          content_org_structures          { get { return this.GetTable<content_org_structure>(); } }
@@ -712,6 +713,21 @@ namespace cms.dbase.models
 		#endregion
 	}
 
+	[Table(Schema="dbo", Name="content_feedbacks")]
+	public partial class content_feedbacks
+	{
+		[PrimaryKey, NotNull    ] public Guid     id             { get; set; } // uniqueidentifier
+		[Column,        Nullable] public string   c_title        { get; set; } // varchar(256)
+		[Column,        Nullable] public string   c_text         { get; set; } // varchar(2048)
+		[Column,     NotNull    ] public DateTime d_date         { get; set; } // datetime
+		[Column,        Nullable] public string   c_sender_email { get; set; } // varchar(50)
+		[Column,        Nullable] public string   c_sender_name  { get; set; } // varchar(256)
+		[Column,        Nullable] public string   c_answer       { get; set; } // varchar(4096)
+		[Column,        Nullable] public string   c_answerer     { get; set; } // varchar(256)
+		[Column,     NotNull    ] public bool     b_new          { get; set; } // bit
+		[Column,     NotNull    ] public bool     b_disabled     { get; set; } // bit
+	}
+
 	[Table(Schema="dbo", Name="content_materials")]
 	public partial class content_materials
 	{
@@ -1234,6 +1250,12 @@ namespace cms.dbase.models
 		}
 
 		public static content_events Find(this ITable<content_events> table, Guid id)
+		{
+			return table.FirstOrDefault(t =>
+				t.id == id);
+		}
+
+		public static content_feedbacks Find(this ITable<content_feedbacks> table, Guid id)
 		{
 			return table.FirstOrDefault(t =>
 				t.id == id);
