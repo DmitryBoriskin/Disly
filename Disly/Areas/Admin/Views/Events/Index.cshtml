@@ -1,0 +1,85 @@
+﻿@model EventsViewModel
+
+
+
+@if (Model.UserResolution.Read)
+{
+    <div class="content">
+        <h1>@ViewBag.Title</h1>
+
+        @if (Model.List != null)
+        {
+            foreach (EventModel Item in Model.List.Data)
+            {
+
+                string ImgUrl = @Item.Preview;
+                if (@Item.Preview == string.Empty || @Item.Preview == null) ImgUrl = "/Content/img/nophoto.jpg";
+                else if (ImgUrl.IndexOf("http") == -1) if (!File.Exists(Server.MapPath(ImgUrl))) ImgUrl = "/Content/img/nophoto.jpg";
+                string disabled = (Item.Disabled) ? "disabled" : "";
+
+
+                <div class="row list-item @disabled">
+                    <div class="col-lg-3">
+                        <div class="li-image">
+                            <a href="/admin/events/item/@Item.Id/@ViewBag.urlQuery">
+                                <img src="@ImgUrl" alt="@Item.Title">
+                            </a>
+                        </div>
+                        <div class="li-date">
+                            @Convert.ToDateTime(Item.Date).ToString("dd MMMM yyyy")
+                        </div>
+                    </div>
+                    <div class="col-lg-9">
+                        <div class="li-title">
+                            <a title="@Item.Title" class="li-caption" href="/admin/events/item/@Item.Id/@ViewBag.urlQuery">@Item.Title</a><br />
+                            <span>@Html.Raw(Item.Text.Substring(0, 150))...</span>
+                        </div>
+                        <div class="li-desc">
+                            <span>Дата проведения:</span> @Convert.ToDateTime(Item.DateBegin).ToString("dd MMMM yyyy")
+                            @if (Item.DateEnd.HasValue)
+                            {
+                                <span> - </span>
+                                        @Convert.ToDateTime(Item.DateEnd).ToString("dd MMMM yyyy")
+                            }<br />
+                            <span>Место проведения:</span> @Item.Place<br />
+                            <span>Организатор:</span> @Item.EventMaker<br />
+                        </div>
+                    </div>
+
+                </div>
+            }
+            Html.RenderAction("Pager", "Templates", new { @Model = Model.List.Pager });
+        }
+        else
+        {
+            <div class="alert alert-info">Не найдено ни одной записи.</div>
+        }
+    </div>
+
+
+    <div class="dop_info-block">
+        <div class="dop-caption">Фильтр</div>
+        @Html.TextBox("filter", Request.QueryString["filter"], new { @class = "uc_input", @title = "Поиск по ключевым словам", @placeholder = "поиск...", @MaxLength = "512" })
+        @Html.CheckBox("enabeld", String.IsNullOrEmpty(Request.QueryString["enabeld"]), new { @class = "uc_input", @title = "Отображать", @data_on = "Все записи", @data_off = "Только запрещенные", @data_width = "270" })
+        <div class="row">
+            <div class="col-xs-6">@Html.TextBox("datestart", Request.QueryString["datestart"], new { @class = "uc_input", @data_type = "date", @title = "Дата публикации с", @placeholder = "дд.мм.гггг" })</div>
+            <div class="col-xs-6">@Html.TextBox("dateend", Request.QueryString["dateend"], new { @class = "uc_input", @data_type = "date", @title = "по", @placeholder = "дд.мм.гггг" })</div>
+        </div>
+        <div class="row">
+            <div class="col-md-6"><button type="submit" name="action" value="search-btn" class="button btn-primary">Применить</button></div>
+            <div class="col-md-6"><button type="submit" name="action" value="clear-btn" class="button btn-default">Сбросить</button></div>
+        </div>
+    </div>
+
+    <div class="buttons">
+        @if (Model.UserResolution.Write)
+        {
+            <button type="submit" name="action" value="insert-btn" class="button icon-create">Создать</button>
+            <button type="submit" name="action" value="rssimport-btn" class="button icon-create green">Импорт с других сайтов</button>
+        }
+    </div>
+}
+else
+{
+    <div class="content"><p>У вас недостаточно прав.</p></div>
+}

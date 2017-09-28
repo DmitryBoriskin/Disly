@@ -1,0 +1,67 @@
+﻿@model FeedbacksViewModel
+
+@if (Model.UserResolution.Write)
+{
+    <div class="content">
+        <h1>@ViewBag.Title</h1>
+        <div class="row">
+            <div class="col-lg-7">
+                @Html.TextBoxFor(m => m.Item.SenderName, new { type = "text", title = "Отправитель", maxlength = "256" })
+            </div>
+            <div class="col-lg-5">
+                @Html.TextBoxFor(m => m.Item.SenderEmail, new { type = "text", title = "Email отправителя", maxlength = "50" })
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">@Html.TextBoxFor(m => m.Item.Title, new { required = "required", type = "text", maxlength = "256", title = "Заголовок" })</div>
+        </div>
+        @*<div class="row">
+            <div class="col-lg-12">
+                @Html.TextBoxFor(m => m.Item.Preview, new { type = "file", title = "Картинка для предпросмотра", data_name = "", data_size = "", data_url = "", data_help = "размер фотографии должен быть не менне 400 точек по ширине и пропорции картинки - 4х3" })
+            </div>
+        </div>*@
+        <div class="row">
+            <div class="col-lg-12">
+                @Html.TextAreaFor(m => m.Item.Text, new { type = "textarea", title = "Текст вопроса", rows="5", maxlength="2048" })
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                @Html.TextBoxFor(m => m.Item.Answerer, new { type = "text", title = "Отвечает", placeholder = "", maxlength = "256" })
+                @Html.TextAreaFor(m => m.Item.Answer, new { type = "editor", title = "Текс ответа", placeholder = "", height="300", maxlength = "4096" })
+            </div>
+        </div>
+    </div>
+
+    <div class="dop_info-block">
+        <div class="dop-caption">Настройки</div>
+        @Html.TextBoxFor(m => m.Item.Date, new { required = "required", data_type = "datetime", title = "Дата публикации", value = ViewBag.Date })
+        @*@Html.DropDownListFor(m => m.Item.Type, new SelectList(section[0].Items, "Alias", "Title", 0), new { @class = "uc_input", @title = section[0].Title, @required = "" })
+            @Html.DropDownListFor(m => m.Item.Category, new SelectList(section[1].Items, "Alias", "Title", 0), new { @class = "uc_input", @title = section[1].Title, @required = "" })*@
+
+        @*@Html.CheckBoxFor(m => m.Item.IsNew, new { type = "checkbox", title = "Не прочитано", data_toggle = "toggle", data_on = "не прочитано", data_onstyle = "danger", data_off = "прочитано", data_offstyle = "success", data_width = "248" })*@
+        
+        @Html.CheckBoxFor(m => m.Item.Disabled, new { type = "checkbox", title = "Запретить просмотр", data_toggle = "toggle", data_on = "запретить просмотр", data_onstyle = "danger", data_off = "показывать на сайте", data_offstyle = "success", data_width = "248" })
+        @if (Model.Item != null)
+                {
+            @Html.ActionLink("Журнал изменений", "log", "services", new { @id = Model.Item.Id }, new { @id = "LogLists", @class = "button pop-up_frame icon-archive", @data_class = "LogList", @title = "Журнал изменений" })
+        }
+    </div>
+
+}
+else
+{
+    <div class="content"><p>У вас недостаточно прав.</p></div>
+}
+
+<div class="buttons">
+    @if ((Model.Item != null && Model.UserResolution.Change) || (Model.Item == null && Model.UserResolution.Write))
+    {
+        <button type="submit" name="action" value="save-btn" data-primary="true" class="button icon-create">Сохранить</button>
+    }
+    @if (Model.Item != null && Model.UserResolution.Delete)
+    {
+        <button type="submit" name="action" value="delete-btn" class="button icon-delete">Удалить</button>
+    }
+    <button type="submit" name="action" value="cancel-btn" class="button icon-cancel">Закрыть</button>
+</div>

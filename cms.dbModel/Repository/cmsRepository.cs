@@ -53,6 +53,31 @@ namespace cms.dbModel
         public abstract MaterialsList getMaterialsList(FilterParams filtr);
         public abstract MaterialsModel getMaterial(Guid id);
 
+
+        // Events
+        public abstract EventsList getEventsList(FilterParams filtr);
+        public abstract EventModel getEvent(Guid id);
+
+        public abstract bool updateCmsEvent(EventModel eventData);
+        public abstract bool insertCmsEvent(EventModel eventData);
+        public abstract bool deleteCmsEvent(Guid id);
+
+        //Orgs
+        public abstract OrgsModel[] getOrgs(FilterParams filtr);
+        
+        // Персоны
+        public abstract UsersList getPersonList(FilterParams filtr);
+        public abstract UsersModel getPerson(Guid id);
+
+        //Feedbacks
+        public abstract FeedbacksList getFeedbacksList(FilterParams filtr);
+        public abstract FeedbackModel getFeedback(Guid id);
+        
+        public abstract bool insertCmsFeedback(FeedbackModel eventData);
+        public abstract bool updateCmsFeedback(FeedbackModel eventData);
+        public abstract bool deleteCmsFeedback(Guid id);
+        
+
         // Карта сайта
         public abstract SiteMapList getSiteMapList(string site, FilterParams filtr);
         public abstract SiteMapModel getSiteMapItem(Guid id);
