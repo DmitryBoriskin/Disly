@@ -70,7 +70,7 @@ namespace cms.dbModel
         public abstract UsersModel getPerson(Guid id);
 
         //Orgs
-        public abstract OrgsModel[] getOrgs(FilterParams filtr);
+        //public abstract OrgsModel[] getOrgs(FilterParams filtr);
         public abstract OrgsModel getOrgItem(Guid id);
         public abstract StructureModel[] getStructureList(Guid id);
         public abstract StructureModel getStructure(Guid id);
