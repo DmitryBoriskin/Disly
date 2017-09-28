@@ -810,7 +810,8 @@ namespace cms.dbase
                             Date = s.d_date,
                             Keyw = s.c_keyw,
                             Desc = s.c_desc,
-                            Disabled = s.b_disabled
+                            Disabled = s.b_disabled,
+                            Important = s.b_important
                         }).
                         Skip(filtr.Size * (filtr.Page - 1)).
                         Take(filtr.Size);
@@ -850,12 +851,132 @@ namespace cms.dbase
                         Date = s.d_date,
                         Keyw = s.c_keyw,
                         Desc = s.c_desc,
-                        Disabled = s.b_disabled
+                        Disabled = s.b_disabled,
+                        Important = s.b_important
                     });
 
 
                 if (!data.Any()) { return null; }
                 else { return data.First(); }
+            }
+        }
+
+        public override bool insertCmsMaterial(MaterialsModel material)
+        {
+            try
+            {
+                using (var db = new CMSdb(_context))
+                {
+                    content_materials cdMaterial = db.content_materialss
+                                                .Where(p => p.id == material.Id)
+                                                .SingleOrDefault();
+                    if (cdMaterial != null)
+                    {
+                        throw new Exception("Запись с таким Id уже существует");
+                    }
+
+                    cdMaterial = new content_materials
+                    {
+                        id = material.Id,
+                        c_title = material.Title,
+                        c_alias = material.Alias,
+                        c_text = material.Text,
+                        d_date = material.Date,
+                        c_preview = material.Preview,
+                        c_url= material.Url,
+                        c_url_name = material.UrlName,
+                        c_desc = material.Desc,
+                        c_keyw = material.Keyw,
+                        b_important = material.Important,
+                        b_disabled = material.Disabled,
+                        n_day = material.Date.Day,
+                        n_month = material.Date.Month,
+                        n_year = material.Date.Year
+                    };
+
+                    using (var tran = db.BeginTransaction())
+                    {
+                        db.Insert(cdMaterial);
+                        tran.Commit();
+                        return true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                //write to log ex
+                return false;
+            }
+        }
+        public override bool updateCmsMaterial(MaterialsModel material)
+        {
+            try
+            {
+                using (var db = new CMSdb(_context))
+                {
+                    content_materials cdMaterial = db.content_materialss
+                                                .Where(p => p.id == material.Id)
+                                                .SingleOrDefault();
+                    if (cdMaterial == null)
+                    {
+                        throw new Exception("Запись с таким Id не найдена");
+                    }
+
+                    cdMaterial.c_title = material.Title;
+                    cdMaterial.c_alias = material.Alias;
+                    cdMaterial.c_text = material.Text;
+                    cdMaterial.d_date = material.Date;
+                    cdMaterial.c_preview = material.Preview;
+                    cdMaterial.c_url = material.Url;
+                    cdMaterial.c_url_name = material.UrlName;
+                    cdMaterial.c_desc = material.Desc;
+                    cdMaterial.c_keyw = material.Keyw;
+                    cdMaterial.b_important = material.Important;
+                    cdMaterial.b_disabled = material.Disabled;
+                    cdMaterial.n_day = material.Date.Day;
+                    cdMaterial.n_month = material.Date.Month;
+                    cdMaterial.n_year = material.Date.Year;
+
+                    using (var tran = db.BeginTransaction())
+                    {
+                        db.Update(cdMaterial);
+                        tran.Commit();
+                        return true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                //write to log ex
+                return false;
+            }
+        }
+        public override bool deleteCmsMaterial(Guid id)
+        {
+            try
+            {
+                using (var db = new CMSdb(_context))
+                {
+                    content_materials cdMaterial = db.content_materialss
+                                                .Where(p => p.id == id)
+                                                .SingleOrDefault();
+                    if (cdMaterial == null)
+                    {
+                        throw new Exception("Запись с таким Id не найдена");
+                    }
+
+                    using (var tran = db.BeginTransaction())
+                    {
+                        db.Delete(cdMaterial);
+                        tran.Commit();
+                        return true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                //write to log ex
+                return false;
             }
         }
         #endregion

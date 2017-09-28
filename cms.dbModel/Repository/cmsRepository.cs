@@ -53,6 +53,10 @@ namespace cms.dbModel
         public abstract MaterialsList getMaterialsList(FilterParams filtr);
         public abstract MaterialsModel getMaterial(Guid id);
 
+        public abstract bool insertCmsMaterial(MaterialsModel material);
+        public abstract bool updateCmsMaterial(MaterialsModel material);
+        public abstract bool deleteCmsMaterial(Guid id);
+
 
         // Events
         public abstract EventsList getEventsList(FilterParams filtr);
