@@ -56,8 +56,17 @@ namespace cms.dbModel
         // Персоны
         public abstract UsersList getPersonList(FilterParams filtr);
 
-
         //Orgs
         public abstract OrgsModel[] getOrgs(FilterParams filtr);
+        public abstract OrgsModel getOrgItem(Guid id);
+        public abstract StructureModel[] getStructureList(Guid id);
+        public abstract StructureModel getStructure(Guid id);
+        public abstract Departments[] getDepartmentsList(Guid id);
+        public abstract Departments getDepartamentItem(Guid id);
+        public abstract DepartmentsPhone[] getDepartmentsPhone(Guid id);
+        public abstract BreadCrumb[] getBreadCrumbOrgs(Guid id, string type);
+        public abstract bool insDepartmentsPhone(Guid idDepart, string Label, string Value);
+        public abstract bool delDepartmentsPhone(int id);
+        public abstract People[] getPeopleDepartment(Guid idDepart);
     }
 }

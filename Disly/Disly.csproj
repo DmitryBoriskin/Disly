@@ -417,6 +417,9 @@
     <Content Include="Areas\Admin\Views\Orgs\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Person\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Person\Item.cshtml" />
+    <Content Include="Areas\Admin\Views\Orgs\Item.cshtml" />
+    <Content Include="Areas\Admin\Views\Orgs\Structure.cshtml" />
+    <Content Include="Areas\Admin\Views\Orgs\Deparment.cshtml" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Web.config" />

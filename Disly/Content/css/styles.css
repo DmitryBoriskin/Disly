@@ -538,6 +538,9 @@ a.link-close:before {
 
 /* ------- // Users.aspx  ----------- */
 
+.child-list{}
+.child-list_head h1{display:inline-block;}
+
 
 
 /* Дополнительный блок */
@@ -909,3 +912,9 @@ a.button  {
     padding-left: 5px;
     padding-right: 5px;
 }
+
+.depart_phone_wr{position:relative}
+.depart_phone_del{position:absolute;top:30px; right:7px;display:block;cursor:pointer;}
+.depart_phone_del:hover{text-decoration:none;}
+.depart_phone_del:before{content:'\ec5b';font-family:fontello;color:red;}
+.depart_phone_del:hover:before{color:#c50505;}
