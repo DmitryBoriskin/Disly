@@ -83,4 +83,3 @@ E:\ProjectsGit\MedPortal\cms.dbModel\bin\Debug\System.Web.Mvc.dll
 E:\ProjectsGit\MedPortal\cms.dbModel\bin\Debug\System.Web.Mvc.xml
 E:\ProjectsGit\MedPortal\cms.dbModel\obj\Debug\cms.dbModel.dll
 E:\ProjectsGit\MedPortal\cms.dbModel\obj\Debug\cms.dbModel.pdb
-E:\ProjectsGit\MedPortal\cms.dbModel\obj\Debug\cms.dbModel.csprojResolveAssemblyReference.cache
