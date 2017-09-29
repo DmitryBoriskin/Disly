@@ -70,11 +70,11 @@ namespace Disly.Areas.Admin.Controllers
         {
             // текущий элемент карты сайта
             model.Item = _cmsRepository.getSiteMapItem(id);
-
-            var m = new MultiSelectList(model.MenuTypes, "value", "text", model.Item.MenuGroups);
+            var m = new MultiSelectList(model.MenuTypes, "value", "text", model.Item != null ?  model.Item.MenuGroups : null);
             ViewBag.GroupMenu = m;
 
-            model.Item.MenuGroups = null;
+            if (model.Item != null)
+                model.Item.MenuGroups = null;
 
             Guid? _parent = (parent.Equals(null) && model.Item != null) ? model.Item.ParentId : parent;
 
@@ -114,6 +114,9 @@ namespace Disly.Areas.Admin.Controllers
 
             // хлебные крошки
             model.BreadCrumbs = _cmsRepository.getSiteMapBreadCrumbs(parent);
+
+            // список дочерних элементов
+            model.Childrens = _cmsRepository.getSiteMapChildrens(id);
             #endregion
 
             if (ModelState.IsValid)
@@ -129,8 +132,10 @@ namespace Disly.Areas.Admin.Controllers
                     userMessage.info = "Запись добавлена";
                 }
 
+                string backUrl = back_model.Item.ParentId != null ? "item/" + back_model.Item.ParentId : string.Empty;
+
                 userMessage.buttons = new ErrorMassegeBtn[]{
-                     new ErrorMassegeBtn { url = StartUrl + Request.Url.Query, text = "Вернуться в список" },
+                     new ErrorMassegeBtn { url = StartUrl + backUrl, text = "Вернуться в список" },
                      new ErrorMassegeBtn { url = "#", text = "ок", action = "false" }
                  };
             }
