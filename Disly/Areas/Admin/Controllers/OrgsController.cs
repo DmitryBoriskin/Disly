@@ -119,7 +119,7 @@ namespace Disly.Areas.Admin.Controllers
             }
             return View("Structure", model);
         }
-        //save-structure-btn
+        
         [HttpPost]
         [ValidateInput(false)]
         [MultiButton(MatchFormKey = "action", MatchFormValue = "save-structure-btn")]
@@ -152,8 +152,8 @@ namespace Disly.Areas.Admin.Controllers
                     #endregion
                 }
                 else
-                {                    
-                    #region сохранения                    
+                {
+                    #region обновление                    
                     if (_cmsRepository.setStructure(id, back_model.StructureItem))
                     {
                         userMessage.info = "Запись обновлена";
@@ -176,8 +176,7 @@ namespace Disly.Areas.Admin.Controllers
         {
             ErrorMassege userMassage = new ErrorMassege();
             userMassage.title = "Информация";
-            model.StructureItem = _cmsRepository.getStructure(id);
-            Guid ParentOrgId = model.StructureItem.OrgId;
+            Guid ParentOrgId= _cmsRepository.getStructure(id).OrgId;            
             if (_cmsRepository.delStructure(id)) {
                 userMassage.info = "Запись Удалена";
                 userMassage.buttons = new ErrorMassegeBtn[]{
@@ -208,7 +207,95 @@ namespace Disly.Areas.Admin.Controllers
         {
             ViewBag.Title = "Отделение";            
             model.DepartmentItem=_cmsRepository.getDepartamentItem(id);
-            model.BreadCrumbOrg = _cmsRepository.getBreadCrumbOrgs(id, ViewBag.ActionName);
+            if (model.DepartmentItem != null)
+            {
+                model.BreadCrumbOrg = _cmsRepository.getBreadCrumbOrgs(id, ViewBag.ActionName);
+            }
+            else
+            {
+                var StrucId = Request.Params["strucid"];
+                if (StrucId.Length > 0)
+                {
+                    model.BreadCrumbOrg = _cmsRepository.getBreadCrumbOrgs(Guid.Parse(StrucId), "structure");
+                }
+                
+            }
+
+            
+            return View("department", model);
+        }
+
+        
+        [HttpPost]
+        [ValidateInput(false)]
+        [MultiButton(MatchFormKey = "action", MatchFormValue = "save-department-btn")]
+        public ActionResult DepartmentSave(Guid id, OrgsViewModel back_model)
+        {
+            ErrorMassege userMessage = new ErrorMassege();
+            userMessage.title = "Информация";
+            model.DepartmentItem = _cmsRepository.getDepartamentItem(id);
+            if (ModelState.IsValid)
+            {
+                if (model.DepartmentItem == null)
+                {
+                    #region создание
+                    var StrucId = Request.Params["strucid"];
+                    if (StrucId != null)
+                    {
+                        Guid StrucGuid = Guid.Parse(StrucId);
+                        if (_cmsRepository.insDepartament(id, StrucGuid, back_model.DepartmentItem))
+                        {
+                            userMessage.info = "Запись создана";
+                            userMessage.buttons = new ErrorMassegeBtn[]{
+                                 new ErrorMassegeBtn { url = "/admin/orgs/department/"+id, text = "ок"}
+                             };
+                        }
+                        else { userMessage.info = "Произошла ошибка"; }
+                    }
+                    else { userMessage.info = "Произошла ошибка - в адресе строки нет идентифкатора структуры"; }
+                    #endregion
+                }
+                else
+                {
+                    #region обновление
+                    if(_cmsRepository.updDepartament(id, back_model.DepartmentItem))
+                    {
+                        userMessage.info = "Запись обновлена";
+                        userMessage.buttons = new ErrorMassegeBtn[]{
+                                 new ErrorMassegeBtn { url = "/admin/orgs/department/"+id, text = "ок"}
+                             };
+                    }
+                    else { userMessage.info = "Произошла ошибка"; }
+                    #endregion
+                }
+            }
+            model.ErrorInfo = userMessage;
+            return View("department", model);
+        }
+        [HttpPost]
+        [ValidateInput(false)]
+        [MultiButton(MatchFormKey = "action", MatchFormValue = "delete-department-btn")]
+        public ActionResult DepartmentDelete(Guid id)
+        {
+            ErrorMassege userMassage = new ErrorMassege();
+            userMassage.title = "Информация";
+            Guid IdParentStruct = _cmsRepository.getDepartamentItem(id).StructureF;
+            if (_cmsRepository.delDepartament(id))
+            {
+                userMassage.info = "Запись Удалена";
+                userMassage.buttons = new ErrorMassegeBtn[]{
+                    new ErrorMassegeBtn { url = "#", text = "ок", action = "false" },
+                    new ErrorMassegeBtn { url = "/admin/orgs/structure/"+IdParentStruct, text = "Вернуться в струкутуру"}
+                };
+            }
+            else
+            {
+                userMassage.info = "Произошла ошибка";
+                userMassage.buttons = new ErrorMassegeBtn[]{
+                    new ErrorMassegeBtn { url = "#", text = "ок", action = "false" }
+                };
+            }
+            model.ErrorInfo = userMassage;
             return View("department", model);
         }
         /// <summary>
@@ -229,15 +316,7 @@ namespace Disly.Areas.Admin.Controllers
         {
             _cmsRepository.delDepartmentsPhone(id);
             return null;
-        }
-                
-        [HttpPost]
-        [MultiButton(MatchFormKey = "action", MatchFormValue = "departaments-ins")]
-        public ActionResult InsertDepa() {
-            return Redirect(StartUrl + "structure/" + Guid.NewGuid());
-        }
-
-
+        }        
 
 
     }

@@ -1,7 +1,14 @@
 ﻿@model OrgsViewModel
 @{ 
     SelectList PeopleList = null;
-    PeopleList = new SelectList(Model.DepartmentItem.Peoples,"id", "FIO",0);
+    if (Model.DepartmentItem != null)
+    {
+        if (Model.DepartmentItem.Peoples != null)
+        {
+            PeopleList = new SelectList(Model.DepartmentItem.Peoples, "id", "FIO", 0);
+        }
+    }
+
 }
 
 @if (Model.UserResolution.Write)
@@ -11,78 +18,93 @@
         @Html.Partial("part/bread")
         @Html.TextBoxFor(m => m.DepartmentItem.Title, new { required = "", type = "text", maxlength = "256", title = "Название отделения" })                       
         <div class="group-block open" title="Адрес">
-            @if (Model.DepartmentItem.Phones != null)
+            @if (Model.DepartmentItem != null)
             {
-                <div class="row">
-                    @for (int i = 0; i < Model.DepartmentItem.Phones.Count(); i++)
-                    {
-                    <div class="col-md-4">
-                        <div class="depart_phone_wr">
-                            @Html.TextBoxFor(m => m.DepartmentItem.Phones[i].Value, new { type = "text", title = @Model.DepartmentItem.Phones[i].Label })
-                            <a class="depart_phone_del" data-id="@Model.DepartmentItem.Phones[i].Id"></a>
-                        </div>                                                
+                if (Model.DepartmentItem.Phones != null)
+                {
+                    <div class="row">
+                        @for (int i = 0; i < Model.DepartmentItem.Phones.Count(); i++)
+                        {
+                            <div class="col-md-4">
+                                <div class="depart_phone_wr">
+                                    @Html.TextBoxFor(m => m.DepartmentItem.Phones[i].Value, new { type = "text", title = @Model.DepartmentItem.Phones[i].Label })
+                                    <a class="depart_phone_del" data-id="@Model.DepartmentItem.Phones[i].Id"></a>
+                                </div>
+                            </div>
+                        }
                     </div>
-                    }
+                }
+
+                <div class="row">
+                    <div class="col-xs-12">
+                        <h5>Добавить телефон</h5>
+                    </div>
+                    @Html.HiddenFor(m => m.DepartmentItem.Id)
+                    <div class="col-md-4">
+                        <input type="text" title="Наименование" name="new_phone_label" />
+                    </div>
+                    <div class="col-md-4">
+                        <input type="text" title="Номер телефона" name="new_phone_value" />
+                    </div>
+                    <div class="col-md-4">
+                        <button style="margin-top: 23px;" class="button icon-create green pull-right" type="submit" name="action" value="add-new-phone-depart">Добавить</button>
+                    </div>
                 </div>
             }
-            <div class="row">
-                <div class="col-xs-12">
-                    <h5>Добавить телефон</h5>
-                </div>
-                @Html.HiddenFor(m=>m.DepartmentItem.Id)
-                <div class="col-md-4">
-                    <input type="text" title="Наименование" name="new_phone_label"  />                    
-                </div>
-                <div class="col-md-4">                    
-                    <input type="text" title="Номер телефона" name="new_phone_value" />
-                </div>
-                <div class="col-md-4">                                            
-                        <button style="margin-top: 23px;"  class="button icon-create green pull-right" type="submit" name="action" value="add-new-phone-depart">Добавить</button>                            
-                </div>                
-            </div>
-
+            else
+            {<p>Телефоны можно доавить после создания отдела.</p>}
         </div>
         <div class="group-block open" title="Описание">
             @Html.TextAreaFor(m => m.DepartmentItem.Text, new { type = "editor", title = "Текст", height = "100" })        
         </div>
-        <div class="child-list">
-            <div class="child-list_head">
-                <div class="row">
-                    <div class="col-lg-8"><h1>Врачи отделения</h1></div>
-                    <div class="col-lg-4 text-right"><a class="button icon-create green pull-right" href="#">Добавить</a></div>
+        @if (Model.DepartmentItem != null)
+        {
+            <div class="child-list">
+                <div class="child-list_head">
+                    <div class="row">
+                        <div class="col-lg-8"><h1>Врачи отделения</h1></div>
+                        <div class="col-lg-4 text-right"><a class="button icon-create green pull-right" href="#">Добавить</a></div>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="site_map_list">
-
-            <table class="table table-striped">
-                <tr>
-                    <th>&nbsp;</th>
-                    <th>Название</th>
-                </tr>
-                @if (Model.DepartmentItem.Peoples != null)
-                {
-                    foreach (var item in Model.DepartmentItem.Peoples)
+            <div class="site_map_list">
+                <table class="table table-striped">
+                    <tr>
+                        <th>&nbsp;</th>
+                        <th>Название</th>
+                    </tr>
+                    @if (Model.DepartmentItem.Peoples != null)
                     {
-                        <tr>
-                            <td class="map_site_icon"></td>
-                            <td>
-                                <a href="@item.Id">@item.FIO</a>
-                            </td>
-                        </tr>
+                        foreach (var item in Model.DepartmentItem.Peoples)
+                        {
+                            <tr>
+                                <td class="map_site_icon"></td>
+                                <td>
+                                    <a href="@item.Id">@item.FIO</a>
+                                </td>
+                            </tr>
+                        }
                     }
-                }
-            </table>
-        </div>
-
+                </table>
+            </div>
+        }
+        else
+        {
+            <p>Сотрудников можно добавить только послед создания отдела.</p>
+        }
      
     </div>
     <div class="dop_info-block">
         <div class="dop-caption">Дополнительно</div>
         <div class="group-block open" title="Руководитель отделения">
             @Html.TextBoxFor(m => m.DepartmentItem.DirecorPost, new {type = "text", title = "Должность" })
-            @Html.DropDownListFor(m => m.DepartmentItem.DirectorF, PeopleList, new { @class = "selectpicker", @title = "Выберите врача из списка" })
-
+            @if (Model.DepartmentItem != null)
+            {
+                if (PeopleList != null)
+                {
+                    @Html.DropDownListFor(m => m.DepartmentItem.DirectorF, PeopleList, new { @class = "selectpicker", @title = "Выберите врача из списка" })
+                }
+            }            
         </div>
     </div>
 }
@@ -94,11 +116,11 @@ else
 <div class="buttons">
     @if ((Model.Item != null && Model.UserResolution.Change) || (Model.Item == null && Model.UserResolution.Write))
     {
-        <button type="submit" name="action" value="save-btn" data-primary="true" class="button icon-create">Сохранить</button>
+        <button type="submit" name="action" value="save-department-btn" data-primary="true" class="button icon-create">Сохранить</button>
     }
-    @if (Model.Item != null && Model.UserResolution.Delete)
+    @if (Model.DepartmentItem != null && Model.UserResolution.Delete)
     {
-        <button type="submit" name="action" value="delete-btn" data-action="delete" class="button icon-delete">Удалить</button>
+        <button type="submit" name="action" value="delete-department-btn" data-action="delete" class="button icon-delete">Удалить</button>
     }
-    <button type="submit" name="action" value="cancel-btn" data-action="cancel" class="button icon-cancel">Закрыть</button>
+    <button type="submit" name="action" value="cancel-department-btn" data-action="cancel" class="button icon-cancel">Закрыть</button>
 </div>

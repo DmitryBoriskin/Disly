@@ -1385,11 +1385,12 @@ namespace cms.dbase
                     return data.Select(s=> new Departments {
                         Id=s.id,
                         Title=s.c_title,
+                        StructureF=s.f_structure,
                         Phones=getDepartmentsPhone(s.id),
                         Peoples=getPeopleDepartment(s.id)
                     }).First();
                 }
-                return new Departments();
+                return null;
             }
         }
         /// <summary>
@@ -1466,7 +1467,7 @@ namespace cms.dbase
 
                     MyBread.Push(new BreadCrumb
                     {
-                        Title = ParentStructure.c_title,
+                        Title = ParentOrg.c_title,
                         Url = "/admin/orgs/item/" + ParentOrg.id
                     });
                     MyBread.Push(new BreadCrumb
@@ -1533,8 +1534,6 @@ namespace cms.dbase
                 return null; 
             }          
         }
-
-
         public override bool insDepartament(Guid id, Guid Structure, Departments insert)
         {
             using (var db = new CMSdb(_context))
@@ -1599,9 +1598,6 @@ namespace cms.dbase
                 return true;
             }
         }
-
-
-
         #endregion
 
 

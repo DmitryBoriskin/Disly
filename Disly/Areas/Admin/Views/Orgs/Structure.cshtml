@@ -40,7 +40,9 @@
                 <div class="child-list_head">
                     <div class="row">
                         <div class="col-lg-8"><h1>Отделения</h1></div>
-                        <div class="col-lg-4 text-right"><button class="button icon-create green pull-right" type="submit" name="action" value="departaments-ins">Добавить</button></div>
+                        <div class="col-lg-4 text-right">                            
+                            <a class="button icon-create green pull-right" href="/admin/orgs/department/@Guid.NewGuid()?strucid=@Model.StructureItem.Id">Добавить</a>
+                        </div>
                     </div>
                 </div>
                 <div class="site_map_list">
