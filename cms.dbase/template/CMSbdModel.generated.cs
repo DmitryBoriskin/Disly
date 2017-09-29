@@ -1017,15 +1017,16 @@ namespace cms.dbase.models
 	[Table(Schema="dbo", Name="content_vacancies")]
 	public partial class content_vacancies
 	{
-		[PrimaryKey, NotNull    ] public Guid     id           { get; set; } // uniqueidentifier
-		[Column,     NotNull    ] public string   c_profession { get; set; } // varchar(100)
-		[Column,        Nullable] public string   c_post       { get; set; } // varchar(512)
-		[Column,        Nullable] public string   c_education  { get; set; } // varchar(256)
-		[Column,        Nullable] public string   с_experience { get; set; } // varchar(256)
-		[Column,        Nullable] public string   c_salary     { get; set; } // varchar(100)
-		[Column,        Nullable] public string   c_desc       { get; set; } // varchar(2048)
-		[Column,     NotNull    ] public DateTime d_date       { get; set; } // datetime
-		[Column,     NotNull    ] public bool     d_disabled   { get; set; } // bit
+		[PrimaryKey, NotNull    ] public Guid     id            { get; set; } // uniqueidentifier
+		[Column,     NotNull    ] public string   c_profession  { get; set; } // varchar(100)
+		[Column,        Nullable] public string   c_post        { get; set; } // varchar(512)
+		[Column,        Nullable] public string   c_desc        { get; set; } // varchar(2048)
+		[Column,        Nullable] public string   с_experience  { get; set; } // varchar(2048)
+		[Column,        Nullable] public string   с_conditions  { get; set; } // varchar(2048)
+		[Column,        Nullable] public string   c_salary      { get; set; } // varchar(100)
+		[Column,     NotNull    ] public DateTime d_date        { get; set; } // datetime
+		[Column,     NotNull    ] public bool     b_temporarily { get; set; } // bit
+		[Column,     NotNull    ] public bool     b_disabled    { get; set; } // bit
 	}
 
 	[Table(Schema="dbo", Name="front_modules")]

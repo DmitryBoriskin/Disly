@@ -88,7 +88,7 @@ else
     }
     @if (Model.Item != null && Model.UserResolution.Delete)
     {
-        <button type="submit" name="action" value="delete-btn" class="button icon-delete">Удалить</button>
+        <button type="submit" name="action" value="delete-btn" data-action="delete" class="button icon-delete">Удалить</button>
     }
-    <button type="submit" name="action" value="cancel-btn" class="button icon-cancel">Закрыть</button>
+    <button type="submit" name="action" value="cancel-btn" data-action="cancel" class="button icon-cancel">Закрыть</button>
 </div>

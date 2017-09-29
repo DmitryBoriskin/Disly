@@ -7,7 +7,7 @@ using System.Web;
 namespace Disly.Areas.Admin.Models
 {
     public class OrgsViewModel : CoreViewModel
-    {        
+    {                
         public OrgsModel Item { get; set; }
         public OrgsModel[] OrgList { get; set; }
         public StructureModel StructureItem { get; set; }

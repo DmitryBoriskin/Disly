@@ -24,6 +24,7 @@ namespace cms.dbModel.entity
     {
         [Required]
         public Guid Id { get; set; }
+        public Guid OrgId { get; set; }
         [Required(ErrorMessage = "Поле «Название структуры» не должно быть пустым.")]
         public string Title { get; set; }
         public string Adress { get; set; }
@@ -42,7 +43,7 @@ namespace cms.dbModel.entity
         /// </summary>
         public string Schedule { get; set; }
         public string DirecorPost { get; set; }
-        public Guid DirectorF { get; set; }
+        public Guid? DirectorF { get; set; }
         /// <summary>
         /// Отделения
         /// </summary>
