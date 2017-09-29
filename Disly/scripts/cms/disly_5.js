@@ -52,6 +52,7 @@ $(document).ready(function () {
             var req_count = $('form input[required]:invalid').length
 
             if (req_count > 0 && btn_class == 'save-btn') {
+            } else if (btn_class == 'no-preloader-btn') {
             }
             else {
                 // показываем preloader при клике на кнопку
@@ -175,6 +176,14 @@ $(document).ready(function () {
 
     // Показываем страницу, убираем preloader
     load_page();
+
+    // Добавляем возможность сортировки
+    $('#sorting_element').click(function () {
+        $('.site_map_list').find('tbody').addClass('sortable');
+        $('.sortable').each(function () {
+            Sorting_init($(this));
+        });
+    });
 });
 
 var validSumm = $('.validation-summary-valid');

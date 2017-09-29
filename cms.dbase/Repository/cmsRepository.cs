@@ -152,7 +152,7 @@ namespace cms.dbase
                     f_site = Site,
                     f_user = UserId,
                     c_ip = IP,
-                    f_action = Action                    
+                    f_action = Action
                 });
             }
         }
@@ -209,14 +209,14 @@ namespace cms.dbase
                 var data = db.cms_sv_resolutionss.
                     Where(w => (w.f_group == group_id && w.b_read == true && w.c_user_id == user_id)).
                     Select(s => new cmsMenuItem
-                {
-                    id = s.c_menu_id,
-                    Permit = s.n_permit,
-                    Alias = s.c_alias,
-                    Title = s.c_title,
-                    Class = s.c_class,
-                    Group = s.f_group
-                })
+                    {
+                        id = s.c_menu_id,
+                        Permit = s.n_permit,
+                        Alias = s.c_alias,
+                        Title = s.c_title,
+                        Class = s.c_class,
+                        Group = s.f_group
+                    })
                 .OrderBy(o => o.Permit);
 
                 if (!data.Any()) { return null; }
@@ -467,7 +467,7 @@ namespace cms.dbase
                 return result;
             }
         }
-        public override void check_usergroup(Guid id, string group, Guid UserId, string IP) 
+        public override void check_usergroup(Guid id, string group, Guid UserId, string IP)
         {
             using (var db = new CMSdb(_context))
             {
@@ -508,7 +508,7 @@ namespace cms.dbase
                 }
             }
         }
-        
+
         public override UsersList getUsersList(FilterParams filtr)
         {
             using (var db = new CMSdb(_context))
@@ -530,9 +530,9 @@ namespace cms.dbase
                         query = query.Where(w => w.c_surname.Contains(param) || w.c_name.Contains(param) || w.c_patronymic.Contains(param) || w.c_email.Contains(param));
                     }
                 }
-                                
+
                 query = query.OrderBy(o => new { o.c_surname, o.c_name });
-                
+
                 if (query.Any())
                 {
                     int ItemCount = query.Count();
@@ -557,11 +557,12 @@ namespace cms.dbase
                     return new UsersList
                     {
                         Data = usersInfo,
-                        Pager = new Pager { 
-                            page = filtr.Page, 
-                            size = filtr.Size, 
-                            items_count = ItemCount, 
-                            page_count = (ItemCount % filtr.Size > 0) ? (ItemCount / filtr.Size) + 1 : ItemCount / filtr.Size 
+                        Pager = new Pager
+                        {
+                            page = filtr.Page,
+                            size = filtr.Size,
+                            items_count = ItemCount,
+                            page_count = (ItemCount % filtr.Size > 0) ? (ItemCount / filtr.Size) + 1 : ItemCount / filtr.Size
                         }
                     };
                 }
@@ -574,7 +575,8 @@ namespace cms.dbase
             {
                 var data = db.cms_userss.
                     Where(w => w.id == id).
-                    Select(s => new UsersModel { 
+                    Select(s => new UsersModel
+                    {
                         Id = s.id,
                         EMail = s.c_email,
                         Group = s.f_group,
@@ -650,7 +652,7 @@ namespace cms.dbase
                             .Insert();
                     }
                     // логирование
-                    insertLog(UserId, IP,"change_resolutions", id, String.Empty, "Users", Item.Surname + " " + Item.Name);
+                    insertLog(UserId, IP, "change_resolutions", id, String.Empty, "Users", Item.Surname + " " + Item.Name);
                     return true;
                 }
                 else
@@ -711,7 +713,7 @@ namespace cms.dbase
         public override void changePassword(Guid id, string Salt, string Hash, Guid UserId, string IP)
         {
             using (var db = new CMSdb(_context))
-            {                
+            {
                 string logTitle = db.cms_userss.Where(w => w.id == id).Select(s => s.c_surname + " " + s.c_name).First().ToString();
                 var data = db.cms_userss.Where(w => w.id == id);
 
@@ -792,7 +794,7 @@ namespace cms.dbase
             {
                 var query = db.content_materialss.Where(w => w.id != null);
                 query = query.OrderByDescending(o => o.d_date);
-                
+
                 if (query.Any())
                 {
                     int ItemCount = query.Count();
@@ -1668,7 +1670,7 @@ namespace cms.dbase
 
         public override UsersModel getPerson(Guid id)
         {
-           return null;
+            return null;
         }
         #endregion
 
@@ -1763,7 +1765,7 @@ namespace cms.dbase
                         id = feedback.Id,
                         c_title = feedback.Title,
                         c_text = feedback.Text,
-                        d_date= feedback.Date,
+                        d_date = feedback.Date,
                         c_sender_name = feedback.SenderName,
                         c_sender_email = feedback.SenderEmail,
                         c_answer = feedback.Answer,
@@ -1809,7 +1811,7 @@ namespace cms.dbase
                     cdFeedback.d_date = feedback.Date;
                     cdFeedback.b_new = feedback.IsNew;
                     cdFeedback.b_disabled = feedback.Disabled;
-                    
+
                     using (var tran = db.BeginTransaction())
                     {
                         db.Update(cdFeedback);
@@ -1943,14 +1945,33 @@ namespace cms.dbase
                         DisabledMenu = s.b_disabled_menu,
                         Sort = s.n_sort,
                         ParentId = s.uui_parent,
-                        CountSibling = getCountSiblings(s.id)
+                        CountSibling = getCountSiblings(s.id),
+                        MenuGroups = getSiteMapGroupMenu(id)
                     });
 
                 if (!data.Any()) { return null; }
                 else { return data.FirstOrDefault(); }
             }
         }
-        
+
+        /// <summary>
+        /// Получим группы меню для элемента карты сайта
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public override string[] getSiteMapGroupMenu(Guid id)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var data = db.content_sitemap_menutypess
+                    .Where(w => w.f_sitemap.Equals(id))
+                    .Select(s => s.f_menutype.ToString());
+
+                if (!data.Any()) return null;
+                else { return data.ToArray(); }
+            }
+        }
+
         /// <summary>
         /// Получим кол-во дочерних элементов карты сайта
         /// </summary>
@@ -2023,6 +2044,18 @@ namespace cms.dbase
                         .Value(p => p.uui_parent, item.ParentId)
                         .Insert();
 
+                    // группы меню
+                    if (item.MenuGroups != null)
+                    {
+                        foreach (var m in item.MenuGroups)
+                        {
+                            var menu = db.content_sitemap_menutypess
+                                .Value(p => p.f_sitemap, id)
+                                .Value(p => p.f_menutype, Guid.Parse(m))
+                                .Insert();
+                        }
+                    }
+
                     // логирование
                     insertLog(userId, IP, "insert", id, String.Empty, "SiteMap", item.Title);
 
@@ -2066,6 +2099,21 @@ namespace cms.dbase
                         .Set(u => u.b_disabled_menu, item.DisabledMenu)
                         .Update();
 
+                    // группы меню
+                    var menu = db.content_sitemap_menutypess
+                        .Where(w => w.f_sitemap.Equals(id)).Delete();
+
+                    if (item.MenuGroups != null)
+                    {
+                        foreach (var m in item.MenuGroups)
+                        {
+                            var me = db.content_sitemap_menutypess
+                                .Value(p => p.f_sitemap, id)
+                                .Value(p => p.f_menutype, Guid.Parse(m))
+                                .Insert();
+                        }
+                    }
+
                     // логирование
                     insertLog(userId, IP, "update", id, String.Empty, "SiteMap", item.Title);
                     return true;
@@ -2098,6 +2146,26 @@ namespace cms.dbase
         }
 
         /// <summary>
+        /// Список доступных типов меню для элемента карты сайта
+        /// </summary>
+        /// <returns></returns>
+        public override Catalog_list[] getSiteMapMenuTypes()
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var data = db.content_menutypess
+                    .OrderBy(o => o.n_sort)
+                    .Select(s => new Catalog_list
+                    {
+                        text = s.c_title,
+                        value = s.id.ToString()
+                    });
+                if (!data.Any()) { return null; }
+                else { return data.ToArray(); }
+            }
+        }
+
+        /// <summary>
         /// Удаляем элемент карты сайта
         /// </summary>
         /// <param name="id"></param>
@@ -2112,7 +2180,7 @@ namespace cms.dbase
                     .Where(w => w.id.Equals(id))
                     .Select(s => s.c_title).FirstOrDefault();
                 db.content_sitemaps.Where(w => w.id.Equals(id) || w.uui_parent.Equals(id)).Delete();
-                
+
                 // логирование
                 insertLog(userId, IP, "delete", id, String.Empty, "SiteMap", logTitle);
                 return true;
@@ -2145,6 +2213,103 @@ namespace cms.dbase
                 if (!data.Any()) { return null; }
                 else { return data.ToArray(); }
             }
+        }
+
+        /// <summary>
+        /// Получаем хлебные крошки для карты сайта
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public override BreadCrumbSiteMap[] getSiteMapBreadCrumbs(Guid? id)
+        {
+            List<BreadCrumbSiteMap> breadCrumbList = new List<BreadCrumbSiteMap>();
+
+            if (!id.Equals(null))
+            {
+                BreadCrumbSiteMap item = getSiteMapBreadCrumbItem((Guid)id);
+
+                while (item != null)
+                {
+                    breadCrumbList.Add(item);
+                    if (!item.ParentId.Equals(null))
+                    {
+                        item = getSiteMapBreadCrumbItem((Guid)item.ParentId);
+                    }
+                    else { item = null; }
+                }
+            }
+
+            breadCrumbList.Reverse();
+
+            return breadCrumbList != null ? breadCrumbList.ToArray() : null;
+        }
+
+        /// <summary>
+        /// Единичная запись хлебных крошек для карты сайта
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public override BreadCrumbSiteMap getSiteMapBreadCrumbItem(Guid id)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var data = db.content_sitemaps
+                    .Where(w => w.id.Equals(id))
+                    .Select(s => new BreadCrumbSiteMap
+                    {
+                        Id = s.id,
+                        Title = s.c_title,
+                        ParentId = s.uui_parent
+                    });
+
+                if (!data.Any()) { return null; }
+                else { return data.FirstOrDefault(); }
+            }
+        }
+
+        /// <summary>
+        /// Меняем приоритет для сортировки карты сайта
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="permit"></param>
+        /// <param name="domain"></param>
+        /// <returns></returns>
+        public override bool permit_SiteMap(Guid id, int permit, string domain)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var data = db.content_sitemaps
+                    .Where(w => w.id.Equals(id))
+                    .Select(s => new SiteMapModel
+                    {
+                        Path = s.c_path,
+                        Sort = s.n_sort
+                    }).FirstOrDefault();
+
+                if (permit > data.Sort)
+                {
+                    db.content_sitemaps
+                        .Where(w => w.f_site.Equals(domain))
+                        .Where(w => w.c_path.Equals(data.Path))
+                        .Where(w => w.n_sort > data.Sort && w.n_sort <= permit)
+                        .Set(u => u.n_sort, u => u.n_sort - 1)
+                        .Update();
+                }
+                else
+                {
+                    db.content_sitemaps
+                        .Where(w => w.f_site.Equals(domain))
+                        .Where(w => w.c_path.Equals(data.Path))
+                        .Where(w => w.n_sort < data.Sort && w.n_sort >= permit)
+                        .Set(u => u.n_sort, u => u.n_sort + 1)
+                        .Update();
+                }
+                db.content_sitemaps
+                    .Where(w => w.id.Equals(id))
+                    .Set(u => u.n_sort, permit)
+                    .Update();
+            }
+            return true;
         }
         #endregion
     }

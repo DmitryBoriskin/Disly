@@ -11,22 +11,22 @@
   </PropertyGroup>
   <ItemGroup>
     <File Include="Areas/Admin/Views/Account/ChangePass.cshtml">
-      <publishTime>08/07/2017 11:18:25</publishTime>
+      <publishTime>09/28/2017 09:39:15</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Account/LogIn.cshtml">
-      <publishTime>07/06/2017 12:11:53</publishTime>
+      <publishTime>06/07/2017 12:11:53</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Account/LogOff.cshtml">
       <publishTime>05/22/2017 13:19:11</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Account/MsgFailRestore.cshtml">
-      <publishTime>07/27/2017 12:33:07</publishTime>
+      <publishTime>09/28/2017 09:39:15</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Account/MsgResult.cshtml">
-      <publishTime>07/27/2017 12:19:52</publishTime>
+      <publishTime>09/28/2017 09:39:15</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Account/MsgSendMail.cshtml">
-      <publishTime>07/27/2017 12:05:22</publishTime>
+      <publishTime>09/28/2017 09:39:15</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Account/RestorePass.cshtml">
       <publishTime>07/27/2017 11:42:40</publishTime>
@@ -37,17 +37,50 @@
     <File Include="Areas/Admin/Views/cmsMenu/Item.cshtml">
       <publishTime>09/18/2017 15:14:53</publishTime>
     </File>
+    <File Include="Areas/Admin/Views/Events/Index.cshtml">
+      <publishTime>09/27/2017 16:04:54</publishTime>
+    </File>
+    <File Include="Areas/Admin/Views/Events/Item.cshtml">
+      <publishTime>09/28/2017 12:35:34</publishTime>
+    </File>
+    <File Include="Areas/Admin/Views/Feedbacks/Index.cshtml">
+      <publishTime>09/28/2017 08:38:21</publishTime>
+    </File>
+    <File Include="Areas/Admin/Views/Feedbacks/Item.cshtml">
+      <publishTime>09/28/2017 09:39:15</publishTime>
+    </File>
     <File Include="Areas/Admin/Views/Image/Index.cshtml">
       <publishTime>05/31/2017 16:50:33</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Main/Index.cshtml">
-      <publishTime>07/06/2017 16:20:43</publishTime>
+      <publishTime>06/07/2017 16:20:43</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Materials/Index.cshtml">
-      <publishTime>09/26/2017 13:02:42</publishTime>
+      <publishTime>09/27/2017 16:23:53</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Materials/Item.cshtml">
-      <publishTime>09/19/2017 12:27:54</publishTime>
+      <publishTime>09/28/2017 12:34:18</publishTime>
+    </File>
+    <File Include="Areas/Admin/Views/Orgs/Department.cshtml">
+      <publishTime>09/28/2017 12:42:24</publishTime>
+    </File>
+    <File Include="Areas/Admin/Views/Orgs/Index.cshtml">
+      <publishTime>09/28/2017 11:24:23</publishTime>
+    </File>
+    <File Include="Areas/Admin/Views/Orgs/Item.cshtml">
+      <publishTime>09/28/2017 11:24:23</publishTime>
+    </File>
+    <File Include="Areas/Admin/Views/Orgs/part/bread.cshtml">
+      <publishTime>09/28/2017 12:19:12</publishTime>
+    </File>
+    <File Include="Areas/Admin/Views/Orgs/Structure.cshtml">
+      <publishTime>09/28/2017 12:19:12</publishTime>
+    </File>
+    <File Include="Areas/Admin/Views/Person/Index.cshtml">
+      <publishTime>09/27/2017 11:53:21</publishTime>
+    </File>
+    <File Include="Areas/Admin/Views/Person/Item.cshtml">
+      <publishTime>09/27/2017 10:32:23</publishTime>
     </File>
     <File Include="Areas/Admin/Views/PortalUsers/Index.cshtml">
       <publishTime>09/26/2017 12:01:41</publishTime>
@@ -59,7 +92,7 @@
       <publishTime>05/22/2017 13:20:01</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Services/GetFile.cshtml">
-      <publishTime>06/30/2017 15:58:53</publishTime>
+      <publishTime>09/28/2017 09:39:15</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Services/Log.cshtml">
       <publishTime>01/01/0001 00:00:00</publishTime>
@@ -98,10 +131,10 @@
       <publishTime>05/22/2017 13:20:45</publishTime>
     </File>
     <File Include="Areas/Admin/Views/SiteMap/Index.cshtml">
-      <publishTime>09/18/2017 16:15:04</publishTime>
+      <publishTime>09/28/2017 09:39:15</publishTime>
     </File>
     <File Include="Areas/Admin/Views/SiteMap/Item.cshtml">
-      <publishTime>05/22/2017 13:20:46</publishTime>
+      <publishTime>09/28/2017 09:39:15</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Sites/Domains.cshtml">
       <publishTime>05/22/2017 13:21:33</publishTime>
@@ -131,25 +164,25 @@
       <publishTime>05/22/2017 13:13:09</publishTime>
     </File>
     <File Include="bin/cms.dbase.dll">
-      <publishTime>09/26/2017 20:59:40</publishTime>
+      <publishTime>09/28/2017 12:43:20</publishTime>
     </File>
     <File Include="bin/cms.dbase.dll.config">
       <publishTime>05/22/2017 13:02:04</publishTime>
     </File>
     <File Include="bin/cms.dbase.pdb">
-      <publishTime>09/26/2017 20:59:40</publishTime>
+      <publishTime>09/28/2017 12:43:20</publishTime>
     </File>
     <File Include="bin/cms.dbModel.dll">
-      <publishTime>09/26/2017 20:59:39</publishTime>
+      <publishTime>09/28/2017 12:43:17</publishTime>
     </File>
     <File Include="bin/cms.dbModel.pdb">
-      <publishTime>09/26/2017 20:59:39</publishTime>
+      <publishTime>09/28/2017 12:43:17</publishTime>
     </File>
     <File Include="bin/Disly.dll">
-      <publishTime>09/26/2017 20:59:41</publishTime>
+      <publishTime>09/28/2017 12:43:21</publishTime>
     </File>
     <File Include="bin/Disly.pdb">
-      <publishTime>09/26/2017 20:59:41</publishTime>
+      <publishTime>09/28/2017 12:43:21</publishTime>
     </File>
     <File Include="bin/EntityFramework.dll">
       <publishTime>05/22/2017 13:30:29</publishTime>
@@ -218,7 +251,7 @@
       <publishTime>05/22/2017 13:13:42</publishTime>
     </File>
     <File Include="Content/css/styles.css">
-      <publishTime>09/19/2017 10:29:28</publishTime>
+      <publishTime>09/28/2017 12:19:12</publishTime>
     </File>
     <File Include="Content/css/styles_login.css">
       <publishTime>07/07/2017 08:10:41</publishTime>
@@ -239,7 +272,7 @@
       <publishTime>05/22/2017 13:15:35</publishTime>
     </File>
     <File Include="Content/decor/chuvashia/map.css">
-      <publishTime>07/26/2017 13:04:14</publishTime>
+      <publishTime>09/28/2017 09:39:15</publishTime>
     </File>
     <File Include="Content/decor/chuvashia/styles.css">
       <publishTime>05/22/2017 13:15:35</publishTime>
@@ -248,13 +281,13 @@
       <publishTime>05/22/2017 13:08:10</publishTime>
     </File>
     <File Include="Content/fonts/fontello/fontello.css">
-      <publishTime>05/22/2017 13:15:36</publishTime>
+      <publishTime>09/28/2017 09:39:15</publishTime>
     </File>
     <File Include="Content/fonts/fontello/fontello.eot">
       <publishTime>05/22/2017 13:15:37</publishTime>
     </File>
     <File Include="Content/fonts/fontello/fontello.svg">
-      <publishTime>05/22/2017 13:15:53</publishTime>
+      <publishTime>09/28/2017 09:39:16</publishTime>
     </File>
     <File Include="Content/fonts/fontello/fontello.ttf">
       <publishTime>05/22/2017 13:15:37</publishTime>
@@ -263,7 +296,7 @@
       <publishTime>05/22/2017 13:15:52</publishTime>
     </File>
     <File Include="Content/fonts/raleway/raleway-regular-webfont.svg">
-      <publishTime>05/22/2017 13:15:52</publishTime>
+      <publishTime>09/28/2017 09:39:16</publishTime>
     </File>
     <File Include="Content/fonts/raleway/raleway-regular-webfont.woff">
       <publishTime>05/22/2017 13:15:51</publishTime>
@@ -272,7 +305,7 @@
       <publishTime>05/22/2017 13:15:51</publishTime>
     </File>
     <File Include="Content/fonts/raleway/raleway-semibold-webfont.svg">
-      <publishTime>05/22/2017 13:15:52</publishTime>
+      <publishTime>09/28/2017 09:39:16</publishTime>
     </File>
     <File Include="Content/fonts/raleway/raleway-semibold-webfont.woff">
       <publishTime>05/22/2017 13:15:51</publishTime>
@@ -284,7 +317,7 @@
       <publishTime>05/22/2017 13:15:52</publishTime>
     </File>
     <File Include="Content/fonts/Ubuntu/ubuntu_300.svg">
-      <publishTime>05/22/2017 13:15:52</publishTime>
+      <publishTime>09/28/2017 09:39:15</publishTime>
     </File>
     <File Include="Content/fonts/Ubuntu/ubuntu_300.ttf">
       <publishTime>05/22/2017 13:16:06</publishTime>
@@ -299,7 +332,7 @@
       <publishTime>05/22/2017 13:16:21</publishTime>
     </File>
     <File Include="Content/fonts/Ubuntu/ubuntu_300italic.svg">
-      <publishTime>05/22/2017 13:16:06</publishTime>
+      <publishTime>09/28/2017 09:39:15</publishTime>
     </File>
     <File Include="Content/fonts/Ubuntu/ubuntu_300italic.ttf">
       <publishTime>05/22/2017 13:16:23</publishTime>
@@ -314,7 +347,7 @@
       <publishTime>05/22/2017 13:16:21</publishTime>
     </File>
     <File Include="Content/fonts/Ubuntu/ubuntu_500.svg">
-      <publishTime>05/22/2017 13:16:23</publishTime>
+      <publishTime>09/28/2017 09:39:15</publishTime>
     </File>
     <File Include="Content/fonts/Ubuntu/ubuntu_500.ttf">
       <publishTime>05/22/2017 13:16:22</publishTime>
@@ -329,7 +362,7 @@
       <publishTime>05/22/2017 13:16:45</publishTime>
     </File>
     <File Include="Content/fonts/Ubuntu/ubuntu_500italic.svg">
-      <publishTime>05/22/2017 13:16:48</publishTime>
+      <publishTime>09/28/2017 09:39:15</publishTime>
     </File>
     <File Include="Content/fonts/Ubuntu/ubuntu_500italic.ttf">
       <publishTime>05/22/2017 13:16:47</publishTime>
@@ -344,7 +377,7 @@
       <publishTime>05/22/2017 13:16:43</publishTime>
     </File>
     <File Include="Content/fonts/Ubuntu/ubuntu_700.svg">
-      <publishTime>05/22/2017 13:16:49</publishTime>
+      <publishTime>09/28/2017 09:39:15</publishTime>
     </File>
     <File Include="Content/fonts/Ubuntu/ubuntu_700.ttf">
       <publishTime>05/22/2017 13:16:46</publishTime>
@@ -359,7 +392,7 @@
       <publishTime>05/22/2017 13:17:01</publishTime>
     </File>
     <File Include="Content/fonts/Ubuntu/ubuntu_700italic.svg">
-      <publishTime>05/22/2017 13:17:07</publishTime>
+      <publishTime>09/28/2017 09:39:15</publishTime>
     </File>
     <File Include="Content/fonts/Ubuntu/ubuntu_700italic.ttf">
       <publishTime>05/22/2017 13:17:01</publishTime>
@@ -374,7 +407,7 @@
       <publishTime>01/01/0001 00:00:00</publishTime>
     </File>
     <File Include="Content/fonts/Ubuntu/ubuntu_italic.svg">
-      <publishTime>05/22/2017 13:17:05</publishTime>
+      <publishTime>09/28/2017 09:39:15</publishTime>
     </File>
     <File Include="Content/fonts/Ubuntu/ubuntu_italic.ttf">
       <publishTime>05/22/2017 13:17:02</publishTime>
@@ -389,7 +422,7 @@
       <publishTime>05/22/2017 13:17:08</publishTime>
     </File>
     <File Include="Content/fonts/Ubuntu/ubuntu_regular.svg">
-      <publishTime>05/22/2017 13:17:11</publishTime>
+      <publishTime>09/28/2017 09:39:15</publishTime>
     </File>
     <File Include="Content/fonts/Ubuntu/ubuntu_regular.ttf">
       <publishTime>05/22/2017 13:17:11</publishTime>
@@ -401,40 +434,40 @@
       <publishTime>05/22/2017 13:17:25</publishTime>
     </File>
     <File Include="Content/img/MapRF.svg">
-      <publishTime>07/12/2017 13:14:53</publishTime>
+      <publishTime>09/28/2017 09:39:16</publishTime>
     </File>
     <File Include="Content/img/nophoto.jpg">
       <publishTime>09/19/2017 11:59:33</publishTime>
     </File>
     <File Include="Content/img/preloader.svg">
-      <publishTime>07/06/2017 12:11:37</publishTime>
+      <publishTime>09/28/2017 09:39:16</publishTime>
     </File>
     <File Include="Content/img/preloader_planet.svg">
-      <publishTime>07/06/2017 12:11:01</publishTime>
+      <publishTime>09/28/2017 09:39:16</publishTime>
     </File>
     <File Include="Content/plugins/bootstrap/config.json">
-      <publishTime>05/22/2017 13:17:07</publishTime>
+      <publishTime>09/28/2017 09:39:16</publishTime>
     </File>
     <File Include="Content/plugins/bootstrap/css/bootstrap-select.css">
       <publishTime>06/30/2017 14:57:11</publishTime>
     </File>
     <File Include="Content/plugins/bootstrap/css/bootstrap-theme.css">
-      <publishTime>11/15/2016 11:34:09</publishTime>
+      <publishTime>09/28/2017 09:39:16</publishTime>
     </File>
     <File Include="Content/plugins/bootstrap/css/bootstrap-theme.min.css">
-      <publishTime>11/15/2016 11:34:09</publishTime>
+      <publishTime>09/28/2017 09:39:16</publishTime>
     </File>
     <File Include="Content/plugins/bootstrap/css/bootstrap.css">
-      <publishTime>11/15/2016 11:34:09</publishTime>
+      <publishTime>09/28/2017 09:39:16</publishTime>
     </File>
     <File Include="Content/plugins/bootstrap/css/bootstrap.min.css">
-      <publishTime>11/15/2016 11:34:09</publishTime>
+      <publishTime>09/28/2017 09:39:16</publishTime>
     </File>
     <File Include="Content/plugins/bootstrap/fonts/glyphicons-halflings-regular.eot">
       <publishTime>05/22/2017 13:21:33</publishTime>
     </File>
     <File Include="Content/plugins/bootstrap/fonts/glyphicons-halflings-regular.svg">
-      <publishTime>05/22/2017 13:21:48</publishTime>
+      <publishTime>09/28/2017 09:39:16</publishTime>
     </File>
     <File Include="Content/plugins/bootstrap/fonts/glyphicons-halflings-regular.ttf">
       <publishTime>05/22/2017 13:21:47</publishTime>
@@ -452,43 +485,43 @@
       <publishTime>05/22/2017 13:21:45</publishTime>
     </File>
     <File Include="Content/plugins/bootstrap/js/bootstrap-toggle.min.js">
-      <publishTime>05/22/2017 13:21:45</publishTime>
+      <publishTime>09/28/2017 09:39:16</publishTime>
     </File>
     <File Include="Content/plugins/bootstrap/js/bootstrap.js">
-      <publishTime>05/22/2017 13:21:48</publishTime>
+      <publishTime>09/28/2017 09:39:16</publishTime>
     </File>
     <File Include="Content/plugins/bootstrap/js/bootstrap.min.js">
-      <publishTime>05/22/2017 13:21:47</publishTime>
+      <publishTime>09/28/2017 09:39:16</publishTime>
     </File>
     <File Include="Content/plugins/Disly/DislyControls.css">
       <publishTime>06/23/2017 11:48:43</publishTime>
     </File>
     <File Include="Content/plugins/Disly/DislyControls.js">
-      <publishTime>08/10/2017 21:27:04</publishTime>
+      <publishTime>09/27/2017 10:02:13</publishTime>
     </File>
     <File Include="Content/plugins/jquery/jquery.cookie.js">
-      <publishTime>05/22/2017 13:17:39</publishTime>
+      <publishTime>09/28/2017 09:39:16</publishTime>
     </File>
     <File Include="Content/plugins/jquery/jquery.history.js">
       <publishTime>05/22/2017 13:17:42</publishTime>
     </File>
     <File Include="Content/plugins/jquery/jquery.js">
-      <publishTime>05/22/2017 13:17:44</publishTime>
+      <publishTime>09/28/2017 09:39:16</publishTime>
     </File>
     <File Include="Content/plugins/jquery/jquery.mask.min.js">
-      <publishTime>05/22/2017 13:17:41</publishTime>
+      <publishTime>09/28/2017 09:39:16</publishTime>
     </File>
     <File Include="Content/plugins/jquery/jquery.maskedinput.js">
-      <publishTime>05/22/2017 13:17:40</publishTime>
+      <publishTime>09/28/2017 09:39:16</publishTime>
     </File>
     <File Include="Content/plugins/jquery/jquery.ui.js">
-      <publishTime>05/22/2017 13:17:45</publishTime>
+      <publishTime>09/28/2017 09:39:16</publishTime>
     </File>
     <File Include="Content/plugins/mCustomScrollbar/jquery.mCustomScrollbar.css">
-      <publishTime>05/22/2017 13:17:43</publishTime>
+      <publishTime>09/28/2017 09:39:16</publishTime>
     </File>
     <File Include="Content/plugins/mCustomScrollbar/jquery.mCustomScrollbar.js">
-      <publishTime>05/22/2017 13:17:43</publishTime>
+      <publishTime>09/28/2017 09:39:16</publishTime>
     </File>
     <File Include="Content/plugins/tinymce/langs/readme.md">
       <publishTime>06/30/2017 13:28:12</publishTime>
@@ -497,7 +530,7 @@
       <publishTime>06/30/2017 13:28:12</publishTime>
     </File>
     <File Include="Content/plugins/tinymce/license.txt">
-      <publishTime>06/30/2017 13:28:12</publishTime>
+      <publishTime>09/28/2017 09:39:16</publishTime>
     </File>
     <File Include="Content/plugins/tinymce/plugins/advlist/plugin.min.js">
       <publishTime>06/30/2017 13:28:12</publishTime>
@@ -530,7 +563,7 @@
       <publishTime>06/30/2017 13:28:12</publishTime>
     </File>
     <File Include="Content/plugins/tinymce/plugins/disly_media/plugin.min.js">
-      <publishTime>06/30/2017 13:31:55</publishTime>
+      <publishTime>09/28/2017 09:39:16</publishTime>
     </File>
     <File Include="Content/plugins/tinymce/plugins/emoticons/img/smiley-cool.gif">
       <publishTime>06/30/2017 13:28:12</publishTime>
@@ -623,7 +656,7 @@
       <publishTime>06/30/2017 13:28:12</publishTime>
     </File>
     <File Include="Content/plugins/tinymce/plugins/media/plugin.min.js">
-      <publishTime>06/30/2017 14:52:45</publishTime>
+      <publishTime>09/28/2017 09:39:16</publishTime>
     </File>
     <File Include="Content/plugins/tinymce/plugins/nonbreaking/plugin.min.js">
       <publishTime>06/30/2017 13:28:12</publishTime>
@@ -665,7 +698,7 @@
       <publishTime>06/30/2017 13:28:12</publishTime>
     </File>
     <File Include="Content/plugins/tinymce/plugins/visualblocks/css/visualblocks.css">
-      <publishTime>06/30/2017 13:28:12</publishTime>
+      <publishTime>09/28/2017 09:39:16</publishTime>
     </File>
     <File Include="Content/plugins/tinymce/plugins/visualblocks/plugin.min.js">
       <publishTime>06/30/2017 13:28:12</publishTime>
@@ -683,13 +716,13 @@
       <publishTime>06/30/2017 13:28:12</publishTime>
     </File>
     <File Include="Content/plugins/tinymce/skins/lightgray/fonts/readme.md">
-      <publishTime>06/30/2017 13:28:12</publishTime>
+      <publishTime>09/28/2017 09:39:16</publishTime>
     </File>
     <File Include="Content/plugins/tinymce/skins/lightgray/fonts/tinymce-small.eot">
       <publishTime>06/30/2017 13:28:12</publishTime>
     </File>
     <File Include="Content/plugins/tinymce/skins/lightgray/fonts/tinymce-small.svg">
-      <publishTime>06/30/2017 13:28:12</publishTime>
+      <publishTime>09/28/2017 09:39:16</publishTime>
     </File>
     <File Include="Content/plugins/tinymce/skins/lightgray/fonts/tinymce-small.ttf">
       <publishTime>06/30/2017 13:28:12</publishTime>
@@ -701,7 +734,7 @@
       <publishTime>06/30/2017 13:28:12</publishTime>
     </File>
     <File Include="Content/plugins/tinymce/skins/lightgray/fonts/tinymce.svg">
-      <publishTime>06/30/2017 13:28:12</publishTime>
+      <publishTime>09/28/2017 09:39:16</publishTime>
     </File>
     <File Include="Content/plugins/tinymce/skins/lightgray/fonts/tinymce.ttf">
       <publishTime>06/30/2017 13:28:12</publishTime>
@@ -746,10 +779,10 @@
       <publishTime>05/22/2017 13:02:06</publishTime>
     </File>
     <File Include="scripts/cms/disly_5.js">
-      <publishTime>08/10/2017 22:14:16</publishTime>
+      <publishTime>09/28/2017 11:24:23</publishTime>
     </File>
     <File Include="scripts/cms/disly_5_login.js">
-      <publishTime>07/06/2017 10:46:02</publishTime>
+      <publishTime>06/07/2017 10:46:02</publishTime>
     </File>
     <File Include="scripts/cms/disly_5_popup.js">
       <publishTime>05/22/2017 13:12:37</publishTime>
@@ -767,10 +800,10 @@
       <publishTime>05/22/2017 13:09:35</publishTime>
     </File>
     <File Include="test.html">
-      <publishTime>08/16/2017 15:19:44</publishTime>
+      <publishTime>09/28/2017 08:47:46</publishTime>
     </File>
     <File Include="UC_params.txt">
-      <publishTime>06/26/2017 12:12:37</publishTime>
+      <publishTime>09/27/2017 11:37:47</publishTime>
     </File>
     <File Include="Userfiles/chuvashia/styles.css">
       <publishTime>05/22/2017 13:12:34</publishTime>
@@ -791,7 +824,7 @@
       <publishTime>05/22/2017 13:12:35</publishTime>
     </File>
     <File Include="Views/Home/Index.cshtml">
-      <publishTime>07/26/2017 13:04:55</publishTime>
+      <publishTime>09/28/2017 09:39:16</publishTime>
     </File>
     <File Include="Views/Home/Modern.cshtml">
       <publishTime>05/22/2017 13:12:57</publishTime>
@@ -818,7 +851,7 @@
       <publishTime>05/22/2017 13:09:46</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>09/11/2017 11:57:35</publishTime>
+      <publishTime>09/28/2017 12:43:22</publishTime>
     </File>
   </ItemGroup>
 </Project>

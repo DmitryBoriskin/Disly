@@ -86,6 +86,11 @@ namespace cms.dbModel.entity
         /// Родительский идентификатор
         /// </summary>
         public Guid? ParentId { get; set; }
+
+        /// <summary>
+        /// Типы меню для элемента карты сайта
+        /// </summary>
+        public string[] MenuGroups { get; set; }
     }
 
     /// <summary>
@@ -102,5 +107,26 @@ namespace cms.dbModel.entity
         /// Пэйджер
         /// </summary>
         public Pager Pager { get; set; }
+    }
+
+    /// <summary>
+    /// Хлебные крошки для карты сайта
+    /// </summary>
+    public class BreadCrumbSiteMap
+    {
+        /// <summary>
+        /// Идентификатор
+        /// </summary>
+        public Guid Id { get; set; }
+
+        /// <summary>
+        /// Название
+        /// </summary>
+        public string Title { get; set; }
+
+        /// <summary>
+        /// Идентификатор родителя
+        /// </summary>
+        public Guid? ParentId { get; set; }
     }
 }
