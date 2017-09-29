@@ -23,7 +23,7 @@
                     <div class="col-lg-3">
                         <div class="li-date">
                             @Convert.ToDateTime(Item.DateBegin).ToString("dd MMMM yyyy")
-                            @if(Item.DateEnd != Item.DateBegin)
+                            @if(Item.DateEnd.Value.Date != Item.DateBegin.Date)
                             {
                                 <span> - </span>
                                 @Convert.ToDateTime(Item.DateEnd).ToString("dd MMMM yyyy")
