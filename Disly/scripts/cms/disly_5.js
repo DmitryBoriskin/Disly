@@ -22,32 +22,37 @@ $(document).ready(function () {
     // События Кнопок
     $('input[type=submit], .button').bind({
         mousedown: function () {
-            var btn_class = $(this).attr('value');
+            //логика всплывающих окон            
+            var Action = $(this).attr('data-action');
+            if (Action.length > 0) {
+                switch (Action) {
+                    case "delete":
+                        $('form input[required]').removeAttr('required');
+                        Confirm('Уведомление', 'Вы хотите удалить эту запись?', $(this));
+                        break;
+                    case "cancel":
+                            if (change != 0) {
+                                Confirm('Уведомление', 'Выйти без изменений?', $(this));
+                            }
+                            else {
+                                $('form input[required]').removeAttr('required');
+                                $(this).trigger('click');
+                            }
+                        break;
+                        //case
+                    default: return false; break;
+                }
+            }
+            
 
-            if (btn_class == 'cancel-btn')
-            {
-                // Показываем диалог при попытке выйти без сохранения данных
-                if (change != 0) {
-                    Confirm('Уведомление', 'Выйти без изменений?', $(this));
-                }
-                else {
-                    $('form input[required]').removeAttr('required');
-                    $(this).trigger('click');
-                }
-                return false;
-            }
-            else if (btn_class == 'delete-btn')
-            {
-                // Показываем диалог при удалении записи
-                Confirm('Уведомление', 'Вы хотите удалить эту запись?', $(this));
-                return false;
-            }
+
         },
         click: function () {
             var btn_class = $(this).attr('value');
             var req_count = $('form input[required]:invalid').length
 
             if (req_count > 0 && btn_class == 'save-btn') {
+            } else if (btn_class == 'no-preloader-btn') {
             }
             else {
                 // показываем preloader при клике на кнопку
@@ -171,6 +176,14 @@ $(document).ready(function () {
 
     // Показываем страницу, убираем preloader
     load_page();
+
+    // Добавляем возможность сортировки
+    $('#sorting_element').click(function () {
+        $('.site_map_list').find('tbody').addClass('sortable');
+        $('.sortable').each(function () {
+            Sorting_init($(this));
+        });
+    });
 });
 
 var validSumm = $('.validation-summary-valid');

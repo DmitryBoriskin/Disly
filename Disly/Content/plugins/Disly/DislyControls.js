@@ -100,25 +100,15 @@
                 });
             function SpotDate() {
                 var time = $InputTime.val();
-                var Length = time.length;                
-                if (Length == 5) {
-                    time = time + ':00';
-                }
-                if (Length == 4) {
-                    time = time + '0:00';
-                }
-                if (Length == 3) {
-                    time = time + '00:00';
-                }
-                if (Length == 2) {
-                    time = time + ':00:00';
-                }
-                if (Length == 1) {
-                    time = time + '0:00:00';
-                }
-                if (Length == 0) {
-                    time = time + '00:00:00';
-                }
+                var Length = time.length;
+                switch (Length) {                    
+                    case (5): time +=       ':00'; break;
+                    case (4): time +=      '0:00'; break;
+                    case (3): time +=     '00:00'; break;
+                    case (2): time +=    ':00:00'; break;
+                    case (1): time +=   '0:00:00'; break;
+                    default:  time +=  '00:00:00'; break;
+                }               
                 $TargetInput.attr('value', $InputDate.val() + ' ' + time); 
             }
         }

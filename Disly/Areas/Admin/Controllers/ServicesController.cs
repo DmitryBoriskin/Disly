@@ -13,12 +13,22 @@ namespace Disly.Areas.Admin.Controllers
 {
     public class ServicesController : CoreController
     {
+        private string domain;
+
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             base.OnActionExecuting(filterContext);
 
             ViewBag.ControllerName = (String)RouteData.Values["controller"];
             ViewBag.ActionName = RouteData.Values["action"].ToString().ToLower();
+
+            string _domain = HttpContext.Request.Url.Host.ToString().ToLower().Replace("www.", "").Replace("new.", "");
+            try { domain = _cmsRepository.getSiteId(_domain); }
+            catch
+            {
+                if (_domain != ConfigurationManager.AppSettings["BaseURL"]) filterContext.Result = Redirect("/Error/");
+                else domain = String.Empty;
+            }
         }
 
         /// <summary>
@@ -225,6 +235,17 @@ namespace Disly.Areas.Admin.Controllers
         //}
         #endregion
 
+        #region Карта сайта
+        [HttpGet]
+        public ActionResult MenuGroup(string id)
+        {
+            //UsersGroupModel model = _cmsRepository.getUsersGroup(id);
+
+            //return PartialView("UsersGroup", model);
+            return null;
+        }
+        #endregion
+
         /// <summary>
         /// Изменение позиции в списке
         /// </summary>
@@ -241,6 +262,9 @@ namespace Disly.Areas.Admin.Controllers
             {
                 case "cmsmenu":
                     Result = _cmsRepository.permit_cmsMenu(id, permit, AccountInfo.id, RequestUserInfo.IP);
+                    break;
+                case "sitemap":
+                    Result = _cmsRepository.permit_SiteMap(id, permit, domain);
                     break;
             }
 

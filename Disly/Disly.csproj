@@ -436,6 +436,7 @@
     <Content Include="Areas\Admin\Views\Orgs\part\bread.cshtml" />
     <Content Include="Areas\Admin\Views\Vacancy\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Vacancy\Item.cshtml" />
+    <Content Include="Areas\Admin\Views\Shared\Partial\BreadCrumbSiteMap.cshtml" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <Content Include="Views\_ViewStart.cshtml" />
     <None Include="Web.Debug.config">
