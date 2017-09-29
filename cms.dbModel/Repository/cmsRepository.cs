@@ -66,11 +66,18 @@ namespace cms.dbModel
         public abstract bool insertCmsEvent(EventModel eventData);
         public abstract bool deleteCmsEvent(Guid id);
 
-        
-        
+
         // Персоны
         public abstract UsersList getPersonList(FilterParams filtr);
         public abstract UsersModel getPerson(Guid id);
+
+        // Vacancies
+        public abstract VacanciesList getVacanciesList(FilterParams filtr);
+        public abstract VacancyModel getVacancy(Guid id);
+
+        public abstract bool insertCmsVacancy(VacancyModel vacancy);
+        public abstract bool updateCmsVacancy(VacancyModel vacancy);
+        public abstract bool deleteCmsVacancy(Guid id);
 
         //Orgs
         public abstract OrgsModel[] getOrgs(FilterParams filtr);
@@ -85,6 +92,7 @@ namespace cms.dbModel
         public abstract bool insDepartmentsPhone(Guid idDepart, string Label, string Value);
         public abstract bool delDepartmentsPhone(int id);
         public abstract People[] getPeopleDepartment(Guid idDepart);
+        
         //Feedbacks
         public abstract FeedbacksList getFeedbacksList(FilterParams filtr);
         public abstract FeedbackModel getFeedback(Guid id);

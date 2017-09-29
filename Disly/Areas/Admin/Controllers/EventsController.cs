@@ -67,7 +67,6 @@
             if (model.Item == null)
                 model.Item = new EventModel()
                 {
-                    Date = DateTime.Now,
                     DateBegin = DateTime.Now
                 };
             return View("Item", model);

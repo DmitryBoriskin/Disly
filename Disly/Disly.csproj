@@ -290,6 +290,7 @@
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
     <Compile Include="Areas\Admin\Controllers\AccountController.cs" />
     <Compile Include="Areas\Admin\Controllers\cmsMenuController.cs" />
+    <Compile Include="Areas\Admin\Controllers\VacancyController.cs" />
     <Compile Include="Areas\Admin\Controllers\FeedbacksController.cs" />
     <Compile Include="Areas\Admin\Controllers\EventsController.cs" />
     <Compile Include="Areas\Admin\Controllers\MainController.cs">
@@ -307,6 +308,7 @@
     <Compile Include="Areas\Admin\Models\AccountModel.cs" />
     <Compile Include="Areas\Admin\Controllers\CoreController.cs" />
     <Compile Include="Areas\Admin\Models\cmsMenuViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\VacancyViewModel.cs" />
     <Compile Include="Areas\Admin\Models\FeadbacksViewModel.cs" />
     <Compile Include="Areas\Admin\Models\EventsViewModel.cs" />
     <Compile Include="Areas\Admin\Models\FiltrModel.cs.cs" />
@@ -432,6 +434,8 @@
     <Content Include="Areas\Admin\Views\Events\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Events\Item.cshtml" />
     <Content Include="Areas\Admin\Views\Orgs\part\bread.cshtml" />
+    <Content Include="Areas\Admin\Views\Vacancy\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\Vacancy\Item.cshtml" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <Content Include="Views\_ViewStart.cshtml" />
     <None Include="Web.Debug.config">

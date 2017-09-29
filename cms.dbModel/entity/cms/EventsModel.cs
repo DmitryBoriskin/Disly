@@ -50,12 +50,6 @@ namespace cms.dbModel.entity
         /// </summary>
         public string UrlName { get; set; }
         /// <summary>
-        /// Дата публикации
-        /// </summary>
-        [Display(Name = "Дата публикации")]
-        [Required(ErrorMessage = "Поле «Название» не должно быть пустым.")]
-        public DateTime Date { get; set; }
-        /// <summary>
         /// Дата начала события
         /// </summary>
         [Display(Name = "Дата начала события")]
