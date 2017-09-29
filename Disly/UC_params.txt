@@ -28,3 +28,4 @@ input type=text
 
 button
 	data-primary = "true"	- кнопка будет реагировать на правильность заполнения формы
+	value = "no-preloader-btn" - нажатие по кнопке не вызывает прелоадер

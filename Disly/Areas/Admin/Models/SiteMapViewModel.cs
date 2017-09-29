@@ -28,5 +28,15 @@ namespace Disly.Areas.Admin.Models
         /// Список типов страниц
         /// </summary>
         public Catalog_list[] FrontSectionList { get; set; }
+
+        /// <summary>
+        /// Список доступных типов меню
+        /// </summary>
+        public Catalog_list[] MenuTypes { get; set; }
+
+        /// <summary>
+        /// Хлебные крошки 
+        /// </summary>
+        public BreadCrumbSiteMap[] BreadCrumbs { get; set; }
     }
 }

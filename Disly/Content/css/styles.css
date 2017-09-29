@@ -936,6 +936,8 @@ a.button  {
 }
 
 /* Иконки вложенностей */
+.bubble_but{float:right;}
+.bubble_but>a{display:inline-block;}
 .sort-element:before{
     font-family: fontello;
     margin-right: 10px;

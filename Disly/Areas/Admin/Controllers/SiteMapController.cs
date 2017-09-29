@@ -32,7 +32,8 @@ namespace Disly.Areas.Admin.Controllers
                 Account = AccountInfo,
                 Settings = SettingsInfo,
                 UserResolution = UserResolutionInfo,
-                FrontSectionList = _cmsRepository.getSiteMapFrontSectionList()
+                FrontSectionList = _cmsRepository.getSiteMapFrontSectionList(),
+                MenuTypes = _cmsRepository.getSiteMapMenuTypes()
             };
 
             string _domain = HttpContext.Request.Url.Host.ToString().ToLower().Replace("www.", "").Replace("new.", "");
@@ -69,6 +70,16 @@ namespace Disly.Areas.Admin.Controllers
         {
             // текущий элемент карты сайта
             model.Item = _cmsRepository.getSiteMapItem(id);
+            var m = new MultiSelectList(model.MenuTypes, "value", "text", model.Item != null ?  model.Item.MenuGroups : null);
+            ViewBag.GroupMenu = m;
+
+            if (model.Item != null)
+                model.Item.MenuGroups = null;
+
+            Guid? _parent = (parent.Equals(null) && model.Item != null) ? model.Item.ParentId : parent;
+
+            // хлебные крошки
+            model.BreadCrumbs = _cmsRepository.getSiteMapBreadCrumbs(_parent);
 
             // список дочерних элементов
             model.Childrens = _cmsRepository.getSiteMapChildrens(id);
@@ -88,7 +99,7 @@ namespace Disly.Areas.Admin.Controllers
             back_model.Item.ParentId = parent; // родительский id
 
             back_model.Item.Path = back_model.Item.ParentId.Equals(null) ? "/"
-                : _cmsRepository.getSiteMapItem((Guid)back_model.Item.ParentId).Path + _cmsRepository.getSiteMapItem((Guid)back_model.Item.ParentId).Alias;
+                : _cmsRepository.getSiteMapItem((Guid)back_model.Item.ParentId).Path + "/" + _cmsRepository.getSiteMapItem((Guid)back_model.Item.ParentId).Alias;
 
             back_model.Item.Site = domain;
 
@@ -100,6 +111,12 @@ namespace Disly.Areas.Admin.Controllers
             {
                 back_model.Item.Alias = Transliteration.Translit(back_model.Item.Alias);
             }
+
+            // хлебные крошки
+            model.BreadCrumbs = _cmsRepository.getSiteMapBreadCrumbs(parent);
+
+            // список дочерних элементов
+            model.Childrens = _cmsRepository.getSiteMapChildrens(id);
             #endregion
 
             if (ModelState.IsValid)
@@ -114,6 +131,13 @@ namespace Disly.Areas.Admin.Controllers
                     _cmsRepository.createSiteMapItem(id, back_model.Item, AccountInfo.id, RequestUserInfo.IP);
                     userMessage.info = "Запись добавлена";
                 }
+
+                string backUrl = back_model.Item.ParentId != null ? "item/" + back_model.Item.ParentId : string.Empty;
+
+                userMessage.buttons = new ErrorMassegeBtn[]{
+                     new ErrorMassegeBtn { url = StartUrl + backUrl, text = "Вернуться в список" },
+                     new ErrorMassegeBtn { url = "#", text = "ок", action = "false" }
+                 };
             }
             else
             {
@@ -125,6 +149,11 @@ namespace Disly.Areas.Admin.Controllers
             }
 
             model.Item = _cmsRepository.getSiteMapItem(id);
+
+            var m = new MultiSelectList(model.MenuTypes, "value", "text", model.Item.MenuGroups);
+            ViewBag.GroupMenu = m;
+            model.Item.MenuGroups = null;
+
             model.ErrorInfo = userMessage;
 
             return View(model);
@@ -132,14 +161,16 @@ namespace Disly.Areas.Admin.Controllers
         
         [HttpPost]
         [MultiButton(MatchFormKey = "action", MatchFormValue = "cancel-btn")]
-        public ActionResult Cancel(Guid id)
+        public ActionResult Cancel(Guid id, Guid? parent)
         {
-            // получим родительский элемент для перехода
-            var parent = _cmsRepository.getSiteMapItem(id).ParentId;
+            var p = _cmsRepository.getSiteMapItem(id);
 
-            if (parent != null)
+            // получим родительский элемент для перехода
+            var _parent = (parent.Equals(null) && p != null) ? p.ParentId : parent;
+
+            if (_parent != null)
             {
-                return RedirectToAction("Item", new { id = parent });
+                return RedirectToAction("Item", new { id = _parent });
             }
             return Redirect(StartUrl + Request.Url.Query);
         }
@@ -168,7 +199,7 @@ namespace Disly.Areas.Admin.Controllers
             }
             else
             {
-                return RedirectToAction("Item", new { model.Item.ParentId });
+                return RedirectToAction("Item", new { id = model.Item.ParentId });
             }
         }
     }
