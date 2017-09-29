@@ -1192,7 +1192,6 @@ namespace cms.dbase
 
 
         #region Orgs
-
         public override OrgsModel[] getOrgs(FilterParams filtr)
         {
             using (var db = new CMSdb(_context))
@@ -1227,7 +1226,6 @@ namespace cms.dbase
                 return null;
             }
         }
-
         public override bool setOrgs(Guid id, OrgsModel model)
         {
             using (var db = new CMSdb(_context))
@@ -1241,8 +1239,7 @@ namespace cms.dbase
                 }
                 return false;                
             }
-        }
-        
+        }        
         public override StructureModel[] getStructureList(Guid id)
         {
             using (var db = new CMSdb(_context))
@@ -1269,6 +1266,7 @@ namespace cms.dbase
                 {
                     return data.Select(s => new StructureModel {
                                 Id=s.id,
+                                OrgId=s.f_ord,
                                 Title=s.c_title,
                                 Adress=s.c_adress,
                                 GeopointX=s.n_geopoint_x,
@@ -1285,9 +1283,71 @@ namespace cms.dbase
                                 //f_direcor
                     }).FirstOrDefault();
                 }
-                return new StructureModel();
+                return null;
             }
-        }        
+        }   
+        public override bool insStructure(Guid id, Guid OrgId, StructureModel insert)
+        {
+            using (var db = new CMSdb(_context))
+            {                
+                db.content_org_structures
+                  .Value(v => v.id, id)
+                  .Value(v => v.f_ord, OrgId)
+                  .Value(v => v.c_title, insert.Title)
+                  .Value(v => v.c_adress, insert.Adress)
+                  .Value(v => v.n_geopoint_x, insert.GeopointX)
+                  .Value(v => v.n_geopoint_y, insert.GeopointY)
+                  .Value(v => v.c_phone, insert.Phone)
+                  .Value(v => v.c_phone_reception, insert.PhoneReception)
+                  .Value(v => v.c_fax, insert.Fax)
+                  .Value(v => v.c_email, insert.Email)
+                  .Value(v => v.c_routes, insert.Routes)
+                  .Value(v => v.c_schedule, insert.Schedule)
+                  .Value(v => v.c_director_post, insert.DirecorPost)
+                  .Value(v => v.f_director, insert.DirectorF)
+                  .Insert();
+                return true;
+            }
+        }
+        public override bool setStructure(Guid id, StructureModel insert)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var data = db.content_org_structures.Where(w => w.id == id);
+                if (data.Any())
+                {
+                    data
+                    .Set(v => v.c_title, insert.Title)
+                    .Set(v => v.c_adress, insert.Adress)
+                    .Set(v => v.n_geopoint_x, insert.GeopointX)
+                    .Set(v => v.n_geopoint_y, insert.GeopointY)
+                    .Set(v => v.c_phone, insert.Phone)
+                    .Set(v => v.c_phone_reception, insert.PhoneReception)
+                    .Set(v => v.c_fax, insert.Fax)
+                    .Set(v => v.c_email, insert.Email)
+                    .Set(v => v.c_routes, insert.Routes)
+                    .Set(v => v.c_schedule, insert.Schedule)
+                    .Set(v => v.c_director_post, insert.DirecorPost)
+                    .Set(v => v.f_director, insert.DirectorF)
+                    .Update();
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+        }
+        public override bool delStructure(Guid id)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var data = db.content_org_structures.Where(w => w.id == id);
+                if (data.Any()) { data.Delete(); return true; }
+                return false;
+            }
+        }
+
         /// <summary>
         /// Отделение
         /// </summary>
@@ -1381,17 +1441,17 @@ namespace cms.dbase
                 if (type == "structure")
                 {
                     var data = db.content_org_structures.Where(w => w.id == id).FirstOrDefault();
-                    var ParentStructure = db.content_org_structures.Where(w => w.id == data.id).FirstOrDefault();
+                    var ParentStructure = db.content_orgss.Where(w => w.id == data.f_ord).FirstOrDefault();
 
                     MyBread.Push(new BreadCrumb
                     {
-                        Title = data.c_title,
-                        Url = "/admin/orgs/item/" + data.f_ord
+                        Title = ParentStructure.c_title,
+                        Url = "/admin/orgs/item/" + ParentStructure.id
                     });
                     MyBread.Push(new BreadCrumb
                     {
-                        Title = ParentStructure.c_title,
-                        Url = "/admin/orgs/structure/" + ParentStructure.id
+                        Title = data.c_title,
+                        Url = "/admin/orgs/structure/" + data.id
                     });
                 }
                 #endregion
@@ -1470,15 +1530,79 @@ namespace cms.dbase
                 if (data.Any()) return data.ToArray();
                 return null; 
             }          
-        }     
+        }
+
+
+        public override bool insDepartament(Guid id, Guid Structure, Departments insert)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                content_departments cdDepart = db.content_departmentss
+                                                 .Where(p => p.id == id)
+                                                 .SingleOrDefault();
+                if (cdDepart != null)
+                {
+                    throw new Exception("Запись с таким Id уже существует");
+                }
+                cdDepart = new content_departments
+                {
+                    id = id,
+                    f_structure = Structure,
+                    c_title = insert.Title
+                };
+                using (var tran = db.BeginTransaction())
+                {
+                    db.Insert(cdDepart);
+                    tran.Commit();                    
+                }                
+                return true;
+            }
+        }
+        public override bool updDepartament(Guid id, Departments insert)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                content_departments cdDepart = db.content_departmentss
+                                              .Where(p => p.id == id)
+                                              .SingleOrDefault();
+                if(cdDepart==null)
+                {
+                    throw new Exception("Запись с таким Id не существует");
+                }
+                cdDepart.c_title = insert.Title;
+                using (var tran = db.BeginTransaction())
+                {
+                    db.Update(cdDepart);
+                    tran.Commit();                    
+                }
+                return true;
+            }
+        }
+        public override bool delDepartament(Guid id)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                content_departments cdDepart = db.content_departmentss
+                                                .Where(p => p.id == id)
+                                                .SingleOrDefault();
+                if (cdDepart == null)
+                {
+                    throw new Exception("Запись с таким Id не найдена");
+                }
+                using (var tran = db.BeginTransaction())
+                {
+                    db.Delete(cdDepart);
+                    tran.Commit();                    
+                }
+                return true;
+            }
+        }
 
 
 
-    
-     
         #endregion
 
-     
+
 
         #region Person
         public override UsersList getPersonList(FilterParams filtr)

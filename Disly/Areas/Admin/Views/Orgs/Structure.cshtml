@@ -8,12 +8,12 @@
         @Html.TextBoxFor(m => m.StructureItem.Title, new { required = "", type = "text", maxlength = "256", title = "Название подразделения" })               
         <div class="group-block open" title="Телефон и e-mail">
             <div class="row">
-                <div class="col-md-4">@Html.TextBoxFor(m => m.StructureItem.Phone, new { type = "text", maxlength = "256", title = "Телефон приемной:" })</div>
-                <div class="col-md-4">@Html.TextBoxFor(m => m.StructureItem.PhoneReception, new { type = "text", maxlength = "256", title = "Телефон регистраутры:" })</div>
-                <div class="col-md-4">@Html.TextBoxFor(m => m.StructureItem.Fax, new { type = "text", maxlength = "256", title = "Факс:" })</div>
+                <div class="col-md-4">@Html.TextBoxFor(m => m.StructureItem.Phone, new { type = "text", maxlength = "256", title = "Телефон приемной" })</div>
+                <div class="col-md-4">@Html.TextBoxFor(m => m.StructureItem.PhoneReception, new { type = "text", maxlength = "256", title = "Телефон регистраутры" })</div>
+                <div class="col-md-4">@Html.TextBoxFor(m => m.StructureItem.Fax, new { type = "text", maxlength = "256", title = "Факс" })</div>
             </div>
             <div class="row">
-                <div class="col-md-4">@Html.TextBoxFor(m => m.StructureItem.Email, new { type = "text", maxlength = "256", title = "E-mail приемной:" })</div>
+                <div class="col-md-4">@Html.TextBoxFor(m => m.StructureItem.Email, new { type = "text", maxlength = "256", title = "E-mail приемной" })</div>
             </div>
         </div>
         <div class="group-block open" title="Адрес">
@@ -34,44 +34,50 @@
             @Html.TextAreaFor(m => m.StructureItem.Schedule, new { type = "editor", title = "Текст", height = "100" })
         </div>
 
-
-        <div class="child-list">
-            <div class="child-list_head">
-                <div class="row">
-                    <div class="col-lg-8"><h1>Отделения</h1></div>
-                    <div class="col-lg-4 text-right"><button class="button icon-create green pull-right" type="submit" name="action" value="structure-ins">Добавить</button></div>
+        @if (Model.StructureItem != null)
+        {
+            <div class="child-list">
+                <div class="child-list_head">
+                    <div class="row">
+                        <div class="col-lg-8"><h1>Отделения</h1></div>
+                        <div class="col-lg-4 text-right"><button class="button icon-create green pull-right" type="submit" name="action" value="departaments-ins">Добавить</button></div>
+                    </div>
                 </div>
+                <div class="site_map_list">
+                    <table class="table table-striped">
+                        <tr>
+                            <th>&nbsp;</th>
+                            <th>Название</th>
+                        </tr>
+                        @if (Model.StructureItem.Departments != null)
+                        {
+                            foreach (var item in Model.StructureItem.Departments)
+                            {
+                                <tr>
+                                    <td class="map_site_icon"></td>
+                                    <td>
+                                        <a href="/admin/orgs/department/@item.Id">@item.Title</a>
+                                    </td>
+                                </tr>
+
+                            }
+                        }
+                    </table>
+                </div>
+
             </div>
-            <div class="site_map_list">
-                <table class="table table-striped">
-                    <tr>
-                        <th>&nbsp;</th>
-                        <th>Название</th>
-                    </tr>
-            @if (Model.StructureItem.Departments != null)
-            {
-                foreach (var item in Model.StructureItem.Departments)
-                {
-                    <tr>
-                        <td class="map_site_icon"></td>
-                        <td>
-                            <a href="/admin/orgs/department/@item.Id">@item.Title</a>
-                        </td>
-                    </tr>
-
-                }
-            }
-
-
-                </table>
-            </div>
-
-        </div>
+        }
+        else
+        {
+            <p>
+                <br />
+                Отделения можно добавлять только после создания струкутурного подразделения. 
+            </p>
+        }
 
     </div>
     <div class="dop_info-block">
         <div class="dop-caption">Дополнительно</div>
-
     </div>
 }
 else
@@ -82,11 +88,11 @@ else
 <div class="buttons">
     @if ((Model.Item != null && Model.UserResolution.Change) || (Model.Item == null && Model.UserResolution.Write))
     {
-        <button type="submit" name="action" value="save-btn" data-primary="true" class="button icon-create">Сохранить</button>
+        <button type="submit" name="action" value="save-structure-btn" data-primary="true" class="button icon-create">Сохранить</button>
     }
-    @if (Model.Item != null && Model.UserResolution.Delete)
+    @if (Model.StructureItem != null && Model.UserResolution.Delete)
     {
-        <button type="submit" name="action" value="delete-btn" class="button icon-delete">Удалить</button>
+        <button type="submit" name="action" value="delete-structure-btn" data-action="delete" class="button icon-delete">Удалить</button>
     }
-    <button type="submit" name="action" value="cancel-btn" class="button icon-cancel">Закрыть</button>
+    <button type="submit" name="action" value="cancel-btn" data-action="cancel" class="button icon-cancel">Закрыть</button>
 </div>
