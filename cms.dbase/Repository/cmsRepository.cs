@@ -1741,11 +1741,27 @@ namespace cms.dbase
         {
             using (var db = new CMSdb(_context))
             {
+                //Guid? menuId = null;
+                //var joinData = new List<Guid>();
+                //if (!string.IsNullOrEmpty(filtr.Group))
+                //{
+                //    menuId = Guid.Parse(filtr.Group);
+                //    joinData = (from s in db.content_sitemaps
+                //                    join m in db.content_sitemap_menutypess
+                //                    on s.id equals m.f_sitemap
+                //                    where m.f_menutype.Equals(menuId)
+                //                    select m.f_sitemap).ToList();
+                //}
+
                 var query = db.content_sitemaps
                     .Where(w => w.f_site.Equals(site))
                     .Where(w => !w.id.Equals(null))
                     .Where(w => w.uui_parent.Equals(null))
                     .Where(w => !w.c_alias.Equals(" "));
+                //if (menuId != null)
+                //{
+                //    query.Any(s => joinData.Contains(s.id));
+                //}
 
                 if (query.Any())
                 {

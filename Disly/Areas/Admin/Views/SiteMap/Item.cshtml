@@ -14,16 +14,23 @@
             <div class="group-block" title="Текст">
                 @Html.TextAreaFor(m => m.Item.Text, new { @type = "editor", @height = "300" })
             </div>
-
-            <div class="bubble_but">
-                @if (Model.UserResolution.Write && Model.Item != null)
-                {
-                    <a class="button icon-create green" href="/admin/sitemap/item/@Guid.NewGuid()/?parent=@Model.Item.Id">Создать вложенность</a>
-                }
-                @if (Model.Childrens != null && Model.Childrens.Count() > 1)
-                {
-                    <a class="button icon-sort" value="no-preloader-btn" id="sorting_element" title="Добавляет возможность сортировки элементов списка">Сортировать</a>
-                }
+            
+            <div class="row">
+                <div class="col-sm-5">
+                    <h3 class="nesting_title">Список вложенностей</h3>
+                </div>
+                <div class="col-sm-7">
+                    <div class="bubble_but">
+                        @if (Model.UserResolution.Write && Model.Item != null)
+                        {
+                            <a class="button icon-create green" href="/admin/sitemap/item/@Guid.NewGuid()/?parent=@Model.Item.Id">Добавить</a>
+                        }
+                        @if (Model.Childrens != null && Model.Childrens.Count() > 1)
+                        {
+                            <a class="button icon-sort" value="no-preloader-btn" id="sorting_element" title="Добавляет возможность сортировки элементов списка">Сортировать</a>
+                        }
+                    </div>
+                </div>
             </div>
 
             @if (Model.Childrens != null)

@@ -936,6 +936,10 @@ a.button  {
 }
 
 /* Иконки вложенностей */
+h3.nesting_title{
+    font-weight:300 !important;
+    margin-top:12px;
+}
 .bubble_but{float:right;}
 .bubble_but>a{display:inline-block;}
 .sort-element:before{

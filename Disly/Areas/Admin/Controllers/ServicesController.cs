@@ -235,6 +235,17 @@ namespace Disly.Areas.Admin.Controllers
         //}
         #endregion
 
+        #region Карта сайта
+        [HttpGet]
+        public ActionResult MenuGroup(string id)
+        {
+            //UsersGroupModel model = _cmsRepository.getUsersGroup(id);
+
+            //return PartialView("UsersGroup", model);
+            return null;
+        }
+        #endregion
+
         /// <summary>
         /// Изменение позиции в списке
         /// </summary>

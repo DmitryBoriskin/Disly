@@ -7,6 +7,25 @@
         <ol class="breadcrumb">
             <li><a href="/admin/sitemap/">Главная</a></li>
         </ol>
+
+        <div class="row">
+            <div class="col-sm-5">
+                <h3 class="nesting_title">Список вложенностей</h3>
+            </div>
+            <div class="col-sm-7">
+                <div class="bubble_but">
+                    @if (Model.UserResolution.Write)
+                    {
+                        <a class="button icon-create green" href="/admin/sitemap/item/@Guid.NewGuid()/">Добавить</a>
+                    }
+                    @if (Model.List.Data != null && Model.List.Data.Count() > 1)
+                    {
+                        <a class="button icon-sort" value="no-preloader-btn" id="sorting_element" title="Добавляет возможность сортировки элементов списка">Сортировать</a>
+                    }
+                </div>
+            </div>
+        </div>
+
         @if (Model.List != null)
         {
             <div class="site_map_list">
@@ -50,22 +69,20 @@
                 </table>
             </div>
         }
-
-        <div class="bubble_but">
-            @if (Model.UserResolution.Write)
-                {
-                <a class="button icon-create green" href="/admin/sitemap/item/@Guid.NewGuid()/">Создать вложенность</a>
-            }
-            @if (Model.List.Data != null && Model.List.Data.Count() > 1)
-            {
-                <a class="button icon-sort" value="no-preloader-btn" id="sorting_element" title="Добавляет возможность сортировки элементов списка">Сортировать</a>
-            }
-        </div>
-
     </div>
 
     <div class="dop_info-block">
-        <div class="dop-caption">Меню</div>
+        <div class="dop-caption">Фильтр</div>
+        @{ Html.RenderAction("Filtr", "Templates", new { @Title = "Группы меню", @Alias = "group", @Icon = "icon-th-list-3", @Url = "/admin/services/MenuGroup/", @BtnName = "Новая группа меню", @Items = Model.MenuTypes }); }
+        @*@if (Model.MenuTypes != null)
+        {
+            <select class="selectpicker" title="Группа меню">
+                @foreach (var item in Model.MenuTypes)
+                {
+                    <option value="@item.value">@item.text</option>
+                }
+            </select>
+        }*@
     </div>
     <div class="buttons"></div>
 }
