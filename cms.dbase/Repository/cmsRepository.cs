@@ -1103,6 +1103,11 @@ namespace cms.dbase
                         n_date_begin_day = int.Parse(eventData.DateBegin.ToString("MMdd")),
                         n_date_end_day = int.Parse(EndDate.ToString("MMdd"))
                     };
+                    if(!eventData.Annually)
+                    {
+                        cdEvent.n_date_begin_year = eventData.DateBegin.Year;
+                        cdEvent.n_date_end_year = eventData.DateEnd.Value.Year;
+                    }
 
                     using (var tran = db.BeginTransaction())
                     {
@@ -1151,6 +1156,17 @@ namespace cms.dbase
                     cdEvent.c_url_name = eventData.UrlName;
                     cdEvent.n_date_begin_day = int.Parse(eventData.DateBegin.ToString("MMdd"));
                     cdEvent.n_date_end_day = int.Parse(EndDate.ToString("MMdd"));
+
+                    if (!eventData.Annually)
+                    {
+                        cdEvent.n_date_begin_year = eventData.DateBegin.Year;
+                        cdEvent.n_date_end_year = eventData.DateEnd.Value.Year;
+                    }
+                    else
+                    {
+                        cdEvent.n_date_begin_year = null;
+                        cdEvent.n_date_end_year = null;
+                    }
 
                     using (var tran = db.BeginTransaction())
                     {
@@ -1602,8 +1618,6 @@ namespace cms.dbase
             }
         }
         #endregion
-
-
 
         #region Person
         public override UsersList getPersonList(FilterParams filtr)
