@@ -393,11 +393,26 @@ a.link-close:before {
     font-size: 1.3em;
 }
 .li-desc {
-    padding: 0 0 3px;
+    margin-top:10px;
+    font-size:0.9em;
+}
+.li-divider{
+    border-top:1px solid rgb(245, 248, 250);
+    padding-top:5px;
 }
 .li-desc span {
     font-weight: 500;
 }
+.li-isNew{
+    margin-top: 6px;
+}
+.li-date{
+    margin-top: 6px;
+    background-color: rgb(245, 248, 250);
+    padding: 5px;
+    padding-left:10px;
+}
+
 .disabled,
 .disabled .li-caption,
 .disabled a,
@@ -537,6 +552,9 @@ a.link-close:before {
 /* --------- Users.aspx  ------------ */
 
 /* ------- // Users.aspx  ----------- */
+
+.child-list{}
+.child-list_head h1{display:inline-block;}
 
 
 
@@ -941,3 +959,25 @@ a.button  {
     content: '\e88d';
 }
 /*  */
+}
+.icon-layers:before {
+    content: '\eead';
+}
+.row {
+    margin-left: -5px;
+    margin-right: -5px;
+}
+
+[class^=col],
+[class^=col] {
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+.depart_phone_wr{position:relative}
+.depart_phone_del{position:absolute;top:30px; right:7px;display:block;cursor:pointer;}
+.depart_phone_del:hover{text-decoration:none;}
+.depart_phone_del:before{content:'\ec5b';font-family:fontello;color:red;}
+.depart_phone_del:hover:before{color:#c50505;}
+
+.breadcrumb > li{display:inline;}

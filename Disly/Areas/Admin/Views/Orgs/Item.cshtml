@@ -1,0 +1,94 @@
+﻿@model OrgsViewModel
+
+@if (Model.UserResolution.Write)
+{
+    <div class="content">
+        <h1>@ViewBag.Title</h1>
+        @Html.TextBoxFor(m => m.Item.Title, new { required = "", type = "text", maxlength = "256", title = "Полное название" })
+        @Html.TextBoxFor(m => m.Item.ShortTitle, new { required = "", type = "text", maxlength = "128", title = "Краткое название" })
+        <div class="row">
+            <div class="col-lg-6">
+                <select title="Тип финансирование" class="selectpicker">
+                    <option value="1">Государственный</option>
+                    <option value="2">Частный</option>                    
+                </select>
+            </div>
+            <div class="col-lg-6">
+                <select title="Тип мед. учреждения" class="selectpicker">
+                    <option value="1">Стоматология</option>
+                    <option value="2">Трамвотология</option>                    
+                </select>
+            </div>
+        </div>
+        
+        <select class="selectpicker" title="Направления деятельности" multiple>
+            <option value="1">Сестринское дело</option>
+            <option value="2">Генетика</option>
+            <option value="3">Рентегенология</option>
+            <option value="4">Лучевая диагностика</option>
+        </select>
+
+        @if (Model.Item != null)
+        {
+            <div class="child-list">
+                <div class="child-list_head">
+                    <div class="row">
+                        <div class="col-lg-8"><h1>Структурные подразделения</h1></div>
+                        <div class="col-lg-4 text-right"><a class="button icon-create green pull-right" href="/admin/orgs/structure/@Guid.NewGuid()?orgid=@Model.Item.Id">Добавить</a></div>
+                    </div>
+                </div>
+                <div class="site_map_list">
+                    <table class="table table-striped">
+                        <tr>
+                            <th>&nbsp;</th>
+                            <th>Название</th>
+                        </tr>
+                        @if (Model.Item.Structure != null)
+                        {
+                            foreach (var item in Model.Item.Structure)
+                            {
+                                <tr>
+                                    <td class="map_site_icon"></td>
+                                    <td>
+                                        <a href="/admin/orgs/structure/@item.Id">@item.Title</a>
+                                    </td>
+                                </tr>
+
+                            }
+                        }
+
+
+                    </table>
+                </div>
+
+            </div>
+
+        }
+        else
+        {
+            <br />
+            <p>Структурные подразделения млжно будет добавить после сохранения организации.</p>
+        }
+       
+        
+    </div>
+    <div class="dop_info-block">
+        <div class="dop-caption">Дополнительно</div>
+    </div>
+}
+else
+{
+    <div class="content"><p>У вас недостаточно прав.</p></div>
+}
+
+<div class="buttons">
+    @if ((Model.Item != null && Model.UserResolution.Change) || (Model.Item == null && Model.UserResolution.Write))
+    {
+        <button type="submit" name="action" value="save-btn" data-primary="true" class="button icon-create">Сохранить</button>
+    }
+    @if (Model.Item != null && Model.UserResolution.Delete)
+    {
+        <button type="submit" name="action" value="delete-btn" class="button icon-delete">Удалить</button>
+    }
+    <button type="submit" name="action" value="cancel-btn" class="button icon-cancel">Закрыть</button>
+</div>

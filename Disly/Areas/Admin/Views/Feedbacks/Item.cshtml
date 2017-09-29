@@ -35,7 +35,7 @@
 
     <div class="dop_info-block">
         <div class="dop-caption">Настройки</div>
-        @Html.TextBoxFor(m => m.Item.Date, new { required = "required", data_type = "datetime", title = "Дата публикации", value = ViewBag.Date })
+        @Html.TextBoxFor(m => m.Item.Date, new { type="text", required = "required", data_type = "datetime", title = "Дата"})
         @*@Html.DropDownListFor(m => m.Item.Type, new SelectList(section[0].Items, "Alias", "Title", 0), new { @class = "uc_input", @title = section[0].Title, @required = "" })
             @Html.DropDownListFor(m => m.Item.Category, new SelectList(section[1].Items, "Alias", "Title", 0), new { @class = "uc_input", @title = section[1].Title, @required = "" })*@
 

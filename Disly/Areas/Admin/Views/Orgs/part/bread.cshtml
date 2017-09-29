@@ -1,0 +1,11 @@
+﻿@model OrgsViewModel
+
+@if (Model.BreadCrumbOrg != null)
+{
+    <ol class="breadcrumb">
+        @foreach (var item in Model.BreadCrumbOrg)
+        {
+            <li><a href="@item.Url">@item.Title</a></li>
+        }
+    </ol>
+}

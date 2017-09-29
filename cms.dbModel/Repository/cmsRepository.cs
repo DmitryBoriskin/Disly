@@ -54,6 +54,10 @@ namespace cms.dbModel
         public abstract MaterialsList getMaterialsList(FilterParams filtr);
         public abstract MaterialsModel getMaterial(Guid id);
 
+        public abstract bool insertCmsMaterial(MaterialsModel material);
+        public abstract bool updateCmsMaterial(MaterialsModel material);
+        public abstract bool deleteCmsMaterial(Guid id);
+
 
         // Events
         public abstract EventsList getEventsList(FilterParams filtr);
@@ -63,13 +67,25 @@ namespace cms.dbModel
         public abstract bool insertCmsEvent(EventModel eventData);
         public abstract bool deleteCmsEvent(Guid id);
 
-        //Orgs
-        public abstract OrgsModel[] getOrgs(FilterParams filtr);
+        
         
         // Персоны
         public abstract UsersList getPersonList(FilterParams filtr);
         public abstract UsersModel getPerson(Guid id);
 
+        //Orgs
+        public abstract OrgsModel[] getOrgs(FilterParams filtr);
+        public abstract OrgsModel getOrgItem(Guid id);
+        public abstract bool setOrgs(Guid id, OrgsModel model);
+        public abstract StructureModel[] getStructureList(Guid id);
+        public abstract StructureModel getStructure(Guid id);
+        public abstract Departments[] getDepartmentsList(Guid id);
+        public abstract Departments getDepartamentItem(Guid id);
+        public abstract DepartmentsPhone[] getDepartmentsPhone(Guid id);
+        public abstract BreadCrumb[] getBreadCrumbOrgs(Guid id, string type);
+        public abstract bool insDepartmentsPhone(Guid idDepart, string Label, string Value);
+        public abstract bool delDepartmentsPhone(int id);
+        public abstract People[] getPeopleDepartment(Guid idDepart);
         //Feedbacks
         public abstract FeedbacksList getFeedbacksList(FilterParams filtr);
         public abstract FeedbackModel getFeedback(Guid id);
