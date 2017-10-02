@@ -54,6 +54,10 @@ namespace cms.dbModel.entity
         public string DirecorPost { get; set; }
         public Guid? DirectorF { get; set; }
         /// <summary>
+        /// true- если это (ФАП/ОВП)
+        /// </summary>
+        public bool Ovp { get; set; }
+        /// <summary>
         /// Отделения
         /// </summary>
         public Departments[] Departments { get; set; }

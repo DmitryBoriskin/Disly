@@ -24,7 +24,8 @@ $(document).ready(function () {
         mousedown: function () {
             //логика всплывающих окон            
             var Action = $(this).attr('data-action');
-            if (Action.length > 0) {
+            if (Action != undefined)
+            {
                 switch (Action) {
                     case "delete":
                         $('form input[required]').removeAttr('required');

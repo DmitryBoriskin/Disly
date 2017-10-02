@@ -64,12 +64,17 @@
         @if (Model.Item != null)
         {
             <div class="child-list">
-                <div class="child-list_head">
-                    <div class="row">
-                        <div class="col-lg-8"><h1>Структурные подразделения</h1></div>
-                        <div class="col-lg-4 text-right"><a class="button icon-create green pull-right" href="/admin/orgs/structure/@Guid.NewGuid()?orgid=@Model.Item.Id">Добавить</a></div>
+
+                <div class="row">
+                    <div class="col-sm-5">
+                        <h3 class="nesting_title">Структурные подразделения</h3>
+                    </div>
+                    <div class="col-sm-7">
+                        <a class="button icon-create green pull-right" href="/admin/orgs/structure/@Guid.NewGuid()?orgid=@Model.Item.Id">Добавить</a>
+                        <a class="button icon-create green pull-right" href="/admin/orgs/ovp/@Guid.NewGuid()?orgid=@Model.Item.Id">Добавить ОВП</a>
                     </div>
                 </div>
+
                 <div class="site_map_list">
                     <table class="table table-striped">
                         <tr>
@@ -83,7 +88,15 @@
                                 <tr>
                                     <td class="map_site_icon"></td>
                                     <td>
-                                        <a href="/admin/orgs/structure/@item.Id">@item.Title</a>
+                                        @if (item.Ovp)
+                                        {
+                                            <a href="/admin/orgs/ovp/@item.Id">@item.Title</a>
+                                        }
+                                        else
+                                        {
+                                            <a href="/admin/orgs/structure/@item.Id">@item.Title</a>
+                                        }
+                                        
                                     </td>
                                 </tr>
 

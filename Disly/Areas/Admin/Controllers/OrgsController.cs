@@ -10,6 +10,7 @@ namespace Disly.Areas.Admin.Controllers
 {
     public class OrgsController : CoreController
     {
+        //ovp- это вьюха объединяющая в себе структурное подразделение и департамент(отдел)
         OrgsViewModel model;
         FilterParams filter;
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
@@ -91,8 +92,8 @@ namespace Disly.Areas.Admin.Controllers
         [MultiButton(MatchFormKey = "action", MatchFormValue = "save-btn")]
         public ActionResult Save(Guid id, OrgsViewModel back_model)
         {
-            ErrorMassege userMassege = new ErrorMassege();
-            userMassege.title = "Информация";
+            ErrorMassege userMessege = new ErrorMassege();
+            userMessege.title = "Информация";
 
             if (ModelState.IsValid)
             {
@@ -118,20 +119,20 @@ namespace Disly.Areas.Admin.Controllers
                 #endregion
 
                 _cmsRepository.setOrgs(id, back_model.Item);
-                userMassege.info = "Запись сохранена";
-                userMassege.buttons = new ErrorMassegeBtn[]{
+                userMessege.info = "Запись сохранена";
+                userMessege.buttons = new ErrorMassegeBtn[]{
                     new ErrorMassegeBtn { url = StartUrl + Request.Url.Query, text = "вернуться в список" },
                     new ErrorMassegeBtn { url = "#", text = "ок", action = "false" }
                 };
             }
             else
             {
-                userMassege.info = "Произошла ошибка";
-                userMassege.buttons = new ErrorMassegeBtn[]{                    
+                userMessege.info = "Произошла ошибка";
+                userMessege.buttons = new ErrorMassegeBtn[]{                    
                     new ErrorMassegeBtn { url = "#", text = "ок", action = "false" }
                 };
             }
-            model.ErrorInfo = userMassege;
+            model.ErrorInfo = userMessege;
             return View("Item", model);
         }
 
@@ -140,15 +141,13 @@ namespace Disly.Areas.Admin.Controllers
         {
             ViewBag.Title = "Структурное подразделение";
             model.StructureItem = _cmsRepository.getStructure(id);//+ список подразделений      
-
-            #region координаты
-            ViewBag.Titlecoord = model.StructureItem.Title;
-            ViewBag.Xcoord = model.StructureItem.GeopointX;
-            ViewBag.Ycoord = model.StructureItem.GeopointY; 
-            #endregion
-
             if (model.StructureItem != null)
             {
+                #region координаты
+                ViewBag.Titlecoord = model.StructureItem.Title;
+                ViewBag.Xcoord = model.StructureItem.GeopointX;
+                ViewBag.Ycoord = model.StructureItem.GeopointY;
+                #endregion
                 model.BreadCrumbOrg = _cmsRepository.getBreadCrumbOrgs(id, ViewBag.ActionName);
             }
             return View("Structure", model);
@@ -249,6 +248,121 @@ namespace Disly.Areas.Admin.Controllers
             model.ErrorInfo = userMassage;
             return View("structure", model);
         }
+
+
+        #region Ovp
+        public ActionResult Ovp(Guid id)
+        {
+            ViewBag.Title = "ОВП/ОФП";
+            var OrgId = Request.Params["orgid"];
+            model.StructureItem = _cmsRepository.getStructure(id);  
+            
+            if (model.StructureItem != null)
+            {
+                if (!model.StructureItem.Ovp)
+                {
+                    return Redirect("/admin/orgs/structure/" + id);//если струкутра с таким id уже существует и не является типом OVP
+                }
+                else
+                {
+                    if (model.StructureItem.Departments.First() != null)
+                    {
+                        model.DepartmentItem = _cmsRepository.getDepartamentItem(model.StructureItem.Departments.First().Id);
+                        model.BreadCrumbOrg = _cmsRepository.getBreadCrumbOrgs(id, ViewBag.ActionName);
+                    }                    
+                }
+            }
+            else
+            {
+                
+
+            }
+            return View("Ovp", model);
+        }
+
+        [HttpPost]
+        [ValidateInput(false)]
+        [MultiButton(MatchFormKey = "action", MatchFormValue = "save-ovp-btn")]
+        public ActionResult SaveOvp(Guid id, OrgsViewModel back_model)
+        {
+            ErrorMassege userMessage = new ErrorMassege();
+            userMessage.title = "Информация";
+            model.StructureItem = _cmsRepository.getStructure(id);
+            #region координаты
+            double MapX = 0;
+            double MapY = 0;
+
+            if (back_model.StructureItem.GeopointX != null) { MapX = (double)back_model.StructureItem.GeopointX; }
+            if (back_model.StructureItem.GeopointY != null) { MapY = (double)back_model.StructureItem.GeopointY; }
+            ViewBag.Titlecoord = back_model.StructureItem.Title;
+            ViewBag.Xcoord = MapX;
+            ViewBag.Ycoord = MapY;
+            try
+            {
+                if (back_model.StructureItem.Adress != String.Empty && (MapX == 0 || MapY == 0))
+                {
+                    var CoordResult = Spots.Coords(back_model.StructureItem.Adress);
+                    back_model.StructureItem.GeopointX = CoordResult.GeopointX;
+                    back_model.StructureItem.GeopointY = CoordResult.GeopointY;
+                }
+            }
+            catch { }
+            #endregion
+            
+            if (model.StructureItem == null)
+            {
+                #region создание
+                if (ModelState.IsValid)
+                {
+                    var OrgId = Request.Params["orgid"];
+                    if (OrgId != null)
+                    {
+                        Guid OrgGuid = Guid.Parse(OrgId);
+                        if(_cmsRepository.insOvp(id, OrgGuid, back_model.StructureItem))
+                        {
+                            userMessage.info = "Запись создана";
+                            userMessage.buttons = new ErrorMassegeBtn[]{
+                                 new ErrorMassegeBtn { url = "/admin/orgs/ovp/"+id, text = "ок"}
+                             };
+                        }
+                        else
+                        {
+                            userMessage.info = "Произошла ошибка";
+                            userMessage.buttons = new ErrorMassegeBtn[]
+                            {
+                                new ErrorMassegeBtn { url = "#", text = "ок", action = "false" }
+                            };
+
+                        }
+                        
+                    }
+                        
+                }
+                #endregion
+            }
+            else
+            {
+                if (!model.StructureItem.Ovp)
+                {
+                    return Redirect("/admin/orgs/structure/" + id);//если струкутра с таким id уже существует и не является типом OVP
+                }
+                #region обновление
+                if (ModelState.IsValid) {
+                    if (_cmsRepository.setOvp(id, back_model.StructureItem))
+                    {
+                        userMessage.info = "Запись обновлена";
+                        userMessage.buttons = new ErrorMassegeBtn[]{
+                                 new ErrorMassegeBtn { url = "/admin/orgs/set/"+id, text = "ок"}
+                             };
+                    }
+                    else { userMessage.info = "Произошла ошибка"; }
+                }
+                #endregion
+            }
+            return View("Ovp", model);
+        }
+        #endregion
+
 
         [HttpPost]
         [MultiButton(MatchFormKey = "action", MatchFormValue = "cancel-btn")]

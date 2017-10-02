@@ -92,6 +92,9 @@ namespace cms.dbModel
         public abstract bool setStructure(Guid id, StructureModel insert);
         public abstract bool delStructure(Guid id);
 
+        public abstract bool insOvp(Guid IdStructure, Guid OrgId, StructureModel insertStructure);
+        public abstract bool setOvp(Guid IdStructure, StructureModel updStructure);
+
         public abstract Departments[] getDepartmentsList(Guid id);
         public abstract Departments getDepartamentItem(Guid id);
         public abstract DepartmentsPhone[] getDepartmentsPhone(Guid id);

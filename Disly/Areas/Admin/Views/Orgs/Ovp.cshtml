@@ -1,0 +1,116 @@
+﻿@model OrgsViewModel
+
+@if (Model.UserResolution.Write)
+{
+    <div class="content">
+        <h1>@ViewBag.Title</h1>
+        @Html.Partial("part/bread")
+        @Html.TextBoxFor(m => m.StructureItem.Title, new { required = "", type = "text", maxlength = "256", title = "Название подразделения" })
+        <div class="group-block open" title="Телефон и e-mail">
+            <div class="row">
+                <div class="col-md-4">@Html.TextBoxFor(m => m.StructureItem.Phone, new { type = "text", maxlength = "256", title = "Телефон приемной" })</div>
+                <div class="col-md-4">@Html.TextBoxFor(m => m.StructureItem.PhoneReception, new { type = "text", maxlength = "256", title = "Телефон регистраутры" })</div>
+                <div class="col-md-4">@Html.TextBoxFor(m => m.StructureItem.Fax, new { type = "text", maxlength = "256", title = "Факс" })</div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">@Html.TextBoxFor(m => m.StructureItem.Email, new { type = "text", maxlength = "256", title = "E-mail приемной" })</div>
+            </div>
+        </div>
+        <div class="group-block open" title="Адрес">
+            @Html.TextBoxFor(m => m.StructureItem.Adress, new { type = "text", maxlength = "512", title = "Адрес организации:" })
+            <div class="row">
+                <div class="col-md-6">
+                    @Html.TextBoxFor(m => m.StructureItem.GeopointX, new { type = "text", maxlength = "128", title = "X - координата:" })
+                </div>
+                <div class="col-md-6">
+                    @Html.TextBoxFor(m => m.StructureItem.GeopointY, new { type = "text", maxlength = "128", title = "Y - координата:" })
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12">
+                    <div id="map">
+                        <script type="text/javascript">
+                        Coords('@ViewBag.Ycoord', '@ViewBag.Xcoord', '@ViewBag.Titlecoord', '', '14');
+                        </script>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="group-block " title="Как добраться">
+            @Html.TextAreaFor(m => m.StructureItem.Routes, new { type = "editor", title = "Текст", height = "100" })
+        </div>
+        <div class="group-block " title="График работы">
+            @Html.TextAreaFor(m => m.StructureItem.Schedule, new { type = "editor", title = "Текст", height = "100" })
+        </div>
+
+        <div class="group-block open" title="Адрес">
+            @if (Model.DepartmentItem != null)
+            {
+                if (Model.DepartmentItem.Phones != null)
+                {
+                    <div class="row">
+                        @for (int i = 0; i < Model.DepartmentItem.Phones.Count(); i++)
+                        {
+                            <div class="col-md-4">
+                                <div class="depart_phone_wr">
+                                    @Html.TextBoxFor(m => m.DepartmentItem.Phones[i].Value, new { type = "text", title = @Model.DepartmentItem.Phones[i].Label })
+                                    <a class="depart_phone_del" data-id="@Model.DepartmentItem.Phones[i].Id"></a>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+
+                <div class="row">
+                    <div class="col-xs-12">
+                        <h5>Добавить телефон</h5>
+                    </div>
+                    @Html.HiddenFor(m => m.DepartmentItem.Id)
+                    <div class="col-md-4">
+                        <input type="text" title="Наименование" name="new_phone_label" />
+                    </div>
+                    <div class="col-md-4">
+                        <input type="text" title="Номер телефона" name="new_phone_value" />
+                    </div>
+                    <div class="col-md-4">
+                        <button style="margin-top: 23px;" class="button icon-create green pull-right" type="submit" name="action" value="add-new-phone-depart">Добавить</button>
+                    </div>
+                </div>
+            }
+            else
+            {<p>Дополнительные телефоны можно доавить после создания раздела.</p>}
+        </div>
+
+
+    </div>
+    <div class="dop_info-block">
+        <div class="dop-caption">Дополнительно</div>
+        <div class="group-block open" title="Руководитель отделения">
+            @Html.TextBoxFor(m => m.DepartmentItem.DirecorPost, new { type = "text", title = "Должность" })
+            @*@if (Model.DepartmentItem != null)
+                {
+                    if (PeopleList != null)
+                    {
+                        @Html.DropDownListFor(m => m.DepartmentItem.DirectorF, PeopleList, new { @class = "selectpicker", @title = "Выберите врача из списка" })
+                    }
+                }*@
+        </div>
+
+    </div>
+}
+else
+{
+    <div class="content"><p>У вас недостаточно прав.</p></div>
+}
+
+<div class="buttons">
+    @if ((Model.Item != null && Model.UserResolution.Change) || (Model.Item == null && Model.UserResolution.Write))
+    {
+        <button type="submit" name="action" value="save-ovp-btn" data-primary="true" class="button icon-create">Сохранить</button>
+    }
+    @if (Model.StructureItem != null && Model.UserResolution.Delete)
+    {
+        <button type="submit" name="action" value="delete-structure-btn" data-action="delete" class="button icon-delete">Удалить</button>
+    }
+    <button type="submit" name="action" value="cancel-btn" data-action="cancel" class="button icon-cancel">Закрыть</button>
+</div>
