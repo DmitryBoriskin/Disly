@@ -1002,8 +1002,7 @@ namespace cms.dbase
                         Text = s.c_text,
                         Url = s.c_url,
                         UrlName = s.c_url_name,
-                        Date = s.d_date,
-                        DateBegin = s.d_date_begin,
+                        DateBegin = s.d_date,
                         DateEnd = s.d_date_end,
                         Annually = s.b_annually,
                         KeyW = s.c_keyw,
@@ -1041,8 +1040,7 @@ namespace cms.dbase
                             Text = s.c_text,
                             Url = s.c_url,
                             UrlName = s.c_url_name,
-                            Date = s.d_date,
-                            DateBegin = s.d_date_begin,
+                            DateBegin = s.d_date,
                             DateEnd = s.d_date_end,
                             Annually = s.b_annually,
                             KeyW = s.c_keyw,
@@ -1069,6 +1067,7 @@ namespace cms.dbase
                 return null;
             }
         }
+
         public override bool insertCmsEvent(EventModel eventData)
         {
             try
@@ -1083,6 +1082,7 @@ namespace cms.dbase
                         throw new Exception("Запись с таким Id уже существует");
                     }
 
+                    var EndDate = (eventData.DateEnd.HasValue) ? eventData.DateEnd.Value : eventData.DateBegin;
                     cdEvent = new content_events
                     {
                         id = eventData.Id,
@@ -1096,16 +1096,23 @@ namespace cms.dbase
                         c_keyw = eventData.KeyW,
                         b_annually = eventData.Annually,
                         b_disabled = eventData.Disabled,
-                        d_date = eventData.Date,
-                        d_date_begin = eventData.DateBegin,
-                        d_date_end = eventData.DateEnd,
+                        d_date = eventData.DateBegin,
+                        d_date_end = EndDate,
                         c_url = eventData.Url,
                         c_url_name = eventData.UrlName,
+                        n_date_begin_day = int.Parse(eventData.DateBegin.ToString("MMdd")),
+                        n_date_end_day = int.Parse(EndDate.ToString("MMdd"))
                     };
+                    if(!eventData.Annually)
+                    {
+                        cdEvent.n_date_begin_year = eventData.DateBegin.Year;
+                        cdEvent.n_date_end_year = eventData.DateEnd.Value.Year;
+                    }
 
                     using (var tran = db.BeginTransaction())
                     {
                         db.Insert(cdEvent);
+                        //insertLog(UserId, IP, "change_resolutions", id, String.Empty, "Users", logTitle);
                         tran.Commit();
                         return true;
                     }
@@ -1131,6 +1138,8 @@ namespace cms.dbase
                         throw new Exception("Запись с таким Id не найдена");
                     }
 
+                    var EndDate = (eventData.DateEnd.HasValue) ? eventData.DateEnd.Value : eventData.DateBegin;
+
                     cdEvent.c_alias = eventData.Alias;
                     cdEvent.c_title = eventData.Title;
                     cdEvent.c_text = eventData.Text;
@@ -1141,11 +1150,23 @@ namespace cms.dbase
                     cdEvent.c_keyw = eventData.KeyW;
                     cdEvent.b_annually = eventData.Annually;
                     cdEvent.b_disabled = eventData.Disabled;
-                    cdEvent.d_date = eventData.Date;
-                    cdEvent.d_date_begin = eventData.DateBegin;
-                    cdEvent.d_date_end = eventData.DateEnd;
+                    cdEvent.d_date = eventData.DateBegin;
+                    cdEvent.d_date_end = EndDate;
                     cdEvent.c_url = eventData.Url;
                     cdEvent.c_url_name = eventData.UrlName;
+                    cdEvent.n_date_begin_day = int.Parse(eventData.DateBegin.ToString("MMdd"));
+                    cdEvent.n_date_end_day = int.Parse(EndDate.ToString("MMdd"));
+
+                    if (!eventData.Annually)
+                    {
+                        cdEvent.n_date_begin_year = eventData.DateBegin.Year;
+                        cdEvent.n_date_end_year = eventData.DateEnd.Value.Year;
+                    }
+                    else
+                    {
+                        cdEvent.n_date_begin_year = null;
+                        cdEvent.n_date_end_year = null;
+                    }
 
                     using (var tran = db.BeginTransaction())
                     {
@@ -1190,8 +1211,6 @@ namespace cms.dbase
             }
         }
         #endregion
-
-
 
         #region Orgs
         public override OrgsModel[] getOrgs(FilterParams filtr)
@@ -1600,8 +1619,6 @@ namespace cms.dbase
         }
         #endregion
 
-
-
         #region Person
         public override UsersList getPersonList(FilterParams filtr)
         {
@@ -1666,8 +1683,191 @@ namespace cms.dbase
 
         public override UsersModel getPerson(Guid id)
         {
-            return null;
+           return null;
         }
+        #endregion
+
+        #region Vacancies
+        public override VacanciesList getVacanciesList(FilterParams filtr)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var query = db.content_vacanciess.Where(w => w.id != null);
+                query = query.OrderByDescending(o => o.d_date);
+
+                if (query.Any())
+                {
+                    int ItemCount = query.Count();
+
+                    var List = query
+                        .Select(s => new VacancyModel
+                        {
+                            Id = s.id,
+                            Profession = s.c_profession,
+                            Post = s.c_post,
+                            Date = s.d_date,
+                            Experience = s.с_experience,
+                            Сonditions = s.с_conditions,
+                            Salary = s.c_salary,
+                            Desc = s.c_desc,
+                            Temporarily = s.b_temporarily,
+                            Disabled = s.b_disabled
+                        }).
+                        Skip(filtr.Size * (filtr.Page - 1)).
+                        Take(filtr.Size);
+
+                    VacancyModel[] eventsInfo = List.ToArray();
+
+                    return new VacanciesList
+                    {
+                        Data = eventsInfo,
+                        Pager = new Pager
+                        {
+                            page = filtr.Page,
+                            size = filtr.Size,
+                            items_count = ItemCount,
+                            page_count = (ItemCount % filtr.Size > 0) ? (ItemCount / filtr.Size) + 1 : ItemCount / filtr.Size
+                        }
+                    };
+                }
+                return null;
+            }
+        }
+        public override VacancyModel getVacancy(Guid id)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var data = db.content_vacanciess.
+                    Where(w => w.id == id).
+                    Select(s => new VacancyModel
+                    {
+                        Id = s.id,
+                        Profession = s.c_profession,
+                        Post = s.c_post,
+                        Date = s.d_date,
+                        Сonditions = s.с_conditions,
+                        Experience = s.с_experience,
+                        Salary = s.c_salary,
+                        Desc = s.c_desc,
+                        Temporarily = s.b_temporarily,
+                        Disabled = s.b_disabled
+                    });
+
+
+                if (!data.Any()) { return null; }
+                else { return data.First(); }
+            }
+        }
+
+        public override bool insertCmsVacancy(VacancyModel vacancy)
+        {
+            try
+            {
+                using (var db = new CMSdb(_context))
+                {
+                    content_vacancies cdVacancy = db.content_vacanciess
+                                                .Where(p => p.id == vacancy.Id)
+                                                .SingleOrDefault();
+                    if (cdVacancy != null)
+                    {
+                        throw new Exception("Запись с таким Id уже существует");
+                    }
+
+                    cdVacancy = new content_vacancies
+                    {
+                        id = vacancy.Id,
+                        c_profession = vacancy.Profession,
+                        c_post = vacancy.Post,
+                        d_date = vacancy.Date,
+                        с_conditions = vacancy.Сonditions,
+                        с_experience = vacancy.Experience,
+                        c_salary = vacancy.Salary,
+                        c_desc = vacancy.Desc,
+                        b_temporarily = vacancy.Temporarily,
+                        b_disabled = vacancy.Disabled
+                    };
+
+                    using (var tran = db.BeginTransaction())
+                    {
+                        db.Insert(cdVacancy);
+                        tran.Commit();
+                        return true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                //write to log ex
+                return false;
+            }
+        }
+        public override bool updateCmsVacancy(VacancyModel vacancy)
+        {
+            try
+            {
+                using (var db = new CMSdb(_context))
+                {
+                    content_vacancies cdVacancy = db.content_vacanciess
+                                                .Where(p => p.id == vacancy.Id)
+                                                .SingleOrDefault();
+                    if (cdVacancy == null)
+                    {
+                        throw new Exception("Запись с таким Id не найдена");
+                    }
+
+                    cdVacancy.c_profession = vacancy.Profession;
+                    cdVacancy.c_post = vacancy.Post;
+                    cdVacancy.d_date = vacancy.Date;
+                    cdVacancy.с_conditions = vacancy.Сonditions;
+                    cdVacancy.с_experience = vacancy.Experience;
+                    cdVacancy.c_salary = vacancy.Salary;
+                    cdVacancy.c_desc = vacancy.Desc;
+                    cdVacancy.b_temporarily = vacancy.Temporarily;
+                    cdVacancy.b_disabled = vacancy.Disabled;
+
+                    using (var tran = db.BeginTransaction())
+                    {
+                        db.Update(cdVacancy);
+                        tran.Commit();
+                        return true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                //write to log ex
+                return false;
+            }
+        }
+        public override bool deleteCmsVacancy(Guid id)
+        {
+            try
+            {
+                using (var db = new CMSdb(_context))
+                {
+                    content_vacancies cdVacancy = db.content_vacanciess
+                                                .Where(p => p.id == id)
+                                                .SingleOrDefault();
+                    if (cdVacancy == null)
+                    {
+                        throw new Exception("Запись с таким Id не найдена");
+                    }
+
+                    using (var tran = db.BeginTransaction())
+                    {
+                        db.Delete(cdVacancy);
+                        tran.Commit();
+                        return true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                //write to log ex
+                return false;
+            }
+        }
+
         #endregion
 
         #region FeedBacks
