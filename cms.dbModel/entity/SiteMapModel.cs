@@ -91,6 +91,11 @@ namespace cms.dbModel.entity
         /// Типы меню для элемента карты сайта
         /// </summary>
         public string[] MenuGroups { get; set; }
+
+        /// <summary>
+        /// Идентификатор меню для сортировки
+        /// </summary>
+        public Guid? MenuGr { get; set; }
     }
 
     /// <summary>
@@ -128,5 +133,31 @@ namespace cms.dbModel.entity
         /// Идентификатор родителя
         /// </summary>
         public Guid? ParentId { get; set; }
+    }
+
+    /// <summary>
+    /// Элемент меню карты сайта
+    /// </summary>
+    public class SiteMapMenu
+    {
+        /// <summary>
+        /// Идентификатор
+        /// </summary>
+        public Guid? Id { get; set; }
+
+        /// <summary>
+        /// Текст
+        /// </summary>
+        public string Text { get; set; }
+
+        /// <summary>
+        /// Значение
+        /// </summary>
+        public string Value { get; set; }
+
+        /// <summary>
+        /// Сортировка
+        /// </summary>
+        public int Sort { get; set; }
     }
 }

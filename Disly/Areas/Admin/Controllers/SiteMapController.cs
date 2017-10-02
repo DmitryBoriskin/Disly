@@ -15,7 +15,7 @@ namespace Disly.Areas.Admin.Controllers
         private FilterParams filter;
 
         // Кол-во элементов на странице
-        int pageSize = 40;
+        int pageSize = 100;
 
         // Доменное имя сайта
         private string domain;
@@ -62,6 +62,8 @@ namespace Disly.Areas.Admin.Controllers
             // Наполняем модель списка данными
             model.List = _cmsRepository.getSiteMapList(domain, filter);
 
+            ViewBag.Group = filter.Group;
+
             return View(model);
         }
         
@@ -96,10 +98,12 @@ namespace Disly.Areas.Admin.Controllers
             userMessage.title = "Информация";
 
             #region Данные необходимые для сохранения
-            back_model.Item.ParentId = parent; // родительский id
+            back_model.Item.ParentId = back_model.Item.ParentId != null ? back_model.Item.ParentId : parent; // родительский id
 
-            back_model.Item.Path = back_model.Item.ParentId.Equals(null) ? "/"
-                : _cmsRepository.getSiteMapItem((Guid)back_model.Item.ParentId).Path + "/" + _cmsRepository.getSiteMapItem((Guid)back_model.Item.ParentId).Alias;
+            var p = back_model.Item.ParentId != null ? _cmsRepository.getSiteMapItem((Guid)back_model.Item.ParentId) : null;
+
+            back_model.Item.Path = p == null ? "/" :
+                p.Path.Equals("/") ? p.Path + p.Alias : p.Path + "/" + p.Alias;
 
             back_model.Item.Site = domain;
 

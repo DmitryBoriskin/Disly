@@ -2256,67 +2256,119 @@ namespace cms.dbase
         {
             using (var db = new CMSdb(_context))
             {
-                Guid? menuId = null;
-
-                var query = db.content_sitemaps
-                    .Where(w => w.f_site.Equals(site))
-                    .Where(w => !w.id.Equals(null))
-                    .Where(w => w.uui_parent.Equals(null))
-                    .Where(w => !w.c_alias.Equals(" "));
-
-                if (!string.IsNullOrEmpty(filtr.Group))
+                if (string.IsNullOrEmpty(filtr.Group))
                 {
-                    menuId = Guid.Parse(filtr.Group);
-                    query = from p in query
-                            join t in db.content_sitemap_menutypess
-                            on p.id equals t.f_sitemap
-                            where t.f_menutype == menuId
-                            select p;
-                }
+                    var query = db.content_sitemaps
+                        .Where(w => w.f_site.Equals(site))
+                        .Where(w => !w.id.Equals(null))
+                        .Where(w => w.uui_parent.Equals(null))
+                        .Where(w => !w.c_alias.Equals(" "));
 
-                if (query.Any())
-                {
-                    int itemCount = query.Count();
-
-                    var list = query.Select(s => new SiteMapModel
+                    if (query.Any())
                     {
-                        Id = s.id,
-                        Site = s.f_site,
-                        FrontSection = s.f_front_section,
-                        Path = s.c_path,
-                        Alias = s.c_alias,
-                        Title = s.c_title,
-                        Text = s.c_text,
-                        Preview = s.c_preview,
-                        Url = s.c_url,
-                        Desc = s.c_desc,
-                        Keyw = s.c_keyw,
-                        Disabled = s.b_disabled,
-                        DisabledMenu = s.b_disabled_menu,
-                        Sort = s.n_sort,
-                        ParentId = s.uui_parent,
-                        CountSibling = getCountSiblings(s.id)
-                    }).Skip(filtr.Size * (filtr.Page - 1))
-                      .Take(filtr.Size);
+                        int itemCount = query.Count();
 
-                    var siteMapList = list.OrderBy(o => o.Sort).ToArray();
-
-                    return new SiteMapList
-                    {
-                        Data = siteMapList,
-                        Pager = new Pager
+                        var list = query.Select(s => new SiteMapModel
                         {
-                            page = filtr.Page,
-                            size = filtr.Size,
-                            items_count = itemCount,
-                            page_count = (itemCount % filtr.Size > 0) ? (itemCount / filtr.Size) + 1 : itemCount / filtr.Size
-                        }
-                    };
+                            Id = s.id,
+                            Site = s.f_site,
+                            FrontSection = s.f_front_section,
+                            Path = s.c_path,
+                            Alias = s.c_alias,
+                            Title = s.c_title,
+                            Text = s.c_text,
+                            Preview = s.c_preview,
+                            Url = s.c_url,
+                            Desc = s.c_desc,
+                            Keyw = s.c_keyw,
+                            Disabled = s.b_disabled,
+                            DisabledMenu = s.b_disabled_menu,
+                            Sort = s.n_sort,
+                            ParentId = s.uui_parent,
+                            CountSibling = getCountSiblings(s.id)
+                        }).Skip(filtr.Size * (filtr.Page - 1))
+                          .Take(filtr.Size);
+
+                        var siteMapList = list.OrderBy(o => o.Sort).ToArray();
+
+                        return new SiteMapList
+                        {
+                            Data = siteMapList,
+                            Pager = new Pager
+                            {
+                                page = filtr.Page,
+                                size = filtr.Size,
+                                items_count = itemCount,
+                                page_count = (itemCount % filtr.Size > 0) ? (itemCount / filtr.Size) + 1 : itemCount / filtr.Size
+                            }
+                        };
+                    }
+                    else
+                    {
+                        return null;
+                    }
                 }
                 else
                 {
-                    return null;
+                    Guid? menuId = Guid.Parse(filtr.Group);
+
+                    //var query = from p in query
+                    //        join t in db.content_sitemap_menutypess
+                    //        on p.id equals t.f_sitemap
+                    //        where t.f_menutype == menuId
+                    //        select p;
+
+                    var query = db.content_sv_sitemap_menus
+                        .Where(w => w.f_site.Equals(site))
+                        .Where(w => !w.id.Equals(null))
+                        .Where(w => w.f_menutype.Equals(menuId))
+                        .OrderBy(o => o.menu_sort);
+
+                    if (query.Any())
+                    {
+                        int itemCount = query.Count();
+
+                        var list = query.Select(s => new SiteMapModel
+                        {
+                            Id = s.id,
+                            Site = s.f_site,
+                            FrontSection = s.f_front_section,
+                            Path = s.c_path,
+                            Alias = s.c_alias,
+                            Title = s.c_title,
+                            Text = s.c_text,
+                            Preview = s.c_preview,
+                            Url = s.c_url,
+                            Desc = s.c_desc,
+                            Keyw = s.c_keyw,
+                            Disabled = s.b_disabled,
+                            DisabledMenu = s.b_disabled_menu,
+                            Sort = s.n_sort,
+                            ParentId = s.uui_parent,
+                            CountSibling = getCountSiblings(s.id)
+                        }).Skip(filtr.Size * (filtr.Page - 1))
+                          .Take(filtr.Size);
+
+                        var siteMapList = list.ToArray();
+
+                        return new SiteMapList
+                        {
+                            Data = siteMapList,
+                            Pager = new Pager
+                            {
+                                page = filtr.Page,
+                                size = filtr.Size,
+                                items_count = itemCount,
+                                page_count = (itemCount % filtr.Size > 0) ? (itemCount / filtr.Size) + 1 : itemCount / filtr.Size
+                            }
+                        };
+                    }
+                    else
+                    {
+                        return null;
+                    }
                 }
+
             }
         }
 
@@ -2452,9 +2504,18 @@ namespace cms.dbase
                     {
                         foreach (var m in item.MenuGroups)
                         {
+                            Guid menuId = Guid.Parse(m);
+
+                            int _maxSortMenu = db.content_sitemap_menutypess
+                                .Where(w => w.f_site.Equals(item.Site))
+                                .Where(w => w.f_menutype.Equals(menuId))
+                                .Select(s => s.n_sort).Max();
+
                             var menu = db.content_sitemap_menutypess
                                 .Value(p => p.f_sitemap, id)
-                                .Value(p => p.f_menutype, Guid.Parse(m))
+                                .Value(p => p.f_menutype, menuId)
+                                .Value(p => p.f_site, item.Site)
+                                .Value(p => p.n_sort, _maxSortMenu + 1)
                                 .Insert();
                         }
                     }
@@ -2510,9 +2571,18 @@ namespace cms.dbase
                     {
                         foreach (var m in item.MenuGroups)
                         {
-                            var me = db.content_sitemap_menutypess
+                            Guid menuId = Guid.Parse(m);
+
+                            int _maxSortMenu = db.content_sitemap_menutypess
+                                .Where(w => w.f_site.Equals(item.Site))
+                                .Where(w => w.f_menutype.Equals(menuId))
+                                .Select(s => s.n_sort).Max();
+
+                            var res = db.content_sitemap_menutypess
                                 .Value(p => p.f_sitemap, id)
-                                .Value(p => p.f_menutype, Guid.Parse(m))
+                                .Value(p => p.f_menutype, menuId)
+                                .Value(p => p.f_site, item.Site)
+                                .Value(p => p.n_sort, _maxSortMenu + 1)
                                 .Insert();
                         }
                     }
@@ -2532,15 +2602,15 @@ namespace cms.dbase
         /// Получаем список типов страниц
         /// </summary>
         /// <returns></returns>
-        public override Catalog_list[] getSiteMapFrontSectionList()
+        public override SiteMapMenu[] getSiteMapFrontSectionList()
         {
             using (var db = new CMSdb(_context))
             {
                 var data = db.front_sections
-                    .Select(s => new Catalog_list
+                    .Select(s => new SiteMapMenu
                     {
-                        text = s.c_name,
-                        value = s.c_alias
+                        Text = s.c_name,
+                        Value = s.c_alias
                     });
 
                 if (!data.Any()) { return null; }
@@ -2565,6 +2635,35 @@ namespace cms.dbase
                     });
                 if (!data.Any()) { return null; }
                 else { return data.ToArray(); }
+            }
+        }
+
+        /// <summary>
+        /// Добавляем меню в карту сайта
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        public override bool createSiteMapMenu(SiteMapMenu item)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var query = db.content_sitemap_menuss.Where(w => w.id.Equals(item.Id));
+                if (!query.Any())
+                {
+                    var sortMax = db.content_sitemap_menuss.Select(s => s.n_sort).Max();
+
+                    db.content_sitemap_menuss
+                        .Value(v => v.id, Guid.NewGuid())
+                        .Value(v => v.c_title, item.Text)
+                        .Value(v => v.n_sort, sortMax + 1)
+                        .Insert();
+
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
         }
 
@@ -2677,40 +2776,104 @@ namespace cms.dbase
         /// <param name="permit"></param>
         /// <param name="domain"></param>
         /// <returns></returns>
-        public override bool permit_SiteMap(Guid id, int permit, string domain)
+        public override bool permit_SiteMap(Guid id, int permit, string domain, string menuSort)
         {
             using (var db = new CMSdb(_context))
             {
-                var data = db.content_sitemaps
-                    .Where(w => w.id.Equals(id))
-                    .Select(s => new SiteMapModel
-                    {
-                        Path = s.c_path,
-                        Sort = s.n_sort
-                    }).FirstOrDefault();
-
-                if (permit > data.Sort)
+                if (string.IsNullOrEmpty(menuSort))
                 {
+                    var data = db.content_sitemaps
+                        .Where(w => w.id.Equals(id))
+                        .Select(s => new SiteMapModel
+                        {
+                            Path = s.c_path,
+                            Sort = s.n_sort
+                        }).FirstOrDefault();
+
+                    if (permit > data.Sort)
+                    {
+                        db.content_sitemaps
+                            .Where(w => w.f_site.Equals(domain))
+                            .Where(w => w.c_path.Equals(data.Path))
+                            .Where(w => w.n_sort > data.Sort && w.n_sort <= permit)
+                            .Set(u => u.n_sort, u => u.n_sort - 1)
+                            .Update();
+                    }
+                    else
+                    {
+                        db.content_sitemaps
+                            .Where(w => w.f_site.Equals(domain))
+                            .Where(w => w.c_path.Equals(data.Path))
+                            .Where(w => w.n_sort < data.Sort && w.n_sort >= permit)
+                            .Set(u => u.n_sort, u => u.n_sort + 1)
+                            .Update();
+                    }
                     db.content_sitemaps
-                        .Where(w => w.f_site.Equals(domain))
-                        .Where(w => w.c_path.Equals(data.Path))
-                        .Where(w => w.n_sort > data.Sort && w.n_sort <= permit)
-                        .Set(u => u.n_sort, u => u.n_sort - 1)
+                        .Where(w => w.id.Equals(id))
+                        .Set(u => u.n_sort, permit)
                         .Update();
                 }
                 else
                 {
-                    db.content_sitemaps
-                        .Where(w => w.f_site.Equals(domain))
-                        .Where(w => w.c_path.Equals(data.Path))
-                        .Where(w => w.n_sort < data.Sort && w.n_sort >= permit)
-                        .Set(u => u.n_sort, u => u.n_sort + 1)
+                    Guid m = Guid.Parse(menuSort);
+
+                    var data = db.content_sv_sitemap_menus
+                        .Where(w => w.id.Equals(id))
+                        .Select(s => new SiteMapModel
+                        {
+                            MenuGr = s.f_menutype,
+                            Sort = s.menu_sort
+                        }).FirstOrDefault();
+
+                    if (permit > data.Sort)
+                    {
+                        #region comment
+                        //db.content_sv_sitemap_menus
+                        //    .Where(w => w.f_site.Equals(domain))
+                        //    .Where(w => w.f_menutype.Equals(m))
+                        //    .Where(w => w.menu_sort > data.Sort && w.menu_sort <= permit)
+                        //    .Set(u => u.menu_sort, u => u.menu_sort - 1)
+                        //    .Update();
+                        #endregion
+
+                        db.content_sitemap_menutypess
+                            .Where(w => w.f_site.Equals(domain))
+                            .Where(w => w.f_menutype.Equals(m))
+                            .Where(w => w.n_sort > data.Sort && w.n_sort <= permit)
+                            .Set(u => u.n_sort, u => u.n_sort - 1)
+                            .Update();
+                    }
+                    else
+                    {
+                        #region comment
+                        //db.content_sv_sitemap_menus
+                        //    .Where(w => w.f_site.Equals(domain))
+                        //    .Where(w => w.f_menutype.Equals(m))
+                        //    .Where(w => w.menu_sort < data.Sort && w.menu_sort >= permit)
+                        //    .Set(u => u.menu_sort, u => u.menu_sort + 1)
+                        //    .Update();
+                        #endregion
+
+                        db.content_sitemap_menutypess
+                            .Where(w => w.f_site.Equals(domain))
+                            .Where(w => w.f_menutype.Equals(m))
+                            .Where(w => w.n_sort < data.Sort && w.n_sort >= permit)
+                            .Set(u => u.n_sort, u => u.n_sort + 1)
+                            .Update();
+                    }
+                    #region comment
+                    //db.content_sv_sitemap_menus
+                    //    .Where(w => w.id.Equals(id))
+                    //    .Set(u => u.menu_sort, permit)
+                    //    .Update();
+                    #endregion
+
+                    db.content_sitemap_menutypess
+                        .Where(w => w.f_sitemap.Equals(id))
+                        .Where(w => w.f_menutype.Equals(m))
+                        .Set(u => u.n_sort, permit)
                         .Update();
                 }
-                db.content_sitemaps
-                    .Where(w => w.id.Equals(id))
-                    .Set(u => u.n_sort, permit)
-                    .Update();
             }
             return true;
         }

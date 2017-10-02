@@ -123,12 +123,13 @@ namespace cms.dbModel
         public abstract bool checkSiteMap(Guid id);
         public abstract bool createSiteMapItem(Guid id, SiteMapModel item, Guid userId, string IP);
         public abstract bool updateSiteMapItem(Guid id, SiteMapModel item, Guid userId, string IP);
-        public abstract Catalog_list[] getSiteMapFrontSectionList();
+        public abstract SiteMapMenu[] getSiteMapFrontSectionList();
         public abstract Catalog_list[] getSiteMapMenuTypes();
+        public abstract bool createSiteMapMenu(SiteMapMenu item);
         public abstract bool deleteSiteMapItem(Guid id, Guid userId, string IP);
         public abstract SiteMapModel[] getSiteMapChildrens(Guid parent);
         public abstract BreadCrumbSiteMap[] getSiteMapBreadCrumbs(Guid? id);
         public abstract BreadCrumbSiteMap getSiteMapBreadCrumbItem(Guid id);
-        public abstract bool permit_SiteMap(Guid id, int permit, string domain);
+        public abstract bool permit_SiteMap(Guid id, int permit, string domain, string menuSort);
     }
 }

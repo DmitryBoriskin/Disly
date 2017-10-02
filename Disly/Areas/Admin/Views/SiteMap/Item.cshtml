@@ -10,6 +10,7 @@
             @Html.TextBoxFor(m => m.Item.Title, new { @title = "Название", @required = "" })
             @Html.TextBoxFor(m => m.Item.Alias, new { @title = "Алиас" })
             @Html.TextBoxFor(m => m.Item.Url, new { @title = "Ссылка" })
+            @Html.HiddenFor(m => m.Item.ParentId)
 
             <div class="group-block" title="Текст">
                 @Html.TextAreaFor(m => m.Item.Text, new { @type = "editor", @height = "300" })
@@ -39,7 +40,6 @@
                     <table id="sm_list" class="table table-striped">
                         <thead>
                             <tr>
-                                <th class="map_site_icon">&nbsp;</th>
                                 <th class="map_site_title">Название</th>
                                 <th class="map_site_attach">Вложения</th>
                             </tr>
@@ -65,8 +65,7 @@
                                         {
                                             _class = "icon-site-folder";
                                         }
-
-                                        <td class="map_site_icon disabled"></td>
+                                        
                                         <td class="@_class @disabled"><a href="/admin/sitemap/item/@item.Id">@item.Title</a></td>
                                         <td class="sort-element @disabled">@item.CountSibling</td>
                                     }
@@ -78,7 +77,7 @@
             }
         </div>
                 <div class="dop_info-block">
-                    @Html.DropDownListFor(m => m.Item.FrontSection, new SelectList(Model.FrontSectionList, "value", "text", "page"), new { @title = "Шаблон", @class = "selectpicker", @data_help = "Выбор шаблона страницы", @required = "" })
+                    @Html.DropDownListFor(m => m.Item.FrontSection, new SelectList(Model.FrontSectionList, "Value", "Text", "page"), new { @title = "Шаблон", @class = "selectpicker", @data_help = "Выбор шаблона страницы", @required = "" })
                     @*@Html.DropDownListFor(m => m.Item.MenuGroups, new MultiSelectList(Model.MenuTypes, "value", "text", Model.Item.MenuGroups), new { @title = "Группы меню", @class = "selectpicker", @multiple = "multiple" })*@
                     @Html.DropDownListFor(m => m.Item.MenuGroups, (MultiSelectList)ViewBag.GroupMenu, new { @title = "Группы меню", @class = "selectpicker", @multiple = "multiple" })
                     <div class="group-block" title="Мета теги">
