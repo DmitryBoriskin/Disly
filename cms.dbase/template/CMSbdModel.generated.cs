@@ -69,6 +69,8 @@ namespace cms.dbase.models
 		public ITable<front_section>                  front_sections                  { get { return this.GetTable<front_section>(); } }
 		public ITable<front_site_section>             front_site_sections             { get { return this.GetTable<front_site_section>(); } }
 		public ITable<front_sv_page_veiw>             front_sv_page_veiws             { get { return this.GetTable<front_sv_page_veiw>(); } }
+		public ITable<import_frmp_orgs>               import_frmp_orgss               { get { return this.GetTable<import_frmp_orgs>(); } }
+		public ITable<import_frmp_peoples>            import_frmp_peopless            { get { return this.GetTable<import_frmp_peoples>(); } }
 
 		public CMSdb()
 			: base("CMSdb")
@@ -1022,6 +1024,7 @@ namespace cms.dbase.models
 		[Column,    Nullable] public Guid?  uui_parent      { get; set; } // uniqueidentifier
 		[Column, NotNull    ] public string menu_title      { get; set; } // nvarchar(256)
 		[Column, NotNull    ] public int    menu_sort       { get; set; } // int
+		[Column, NotNull    ] public Guid   f_menutype      { get; set; } // uniqueidentifier
 	}
 
 	[Table(Schema="dbo", Name="content_vacancies")]
@@ -1164,6 +1167,30 @@ namespace cms.dbase.models
 		[Column,    Nullable] public string f_pege_type { get; set; } // varchar(16)
 		[Column, NotNull    ] public string c_name      { get; set; } // varchar(128)
 		[Column, NotNull    ] public string c_url       { get; set; } // varchar(1024)
+	}
+
+	[Table(Schema="dbo", Name="import_frmp_orgs")]
+	public partial class import_frmp_orgs
+	{
+		[Column,     NotNull    ] public Guid     guid     { get; set; } // uniqueidentifier
+		[PrimaryKey, NotNull    ] public string   c_oid    { get; set; } // varchar(64)
+		[Column,        Nullable] public string   c_name   { get; set; } // varchar(64)
+		[Column,     NotNull    ] public DateTime d_modify { get; set; } // datetime
+	}
+
+	[Table(Schema="dbo", Name="import_frmp_peoples")]
+	public partial class import_frmp_peoples
+	{
+		[PrimaryKey, NotNull    ] public Guid      id           { get; set; } // uniqueidentifier
+		[Column,        Nullable] public string    f_org        { get; set; } // varchar(64)
+		[Column,        Nullable] public string    c_surname    { get; set; } // varchar(64)
+		[Column,        Nullable] public string    c_name       { get; set; } // varchar(64)
+		[Column,        Nullable] public string    c_patronymic { get; set; } // varchar(64)
+		[Column,     NotNull    ] public string    c_snils      { get; set; } // varchar(64)
+		[Column,        Nullable] public bool?     b_sex        { get; set; } // bit
+		[Column,        Nullable] public DateTime? d_birthdate  { get; set; } // datetime
+		[Column,        Nullable] public DateTime? d_modify     { get; set; } // datetime
+		[Column,        Nullable] public bool?     b_changed    { get; set; } // bit
 	}
 
 	public static partial class CMSdbStoredProcedures
@@ -1431,6 +1458,18 @@ namespace cms.dbase.models
 		{
 			return table.FirstOrDefault(t =>
 				t.c_alias == c_alias);
+		}
+
+		public static import_frmp_orgs Find(this ITable<import_frmp_orgs> table, string c_oid)
+		{
+			return table.FirstOrDefault(t =>
+				t.c_oid == c_oid);
+		}
+
+		public static import_frmp_peoples Find(this ITable<import_frmp_peoples> table, Guid id)
+		{
+			return table.FirstOrDefault(t =>
+				t.id == id);
 		}
 	}
 }
