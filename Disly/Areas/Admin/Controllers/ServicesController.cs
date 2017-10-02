@@ -265,8 +265,16 @@ namespace Disly.Areas.Admin.Controllers
                 case "sitemap":
                     Result = _cmsRepository.permit_SiteMap(id, permit, domain, menuSort);
                     break;
+                case "orgs":
+                    Result = _cmsRepository.sortOrgs(id, permit);
+                    break;
+                case "orgs_structure":
+                    Result = _cmsRepository.sortStructure(id, permit);
+                    break;
+                case "orgs_department":
+                    Result = _cmsRepository.sortDepartament(id, permit);
+                    break;
             }
-
             return Content(Result.ToString());
         }
         

@@ -1,17 +1,36 @@
 ﻿@model OrgsViewModel
+@{
+    string urlParam = "/Admin/Services/ChangePermit?group=orgs";
+}
 
 @if (Model.UserResolution.Read)
 {
     <div class="content">
-        <h1>@ViewBag.Title</h1>
+        <div class="row">
+            <div class="col-sm-8"><h1>@ViewBag.Title</h1></div>
+            <div class="col-sm-4"><a class="button icon-sort" value="no-preloader-btn" id="sorting_element" title="Добавляет возможность сортировки элементов списка">Сортировать</a></div>
+        </div>
+        
+        
         @if (Model.OrgList != null)
         {
-            foreach (var item in Model.OrgList)
-            {
-                <div class="list-item">
-                    <a href="/admin/orgs/item/@item.Id">@item.Title</a>
-                </div>
-            }
+            <div class="sort_list">
+                <table id="sm_list" class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th class="map_site_title">Название</th>
+                        </tr>
+                    </thead>
+                    <tbody  data-service="@urlParam">
+                        @foreach (var item in Model.OrgList)
+                        {
+                            <tr class="ui-sortable-handle" data-id="@item.Id">
+                                <td><a href="/admin/orgs/item/@item.Id">@item.Sort -- @item.Title</a></td>
+                            </tr>
+                        }
+                    </tbody>                    
+                </table>
+            </div>
         }
         else
         {

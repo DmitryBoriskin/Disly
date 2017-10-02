@@ -180,7 +180,12 @@ $(document).ready(function () {
 
     // Добавляем возможность сортировки
     $('#sorting_element').click(function () {
-        $('.site_map_list').find('tbody').addClass('sortable');
+        if ($('.sort_list').hasClass('sort_list_on')) {
+            location.reload();
+        }
+        $('.sort_list').addClass('sort_list_on');
+        
+        $('.sort_list').find('tbody').addClass('sortable');
         $('.sortable').each(function () {
             Sorting_init($(this));
         });
