@@ -1240,11 +1240,49 @@ namespace cms.dbase
                             .Select(s => new OrgsModel {
                                 Id=s.id,
                                 Title=s.c_title,
-                                Structure=getStructureList(s.id)
+                                ShortTitle=s.c_title_short,
+                                Phone = s.c_phone,
+                                PhoneReception = s.c_phone_reception,
+                                Fax = s.c_fax,
+                                Email = s.c_email,
+                                DirecorPost = s.c_director_post,
+                                DirectorF = s.f_director,
+                                Contacts = s.c_contacts,
+                                Address=s.c_adress,
+                                GeopointX = s.n_geopoint_x,
+                                GeopointY = s.n_geopoint_y,
+                                Structure =getStructureList(s.id)
                             })
                             .FirstOrDefault();
                 if (data != null) return data;
                 return null;
+            }
+        }
+        public override bool insOrgs(Guid id, OrgsModel model)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var data = db.content_orgss.Where(w => w.id == id);
+                if (!data.Any())
+                {
+                    db.content_orgss
+                        .Value(s => s.id, model.Id)
+                        .Value(s => s.c_title, model.Title)
+                        .Value(s => s.c_title_short, model.ShortTitle)
+                        .Value(s => s.c_phone, model.Phone)
+                        .Value(s => s.c_phone_reception, model.PhoneReception)
+                        .Value(s => s.c_fax, model.Fax)
+                        .Value(s => s.c_email, model.Email)
+                        .Value(s => s.c_director_post, model.DirecorPost)
+                        .Value(s => s.f_director, model.DirectorF)
+                        .Value(s => s.c_contacts, model.Contacts)
+                        .Value(s => s.c_adress, model.Address)
+                        .Value(s => s.n_geopoint_x, model.GeopointX)
+                        .Value(s => s.n_geopoint_y, model.GeopointY)
+                        .Insert();
+                    return true;
+                }
+                return false;
             }
         }
         public override bool setOrgs(Guid id, OrgsModel model)
@@ -1254,7 +1292,19 @@ namespace cms.dbase
                 var data = db.content_orgss.Where(w => w.id == id);
                 if (data.Any())
                 {
-                    data.Set(s => s.c_title, model.Title)
+                    data
+                        .Set(s => s.c_title, model.Title)
+                        .Set(s => s.c_title_short, model.ShortTitle)
+                        .Set(s => s.c_phone, model.Phone)
+                        .Set(s => s.c_phone_reception, model.PhoneReception)
+                        .Set(s => s.c_fax, model.Fax)
+                        .Set(s => s.c_email, model.Email)
+                        .Set(s => s.c_director_post, model.DirecorPost)
+                        .Set(s => s.f_director, model.DirectorF)
+                        .Set(s => s.c_contacts, model.Contacts)
+                        .Set(s => s.c_adress, model.Address)
+                        .Set(s => s.n_geopoint_x, model.GeopointX)
+                        .Set(s => s.n_geopoint_y, model.GeopointY)                        
                         .Update();
                     return true;
                 }
@@ -1271,7 +1321,8 @@ namespace cms.dbase
                     var List = data
                                 .Select(s => new StructureModel() {
                                     Id=s.id,
-                                    Title=s.c_title                                    
+                                    Title=s.c_title,
+                                    Ovp=s.b_ovp                                    
                                 });
                     return List.ToArray();
                 }
@@ -1299,6 +1350,7 @@ namespace cms.dbase
                                 Routes=s.c_routes,
                                 Schedule=s.c_schedule,
                                 DirecorPost=s.c_director_post,
+                                Ovp=s.b_ovp,
                                 Departments=getDepartmentsList(s.id)                                
                                 
                                 //f_direcor
@@ -1366,6 +1418,92 @@ namespace cms.dbase
                 var data = db.content_org_structures.Where(w => w.id == id);
                 if (data.Any()) { data.Delete(); return true; }
                 return false;
+            }
+        }
+
+        /// <summary>
+        /// Добавляем ОВП
+        /// </summary>        
+        /// <returns></returns>
+        public override bool insOvp(Guid IdStructure, Guid OrgId, StructureModel insertStructure)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                content_org_structure cdStructur = db.content_org_structures.Where(w => w.id == IdStructure).SingleOrDefault();
+                if (cdStructur != null)
+                {
+                    throw new Exception("Запись с таким Id уже существует");
+                }
+                cdStructur = new content_org_structure
+                {
+                    id = IdStructure,
+                    f_ord = OrgId,
+                    c_title = insertStructure.Title,                    
+                    c_adress = insertStructure.Adress,
+                    c_phone= insertStructure.PhoneReception,
+                    c_fax= insertStructure.Fax,
+                    c_email= insertStructure.Email,
+                    n_geopoint_x = insertStructure.GeopointX,
+                    n_geopoint_y = insertStructure.GeopointY,
+                    c_schedule= insertStructure.Schedule,
+                    c_routes= insertStructure.Routes,
+                    c_director_post= insertStructure.DirecorPost,
+                    f_director= insertStructure.DirectorF,
+                    b_ovp = true
+                };
+
+                content_departments cdDepart = new content_departments
+                {
+                    id=Guid.NewGuid(),
+                    f_structure= IdStructure,
+                    c_title= insertStructure.Title,
+                    c_adress= insertStructure.Adress
+                };
+
+                using (var tran = db.BeginTransaction())
+                {
+                    db.Insert(cdStructur);
+                    db.Insert(cdDepart);
+                    tran.Commit();
+                    return true;
+                }
+            }
+        }
+
+        public override bool setOvp(Guid IdStructure, StructureModel updStructure)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                content_org_structure cdStructur = db.content_org_structures.Where(w => w.id == IdStructure).SingleOrDefault();
+                if (cdStructur == null)
+                {
+                    throw new Exception("Запись с таким Id не существует");
+                }
+                cdStructur.c_title = updStructure.Title;
+                cdStructur.c_adress = updStructure.Adress;
+                cdStructur.n_geopoint_x = updStructure.GeopointX;
+                cdStructur.n_geopoint_y = updStructure.GeopointY;
+                cdStructur.c_phone = updStructure.PhoneReception;
+                cdStructur.c_fax = updStructure.Fax;
+                cdStructur.c_email = updStructure.Email;
+                cdStructur.c_schedule = updStructure.Schedule;
+                cdStructur.c_routes = updStructure.Routes;
+                cdStructur.c_director_post = updStructure.DirecorPost;
+                cdStructur.f_director = updStructure.DirectorF;                
+
+                content_departments cdDepart = db.content_departmentss.Where(w => w.f_structure == IdStructure).FirstOrDefault();
+                if (cdDepart == null)
+                {
+                    throw new Exception("У данного ОВП в базе не существует отдела");
+                }
+                cdDepart.c_title= updStructure.Title;
+                using (var tran = db.BeginTransaction())
+                {
+                    db.Update(cdStructur);
+                    db.Update(cdDepart);
+                    tran.Commit();
+                    return true;
+                }   
             }
         }
 
@@ -1474,6 +1612,24 @@ namespace cms.dbase
                     {
                         Title = data.c_title,
                         Url = "/admin/orgs/structure/" + data.id
+                    });
+                }
+                #endregion
+                #region ovp
+                if (type == "ovp")
+                {
+                    var data = db.content_org_structures.Where(w => w.id == id).FirstOrDefault();
+                    var ParentStructure = db.content_orgss.Where(w => w.id == data.f_ord).FirstOrDefault();
+
+                    MyBread.Push(new BreadCrumb
+                    {
+                        Title = ParentStructure.c_title,
+                        Url = "/admin/orgs/item/" + ParentStructure.id
+                    });
+                    MyBread.Push(new BreadCrumb
+                    {
+                        Title = data.c_title,
+                        Url = "/admin/orgs/ovp/" + data.id
                     });
                 }
                 #endregion

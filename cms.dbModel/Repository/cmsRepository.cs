@@ -83,6 +83,7 @@ namespace cms.dbModel
         //Orgs
         public abstract OrgsModel[] getOrgs(FilterParams filtr);
         public abstract OrgsModel getOrgItem(Guid id);
+        public abstract bool insOrgs(Guid id, OrgsModel model);
         public abstract bool setOrgs(Guid id, OrgsModel model);
 
         public abstract StructureModel[] getStructureList(Guid id);
@@ -90,6 +91,9 @@ namespace cms.dbModel
         public abstract bool insStructure(Guid id, Guid OrgId, StructureModel insert);
         public abstract bool setStructure(Guid id, StructureModel insert);
         public abstract bool delStructure(Guid id);
+
+        public abstract bool insOvp(Guid IdStructure, Guid OrgId, StructureModel insertStructure);
+        public abstract bool setOvp(Guid IdStructure, StructureModel updStructure);
 
         public abstract Departments[] getDepartmentsList(Guid id);
         public abstract Departments getDepartamentItem(Guid id);

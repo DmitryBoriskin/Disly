@@ -1022,7 +1022,6 @@ namespace cms.dbase.models
 		[Column,    Nullable] public Guid?  uui_parent      { get; set; } // uniqueidentifier
 		[Column, NotNull    ] public string menu_title      { get; set; } // nvarchar(256)
 		[Column, NotNull    ] public int    menu_sort       { get; set; } // int
-		[Column, NotNull    ] public Guid   f_menutype      { get; set; } // uniqueidentifier
 	}
 
 	[Table(Schema="dbo", Name="content_vacancies")]
