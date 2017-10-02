@@ -2800,13 +2800,28 @@ namespace cms.dbase
         {
             using (var db = new CMSdb(_context))
             {
-                string logTitle = db.content_sitemaps
+                var itemToDelete = db.content_sitemaps
                     .Where(w => w.id.Equals(id))
-                    .Select(s => s.c_title).FirstOrDefault();
-                db.content_sitemaps.Where(w => w.id.Equals(id) || w.uui_parent.Equals(id)).Delete();
+                    .Select(s => new SiteMapModel
+                    {
+                        Title = s.c_title,
+                        Path = s.c_path,
+                        Alias = s.c_alias
+                    }).FirstOrDefault();
+
+                var listToDelete = db.content_sitemaps
+                    .Where(w => w.id.Equals(id) || w.c_path.Contains(itemToDelete.Path + itemToDelete.Alias));
+                
+                if (listToDelete.Any())
+                {
+                    foreach (var item in listToDelete.ToArray())
+                    {
+                        listToDelete.Where(w => w.id.Equals(item.id)).Delete();
+                        insertLog(userId, IP, "delete", item.id, String.Empty, "SiteMap", item.c_title);
+                    }
+                }
 
                 // логирование
-                insertLog(userId, IP, "delete", id, String.Empty, "SiteMap", logTitle);
                 return true;
             }
         }
