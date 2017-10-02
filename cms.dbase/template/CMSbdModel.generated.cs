@@ -52,16 +52,17 @@ namespace cms.dbase.models
 		public ITable<content_feedbacks>              content_feedbackss              { get { return this.GetTable<content_feedbacks>(); } }
 		public ITable<content_materials>              content_materialss              { get { return this.GetTable<content_materials>(); } }
 		public ITable<content_materials_link>         content_materials_links         { get { return this.GetTable<content_materials_link>(); } }
-		public ITable<content_menutypes>              content_menutypess              { get { return this.GetTable<content_menutypes>(); } }
 		public ITable<content_org_structure>          content_org_structures          { get { return this.GetTable<content_org_structure>(); } }
 		public ITable<content_orgs>                   content_orgss                   { get { return this.GetTable<content_orgs>(); } }
 		public ITable<content_people>                 content_peoples                 { get { return this.GetTable<content_people>(); } }
 		public ITable<content_people_department_link> content_people_department_links { get { return this.GetTable<content_people_department_link>(); } }
 		public ITable<content_people_org_link>        content_people_org_links        { get { return this.GetTable<content_people_org_link>(); } }
 		public ITable<content_sitemap>                content_sitemaps                { get { return this.GetTable<content_sitemap>(); } }
+		public ITable<content_sitemap_menus>          content_sitemap_menuss          { get { return this.GetTable<content_sitemap_menus>(); } }
 		public ITable<content_sitemap_menutypes>      content_sitemap_menutypess      { get { return this.GetTable<content_sitemap_menutypes>(); } }
 		public ITable<content_sv_people_department>   content_sv_people_departments   { get { return this.GetTable<content_sv_people_department>(); } }
 		public ITable<content_sv_people_org>          content_sv_people_orgs          { get { return this.GetTable<content_sv_people_org>(); } }
+		public ITable<content_sv_sitemap_menu>        content_sv_sitemap_menus        { get { return this.GetTable<content_sv_sitemap_menu>(); } }
 		public ITable<content_vacancies>              content_vacanciess              { get { return this.GetTable<content_vacancies>(); } }
 		public ITable<front_modules>                  front_moduless                  { get { return this.GetTable<front_modules>(); } }
 		public ITable<front_page_views>               front_page_viewss               { get { return this.GetTable<front_page_views>(); } }
@@ -306,16 +307,16 @@ namespace cms.dbase.models
 		#region Associations
 
 		/// <summary>
-		/// fk_menu_resolutions
-		/// </summary>
-		[Association(ThisKey="c_menu_id", OtherKey="id", CanBeNull=false, KeyName="fk_menu_resolutions", BackReferenceName="fkmenuresolutionss")]
-		public cms_menu fkmenuresolutions { get; set; }
-
-		/// <summary>
 		/// fk_user_resolutions
 		/// </summary>
 		[Association(ThisKey="c_user_id", OtherKey="id", CanBeNull=false, KeyName="fk_user_resolutions", BackReferenceName="fkuserresolutionss")]
 		public cms_users fkuserresolutions { get; set; }
+
+		/// <summary>
+		/// fk_menu_resolutions
+		/// </summary>
+		[Association(ThisKey="c_menu_id", OtherKey="id", CanBeNull=false, KeyName="fk_menu_resolutions", BackReferenceName="fkmenuresolutionss")]
+		public cms_menu fkmenuresolutions { get; set; }
 
 		#endregion
 	}
@@ -334,16 +335,16 @@ namespace cms.dbase.models
 		#region Associations
 
 		/// <summary>
-		/// fk_menu_template_resolutions
-		/// </summary>
-		[Association(ThisKey="f_menu_id", OtherKey="id", CanBeNull=false, KeyName="fk_menu_template_resolutions", BackReferenceName="fkmenutemplateresolutionss")]
-		public cms_menu fkmenutemplateresolutions { get; set; }
-
-		/// <summary>
 		/// fk_user_group_resolutions
 		/// </summary>
 		[Association(ThisKey="f_user_group", OtherKey="c_alias", CanBeNull=false, KeyName="fk_user_group_resolutions", BackReferenceName="fkusergroupresolutionss")]
 		public cms_users_group fkusergroupresolutions { get; set; }
+
+		/// <summary>
+		/// fk_menu_template_resolutions
+		/// </summary>
+		[Association(ThisKey="f_menu_id", OtherKey="id", CanBeNull=false, KeyName="fk_menu_template_resolutions", BackReferenceName="fkmenutemplateresolutionss")]
+		public cms_menu fkmenutemplateresolutions { get; set; }
 
 		#endregion
 	}
@@ -786,24 +787,6 @@ namespace cms.dbase.models
 		#endregion
 	}
 
-	[Table(Schema="dbo", Name="content_menutypes")]
-	public partial class content_menutypes
-	{
-		[PrimaryKey, NotNull] public Guid   id      { get; set; } // uniqueidentifier
-		[Column,     NotNull] public string c_title { get; set; } // nvarchar(256)
-		[Identity           ] public int    n_sort  { get; set; } // int
-
-		#region Associations
-
-		/// <summary>
-		/// FK_content_sitemap_menutypes_content_menutypes_BackReference
-		/// </summary>
-		[Association(ThisKey="id", OtherKey="f_menutype", CanBeNull=true, IsBackReference=true)]
-		public IEnumerable<content_sitemap_menutypes> contentsitemapmenutypescontentmenutypess { get; set; }
-
-		#endregion
-	}
-
 	[Table(Schema="dbo", Name="content_org_structure")]
 	public partial class content_org_structure
 	{
@@ -821,6 +804,7 @@ namespace cms.dbase.models
 		[Column,        Nullable] public string  c_schedule        { get; set; } // nvarchar(max)
 		[Column,        Nullable] public string  c_director_post   { get; set; } // varchar(64)
 		[Column,        Nullable] public Guid?   f_director        { get; set; } // uniqueidentifier
+		[Column,     NotNull    ] public bool    b_ovp             { get; set; } // bit
 
 		#region Associations
 
@@ -842,14 +826,19 @@ namespace cms.dbase.models
 	[Table(Schema="dbo", Name="content_orgs")]
 	public partial class content_orgs
 	{
-		[PrimaryKey, NotNull    ] public Guid   id                { get; set; } // uniqueidentifier
-		[Column,     NotNull    ] public string c_title           { get; set; } // nvarchar(512)
-		[Column,        Nullable] public string c_phone           { get; set; } // varchar(64)
-		[Column,        Nullable] public string c_phone_reception { get; set; } // varchar(64)
-		[Column,        Nullable] public string c_fax             { get; set; } // varchar(64)
-		[Column,        Nullable] public string c_email           { get; set; } // varchar(128)
-		[Column,        Nullable] public string c_director_post   { get; set; } // varchar(64)
-		[Column,        Nullable] public Guid?  f_director        { get; set; } // uniqueidentifier
+		[PrimaryKey, NotNull    ] public Guid    id                { get; set; } // uniqueidentifier
+		[Column,     NotNull    ] public string  c_title           { get; set; } // nvarchar(512)
+		[Column,        Nullable] public string  c_title_short     { get; set; } // nvarchar(512)
+		[Column,        Nullable] public string  c_phone           { get; set; } // varchar(64)
+		[Column,        Nullable] public string  c_phone_reception { get; set; } // varchar(64)
+		[Column,        Nullable] public string  c_fax             { get; set; } // varchar(64)
+		[Column,        Nullable] public string  c_email           { get; set; } // varchar(128)
+		[Column,        Nullable] public string  c_director_post   { get; set; } // varchar(64)
+		[Column,        Nullable] public Guid?   f_director        { get; set; } // uniqueidentifier
+		[Column,        Nullable] public string  c_contacts        { get; set; } // nvarchar(max)
+		[Column,        Nullable] public double? n_geopoint_x      { get; set; } // float
+		[Column,        Nullable] public double? n_geopoint_y      { get; set; } // float
+		[Column,        Nullable] public string  c_adress          { get; set; } // nvarchar(512)
 
 		#region Associations
 
@@ -970,36 +959,24 @@ namespace cms.dbase.models
 		[Association(ThisKey="f_site", OtherKey="c_alias", CanBeNull=false, KeyName="fk_content_sitemap_from_sites", BackReferenceName="fkcontentsitemapfromsitess")]
 		public cms_sites fkcontentsitemapfromsites { get; set; }
 
-		/// <summary>
-		/// FK_content_sitemap_menutypes_content_sitemap_BackReference
-		/// </summary>
-		[Association(ThisKey="id", OtherKey="f_sitemap", CanBeNull=true, IsBackReference=true)]
-		public IEnumerable<content_sitemap_menutypes> contentsitemapmenutypescontentsitemaps { get; set; }
-
 		#endregion
+	}
+
+	[Table(Schema="dbo", Name="content_sitemap_menus")]
+	public partial class content_sitemap_menus
+	{
+		[PrimaryKey, NotNull] public Guid   id      { get; set; } // uniqueidentifier
+		[Column,     NotNull] public string c_title { get; set; } // nvarchar(256)
+		[Identity           ] public int    n_sort  { get; set; } // int
 	}
 
 	[Table(Schema="dbo", Name="content_sitemap_menutypes")]
 	public partial class content_sitemap_menutypes
 	{
-		[Column, NotNull] public Guid f_sitemap  { get; set; } // uniqueidentifier
-		[Column, NotNull] public Guid f_menutype { get; set; } // uniqueidentifier
-
-		#region Associations
-
-		/// <summary>
-		/// FK_content_sitemap_menutypes_content_sitemap
-		/// </summary>
-		[Association(ThisKey="f_sitemap", OtherKey="id", CanBeNull=false, KeyName="FK_content_sitemap_menutypes_content_sitemap", BackReferenceName="contentsitemapmenutypescontentsitemaps")]
-		public content_sitemap contentsitemapmenutypescontentsitemap { get; set; }
-
-		/// <summary>
-		/// FK_content_sitemap_menutypes_content_menutypes
-		/// </summary>
-		[Association(ThisKey="f_menutype", OtherKey="id", CanBeNull=false, KeyName="FK_content_sitemap_menutypes_content_menutypes", BackReferenceName="contentsitemapmenutypescontentmenutypess")]
-		public content_menutypes contentsitemapmenutypescontentmenutypes { get; set; }
-
-		#endregion
+		[Column, NotNull] public Guid   f_sitemap  { get; set; } // uniqueidentifier
+		[Column, NotNull] public Guid   f_menutype { get; set; } // uniqueidentifier
+		[Column, NotNull] public string f_site     { get; set; } // nvarchar(64)
+		[Column, NotNull] public int    n_sort     { get; set; } // int
 	}
 
 	// View
@@ -1022,6 +999,30 @@ namespace cms.dbase.models
 		[Column,    Nullable] public string c_surname    { get; set; } // varchar(64)
 		[Column,    Nullable] public string c_name       { get; set; } // varchar(64)
 		[Column,    Nullable] public string c_patronymic { get; set; } // varchar(64)
+	}
+
+	// View
+	[Table(Schema="dbo", Name="content_sv_sitemap_menu")]
+	public partial class content_sv_sitemap_menu
+	{
+		[Column, NotNull    ] public Guid   id              { get; set; } // uniqueidentifier
+		[Column, NotNull    ] public string f_site          { get; set; } // varchar(64)
+		[Column, NotNull    ] public string f_front_section { get; set; } // nvarchar(16)
+		[Column, NotNull    ] public string c_path          { get; set; } // varchar(1024)
+		[Column,    Nullable] public string c_alias         { get; set; } // varchar(64)
+		[Column,    Nullable] public string c_title         { get; set; } // nvarchar(256)
+		[Column,    Nullable] public string c_preview       { get; set; } // varchar(1024)
+		[Column,    Nullable] public string c_url           { get; set; } // varchar(1024)
+		[Column,    Nullable] public string c_text          { get; set; } // nvarchar(max)
+		[Column,    Nullable] public string c_desc          { get; set; } // nvarchar(1024)
+		[Column,    Nullable] public string c_keyw          { get; set; } // nvarchar(512)
+		[Column, NotNull    ] public bool   b_disabled      { get; set; } // bit
+		[Column, NotNull    ] public bool   b_disabled_menu { get; set; } // bit
+		[Column, NotNull    ] public int    n_sort          { get; set; } // int
+		[Column,    Nullable] public Guid?  uui_parent      { get; set; } // uniqueidentifier
+		[Column, NotNull    ] public string menu_title      { get; set; } // nvarchar(256)
+		[Column, NotNull    ] public int    menu_sort       { get; set; } // int
+		[Column, NotNull    ] public Guid   f_menutype      { get; set; } // uniqueidentifier
 	}
 
 	[Table(Schema="dbo", Name="content_vacancies")]
@@ -1366,12 +1367,6 @@ namespace cms.dbase.models
 				t.id == id);
 		}
 
-		public static content_menutypes Find(this ITable<content_menutypes> table, Guid id)
-		{
-			return table.FirstOrDefault(t =>
-				t.id == id);
-		}
-
 		public static content_org_structure Find(this ITable<content_org_structure> table, Guid id)
 		{
 			return table.FirstOrDefault(t =>
@@ -1404,6 +1399,12 @@ namespace cms.dbase.models
 		}
 
 		public static content_sitemap Find(this ITable<content_sitemap> table, Guid id)
+		{
+			return table.FirstOrDefault(t =>
+				t.id == id);
+		}
+
+		public static content_sitemap_menus Find(this ITable<content_sitemap_menus> table, Guid id)
 		{
 			return table.FirstOrDefault(t =>
 				t.id == id);

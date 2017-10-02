@@ -27,7 +27,7 @@ namespace Disly.Areas.Admin.Models
         /// <summary>
         /// Список типов страниц
         /// </summary>
-        public Catalog_list[] FrontSectionList { get; set; }
+        public SiteMapMenu[] FrontSectionList { get; set; }
 
         /// <summary>
         /// Список доступных типов меню

@@ -239,10 +239,9 @@ namespace Disly.Areas.Admin.Controllers
         [HttpGet]
         public ActionResult MenuGroup(string id)
         {
-            //UsersGroupModel model = _cmsRepository.getUsersGroup(id);
+            SiteMapMenu model = new SiteMapMenu();
 
-            //return PartialView("UsersGroup", model);
-            return null;
+            return PartialView("SiteMapMenuGroup", model);
         }
         #endregion
 
@@ -254,7 +253,7 @@ namespace Disly.Areas.Admin.Controllers
         /// <param name="permit">Номер новой позиции</param>
         /// <returns></returns>
         [HttpPost]
-        public ActionResult ChangePermit(string group, Guid id, int permit)
+        public ActionResult ChangePermit(string group, string menuSort, Guid id, int permit)
         {
             bool Result = false;
 
@@ -264,7 +263,7 @@ namespace Disly.Areas.Admin.Controllers
                     Result = _cmsRepository.permit_cmsMenu(id, permit, AccountInfo.id, RequestUserInfo.IP);
                     break;
                 case "sitemap":
-                    Result = _cmsRepository.permit_SiteMap(id, permit, domain);
+                    Result = _cmsRepository.permit_SiteMap(id, permit, domain, menuSort);
                     break;
             }
 

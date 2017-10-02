@@ -940,6 +940,13 @@ h3.nesting_title{
     font-weight:300 !important;
     margin-top:12px;
 }
+
+.site_map_list .ui-sortable-handle{
+    cursor:pointer !important;
+}
+.site_map_list .sortable .ui-sortable-handle {
+    cursor: n-resize !important;
+}
 .bubble_but{float:right;}
 .bubble_but>a{display:inline-block;}
 .sort-element:before{
