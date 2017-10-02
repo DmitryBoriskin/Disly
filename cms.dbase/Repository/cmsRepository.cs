@@ -1240,11 +1240,49 @@ namespace cms.dbase
                             .Select(s => new OrgsModel {
                                 Id=s.id,
                                 Title=s.c_title,
-                                Structure=getStructureList(s.id)
+                                ShortTitle=s.c_title_short,
+                                Phone = s.c_phone,
+                                PhoneReception = s.c_phone_reception,
+                                Fax = s.c_fax,
+                                Email = s.c_email,
+                                DirecorPost = s.c_director_post,
+                                DirectorF = s.f_director,
+                                Contacts = s.c_contacts,
+                                Address=s.c_adress,
+                                GeopointX = s.n_geopoint_x,
+                                GeopointY = s.n_geopoint_y,
+                                Structure =getStructureList(s.id)
                             })
                             .FirstOrDefault();
                 if (data != null) return data;
                 return null;
+            }
+        }
+        public override bool insOrgs(Guid id, OrgsModel model)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var data = db.content_orgss.Where(w => w.id == id);
+                if (!data.Any())
+                {
+                    db.content_orgss
+                        .Value(s => s.id, model.Id)
+                        .Value(s => s.c_title, model.Title)
+                        .Value(s => s.c_title_short, model.ShortTitle)
+                        .Value(s => s.c_phone, model.Phone)
+                        .Value(s => s.c_phone_reception, model.PhoneReception)
+                        .Value(s => s.c_fax, model.Fax)
+                        .Value(s => s.c_email, model.Email)
+                        .Value(s => s.c_director_post, model.DirecorPost)
+                        .Value(s => s.f_director, model.DirectorF)
+                        .Value(s => s.c_contacts, model.Contacts)
+                        .Value(s => s.c_adress, model.Address)
+                        .Value(s => s.n_geopoint_x, model.GeopointX)
+                        .Value(s => s.n_geopoint_y, model.GeopointY)
+                        .Insert();
+                    return true;
+                }
+                return false;
             }
         }
         public override bool setOrgs(Guid id, OrgsModel model)
@@ -1254,7 +1292,19 @@ namespace cms.dbase
                 var data = db.content_orgss.Where(w => w.id == id);
                 if (data.Any())
                 {
-                    data.Set(s => s.c_title, model.Title)
+                    data
+                        .Set(s => s.c_title, model.Title)
+                        .Set(s => s.c_title_short, model.ShortTitle)
+                        .Set(s => s.c_phone, model.Phone)
+                        .Set(s => s.c_phone_reception, model.PhoneReception)
+                        .Set(s => s.c_fax, model.Fax)
+                        .Set(s => s.c_email, model.Email)
+                        .Set(s => s.c_director_post, model.DirecorPost)
+                        .Set(s => s.f_director, model.DirectorF)
+                        .Set(s => s.c_contacts, model.Contacts)
+                        .Set(s => s.c_adress, model.Address)
+                        .Set(s => s.n_geopoint_x, model.GeopointX)
+                        .Set(s => s.n_geopoint_y, model.GeopointY)                        
                         .Update();
                     return true;
                 }

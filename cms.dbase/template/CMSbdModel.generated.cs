@@ -842,14 +842,19 @@ namespace cms.dbase.models
 	[Table(Schema="dbo", Name="content_orgs")]
 	public partial class content_orgs
 	{
-		[PrimaryKey, NotNull    ] public Guid   id                { get; set; } // uniqueidentifier
-		[Column,     NotNull    ] public string c_title           { get; set; } // nvarchar(512)
-		[Column,        Nullable] public string c_phone           { get; set; } // varchar(64)
-		[Column,        Nullable] public string c_phone_reception { get; set; } // varchar(64)
-		[Column,        Nullable] public string c_fax             { get; set; } // varchar(64)
-		[Column,        Nullable] public string c_email           { get; set; } // varchar(128)
-		[Column,        Nullable] public string c_director_post   { get; set; } // varchar(64)
-		[Column,        Nullable] public Guid?  f_director        { get; set; } // uniqueidentifier
+		[PrimaryKey, NotNull    ] public Guid    id                { get; set; } // uniqueidentifier
+		[Column,     NotNull    ] public string  c_title           { get; set; } // nvarchar(512)
+		[Column,        Nullable] public string  c_title_short     { get; set; } // nvarchar(512)
+		[Column,        Nullable] public string  c_phone           { get; set; } // varchar(64)
+		[Column,        Nullable] public string  c_phone_reception { get; set; } // varchar(64)
+		[Column,        Nullable] public string  c_fax             { get; set; } // varchar(64)
+		[Column,        Nullable] public string  c_email           { get; set; } // varchar(128)
+		[Column,        Nullable] public string  c_director_post   { get; set; } // varchar(64)
+		[Column,        Nullable] public Guid?   f_director        { get; set; } // uniqueidentifier
+		[Column,        Nullable] public string  c_contacts        { get; set; } // nvarchar(max)
+		[Column,        Nullable] public double? n_geopoint_x      { get; set; } // float
+		[Column,        Nullable] public double? n_geopoint_y      { get; set; } // float
+		[Column,        Nullable] public string  c_adress          { get; set; } // nvarchar(512)
 
 		#region Associations
 
@@ -984,6 +989,7 @@ namespace cms.dbase.models
 	{
 		[Column, NotNull] public Guid f_sitemap  { get; set; } // uniqueidentifier
 		[Column, NotNull] public Guid f_menutype { get; set; } // uniqueidentifier
+		[Column, NotNull] public int  n_sort     { get; set; } // int
 
 		#region Associations
 
@@ -1141,16 +1147,16 @@ namespace cms.dbase.models
 		public front_page_views sitefrontsectionpageviews { get; set; }
 
 		/// <summary>
-		/// FK_front_section_site
-		/// </summary>
-		[Association(ThisKey="f_front_section", OtherKey="c_alias", CanBeNull=false, KeyName="FK_front_section_site", BackReferenceName="frontsectionsites")]
-		public front_section frontsectionsite { get; set; }
-
-		/// <summary>
 		/// FK_site_front_section
 		/// </summary>
 		[Association(ThisKey="f_site", OtherKey="c_alias", CanBeNull=false, KeyName="FK_site_front_section", BackReferenceName="sitefrontsections")]
 		public cms_sites sitefrontsection { get; set; }
+
+		/// <summary>
+		/// FK_front_section_site
+		/// </summary>
+		[Association(ThisKey="f_front_section", OtherKey="c_alias", CanBeNull=false, KeyName="FK_front_section_site", BackReferenceName="frontsectionsites")]
+		public front_section frontsectionsite { get; set; }
 
 		#endregion
 	}

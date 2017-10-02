@@ -83,6 +83,7 @@ namespace cms.dbModel
         //Orgs
         public abstract OrgsModel[] getOrgs(FilterParams filtr);
         public abstract OrgsModel getOrgItem(Guid id);
+        public abstract bool insOrgs(Guid id, OrgsModel model);
         public abstract bool setOrgs(Guid id, OrgsModel model);
 
         public abstract StructureModel[] getStructureList(Guid id);

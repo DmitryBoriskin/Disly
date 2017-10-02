@@ -1,4 +1,5 @@
 ﻿using Disly.Areas.Admin.Models;
+using Disly.Areas.Admin.Service;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,6 @@ namespace Disly.Areas.Admin.Controllers
     {
         OrgsViewModel model;
         FilterParams filter;
-
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             base.OnActionExecuting(filterContext);
@@ -35,16 +35,13 @@ namespace Disly.Areas.Admin.Controllers
             ViewBag.KeyWords = "";
             #endregion
         }
-
         // GET: Admin/Orgs
         public ActionResult Index()
         {
             filter = getFilter();
             model.OrgList = _cmsRepository.getOrgs(filter);//+ список организаций
             return View(model);
-        }
-
-        
+        }        
         /// <summary>
         /// Формируем строку фильтра
         /// </summary>
@@ -59,7 +56,6 @@ namespace Disly.Areas.Admin.Controllers
             query = addFiltrParam(query, "disabled", disabled.ToString().ToLower());
             return Redirect(StartUrl + query);
         }
-
         /// <summary>
         /// Очищаем фильтр
         /// </summary>
@@ -79,11 +75,14 @@ namespace Disly.Areas.Admin.Controllers
             string query = HttpUtility.UrlDecode(Request.Url.Query);
             query = addFiltrParam(query, "page", String.Empty);
             return Redirect(StartUrl + "item/" + Guid.NewGuid() + "/" + query);
-        }
-        
+        }        
+
         public ActionResult Item(Guid Id)
         {
             model.Item = _cmsRepository.getOrgItem(Id);    //+ список структур        
+            ViewBag.Titlecoord = model.Item.ShortTitle;
+            ViewBag.Xcoord = model.Item.GeopointX;                
+            ViewBag.Ycoord = model.Item.GeopointY;
             return View("Item", model);
         }
 
@@ -97,10 +96,38 @@ namespace Disly.Areas.Admin.Controllers
 
             if (ModelState.IsValid)
             {
+                #region координаты
+                double MapX = 0;
+                double MapY = 0;
+
+                if (back_model.Item.GeopointX != null) { MapX = (double)back_model.Item.GeopointX; }
+                if (back_model.Item.GeopointY != null) { MapY = (double)back_model.Item.GeopointY; }
+                ViewBag.Titlecoord = back_model.Item.ShortTitle;
+                ViewBag.Xcoord = MapX;
+                ViewBag.Ycoord = MapY;
+                try
+                {
+                    if (back_model.Item.Address != String.Empty && (MapX == 0 || MapY == 0))
+                    {
+                        var CoordResult=Spots.Coords(back_model.Item.Address);
+                        back_model.Item.GeopointX = CoordResult.GeopointX;
+                        back_model.Item.GeopointY = CoordResult.GeopointY;
+                    }
+                }
+                catch { }
+                #endregion
+
                 _cmsRepository.setOrgs(id, back_model.Item);
                 userMassege.info = "Запись сохранена";
                 userMassege.buttons = new ErrorMassegeBtn[]{
                     new ErrorMassegeBtn { url = StartUrl + Request.Url.Query, text = "вернуться в список" },
+                    new ErrorMassegeBtn { url = "#", text = "ок", action = "false" }
+                };
+            }
+            else
+            {
+                userMassege.info = "Произошла ошибка";
+                userMassege.buttons = new ErrorMassegeBtn[]{                    
                     new ErrorMassegeBtn { url = "#", text = "ок", action = "false" }
                 };
             }
@@ -113,6 +140,13 @@ namespace Disly.Areas.Admin.Controllers
         {
             ViewBag.Title = "Структурное подразделение";
             model.StructureItem = _cmsRepository.getStructure(id);//+ список подразделений      
+
+            #region координаты
+            ViewBag.Titlecoord = model.StructureItem.Title;
+            ViewBag.Xcoord = model.StructureItem.GeopointX;
+            ViewBag.Ycoord = model.StructureItem.GeopointY; 
+            #endregion
+
             if (model.StructureItem != null)
             {
                 model.BreadCrumbOrg = _cmsRepository.getBreadCrumbOrgs(id, ViewBag.ActionName);
@@ -127,11 +161,33 @@ namespace Disly.Areas.Admin.Controllers
         {
             ErrorMassege userMessage = new ErrorMassege();
             userMessage.title = "Информация";
-            
-
             model.StructureItem = _cmsRepository.getStructure(id);
             if (ModelState.IsValid)
             {
+
+                #region координаты
+                double MapX = 0;
+                double MapY = 0;
+
+                if (back_model.StructureItem.GeopointX != null) { MapX = (double)back_model.StructureItem.GeopointX; }
+                if (back_model.StructureItem.GeopointY != null) { MapY = (double)back_model.StructureItem.GeopointY; }
+                ViewBag.Titlecoord = back_model.StructureItem.Title;
+                ViewBag.Xcoord = MapX;
+                ViewBag.Ycoord = MapY;
+                try
+                {
+                    if (back_model.StructureItem.Adress != String.Empty && (MapX == 0 || MapY == 0))
+                    {
+                        var CoordResult = Spots.Coords(back_model.StructureItem.Adress);
+                        back_model.StructureItem.GeopointX = CoordResult.GeopointX;
+                        back_model.StructureItem.GeopointY = CoordResult.GeopointY;
+                    }
+                }
+                catch { }
+                #endregion
+
+
+
                 if (model.StructureItem == null)
                 {
                     #region создание
@@ -217,15 +273,10 @@ namespace Disly.Areas.Admin.Controllers
                 if (StrucId.Length > 0)
                 {
                     model.BreadCrumbOrg = _cmsRepository.getBreadCrumbOrgs(Guid.Parse(StrucId), "structure");
-                }
-                
+                }                
             }
-
-            
             return View("department", model);
-        }
-
-        
+        }                
         [HttpPost]
         [ValidateInput(false)]
         [MultiButton(MatchFormKey = "action", MatchFormValue = "save-department-btn")]
@@ -272,6 +323,7 @@ namespace Disly.Areas.Admin.Controllers
             model.ErrorInfo = userMessage;
             return View("department", model);
         }
+
         [HttpPost]
         [ValidateInput(false)]
         [MultiButton(MatchFormKey = "action", MatchFormValue = "delete-department-btn")]
@@ -312,12 +364,11 @@ namespace Disly.Areas.Admin.Controllers
             _cmsRepository.insDepartmentsPhone(Guid.Parse(IdDepartment), PhoneLabel, PhoneValue);
             return Redirect(((System.Web.HttpRequestWrapper)Request).RawUrl);
         }
+
         public ActionResult DelPhoneDepart(int id)
         {
             _cmsRepository.delDepartmentsPhone(id);
             return null;
         }        
-
-
     }
 }

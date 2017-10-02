@@ -7,12 +7,21 @@ namespace cms.dbModel.entity
     /// Организация
     /// </summary>
     public class OrgsModel
-    {
-        [Required]
+    {        
         public Guid Id { get; set; }
         [Required(ErrorMessage = "Поле «Название организации» не должно быть пустым.")]
         public string Title { get; set; }
         public string ShortTitle { get; set; }
+        public string Contacts { get; set; }
+        public string Address { get; set; }
+        public double? GeopointX { get; set; }
+        public double? GeopointY { get; set; }
+        public string Phone { get; set; }        
+        public string PhoneReception { get; set; }
+        public string Fax { get; set; }
+        public string Email { get; set; }
+        public string DirecorPost { get; set; }
+        public Guid? DirectorF { get; set; }
         public bool Disabled { get; set; }
         public StructureModel[] Structure { get; set; }
     }
@@ -86,5 +95,11 @@ namespace cms.dbModel.entity
         public string Title { get; set; }
     }
 
+
+    public class CoordModel
+    {
+        public double? GeopointX { get; set; }
+        public double? GeopointY { get; set; }
+    }
 }
 

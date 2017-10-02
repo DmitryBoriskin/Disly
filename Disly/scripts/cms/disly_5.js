@@ -215,6 +215,9 @@ function clear_modal() {
     $modalFooter.empty();
 }
 
+
+
+
 // Всплывающие окна
 function Confirm(Title, Body, Object) {
     clear_modal();
@@ -440,5 +443,74 @@ function InitTinyMCE_new(id, _width, _height, directory) {
         //    $('iframe#FileManager').bind('load', function () { FileManagerLoad(field_name); });
         //    if (win.getImageData) win.getImageData();
         //}
+    });
+}
+
+
+
+function Coords(x, y, title, desc, zoom) {
+    $(document).ready(function () {
+        var JQ_Ymaps = $('script[src$="//api-maps.yandex.ru/2.0/?load=package.full&lang=ru-RU"]').length;
+        x = x.replace(',', '.');
+        y = y.replace(',', '.');
+        if (JQ_Ymaps == 0) {
+
+            $.getScript("//api-maps.yandex.ru/2.0/?load=package.full&lang=ru-RU", function () {
+                var script = document.createElement('script');
+                script.type = 'text/javascript';
+                script.src = "//api-maps.yandex.ru/2.0/?load=package.full&lang=ru-RU";
+                document.head.appendChild(script);
+
+                ymaps.ready(function () {
+                    if (title == '') { title = "Название организации"; }
+                    if (desc == '') { desc = "Описание организации"; }
+                    var myMap = new ymaps.Map("map", { center: [y, x], zoom: zoom }),
+                myPlacemark = new ymaps.Placemark([y, x], {
+                    hasBalloon: false,                    
+                }, { draggable: true });
+                    //Перемещение метки 
+                    myPlacemark.events.add("dragend", function () {
+                        var coordinates = this.geometry.getCoordinates();
+                        var x = this.geometry.getCoordinates(6)[1];
+                        var y = this.geometry.getCoordinates(6)[0];
+                        CoordPoint(y, x);
+                        return false;
+
+                    }, myPlacemark);
+                    //Перемещение метки по клику
+                    myMap.events.add('click', function (e) {
+                        var coords = e.get('coordPosition');
+                        myPlacemark.geometry.setCoordinates(coords);  //Перемещает метку на место клика                        
+                        var xMap = coords[0].toPrecision(8)
+                        var yMap = coords[1].toPrecision(8)
+                        CoordPoint(xMap, yMap);
+                        return false;
+                    });
+                    myMap.controls                    
+                    .add('zoomControl', { left: 5, top: 5 })                    
+                    .add('typeSelector')                    
+                    .add('mapTools', { left: 35, top: 5 });
+                    myMap.geoObjects.add(myPlacemark);
+                });
+            });
+        }
+    });
+
+
+    //myMap.events.add('click', function (e) {        
+    //    var coords = e.get('coordPosition');
+    //    var xMap = coords[0].toPrecision(6);
+    //    var yMap = coords[1].toPrecision(6);
+    //});
+}
+
+
+function CoordPoint(xMap, yMap) {
+    $(document).ready(function () {        
+        var pointX = $('.Item_CoordX');
+        pointX.val(String(xMap).replace(/[.]/g, ","))
+        var pointY = $('.Item_CoordY');
+        pointY.val(String(yMap).replace(/[.]/g, ","))
+
     });
 }

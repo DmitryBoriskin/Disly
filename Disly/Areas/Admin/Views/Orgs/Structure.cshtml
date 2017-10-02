@@ -26,6 +26,15 @@
                     @Html.TextBoxFor(m => m.StructureItem.GeopointY, new { type = "text", maxlength = "128", title = "Y - координата:" })
                 </div>
             </div>
+            <div class="row">
+                <div class="col-xs-12">
+                    <div id="map">
+                        <script type="text/javascript">
+                        Coords('@ViewBag.Ycoord', '@ViewBag.Xcoord', '@ViewBag.Titlecoord', '', '14');
+                        </script>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="group-block " title="Как добраться">
             @Html.TextAreaFor(m => m.StructureItem.Routes, new { type = "editor", title = "Текст", height = "100" })
@@ -80,6 +89,17 @@
     </div>
     <div class="dop_info-block">
         <div class="dop-caption">Дополнительно</div>
+        <div class="group-block open" title="Руководитель отделения">
+            @Html.TextBoxFor(m => m.DepartmentItem.DirecorPost, new { type = "text", title = "Должность" })
+            @*@if (Model.DepartmentItem != null)
+            {
+                if (PeopleList != null)
+                {
+                    @Html.DropDownListFor(m => m.DepartmentItem.DirectorF, PeopleList, new { @class = "selectpicker", @title = "Выберите врача из списка" })
+                }
+            }*@
+        </div>
+
     </div>
 }
 else
