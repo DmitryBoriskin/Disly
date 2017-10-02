@@ -1258,7 +1258,7 @@ namespace cms.dbase
                 return null;
             }
         }
-        public override bool insOrgs(Guid id, OrgsModel model)
+        public override bool insOrgs(Guid id, OrgsModel model, Guid UserId, String IP)
         {
             using (var db = new CMSdb(_context))
             {
@@ -1266,7 +1266,7 @@ namespace cms.dbase
                 if (!data.Any())
                 {
                     db.content_orgss
-                        .Value(s => s.id, model.Id)
+                        .Value(s => s.id, id)
                         .Value(s => s.c_title, model.Title)
                         .Value(s => s.c_title_short, model.ShortTitle)
                         .Value(s => s.c_phone, model.Phone)
@@ -1280,12 +1280,14 @@ namespace cms.dbase
                         .Value(s => s.n_geopoint_x, model.GeopointX)
                         .Value(s => s.n_geopoint_y, model.GeopointY)
                         .Insert();
+                    //логирование
+                    insertLog(UserId, IP, "insert", id, String.Empty, "Orgs", model.Title);
                     return true;
                 }
                 return false;
             }
         }
-        public override bool setOrgs(Guid id, OrgsModel model)
+        public override bool setOrgs(Guid id, OrgsModel model, Guid UserId, String IP)
         {
             using (var db = new CMSdb(_context))
             {
@@ -1306,11 +1308,30 @@ namespace cms.dbase
                         .Set(s => s.n_geopoint_x, model.GeopointX)
                         .Set(s => s.n_geopoint_y, model.GeopointY)                        
                         .Update();
+                    //логирование
+                    insertLog(UserId, IP, "update", id, String.Empty, "Orgs", model.Title);
                     return true;
                 }
                 return false;                
             }
         }        
+        public override bool delOrgs(Guid id, Guid UserId, String IP)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var data = db.content_orgss.Where(w => w.id == id);
+                string logTitle = data.FirstOrDefault().c_title;
+                if (data.Any())
+                {
+                    data.Delete();
+                    //логирование
+                    insertLog(UserId, IP, "delete", id, String.Empty, "Orgs", logTitle);
+                    return true;
+                }
+                return false;
+            }
+        }
+
         public override StructureModel[] getStructureList(Guid id)
         {
             using (var db = new CMSdb(_context))
@@ -1359,7 +1380,7 @@ namespace cms.dbase
                 return null;
             }
         }   
-        public override bool insStructure(Guid id, Guid OrgId, StructureModel insert)
+        public override bool insStructure(Guid id, Guid OrgId, StructureModel insert, Guid UserId, String IP)
         {
             using (var db = new CMSdb(_context))
             {                
@@ -1379,10 +1400,12 @@ namespace cms.dbase
                   .Value(v => v.c_director_post, insert.DirecorPost)
                   .Value(v => v.f_director, insert.DirectorF)
                   .Insert();
+                //логирование
+                insertLog(UserId, IP, "insert", id, String.Empty, "Orgs", insert.Title);
                 return true;
             }
         }
-        public override bool setStructure(Guid id, StructureModel insert)
+        public override bool setStructure(Guid id, StructureModel insert, Guid UserId, String IP)
         {
             using (var db = new CMSdb(_context))
             {
@@ -1403,6 +1426,8 @@ namespace cms.dbase
                     .Set(v => v.c_director_post, insert.DirecorPost)
                     .Set(v => v.f_director, insert.DirectorF)
                     .Update();
+                    //логирование
+                    insertLog(UserId, IP, "update", id, String.Empty, "Orgs", insert.Title);
                     return true;
                 }
                 else
@@ -1411,12 +1436,18 @@ namespace cms.dbase
                 }
             }
         }
-        public override bool delStructure(Guid id)
+        public override bool delStructure(Guid id, Guid UserId, String IP)
         {
             using (var db = new CMSdb(_context))
             {
                 var data = db.content_org_structures.Where(w => w.id == id);
-                if (data.Any()) { data.Delete(); return true; }
+                string logTitle = data.FirstOrDefault().c_title;
+                if (data.Any()) {
+                    data.Delete(); 
+                    //логирование
+                    insertLog(UserId, IP, "delete", id, String.Empty, "Orgs", logTitle);
+                    return true;
+                }
                 return false;
             }
         }
@@ -1425,7 +1456,7 @@ namespace cms.dbase
         /// Добавляем ОВП
         /// </summary>        
         /// <returns></returns>
-        public override bool insOvp(Guid IdStructure, Guid OrgId, StructureModel insertStructure)
+        public override bool insOvp(Guid IdStructure, Guid OrgId, StructureModel insertStructure, Guid UserId, String IP)
         {
             using (var db = new CMSdb(_context))
             {
@@ -1459,18 +1490,20 @@ namespace cms.dbase
                     c_title= insertStructure.Title,
                     c_adress= insertStructure.Adress
                 };
-
+                string logTitle = insertStructure.Title;
                 using (var tran = db.BeginTransaction())
                 {
                     db.Insert(cdStructur);
                     db.Insert(cdDepart);
                     tran.Commit();
+                    //логирование
+                    insertLog(UserId, IP, "insert", IdStructure, String.Empty, "Orgs", logTitle);
                     return true;
                 }
             }
         }
 
-        public override bool setOvp(Guid IdStructure, StructureModel updStructure)
+        public override bool setOvp(Guid IdStructure, StructureModel updStructure, Guid UserId, String IP)
         {
             using (var db = new CMSdb(_context))
             {
@@ -1502,6 +1535,8 @@ namespace cms.dbase
                     db.Update(cdStructur);
                     db.Update(cdDepart);
                     tran.Commit();
+                    //логирование
+                    insertLog(UserId, IP, "update", IdStructure, String.Empty, "Orgs", updStructure.Title);
                     return true;
                 }   
             }
@@ -1667,7 +1702,7 @@ namespace cms.dbase
         /// <param name="Label"></param>
         /// <param name="Value"></param>
         /// <returns></returns>
-        public override bool insDepartmentsPhone(Guid idDepart, string Label, string Value)
+        public override bool insDepartmentsPhone(Guid idDepart, string Label, string Value, Guid UserId, String IP)
         {
             using (var db = new CMSdb(_context))
             {
@@ -1680,6 +1715,8 @@ namespace cms.dbase
                    .Value(v => v.c_val, Value)
                    .Value(v => v.n_sort, Sort)
                    .Insert();
+                //логирование
+                insertLog(UserId, IP, "insert_phone_depart", idDepart, String.Empty, "Orgs", Label);
                 return true;
             }
         }
@@ -1688,9 +1725,11 @@ namespace cms.dbase
             using (var db = new CMSdb(_context))
             {
                 var data = db.content_departments_phones.Where(w => w.id == id);
+                
                 if (data.Any())
                 {
-                    data.Delete();
+                    string logtitle = data.FirstOrDefault().c_val;
+                    data.Delete();                    
                 }
             }
             return true;
@@ -1709,7 +1748,7 @@ namespace cms.dbase
                 return null; 
             }          
         }
-        public override bool insDepartament(Guid id, Guid Structure, Departments insert)
+        public override bool insDepartament(Guid id, Guid Structure, Departments insert, Guid UserId, String IP)
         {
             using (var db = new CMSdb(_context))
             {
@@ -1734,7 +1773,7 @@ namespace cms.dbase
                 return true;
             }
         }
-        public override bool updDepartament(Guid id, Departments insert)
+        public override bool updDepartament(Guid id, Departments insert, Guid UserId, String IP)
         {
             using (var db = new CMSdb(_context))
             {
@@ -1754,7 +1793,7 @@ namespace cms.dbase
                 return true;
             }
         }
-        public override bool delDepartament(Guid id)
+        public override bool delDepartament(Guid id, Guid UserId, String IP)
         {
             using (var db = new CMSdb(_context))
             {

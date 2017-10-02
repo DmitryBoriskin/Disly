@@ -83,28 +83,29 @@ namespace cms.dbModel
         //Orgs
         public abstract OrgsModel[] getOrgs(FilterParams filtr);
         public abstract OrgsModel getOrgItem(Guid id);
-        public abstract bool insOrgs(Guid id, OrgsModel model);
-        public abstract bool setOrgs(Guid id, OrgsModel model);
+        public abstract bool insOrgs(Guid id, OrgsModel model, Guid UserId, String IP);
+        public abstract bool setOrgs(Guid id, OrgsModel model, Guid UserId, String IP);
+        public abstract bool delOrgs(Guid id, Guid UserId, String IP);
 
         public abstract StructureModel[] getStructureList(Guid id);
         public abstract StructureModel getStructure(Guid id);
-        public abstract bool insStructure(Guid id, Guid OrgId, StructureModel insert);
-        public abstract bool setStructure(Guid id, StructureModel insert);
-        public abstract bool delStructure(Guid id);
+        public abstract bool insStructure(Guid id, Guid OrgId, StructureModel insert, Guid UserId, String IP);
+        public abstract bool setStructure(Guid id, StructureModel insert, Guid UserId, String IP);
+        public abstract bool delStructure(Guid id, Guid UserId, String IP);
 
-        public abstract bool insOvp(Guid IdStructure, Guid OrgId, StructureModel insertStructure);
-        public abstract bool setOvp(Guid IdStructure, StructureModel updStructure);
+        public abstract bool insOvp(Guid IdStructure, Guid OrgId, StructureModel insertStructure, Guid UserId, String IP);
+        public abstract bool setOvp(Guid IdStructure, StructureModel updStructure, Guid UserId, String IP);
 
         public abstract Departments[] getDepartmentsList(Guid id);
         public abstract Departments getDepartamentItem(Guid id);
         public abstract DepartmentsPhone[] getDepartmentsPhone(Guid id);
         public abstract BreadCrumb[] getBreadCrumbOrgs(Guid id, string type);
-        public abstract bool insDepartmentsPhone(Guid idDepart, string Label, string Value);
+        public abstract bool insDepartmentsPhone(Guid idDepart, string Label, string Value, Guid UserId, String IP);
         public abstract bool delDepartmentsPhone(int id);
         public abstract People[] getPeopleDepartment(Guid idDepart);
-        public abstract bool insDepartament(Guid id, Guid Structure, Departments insert);
-        public abstract bool updDepartament(Guid id,  Departments update);
-        public abstract bool delDepartament(Guid id);
+        public abstract bool insDepartament(Guid id, Guid Structure, Departments insert, Guid UserId, String IP);
+        public abstract bool updDepartament(Guid id,  Departments update, Guid UserId, String IP);
+        public abstract bool delDepartament(Guid id, Guid UserId, String IP);
         //Feedbacks
         public abstract FeedbacksList getFeedbacksList(FilterParams filtr);
         public abstract FeedbackModel getFeedback(Guid id);
