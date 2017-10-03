@@ -2807,9 +2807,18 @@ namespace cms.dbase
                     {
                         Title = s.c_title,
                         Path = s.c_path,
-                        Alias = s.c_alias
+                        Alias = s.c_alias,
+                        Sort = s.n_sort
                     }).FirstOrDefault();
 
+                // Обновляем поле для сортировки для сестринских эл-тов
+                var listToUpdate = db.content_sitemaps
+                    .Where(w => w.c_path.Equals(itemToDelete.Path))
+                    .Where(w => w.n_sort > itemToDelete.Sort);
+
+                listToUpdate.Set(u => u.n_sort, u => u.n_sort - 1).Update();
+                    
+                // Удаляем дочерние эл-ты 
                 var listToDelete = db.content_sitemaps
                     .Where(w => w.id.Equals(id) || w.c_path.Contains(itemToDelete.Path + itemToDelete.Alias));
                 
@@ -2821,8 +2830,6 @@ namespace cms.dbase
                         insertLog(userId, IP, "delete", item.id, String.Empty, "SiteMap", item.c_title);
                     }
                 }
-
-                // логирование
                 return true;
             }
         }
