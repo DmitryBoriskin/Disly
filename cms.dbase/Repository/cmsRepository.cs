@@ -1636,7 +1636,7 @@ namespace cms.dbase
         {
             using (var db = new CMSdb(_context))
             {
-                var data = db.content_departmentss.Where(w => w.f_structure == id);
+                var data = db.content_departmentss.Where(w => w.f_structure == id).OrderBy(o=>o.n_sort);
                 if (data.Any())
                 {
                     return data.Select(s => new Departments() {
@@ -1856,7 +1856,8 @@ namespace cms.dbase
                 {
                     id = id,
                     f_structure = Structure,
-                    c_title = insert.Title
+                    c_title = insert.Title,
+                    n_sort=MaxSort
                 };
                 using (var tran = db.BeginTransaction())
                 {
