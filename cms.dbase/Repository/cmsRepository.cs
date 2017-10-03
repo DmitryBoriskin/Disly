@@ -5,6 +5,7 @@ using LinqToDB;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace cms.dbase
 {
@@ -2676,6 +2677,8 @@ namespace cms.dbase
 
                 if (data.Any())
                 {
+                    var oldRecord = data.FirstOrDefault();
+
                     data.Where(w => w.id.Equals(id))
                         .Set(u => u.f_site, item.Site)
                         .Set(u => u.f_front_section, item.FrontSection)
@@ -2691,6 +2694,29 @@ namespace cms.dbase
                         .Set(u => u.b_disabled_menu, item.DisabledMenu)
                         .Update();
 
+                    #region обновим алиасы для дочерних эл-тов
+
+                    // заменяемый путь 
+                    string _oldPath = oldRecord.c_path.Equals("/") ?
+                        oldRecord.c_path + oldRecord.c_alias : oldRecord.c_path + "/" + oldRecord.c_alias;
+
+                    // новый путь
+                    string _newPath = item.Path.Equals("/") ?
+                        item.Path + item.Alias : item.Path + "/" + item.Alias;
+
+                    // список дочерних эл-тов для обновления алиаса
+                    var listToUpdate = db.content_sitemaps
+                        .Where(w => w.f_site.Equals(item.Site))
+                        .Where(w => w.c_path.StartsWith(_oldPath));
+                    
+                    if (listToUpdate.Any())
+                    {
+                        listToUpdate
+                            .Set(u => u.c_path, u => u.c_path.Replace(_oldPath, _newPath))
+                            .Update();
+                    }
+
+                    #endregion
                     // группы меню
                     var menu = db.content_sitemap_menutypess
                         .Where(w => w.f_sitemap.Equals(id)).Delete();

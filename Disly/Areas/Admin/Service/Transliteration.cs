@@ -83,8 +83,10 @@ namespace Disly.Areas.Admin.Service
             words.Add("Э", "E");
             words.Add("Ю", "Yu");
             words.Add("Я", "Ya");
-            words.Add(" ", "_");
-            words.Add("–", "_");
+            //words.Add(" ", "_");
+            words.Add(" ", "-");
+            words.Add("–", "-");
+            //words.Add("–", "_");
             words.Add(":", "-");
             words.Add("<", "(");
             words.Add(">", ")");
@@ -112,11 +114,26 @@ namespace Disly.Areas.Admin.Service
             words.Add("`", "");
             words.Add("|", "");
             words.Add(".", "");
+            words.Add("/", "-");
+
+            words.Add("Ă", "A");
+            words.Add("ă", "a");
+            words.Add("ÿ", "y");
+            words.Add("ĕ", "e");
+
+
+
+
 
             Regex re = new Regex("[-]{2,}");
             Regex Re = new Regex("[_]{2,}");
             Regex StartRe = new Regex("^[-|_]{1,}");
             Regex EndRe = new Regex("[-|_]${1,}");
+
+            if (source.Length > 50)
+            {
+                source = source.Substring(0, 50);
+            }
 
             foreach (KeyValuePair<string, string> pair in words)
             {
@@ -126,6 +143,7 @@ namespace Disly.Areas.Admin.Service
             source = Re.Replace(source, "_");
             source = StartRe.Replace(source, "");
             source = EndRe.Replace(source, "");
+            source = source.ToLower();
             return source;
         }
     }
