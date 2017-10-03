@@ -20,6 +20,10 @@ namespace Disly.Areas.Admin.Controllers
         // Доменное имя сайта
         private string domain;
 
+        /// <summary>
+        /// Обрабатывается до вызыва экшена
+        /// </summary>
+        /// <param name="filterContext"></param>
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             base.OnActionExecuting(filterContext);
@@ -52,7 +56,10 @@ namespace Disly.Areas.Admin.Controllers
             #endregion
         }
 
-        // GET: SiteMap
+        /// <summary>
+        /// Список эл-тов карты сайта
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public ActionResult Index()
         {
@@ -67,6 +74,12 @@ namespace Disly.Areas.Admin.Controllers
             return View(model);
         }
         
+        /// <summary>
+        /// Едичная запись эл-та карты сайта
+        /// </summary>
+        /// <param name="id">Идентификатор карты сайта</param>
+        /// <param name="parent">Родительский идентификатор</param>
+        /// <returns></returns>
         [HttpGet]
         public ActionResult Item(Guid id, Guid? parent)
         {
@@ -89,6 +102,13 @@ namespace Disly.Areas.Admin.Controllers
             return View(model);
         }
 
+        /// <summary>
+        /// POST-обработка эл-та карты сайта
+        /// </summary>
+        /// <param name="id">Идентификатор</param>
+        /// <param name="parent">Родительский идентификатор</param>
+        /// <param name="back_model">Возвращаемая модель</param>
+        /// <returns></returns>
         [HttpPost]
         [ValidateInput(false)]
         [MultiButton(MatchFormKey = "action", MatchFormValue = "save-btn")]
@@ -163,6 +183,12 @@ namespace Disly.Areas.Admin.Controllers
             return View(model);
         }
         
+        /// <summary>
+        /// Обработчика кнопки "Назад"
+        /// </summary>
+        /// <param name="id">Идентификатор эл-та карты сайта</param>
+        /// <param name="parent">Родительский идентификатор</param>
+        /// <returns></returns>
         [HttpPost]
         [MultiButton(MatchFormKey = "action", MatchFormValue = "cancel-btn")]
         public ActionResult Cancel(Guid id, Guid? parent)
@@ -179,6 +205,11 @@ namespace Disly.Areas.Admin.Controllers
             return Redirect(StartUrl + Request.Url.Query);
         }
 
+        /// <summary>
+        /// Обработчик события кнопки "Удалить"
+        /// </summary>
+        /// <param name="id">Идентификатор записи</param>
+        /// <returns></returns>
         [HttpPost]
         [MultiButton(MatchFormKey = "action", MatchFormValue = "delete-btn")]
         public ActionResult Delete(Guid id)
