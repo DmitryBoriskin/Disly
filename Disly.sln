@@ -11,6 +11,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "cms.dbModel", "cms.dbModel\
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Database", "Database", "{69AABF96-94E5-4C51-B51F-4ADF501DAFF5}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ImportPerson", "ImportPerson", "{70DDC8B6-FAC1-453E-9EF1-C4B6C4D888C5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImportFRMP", "ImportFRMP\ImportFRMP.csproj", "{6D24FEC0-BF75-47DF-A478-3824B0B88F5C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,6 +33,10 @@ Global
 		{194E3F69-A5F5-49A4-B2A8-B11366633D1C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{194E3F69-A5F5-49A4-B2A8-B11366633D1C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{194E3F69-A5F5-49A4-B2A8-B11366633D1C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6D24FEC0-BF75-47DF-A478-3824B0B88F5C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6D24FEC0-BF75-47DF-A478-3824B0B88F5C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6D24FEC0-BF75-47DF-A478-3824B0B88F5C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6D24FEC0-BF75-47DF-A478-3824B0B88F5C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -36,5 +44,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{FF945C70-81BF-4972-AA80-FAE920C0E028} = {69AABF96-94E5-4C51-B51F-4ADF501DAFF5}
 		{194E3F69-A5F5-49A4-B2A8-B11366633D1C} = {69AABF96-94E5-4C51-B51F-4ADF501DAFF5}
+		{6D24FEC0-BF75-47DF-A478-3824B0B88F5C} = {70DDC8B6-FAC1-453E-9EF1-C4B6C4D888C5}
 	EndGlobalSection
 EndGlobal

@@ -1,0 +1,1738 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ArrayOfEmployee xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Employee>
+    <ID>7a1731a4-c915-419b-93e2-7d0a374771ef</ID>
+    <Population>0</Population>
+    <TabelNumber>0000000011</TabelNumber>
+    <UZ>
+      <ID>36c9f7eb-a198-11e1-8e66-b803051cdedb</ID>
+      <Name>Бюджетное учреждение Чувашской Республики "Алатырская городская станция скорой медицинской помощи" Министерства здравоохранения и социального развития Чувашской Республики</Name>
+      <OID/>
+      <INN>2122004060</INN>
+      <KPP>212201001</KPP>
+      <OGRN>1022101629945</OGRN>
+      <Type/>
+      <Municipality>
+        <ID>2100002200000</ID>
+        <Name>Алатырь</Name>
+        <Prefix>г</Prefix>
+        <Parent>2100000000000</Parent>
+      </Municipality>
+    </UZ>
+    <ChangeTime>2013-01-23T00:00:00</ChangeTime>
+    <Name>Ольга</Name>
+    <Surname>Аверьянова</Surname>
+    <Patroname>Николаевна</Patroname>
+    <Sex>Female</Sex>
+    <Birthdate>1978-07-27T00:00:00</Birthdate>
+    <Deathdate xsi:nil="true" />
+    <SNILS>054-125-368-32</SNILS>
+    <INN>210100069128</INN>
+    <IsRealPerson>true</IsRealPerson>
+    <EmployeeRecords>
+      <CardRecord>
+        <Duration>0</Duration>
+        <Population>0</Population>
+        <Organisation>Бюджетное учреждение Чувашской Республики "Республиканская станция скорой медицинской помощи" Министерства здравоохранения и социального развития Чувашской Республики</Organisation>
+        <Care>
+          <ID>3</ID>
+          <Name>Скорая медицинская помощь</Name>
+        </Care>
+        <Conditions>
+          <ID>3</ID>
+          <Name>Скорая медицинская помощь</Name>
+        </Conditions>
+        <RecrodPosition>
+          <ID>2</ID>
+          <Name>средний медперсонал</Name>
+        </RecrodPosition>
+        <RecordSubdivision>
+          <ID>10148</ID>
+          <Name>Отделение скорой медицинской помощи</Name>
+          <Parent>4000</Parent>
+        </RecordSubdivision>
+        <Unit>Подстанция СМП Ленинского р-на</Unit>
+        <TypeIn>
+          <ID>0</ID>
+          <Name>Принят</Name>
+        </TypeIn>
+        <OrderIn>44-лс</OrderIn>
+        <DateBegin>2013-01-24T00:00:00</DateBegin>
+        <DateEnd xsi:nil="true" />
+        <RecordRegime>
+          <ID>1</ID>
+          <Name>Работающий на постоянной работе</Name>
+        </RecordRegime>
+        <RecordMilitary>
+          <ID>2</ID>
+          <Name>Военнообязанный</Name>
+        </RecordMilitary>
+        <Wage>1</Wage>
+        <RecordPositionType>
+          <ID>1</ID>
+          <Name>Основная должность</Name>
+        </RecordPositionType>
+        <RecordPost>
+          <ID>117</ID>
+          <Parent>10242</Parent>
+          <Name>фельдшер</Name>
+        </RecordPost>
+      </CardRecord>
+      <CardRecord>
+        <Duration>144</Duration>
+        <Population>0</Population>
+        <Organisation>Бюджетное учреждение Чувашской Республики "Алатырская городская станция скорой медицинской помощи" Министерства здравоохранения и социального развития Чувашской Республики</Organisation>
+        <Care>
+          <ID>3</ID>
+          <Name>Скорая медицинская помощь</Name>
+        </Care>
+        <Conditions>
+          <ID>3</ID>
+          <Name>Скорая медицинская помощь</Name>
+        </Conditions>
+        <RecrodPosition>
+          <ID>2</ID>
+          <Name>средний медперсонал</Name>
+        </RecrodPosition>
+        <RecordSubdivision>
+          <ID>10148</ID>
+          <Name>Отделение скорой медицинской помощи</Name>
+          <Parent>4000</Parent>
+        </RecordSubdivision>
+        <Unit>Станция скорой медицинской помощи</Unit>
+        <TypeIn>
+          <ID>0</ID>
+          <Name>Принят</Name>
+        </TypeIn>
+        <OrderIn>№2</OrderIn>
+        <TypeOut>
+          <ID>1</ID>
+          <Name>Переведён</Name>
+        </TypeOut>
+        <OrderOut>9 к</OrderOut>
+        <DateBegin>2001-01-09T00:00:00</DateBegin>
+        <DateEnd>2013-01-22T00:00:00</DateEnd>
+        <RecordRegime>
+          <ID>1</ID>
+          <Name>Работающий на постоянной работе</Name>
+        </RecordRegime>
+        <RecordMilitary>
+          <ID>2</ID>
+          <Name>Военнообязанный</Name>
+        </RecordMilitary>
+        <Wage>1</Wage>
+        <RecordPositionType>
+          <ID>1</ID>
+          <Name>Основная должность</Name>
+        </RecordPositionType>
+        <RecordPost>
+          <ID>10170</ID>
+          <Parent>10242</Parent>
+          <Name>фельдшер скорой медицинской помощи</Name>
+        </RecordPost>
+      </CardRecord>
+      <CardRecord>
+        <Duration>0</Duration>
+        <Population>0</Population>
+        <Organisation>Бюджетное учреждение Чувашской Республики "Республиканская станция скорой медицинской помощи" Министерства здравоохранения и социального развития Чувашской Республики</Organisation>
+        <Care>
+          <ID>3</ID>
+          <Name>Скорая медицинская помощь</Name>
+        </Care>
+        <Conditions>
+          <ID>3</ID>
+          <Name>Скорая медицинская помощь</Name>
+        </Conditions>
+        <RecrodPosition>
+          <ID>2</ID>
+          <Name>средний медперсонал</Name>
+        </RecrodPosition>
+        <RecordSubdivision>
+          <ID>10355</ID>
+          <Name>Отделение скорой медицинской помощи</Name>
+          <Parent>1000</Parent>
+        </RecordSubdivision>
+        <Unit>Подстанция СМП Ленинского р-на</Unit>
+        <TypeIn>
+          <ID>0</ID>
+          <Name>Принят</Name>
+        </TypeIn>
+        <OrderIn>45-лс</OrderIn>
+        <DateBegin>2013-01-24T00:00:00</DateBegin>
+        <DateEnd xsi:nil="true" />
+        <RecordRegime>
+          <ID>4</ID>
+          <Name>Работающий по срочному трудовому договору</Name>
+        </RecordRegime>
+        <RecordMilitary>
+          <ID>2</ID>
+          <Name>Военнообязанный</Name>
+        </RecordMilitary>
+        <Wage>0.5</Wage>
+        <RecordPositionType>
+          <ID>3</ID>
+          <Name>Совместительство (внутреннее)</Name>
+        </RecordPositionType>
+        <RecordPost>
+          <ID>117</ID>
+          <Parent>10242</Parent>
+          <Name>фельдшер</Name>
+        </RecordPost>
+      </CardRecord>
+    </EmployeeRecords>
+    <EmployeeSertificateEducation>
+      <SertificateEducation>
+        <IssueOrg>
+          <ID>4069</ID>
+          <Name>Канашское медицинское училище</Name>
+          <Parent>3000</Parent>
+        </IssueOrg>
+        <IssueDate>2006-04-06T00:00:00</IssueDate>
+        <SertificateSerie>А</SertificateSerie>
+        <SertificateNumber>2786277</SertificateNumber>
+        <EducationSpeciality>
+          <ID>206</ID>
+          <Parent>204</Parent>
+          <Name>Лечебное дело</Name>
+        </EducationSpeciality>
+      </SertificateEducation>
+      <SertificateEducation>
+        <IssueOrg>
+          <ID>4069</ID>
+          <Name>Канашское медицинское училище</Name>
+          <Parent>3000</Parent>
+        </IssueOrg>
+        <IssueDate>2010-11-26T00:00:00</IssueDate>
+        <SertificateSerie>А</SertificateSerie>
+        <SertificateNumber>3998704</SertificateNumber>
+        <EducationSpeciality>
+          <ID>206</ID>
+          <Parent>204</Parent>
+          <Name>Лечебное дело</Name>
+        </EducationSpeciality>
+      </SertificateEducation>
+    </EmployeeSertificateEducation>
+  </Employee>
+  <Employee>
+    <ID>74e02a61-0a1e-48ff-a86b-0c60dc9554ec</ID>
+    <Population>0</Population>
+    <TabelNumber>0000000010</TabelNumber>
+    <UZ>
+      <ID>36c9f7eb-a198-11e1-8e66-b803051cdedb</ID>
+      <Name>Бюджетное учреждение Чувашской Республики "Алатырская городская станция скорой медицинской помощи" Министерства здравоохранения и социального развития Чувашской Республики</Name>
+      <OID/>
+      <INN>2122004060</INN>
+      <KPP>212201001</KPP>
+      <OGRN>1022101629945</OGRN>
+      <Type/>
+      <Municipality>
+        <ID>2100002200000</ID>
+        <Name>Алатырь</Name>
+        <Prefix>г</Prefix>
+        <Parent>2100000000000</Parent>
+      </Municipality>
+    </UZ>
+    <ChangeTime>2013-01-23T00:00:00</ChangeTime>
+    <Name>Марина</Name>
+    <Surname>Акимова</Surname>
+    <Patroname>Юрьевна</Patroname>
+    <Sex>Female</Sex>
+    <Birthdate>1974-08-27T00:00:00</Birthdate>
+    <Deathdate xsi:nil="true" />
+    <SNILS>023-143-193-99</SNILS>
+    <INN>130102042604</INN>
+    <IsRealPerson>true</IsRealPerson>
+    <EmployeeRecords>
+      <CardRecord>
+        <Duration>126</Duration>
+        <Population>0</Population>
+        <Organisation>Бюджетное учреждение Чувашской Республики "Алатырская городская станция скорой медицинской помощи" Министерства здравоохранения и социального развития Чувашской Республики</Organisation>
+        <Care>
+          <ID>3</ID>
+          <Name>Скорая медицинская помощь</Name>
+        </Care>
+        <Conditions>
+          <ID>3</ID>
+          <Name>Скорая медицинская помощь</Name>
+        </Conditions>
+        <RecrodPosition>
+          <ID>2</ID>
+          <Name>средний медперсонал</Name>
+        </RecrodPosition>
+        <RecordSubdivision>
+          <ID>10148</ID>
+          <Name>Отделение скорой медицинской помощи</Name>
+          <Parent>4000</Parent>
+        </RecordSubdivision>
+        <Unit>Станция скорой медицинской помощи</Unit>
+        <TypeIn>
+          <ID>0</ID>
+          <Name>Принят</Name>
+        </TypeIn>
+        <OrderIn>48</OrderIn>
+        <TypeOut>
+          <ID>1</ID>
+          <Name>Переведён</Name>
+        </TypeOut>
+        <OrderOut>9 к</OrderOut>
+        <DateBegin>2002-07-02T00:00:00</DateBegin>
+        <DateEnd>2013-01-22T00:00:00</DateEnd>
+        <RecordRegime>
+          <ID>1</ID>
+          <Name>Работающий на постоянной работе</Name>
+        </RecordRegime>
+        <RecordMilitary>
+          <ID>2</ID>
+          <Name>Военнообязанный</Name>
+        </RecordMilitary>
+        <Wage>1</Wage>
+        <RecordPositionType>
+          <ID>1</ID>
+          <Name>Основная должность</Name>
+        </RecordPositionType>
+        <RecordPost>
+          <ID>10170</ID>
+          <Parent>10242</Parent>
+          <Name>фельдшер скорой медицинской помощи</Name>
+        </RecordPost>
+      </CardRecord>
+      <CardRecord>
+        <Duration>0</Duration>
+        <Population>0</Population>
+        <Organisation>Бюджетное учреждение Чувашской Республики "Республиканская станция скорой медицинской помощи" Министерства здравоохранения и социального развития Чувашской Республики</Organisation>
+        <Care>
+          <ID>3</ID>
+          <Name>Скорая медицинская помощь</Name>
+        </Care>
+        <Conditions>
+          <ID>3</ID>
+          <Name>Скорая медицинская помощь</Name>
+        </Conditions>
+        <RecrodPosition>
+          <ID>2</ID>
+          <Name>средний медперсонал</Name>
+        </RecrodPosition>
+        <RecordSubdivision>
+          <ID>10354</ID>
+          <Name>Отделение скорой медицинской помощи</Name>
+          <Parent>3000</Parent>
+        </RecordSubdivision>
+        <Unit/>
+        <TypeIn>
+          <ID>0</ID>
+          <Name>Принят</Name>
+        </TypeIn>
+        <OrderIn>726-лс</OrderIn>
+        <DateBegin>2010-12-31T00:00:00</DateBegin>
+        <DateEnd xsi:nil="true" />
+        <RecordRegime>
+          <ID>1</ID>
+          <Name>Работающий на постоянной работе</Name>
+        </RecordRegime>
+        <RecordMilitary>
+          <ID>2</ID>
+          <Name>Военнообязанный</Name>
+        </RecordMilitary>
+        <Wage>1</Wage>
+        <RecordPositionType>
+          <ID>1</ID>
+          <Name>Основная должность</Name>
+        </RecordPositionType>
+        <RecordPost>
+          <ID>117</ID>
+          <Parent>10242</Parent>
+          <Name>фельдшер</Name>
+        </RecordPost>
+      </CardRecord>
+    </EmployeeRecords>
+    <EmployeeSertificateEducation>
+      <SertificateEducation>
+        <IssueOrg>
+          <ID>4069</ID>
+          <Name>Канашское медицинское училище</Name>
+          <Parent>3000</Parent>
+        </IssueOrg>
+        <IssueDate>2006-04-06T00:00:00</IssueDate>
+        <SertificateSerie>А</SertificateSerie>
+        <SertificateNumber>2786272</SertificateNumber>
+        <EducationSpeciality>
+          <ID>206</ID>
+          <Parent>204</Parent>
+          <Name>Лечебное дело</Name>
+        </EducationSpeciality>
+      </SertificateEducation>
+      <SertificateEducation>
+        <IssueOrg>
+          <ID>613</ID>
+          <Name>Чебоксарский медицинский колледж</Name>
+          <Parent>3000</Parent>
+        </IssueOrg>
+        <IssueDate>2011-12-07T00:00:00</IssueDate>
+        <SertificateSerie>А</SertificateSerie>
+        <SertificateNumber>4520312</SertificateNumber>
+        <EducationSpeciality>
+          <ID>283</ID>
+          <Parent>204</Parent>
+          <Name>Скорая и неотложная помощь</Name>
+        </EducationSpeciality>
+      </SertificateEducation>
+    </EmployeeSertificateEducation>
+  </Employee>
+  <Employee>
+    <ID>f34a4193-8a8e-4c2b-81a0-ac8170c45af6</ID>
+    <Population>0</Population>
+    <TabelNumber>0000000013</TabelNumber>
+    <UZ>
+      <ID>36c9f7eb-a198-11e1-8e66-b803051cdedb</ID>
+      <Name>Бюджетное учреждение Чувашской Республики "Алатырская городская станция скорой медицинской помощи" Министерства здравоохранения и социального развития Чувашской Республики</Name>
+      <OID/>
+      <INN>2122004060</INN>
+      <KPP>212201001</KPP>
+      <OGRN>1022101629945</OGRN>
+      <Type/>
+      <Municipality>
+        <ID>2100002200000</ID>
+        <Name>Алатырь</Name>
+        <Prefix>г</Prefix>
+        <Parent>2100000000000</Parent>
+      </Municipality>
+    </UZ>
+    <ChangeTime>2013-01-23T00:00:00</ChangeTime>
+    <Name>Ирина</Name>
+    <Surname>Алексеева</Surname>
+    <Patroname>Владимировна</Patroname>
+    <Sex>Female</Sex>
+    <Birthdate>1974-01-01T00:00:00</Birthdate>
+    <Deathdate xsi:nil="true" />
+    <SNILS>011-653-164-06</SNILS>
+    <INN>210100077224</INN>
+    <IsRealPerson>true</IsRealPerson>
+    <EmployeeRecords>
+      <CardRecord>
+        <Duration>234</Duration>
+        <Population>0</Population>
+        <Organisation>Бюджетное учреждение Чувашской Республики "Алатырская городская станция скорой медицинской помощи" Министерства здравоохранения и социального развития Чувашской Республики</Organisation>
+        <Care>
+          <ID>3</ID>
+          <Name>Скорая медицинская помощь</Name>
+        </Care>
+        <Conditions>
+          <ID>3</ID>
+          <Name>Скорая медицинская помощь</Name>
+        </Conditions>
+        <RecrodPosition>
+          <ID>2</ID>
+          <Name>средний медперсонал</Name>
+        </RecrodPosition>
+        <RecordSubdivision>
+          <ID>10148</ID>
+          <Name>Отделение скорой медицинской помощи</Name>
+          <Parent>4000</Parent>
+        </RecordSubdivision>
+        <Unit>Станция скорой медицинской помощи</Unit>
+        <TypeIn>
+          <ID>0</ID>
+          <Name>Принят</Name>
+        </TypeIn>
+        <OrderIn>76</OrderIn>
+        <TypeOut>
+          <ID>1</ID>
+          <Name>Переведён</Name>
+        </TypeOut>
+        <OrderOut>9 к</OrderOut>
+        <DateBegin>1993-07-08T00:00:00</DateBegin>
+        <DateEnd>2013-01-22T00:00:00</DateEnd>
+        <RecordRegime>
+          <ID>1</ID>
+          <Name>Работающий на постоянной работе</Name>
+        </RecordRegime>
+        <RecordMilitary>
+          <ID>2</ID>
+          <Name>Военнообязанный</Name>
+        </RecordMilitary>
+        <Wage>1</Wage>
+        <RecordPositionType>
+          <ID>1</ID>
+          <Name>Основная должность</Name>
+        </RecordPositionType>
+        <RecordPost>
+          <ID>10170</ID>
+          <Parent>10242</Parent>
+          <Name>фельдшер скорой медицинской помощи</Name>
+        </RecordPost>
+      </CardRecord>
+      <CardRecord>
+        <Duration>0</Duration>
+        <Population>0</Population>
+        <Organisation>Бюджетное учреждение Чувашской Республики "Республиканская станция скорой медицинской помощи" Министерства здравоохранения и социального развития Чувашской Республики</Organisation>
+        <Care>
+          <ID>3</ID>
+          <Name>Скорая медицинская помощь</Name>
+        </Care>
+        <Conditions>
+          <ID>3</ID>
+          <Name>Скорая медицинская помощь</Name>
+        </Conditions>
+        <RecrodPosition>
+          <ID>2</ID>
+          <Name>средний медперсонал</Name>
+        </RecrodPosition>
+        <RecordSubdivision>
+          <ID>10354</ID>
+          <Name>Отделение скорой медицинской помощи</Name>
+          <Parent>3000</Parent>
+        </RecordSubdivision>
+        <Unit>подстанция скорой медицинской помощи г.Алатырь</Unit>
+        <TypeIn>
+          <ID>0</ID>
+          <Name>Принят</Name>
+        </TypeIn>
+        <OrderIn>775-лс</OrderIn>
+        <DateBegin>2010-12-31T00:00:00</DateBegin>
+        <DateEnd xsi:nil="true" />
+        <RecordRegime>
+          <ID>1</ID>
+          <Name>Работающий на постоянной работе</Name>
+        </RecordRegime>
+        <RecordMilitary>
+          <ID>2</ID>
+          <Name>Военнообязанный</Name>
+        </RecordMilitary>
+        <Wage>1</Wage>
+        <RecordPositionType>
+          <ID>1</ID>
+          <Name>Основная должность</Name>
+        </RecordPositionType>
+        <RecordPost>
+          <ID>117</ID>
+          <Parent>10242</Parent>
+          <Name>фельдшер</Name>
+        </RecordPost>
+      </CardRecord>
+    </EmployeeRecords>
+    <EmployeeSertificateEducation>
+      <SertificateEducation>
+        <IssueOrg>
+          <ID>4069</ID>
+          <Name>Канашское медицинское училище</Name>
+          <Parent>3000</Parent>
+        </IssueOrg>
+        <IssueDate>2006-04-06T00:00:00</IssueDate>
+        <SertificateSerie>А</SertificateSerie>
+        <SertificateNumber>1455686</SertificateNumber>
+        <EducationSpeciality>
+          <ID>206</ID>
+          <Parent>204</Parent>
+          <Name>Лечебное дело</Name>
+        </EducationSpeciality>
+      </SertificateEducation>
+      <SertificateEducation>
+        <IssueOrg>
+          <ID>613</ID>
+          <Name>Чебоксарский медицинский колледж</Name>
+          <Parent>3000</Parent>
+        </IssueOrg>
+        <IssueDate>2013-10-23T00:00:00</IssueDate>
+        <SertificateSerie>А</SertificateSerie>
+        <SertificateNumber>1455686</SertificateNumber>
+        <EducationSpeciality>
+          <ID>283</ID>
+          <Parent>204</Parent>
+          <Name>Скорая и неотложная помощь</Name>
+        </EducationSpeciality>
+      </SertificateEducation>
+    </EmployeeSertificateEducation>
+  </Employee>
+  <Employee>
+    <ID>60c1e306-0459-4843-a8f2-4e43dbab93b6</ID>
+    <Population>0</Population>
+    <TabelNumber>0000000012</TabelNumber>
+    <UZ>
+      <ID>36c9f7eb-a198-11e1-8e66-b803051cdedb</ID>
+      <Name>Бюджетное учреждение Чувашской Республики "Алатырская городская станция скорой медицинской помощи" Министерства здравоохранения и социального развития Чувашской Республики</Name>
+      <OID/>
+      <INN>2122004060</INN>
+      <KPP>212201001</KPP>
+      <OGRN>1022101629945</OGRN>
+      <Type/>
+      <Municipality>
+        <ID>2100002200000</ID>
+        <Name>Алатырь</Name>
+        <Prefix>г</Prefix>
+        <Parent>2100000000000</Parent>
+      </Municipality>
+    </UZ>
+    <ChangeTime>2012-10-15T00:00:00</ChangeTime>
+    <Name>Марина</Name>
+    <Surname>Алексеева</Surname>
+    <Patroname>Александровна</Patroname>
+    <Sex>Female</Sex>
+    <Birthdate>1972-11-05T00:00:00</Birthdate>
+    <Deathdate xsi:nil="true" />
+    <SNILS>026-081-703-25</SNILS>
+    <INN>210100093032</INN>
+    <IsRealPerson>true</IsRealPerson>
+    <EmployeeRecords>
+      <CardRecord>
+        <Duration>214</Duration>
+        <Population>0</Population>
+        <Organisation>Бюджетное учреждение Чувашской Республики "Алатырская городская станция скорой медицинской помощи" Министерства здравоохранения и социального развития Чувашской Республики</Organisation>
+        <Care>
+          <ID>3</ID>
+          <Name>Скорая медицинская помощь</Name>
+        </Care>
+        <Conditions>
+          <ID>3</ID>
+          <Name>Скорая медицинская помощь</Name>
+        </Conditions>
+        <RecrodPosition>
+          <ID>2</ID>
+          <Name>средний медперсонал</Name>
+        </RecrodPosition>
+        <RecordSubdivision>
+          <ID>10148</ID>
+          <Name>Отделение скорой медицинской помощи</Name>
+          <Parent>4000</Parent>
+        </RecordSubdivision>
+        <Unit>Станция скорой медицинской помощи</Unit>
+        <TypeIn>
+          <ID>0</ID>
+          <Name>Принят</Name>
+        </TypeIn>
+        <OrderIn>27</OrderIn>
+        <TypeOut>
+          <ID>3</ID>
+          <Name>Уволился по собственному желанию</Name>
+        </TypeOut>
+        <OrderOut>165-к</OrderOut>
+        <DateBegin>1992-04-01T00:00:00</DateBegin>
+        <DateEnd>2012-10-14T00:00:00</DateEnd>
+        <RecordRegime>
+          <ID>1</ID>
+          <Name>Работающий на постоянной работе</Name>
+        </RecordRegime>
+        <RecordMilitary>
+          <ID>2</ID>
+          <Name>Военнообязанный</Name>
+        </RecordMilitary>
+        <Wage>1</Wage>
+        <RecordPositionType>
+          <ID>1</ID>
+          <Name>Основная должность</Name>
+        </RecordPositionType>
+        <RecordPost>
+          <ID>10170</ID>
+          <Parent>10242</Parent>
+          <Name>фельдшер скорой медицинской помощи</Name>
+        </RecordPost>
+      </CardRecord>
+    </EmployeeRecords>
+    <EmployeeSertificateEducation/>
+  </Employee>
+  <Employee>
+    <ID>566a5e92-28ec-43d4-b212-0291422297f9</ID>
+    <Population>0</Population>
+    <TabelNumber>0000000001</TabelNumber>
+    <UZ>
+      <ID>36c9f7eb-a198-11e1-8e66-b803051cdedb</ID>
+      <Name>Бюджетное учреждение Чувашской Республики "Алатырская городская станция скорой медицинской помощи" Министерства здравоохранения и социального развития Чувашской Республики</Name>
+      <OID/>
+      <INN>2122004060</INN>
+      <KPP>212201001</KPP>
+      <OGRN>1022101629945</OGRN>
+      <Type/>
+      <Municipality>
+        <ID>2100002200000</ID>
+        <Name>Алатырь</Name>
+        <Prefix>г</Prefix>
+        <Parent>2100000000000</Parent>
+      </Municipality>
+    </UZ>
+    <ChangeTime>2013-01-23T00:00:00</ChangeTime>
+    <Name>Анатолий</Name>
+    <Surname>Арбузов</Surname>
+    <Patroname>Николаевич</Patroname>
+    <Sex>Male</Sex>
+    <Birthdate>1950-06-13T00:00:00</Birthdate>
+    <Deathdate xsi:nil="true" />
+    <SNILS>011-653-169-11</SNILS>
+    <INN>212200573283</INN>
+    <IsRealPerson>true</IsRealPerson>
+    <EmployeeRecords>
+      <CardRecord>
+        <Duration>187</Duration>
+        <Population>0</Population>
+        <Organisation>Бюджетное учреждение Чувашской Республики "Алатырская городская станция скорой медицинской помощи" Министерства здравоохранения и социального развития Чувашской Республики</Organisation>
+        <Care>
+          <ID>3</ID>
+          <Name>Скорая медицинская помощь</Name>
+        </Care>
+        <Conditions>
+          <ID>3</ID>
+          <Name>Скорая медицинская помощь</Name>
+        </Conditions>
+        <RecrodPosition>
+          <ID>1</ID>
+          <Name>врач</Name>
+        </RecrodPosition>
+        <RecordSubdivision>
+          <ID>10148</ID>
+          <Name>Отделение скорой медицинской помощи</Name>
+          <Parent>4000</Parent>
+        </RecordSubdivision>
+        <Unit>Станция скорой медицинской помощи</Unit>
+        <TypeIn>
+          <ID>0</ID>
+          <Name>Принят</Name>
+        </TypeIn>
+        <OrderIn>40</OrderIn>
+        <TypeOut>
+          <ID>1</ID>
+          <Name>Переведён</Name>
+        </TypeOut>
+        <OrderOut>9 к</OrderOut>
+        <DateBegin>1997-05-26T00:00:00</DateBegin>
+        <DateEnd>2013-01-22T00:00:00</DateEnd>
+        <RecordRegime>
+          <ID>1</ID>
+          <Name>Работающий на постоянной работе</Name>
+        </RecordRegime>
+        <RecordMilitary>
+          <ID>3</ID>
+          <Name>Невоеннообязанный</Name>
+        </RecordMilitary>
+        <Wage>1</Wage>
+        <RecordPositionType>
+          <ID>1</ID>
+          <Name>Основная должность</Name>
+        </RecordPositionType>
+        <RecordPost>
+          <ID>10002</ID>
+          <Parent>10232</Parent>
+          <Name>главный врач (начальник) медицинской организации</Name>
+        </RecordPost>
+      </CardRecord>
+      <CardRecord>
+        <Duration>0</Duration>
+        <Population>0</Population>
+        <Organisation>Бюджетное учреждение Чувашской Республики "Республиканская станция скорой медицинской помощи" Министерства здравоохранения и социального развития Чувашской Республики</Organisation>
+        <Care>
+          <ID>3</ID>
+          <Name>Скорая медицинская помощь</Name>
+        </Care>
+        <Conditions>
+          <ID>3</ID>
+          <Name>Скорая медицинская помощь</Name>
+        </Conditions>
+        <RecrodPosition>
+          <ID>1</ID>
+          <Name>врач</Name>
+        </RecrodPosition>
+        <RecordSubdivision>
+          <ID>10354</ID>
+          <Name>Отделение скорой медицинской помощи</Name>
+          <Parent>3000</Parent>
+        </RecordSubdivision>
+        <Unit/>
+        <TypeIn>
+          <ID>0</ID>
+          <Name>Принят</Name>
+        </TypeIn>
+        <OrderIn>773-лс</OrderIn>
+        <DateBegin>2010-12-31T00:00:00</DateBegin>
+        <DateEnd xsi:nil="true" />
+        <RecordRegime>
+          <ID>1</ID>
+          <Name>Работающий на постоянной работе</Name>
+        </RecordRegime>
+        <RecordMilitary>
+          <ID>2</ID>
+          <Name>Военнообязанный</Name>
+        </RecordMilitary>
+        <Wage>1</Wage>
+        <RecordPositionType>
+          <ID>1</ID>
+          <Name>Основная должность</Name>
+        </RecordPositionType>
+        <RecordPost>
+          <ID>10234</ID>
+          <Parent>10232</Parent>
+          <Name>заведующий (начальник) структурного подразделения (отдела, отделения, лаборатории, кабинета, отряда и другое) медицинской организации - врач-специалист</Name>
+        </RecordPost>
+      </CardRecord>
+    </EmployeeRecords>
+    <EmployeeSertificateEducation>
+      <SertificateEducation>
+        <IssueOrg>
+          <ID>167</ID>
+          <Name>Чувашский государственный университет</Name>
+          <Parent>1000</Parent>
+        </IssueOrg>
+        <IssueDate>2009-12-12T00:00:00</IssueDate>
+        <SertificateSerie>А</SertificateSerie>
+        <SertificateNumber>4162280</SertificateNumber>
+        <EducationSpeciality>
+          <ID>18</ID>
+          <Parent>1</Parent>
+          <Name>Организация здравоохранения и общественное здоровье</Name>
+        </EducationSpeciality>
+      </SertificateEducation>
+      <SertificateEducation>
+        <IssueOrg>
+          <ID>72</ID>
+          <Name>Нижегородская государственная медицинская академия Федерального агентства по здравоохранению и социальному развитию, г. Нижний Новгород</Name>
+          <Parent>1000</Parent>
+        </IssueOrg>
+        <IssueDate>2005-05-06T00:00:00</IssueDate>
+        <SertificateSerie>А</SertificateSerie>
+        <SertificateNumber>2665565</SertificateNumber>
+        <EducationSpeciality>
+          <ID>25</ID>
+          <Parent>1</Parent>
+          <Name>Скорая медицинская помощь</Name>
+        </EducationSpeciality>
+      </SertificateEducation>
+      <SertificateEducation>
+        <IssueOrg>
+          <ID>72</ID>
+          <Name>Нижегородская государственная медицинская академия Федерального агентства по здравоохранению и социальному развитию, г. Нижний Новгород</Name>
+          <Parent>1000</Parent>
+        </IssueOrg>
+        <IssueDate>2013-03-01T00:00:00</IssueDate>
+        <SertificateSerie>А</SertificateSerie>
+        <SertificateNumber>2665565</SertificateNumber>
+        <EducationSpeciality>
+          <ID>3</ID>
+          <Parent xsi:nil="true" />
+          <Name>Скорая медицинская помощь</Name>
+        </EducationSpeciality>
+      </SertificateEducation>
+    </EmployeeSertificateEducation>
+  </Employee>
+  <Employee>
+    <ID>4b518891-268c-44d9-a7c7-dc07df94a16c</ID>
+    <Population>0</Population>
+    <TabelNumber>0000000009</TabelNumber>
+    <UZ>
+      <ID>36c9f7eb-a198-11e1-8e66-b803051cdedb</ID>
+      <Name>Бюджетное учреждение Чувашской Республики "Алатырская городская станция скорой медицинской помощи" Министерства здравоохранения и социального развития Чувашской Республики</Name>
+      <OID/>
+      <INN>2122004060</INN>
+      <KPP>212201001</KPP>
+      <OGRN>1022101629945</OGRN>
+      <Type/>
+      <Municipality>
+        <ID>2100002200000</ID>
+        <Name>Алатырь</Name>
+        <Prefix>г</Prefix>
+        <Parent>2100000000000</Parent>
+      </Municipality>
+    </UZ>
+    <ChangeTime>2013-01-23T00:00:00</ChangeTime>
+    <Name>Любовь</Name>
+    <Surname>Арефьева</Surname>
+    <Patroname>Александровна</Patroname>
+    <Sex>Female</Sex>
+    <Birthdate>1955-01-21T00:00:00</Birthdate>
+    <Deathdate xsi:nil="true" />
+    <SNILS>011-646-317-12</SNILS>
+    <INN>210100096957</INN>
+    <IsRealPerson>true</IsRealPerson>
+    <EmployeeRecords>
+      <CardRecord>
+        <Duration>0</Duration>
+        <Population>0</Population>
+        <Organisation>Бюджетное учреждение Чувашской Республики "Республиканская станция скорой медицинской помощи" Министерства здравоохранения и социального развития Чувашской Республики</Organisation>
+        <Care>
+          <ID>3</ID>
+          <Name>Скорая медицинская помощь</Name>
+        </Care>
+        <Conditions>
+          <ID>3</ID>
+          <Name>Скорая медицинская помощь</Name>
+        </Conditions>
+        <RecrodPosition>
+          <ID>1</ID>
+          <Name>врач</Name>
+        </RecrodPosition>
+        <RecordSubdivision>
+          <ID>10148</ID>
+          <Name>Отделение скорой медицинской помощи</Name>
+          <Parent>4000</Parent>
+        </RecordSubdivision>
+        <Unit>подстанция скорой медицинской помощи г.Алатырь</Unit>
+        <TypeIn>
+          <ID>0</ID>
+          <Name>Принят</Name>
+        </TypeIn>
+        <OrderIn>45-лс</OrderIn>
+        <DateBegin>2013-01-24T00:00:00</DateBegin>
+        <DateEnd xsi:nil="true" />
+        <RecordRegime>
+          <ID>1</ID>
+          <Name>Работающий на постоянной работе</Name>
+        </RecordRegime>
+        <RecordMilitary>
+          <ID>2</ID>
+          <Name>Военнообязанный</Name>
+        </RecordMilitary>
+        <Wage>1</Wage>
+        <RecordPositionType>
+          <ID>1</ID>
+          <Name>Основная должность</Name>
+        </RecordPositionType>
+        <RecordPost>
+          <ID>67</ID>
+          <Parent>8</Parent>
+          <Name>Врач скорой медицинской помощи</Name>
+        </RecordPost>
+      </CardRecord>
+      <CardRecord>
+        <Duration>313</Duration>
+        <Population>0</Population>
+        <Organisation>Бюджетное учреждение Чувашской Республики "Алатырская городская станция скорой медицинской помощи" Министерства здравоохранения и социального развития Чувашской Республики</Organisation>
+        <Care>
+          <ID>3</ID>
+          <Name>Скорая медицинская помощь</Name>
+        </Care>
+        <Conditions>
+          <ID>3</ID>
+          <Name>Скорая медицинская помощь</Name>
+        </Conditions>
+        <RecrodPosition>
+          <ID>2</ID>
+          <Name>средний медперсонал</Name>
+        </RecrodPosition>
+        <RecordSubdivision>
+          <ID>10148</ID>
+          <Name>Отделение скорой медицинской помощи</Name>
+          <Parent>4000</Parent>
+        </RecordSubdivision>
+        <Unit>Станция скорой медицинской помощи</Unit>
+        <TypeIn>
+          <ID>1</ID>
+          <Name>Переведён</Name>
+        </TypeIn>
+        <OrderIn>157</OrderIn>
+        <TypeOut>
+          <ID>1</ID>
+          <Name>Переведён</Name>
+        </TypeOut>
+        <OrderOut>9 к</OrderOut>
+        <DateBegin>1986-11-26T00:00:00</DateBegin>
+        <DateEnd>2013-01-22T00:00:00</DateEnd>
+        <RecordRegime>
+          <ID>1</ID>
+          <Name>Работающий на постоянной работе</Name>
+        </RecordRegime>
+        <RecordMilitary>
+          <ID>3</ID>
+          <Name>Невоеннообязанный</Name>
+        </RecordMilitary>
+        <Wage>1.5</Wage>
+        <RecordPositionType>
+          <ID>1</ID>
+          <Name>Основная должность</Name>
+        </RecordPositionType>
+        <RecordPost>
+          <ID>116</ID>
+          <Parent>10242</Parent>
+          <Name>старшая медицинская сестра (акушер, фельдшер, операционная медицинская сестра, зубной техник)</Name>
+        </RecordPost>
+      </CardRecord>
+    </EmployeeRecords>
+    <EmployeeSertificateEducation>
+      <SertificateEducation>
+        <IssueOrg>
+          <ID>4069</ID>
+          <Name>Канашское медицинское училище</Name>
+          <Parent>3000</Parent>
+        </IssueOrg>
+        <IssueDate>2006-04-06T00:00:00</IssueDate>
+        <SertificateSerie>А</SertificateSerie>
+        <SertificateNumber>1455665</SertificateNumber>
+        <EducationSpeciality>
+          <ID>206</ID>
+          <Parent>204</Parent>
+          <Name>Лечебное дело</Name>
+        </EducationSpeciality>
+      </SertificateEducation>
+      <SertificateEducation>
+        <IssueOrg>
+          <ID>4069</ID>
+          <Name>Канашское медицинское училище</Name>
+          <Parent>3000</Parent>
+        </IssueOrg>
+        <IssueDate>2010-11-26T00:00:00</IssueDate>
+        <SertificateSerie>А</SertificateSerie>
+        <SertificateNumber>3998707</SertificateNumber>
+        <EducationSpeciality>
+          <ID>206</ID>
+          <Parent>204</Parent>
+          <Name>Лечебное дело</Name>
+        </EducationSpeciality>
+      </SertificateEducation>
+    </EmployeeSertificateEducation>
+  </Employee>
+  <Employee>
+    <ID>d3892d16-4de5-41ae-a579-91479532420f</ID>
+    <Population>0</Population>
+    <TabelNumber>0000000006</TabelNumber>
+    <UZ>
+      <ID>36c9f7eb-a198-11e1-8e66-b803051cdedb</ID>
+      <Name>Бюджетное учреждение Чувашской Республики "Алатырская городская станция скорой медицинской помощи" Министерства здравоохранения и социального развития Чувашской Республики</Name>
+      <OID/>
+      <INN>2122004060</INN>
+      <KPP>212201001</KPP>
+      <OGRN>1022101629945</OGRN>
+      <Type/>
+      <Municipality>
+        <ID>2100002200000</ID>
+        <Name>Алатырь</Name>
+        <Prefix>г</Prefix>
+        <Parent>2100000000000</Parent>
+      </Municipality>
+    </UZ>
+    <ChangeTime>2013-01-23T00:00:00</ChangeTime>
+    <Name>Сергей</Name>
+    <Surname>Балятинский</Surname>
+    <Patroname>Викторович</Patroname>
+    <Sex>Male</Sex>
+    <Birthdate>1978-03-16T00:00:00</Birthdate>
+    <Deathdate xsi:nil="true" />
+    <SNILS>130-295-036-21</SNILS>
+    <INN>212201531663</INN>
+    <IsRealPerson>true</IsRealPerson>
+    <EmployeeRecords>
+      <CardRecord>
+        <Duration>101</Duration>
+        <Population>0</Population>
+        <Organisation>Бюджетное учреждение Чувашской Республики "Алатырская городская станция скорой медицинской помощи" Министерства здравоохранения и социального развития Чувашской Республики</Organisation>
+        <Care>
+          <ID>3</ID>
+          <Name>Скорая медицинская помощь</Name>
+        </Care>
+        <Conditions>
+          <ID>3</ID>
+          <Name>Скорая медицинская помощь</Name>
+        </Conditions>
+        <RecrodPosition>
+          <ID>1</ID>
+          <Name>врач</Name>
+        </RecrodPosition>
+        <RecordSubdivision>
+          <ID>10148</ID>
+          <Name>Отделение скорой медицинской помощи</Name>
+          <Parent>4000</Parent>
+        </RecordSubdivision>
+        <Unit>Станция скорой медицинской помощи</Unit>
+        <TypeIn>
+          <ID>0</ID>
+          <Name>Принят</Name>
+        </TypeIn>
+        <OrderIn>102-к</OrderIn>
+        <TypeOut>
+          <ID>1</ID>
+          <Name>Переведён</Name>
+        </TypeOut>
+        <OrderOut>9 к</OrderOut>
+        <DateBegin>2004-08-08T00:00:00</DateBegin>
+        <DateEnd>2013-01-22T00:00:00</DateEnd>
+        <RecordRegime>
+          <ID>1</ID>
+          <Name>Работающий на постоянной работе</Name>
+        </RecordRegime>
+        <RecordMilitary>
+          <ID>2</ID>
+          <Name>Военнообязанный</Name>
+        </RecordMilitary>
+        <Wage>1</Wage>
+        <RecordPositionType>
+          <ID>1</ID>
+          <Name>Основная должность</Name>
+        </RecordPositionType>
+        <RecordPost>
+          <ID>67</ID>
+          <Parent>8</Parent>
+          <Name>Врач скорой медицинской помощи</Name>
+        </RecordPost>
+      </CardRecord>
+      <CardRecord>
+        <Duration>0</Duration>
+        <Population>0</Population>
+        <Organisation>Бюджетное учреждение Чувашской Республики "Республиканская станция скорой медицинской помощи" Министерства здравоохранения и социального развития Чувашской Республики</Organisation>
+        <Care>
+          <ID>3</ID>
+          <Name>Скорая медицинская помощь</Name>
+        </Care>
+        <Conditions>
+          <ID>3</ID>
+          <Name>Скорая медицинская помощь</Name>
+        </Conditions>
+        <RecrodPosition>
+          <ID>1</ID>
+          <Name>врач</Name>
+        </RecrodPosition>
+        <RecordSubdivision>
+          <ID>10354</ID>
+          <Name>Отделение скорой медицинской помощи</Name>
+          <Parent>3000</Parent>
+        </RecordSubdivision>
+        <Unit/>
+        <TypeIn>
+          <ID>0</ID>
+          <Name>Принят</Name>
+        </TypeIn>
+        <OrderIn>772-лс</OrderIn>
+        <DateBegin>2010-12-31T00:00:00</DateBegin>
+        <DateEnd xsi:nil="true" />
+        <RecordRegime>
+          <ID>1</ID>
+          <Name>Работающий на постоянной работе</Name>
+        </RecordRegime>
+        <RecordMilitary>
+          <ID>2</ID>
+          <Name>Военнообязанный</Name>
+        </RecordMilitary>
+        <Wage>1</Wage>
+        <RecordPositionType>
+          <ID>1</ID>
+          <Name>Основная должность</Name>
+        </RecordPositionType>
+        <RecordPost>
+          <ID>67</ID>
+          <Parent>8</Parent>
+          <Name>Врач скорой медицинской помощи</Name>
+        </RecordPost>
+      </CardRecord>
+    </EmployeeRecords>
+    <EmployeeSertificateEducation>
+      <SertificateEducation>
+        <IssueOrg>
+          <ID>72</ID>
+          <Name>Нижегородская государственная медицинская академия Федерального агентства по здравоохранению и социальному развитию, г. Нижний Новгород</Name>
+          <Parent>1000</Parent>
+        </IssueOrg>
+        <IssueDate>2007-03-03T00:00:00</IssueDate>
+        <SertificateSerie>А</SertificateSerie>
+        <SertificateNumber>3043443</SertificateNumber>
+        <EducationSpeciality>
+          <ID>25</ID>
+          <Parent>1</Parent>
+          <Name>Скорая медицинская помощь</Name>
+        </EducationSpeciality>
+      </SertificateEducation>
+      <SertificateEducation>
+        <IssueOrg>
+          <ID>72</ID>
+          <Name>Нижегородская государственная медицинская академия Федерального агентства по здравоохранению и социальному развитию, г. Нижний Новгород</Name>
+          <Parent>1000</Parent>
+        </IssueOrg>
+        <IssueDate>2011-10-28T00:00:00</IssueDate>
+        <SertificateSerie>А</SertificateSerie>
+        <SertificateNumber>3043443</SertificateNumber>
+        <EducationSpeciality>
+          <ID>3</ID>
+          <Parent xsi:nil="true" />
+          <Name>Скорая медицинская помощь</Name>
+        </EducationSpeciality>
+      </SertificateEducation>
+    </EmployeeSertificateEducation>
+  </Employee>
+  <Employee>
+    <ID>a2795a9a-8930-4a68-bc42-23356a54673a</ID>
+    <Population>0</Population>
+    <TabelNumber>0000000014</TabelNumber>
+    <UZ>
+      <ID>36c9f7eb-a198-11e1-8e66-b803051cdedb</ID>
+      <Name>Бюджетное учреждение Чувашской Республики "Алатырская городская станция скорой медицинской помощи" Министерства здравоохранения и социального развития Чувашской Республики</Name>
+      <OID/>
+      <INN>2122004060</INN>
+      <KPP>212201001</KPP>
+      <OGRN>1022101629945</OGRN>
+      <Type/>
+      <Municipality>
+        <ID>2100002200000</ID>
+        <Name>Алатырь</Name>
+        <Prefix>г</Prefix>
+        <Parent>2100000000000</Parent>
+      </Municipality>
+    </UZ>
+    <ChangeTime>2013-01-23T00:00:00</ChangeTime>
+    <Name>Евгения</Name>
+    <Surname>Бегеева</Surname>
+    <Patroname>Евгеньевна</Patroname>
+    <Sex>Female</Sex>
+    <Birthdate>1981-12-15T00:00:00</Birthdate>
+    <Deathdate xsi:nil="true" />
+    <SNILS>070-804-066-37</SNILS>
+    <INN>210100454602</INN>
+    <IsRealPerson>true</IsRealPerson>
+    <EmployeeRecords>
+      <CardRecord>
+        <Duration>87</Duration>
+        <Population>0</Population>
+        <Organisation>Бюджетное учреждение Чувашской Республики "Алатырская городская станция скорой медицинской помощи" Министерства здравоохранения и социального развития Чувашской Республики</Organisation>
+        <Care>
+          <ID>3</ID>
+          <Name>Скорая медицинская помощь</Name>
+        </Care>
+        <Conditions>
+          <ID>3</ID>
+          <Name>Скорая медицинская помощь</Name>
+        </Conditions>
+        <RecrodPosition>
+          <ID>2</ID>
+          <Name>средний медперсонал</Name>
+        </RecrodPosition>
+        <RecordSubdivision>
+          <ID>10148</ID>
+          <Name>Отделение скорой медицинской помощи</Name>
+          <Parent>4000</Parent>
+        </RecordSubdivision>
+        <Unit>Станция скорой медицинской помощи</Unit>
+        <TypeIn>
+          <ID>0</ID>
+          <Name>Принят</Name>
+        </TypeIn>
+        <OrderIn>103</OrderIn>
+        <TypeOut>
+          <ID>1</ID>
+          <Name>Переведён</Name>
+        </TypeOut>
+        <OrderOut>9 к</OrderOut>
+        <DateBegin>2005-09-28T00:00:00</DateBegin>
+        <DateEnd>2013-01-22T00:00:00</DateEnd>
+        <RecordRegime>
+          <ID>1</ID>
+          <Name>Работающий на постоянной работе</Name>
+        </RecordRegime>
+        <RecordMilitary>
+          <ID>2</ID>
+          <Name>Военнообязанный</Name>
+        </RecordMilitary>
+        <Wage>1</Wage>
+        <RecordPositionType>
+          <ID>1</ID>
+          <Name>Основная должность</Name>
+        </RecordPositionType>
+        <RecordPost>
+          <ID>10244</ID>
+          <Parent>10242</Parent>
+          <Name>медицинская сестра (фельдшер) по приему вызовов скорой медицинской помощи и передаче их выездным бригадам скорой медицинской помощи</Name>
+        </RecordPost>
+      </CardRecord>
+      <CardRecord>
+        <Duration>3</Duration>
+        <Population>0</Population>
+        <Organisation>Бюджетное учреждение Чувашской Республики "Республиканская станция скорой медицинской помощи" Министерства здравоохранения и социального развития Чувашской Республики</Organisation>
+        <Care>
+          <ID>3</ID>
+          <Name>Скорая медицинская помощь</Name>
+        </Care>
+        <Conditions>
+          <ID>3</ID>
+          <Name>Скорая медицинская помощь</Name>
+        </Conditions>
+        <RecrodPosition>
+          <ID>2</ID>
+          <Name>средний медперсонал</Name>
+        </RecrodPosition>
+        <RecordSubdivision>
+          <ID>10354</ID>
+          <Name>Отделение скорой медицинской помощи</Name>
+          <Parent>3000</Parent>
+        </RecordSubdivision>
+        <Unit/>
+        <TypeIn>
+          <ID>0</ID>
+          <Name>Принят</Name>
+        </TypeIn>
+        <OrderIn>771-лс</OrderIn>
+        <TypeOut>
+          <ID>1</ID>
+          <Name>Переведён</Name>
+        </TypeOut>
+        <OrderOut>1516/8-лс</OrderOut>
+        <DateBegin>2013-09-01T00:00:00</DateBegin>
+        <DateEnd>2013-12-31T00:00:00</DateEnd>
+        <RecordRegime>
+          <ID>1</ID>
+          <Name>Работающий на постоянной работе</Name>
+        </RecordRegime>
+        <RecordMilitary>
+          <ID>2</ID>
+          <Name>Военнообязанный</Name>
+        </RecordMilitary>
+        <Wage>1</Wage>
+        <RecordPositionType>
+          <ID>1</ID>
+          <Name>Основная должность</Name>
+        </RecordPositionType>
+        <RecordPost>
+          <ID>117</ID>
+          <Parent>10242</Parent>
+          <Name>фельдшер</Name>
+        </RecordPost>
+      </CardRecord>
+      <CardRecord>
+        <Duration>0</Duration>
+        <Population>0</Population>
+        <Organisation>Бюджетное учреждение Чувашской Республики "Республиканская станция скорой медицинской помощи" Министерства здравоохранения и социального развития Чувашской Республики</Organisation>
+        <Care>
+          <ID>1</ID>
+          <Name>Первичная медико-санитарная помощь</Name>
+        </Care>
+        <Conditions>
+          <ID>3</ID>
+          <Name>Скорая медицинская помощь</Name>
+        </Conditions>
+        <RecrodPosition>
+          <ID>2</ID>
+          <Name>средний медперсонал</Name>
+        </RecrodPosition>
+        <RecordSubdivision>
+          <ID>10354</ID>
+          <Name>Отделение скорой медицинской помощи</Name>
+          <Parent>3000</Parent>
+        </RecordSubdivision>
+        <Unit>Оперативный отдел-единая диспетчерская служба</Unit>
+        <TypeIn>
+          <ID>1</ID>
+          <Name>Переведён</Name>
+        </TypeIn>
+        <OrderIn>1516/8-лс</OrderIn>
+        <DateBegin>2014-01-01T00:00:00</DateBegin>
+        <DateEnd xsi:nil="true" />
+        <RecordRegime>
+          <ID>1</ID>
+          <Name>Работающий на постоянной работе</Name>
+        </RecordRegime>
+        <RecordMilitary>
+          <ID>2</ID>
+          <Name>Военнообязанный</Name>
+        </RecordMilitary>
+        <Wage>1</Wage>
+        <RecordPositionType>
+          <ID>1</ID>
+          <Name>Основная должность</Name>
+        </RecordPositionType>
+        <RecordPost>
+          <ID>117</ID>
+          <Parent>10242</Parent>
+          <Name>фельдшер</Name>
+        </RecordPost>
+      </CardRecord>
+      <CardRecord>
+        <Duration>0</Duration>
+        <Population>0</Population>
+        <Organisation>Бюджетное учреждение Чувашской Республики "Республиканская станция скорой медицинской помощи" Министерства здравоохранения и социального развития Чувашской Республики</Organisation>
+        <Care>
+          <ID>1</ID>
+          <Name>Первичная медико-санитарная помощь</Name>
+        </Care>
+        <Conditions>
+          <ID>3</ID>
+          <Name>Скорая медицинская помощь</Name>
+        </Conditions>
+        <RecrodPosition>
+          <ID>2</ID>
+          <Name>средний медперсонал</Name>
+        </RecrodPosition>
+        <RecordSubdivision>
+          <ID>10354</ID>
+          <Name>Отделение скорой медицинской помощи</Name>
+          <Parent>3000</Parent>
+        </RecordSubdivision>
+        <Unit>Оперативный отдел-единая диспетчерская служба</Unit>
+        <TypeIn>
+          <ID>0</ID>
+          <Name>Принят</Name>
+        </TypeIn>
+        <OrderIn>1516/10-лс</OrderIn>
+        <DateBegin>2014-01-01T00:00:00</DateBegin>
+        <DateEnd xsi:nil="true" />
+        <RecordRegime>
+          <ID>1</ID>
+          <Name>Работающий на постоянной работе</Name>
+        </RecordRegime>
+        <RecordMilitary>
+          <ID>2</ID>
+          <Name>Военнообязанный</Name>
+        </RecordMilitary>
+        <Wage>0.5</Wage>
+        <RecordPositionType>
+          <ID>3</ID>
+          <Name>Совместительство (внутреннее)</Name>
+        </RecordPositionType>
+        <RecordPost>
+          <ID>117</ID>
+          <Parent>10242</Parent>
+          <Name>фельдшер</Name>
+        </RecordPost>
+      </CardRecord>
+    </EmployeeRecords>
+    <EmployeeSertificateEducation>
+      <SertificateEducation>
+        <IssueOrg>
+          <ID>4069</ID>
+          <Name>Канашское медицинское училище</Name>
+          <Parent>3000</Parent>
+        </IssueOrg>
+        <IssueDate>2006-04-06T00:00:00</IssueDate>
+        <SertificateSerie>А</SertificateSerie>
+        <SertificateNumber>2786426</SertificateNumber>
+        <EducationSpeciality>
+          <ID>206</ID>
+          <Parent>204</Parent>
+          <Name>Лечебное дело</Name>
+        </EducationSpeciality>
+      </SertificateEducation>
+      <SertificateEducation>
+        <IssueOrg>
+          <ID>613</ID>
+          <Name>Чебоксарский медицинский колледж</Name>
+          <Parent>3000</Parent>
+        </IssueOrg>
+        <IssueDate>2011-03-19T00:00:00</IssueDate>
+        <SertificateSerie>А</SertificateSerie>
+        <SertificateNumber>3999218</SertificateNumber>
+        <EducationSpeciality>
+          <ID>283</ID>
+          <Parent>204</Parent>
+          <Name>Скорая и неотложная помощь</Name>
+        </EducationSpeciality>
+      </SertificateEducation>
+    </EmployeeSertificateEducation>
+  </Employee>
+  <Employee>
+    <ID>42635007-e8c5-4970-b191-fdb09bd78c74</ID>
+    <Population>0</Population>
+    <TabelNumber>0000000016</TabelNumber>
+    <UZ>
+      <ID>36c9f7eb-a198-11e1-8e66-b803051cdedb</ID>
+      <Name>Бюджетное учреждение Чувашской Республики "Алатырская городская станция скорой медицинской помощи" Министерства здравоохранения и социального развития Чувашской Республики</Name>
+      <OID/>
+      <INN>2122004060</INN>
+      <KPP>212201001</KPP>
+      <OGRN>1022101629945</OGRN>
+      <Type/>
+      <Municipality>
+        <ID>2100002200000</ID>
+        <Name>Алатырь</Name>
+        <Prefix>г</Prefix>
+        <Parent>2100000000000</Parent>
+      </Municipality>
+    </UZ>
+    <ChangeTime>2013-01-23T00:00:00</ChangeTime>
+    <Name>Марина</Name>
+    <Surname>Бочкарева</Surname>
+    <Patroname>Владимировна</Patroname>
+    <Sex>Female</Sex>
+    <Birthdate>1981-01-30T00:00:00</Birthdate>
+    <Deathdate xsi:nil="true" />
+    <SNILS>069-767-757-47</SNILS>
+    <INN>212200575900</INN>
+    <IsRealPerson>true</IsRealPerson>
+    <EmployeeRecords>
+      <CardRecord>
+        <Duration>154</Duration>
+        <Population>0</Population>
+        <Organisation>Бюджетное учреждение Чувашской Республики "Алатырская городская станция скорой медицинской помощи" Министерства здравоохранения и социального развития Чувашской Республики</Organisation>
+        <Care>
+          <ID>3</ID>
+          <Name>Скорая медицинская помощь</Name>
+        </Care>
+        <Conditions>
+          <ID>3</ID>
+          <Name>Скорая медицинская помощь</Name>
+        </Conditions>
+        <RecrodPosition>
+          <ID>2</ID>
+          <Name>средний медперсонал</Name>
+        </RecrodPosition>
+        <RecordSubdivision>
+          <ID>10148</ID>
+          <Name>Отделение скорой медицинской помощи</Name>
+          <Parent>4000</Parent>
+        </RecordSubdivision>
+        <Unit>Станция скорой медицинской помощи</Unit>
+        <TypeIn>
+          <ID>0</ID>
+          <Name>Принят</Name>
+        </TypeIn>
+        <OrderIn>20</OrderIn>
+        <TypeOut>
+          <ID>1</ID>
+          <Name>Переведён</Name>
+        </TypeOut>
+        <OrderOut>9 к</OrderOut>
+        <DateBegin>2000-03-16T00:00:00</DateBegin>
+        <DateEnd>2013-01-22T00:00:00</DateEnd>
+        <RecordRegime>
+          <ID>1</ID>
+          <Name>Работающий на постоянной работе</Name>
+        </RecordRegime>
+        <RecordMilitary>
+          <ID>2</ID>
+          <Name>Военнообязанный</Name>
+        </RecordMilitary>
+        <Wage>1</Wage>
+        <RecordPositionType>
+          <ID>1</ID>
+          <Name>Основная должность</Name>
+        </RecordPositionType>
+        <RecordPost>
+          <ID>10170</ID>
+          <Parent>10242</Parent>
+          <Name>фельдшер скорой медицинской помощи</Name>
+        </RecordPost>
+      </CardRecord>
+      <CardRecord>
+        <Duration>0</Duration>
+        <Population>0</Population>
+        <Organisation>Бюджетное учреждение Чувашской Республики "Республиканская станция скорой медицинской помощи" Министерства здравоохранения и социального развития Чувашской Республики</Organisation>
+        <Care>
+          <ID>3</ID>
+          <Name>Скорая медицинская помощь</Name>
+        </Care>
+        <Conditions>
+          <ID>3</ID>
+          <Name>Скорая медицинская помощь</Name>
+        </Conditions>
+        <RecrodPosition>
+          <ID>2</ID>
+          <Name>средний медперсонал</Name>
+        </RecrodPosition>
+        <RecordSubdivision>
+          <ID>10354</ID>
+          <Name>Отделение скорой медицинской помощи</Name>
+          <Parent>3000</Parent>
+        </RecordSubdivision>
+        <Unit>подстанция скорой медицинской помощи г.Алатырь</Unit>
+        <TypeIn>
+          <ID>0</ID>
+          <Name>Принят</Name>
+        </TypeIn>
+        <OrderIn>771-лс</OrderIn>
+        <DateBegin>2010-12-31T00:00:00</DateBegin>
+        <DateEnd xsi:nil="true" />
+        <RecordRegime>
+          <ID>1</ID>
+          <Name>Работающий на постоянной работе</Name>
+        </RecordRegime>
+        <RecordMilitary>
+          <ID>2</ID>
+          <Name>Военнообязанный</Name>
+        </RecordMilitary>
+        <Wage>1</Wage>
+        <RecordPositionType>
+          <ID>1</ID>
+          <Name>Основная должность</Name>
+        </RecordPositionType>
+        <RecordPost>
+          <ID>117</ID>
+          <Parent>10242</Parent>
+          <Name>фельдшер</Name>
+        </RecordPost>
+      </CardRecord>
+    </EmployeeRecords>
+    <EmployeeSertificateEducation>
+      <SertificateEducation>
+        <IssueOrg>
+          <ID>4069</ID>
+          <Name>Канашское медицинское училище</Name>
+          <Parent>3000</Parent>
+        </IssueOrg>
+        <IssueDate>2006-04-06T00:00:00</IssueDate>
+        <SertificateSerie>А</SertificateSerie>
+        <SertificateNumber>2786273</SertificateNumber>
+        <EducationSpeciality>
+          <ID>206</ID>
+          <Parent>204</Parent>
+          <Name>Лечебное дело</Name>
+        </EducationSpeciality>
+      </SertificateEducation>
+      <SertificateEducation>
+        <IssueOrg>
+          <ID>613</ID>
+          <Name>Чебоксарский медицинский колледж</Name>
+          <Parent>3000</Parent>
+        </IssueOrg>
+        <IssueDate>2011-03-19T00:00:00</IssueDate>
+        <SertificateSerie>А</SertificateSerie>
+        <SertificateNumber>3999219</SertificateNumber>
+        <EducationSpeciality>
+          <ID>283</ID>
+          <Parent>204</Parent>
+          <Name>Скорая и неотложная помощь</Name>
+        </EducationSpeciality>
+      </SertificateEducation>
+    </EmployeeSertificateEducation>
+  </Employee>
+  <Employee>
+    <ID>4af990df-2eb6-48bc-a227-2b9a65e4aa61</ID>
+    <Population>0</Population>
+    <TabelNumber>0000000015</TabelNumber>
+    <UZ>
+      <ID>36c9f7eb-a198-11e1-8e66-b803051cdedb</ID>
+      <Name>Бюджетное учреждение Чувашской Республики "Алатырская городская станция скорой медицинской помощи" Министерства здравоохранения и социального развития Чувашской Республики</Name>
+      <OID/>
+      <INN>2122004060</INN>
+      <KPP>212201001</KPP>
+      <OGRN>1022101629945</OGRN>
+      <Type/>
+      <Municipality>
+        <ID>2100002200000</ID>
+        <Name>Алатырь</Name>
+        <Prefix>г</Prefix>
+        <Parent>2100000000000</Parent>
+      </Municipality>
+    </UZ>
+    <ChangeTime>2013-01-23T00:00:00</ChangeTime>
+    <Name>Альбина</Name>
+    <Surname>Бушуева</Surname>
+    <Patroname>Николаевна</Patroname>
+    <Sex>Female</Sex>
+    <Birthdate>1972-12-16T00:00:00</Birthdate>
+    <Deathdate xsi:nil="true" />
+    <SNILS>011-653-161-03</SNILS>
+    <INN>212200574304</INN>
+    <IsRealPerson>true</IsRealPerson>
+    <EmployeeRecords>
+      <CardRecord>
+        <Duration>249</Duration>
+        <Population>0</Population>
+        <Organisation>Бюджетное учреждение Чувашской Республики "Алатырская городская станция скорой медицинской помощи" Министерства здравоохранения и социального развития Чувашской Республики</Organisation>
+        <Care>
+          <ID>3</ID>
+          <Name>Скорая медицинская помощь</Name>
+        </Care>
+        <Conditions>
+          <ID>3</ID>
+          <Name>Скорая медицинская помощь</Name>
+        </Conditions>
+        <RecrodPosition>
+          <ID>2</ID>
+          <Name>средний медперсонал</Name>
+        </RecrodPosition>
+        <RecordSubdivision>
+          <ID>10148</ID>
+          <Name>Отделение скорой медицинской помощи</Name>
+          <Parent>4000</Parent>
+        </RecordSubdivision>
+        <Unit>Станция скорой медицинской помощи</Unit>
+        <TypeIn>
+          <ID>0</ID>
+          <Name>Принят</Name>
+        </TypeIn>
+        <OrderIn>28</OrderIn>
+        <TypeOut>
+          <ID>1</ID>
+          <Name>Переведён</Name>
+        </TypeOut>
+        <OrderOut>9 к</OrderOut>
+        <DateBegin>1992-04-08T00:00:00</DateBegin>
+        <DateEnd>2013-01-22T00:00:00</DateEnd>
+        <RecordRegime>
+          <ID>1</ID>
+          <Name>Работающий на постоянной работе</Name>
+        </RecordRegime>
+        <RecordMilitary>
+          <ID>2</ID>
+          <Name>Военнообязанный</Name>
+        </RecordMilitary>
+        <Wage>1</Wage>
+        <RecordPositionType>
+          <ID>1</ID>
+          <Name>Основная должность</Name>
+        </RecordPositionType>
+        <RecordPost>
+          <ID>10170</ID>
+          <Parent>10242</Parent>
+          <Name>фельдшер скорой медицинской помощи</Name>
+        </RecordPost>
+      </CardRecord>
+      <CardRecord>
+        <Duration>0</Duration>
+        <Population>0</Population>
+        <Organisation>Бюджетное учреждение Чувашской Республики "Республиканская станция скорой медицинской помощи" Министерства здравоохранения и социального развития Чувашской Республики</Organisation>
+        <Care>
+          <ID>3</ID>
+          <Name>Скорая медицинская помощь</Name>
+        </Care>
+        <Conditions>
+          <ID>3</ID>
+          <Name>Скорая медицинская помощь</Name>
+        </Conditions>
+        <RecrodPosition>
+          <ID>2</ID>
+          <Name>средний медперсонал</Name>
+        </RecrodPosition>
+        <RecordSubdivision>
+          <ID>10354</ID>
+          <Name>Отделение скорой медицинской помощи</Name>
+          <Parent>3000</Parent>
+        </RecordSubdivision>
+        <Unit>подстанция скорой медицинской помощи г.Алатырь</Unit>
+        <TypeIn>
+          <ID>0</ID>
+          <Name>Принят</Name>
+        </TypeIn>
+        <OrderIn>770-лс</OrderIn>
+        <DateBegin>2010-12-31T00:00:00</DateBegin>
+        <DateEnd xsi:nil="true" />
+        <RecordRegime>
+          <ID>1</ID>
+          <Name>Работающий на постоянной работе</Name>
+        </RecordRegime>
+        <RecordMilitary>
+          <ID>2</ID>
+          <Name>Военнообязанный</Name>
+        </RecordMilitary>
+        <Wage>1</Wage>
+        <RecordPositionType>
+          <ID>1</ID>
+          <Name>Основная должность</Name>
+        </RecordPositionType>
+        <RecordPost>
+          <ID>117</ID>
+          <Parent>10242</Parent>
+          <Name>фельдшер</Name>
+        </RecordPost>
+      </CardRecord>
+    </EmployeeRecords>
+    <EmployeeSertificateEducation>
+      <SertificateEducation>
+        <IssueOrg>
+          <ID>4069</ID>
+          <Name>Канашское медицинское училище</Name>
+          <Parent>3000</Parent>
+        </IssueOrg>
+        <IssueDate>2006-04-06T00:00:00</IssueDate>
+        <SertificateSerie>А</SertificateSerie>
+        <SertificateNumber>1455672</SertificateNumber>
+        <EducationSpeciality>
+          <ID>206</ID>
+          <Parent>204</Parent>
+          <Name>Лечебное дело</Name>
+        </EducationSpeciality>
+      </SertificateEducation>
+      <SertificateEducation>
+        <IssueOrg>
+          <ID>613</ID>
+          <Name>Чебоксарский медицинский колледж</Name>
+          <Parent>3000</Parent>
+        </IssueOrg>
+        <IssueDate>2011-03-19T00:00:00</IssueDate>
+        <SertificateSerie>А</SertificateSerie>
+        <SertificateNumber>3999220</SertificateNumber>
+        <EducationSpeciality>
+          <ID>283</ID>
+          <Parent>204</Parent>
+          <Name>Скорая и неотложная помощь</Name>
+        </EducationSpeciality>
+      </SertificateEducation>
+    </EmployeeSertificateEducation>
+  </Employee>
+</ArrayOfEmployee>
