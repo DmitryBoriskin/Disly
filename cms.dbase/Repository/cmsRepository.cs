@@ -1328,9 +1328,11 @@ namespace cms.dbase
             using (var db = new CMSdb(_context))
             {
                 var data = db.content_orgss.Where(w => w.id == id);
-                string logTitle = data.FirstOrDefault().c_title;
                 if (data.Any())
                 {
+                    string logTitle = data.FirstOrDefault().c_title;
+                    int ThisSort = data.FirstOrDefault().n_sort;
+                    db.content_orgss.Where(w=>w.n_sort>ThisSort).Set(p => p.n_sort, p => p.n_sort - 1).Update();//смещение n_sort
                     data.Delete();
                     //логирование
                     insertLog(UserId, IP, "delete", id, String.Empty, "Orgs", logTitle);
@@ -1486,9 +1488,13 @@ namespace cms.dbase
             using (var db = new CMSdb(_context))
             {
                 var data = db.content_org_structures.Where(w => w.id == id);
+                Guid IdOrg = data.FirstOrDefault().f_ord;
+                int ThisSort = data.FirstOrDefault().n_sort;
                 string logTitle = data.FirstOrDefault().c_title;
                 if (data.Any()) {
+
                     data.Delete(); 
+                    db.content_org_structures.Where(w=>w.f_ord== IdOrg && w.n_sort>ThisSort).Set(p => p.n_sort, p => p.n_sort - 1).Update();//смещение n_sort
                     //логирование
                     insertLog(UserId, IP, "delete", id, String.Empty, "Orgs", logTitle);
                     return true;
@@ -1898,9 +1904,13 @@ namespace cms.dbase
                 {
                     throw new Exception("Запись с таким Id не найдена");
                 }
+                Guid IdStruct = cdDepart.f_structure;
+                int ThisSort = cdDepart.n_sort;
                 using (var tran = db.BeginTransaction())
-                {
+                {                    
+                    db.content_departmentss.Where(w=>w.f_structure== IdStruct && w.n_sort> ThisSort).Set(p => p.n_sort, p => p.n_sort - 1).Update();//смещение n_sort
                     db.Delete(cdDepart);
+
                     tran.Commit();                    
                 }
                 return true;

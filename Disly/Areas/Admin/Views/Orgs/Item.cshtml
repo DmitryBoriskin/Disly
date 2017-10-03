@@ -8,7 +8,7 @@
     <div class="content">
         <h1>@ViewBag.Title</h1>
         @Html.TextBoxFor(m => m.Item.Title, new { required = "", type = "text", maxlength = "256", title = "Полное название" })
-        @Html.TextBoxFor(m => m.Item.ShortTitle, new { required = "", type = "text", maxlength = "128", title = "Краткое название" })
+        @Html.TextBoxFor(m => m.Item.ShortTitle, new {  type = "text", maxlength = "128", title = "Краткое название" })
         <div class="row">
             <div class="col-lg-6">
                 <select title="Тип финансирование" class="selectpicker">
