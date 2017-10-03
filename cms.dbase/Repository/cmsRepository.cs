@@ -2437,12 +2437,6 @@ namespace cms.dbase
                 {
                     Guid? menuId = Guid.Parse(filtr.Group);
 
-                    //var query = from p in query
-                    //        join t in db.content_sitemap_menutypess
-                    //        on p.id equals t.f_sitemap
-                    //        where t.f_menutype == menuId
-                    //        select p;
-
                     var query = db.content_sv_sitemap_menus
                         .Where(w => w.f_site.Equals(site))
                         .Where(w => !w.id.Equals(null))
@@ -2697,16 +2691,17 @@ namespace cms.dbase
                         {
                             Guid menuId = Guid.Parse(m);
 
-                            int _maxSortMenu = db.content_sitemap_menutypess
+                            var _maxSortMenu = db.content_sitemap_menutypess
                                 .Where(w => w.f_site.Equals(item.Site))
-                                .Where(w => w.f_menutype.Equals(menuId))
-                                .Select(s => s.n_sort).Max();
+                                .Where(w => w.f_menutype.Equals(menuId));
+
+                            int resmaxSortMenu = _maxSortMenu.Any() ? _maxSortMenu.Select(s => s.n_sort).Max() : 0;
 
                             var res = db.content_sitemap_menutypess
                                 .Value(p => p.f_sitemap, id)
                                 .Value(p => p.f_menutype, menuId)
                                 .Value(p => p.f_site, item.Site)
-                                .Value(p => p.n_sort, _maxSortMenu + 1)
+                                .Value(p => p.n_sort, resmaxSortMenu + 1)
                                 .Insert();
                         }
                     }
@@ -2818,17 +2813,27 @@ namespace cms.dbase
                     .Where(w => w.n_sort > itemToDelete.Sort);
 
                 listToUpdate.Set(u => u.n_sort, u => u.n_sort - 1).Update();
-                    
+
                 // Удаляем дочерние эл-ты 
+                string pathToDrop = itemToDelete.Path.Equals("/") ?
+                    itemToDelete.Path + itemToDelete.Alias :
+                    itemToDelete.Path + "/" + itemToDelete.Alias;
+
                 var listToDelete = db.content_sitemaps
-                    .Where(w => w.id.Equals(id) || w.c_path.Contains(itemToDelete.Path + itemToDelete.Alias));
+                    .Where(w => w.id.Equals(id) || w.c_path.Contains(pathToDrop));
                 
                 if (listToDelete.Any())
                 {
                     foreach (var item in listToDelete.ToArray())
                     {
-                        listToDelete.Where(w => w.id.Equals(item.id)).Delete();
+                        // Логирование
                         insertLog(userId, IP, "delete", item.id, String.Empty, "SiteMap", item.c_title);
+                        
+                        var itemD = db.content_sitemaps
+                            .Where(w => w.id == item.id)
+                            .SingleOrDefault();
+
+                        db.Delete(itemD);
                     }
                 }
                 return true;
