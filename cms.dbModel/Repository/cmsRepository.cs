@@ -86,12 +86,14 @@ namespace cms.dbModel
         public abstract bool insOrgs(Guid id, OrgsModel model, Guid UserId, String IP);
         public abstract bool setOrgs(Guid id, OrgsModel model, Guid UserId, String IP);
         public abstract bool delOrgs(Guid id, Guid UserId, String IP);
+        public abstract bool sortOrgs(Guid id, int new_num);
 
         public abstract StructureModel[] getStructureList(Guid id);
         public abstract StructureModel getStructure(Guid id);
         public abstract bool insStructure(Guid id, Guid OrgId, StructureModel insert, Guid UserId, String IP);
         public abstract bool setStructure(Guid id, StructureModel insert, Guid UserId, String IP);
         public abstract bool delStructure(Guid id, Guid UserId, String IP);
+        public abstract bool sortStructure(Guid id, int new_num);
 
         public abstract bool insOvp(Guid IdStructure, Guid OrgId, StructureModel insertStructure, Guid UserId, String IP);
         public abstract bool setOvp(Guid IdStructure, StructureModel updStructure, Guid UserId, String IP);
@@ -102,6 +104,7 @@ namespace cms.dbModel
         public abstract BreadCrumb[] getBreadCrumbOrgs(Guid id, string type);
         public abstract bool insDepartmentsPhone(Guid idDepart, string Label, string Value, Guid UserId, String IP);
         public abstract bool delDepartmentsPhone(int id);
+        public abstract bool sortDepartament(Guid id, int new_num);
         public abstract People[] getPeopleDepartment(Guid idDepart);
         public abstract bool insDepartament(Guid id, Guid Structure, Departments insert, Guid UserId, String IP);
         public abstract bool updDepartament(Guid id,  Departments update, Guid UserId, String IP);

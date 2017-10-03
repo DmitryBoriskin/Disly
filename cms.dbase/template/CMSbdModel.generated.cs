@@ -627,6 +627,7 @@ namespace cms.dbase.models
 		[Column,     NotNull    ] public Guid   f_structure { get; set; } // uniqueidentifier
 		[Column,     NotNull    ] public string c_title     { get; set; } // varchar(1024)
 		[Column,        Nullable] public string c_adress    { get; set; } // nvarchar(512)
+		[Column,     NotNull    ] public int    n_sort      { get; set; } // int
 
 		#region Associations
 
@@ -807,6 +808,7 @@ namespace cms.dbase.models
 		[Column,        Nullable] public string  c_director_post   { get; set; } // varchar(64)
 		[Column,        Nullable] public Guid?   f_director        { get; set; } // uniqueidentifier
 		[Column,     NotNull    ] public bool    b_ovp             { get; set; } // bit
+		[Column,     NotNull    ] public int     n_sort            { get; set; } // int
 
 		#region Associations
 
@@ -841,6 +843,7 @@ namespace cms.dbase.models
 		[Column,        Nullable] public double? n_geopoint_x      { get; set; } // float
 		[Column,        Nullable] public double? n_geopoint_y      { get; set; } // float
 		[Column,        Nullable] public string  c_adress          { get; set; } // nvarchar(512)
+		[Column,     NotNull    ] public int     n_sort            { get; set; } // int
 
 		#region Associations
 

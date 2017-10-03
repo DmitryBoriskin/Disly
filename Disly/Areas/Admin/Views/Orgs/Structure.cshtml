@@ -1,5 +1,7 @@
 ﻿@model OrgsViewModel
-
+@{
+    string urlParam = "/Admin/Services/ChangePermit?group=orgs_department";
+}
 @if (Model.UserResolution.Write)
 {
     <div class="content">
@@ -48,31 +50,35 @@
             <div class="child-list">
                 <div class="child-list_head">
                     <div class="row">
-                        <div class="col-lg-8"><h1>Отделения</h1></div>
-                        <div class="col-lg-4 text-right">                            
+                        <div class="col-lg-5"><h1>Отделения</h1></div>
+                        <div class="col-lg-7 text-right">                            
                             <a class="button icon-create green pull-right" href="/admin/orgs/department/@Guid.NewGuid()?strucid=@Model.StructureItem.Id">Добавить</a>
+                            <a class="button icon-sort pull-right" style="max-width:150px;" value="no-preloader-btn" id="sorting_element" title="Добавляет возможность сортировки элементов списка">Сортировать</a>
                         </div>
                     </div>
                 </div>
-                <div class="site_map_list">
+                <div class="sort_list">
                     <table class="table table-striped">
-                        <tr>
-                            <th>&nbsp;</th>
-                            <th>Название</th>
-                        </tr>
-                        @if (Model.StructureItem.Departments != null)
-                        {
-                            foreach (var item in Model.StructureItem.Departments)
+                        <thead>
+                            <tr>
+                                <th>&nbsp;</th>
+                                <th>Название</th>
+                            </tr>
+                        </thead>  
+                        <tbody  data-service="@urlParam">
+                            @if (Model.StructureItem.Departments != null)
                             {
-                                <tr>
-                                    <td class="map_site_icon"></td>
-                                    <td>
-                                        <a href="/admin/orgs/department/@item.Id">@item.Title</a>
-                                    </td>
-                                </tr>
-
+                                foreach (var item in Model.StructureItem.Departments)
+                                {
+                                    <tr class="ui-sortable-handle" data-id="@item.Id">
+                                        <td class="map_site_icon"></td>
+                                        <td>
+                                            <a href="/admin/orgs/department/@item.Id">@item.Title</a>
+                                        </td>
+                                    </tr>
+                                }
                             }
-                        }
+                        </tbody>                        
                     </table>
                 </div>
 

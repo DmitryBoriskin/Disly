@@ -1,4 +1,7 @@
 ﻿@model OrgsViewModel
+@{ 
+    string urlParam = "/Admin/Services/ChangePermit?group=orgs_structure";
+}
 
 @if (Model.UserResolution.Write)
 {
@@ -72,36 +75,41 @@
                     <div class="col-sm-7">
                         <a class="button icon-create green pull-right" href="/admin/orgs/structure/@Guid.NewGuid()?orgid=@Model.Item.Id">Добавить</a>
                         <a class="button icon-create green pull-right" href="/admin/orgs/ovp/@Guid.NewGuid()?orgid=@Model.Item.Id">Добавить ОВП</a>
+                        <a class="button icon-sort pull-right" style="max-width:150px;" value="no-preloader-btn" id="sorting_element" title="Добавляет возможность сортировки элементов списка">Сортировать</a>
                     </div>
                 </div>
 
-                <div class="site_map_list">
+                <div class="sort_list">
                     <table class="table table-striped">
-                        <tr>
-                            <th>&nbsp;</th>
-                            <th>Название</th>
-                        </tr>
-                        @if (Model.Item.Structure != null)
-                        {
-                            foreach (var item in Model.Item.Structure)
+                        <thead>
+                            <tr>
+                                <th>&nbsp;</th>
+                                <th>Название</th>
+                            </tr>
+                        </thead>     
+                        <tbody data-service="@urlParam">
+                            @if (Model.Item.Structure != null)
                             {
-                                <tr>
-                                    <td class="map_site_icon"></td>
-                                    <td>
-                                        @if (item.Ovp)
-                                        {
-                                            <a href="/admin/orgs/ovp/@item.Id">@item.Title</a>
-                                        }
-                                        else
-                                        {
-                                            <a href="/admin/orgs/structure/@item.Id">@item.Title</a>
-                                        }
-                                        
-                                    </td>
-                                </tr>
+                                foreach (var item in Model.Item.Structure)
+                                {
+                                    <tr  class="ui-sortable-handle" data-id="@item.Id">
+                                        <td class="map_site_icon"></td>
+                                        <td>
+                                            @if (item.Ovp)
+                                            {
+                                                <a href="/admin/orgs/ovp/@item.Id">@item.Title</a>
+                                            }
+                                            else
+                                            {
+                                                <a href="/admin/orgs/structure/@item.Id">@item.Title</a>
+                                            }
+                                        </td>
+                                    </tr>
 
+                                }
                             }
-                        }
+                        </tbody>
+                        
 
 
                     </table>
@@ -117,6 +125,7 @@
     </div>
     <div class="dop_info-block">
         <div class="dop-caption">Дополнительно</div>
+        @Html.TextBoxFor(m => m.Item.Logo, new { type = "file", title = "Логтип", data_name = "", data_size = "", data_url = "", data_help = "размер фотографии" })
     </div>
 }
 else

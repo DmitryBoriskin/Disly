@@ -36,7 +36,7 @@
 
             @if (Model.Childrens != null)
             {
-                <div class="site_map_list">
+                <div class="sort_list">
                     <table id="sm_list" class="table table-striped">
                         <thead>
                             <tr>
@@ -44,7 +44,7 @@
                                 <th class="map_site_attach">Вложения</th>
                             </tr>
                         </thead>
-                        <tbody data-service="/Admin/Services/ChangePermit?group=SiteMap">
+                        <tbody data-service="/Admin/Services/ChangePermit?group=orgs_structure">
                             @foreach (var item in Model.Childrens)
                             {
                                 <tr class="ui-sortable-handle" data-id="@item.Id">
