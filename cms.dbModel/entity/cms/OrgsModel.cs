@@ -12,6 +12,7 @@ namespace cms.dbModel.entity
         [Required(ErrorMessage = "Поле «Название организации» не должно быть пустым.")]
         public string Title { get; set; }
         public string ShortTitle { get; set; }
+        public string Logo { get; set; }
         public string Contacts { get; set; }
         public string Address { get; set; }
         public double? GeopointX { get; set; }
@@ -23,6 +24,7 @@ namespace cms.dbModel.entity
         public string DirecorPost { get; set; }
         public Guid? DirectorF { get; set; }
         public bool Disabled { get; set; }
+        public int Sort { get; set; }
         public StructureModel[] Structure { get; set; }
     }
 

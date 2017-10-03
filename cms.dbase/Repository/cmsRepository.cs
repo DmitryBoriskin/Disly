@@ -1217,16 +1217,17 @@ namespace cms.dbase
         {
             using (var db = new CMSdb(_context))
             {
-                var data = db.content_orgss.AsQueryable();
+                var data = db.content_orgss.OrderBy(o => o.n_sort).AsQueryable();
                 if (filtr.SearchText != null)
                 {
                     data = data.Where(w => (w.c_title.Contains(filtr.SearchText)));
                 }
-
+                //data.OrderBy(o => o.n_sort); ХЗ почему эта строка нормально не сортирует                
                 var list = data.Select(s => new OrgsModel()
                 {
                     Id = s.id,
-                    Title = s.c_title
+                    Title = s.c_title,
+                    Sort=s.n_sort
                 });
                 if (list.Any()) return list.ToArray();
                 return null;
@@ -1265,8 +1266,15 @@ namespace cms.dbase
                 var data = db.content_orgss.Where(w => w.id == id);
                 if (!data.Any())
                 {
+                    int MaxSort = 0;
+                    try {
+                        MaxSort = db.content_orgss.Max(m => m.n_sort);
+                    }
+                    catch { }
+                    MaxSort++;
                     db.content_orgss
                         .Value(s => s.id, id)
+                        .Value(s => s.n_sort, MaxSort)
                         .Value(s => s.c_title, model.Title)
                         .Value(s => s.c_title_short, model.ShortTitle)
                         .Value(s => s.c_phone, model.Phone)
@@ -1331,6 +1339,34 @@ namespace cms.dbase
                 return false;
             }
         }
+        public override bool sortOrgs(Guid id, int new_num)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var actual_num = db.content_orgss.Where(w => w.id == id).FirstOrDefault().n_sort;
+                if (new_num > actual_num)
+                {
+                    db.content_orgss
+                        .Where(w =>(w.n_sort > actual_num && w.n_sort <= new_num))
+                        .Set(p => p.n_sort, p => p.n_sort - 1)
+                        .Update();
+                }
+                else
+                {
+                    db.content_orgss
+                        .Where(w => w.n_sort < actual_num && w.n_sort>=new_num)
+                        .Set(p => p.n_sort, p => p.n_sort + 1)
+                        .Update();
+                }
+                db.content_orgss
+                    .Where(w => w.id == id)
+                    .Set(s => s.n_sort, new_num)
+                    .Update();
+
+                return true;
+            }
+        }
+
 
         public override StructureModel[] getStructureList(Guid id)
         {
@@ -1383,9 +1419,18 @@ namespace cms.dbase
         public override bool insStructure(Guid id, Guid OrgId, StructureModel insert, Guid UserId, String IP)
         {
             using (var db = new CMSdb(_context))
-            {                
+            {
+                int MaxSort = 0;
+                try
+                {
+                    MaxSort = db.content_org_structures.Where(w=>w.f_ord== OrgId).Max(m => m.n_sort);
+                }
+                catch { }
+                MaxSort++;
+
                 db.content_org_structures
                   .Value(v => v.id, id)
+                  .Value(v => v.n_sort, MaxSort)
                   .Value(v => v.f_ord, OrgId)
                   .Value(v => v.c_title, insert.Title)
                   .Value(v => v.c_adress, insert.Adress)
@@ -1451,6 +1496,36 @@ namespace cms.dbase
                 return false;
             }
         }
+        public override bool sortStructure(Guid id, int new_num)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var thisdata = db.content_org_structures.Where(w => w.id == id).FirstOrDefault();
+                int actual_num = thisdata.n_sort;
+                Guid OrgId = thisdata.f_ord;
+                if (new_num > actual_num)
+                {
+                    db.content_org_structures
+                        .Where(w =>w.f_ord== OrgId && w.n_sort > actual_num && w.n_sort <= new_num)
+                        .Set(p => p.n_sort, p => p.n_sort - 1)
+                        .Update();
+                }
+                else
+                {
+                    db.content_org_structures
+                        .Where(w => w.f_ord == OrgId && w.n_sort < actual_num && w.n_sort >= new_num)
+                        .Set(p => p.n_sort, p => p.n_sort + 1)
+                        .Update();
+                }
+                db.content_org_structures
+                    .Where(w => w.f_ord == OrgId && w.id == id)
+                    .Set(s => s.n_sort, new_num)
+                    .Update();
+
+                return true;
+            }
+        }
+
 
         /// <summary>
         /// Добавляем ОВП
@@ -1465,10 +1540,19 @@ namespace cms.dbase
                 {
                     throw new Exception("Запись с таким Id уже существует");
                 }
+                int MaxSort = 0;
+                try
+                {
+                    MaxSort = db.content_org_structures.Where(w=>w.f_ord==OrgId).Max(m => m.n_sort);
+                }
+                catch { }
+                MaxSort++;
+
                 cdStructur = new content_org_structure
                 {
                     id = IdStructure,
                     f_ord = OrgId,
+                    n_sort=MaxSort,
                     c_title = insertStructure.Title,                    
                     c_adress = insertStructure.Adress,
                     c_phone= insertStructure.PhoneReception,
@@ -1486,6 +1570,7 @@ namespace cms.dbase
                 content_departments cdDepart = new content_departments
                 {
                     id=Guid.NewGuid(),
+                    n_sort=1,
                     f_structure= IdStructure,
                     c_title= insertStructure.Title,
                     c_adress= insertStructure.Adress
@@ -1759,6 +1844,14 @@ namespace cms.dbase
                 {
                     throw new Exception("Запись с таким Id уже существует");
                 }
+                int MaxSort = 0;
+                try
+                {
+                    MaxSort = db.content_departmentss.Where(w=>w.f_structure==Structure).Max(m => m.n_sort);
+                }
+                catch { }
+                MaxSort++;
+
                 cdDepart = new content_departments
                 {
                     id = id,
@@ -1809,6 +1902,35 @@ namespace cms.dbase
                     db.Delete(cdDepart);
                     tran.Commit();                    
                 }
+                return true;
+            }
+        }
+        public override bool sortDepartament(Guid id, int new_num)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var thisdata = db.content_departmentss.Where(w => w.id == id).FirstOrDefault();
+                int actual_num = thisdata.n_sort;
+                Guid OrgId = thisdata.f_structure;
+                if (new_num > actual_num)
+                {
+                    db.content_departmentss
+                        .Where(w => w.f_structure == OrgId && w.n_sort > actual_num && w.n_sort <= new_num)
+                        .Set(p => p.n_sort, p => p.n_sort - 1)
+                        .Update();
+                }
+                else
+                {
+                    db.content_departmentss
+                        .Where(w => w.f_structure == OrgId && w.n_sort < actual_num && w.n_sort >= new_num)
+                        .Set(p => p.n_sort, p => p.n_sort + 1)
+                        .Update();
+                }
+                db.content_departmentss
+                    .Where(w => w.f_structure == OrgId && w.id == id)
+                    .Set(s => s.n_sort, new_num)
+                    .Update();
+
                 return true;
             }
         }

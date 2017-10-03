@@ -708,6 +708,8 @@ a.tree-btn.new:before {
 
 
 /* Сортировка */
+.sort_list.sort_list_on table{    border: 2px dashed #006bb3!important;}
+.sort_list.sort_list_on .sortable{border-left:inherit;}
 .sortable {
     margin-bottom: 15px;
     overflow: hidden;
@@ -941,10 +943,10 @@ h3.nesting_title{
     margin-top:12px;
 }
 
-.site_map_list .ui-sortable-handle{
+.sort_list .ui-sortable-handle{
     cursor:pointer !important;
 }
-.site_map_list .sortable .ui-sortable-handle {
+.sort_list .sortable .ui-sortable-handle {
     cursor: n-resize !important;
 }
 .bubble_but{float:right;}
