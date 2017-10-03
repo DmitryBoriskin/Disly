@@ -8,7 +8,7 @@
     <div class="content">
         <div class="row">
             <div class="col-sm-8"><h1>@ViewBag.Title</h1></div>
-            <div class="col-sm-4"><a class="button icon-sort" value="no-preloader-btn" id="sorting_element" title="Добавляет возможность сортировки элементов списка">Сортировать</a></div>
+            <div class="col-sm-4"><a class="button icon-sort pull-right" style="max-width:150px;" value="no-preloader-btn" id="sorting_element" title="Добавляет возможность сортировки элементов списка">Сортировать</a></div>
         </div>
         
         
@@ -25,7 +25,7 @@
                         @foreach (var item in Model.OrgList)
                         {
                             <tr class="ui-sortable-handle" data-id="@item.Id">
-                                <td><a href="/admin/orgs/item/@item.Id">@item.Sort -- @item.Title</a></td>
+                                <td><a href="/admin/orgs/item/@item.Id">@item.Title</a></td>
                             </tr>
                         }
                     </tbody>                    

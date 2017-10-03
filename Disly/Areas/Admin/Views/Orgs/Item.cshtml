@@ -8,7 +8,7 @@
     <div class="content">
         <h1>@ViewBag.Title</h1>
         @Html.TextBoxFor(m => m.Item.Title, new { required = "", type = "text", maxlength = "256", title = "Полное название" })
-        @Html.TextBoxFor(m => m.Item.ShortTitle, new { required = "", type = "text", maxlength = "128", title = "Краткое название" })
+        @Html.TextBoxFor(m => m.Item.ShortTitle, new {  type = "text", maxlength = "128", title = "Краткое название" })
         <div class="row">
             <div class="col-lg-6">
                 <select title="Тип финансирование" class="selectpicker">
@@ -74,7 +74,7 @@
                     </div>
                     <div class="col-sm-7">
                         <a class="button icon-create green pull-right" href="/admin/orgs/structure/@Guid.NewGuid()?orgid=@Model.Item.Id">Добавить</a>
-                        <a class="button icon-create green pull-right" href="/admin/orgs/ovp/@Guid.NewGuid()?orgid=@Model.Item.Id">Добавить ОВП</a>
+                        <a class="button icon-create green pull-right" href="/admin/orgs/ovp/@Guid.NewGuid()?orgid=@Model.Item.Id">Добавить ОВП/ФАП</a>
                         <a class="button icon-sort pull-right" style="max-width:150px;" value="no-preloader-btn" id="sorting_element" title="Добавляет возможность сортировки элементов списка">Сортировать</a>
                     </div>
                 </div>
@@ -125,7 +125,7 @@
     </div>
     <div class="dop_info-block">
         <div class="dop-caption">Дополнительно</div>
-        @Html.TextBoxFor(m => m.Item.Logo, new { type = "file", title = "Логтип", data_name = "", data_size = "", data_url = "", data_help = "размер фотографии" })
+        @Html.TextBoxFor(m => m.Item.Logo, new { type = "file", title = "Логотип", data_name = "", data_size = "", data_url = "", data_help = "размер фотографии" })
     </div>
 }
 else
@@ -142,5 +142,5 @@ else
     {
         <button type="submit" name="action" value="delete-btn" data-action="delete" class="button icon-delete">Удалить</button>
     }
-    <button type="submit" name="action" value="cancel-btn" data-action="cancel" class="button icon-cancel">Закрыть</button>
+    <button type="submit" name="action" value="cancel-btn" data-action="cancel" class="button icon-cancel">Назад</button>
 </div>
