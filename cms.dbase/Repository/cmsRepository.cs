@@ -2374,6 +2374,8 @@ namespace cms.dbase
         /// <summary>
         /// Получаем список записей карты сайта
         /// </summary>
+        /// <param name="site">Алиас сайта</param>
+        /// <param name="filtr">Фильтр</param>
         /// <returns></returns>
         public override SiteMapList getSiteMapList(string site, FilterParams filtr)
         {
@@ -2498,7 +2500,7 @@ namespace cms.dbase
         /// <summary>
         /// Получаем единичную запись карты сайта
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">Идентификатор записи</param>
         /// <returns></returns>
         public override SiteMapModel getSiteMapItem(Guid id)
         {
@@ -2535,7 +2537,7 @@ namespace cms.dbase
         /// <summary>
         /// Получим группы меню для элемента карты сайта
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">Идентификатор записи</param>
         /// <returns></returns>
         public override string[] getSiteMapGroupMenu(Guid id)
         {
@@ -2553,8 +2555,7 @@ namespace cms.dbase
         /// <summary>
         /// Получим кол-во дочерних элементов карты сайта
         /// </summary>
-        /// <param name="domain"></param>
-        /// <param name="fullPath"></param>
+        /// <param name="id">Идентификатор записи</param>
         /// <returns></returns>
         public override int getCountSiblings(Guid id)
         {
@@ -2571,7 +2572,7 @@ namespace cms.dbase
         /// <summary>
         /// Проверяем существование элемента карты сайта
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">Идентификатор записи</param>
         /// <returns></returns>
         public override bool checkSiteMap(Guid id)
         {
@@ -2587,10 +2588,10 @@ namespace cms.dbase
         /// <summary>
         /// Создаём новый раздел в карте сайта
         /// </summary>
-        /// <param name="id"></param>
-        /// <param name="item"></param>
-        /// <param name="userId"></param>
-        /// <param name="IP"></param>
+        /// <param name="id">Идентификатор записи</param>
+        /// <param name="item">Элемент карты сайта</param>
+        /// <param name="userId">Идентификатор пользователя</param>
+        /// <param name="IP">Ip-адрес</param>
         /// <returns></returns>
         public override bool createSiteMapItem(Guid id, SiteMapModel item, Guid userId, string IP)
         {
@@ -2658,10 +2659,10 @@ namespace cms.dbase
         /// <summary>
         /// Обновляем запись карты сайта
         /// </summary>
-        /// <param name="id"></param>
-        /// <param name="item"></param>
-        /// <param name="userId"></param>
-        /// <param name="IP"></param>
+        /// <param name="id">Идентификатор записи</param>
+        /// <param name="item">Элемент карты сайта</param>
+        /// <param name="userId">Идентификатор пользователя</param>
+        /// <param name="IP">Ip-адрес</param>
         /// <returns></returns>
         public override bool updateSiteMapItem(Guid id, SiteMapModel item, Guid userId, string IP)
         {
@@ -2764,7 +2765,7 @@ namespace cms.dbase
         /// <summary>
         /// Добавляем меню в карту сайта
         /// </summary>
-        /// <param name="item"></param>
+        /// <param name="item">Элемент карты сайта</param>
         /// <returns></returns>
         public override bool createSiteMapMenu(SiteMapMenu item)
         {
@@ -2793,9 +2794,9 @@ namespace cms.dbase
         /// <summary>
         /// Удаляем элемент карты сайта
         /// </summary>
-        /// <param name="id"></param>
-        /// <param name="userId"></param>
-        /// <param name="IP"></param>
+        /// <param name="id">Идентификатор записи</param>
+        /// <param name="userId">Идентификатор пользователя</param>
+        /// <param name="IP">Ip-адрес</param>
         /// <returns></returns>
         public override bool deleteSiteMapItem(Guid id, Guid userId, string IP)
         {
@@ -2837,7 +2838,7 @@ namespace cms.dbase
         /// <summary>
         /// Получаем список дочерних элементов для текущего
         /// </summary>
-        /// <param name="parent"></param>
+        /// <param name="parent">Родительский идентификатор</param>
         /// <returns></returns>
         public override SiteMapModel[] getSiteMapChildrens(Guid parent)
         {
@@ -2865,7 +2866,7 @@ namespace cms.dbase
         /// <summary>
         /// Получаем хлебные крошки для карты сайта
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">Идентификатор элемента карты сайта</param>
         /// <returns></returns>
         public override BreadCrumbSiteMap[] getSiteMapBreadCrumbs(Guid? id)
         {
@@ -2894,7 +2895,7 @@ namespace cms.dbase
         /// <summary>
         /// Единичная запись хлебных крошек для карты сайта
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">Идентификатор записи</param>
         /// <returns></returns>
         public override BreadCrumbSiteMap getSiteMapBreadCrumbItem(Guid id)
         {
@@ -2917,9 +2918,10 @@ namespace cms.dbase
         /// <summary>
         /// Меняем приоритет для сортировки карты сайта
         /// </summary>
-        /// <param name="id"></param>
-        /// <param name="permit"></param>
-        /// <param name="domain"></param>
+        /// <param name="id">Идентификатор записи</param>
+        /// <param name="permit">Порядока сортировки</param>
+        /// <param name="domain">Алиас сайта</param>
+        /// <param name="menuSort">Сортировка в записи для типа меню</param>
         /// <returns></returns>
         public override bool permit_SiteMap(Guid id, int permit, string domain, string menuSort)
         {
