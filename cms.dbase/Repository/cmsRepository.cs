@@ -1372,7 +1372,7 @@ namespace cms.dbase
         {
             using (var db = new CMSdb(_context))
             {
-                var data = db.content_org_structures.Where(w => w.f_ord == id);
+                var data = db.content_org_structures.Where(w => w.f_ord == id).OrderBy(o=>o.n_sort);
                 if (data.Any())
                 {
                     var List = data
