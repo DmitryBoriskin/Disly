@@ -1006,3 +1006,12 @@ h3.nesting_title{
     box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
     background: #fff;
 }
+
+
+/*sites*/
+#site_org,#site_people,#site_event{display:none;}
+
+.del_domain{display:block;cursor:pointer;}
+.del_domain:hover{text-decoration:none;}
+.del_domain:before{content:'\ec5b';font-family:fontello;color:red;}
+.del_domain:hover:before{color:#c50505;}

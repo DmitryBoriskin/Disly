@@ -26,6 +26,7 @@ namespace cms.dbModel.entity
         public string Post { get; set; }
         public string Desc { get; set; }
         public string Keyw { get; set; }
+        public string FIO { get; set; }
         [Required(ErrorMessage = "Поле «Фамилия» не должно быть пустым.")]
         public string Surname { get; set; }
         [Required(ErrorMessage = "Поле «Имя» не должно быть пустым.")]

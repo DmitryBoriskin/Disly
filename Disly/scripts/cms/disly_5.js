@@ -17,7 +17,36 @@ $(document).ready(function () {
     // Полоса прокрутки
     $('.scrollbar').mCustomScrollbar();
 
+    //создание сайта - выбор типов создаваемого сайта
+    if ($('#site_type').length > 0) {
 
+        var $Type = $('#site_type');
+        var $Org = $('#site_org');        
+        var $People = $('#site_people');
+        var $Event = $('#site_event');
+        var $ContentId = $('#Item_ContentId');        
+
+        SpotTypeSite();
+        $Type.change(function () {
+            SpotTypeSite();
+        });
+        function SpotTypeSite() {
+            $Org.hide();
+            $People.hide();
+            $Event.hide();
+            switch ($Type.val()) {
+                case 'org': $Org.show(); $ContentId.val(); break;
+                case 'people': $People.show(); break;
+                case 'event': $Event.show(); break;
+            }
+        }
+        $('#contid_wr select').change(function () {
+            SpotContent($(this));
+        });
+        function SpotContent(obj) {
+            document.getElementById('Item_ContentId').value = obj.val();            
+        }
+    }
     
     // События Кнопок
     $('input[type=submit], .button').bind({
@@ -149,7 +178,7 @@ $(document).ready(function () {
         }
     });
 
-    //телефонные номер а отделениях
+    //телефонные номер  в отделениях
     $('.depart_phone_del').click(function (e) {
         e.preventDefault();
         var idPhone = $(this).attr("data-id");
@@ -162,6 +191,23 @@ $(document).ready(function () {
             error: function () { alert("error"); },
             success: function (data) {
                 $Container.remove();                
+            }
+        });
+    });
+
+    //удаление домена
+    $('.del_domain').click(function (e) {
+        e.preventDefault();
+        var idDomain = $(this).attr("data-id");
+        var $Container = $(this).parent().parent();
+        $.ajax({
+            type: "POST",
+            async: false,
+            url: "/admin/sites/DelDomain",
+            data: { id: idDomain },
+            error: function () {alert("error");},
+            success: function (data) {
+                $Container.remove();
             }
         });
     });

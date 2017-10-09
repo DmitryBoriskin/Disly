@@ -15,12 +15,26 @@
             <div style="overflow: hidden; font: 14px Verdana; margin: 37px 0 0;">.@Settings.BaseURL</div>
         </div>
         <div class="row">
+            <div class="col-xs-6">  
+                
+                @Html.DropDownListFor(m => m.Item.Type, Model.TypeList, new { @title = "Тип сайта", @class = "selectpicker",id="site_type", @value= @ViewBag.OrgType })
+            </div>
+            <div class="col-xs-6">
+                <div id="contid_wr">
+                    <div id="site_org">@Html.DropDownListFor(m => m.Item.ContentId, Model.OrgsList, new { @title = "Выберите организацию", @class = "selectpicker", @data_live_search = "true" })</div>
+                    <div id="site_people">@Html.DropDownListFor(m => m.Item.ContentId, Model.PeopleList, new { @title = "Выберите врача", @class = "selectpicker", @data_live_search = "true" })</div>
+                    <div id="site_event">@Html.DropDownListFor(m => m.Item.ContentId, Model.EventsList, new { @title = "Выберите событие", @class = "selectpicker", @data_live_search = "true" })</div>                    
+                </div>                
+                @Html.HiddenFor(m => m.Item.ContentId,new { @Value= @ViewBag.ContentId })
+            </div>
+        </div>
+        <div class="row">
             <div class="col-xs-6">
                 @Html.TextAreaFor(m => Model.Item.Title, new { @class = "uc_input", @title = "Список дополнительных доменных имен", @MaxLength = "512", @rows = "6", @data_help = "доменные имена должны разделяться запятой" })
             </div>
             <div class="col-xs-6"></div>
         </div>
-        <button type="submit" name="action" value="cancel-btn" data-primary="true" class="button icon-save">Создать сайт</button>
+        <button type="submit" name="action" value="save-btn" data-primary="true" class="button icon-save">Создать сайт</button>
     </div>
 
     

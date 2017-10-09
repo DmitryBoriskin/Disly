@@ -366,6 +366,7 @@ namespace cms.dbase.models
 		[Column,        Nullable] public string c_logo         { get; set; } // varchar(512)
 		[Column,        Nullable] public Guid?  f_content      { get; set; } // uniqueidentifier
 		[Column,        Nullable] public string c_content_type { get; set; } // varchar(64)
+		[Column,        Nullable] public string c_scripts      { get; set; } // nvarchar(max)
 
 		#region Associations
 
@@ -1209,7 +1210,7 @@ namespace cms.dbase.models
 	{
 		[Column,     NotNull    ] public Guid     guid     { get; set; } // uniqueidentifier
 		[PrimaryKey, NotNull    ] public string   c_oid    { get; set; } // varchar(64)
-		[Column,        Nullable] public string   c_name   { get; set; } // varchar(64)
+		[Column,        Nullable] public string   c_name   { get; set; } // nvarchar(512)
 		[Column,     NotNull    ] public DateTime d_modify { get; set; } // datetime
 	}
 
@@ -1226,6 +1227,7 @@ namespace cms.dbase.models
 		[Column,        Nullable] public DateTime? d_birthdate  { get; set; } // datetime
 		[Column,        Nullable] public DateTime? d_modify     { get; set; } // datetime
 		[Column,        Nullable] public bool?     b_changed    { get; set; } // bit
+		[Column,        Nullable] public string    c_info       { get; set; } // nvarchar(max)
 	}
 
 	public static partial class CMSdbStoredProcedures

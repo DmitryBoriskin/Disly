@@ -1,5 +1,7 @@
-﻿using Disly.Areas.Admin.Models;
+﻿using cms.dbModel.entity;
+using Disly.Areas.Admin.Models;
 using System;
+using System.Collections.Generic;
 using System.Web;
 using System.Web.Mvc;
 
@@ -78,6 +80,29 @@ namespace Disly.Areas.Admin.Controllers
         {
             model.Item = _cmsRepository.getSite(Id);
 
+            //тип контента и источник контента
+            
+            switch (model.Item.Type)
+            {
+                case "org":
+                    var data =_cmsRepository.getOrgItem(model.Item.ContentId);
+                    ViewBag.ContentLink="/admin/orgs/item/"+ data.Id;
+                    ViewBag.ContentType = "организации";
+                    ViewBag.ContentTitle = data.Title;
+                    break;
+                case "people":
+                    var data_p = _cmsRepository.getPerson(model.Item.ContentId);
+                    ViewBag.ContentLink = "/admin/Person/item/" + data_p.Id;
+                    ViewBag.ContentType = "персоны";
+                    ViewBag.ContentTitle = data_p.FIO;
+                    break;
+                case "event":
+                    var data_e = _cmsRepository.getEvent(model.Item.ContentId);
+                    ViewBag.ContentLink = "/admin/Person/item/" + data_e.Id;
+                    ViewBag.ContentType = "события";
+                    ViewBag.ContentTitle = data_e.Title;
+                    break;
+            }
             return View("Item", model);
         }
                 
@@ -87,8 +112,37 @@ namespace Disly.Areas.Admin.Controllers
         /// <returns></returns>
         public ActionResult Master()
         {
-            model.Item = _cmsRepository.getSite(Guid.NewGuid());
+            FilterParams filter = new FilterParams()
+            {
+                Page = 1,
+                Size = 999999
+            };
+            #region Данные из адресной строки(для случаев когда сайт создается со страницы того кому создается сайт)
+            string OrgType = Request.QueryString["type"];
+            string ContentId = Request.QueryString["contentid"];
 
+            if (!String.IsNullOrEmpty(OrgType))
+            {
+                ViewBag.OrgType = OrgType;
+            }
+            if (!String.IsNullOrEmpty(ContentId))
+            {
+                ViewBag.ContentId = Guid.Parse(ContentId);                                
+            }            
+            #endregion
+            #region данные для выпадающих списков
+            model.TypeList = new SelectList(
+                    new List<SelectListItem>
+                    {
+                        new SelectListItem { Text = "Организация", Value ="org"},
+                        new SelectListItem { Text = "Врач", Value = "people" },
+                        new SelectListItem { Text = "Событие", Value = "event" }
+                    }, "Value", "Text", OrgType
+                );
+            model.OrgsList = new SelectList(_cmsRepository.getOrgs(filter), "Id", "Title", ContentId);
+            model.PeopleList = new SelectList(_cmsRepository.getPersonList(filter).Data, "Id", "FIO", ContentId);
+            model.EventsList = new SelectList(_cmsRepository.getEventsList(filter).Data, "Id", "Title", ContentId);
+            #endregion
             return View("Master", model);
         }
 
@@ -143,49 +197,51 @@ namespace Disly.Areas.Admin.Controllers
             ErrorMassege userMassege = new ErrorMassege();
             userMassege.title = "Информация";
 
+            
+            if (!_cmsRepository.check_Site(Id) && back_model.Item.ContentId == null)
+            {
+                ModelState.AddModelError("Name", "Необходимо выбрать тип и контент сайта");
+            }
+
             if (ModelState.IsValid)
             {
-            //    //main_Sites
-            //    _repository.createSite(id, input.Site);
+                #region ///
+                //    //main_Sites
+                //    _repository.createSite(id, input.Site);
 
-            //    //main_SitesDomainList
-            //    SitesDomainModel sitedomain = new SitesDomainModel()
-            //    {
-            //        Id = Guid.NewGuid(),
-            //        SiteId = input.Site.C_Domain,
-            //        Domain = input.Site.C_Domain + "." + Request.Url.Authority.Substring(0, Request.Url.Authority.IndexOf(":"))
-            //    };
-            //    _repository.createSiteDomain(sitedomain);
+                //    //main_SitesDomainList
+                //    SitesDomainModel sitedomain = new SitesDomainModel()
+                //    {
+                //        Id = Guid.NewGuid(),
+                //        SiteId = input.Site.C_Domain,
+                //        Domain = input.Site.C_Domain + "." + Request.Url.Authority.Substring(0, Request.Url.Authority.IndexOf(":"))
+                //    };
+                //    _repository.createSiteDomain(sitedomain);
 
-            //    //cms_UserSiteLink
-            //    UserSiteLink usersitelink = new UserSiteLink()
-            //    {
-            //        SiteId = input.Site.C_Domain,
-            //        UserId = input.User.Id
-            //    };
-            //    _repository.createUserSiteLink(usersitelink);
+                //    //cms_UserSiteLink
+                //    UserSiteLink usersitelink = new UserSiteLink()
+                //    {
+                //        SiteId = input.Site.C_Domain,
+                //        UserId = input.User.Id
+                //    };
+                //    _repository.createUserSiteLink(usersitelink); 
+                #endregion
 
-                if (_cmsRepository.check_cmsMenu(Id))
-                {
-                    //_repository.updateSite(id, input.Site, AccountInfo.id, RequestUserInfo.IP);
+                if (_cmsRepository.check_Site(Id))
+                {                    
+                    _cmsRepository.updSite(Id, back_model.Item, AccountInfo.id, RequestUserInfo.IP);
                     userMassege.info = "Запись обновлена";
                 }
-                else if (!_cmsRepository.check_cmsMenu(back_model.Item.Alias))
+                else if (!_cmsRepository.check_Site(Id))
                 {
-                    //_cmsRepository.createSite(id, input.Site, AccountInfo.id, RequestUserInfo.IP);
-
+                    back_model.Item.Id = Id;
+                    _cmsRepository.insSite(back_model.Item, AccountInfo.id, RequestUserInfo.IP);
                     userMassege.info = "Запись добавлена";
                 }
                 else
                 {
                     userMassege.info = "Запись с таким псевдонимом уже существует. <br />Замените псевдоним.";
                 }
-
-               
-
-
-                userMassege.info = "Запись с таким псевдонимом уже существует. <br />Замените псевдоним.";
-                
                 userMassege.buttons = new ErrorMassegeBtn[]{
                     new ErrorMassegeBtn { url = StartUrl + Request.Url.Query, text = "вернуться в список" },
                     new ErrorMassegeBtn { url = StartUrl + "item/" + Id + "/" + Request.Url.Query, text = "редактировать" }
@@ -194,6 +250,13 @@ namespace Disly.Areas.Admin.Controllers
             else
             {
                 userMassege.info = "Ошибка в заполнении формы";
+                userMassege.buttons = new ErrorMassegeBtn[]{
+                    new ErrorMassegeBtn { url = "#", text = "ок", action = "false" }
+                };
+                model.Item = _cmsRepository.getSite(Id);
+                model.ErrorInfo = userMassege;
+
+                return View("Mater", model);
             }
 
             model.Item = _cmsRepository.getSite(Id);
@@ -202,6 +265,26 @@ namespace Disly.Areas.Admin.Controllers
             return View("Item", model);
         }
 
+        /// <summary>
+        /// Добавление домена
+        /// </summary>
+        /// <returns>перезагружает страницу</returns>
+        [HttpPost]
+        [MultiButton(MatchFormKey = "action", MatchFormValue = "add-new-domain")]
+        public ActionResult AddDomain()
+        {
+            Guid id=Guid.Parse(Request["Item.Id"]);
+            var SiteId = _cmsRepository.getSite(id).Alias;
+            string Domain=Request["new_domain"];
+            _cmsRepository.insDomain(SiteId, Domain, AccountInfo.id, RequestUserInfo.IP);
+            return Redirect(((System.Web.HttpRequestWrapper)Request).RawUrl);
+        }
+        [HttpPost]
+        public ActionResult DelDomain(Guid id)
+        {
+            _cmsRepository.delDomain(id, AccountInfo.id, RequestUserInfo.IP);
+            return null;
+        }
         [HttpPost]
         [MultiButton(MatchFormKey = "action", MatchFormValue = "cancel-btn")]
         public ActionResult Cancel()
@@ -212,82 +295,26 @@ namespace Disly.Areas.Admin.Controllers
         [HttpPost]
         [MultiButton(MatchFormKey = "action", MatchFormValue = "delete-btn")]
         public ActionResult Delete(Guid Id)
-        {
-            //_cmsRepository.deleteCmsMenu(Id, AccountInfo.id, RequestUserInfo.IP);
-
-            // записываем информацию о результатах
+        {            
             ErrorMassege userMassege = new ErrorMassege();
             userMassege.title = "Информация";
-            userMassege.info = "Запись Удалена";
-            userMassege.buttons = new ErrorMassegeBtn[]{
-                new ErrorMassegeBtn { url = StartUrl + Request.Url.Query, text = "Ок" }
-            };
-
-            model.Item = _cmsRepository.getSite(Id);
+            if(_cmsRepository.delSite(Id, AccountInfo.id, RequestUserInfo.IP))////——————УДАЛЕНИЕ DELETE
+            {
+                userMassege.info = "Запись Удалена";
+                userMassege.buttons = new ErrorMassegeBtn[]{
+                    new ErrorMassegeBtn { url = StartUrl + Request.Url.Query, text = "Ок" }
+                };
+            }
+            else
+            {
+                userMassege.info = "Произошла ошибка";
+                userMassege.buttons = new ErrorMassegeBtn[]{
+                    new ErrorMassegeBtn { url = "#", text = "ок", action = "false" }
+                };
+            }                        
             model.ErrorInfo = userMassege;
-
             return View("item", model);
         }
 
-
-
-        /// <summary>
-        /// Доменные имена
-        /// </summary>
-        /// <returns></returns>
-        public ActionResult Domains(string siteId)
-        {
-            //SitesDomainModel newDomain = new SitesDomainModel()
-            //{
-            //    Id = Guid.NewGuid(),
-            //    SiteId = siteId,
-            //    Domain = ""
-            //};
-
-            SitesViewModel model = new SitesViewModel()
-            {
-                Account = AccountInfo,
-                Settings = SettingsInfo,
-                UserResolution = UserResolutionInfo,
-
-                //Domain = newDomain,                
-                //Domains = _repository.getSiteDomains(siteId)
-            };
-
-            return View("Domains", model);
-        }
-
-        [HttpPost]
-        [MultiButton(MatchFormKey = "action", MatchFormValue = "create-btn-group")]
-        public ActionResult Domains(string siteId, SitesViewModel model)
-        {
-            ////model.Domain.Id = Id;
-            //model.Domain.SiteId = siteId;
-
-            //if (ModelState.IsValid)
-            //{
-            //    _repository.createSiteDomain(model.Domain);
-            //    _repository.insertLog(model.Domain.Id, AccountInfo.id, "insert", RequestUserInfo.IP);
-
-            //    ViewBag.SuccesAlert = "Домен успешно добавлен.";
-            //    ViewBag.backurl = model.Domain.Id;
-            //}
-
-            return RedirectToAction("Domains", new { @siteId = siteId });
-        }
-
-        [HttpPost]
-        public string DeleteDomains(string id)
-        {
-            Guid domId = Guid.Parse(id);
-            try
-            {
-                //_repository.deleteSiteDomain(domId);
-                //_repository.insertLog(domId, AccountInfo.id, "delete", RequestUserInfo.IP);
-
-                return "";
-            }
-            catch { return "Не удалось удалить доменное имя."; }
-        }
     }
 }

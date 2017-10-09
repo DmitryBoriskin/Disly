@@ -31,6 +31,13 @@ namespace cms.dbModel
 
         // Все сайты портала
         public abstract SitesList getSiteList(string[] filtr, int page, int size);
+        public abstract bool check_Site(Guid id);
+        public abstract bool insSite(SitesModel ins, Guid UserId, String IP);
+        public abstract bool updSite(Guid id, SitesModel ins, Guid UserId, String IP);
+        public abstract bool delSite(Guid id, Guid UserId, String IP);
+        public abstract Domain[] getSiteDomains(string SiteId);
+        public abstract bool insDomain(String SiteId, string NewDomain, Guid UserId, String IP);
+        public abstract bool delDomain(Guid id, Guid UserId, String IP);
 
         // Все пользователи портала
         public abstract bool check_user(Guid id);

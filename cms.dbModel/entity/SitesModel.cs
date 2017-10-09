@@ -22,6 +22,8 @@ namespace cms.dbModel.entity
         [Required(ErrorMessage = "Поле «Доменное имя» не должно быть пустым.")]
         [RegularExpression(@"^[^-]([a-zA-Z0-9-]+)$", ErrorMessage = "Поле «Доменное имя» может содержать только буквы латинского алфавита и символ - (дефис). Доменное имя не может начинаться с дефиса.")]
         public string Alias { get; set; }
+        public string Type { get; set; }
+        public Guid ContentId { get; set; }
         public string Adress { get; set; }
         public string Phone { get; set; }
         public string Fax { get; set; }
@@ -30,6 +32,12 @@ namespace cms.dbModel.entity
         public string Worktime { get; set; }
         public string Logo { get; set; }
         public string Scripts { get; set; }
-        public string[] domainList { get; set; }
+        public Domain[] DomainList { get; set; }
+    }
+
+    public class Domain
+    {
+        public Guid id { get; set;}
+        public string DomainName { get; set; }
     }
 }
