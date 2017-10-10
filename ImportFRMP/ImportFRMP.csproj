@@ -70,7 +70,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="create_classes_from_xsd.bat" />
     <None Include="LinqToDB.Templates\DataAnnotations.ttinclude" />
     <None Include="LinqToDB.Templates\DataModel.ttinclude" />

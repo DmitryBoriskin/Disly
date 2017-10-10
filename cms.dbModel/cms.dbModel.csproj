@@ -54,6 +54,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="entity\cms\BannersModel.cs" />
     <Compile Include="entity\cms\VacanciesModel.cs" />
     <Compile Include="entity\cms\FeedbacksModel.cs" />
     <Compile Include="entity\cms\EventsModel.cs" />

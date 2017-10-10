@@ -1,0 +1,1 @@
+"C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Bin\xsd.exe" "XSD\schema0.xsd" "XSD\schema1.xsd" /c /l:CS /o:Models
