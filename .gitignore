@@ -5,7 +5,11 @@
 */obj/
 cms.dbase/template/CMSbdModel.tt
 ImportFRMP/template/CMSbdModel.tt
+Integration.Frmp.library/template/CMSbdModel.tt
+App.config
 app.config
 Web.config
 Web.Release.config
 Web.Debug.config
+Integration.Frmp.cmd/App.config
+Integration.Frmp.service/App.config

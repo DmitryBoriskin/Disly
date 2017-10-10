@@ -289,6 +289,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
     <Compile Include="Areas\Admin\Controllers\AccountController.cs" />
+    <Compile Include="Areas\Admin\Controllers\BannersController.cs" />
     <Compile Include="Areas\Admin\Controllers\cmsMenuController.cs" />
     <Compile Include="Areas\Admin\Controllers\VacancyController.cs" />
     <Compile Include="Areas\Admin\Controllers\FeedbacksController.cs" />
@@ -307,6 +308,7 @@
     <Compile Include="Areas\Admin\Controllers\TemplatesController.cs" />
     <Compile Include="Areas\Admin\Models\AccountModel.cs" />
     <Compile Include="Areas\Admin\Controllers\CoreController.cs" />
+    <Compile Include="Areas\Admin\Models\BannersViewModel.cs" />
     <Compile Include="Areas\Admin\Models\cmsMenuViewModel.cs" />
     <Compile Include="Areas\Admin\Models\VacancyViewModel.cs" />
     <Compile Include="Areas\Admin\Models\FeadbacksViewModel.cs" />
@@ -451,6 +453,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Areas\Admin\Views\Banners\" />
     <Folder Include="Content\plugins\tinymce\plugins\colorpicker\" />
     <Folder Include="Views\Core\" />
   </ItemGroup>
