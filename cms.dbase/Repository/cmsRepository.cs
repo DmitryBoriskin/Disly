@@ -65,7 +65,10 @@ namespace cms.dbase
                         Email = s.c_email,
                         Site = s.c_url,
                         Worktime = s.c_worktime,
-                        Logo = s.c_logo
+                        Logo = s.c_logo,
+                        DomainList = getSiteDomains(s.c_alias),
+                        ContentId=(Guid)s.f_content,
+                        Type=s.c_content_type
                     });
 
                 if (!data.Any()) { return null; }
@@ -89,6 +92,8 @@ namespace cms.dbase
                         Site = s.c_url,
                         Worktime = s.c_worktime,
                         Logo = s.c_logo
+                        //,
+                        //DomainList= getSiteDomains(s.c_alias)
                     });
 
                 if (!data.Any()) { return null; }
@@ -400,7 +405,7 @@ namespace cms.dbase
         }
         #endregion
 
-        #region SiteList
+        #region Site
         public override SitesList getSiteList(string[] filtr, int page, int size)
         {
             using (var db = new CMSdb(_context))
@@ -439,6 +444,126 @@ namespace cms.dbase
                     };
                 }
                 return null;
+            }
+        }
+        public override bool check_Site(Guid id)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                bool rezult = false;
+                int count = db.cms_sitess.Where(w => w.id == id).Count();
+                if (count > 0) rezult = true;
+                return rezult;
+            }            
+        }
+        public override bool insSite(SitesModel ins, Guid UserId, String IP)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                //проверка на существование строк с таким же алиасом
+                int count = db.cms_sitess.Where(w => w.c_alias == ins.Alias).Count();
+                if (count < 1)
+                {
+                    db.cms_sitess
+                      .Value(v => v.id, ins.Id)
+                      .Value(v => v.c_alias, ins.Alias)
+                      .Value(v => v.c_name, ins.Title)
+                      .Value(v => v.c_content_type, ins.Type)
+                      .Value(v => v.f_content, ins.ContentId)
+                      .Insert();
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }                                
+            }
+        }
+        public override bool updSite(Guid id,SitesModel ins, Guid UserId, String IP)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var data = db.cms_sitess.Where(w => w.id == id);
+                if (data.Any())
+                {
+                    data
+                        .Set(s => s.c_name, ins.Title)
+                        .Set(s => s.c_phone, ins.Phone)
+                        .Set(s => s.c_fax, ins.Fax)
+                        .Set(s => s.c_email, ins.Email)
+                        .Set(s => s.c_url, ins.Site)
+                        .Set(s => s.c_worktime, ins.Worktime)
+                        .Set(s => s.c_logo, ins.Logo)
+                        .Set(s => s.c_scripts, ins.Scripts)
+                        .Update();
+                    return true;
+                }
+                return false;
+            }
+        }
+        public override bool delSite(Guid id, Guid UserId, String IP)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var data = db.cms_sitess.Where(w => w.id == id);
+                string logTitle = data.Select(s => s.c_name).FirstOrDefault();
+                if (data.Any())
+                {
+                    data.Delete();
+                    //логирование
+                    insertLog(UserId, IP, "delete", id, String.Empty, "Sites", logTitle);
+                    return true;
+                }
+                return false;
+            }
+        }
+        public override Domain[] getSiteDomains(string SiteId)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var data = db.cms_sites_domainss.Where(w => w.f_site == SiteId);
+                if (data.Any()) return data.Select(s => new Domain() {
+                                                DomainName=s.c_domain,
+                                                id=s.id
+                                        }).ToArray();
+                return null;
+            }
+        }
+        public override bool insDomain(String SiteId, string NewDomain, Guid UserId, String IP)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var data = db.cms_sites_domainss.Where(w => w.c_domain == NewDomain);
+                if (!data.Any()) {
+                    Guid NewGuid = Guid.NewGuid();
+                    db.cms_sites_domainss
+                                 .Value(v=>v.id, NewGuid)
+                                 .Value(v => v.f_site, SiteId)
+                                 .Value(v => v.c_domain, NewDomain)
+                                 .Insert();
+                    //логирование
+                    insertLog(UserId, IP, "insert_domain", NewGuid, String.Empty, "Sites", NewDomain);
+                    return true;
+                }
+                else return false;                
+            }
+        }
+        public override bool delDomain(Guid id, Guid UserId, String IP)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var data = db.cms_sites_domainss.Where(w => w.id == id);
+                if (data.Any())
+                {
+                    string _domain = data.Select(s => s.c_domain).First();
+                    string _site = data.Select(s => s.f_site).First();
+
+                    data.Delete();
+                    //логирование
+                    insertLog(UserId, IP, "delete_domain", id, _site, "Sites", _domain);
+                    return true;
+                }
+                else return false;
             }
         }
         #endregion
@@ -1594,7 +1719,6 @@ namespace cms.dbase
                 }
             }
         }
-
         public override bool setOvp(Guid IdStructure, StructureModel updStructure, Guid UserId, String IP)
         {
             using (var db = new CMSdb(_context))
@@ -1963,13 +2087,17 @@ namespace cms.dbase
                 //{
                 //    query = query.Where(w => w.f_group == filtr.Group);
                 //}
-                foreach (string param in filtr.SearchText.Split(' '))
+                if (filtr.SearchText != null)
                 {
-                    if (param != String.Empty)
+                    foreach (string param in filtr.SearchText.Split(' '))
                     {
-                        query = query.Where(w => w.c_surname.Contains(param) || w.c_name.Contains(param) || w.c_patronymic.Contains(param));
+                        if (param != String.Empty)
+                        {
+                            query = query.Where(w => w.c_surname.Contains(param) || w.c_name.Contains(param) || w.c_patronymic.Contains(param));
+                        }
                     }
                 }
+                
 
                 query = query.OrderBy(o => new { o.c_surname, o.c_name });
 
@@ -1982,7 +2110,8 @@ namespace cms.dbase
                         {
                             Id = s.id,
                             Surname = s.c_surname,
-                            Name = s.c_name
+                            Name = s.c_name,
+                            FIO=s.c_surname+" "+ s.c_name+" "+s.c_patronymic
                             //EMail = s.c_email,
                             //Group = s.f_group,
                             //GroupName = s.f_group_name,
@@ -2012,6 +2141,7 @@ namespace cms.dbase
 
         public override UsersModel getPerson(Guid id)
         {
+
            return null;
         }
         #endregion

@@ -438,17 +438,31 @@ namespace Disly.Areas.Admin.Controllers
         [MultiButton(MatchFormKey = "action", MatchFormValue = "cancel-structure-btn")]
         public ActionResult CancelStructure(Guid id)
         {
-            var OrgId = _cmsRepository.getStructure(id).OrgId;
-
-            return Redirect(StartUrl+"/item/"+ OrgId + Request.Url.Query);
+            try {
+                var data = _cmsRepository.getStructure(id);                
+                if (data != null)                
+                    return Redirect(StartUrl + "/item/" + data.OrgId + Request.Url.Query);
+                else
+                    return Redirect(StartUrl + "/item/" + Guid.Parse(Request.Params["orgid"]));
+            }
+            catch {
+                return Redirect(StartUrl);
+            }            
         }
         [HttpPost]
         [MultiButton(MatchFormKey = "action", MatchFormValue = "cancel-department-btn")]
         public ActionResult CancelDepartment(Guid id)
         {
-            var StrId = _cmsRepository.getDepartamentItem(id).StructureF;
-
-            return Redirect(StartUrl + "/structure/" + StrId + Request.Url.Query);
+            try {
+                var data = _cmsRepository.getDepartamentItem(id);                
+                if (data != null)                                    
+                    return Redirect(StartUrl + "/structure/" + data.StructureF + Request.Url.Query);
+                else
+                    return Redirect(StartUrl + "/structure/" + Guid.Parse(Request.Params["strucid"]));                                
+            }
+            catch {
+                return Redirect(StartUrl);
+            }            
         }
         //[HttpPost]
         //public ActionResult()
