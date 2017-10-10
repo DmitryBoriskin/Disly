@@ -12,41 +12,14 @@ $(document).ready(function () {
         top.location.href = location.href;
     }
 
+    
+
+
     // Полоса прокрутки главного меню
     $(".menu-block").mCustomScrollbar();
     // Полоса прокрутки
     $('.scrollbar').mCustomScrollbar();
 
-    //создание сайта - выбор типов создаваемого сайта
-    if ($('#site_type').length > 0) {
-
-        var $Type = $('#site_type');
-        var $Org = $('#site_org');        
-        var $People = $('#site_people');
-        var $Event = $('#site_event');
-        var $ContentId = $('#Item_ContentId');        
-
-        SpotTypeSite();
-        $Type.change(function () {
-            SpotTypeSite();
-        });
-        function SpotTypeSite() {
-            $Org.hide();
-            $People.hide();
-            $Event.hide();
-            switch ($Type.val()) {
-                case 'org': $Org.show(); $ContentId.val(); break;
-                case 'people': $People.show(); break;
-                case 'event': $Event.show(); break;
-            }
-        }
-        $('#contid_wr select').change(function () {
-            SpotContent($(this));
-        });
-        function SpotContent(obj) {
-            document.getElementById('Item_ContentId').value = obj.val();            
-        }
-    }
     
     // События Кнопок
     $('input[type=submit], .button').bind({
@@ -74,8 +47,6 @@ $(document).ready(function () {
                 }
             }
             
-
-
         },
         click: function () {
             var btn_class = $(this).attr('value');
@@ -150,6 +121,8 @@ $(document).ready(function () {
     });
     
 
+    
+
     // Изменение приоритета
     if ($(".sortable").length > 0) $('.sortable').each(function () {
         Sorting_init($(this));
@@ -212,6 +185,8 @@ $(document).ready(function () {
         });
     });
 
+
+
     // валидация обязательных полей для заполнения 
     requiredTest();
 
@@ -236,14 +211,103 @@ $(document).ready(function () {
             Sorting_init($(this));
         });
     });
-});
 
+    //создание сайта - выбор типов создаваемого сайта
+    if ($('#site_type').length > 0) {
+        var $Type = $('#site_type');
+        var $Org = $('#site_org');
+        var $People = $('#site_people');
+        var $Event = $('#site_event');
+        var $ContentId = $('#Item_ContentId');
+
+        SpotTypeSite();
+        $Type.change(function () {
+            $ContentId.val('');
+            SpotTypeSite();
+        });        
+
+        function SpotTypeSite() {
+            $Org.hide();
+            $People.hide();
+            $Event.hide();
+            switch ($Type.val()) {
+                case 'org': $Org.show();
+                    if ($Org.find('select').val() == '') {
+                        $Org.addClass('invalid');
+                    }
+                    else {
+                        $Org.removeClass('invalid');
+                    }                   
+
+                    $People.removeClass('invalid');
+                    $Event.removeClass('invalid');
+                    $Org.find('select').attr('required', '');
+                    $People.find('select').removeAttr('required');
+                    $Event.find('select').removeAttr('required');
+                    break;
+                case 'people':
+                    $People.show();
+                    $Org.removeClass('invalid');
+                    $People.addClass('invalid');
+                    $Event.removeClass('invalid');
+                    $Org.find('select').removeAttr('required');
+                    $People.find('select').attr('required', '');
+                    $Event.find('select').removeAttr('required');
+                    break;
+                case 'event':
+                    $Event.show();
+                    $Org.removeClass('invalid');
+                    $People.removeClass('invalid');
+                    $Event.addClass('invalid');
+                    $Org.find('select').removeAttr('required');
+                    $People.find('select').removeAttr('required');
+                    $Event.find('select').attr('required', '');
+                    break;
+                default:
+                    break;
+            }
+
+
+        }
+
+        $('#contid_wr select').change(function () {
+            SpotContent($(this));
+        });
+
+        function SpotContent(obj) {
+            document.getElementById('Item_ContentId').value = obj.val();
+            if (obj.val() != '') {
+                $Org.removeClass('invalid');
+                $People.removeClass('invalid');
+                $Event.removeClass('invalid');
+            }            
+        }
+    }
+    
+    //коррективы selectpicker 
+    $('select.selectpicker[required]').each(function () {
+        $parentBl = $(this).parent();
+        $parentBl.addClass('invalid');
+
+        $(this).change(function () {
+            if ($(this).val() != '') {
+                $parentBl.removeClass('invalid');
+            }
+        });
+
+    });
+
+
+    
+
+});
 var validSumm = $('.validation-summary-valid');
 if (validSumm.length > 0 && validSumm.find('li')[0].innerHTML != '') validSumm.css('display', 'block');
 
 // Если есть пустые, обязательные для заполнения поля, делаем не активной главную кнопку для сохранеиния записи
 function requiredTest() {
     var emptyRequiredLength = $('form input[required]:invalid').length;
+    emptyRequiredLength = emptyRequiredLength + $('form select[required]:invalid').length;
 
     if (emptyRequiredLength > 0 || change == 0)
         $('button[data-primary]').animate({ opacity: "0.3" }, 300).attr('disabled', '');

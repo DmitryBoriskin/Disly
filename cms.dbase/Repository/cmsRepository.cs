@@ -471,6 +471,8 @@ namespace cms.dbase
                       .Value(v => v.c_content_type, ins.Type)
                       .Value(v => v.f_content, ins.ContentId)
                       .Insert();
+                    //Логирование
+                    insertLog(UserId, IP, "insert", ins.Id, String.Empty, "Sites", ins.Title);
                     return true;
                 }
                 else
@@ -479,7 +481,7 @@ namespace cms.dbase
                 }                                
             }
         }
-        public override bool updSite(Guid id,SitesModel ins, Guid UserId, String IP)
+        public override bool updSite(Guid id,SitesModel upd, Guid UserId, String IP)
         {
             using (var db = new CMSdb(_context))
             {
@@ -487,15 +489,17 @@ namespace cms.dbase
                 if (data.Any())
                 {
                     data
-                        .Set(s => s.c_name, ins.Title)
-                        .Set(s => s.c_phone, ins.Phone)
-                        .Set(s => s.c_fax, ins.Fax)
-                        .Set(s => s.c_email, ins.Email)
-                        .Set(s => s.c_url, ins.Site)
-                        .Set(s => s.c_worktime, ins.Worktime)
-                        .Set(s => s.c_logo, ins.Logo)
-                        .Set(s => s.c_scripts, ins.Scripts)
+                        .Set(s => s.c_name, upd.Title)
+                        .Set(s => s.c_phone, upd.Phone)
+                        .Set(s => s.c_fax, upd.Fax)
+                        .Set(s => s.c_email, upd.Email)
+                        .Set(s => s.c_url, upd.Site)
+                        .Set(s => s.c_worktime, upd.Worktime)
+                        .Set(s => s.c_logo, upd.Logo)
+                        .Set(s => s.c_scripts, upd.Scripts)
                         .Update();
+                    //Логирование
+                    insertLog(UserId, IP, "update", id, String.Empty, "Sites", upd.Title);
                     return true;
                 }
                 return false;
@@ -2141,8 +2145,18 @@ namespace cms.dbase
 
         public override UsersModel getPerson(Guid id)
         {
-
-           return null;
+            using (var db = new CMSdb(_context))
+            {
+                var data = db.content_peoples.Where(w => w.id == id);
+                if (data.Any())
+                {
+                    return data.Select(s => new UsersModel {
+                                Id=s.id,
+                                FIO= s.c_surname+" "+s.c_name+" "+s.c_patronymic
+                            }).First();
+                }
+            }
+            return null;
         }
         #endregion
 

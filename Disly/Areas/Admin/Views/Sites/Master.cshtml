@@ -15,15 +15,14 @@
             <div style="overflow: hidden; font: 14px Verdana; margin: 37px 0 0;">.@Settings.BaseURL</div>
         </div>
         <div class="row">
-            <div class="col-xs-6">  
-                
-                @Html.DropDownListFor(m => m.Item.Type, Model.TypeList, new { @title = "Тип сайта", @class = "selectpicker",id="site_type", @value= @ViewBag.OrgType })
+            <div class="col-xs-6">                  
+                @Html.DropDownListFor(m => m.Item.Type, Model.TypeList, new { @title = "Тип сайта", @class = "selectpicker",id="site_type", @value= @ViewBag.OrgType, @required = "" })
             </div>
             <div class="col-xs-6">
                 <div id="contid_wr">
-                    <div id="site_org">@Html.DropDownListFor(m => m.Item.ContentId, Model.OrgsList, new { @title = "Выберите организацию", @class = "selectpicker", @data_live_search = "true" })</div>
-                    <div id="site_people">@Html.DropDownListFor(m => m.Item.ContentId, Model.PeopleList, new { @title = "Выберите врача", @class = "selectpicker", @data_live_search = "true" })</div>
-                    <div id="site_event">@Html.DropDownListFor(m => m.Item.ContentId, Model.EventsList, new { @title = "Выберите событие", @class = "selectpicker", @data_live_search = "true" })</div>                    
+                    <div id="site_org">@Html.DropDownList("s_orgs",Model.OrgsList, new { @title = "Выберите организацию", @class = "selectpicker", @data_live_search = "true" })</div>
+                    <div id="site_people">@Html.DropDownList("s_people", Model.PeopleList, new { @title = "Выберите врача", @class = "selectpicker", @data_live_search = "true" })</div>
+                    <div id="site_event">@Html.DropDownList("s_event", Model.EventsList, new { @title = "Выберите событие", @class = "selectpicker", @data_live_search = "true" })</div>                    
                 </div>                
                 @Html.HiddenFor(m => m.Item.ContentId,new { @Value= @ViewBag.ContentId })
             </div>
