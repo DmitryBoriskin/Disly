@@ -13,7 +13,6 @@ namespace Disly.Areas.Admin.Controllers
 {
     public class ServicesController : CoreController
     {
-        private string domain;
 
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
@@ -21,14 +20,6 @@ namespace Disly.Areas.Admin.Controllers
 
             ViewBag.ControllerName = (String)RouteData.Values["controller"];
             ViewBag.ActionName = RouteData.Values["action"].ToString().ToLower();
-
-            string _domain = HttpContext.Request.Url.Host.ToString().ToLower().Replace("www.", "").Replace("new.", "");
-            try { domain = _cmsRepository.getSiteId(_domain); }
-            catch
-            {
-                if (_domain != ConfigurationManager.AppSettings["BaseURL"]) filterContext.Result = Redirect("/Error/");
-                else domain = String.Empty;
-            }
         }
 
         /// <summary>
@@ -263,7 +254,7 @@ namespace Disly.Areas.Admin.Controllers
                     Result = _cmsRepository.permit_cmsMenu(id, permit, AccountInfo.id, RequestUserInfo.IP);
                     break;
                 case "sitemap":
-                    Result = _cmsRepository.permit_SiteMap(id, permit, domain, menuSort);
+                    Result = _cmsRepository.permit_SiteMap(id, permit, Domain, menuSort);
                     break;
                 case "orgs":
                     Result = _cmsRepository.sortOrgs(id, permit);
@@ -273,6 +264,9 @@ namespace Disly.Areas.Admin.Controllers
                     break;
                 case "orgs_department":
                     Result = _cmsRepository.sortDepartament(id, permit);
+                    break;
+                case "banners":
+                    Result = _cmsRepository.permit_Banners(id, permit, Domain);
                     break;
             }
             return Content(Result.ToString());

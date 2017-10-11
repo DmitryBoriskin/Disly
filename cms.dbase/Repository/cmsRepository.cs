@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using cms.dbModel.entity.cms;
 
 namespace cms.dbase
 {
@@ -67,8 +68,8 @@ namespace cms.dbase
                         Worktime = s.c_worktime,
                         Logo = s.c_logo,
                         DomainList = getSiteDomains(s.c_alias),
-                        ContentId=(Guid)s.f_content,
-                        Type=s.c_content_type
+                        ContentId = (Guid)s.f_content,
+                        Type = s.c_content_type
                     });
 
                 if (!data.Any()) { return null; }
@@ -454,7 +455,7 @@ namespace cms.dbase
                 int count = db.cms_sitess.Where(w => w.id == id).Count();
                 if (count > 0) rezult = true;
                 return rezult;
-            }            
+            }
         }
         public override bool insSite(SitesModel ins, Guid UserId, String IP)
         {
@@ -476,10 +477,10 @@ namespace cms.dbase
                 else
                 {
                     return false;
-                }                                
+                }
             }
         }
-        public override bool updSite(Guid id,SitesModel ins, Guid UserId, String IP)
+        public override bool updSite(Guid id, SitesModel ins, Guid UserId, String IP)
         {
             using (var db = new CMSdb(_context))
             {
@@ -522,10 +523,12 @@ namespace cms.dbase
             using (var db = new CMSdb(_context))
             {
                 var data = db.cms_sites_domainss.Where(w => w.f_site == SiteId);
-                if (data.Any()) return data.Select(s => new Domain() {
-                                                DomainName=s.c_domain,
-                                                id=s.id
-                                        }).ToArray();
+                if (data.Any())
+                    return data.Select(s => new Domain()
+                    {
+                        DomainName = s.c_domain,
+                        id = s.id
+                    }).ToArray();
                 return null;
             }
         }
@@ -534,10 +537,11 @@ namespace cms.dbase
             using (var db = new CMSdb(_context))
             {
                 var data = db.cms_sites_domainss.Where(w => w.c_domain == NewDomain);
-                if (!data.Any()) {
+                if (!data.Any())
+                {
                     Guid NewGuid = Guid.NewGuid();
                     db.cms_sites_domainss
-                                 .Value(v=>v.id, NewGuid)
+                                 .Value(v => v.id, NewGuid)
                                  .Value(v => v.f_site, SiteId)
                                  .Value(v => v.c_domain, NewDomain)
                                  .Insert();
@@ -545,7 +549,7 @@ namespace cms.dbase
                     insertLog(UserId, IP, "insert_domain", NewGuid, String.Empty, "Sites", NewDomain);
                     return true;
                 }
-                else return false;                
+                else return false;
             }
         }
         public override bool delDomain(Guid id, Guid UserId, String IP)
@@ -1011,7 +1015,7 @@ namespace cms.dbase
                         c_text = material.Text,
                         d_date = material.Date,
                         c_preview = material.Preview,
-                        c_url= material.Url,
+                        c_url = material.Url,
                         c_url_name = material.UrlName,
                         c_desc = material.Desc,
                         c_keyw = material.Keyw,
@@ -1229,7 +1233,7 @@ namespace cms.dbase
                         n_date_begin_day = int.Parse(eventData.DateBegin.ToString("MMdd")),
                         n_date_end_day = int.Parse(EndDate.ToString("MMdd"))
                     };
-                    if(!eventData.Annually)
+                    if (!eventData.Annually)
                     {
                         cdEvent.n_date_begin_year = eventData.DateBegin.Year;
                         cdEvent.n_date_end_year = eventData.DateEnd.Value.Year;
@@ -1353,7 +1357,7 @@ namespace cms.dbase
                 {
                     Id = s.id,
                     Title = s.c_title,
-                    Sort=s.n_sort
+                    Sort = s.n_sort
                 });
                 if (list.Any()) return list.ToArray();
                 return null;
@@ -1364,10 +1368,11 @@ namespace cms.dbase
             using (var db = new CMSdb(_context))
             {
                 var data = db.content_orgss.Where(w => w.id == id)
-                            .Select(s => new OrgsModel {
-                                Id=s.id,
-                                Title=s.c_title,
-                                ShortTitle=s.c_title_short,
+                            .Select(s => new OrgsModel
+                            {
+                                Id = s.id,
+                                Title = s.c_title,
+                                ShortTitle = s.c_title_short,
                                 Phone = s.c_phone,
                                 PhoneReception = s.c_phone_reception,
                                 Fax = s.c_fax,
@@ -1375,10 +1380,10 @@ namespace cms.dbase
                                 DirecorPost = s.c_director_post,
                                 DirectorF = s.f_director,
                                 Contacts = s.c_contacts,
-                                Address=s.c_adress,
+                                Address = s.c_adress,
                                 GeopointX = s.n_geopoint_x,
                                 GeopointY = s.n_geopoint_y,
-                                Structure =getStructureList(s.id)
+                                Structure = getStructureList(s.id)
                             })
                             .FirstOrDefault();
                 if (data != null) return data;
@@ -1393,7 +1398,8 @@ namespace cms.dbase
                 if (!data.Any())
                 {
                     int MaxSort = 0;
-                    try {
+                    try
+                    {
                         MaxSort = db.content_orgss.Max(m => m.n_sort);
                     }
                     catch { }
@@ -1440,15 +1446,15 @@ namespace cms.dbase
                         .Set(s => s.c_contacts, model.Contacts)
                         .Set(s => s.c_adress, model.Address)
                         .Set(s => s.n_geopoint_x, model.GeopointX)
-                        .Set(s => s.n_geopoint_y, model.GeopointY)                        
+                        .Set(s => s.n_geopoint_y, model.GeopointY)
                         .Update();
                     //логирование
                     insertLog(UserId, IP, "update", id, String.Empty, "Orgs", model.Title);
                     return true;
                 }
-                return false;                
+                return false;
             }
-        }        
+        }
         public override bool delOrgs(Guid id, Guid UserId, String IP)
         {
             using (var db = new CMSdb(_context))
@@ -1458,7 +1464,7 @@ namespace cms.dbase
                 {
                     string logTitle = data.FirstOrDefault().c_title;
                     int ThisSort = data.FirstOrDefault().n_sort;
-                    db.content_orgss.Where(w=>w.n_sort>ThisSort).Set(p => p.n_sort, p => p.n_sort - 1).Update();//смещение n_sort
+                    db.content_orgss.Where(w => w.n_sort > ThisSort).Set(p => p.n_sort, p => p.n_sort - 1).Update();//смещение n_sort
                     data.Delete();
                     //логирование
                     insertLog(UserId, IP, "delete", id, String.Empty, "Orgs", logTitle);
@@ -1475,14 +1481,14 @@ namespace cms.dbase
                 if (new_num > actual_num)
                 {
                     db.content_orgss
-                        .Where(w =>(w.n_sort > actual_num && w.n_sort <= new_num))
+                        .Where(w => (w.n_sort > actual_num && w.n_sort <= new_num))
                         .Set(p => p.n_sort, p => p.n_sort - 1)
                         .Update();
                 }
                 else
                 {
                     db.content_orgss
-                        .Where(w => w.n_sort < actual_num && w.n_sort>=new_num)
+                        .Where(w => w.n_sort < actual_num && w.n_sort >= new_num)
                         .Set(p => p.n_sort, p => p.n_sort + 1)
                         .Update();
                 }
@@ -1500,14 +1506,15 @@ namespace cms.dbase
         {
             using (var db = new CMSdb(_context))
             {
-                var data = db.content_org_structures.Where(w => w.f_ord == id).OrderBy(o=>o.n_sort);
+                var data = db.content_org_structures.Where(w => w.f_ord == id).OrderBy(o => o.n_sort);
                 if (data.Any())
                 {
                     var List = data
-                                .Select(s => new StructureModel() {
-                                    Id=s.id,
-                                    Title=s.c_title,
-                                    Ovp=s.b_ovp                                    
+                                .Select(s => new StructureModel()
+                                {
+                                    Id = s.id,
+                                    Title = s.c_title,
+                                    Ovp = s.b_ovp
                                 });
                     return List.ToArray();
                 }
@@ -1521,29 +1528,30 @@ namespace cms.dbase
                 var data = db.content_org_structures.Where(w => w.id == id);
                 if (data.Any())
                 {
-                    return data.Select(s => new StructureModel {
-                                Id=s.id,
-                                OrgId=s.f_ord,
-                                Title=s.c_title,
-                                Adress=s.c_adress,
-                                GeopointX=s.n_geopoint_x,
-                                GeopointY=s.n_geopoint_y,
-                                Phone=s.c_phone,
-                                PhoneReception=s.c_phone_reception,
-                                Fax=s.c_fax,
-                                Email=s.c_email,
-                                Routes=s.c_routes,
-                                Schedule=s.c_schedule,
-                                DirecorPost=s.c_director_post,
-                                Ovp=s.b_ovp,
-                                Departments=getDepartmentsList(s.id)                                
-                                
-                                //f_direcor
+                    return data.Select(s => new StructureModel
+                    {
+                        Id = s.id,
+                        OrgId = s.f_ord,
+                        Title = s.c_title,
+                        Adress = s.c_adress,
+                        GeopointX = s.n_geopoint_x,
+                        GeopointY = s.n_geopoint_y,
+                        Phone = s.c_phone,
+                        PhoneReception = s.c_phone_reception,
+                        Fax = s.c_fax,
+                        Email = s.c_email,
+                        Routes = s.c_routes,
+                        Schedule = s.c_schedule,
+                        DirecorPost = s.c_director_post,
+                        Ovp = s.b_ovp,
+                        Departments = getDepartmentsList(s.id)
+
+                        //f_direcor
                     }).FirstOrDefault();
                 }
                 return null;
             }
-        }   
+        }
         public override bool insStructure(Guid id, Guid OrgId, StructureModel insert, Guid UserId, String IP)
         {
             using (var db = new CMSdb(_context))
@@ -1551,7 +1559,7 @@ namespace cms.dbase
                 int MaxSort = 0;
                 try
                 {
-                    MaxSort = db.content_org_structures.Where(w=>w.f_ord== OrgId).Max(m => m.n_sort);
+                    MaxSort = db.content_org_structures.Where(w => w.f_ord == OrgId).Max(m => m.n_sort);
                 }
                 catch { }
                 MaxSort++;
@@ -1617,10 +1625,11 @@ namespace cms.dbase
                 Guid IdOrg = data.FirstOrDefault().f_ord;
                 int ThisSort = data.FirstOrDefault().n_sort;
                 string logTitle = data.FirstOrDefault().c_title;
-                if (data.Any()) {
+                if (data.Any())
+                {
 
-                    data.Delete(); 
-                    db.content_org_structures.Where(w=>w.f_ord== IdOrg && w.n_sort>ThisSort).Set(p => p.n_sort, p => p.n_sort - 1).Update();//смещение n_sort
+                    data.Delete();
+                    db.content_org_structures.Where(w => w.f_ord == IdOrg && w.n_sort > ThisSort).Set(p => p.n_sort, p => p.n_sort - 1).Update();//смещение n_sort
                     //логирование
                     insertLog(UserId, IP, "delete", id, String.Empty, "Orgs", logTitle);
                     return true;
@@ -1638,7 +1647,7 @@ namespace cms.dbase
                 if (new_num > actual_num)
                 {
                     db.content_org_structures
-                        .Where(w =>w.f_ord== OrgId && w.n_sort > actual_num && w.n_sort <= new_num)
+                        .Where(w => w.f_ord == OrgId && w.n_sort > actual_num && w.n_sort <= new_num)
                         .Set(p => p.n_sort, p => p.n_sort - 1)
                         .Update();
                 }
@@ -1675,7 +1684,7 @@ namespace cms.dbase
                 int MaxSort = 0;
                 try
                 {
-                    MaxSort = db.content_org_structures.Where(w=>w.f_ord==OrgId).Max(m => m.n_sort);
+                    MaxSort = db.content_org_structures.Where(w => w.f_ord == OrgId).Max(m => m.n_sort);
                 }
                 catch { }
                 MaxSort++;
@@ -1684,28 +1693,28 @@ namespace cms.dbase
                 {
                     id = IdStructure,
                     f_ord = OrgId,
-                    n_sort=MaxSort,
-                    c_title = insertStructure.Title,                    
+                    n_sort = MaxSort,
+                    c_title = insertStructure.Title,
                     c_adress = insertStructure.Adress,
-                    c_phone= insertStructure.PhoneReception,
-                    c_fax= insertStructure.Fax,
-                    c_email= insertStructure.Email,
+                    c_phone = insertStructure.PhoneReception,
+                    c_fax = insertStructure.Fax,
+                    c_email = insertStructure.Email,
                     n_geopoint_x = insertStructure.GeopointX,
                     n_geopoint_y = insertStructure.GeopointY,
-                    c_schedule= insertStructure.Schedule,
-                    c_routes= insertStructure.Routes,
-                    c_director_post= insertStructure.DirecorPost,
-                    f_director= insertStructure.DirectorF,
+                    c_schedule = insertStructure.Schedule,
+                    c_routes = insertStructure.Routes,
+                    c_director_post = insertStructure.DirecorPost,
+                    f_director = insertStructure.DirectorF,
                     b_ovp = true
                 };
 
                 content_departments cdDepart = new content_departments
                 {
-                    id=Guid.NewGuid(),
-                    n_sort=1,
-                    f_structure= IdStructure,
-                    c_title= insertStructure.Title,
-                    c_adress= insertStructure.Adress
+                    id = Guid.NewGuid(),
+                    n_sort = 1,
+                    f_structure = IdStructure,
+                    c_title = insertStructure.Title,
+                    c_adress = insertStructure.Adress
                 };
                 string logTitle = insertStructure.Title;
                 using (var tran = db.BeginTransaction())
@@ -1738,14 +1747,14 @@ namespace cms.dbase
                 cdStructur.c_schedule = updStructure.Schedule;
                 cdStructur.c_routes = updStructure.Routes;
                 cdStructur.c_director_post = updStructure.DirecorPost;
-                cdStructur.f_director = updStructure.DirectorF;                
+                cdStructur.f_director = updStructure.DirectorF;
 
                 content_departments cdDepart = db.content_departmentss.Where(w => w.f_structure == IdStructure).FirstOrDefault();
                 if (cdDepart == null)
                 {
                     throw new Exception("У данного ОВП в базе не существует отдела");
                 }
-                cdDepart.c_title= updStructure.Title;
+                cdDepart.c_title = updStructure.Title;
                 using (var tran = db.BeginTransaction())
                 {
                     db.Update(cdStructur);
@@ -1754,7 +1763,7 @@ namespace cms.dbase
                     //логирование
                     insertLog(UserId, IP, "update", IdStructure, String.Empty, "Orgs", updStructure.Title);
                     return true;
-                }   
+                }
             }
         }
 
@@ -1767,12 +1776,13 @@ namespace cms.dbase
         {
             using (var db = new CMSdb(_context))
             {
-                var data = db.content_departmentss.Where(w => w.f_structure == id).OrderBy(o=>o.n_sort);
+                var data = db.content_departmentss.Where(w => w.f_structure == id).OrderBy(o => o.n_sort);
                 if (data.Any())
                 {
-                    return data.Select(s => new Departments() {
-                        Id=s.id,
-                        Title=s.c_title
+                    return data.Select(s => new Departments()
+                    {
+                        Id = s.id,
+                        Title = s.c_title
                     }).ToArray();
                 }
                 return null;
@@ -1790,12 +1800,13 @@ namespace cms.dbase
                 var data = db.content_departmentss.Where(w => w.id == id);
                 if (data.Any())
                 {
-                    return data.Select(s=> new Departments {
-                        Id=s.id,
-                        Title=s.c_title,
-                        StructureF=s.f_structure,
-                        Phones=getDepartmentsPhone(s.id),
-                        Peoples=getPeopleDepartment(s.id)
+                    return data.Select(s => new Departments
+                    {
+                        Id = s.id,
+                        Title = s.c_title,
+                        StructureF = s.f_structure,
+                        Phones = getDepartmentsPhone(s.id),
+                        Peoples = getPeopleDepartment(s.id)
                     }).First();
                 }
                 return null;
@@ -1811,13 +1822,15 @@ namespace cms.dbase
             using (var db = new CMSdb(_context))
             {
                 var data = db.content_departments_phones.Where(w => w.f_department == id);
-                if (data.Any()) return data
-                                        .Select(s=> new DepartmentsPhone() {
-                                            Id=s.id,
-                                            Label=s.c_key,
-                                            Value=s.c_val
-                                        })
-                                        .ToArray();
+                if (data.Any())
+                    return data
+                            .Select(s => new DepartmentsPhone()
+                            {
+                                Id = s.id,
+                                Label = s.c_key,
+                                Value = s.c_val
+                            })
+                            .ToArray();
             }
             return null;
         }
@@ -1833,9 +1846,10 @@ namespace cms.dbase
             using (var db = new CMSdb(_context))
             {
                 var MyBread = new Stack<BreadCrumb>();
-                MyBread.Push(new BreadCrumb {
-                    Title="Организации",
-                    Url="/admin/orgs/"
+                MyBread.Push(new BreadCrumb
+                {
+                    Title = "Организации",
+                    Url = "/admin/orgs/"
                 });
                 #region item
                 if (type == "item")
@@ -1906,10 +1920,10 @@ namespace cms.dbase
                         Title = data.c_title,
                         Url = "/admin/orgs/department/" + data.id
                     });
-                } 
+                }
                 #endregion
                 return MyBread.Reverse().ToArray();
-            }            
+            }
         }
         /// <summary>
         /// Добавляет значение в список телефонов отдела
@@ -1941,11 +1955,11 @@ namespace cms.dbase
             using (var db = new CMSdb(_context))
             {
                 var data = db.content_departments_phones.Where(w => w.id == id);
-                
+
                 if (data.Any())
                 {
                     string logtitle = data.FirstOrDefault().c_val;
-                    data.Delete();                    
+                    data.Delete();
                 }
             }
             return true;
@@ -1956,13 +1970,14 @@ namespace cms.dbase
             {
                 var data = db.content_sv_people_departments
                            .Where(w => w.f_department == idDepart)
-                           .Select(s => new People() {
-                               Id=s.id,
-                               FIO= s.c_surname+" "+ s.c_name+" "+s.c_patronymic                               
+                           .Select(s => new People()
+                           {
+                               Id = s.id,
+                               FIO = s.c_surname + " " + s.c_name + " " + s.c_patronymic
                            });
                 if (data.Any()) return data.ToArray();
-                return null; 
-            }          
+                return null;
+            }
         }
         public override bool insDepartament(Guid id, Guid Structure, Departments insert, Guid UserId, String IP)
         {
@@ -1978,7 +1993,7 @@ namespace cms.dbase
                 int MaxSort = 0;
                 try
                 {
-                    MaxSort = db.content_departmentss.Where(w=>w.f_structure==Structure).Max(m => m.n_sort);
+                    MaxSort = db.content_departmentss.Where(w => w.f_structure == Structure).Max(m => m.n_sort);
                 }
                 catch { }
                 MaxSort++;
@@ -1988,13 +2003,13 @@ namespace cms.dbase
                     id = id,
                     f_structure = Structure,
                     c_title = insert.Title,
-                    n_sort=MaxSort
+                    n_sort = MaxSort
                 };
                 using (var tran = db.BeginTransaction())
                 {
                     db.Insert(cdDepart);
-                    tran.Commit();                    
-                }                
+                    tran.Commit();
+                }
                 return true;
             }
         }
@@ -2005,7 +2020,7 @@ namespace cms.dbase
                 content_departments cdDepart = db.content_departmentss
                                               .Where(p => p.id == id)
                                               .SingleOrDefault();
-                if(cdDepart==null)
+                if (cdDepart == null)
                 {
                     throw new Exception("Запись с таким Id не существует");
                 }
@@ -2013,7 +2028,7 @@ namespace cms.dbase
                 using (var tran = db.BeginTransaction())
                 {
                     db.Update(cdDepart);
-                    tran.Commit();                    
+                    tran.Commit();
                 }
                 return true;
             }
@@ -2032,11 +2047,11 @@ namespace cms.dbase
                 Guid IdStruct = cdDepart.f_structure;
                 int ThisSort = cdDepart.n_sort;
                 using (var tran = db.BeginTransaction())
-                {                    
-                    db.content_departmentss.Where(w=>w.f_structure== IdStruct && w.n_sort> ThisSort).Set(p => p.n_sort, p => p.n_sort - 1).Update();//смещение n_sort
+                {
+                    db.content_departmentss.Where(w => w.f_structure == IdStruct && w.n_sort > ThisSort).Set(p => p.n_sort, p => p.n_sort - 1).Update();//смещение n_sort
                     db.Delete(cdDepart);
 
-                    tran.Commit();                    
+                    tran.Commit();
                 }
                 return true;
             }
@@ -2097,7 +2112,7 @@ namespace cms.dbase
                         }
                     }
                 }
-                
+
 
                 query = query.OrderBy(o => new { o.c_surname, o.c_name });
 
@@ -2111,7 +2126,7 @@ namespace cms.dbase
                             Id = s.id,
                             Surname = s.c_surname,
                             Name = s.c_name,
-                            FIO=s.c_surname+" "+ s.c_name+" "+s.c_patronymic
+                            FIO = s.c_surname + " " + s.c_name + " " + s.c_patronymic
                             //EMail = s.c_email,
                             //Group = s.f_group,
                             //GroupName = s.f_group_name,
@@ -2142,7 +2157,7 @@ namespace cms.dbase
         public override UsersModel getPerson(Guid id)
         {
 
-           return null;
+            return null;
         }
         #endregion
 
@@ -2736,6 +2751,7 @@ namespace cms.dbase
                 if (!data.Any())
                 {
                     var queryMaxSort = db.content_sitemaps
+                        .Where(w => w.f_site == item.Site)
                         .Where(w => w.c_path.Equals(item.Path))
                         .Select(s => s.n_sort);
 
@@ -2838,7 +2854,7 @@ namespace cms.dbase
                     var listToUpdate = db.content_sitemaps
                         .Where(w => w.f_site.Equals(item.Site))
                         .Where(w => w.c_path.StartsWith(_oldPath));
-                    
+
                     if (listToUpdate.Any())
                     {
                         listToUpdate
@@ -2987,14 +3003,14 @@ namespace cms.dbase
 
                 var listToDelete = db.content_sitemaps
                     .Where(w => w.id.Equals(id) || w.c_path.Contains(pathToDrop));
-                
+
                 if (listToDelete.Any())
                 {
                     foreach (var item in listToDelete.ToArray())
                     {
                         // Логирование
                         insertLog(userId, IP, "delete", item.id, String.Empty, "SiteMap", item.c_title);
-                        
+
                         var itemD = db.content_sitemaps
                             .Where(w => w.id == item.id)
                             .SingleOrDefault();
@@ -3145,15 +3161,6 @@ namespace cms.dbase
 
                     if (permit > data.Sort)
                     {
-                        #region comment
-                        //db.content_sv_sitemap_menus
-                        //    .Where(w => w.f_site.Equals(domain))
-                        //    .Where(w => w.f_menutype.Equals(m))
-                        //    .Where(w => w.menu_sort > data.Sort && w.menu_sort <= permit)
-                        //    .Set(u => u.menu_sort, u => u.menu_sort - 1)
-                        //    .Update();
-                        #endregion
-
                         db.content_sitemap_menutypess
                             .Where(w => w.f_site.Equals(domain))
                             .Where(w => w.f_menutype.Equals(m))
@@ -3163,15 +3170,6 @@ namespace cms.dbase
                     }
                     else
                     {
-                        #region comment
-                        //db.content_sv_sitemap_menus
-                        //    .Where(w => w.f_site.Equals(domain))
-                        //    .Where(w => w.f_menutype.Equals(m))
-                        //    .Where(w => w.menu_sort < data.Sort && w.menu_sort >= permit)
-                        //    .Set(u => u.menu_sort, u => u.menu_sort + 1)
-                        //    .Update();
-                        #endregion
-
                         db.content_sitemap_menutypess
                             .Where(w => w.f_site.Equals(domain))
                             .Where(w => w.f_menutype.Equals(m))
@@ -3179,13 +3177,6 @@ namespace cms.dbase
                             .Set(u => u.n_sort, u => u.n_sort + 1)
                             .Update();
                     }
-                    #region comment
-                    //db.content_sv_sitemap_menus
-                    //    .Where(w => w.id.Equals(id))
-                    //    .Set(u => u.menu_sort, permit)
-                    //    .Update();
-                    #endregion
-
                     db.content_sitemap_menutypess
                         .Where(w => w.f_sitemap.Equals(id))
                         .Where(w => w.f_menutype.Equals(m))
@@ -3194,6 +3185,336 @@ namespace cms.dbase
                 }
             }
             return true;
+        }
+        #endregion
+
+        #region Баннеры
+        /// <summary>
+        /// Получаем список секций баннеров
+        /// </summary>
+        /// <param name="domain">Домен</param>
+        /// <returns></returns>
+        public override BannersSectionModel[] getBannerSections(string domain)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var query = db.content_banner_sectionss
+                    .OrderBy(o => o.n_sort)
+                    .Select(s => new BannersSectionModel
+                    {
+                        Id = s.id,
+                        Title = s.c_title,
+                        Sort = s.n_sort,
+                        Disabled = s.b_disabled,
+                        CountBanners = getCountBannersBySectionAndDomain(s.id, domain),
+                        Width = s.n_width,
+                        Height = s.n_height
+                    });
+                if (!query.Any()) { return null; }
+                else { return query.ToArray(); }
+            }
+        }
+
+        /// <summary>
+        /// Получаем отдельную секцию баннеров
+        /// </summary>
+        /// <param name="id">Id секции</param>
+        /// <param name="domain">Домен</param>
+        /// <param name="filter">Фильтр</param>
+        /// <returns></returns>
+        public override BannersSectionModel getBannerSection(Guid id, string domain, FilterParams filter)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var query = db.content_banner_sectionss
+                    .Where(w => w.id == id)
+                    .Select(s => new BannersSectionModel
+                    {
+                        Id = s.id,
+                        Title = s.c_title,
+                        Sort = s.n_sort,
+                        Disabled = s.b_disabled,
+                        CountBanners = getCountBannersBySectionAndDomain(s.id, domain),
+                        BannerList = getBanners(id, domain, filter)
+                    });
+                if (!query.Any()) return null;
+                else { return query.FirstOrDefault(); }
+            }
+        }
+
+        /// <summary>
+        /// Получаем кол-во баннеров для сайта и секции
+        /// </summary>
+        /// <param name="section">Секция баннеров</param>
+        /// <param name="domain">Домен</param>
+        /// <returns></returns>
+        public override int getCountBannersBySectionAndDomain(Guid section, string domain)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                return db.content_bannerss
+                    .Where(w => w.f_site == domain)
+                    .Where(w => w.f_section == section)
+                    .Count();
+            }
+        }
+
+        /// <summary>
+        /// Получим список баннеров для секции и домена
+        /// </summary>
+        /// <param name="section">Секция</param>
+        /// <param name="domain">Домен</param>
+        /// <param name="filter">Фильтр</param>
+        /// <returns></returns>
+        public override BannersListModel getBanners(Guid section, string domain, FilterParams filter)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var query = db.content_bannerss
+                    .Where(w => w.f_site == domain)
+                    .Where(w => w.f_section == section);
+
+                if (query.Any())
+                {
+                    int itemCount = query.Count();
+                    var list = query
+                    .Select(s => new BannersModel
+                    {
+                        Id = s.id,
+                        Site = s.f_site,
+                        Title = s.c_title,
+                        Photo = s.c_photo,
+                        Url = s.c_url,
+                        Text = s.c_text,
+                        Date = s.d_date,
+                        Sort = s.n_sort,
+                        Disabled = s.b_disabled,
+                        Section = s.f_section
+                    }).Skip(filter.Size * (filter.Page - 1)).Take(filter.Size);
+
+                    var bannerList = list.OrderBy(o => o.Sort).ToArray();
+
+                    return new BannersListModel
+                    {
+                        Data = bannerList,
+                        Pager = new Pager
+                        {
+                            page = filter.Page,
+                            size = filter.Size,
+                            items_count = itemCount,
+                            page_count = (itemCount % filter.Size > 0) ? (itemCount / filter.Size) + 1
+                                : itemCount / filter.Size
+                        }
+                    };
+                }
+                else { return null; }
+            }
+        }
+
+        /// <summary>
+        /// Получим баннер
+        /// </summary>
+        /// <param name="id">Id баннера</param>
+        /// <returns></returns>
+        public override BannersModel getBanner(Guid id)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var query = db.content_bannerss
+                    .Where(w => w.id == id)
+                    .Select(s => new BannersModel
+                    {
+                        Id = s.id,
+                        Site = s.f_site,
+                        Title = s.c_title,
+                        Photo = s.c_photo,
+                        Url = s.c_url,
+                        Text = s.c_text,
+                        Date = s.d_date,
+                        Sort = s.n_sort,
+                        Disabled = s.b_disabled,
+                        Section = s.f_section
+                    });
+                if (!query.Any()) return null;
+                else { return query.FirstOrDefault(); }
+            }
+        }
+
+        /// <summary>
+        /// Проверим существование баннера
+        /// </summary>
+        /// <param name="id">Идентификатор баннера</param>
+        /// <returns></returns>
+        public override bool checkBannerExist(Guid id)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                return db.content_bannerss.Where(w => w.id == id).Count() > 0;
+            }
+        }
+
+        /// <summary>
+        /// Создадим новый баннер
+        /// </summary>
+        /// <param name="id">Идентификатор</param>
+        /// <param name="item">Модель баннера</param>
+        /// <param name="userId">Id-пользователя</param>
+        /// <param name="IP">ip-адрес</param>
+        /// <returns></returns>
+        public override bool createBanner(Guid id, BannersModel item, Guid userId, string IP)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var query = db.content_bannerss.Where(w => w.id.Equals(id));
+
+                if (!query.Any())
+                {
+                    var queryMaxSort = db.content_bannerss
+                        .Where(w => w.f_site.Equals(item.Site))
+                        .Where(w => w.f_section.Equals(item.Section))
+                        .Select(s => s.n_sort);
+
+                    int maxSort = queryMaxSort.Any() ? queryMaxSort.Max() + 1 : 1;
+
+                    db.content_bannerss
+                        .Value(v => v.id, id)
+                        .Value(v => v.f_site, item.Site)
+                        .Value(v => v.c_title, item.Title)
+                        .Value(v => v.c_photo, item.Photo)
+                        .Value(v => v.c_url, item.Url)
+                        .Value(v => v.c_text, item.Text)
+                        .Value(v => v.d_date, item.Date)
+                        .Value(v => v.n_sort, maxSort)
+                        .Value(v => v.b_disabled, item.Disabled)
+                        .Value(v => v.f_section, item.Section)
+                        .Insert();
+
+                    // логирование
+                    insertLog(userId, IP, "insert", id, String.Empty, "Banners", item.Title);
+
+                    return true;
+                }
+                else { return false; }
+            }
+        }
+
+        /// <summary>
+        /// Обновляем запись баннера
+        /// </summary>
+        /// <param name="id">Идентификатор</param>
+        /// <param name="item">Модель баннера</param>
+        /// <param name="userId">Id-пользователя</param>
+        /// <param name="IP">ip-адрес</param>
+        /// <returns></returns>
+        public override bool updateBanner(Guid id, BannersModel item, Guid userId, string IP)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var query = db.content_bannerss.Where(w => w.id.Equals(id));
+
+                if (query.Any())
+                {
+                    var oldRecord = query.FirstOrDefault();
+
+                    query
+                        .Set(s => s.c_title, item.Title)
+                        .Set(s => s.c_photo, item.Photo)
+                        .Set(s => s.c_url, item.Url)
+                        .Set(s => s.c_text, item.Text)
+                        .Set(s => s.d_date, item.Date)
+                        .Set(s => s.b_disabled, item.Disabled)
+                        .Set(s => s.f_section, item.Section)
+                        .Update();
+
+                    // логирование
+                    insertLog(userId, IP, "update", id, string.Empty, "Banners", item.Title);
+
+                    return true;
+                }
+                else
+                    return false;
+            }
+        }
+
+        /// <summary>
+        /// Удаляем баннер
+        /// </summary>
+        /// <param name="id">Id-баннера</param>
+        /// <param name="userId">Id-пользователя</param>
+        /// <param name="IP">ip-адрес</param>
+        /// <returns></returns>
+        public override bool deleteBanner(Guid id, Guid userId, string IP)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var query = db.content_bannerss.Where(w => w.id.Equals(id));
+
+                if (query.Any())
+                {
+                    db.content_bannerss.Where(w => w.id.Equals(id)).Delete();
+                    
+                    // логирование
+                    insertLog(userId, IP, "delete", id, string.Empty, "Banners", query.Select(s => s.c_title).FirstOrDefault());
+
+                    return true;
+                }
+                else
+                    return false;
+            }
+        }
+
+        /// <summary>
+        /// Меняем приоритет сортировки в баннерах для определённой секции
+        /// </summary>
+        /// <param name="id">Id-баннера</param>
+        /// <param name="permit">Приоритет</param>
+        /// <param name="domain">Домен</param>
+        /// <returns></returns>
+        public override bool permit_Banners(Guid id, int permit, string domain)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var data = db.content_bannerss
+                    .Where(w => w.id.Equals(id))
+                    .Select(s => new BannersModel
+                    {
+                        Section = s.f_section,
+                        Sort = s.n_sort
+                    });
+
+                if (data.Any())
+                {
+                    var query = data.FirstOrDefault();
+                    if (permit > query.Sort)
+                    {
+                        db.content_bannerss
+                            .Where(w => w.f_site.Equals(domain))
+                            .Where(w => w.f_section.Equals(query.Section))
+                            .Where(w => w.n_sort > query.Sort && w.n_sort <= permit)
+                            .Set(u => u.n_sort, u => u.n_sort - 1)
+                            .Update();
+                    }
+                    else
+                    {
+                        db.content_bannerss
+                            .Where(w => w.f_site.Equals(domain))
+                            .Where(w => w.f_section.Equals(query.Section))
+                            .Where(w => w.n_sort < query.Sort && w.n_sort >= permit)
+                            .Set(u => u.n_sort, u => u.n_sort + 1)
+                            .Update();
+                    }
+                    db.content_bannerss
+                        .Where(w => w.id.Equals(id))
+                        .Set(u => u.n_sort, permit)
+                        .Update();
+
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
         }
         #endregion
     }

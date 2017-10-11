@@ -1,4 +1,5 @@
 ﻿using cms.dbModel.entity;
+using cms.dbModel.entity.cms;
 using System;
 using System.Collections.Generic;
 
@@ -141,5 +142,17 @@ namespace cms.dbModel
         public abstract BreadCrumbSiteMap[] getSiteMapBreadCrumbs(Guid? id);
         public abstract BreadCrumbSiteMap getSiteMapBreadCrumbItem(Guid id);
         public abstract bool permit_SiteMap(Guid id, int permit, string domain, string menuSort);
+
+        // Баннеры
+        public abstract BannersSectionModel[] getBannerSections(string domain);
+        public abstract BannersSectionModel getBannerSection(Guid id, string domain, FilterParams filter);
+        public abstract int getCountBannersBySectionAndDomain(Guid section, string domain);
+        public abstract BannersListModel getBanners(Guid section, string domain, FilterParams filter);
+        public abstract BannersModel getBanner(Guid id);
+        public abstract bool checkBannerExist(Guid id);
+        public abstract bool createBanner(Guid id, BannersModel item, Guid userId, string IP);
+        public abstract bool updateBanner(Guid id, BannersModel item, Guid userId, string IP);
+        public abstract bool deleteBanner(Guid id, Guid userId, string IP);
+        public abstract bool permit_Banners(Guid id, int permit, string domain);
     }
 }

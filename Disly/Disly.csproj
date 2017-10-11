@@ -336,6 +336,7 @@
     <Compile Include="Models\PageViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Cripto.cs" />
+    <Compile Include="Properties\Files.cs" />
     <Compile Include="Properties\Mailer.cs" />
     <Compile Include="Properties\RequestUserInfo.cs" />
     <Compile Include="Properties\SiteLogger.cs" />
@@ -442,6 +443,8 @@
     <Content Include="Areas\Admin\Views\Shared\Partial\BreadCrumbSiteMap.cshtml" />
     <Content Include="Areas\Admin\Views\Orgs\Ovp.cshtml" />
     <Content Include="Areas\Admin\Views\Services\SiteMapMenuGroup.cshtml" />
+    <Content Include="Areas\Admin\Views\Banners\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\Banners\Item.cshtml" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <Content Include="Views\_ViewStart.cshtml" />
     <None Include="Web.Debug.config">
@@ -453,7 +456,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Areas\Admin\Views\Banners\" />
     <Folder Include="Content\plugins\tinymce\plugins\colorpicker\" />
     <Folder Include="Views\Core\" />
   </ItemGroup>
