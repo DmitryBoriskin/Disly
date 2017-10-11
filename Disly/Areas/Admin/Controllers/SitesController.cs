@@ -125,6 +125,7 @@ namespace Disly.Areas.Admin.Controllers
             {
                 ViewBag.OrgType = OrgType;
             }
+            else{ }
             if (!String.IsNullOrEmpty(ContentId))
             {
                 ViewBag.ContentId = Guid.Parse(ContentId);                                
@@ -134,6 +135,7 @@ namespace Disly.Areas.Admin.Controllers
             model.TypeList = new SelectList(
                     new List<SelectListItem>
                     {
+                        new SelectListItem { Text = "Не выбрано", Value =""},
                         new SelectListItem { Text = "Организация", Value ="org"},
                         new SelectListItem { Text = "Врач", Value = "people" },
                         new SelectListItem { Text = "Событие", Value = "event" }

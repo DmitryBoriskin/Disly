@@ -455,7 +455,7 @@ namespace cms.dbase
                 int count = db.cms_sitess.Where(w => w.id == id).Count();
                 if (count > 0) rezult = true;
                 return rezult;
-            }
+            }            
         }
         public override bool insSite(SitesModel ins, Guid UserId, String IP)
         {
@@ -472,15 +472,17 @@ namespace cms.dbase
                       .Value(v => v.c_content_type, ins.Type)
                       .Value(v => v.f_content, ins.ContentId)
                       .Insert();
+                    //Логирование
+                    insertLog(UserId, IP, "insert", ins.Id, String.Empty, "Sites", ins.Title);
                     return true;
                 }
                 else
                 {
                     return false;
-                }
+                }                                
             }
         }
-        public override bool updSite(Guid id, SitesModel ins, Guid UserId, String IP)
+        public override bool updSite(Guid id,SitesModel upd, Guid UserId, String IP)
         {
             using (var db = new CMSdb(_context))
             {
@@ -488,15 +490,17 @@ namespace cms.dbase
                 if (data.Any())
                 {
                     data
-                        .Set(s => s.c_name, ins.Title)
-                        .Set(s => s.c_phone, ins.Phone)
-                        .Set(s => s.c_fax, ins.Fax)
-                        .Set(s => s.c_email, ins.Email)
-                        .Set(s => s.c_url, ins.Site)
-                        .Set(s => s.c_worktime, ins.Worktime)
-                        .Set(s => s.c_logo, ins.Logo)
-                        .Set(s => s.c_scripts, ins.Scripts)
+                        .Set(s => s.c_name, upd.Title)
+                        .Set(s => s.c_phone, upd.Phone)
+                        .Set(s => s.c_fax, upd.Fax)
+                        .Set(s => s.c_email, upd.Email)
+                        .Set(s => s.c_url, upd.Site)
+                        .Set(s => s.c_worktime, upd.Worktime)
+                        .Set(s => s.c_logo, upd.Logo)
+                        .Set(s => s.c_scripts, upd.Scripts)
                         .Update();
+                    //Логирование
+                    insertLog(UserId, IP, "update", id, String.Empty, "Sites", upd.Title);
                     return true;
                 }
                 return false;
@@ -528,7 +532,7 @@ namespace cms.dbase
                     {
                         DomainName = s.c_domain,
                         id = s.id
-                    }).ToArray();
+                                        }).ToArray();
                 return null;
             }
         }
@@ -549,7 +553,7 @@ namespace cms.dbase
                     insertLog(UserId, IP, "insert_domain", NewGuid, String.Empty, "Sites", NewDomain);
                     return true;
                 }
-                else return false;
+                else return false;                
             }
         }
         public override bool delDomain(Guid id, Guid UserId, String IP)
@@ -1446,15 +1450,15 @@ namespace cms.dbase
                         .Set(s => s.c_contacts, model.Contacts)
                         .Set(s => s.c_adress, model.Address)
                         .Set(s => s.n_geopoint_x, model.GeopointX)
-                        .Set(s => s.n_geopoint_y, model.GeopointY)
+                        .Set(s => s.n_geopoint_y, model.GeopointY)                        
                         .Update();
                     //логирование
                     insertLog(UserId, IP, "update", id, String.Empty, "Orgs", model.Title);
                     return true;
                 }
-                return false;
+                return false;                
             }
-        }
+        }        
         public override bool delOrgs(Guid id, Guid UserId, String IP)
         {
             using (var db = new CMSdb(_context))
@@ -1545,13 +1549,13 @@ namespace cms.dbase
                         DirecorPost = s.c_director_post,
                         Ovp = s.b_ovp,
                         Departments = getDepartmentsList(s.id)
-
-                        //f_direcor
+                                
+                                //f_direcor
                     }).FirstOrDefault();
                 }
                 return null;
             }
-        }
+        }   
         public override bool insStructure(Guid id, Guid OrgId, StructureModel insert, Guid UserId, String IP)
         {
             using (var db = new CMSdb(_context))
@@ -1628,7 +1632,7 @@ namespace cms.dbase
                 if (data.Any())
                 {
 
-                    data.Delete();
+                    data.Delete(); 
                     db.content_org_structures.Where(w => w.f_ord == IdOrg && w.n_sort > ThisSort).Set(p => p.n_sort, p => p.n_sort - 1).Update();//смещение n_sort
                     //логирование
                     insertLog(UserId, IP, "delete", id, String.Empty, "Orgs", logTitle);
@@ -1694,7 +1698,7 @@ namespace cms.dbase
                     id = IdStructure,
                     f_ord = OrgId,
                     n_sort = MaxSort,
-                    c_title = insertStructure.Title,
+                    c_title = insertStructure.Title,                    
                     c_adress = insertStructure.Adress,
                     c_phone = insertStructure.PhoneReception,
                     c_fax = insertStructure.Fax,
@@ -1747,7 +1751,7 @@ namespace cms.dbase
                 cdStructur.c_schedule = updStructure.Schedule;
                 cdStructur.c_routes = updStructure.Routes;
                 cdStructur.c_director_post = updStructure.DirecorPost;
-                cdStructur.f_director = updStructure.DirectorF;
+                cdStructur.f_director = updStructure.DirectorF;                
 
                 content_departments cdDepart = db.content_departmentss.Where(w => w.f_structure == IdStructure).FirstOrDefault();
                 if (cdDepart == null)
@@ -1763,7 +1767,7 @@ namespace cms.dbase
                     //логирование
                     insertLog(UserId, IP, "update", IdStructure, String.Empty, "Orgs", updStructure.Title);
                     return true;
-                }
+                }   
             }
         }
 
@@ -1829,8 +1833,8 @@ namespace cms.dbase
                                 Id = s.id,
                                 Label = s.c_key,
                                 Value = s.c_val
-                            })
-                            .ToArray();
+                                        })
+                                        .ToArray();
             }
             return null;
         }
@@ -1920,10 +1924,10 @@ namespace cms.dbase
                         Title = data.c_title,
                         Url = "/admin/orgs/department/" + data.id
                     });
-                }
+                } 
                 #endregion
                 return MyBread.Reverse().ToArray();
-            }
+            }            
         }
         /// <summary>
         /// Добавляет значение в список телефонов отдела
@@ -1955,11 +1959,11 @@ namespace cms.dbase
             using (var db = new CMSdb(_context))
             {
                 var data = db.content_departments_phones.Where(w => w.id == id);
-
+                
                 if (data.Any())
                 {
                     string logtitle = data.FirstOrDefault().c_val;
-                    data.Delete();
+                    data.Delete();                    
                 }
             }
             return true;
@@ -1976,8 +1980,8 @@ namespace cms.dbase
                                FIO = s.c_surname + " " + s.c_name + " " + s.c_patronymic
                            });
                 if (data.Any()) return data.ToArray();
-                return null;
-            }
+                return null; 
+            }          
         }
         public override bool insDepartament(Guid id, Guid Structure, Departments insert, Guid UserId, String IP)
         {
@@ -2008,8 +2012,8 @@ namespace cms.dbase
                 using (var tran = db.BeginTransaction())
                 {
                     db.Insert(cdDepart);
-                    tran.Commit();
-                }
+                    tran.Commit();                    
+                }                
                 return true;
             }
         }
@@ -2028,7 +2032,7 @@ namespace cms.dbase
                 using (var tran = db.BeginTransaction())
                 {
                     db.Update(cdDepart);
-                    tran.Commit();
+                    tran.Commit();                    
                 }
                 return true;
             }
@@ -2047,11 +2051,11 @@ namespace cms.dbase
                 Guid IdStruct = cdDepart.f_structure;
                 int ThisSort = cdDepart.n_sort;
                 using (var tran = db.BeginTransaction())
-                {
+                {                    
                     db.content_departmentss.Where(w => w.f_structure == IdStruct && w.n_sort > ThisSort).Set(p => p.n_sort, p => p.n_sort - 1).Update();//смещение n_sort
                     db.Delete(cdDepart);
 
-                    tran.Commit();
+                    tran.Commit();                    
                 }
                 return true;
             }
@@ -2112,7 +2116,7 @@ namespace cms.dbase
                         }
                     }
                 }
-
+                
 
                 query = query.OrderBy(o => new { o.c_surname, o.c_name });
 
@@ -2156,8 +2160,18 @@ namespace cms.dbase
 
         public override UsersModel getPerson(Guid id)
         {
-
-            return null;
+            using (var db = new CMSdb(_context))
+            {
+                var data = db.content_peoples.Where(w => w.id == id);
+                if (data.Any())
+                {
+                    return data.Select(s => new UsersModel {
+                                Id=s.id,
+                                FIO= s.c_surname+" "+s.c_name+" "+s.c_patronymic
+                            }).First();
+                }
+            }
+           return null;
         }
         #endregion
 
@@ -2854,7 +2868,7 @@ namespace cms.dbase
                     var listToUpdate = db.content_sitemaps
                         .Where(w => w.f_site.Equals(item.Site))
                         .Where(w => w.c_path.StartsWith(_oldPath));
-
+                    
                     if (listToUpdate.Any())
                     {
                         listToUpdate
@@ -3003,14 +3017,14 @@ namespace cms.dbase
 
                 var listToDelete = db.content_sitemaps
                     .Where(w => w.id.Equals(id) || w.c_path.Contains(pathToDrop));
-
+                
                 if (listToDelete.Any())
                 {
                     foreach (var item in listToDelete.ToArray())
                     {
                         // Логирование
                         insertLog(userId, IP, "delete", item.id, String.Empty, "SiteMap", item.c_title);
-
+                        
                         var itemD = db.content_sitemaps
                             .Where(w => w.id == item.id)
                             .SingleOrDefault();
