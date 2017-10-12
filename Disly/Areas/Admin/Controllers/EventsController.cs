@@ -166,7 +166,7 @@
                  };
              }
 
-            //model.Item = _cmsRepository.getEvent(Id);
+            model.Item = _cmsRepository.getEvent(Id);
             model.ErrorInfo = userMessage;
  
              return View("Item", model);

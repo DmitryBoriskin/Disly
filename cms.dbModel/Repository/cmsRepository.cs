@@ -39,6 +39,7 @@ namespace cms.dbModel
         public abstract Domain[] getSiteDomains(string SiteId);
         public abstract bool insDomain(String SiteId, string NewDomain, Guid UserId, String IP);
         public abstract bool delDomain(Guid id, Guid UserId, String IP);
+        public abstract string getIdSite(Guid ContentId);
 
         // Все пользователи портала
         public abstract bool check_user(Guid id);
