@@ -13,6 +13,16 @@ namespace Disly.Areas.Admin.Models
         public cmsLogModel Log { get; set; }
 
         public ErrorMassege ErrorInfo { get; set; }
+
+        /// <summary>
+        /// Название контроллера
+        /// </summary>
+        public string ControllerName { get; set; }
+
+        /// <summary>
+        /// Название актина
+        /// </summary>
+        public string ActionName { get; set; }
     }
 
     // Ошибки

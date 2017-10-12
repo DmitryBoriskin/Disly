@@ -29,13 +29,15 @@ namespace Disly.Areas.Admin.Controllers
         public ResolutionsModel UserResolutionInfo;//права пользователей
         public cmsLogModel[] LogInfo;
         public SitesModel SiteInfo;
-        
+        public string ControllerName;
+        public string ActionName;
+
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             base.OnActionExecuting(filterContext);
             
-            string _ControllerName = filterContext.RouteData.Values["Controller"].ToString().ToLower();
-            string _ActionName = filterContext.RouteData.Values["Action"].ToString().ToLower();
+            ControllerName = filterContext.RouteData.Values["Controller"].ToString().ToLower();
+            ActionName = filterContext.RouteData.Values["Action"].ToString().ToLower();
             Guid _PageId;
 
             try { Domain = _cmsRepository.getSiteId(Request.Url.Host.ToLower().Replace("www.", "")); }
@@ -61,7 +63,7 @@ namespace Disly.Areas.Admin.Controllers
             AccountInfo.Domains = _accountRepository.getUserDomains(_userId);
             #endregion
             #region Права пользователя
-            UserResolutionInfo = _accountRepository.getCmsUserResolutioInfo(_userId, _ControllerName);
+            UserResolutionInfo = _accountRepository.getCmsUserResolutioInfo(_userId, ControllerName);
             // Если нет прав на проссмотр, то направляем на главную
             try { if (!UserResolutionInfo.Read) filterContext.Result = Redirect("/Admin/"); }
             catch { }

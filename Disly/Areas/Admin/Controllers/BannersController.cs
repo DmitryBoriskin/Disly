@@ -23,15 +23,14 @@ namespace Disly.Areas.Admin.Controllers
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             base.OnActionExecuting(filterContext);
-
-            ViewBag.ControllerName = RouteData.Values["controller"].ToString().ToLower();
-            ViewBag.ActionName = RouteData.Values["action"].ToString().ToLower();
-
+            
             model = new BannersViewModel
             {
                 Account = AccountInfo,
                 Settings = SettingsInfo,
-                UserResolution = UserResolutionInfo
+                UserResolution = UserResolutionInfo,
+                ControllerName = ControllerName,
+                ActionName = ActionName
             };
 
             #region Метатеги
@@ -95,6 +94,8 @@ namespace Disly.Areas.Admin.Controllers
 
             if (ModelState.IsValid)
             {
+                //string savePath = 
+
                 if (!_cmsRepository.checkBannerExist(id))
                 {
                     _cmsRepository.createBanner(id, back_model.Item, AccountInfo.id, RequestUserInfo.IP);

@@ -8,7 +8,7 @@ public class Settings
 
     public static string SiteTitle = ConfigurationManager.AppSettings["SiteTitle"];
     public static string SiteDesc = ConfigurationManager.AppSettings["SiteDesc"];
-
+    public static string UserFiles = ConfigurationManager.AppSettings["UserFiles"];
     public static string BaseURL = ConfigurationManager.AppSettings["BaseURL"];
     //public static string BaseAdminURL = ConfigurationManager.AppSettings["BaseAdminURL"];
 
@@ -24,7 +24,6 @@ public class Settings
     //public static string VideoTypes = ConfigurationManager.AppSettings["VideoTypes"];
     //public static string DocTypes = ConfigurationManager.AppSettings["DocTypes"];
 
-    //public static string UserFiles = ConfigurationManager.AppSettings["UserFiles"];
     //public static string SettingsDirs = ConfigurationManager.AppSettings["SettingsDirs"];
     //public static string OrgsDir = ConfigurationManager.AppSettings["OrgsDir"];
     //public static string PersonDir = ConfigurationManager.AppSettings["PersonDir"];
