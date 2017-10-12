@@ -1,6 +1,8 @@
 ﻿@model BannersViewModel
+@using System.Text.RegularExpressions;
+
 @{
-    int maxChars = 150;
+    int maxChars = 70;
 }
 
 @if (Model.UserResolution.Read)
@@ -60,37 +62,34 @@
                         {
                             string imgUrl = (!string.IsNullOrEmpty(item.Photo.Url) && File.Exists(Server.MapPath(item.Photo.Url))) ? item.Photo.Url : "/Content/img/nophoto.jpg";
                             string disabled = (item.Disabled) ? "disabled" : string.Empty;
+                            string text = string.Empty;
+
+                            if (!string.IsNullOrEmpty(item.Text))
+                            {
+                                text = Regex.Replace(item.Text, @"<[^>]*>", String.Empty);
+                                text = text.Length > maxChars ? text.Substring(0, maxChars) + " ..." : text;
+                            }
 
                             <div class="row list-item ui-sortable-handle @disabled" data-id="@item.Id">
-                                <div class="col-md-3">
-                                    <div class="li-date">
-                                        @Convert.ToDateTime(item.Date).ToString("dd MMMM yyyy")
-                                    </div>
-                                    <div class="li-image">
-                                        <a href="/admin/banners/item/@item.Id">
-                                            <img class="list_img_preview" src="@imgUrl" alt="@item.Title" />
+                                <div class="list-item @disabled">
+                                    <div class="col-md-3">
+                                        <a href="/admin/banners/item/@item.Id" class="li-image">
+                                            <img src="@imgUrl" alt="@item.Title" class="list_img_preview" />
                                         </a>
                                     </div>
-                                </div>
-                                <div class="col-md-9">
-                                    <div class="li-title">
-                                        <a title="@item.Title" class="li-caption" href="/admin/banners/item/@item.Id">@item.Title</a>
-                                        @if (!string.IsNullOrEmpty(item.Text) && item.Text.Length > maxChars)
-                                        {
-                                            @Html.Raw(item.Text.Substring(0, maxChars))
-                                            <span> ...</span>
-                                        }
-                                        else
-                                        {
-                                            @Html.Raw(item.Text)
-                                        }
+                                    <div class="col-md-9">
+                                        <div class="li-desc">
+                                            <a href="/admin/banners/item/@item.Id" class="li-caption">@item.Title</a><br />
+                                            <span>Дата публикации: </span>@item.Date.ToString("dd MMMM yyyy")<br />
+                                            <span>Текст: </span>@text
+                                        </div>
                                     </div>
                                 </div>
+
                             </div>
                         }
                     </div>
                 </div>
-                //Html.RenderAction("Pager", "Templates", new { @Model = Model.SectionItem.BannerList.Pager });
             }
             else
             {
