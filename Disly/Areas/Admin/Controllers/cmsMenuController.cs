@@ -17,7 +17,10 @@ namespace Disly.Areas.Admin.Controllers
             model = new cmsMenuViewModel()
             {
                 Account = AccountInfo,
-                Settings = SettingsInfo
+                Settings = SettingsInfo,
+                UserResolution = UserResolutionInfo,
+                ControllerName = ControllerName,
+                ActionName = ActionName
             };
             
             #region Метатеги

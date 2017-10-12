@@ -21,6 +21,8 @@ namespace Disly.Areas.Admin.Controllers
                 Account = AccountInfo,
                 Settings = SettingsInfo,
                 UserResolution = UserResolutionInfo,
+                ControllerName = ControllerName,
+                ActionName = ActionName,
                 GroupList = _cmsRepository.getUsersGroupList()
             };
             

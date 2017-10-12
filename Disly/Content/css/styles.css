@@ -389,6 +389,9 @@ a.link-close:before {
     border-bottom: solid 1px #dfe4ec;
     padding: 20px 0 18px;
 }
+.li-image{
+    display:block;float:left;max-width:150px;
+}
 .li-caption {
     font-size: 1.3em;
 }

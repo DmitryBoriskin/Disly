@@ -18,48 +18,27 @@
                 else if (ImgUrl.IndexOf("http") == -1) if (!File.Exists(Server.MapPath(ImgUrl))) ImgUrl = "/Content/img/nophoto.jpg";
                 string disabled = (Item.Disabled) ? "disabled" : "";
 
-
-                <div class="row list-item @disabled">
-                    <div class="col-lg-3">
-                        <div class="li-date">
-                            @Convert.ToDateTime(Item.DateBegin).ToString("dd MMMM yyyy")
-                            @if(Item.DateEnd.Value.Date != Item.DateBegin.Date)
-                            {
-                                <span> - </span>
+                <div class="list-item  @disabled">
+                    <a class="li-image" href="/admin/events/item/@Item.Id/@ViewBag.urlQuery">
+                        <img src="@ImgUrl" alt="">
+                    </a>
+                    <div class="li-desc">
+                        <a title="@Item.Title" class="li-caption" href="/admin/events/item/@Item.Id/@ViewBag.urlQuery">@Item.Title</a><br />
+                        <span>Дата проведения:</span> @Convert.ToDateTime(Item.DateBegin).ToString("dd MMMM yyyy")
+                        @if (Item.DateEnd.HasValue)
+                        {
+                            <span> - </span>
                                 @Convert.ToDateTime(Item.DateEnd).ToString("dd MMMM yyyy")
-                            }
-                        </div>
-                        <div class="li-image">
-                            <a href="/admin/events/item/@Item.Id/@ViewBag.urlQuery">
-                                <img src="@ImgUrl" alt="@Item.Title">
-                            </a>
-                        </div>
-                    </div>
-                    <div class="col-lg-9">
-                        <div class="li-title">
-                            <a title="@Item.Title" class="li-caption" href="/admin/events/item/@Item.Id/@ViewBag.urlQuery">@Item.Title</a><br />
-                            @if (!string.IsNullOrEmpty(Item.Text) && Item.Text.Length > maxChars)
-                            {
-                                @Html.Raw(Item.Text.Substring(0, maxChars))
-                                <span> ...</span>
-                            }
-                            else
-                            {
-                                @Html.Raw(Item.Text)
-                            }
-                        </div>
-                        <div class="li-desc li-divider">
-                            <span>Дата проведения:</span> @Convert.ToDateTime(Item.DateBegin).ToString("dd MMMM yyyy")
-                            @if (Item.DateEnd.HasValue)
-                            {
-                                <span> - </span>
-                                        @Convert.ToDateTime(Item.DateEnd).ToString("dd MMMM yyyy")
-                            }<br />
-                            <span>Место проведения:</span> @Item.Place<br />
-                        </div>
+                        }<br />
+                        <span>Место проведения:</span> @Item.Place<br />
                     </div>
 
                 </div>
+
+
+
+
+                
             }
             Html.RenderAction("Pager", "Templates", new { @Model = Model.List.Pager });
         }
