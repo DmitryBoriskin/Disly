@@ -27,7 +27,9 @@ namespace Disly.Areas.Admin.Controllers
             {
                 Account = AccountInfo,
                 Settings = SettingsInfo,
-                UserResolution = UserResolutionInfo
+                UserResolution = UserResolutionInfo,
+                ControllerName = ControllerName,
+                ActionName = ActionName
             };
 
             #region Метатеги

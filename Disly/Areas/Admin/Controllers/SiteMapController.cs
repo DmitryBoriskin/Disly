@@ -33,6 +33,8 @@ namespace Disly.Areas.Admin.Controllers
                 Account = AccountInfo,
                 Settings = SettingsInfo,
                 UserResolution = UserResolutionInfo,
+                ControllerName = ControllerName,
+                ActionName = ActionName,
                 FrontSectionList = _cmsRepository.getSiteMapFrontSectionList(),
                 MenuTypes = _cmsRepository.getSiteMapMenuTypes()
             };

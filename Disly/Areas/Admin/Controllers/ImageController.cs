@@ -18,7 +18,6 @@ namespace Disly.Areas.Admin.Controllers
                 DomainName = Domain,
                 Account = AccountInfo,
                 Settings = SettingsInfo,
-
                 AccountLog = _cmsRepository.getCmsUserLog(AccountInfo.id)
             };
 
