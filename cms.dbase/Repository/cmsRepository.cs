@@ -3412,7 +3412,7 @@ namespace cms.dbase
                         .Value(v => v.id, id)
                         .Value(v => v.f_site, item.Site)
                         .Value(v => v.c_title, item.Title)
-                        .Value(v => v.c_photo, item.Photo.Url)
+                        .Value(v => v.c_photo, item.Photo != null ? item.Photo.Url : null)
                         .Value(v => v.c_url, item.Url)
                         .Value(v => v.c_text, item.Text)
                         .Value(v => v.d_date, item.Date)
