@@ -71,7 +71,7 @@ namespace Disly.Areas.Admin.Controllers
         /// <param name="parent">Родительский идентификатор</param>
         /// <returns></returns>
         [HttpGet]
-        public ActionResult Item(Guid id, Guid? parent)
+        public ActionResult Item(Guid id)
         {
             // текущий элемент карты сайта
             model.Item = _cmsRepository.getSiteMapItem(id);
@@ -81,7 +81,7 @@ namespace Disly.Areas.Admin.Controllers
             if (model.Item != null)
                 model.Item.MenuGroups = null;
 
-            Guid? _parent = (parent.Equals(null) && model.Item != null) ? model.Item.ParentId : parent;
+            Guid? _parent = (string.IsNullOrEmpty(Request.QueryString["parent"]) && model.Item != null) ? model.Item.ParentId : Guid.Parse(Request.QueryString["parent"]);
 
             // хлебные крошки
             model.BreadCrumbs = _cmsRepository.getSiteMapBreadCrumbs(_parent);
@@ -102,13 +102,13 @@ namespace Disly.Areas.Admin.Controllers
         [HttpPost]
         [ValidateInput(false)]
         [MultiButton(MatchFormKey = "action", MatchFormValue = "save-btn")]
-        public ActionResult Item(Guid id, Guid? parent, SiteMapViewModel back_model)
+        public ActionResult Item(Guid id, SiteMapViewModel back_model)
         {
             ErrorMassege userMessage = new ErrorMassege();
             userMessage.title = "Информация";
 
             #region Данные необходимые для сохранения
-            back_model.Item.ParentId = back_model.Item.ParentId != null ? back_model.Item.ParentId : parent; // родительский id
+            back_model.Item.ParentId = back_model.Item.ParentId != null ? back_model.Item.ParentId : Guid.Parse(Request.Form["Item_ParentId"]); // родительский id
 
             var p = back_model.Item.ParentId != null ? _cmsRepository.getSiteMapItem((Guid)back_model.Item.ParentId) : null;
 
@@ -127,7 +127,7 @@ namespace Disly.Areas.Admin.Controllers
             }
 
             // хлебные крошки
-            model.BreadCrumbs = _cmsRepository.getSiteMapBreadCrumbs(parent);
+            model.BreadCrumbs = _cmsRepository.getSiteMapBreadCrumbs(back_model.Item.ParentId);
 
             // список дочерних элементов
             model.Childrens = _cmsRepository.getSiteMapChildrens(id);
@@ -181,12 +181,12 @@ namespace Disly.Areas.Admin.Controllers
         /// <returns></returns>
         [HttpPost]
         [MultiButton(MatchFormKey = "action", MatchFormValue = "cancel-btn")]
-        public ActionResult Cancel(Guid id, Guid? parent)
+        public ActionResult Cancel(Guid id)
         {
             var p = _cmsRepository.getSiteMapItem(id);
-
+            
             // получим родительский элемент для перехода
-            var _parent = (parent.Equals(null) && p != null) ? p.ParentId : parent;
+            var _parent = (string.IsNullOrEmpty(Request.Form["Item_ParentId"]) && p != null) ? p.ParentId : Guid.Parse(Request.Form["Item_ParentId"]);
 
             if (_parent != null)
             {

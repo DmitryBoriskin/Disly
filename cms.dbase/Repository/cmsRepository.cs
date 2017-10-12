@@ -2817,16 +2817,18 @@ namespace cms.dbase
                         {
                             Guid menuId = Guid.Parse(m);
 
-                            int _maxSortMenu = db.content_sitemap_menutypess
+                            var _maxSortMenu = db.content_sitemap_menutypess
                                 .Where(w => w.f_site.Equals(item.Site))
                                 .Where(w => w.f_menutype.Equals(menuId))
-                                .Select(s => s.n_sort).Max();
+                                .Select(s => s.n_sort);
 
+                            int mS = _maxSortMenu.Any() ? _maxSortMenu.Max() : 0;
+                            
                             var menu = db.content_sitemap_menutypess
                                 .Value(p => p.f_sitemap, id)
                                 .Value(p => p.f_menutype, menuId)
                                 .Value(p => p.f_site, item.Site)
-                                .Value(p => p.n_sort, _maxSortMenu + 1)
+                                .Value(p => p.n_sort, mS)
                                 .Insert();
                         }
                     }
@@ -3270,6 +3272,8 @@ namespace cms.dbase
                         Title = s.c_title,
                         Sort = s.n_sort,
                         Disabled = s.b_disabled,
+                        Width = s.n_width,
+                        Height = s.n_height,
                         CountBanners = getCountBannersBySectionAndDomain(s.id, domain),
                         BannerList = getBanners(id, domain, filter)
                     });
@@ -3310,7 +3314,7 @@ namespace cms.dbase
                     .Where(w => w.f_site == domain)
                     .Where(w => w.f_section == section);
 
-                if (query.Any())
+                if (query.Any() && filter != null)
                 {
                     int itemCount = query.Count();
                     var list = query
@@ -3319,13 +3323,16 @@ namespace cms.dbase
                         Id = s.id,
                         Site = s.f_site,
                         Title = s.c_title,
-                        Photo = s.c_photo,
                         Url = s.c_url,
                         Text = s.c_text,
                         Date = s.d_date,
                         Sort = s.n_sort,
                         Disabled = s.b_disabled,
-                        Section = s.f_section
+                        Section = s.f_section,
+                        Photo = new Photo
+                        {
+                            Url = s.c_photo
+                        }
                     }).Skip(filter.Size * (filter.Page - 1)).Take(filter.Size);
 
                     var bannerList = list.OrderBy(o => o.Sort).ToArray();
@@ -3363,13 +3370,16 @@ namespace cms.dbase
                         Id = s.id,
                         Site = s.f_site,
                         Title = s.c_title,
-                        Photo = s.c_photo,
                         Url = s.c_url,
                         Text = s.c_text,
                         Date = s.d_date,
                         Sort = s.n_sort,
                         Disabled = s.b_disabled,
-                        Section = s.f_section
+                        Section = s.f_section,
+                        Photo = new Photo
+                        {
+                            Url = s.c_photo
+                        }
                     });
                 if (!query.Any()) return null;
                 else { return query.FirstOrDefault(); }
@@ -3416,7 +3426,7 @@ namespace cms.dbase
                         .Value(v => v.id, id)
                         .Value(v => v.f_site, item.Site)
                         .Value(v => v.c_title, item.Title)
-                        .Value(v => v.c_photo, item.Photo)
+                        .Value(v => v.c_photo, item.Photo != null ? item.Photo.Url : null)
                         .Value(v => v.c_url, item.Url)
                         .Value(v => v.c_text, item.Text)
                         .Value(v => v.d_date, item.Date)
@@ -3452,9 +3462,11 @@ namespace cms.dbase
                 {
                     var oldRecord = query.FirstOrDefault();
 
+                    string img = item.Photo == null ? oldRecord.c_photo : item.Photo.Url;
+
                     query
                         .Set(s => s.c_title, item.Title)
-                        .Set(s => s.c_photo, item.Photo)
+                        .Set(s => s.c_photo, img)
                         .Set(s => s.c_url, item.Url)
                         .Set(s => s.c_text, item.Text)
                         .Set(s => s.d_date, item.Date)
@@ -3487,10 +3499,12 @@ namespace cms.dbase
 
                 if (query.Any())
                 {
+                    string title = query.Select(s => s.c_title).FirstOrDefault();
+
                     db.content_bannerss.Where(w => w.id.Equals(id)).Delete();
                     
                     // логирование
-                    insertLog(userId, IP, "delete", id, string.Empty, "Banners", query.Select(s => s.c_title).FirstOrDefault());
+                    insertLog(userId, IP, "delete", id, string.Empty, "Banners", title);
 
                     return true;
                 }
