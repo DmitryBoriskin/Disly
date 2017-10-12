@@ -3485,10 +3485,12 @@ namespace cms.dbase
 
                 if (query.Any())
                 {
+                    string title = query.Select(s => s.c_title).FirstOrDefault();
+
                     db.content_bannerss.Where(w => w.id.Equals(id)).Delete();
                     
                     // логирование
-                    insertLog(userId, IP, "delete", id, string.Empty, "Banners", query.Select(s => s.c_title).FirstOrDefault());
+                    insertLog(userId, IP, "delete", id, string.Empty, "Banners", title);
 
                     return true;
                 }
