@@ -2,6 +2,8 @@
 using Disly.Areas.Admin.Models;
 using System;
 using System.Web;
+using cms.dbModel.entity;
+using System.IO;
 
 namespace Disly.Areas.Admin.Controllers
 {
@@ -13,8 +15,8 @@ namespace Disly.Areas.Admin.Controllers
         // Фильтр
         private FilterParams filter;
 
-        // Кол-во эл-тов на странице 10
-        int pageSize = 10;
+        // Кол-во эл-тов на странице 100
+        int pageSize = 100;
 
         /// <summary>
         /// Обрабатывается до вызова экшенов
@@ -73,6 +75,17 @@ namespace Disly.Areas.Admin.Controllers
         public ActionResult Item(Guid id)
         {
             model.Item = _cmsRepository.getBanner(id);
+
+            // файл изображения
+            if (model.Item != null)
+            {
+                var photo = model.Item.Photo;
+                if (!string.IsNullOrEmpty(photo.Url))
+                {
+                    model.Item.Photo = getInfoPhoto(photo.Url);
+                }
+            }
+
             return View(model);
         }
 
@@ -82,19 +95,41 @@ namespace Disly.Areas.Admin.Controllers
         [HttpPost]
         [ValidateInput(false)]
         [MultiButton(MatchFormKey = "action", MatchFormValue = "save-btn")]
-        public ActionResult Item(Guid id, Guid? section, BannersViewModel back_model, HttpPostedFileBase upload)
+        public ActionResult Item(Guid id, BannersViewModel back_model, HttpPostedFileBase upload)
         {
             ErrorMassege userMessage = new ErrorMassege();
             userMessage.title = "Информация";
 
             #region Данные, необходимые для сохранения
-            back_model.Item.Section = back_model.Item.Section != null ? back_model.Item.Section : (Guid)section;
+            back_model.Item.Section = back_model.Item.Section != null ? back_model.Item.Section : Guid.Parse(Request.Form["Item_Section"]);
             back_model.Item.Site = Domain;
             #endregion
 
             if (ModelState.IsValid)
             {
-                //string savePath = 
+                #region Сохранение изображения
+                // путь для сохранения изображения
+                string savePath = Settings.UserFiles + Domain + Settings.BannersDir;
+
+                // секция
+                var _section = _cmsRepository.getBannerSection((Guid)back_model.Item.Section, Domain, null);
+                int width = _section.Width; // ширина
+                int height = _section.Height; // высота
+
+                if (upload != null && upload.ContentLength > 0)
+                {
+                    string fileExtension = upload.FileName.Substring(upload.FileName.IndexOf("."));
+
+                    Photo photoNew = new Photo()
+                    {
+                        Name = id.ToString() + fileExtension,
+                        Size = Files.FileAnliz.SizeFromUpload(upload),
+                        Url = Files.SaveImageResizeRename(upload, savePath, id.ToString(), width, height)
+                    };
+
+                    back_model.Item.Photo = photoNew;
+                }
+                #endregion
 
                 if (!_cmsRepository.checkBannerExist(id))
                 {
@@ -125,6 +160,12 @@ namespace Disly.Areas.Admin.Controllers
 
             model.Item = _cmsRepository.getBanner(id);
 
+            var photo = model.Item.Photo;
+            if (!string.IsNullOrEmpty(photo.Url))
+            {
+                model.Item.Photo = getInfoPhoto(photo.Url);
+            }
+
             return View(model);
         }
 
@@ -139,7 +180,8 @@ namespace Disly.Areas.Admin.Controllers
         public ActionResult Cancel(Guid id, Guid? section)
         {
             model.Item = _cmsRepository.getBanner(id);
-            var _section = (section.Equals(null) && model.Item != null) ? model.Item.Section : section;
+            var _section = model.Item != null ? model.Item.Section : Guid.Parse(Request.Form["Item_Section"]);
+            //var _section = (section.Equals(null) && model.Item != null) ? model.Item.Section : section;
 
             if (_section != null)
             {
@@ -160,6 +202,10 @@ namespace Disly.Areas.Admin.Controllers
             model.Item = _cmsRepository.getBanner(id);
 
             _cmsRepository.deleteBanner(id, AccountInfo.id, RequestUserInfo.IP);
+
+            // удаляем файл изображения
+            if (System.IO.File.Exists(Server.MapPath(model.Item.Photo.Url)))
+                System.IO.File.Delete(Server.MapPath(model.Item.Photo.Url));
 
             // записываем информацию о результатах
             ErrorMassege userMassege = new ErrorMassege();

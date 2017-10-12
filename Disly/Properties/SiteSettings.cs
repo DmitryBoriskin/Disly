@@ -8,8 +8,9 @@ public class Settings
 
     public static string SiteTitle = ConfigurationManager.AppSettings["SiteTitle"];
     public static string SiteDesc = ConfigurationManager.AppSettings["SiteDesc"];
-    public static string UserFiles = ConfigurationManager.AppSettings["UserFiles"];
     public static string BaseURL = ConfigurationManager.AppSettings["BaseURL"];
+    public static string UserFiles = ConfigurationManager.AppSettings["UserFiles"];
+    public static string BannersDir = ConfigurationManager.AppSettings["BannersDir"];
     //public static string BaseAdminURL = ConfigurationManager.AppSettings["BaseAdminURL"];
 
     //public static string AdminCooke = ConfigurationManager.AppSettings["AdminCooke"];

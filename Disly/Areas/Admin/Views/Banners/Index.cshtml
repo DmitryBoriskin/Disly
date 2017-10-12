@@ -58,7 +58,7 @@
                     <div class="sort_parent" data-service="/admin/services/changepermit?group=banners">
                         @foreach (var item in Model.SectionItem.BannerList.Data)
                         {
-                            string imgUrl = (!string.IsNullOrEmpty(item.Photo) && File.Exists(Server.MapPath(item.Photo))) ? item.Photo : "/Content/img/nophoto.jpg";
+                            string imgUrl = (!string.IsNullOrEmpty(item.Photo.Url) && File.Exists(Server.MapPath(item.Photo.Url))) ? item.Photo.Url : "/Content/img/nophoto.jpg";
                             string disabled = (item.Disabled) ? "disabled" : string.Empty;
 
                             <div class="row list-item ui-sortable-handle @disabled" data-id="@item.Id">
@@ -68,7 +68,7 @@
                                     </div>
                                     <div class="li-image">
                                         <a href="/admin/banners/item/@item.Id">
-                                            <img src="@imgUrl" alt="@item.Title" />
+                                            <img class="list_img_preview" src="@imgUrl" alt="@item.Title" />
                                         </a>
                                     </div>
                                 </div>
@@ -90,7 +90,7 @@
                         }
                     </div>
                 </div>
-                Html.RenderAction("Pager", "Templates", new { @Model = Model.SectionItem.BannerList.Pager });
+                //Html.RenderAction("Pager", "Templates", new { @Model = Model.SectionItem.BannerList.Pager });
             }
             else
             {

@@ -1,4 +1,7 @@
 ﻿@model SiteMapViewModel
+@{ 
+    string parent = Request.Params["parent"] != null ? Request.Params["parent"] : Model.Item.ParentId.ToString();
+}
 
 @using (Html.BeginForm("Item", "SiteMap", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
@@ -11,6 +14,7 @@
             @Html.TextBoxFor(m => m.Item.Alias, new { @title = "Алиас" })
             @Html.TextBoxFor(m => m.Item.Url, new { @title = "Ссылка" })
             @Html.HiddenFor(m => m.Item.ParentId)
+            @Html.Hidden("Item_ParentId", parent)
 
             <div class="group-block" title="Текст">
                 @Html.TextAreaFor(m => m.Item.Text, new { @type = "editor", @height = "300" })

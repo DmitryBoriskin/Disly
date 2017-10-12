@@ -10,6 +10,7 @@ using System.Linq;
 using System.Collections.Specialized;
 using System.Text.RegularExpressions;
 using System.Web;
+using System.IO;
 
 namespace Disly.Areas.Admin.Controllers
 {
@@ -167,6 +168,21 @@ namespace Disly.Areas.Admin.Controllers
             }
 
             return result;
+        }
+
+        /// <summary>
+        /// Получаем параметры изображения
+        /// </summary>
+        /// <param name="url">Ссылка на файл</param>
+        /// <returns></returns>
+        protected Photo getInfoPhoto(string url)
+        {
+            return new Photo
+            {
+                Name = Path.GetFileName(Server.MapPath(url)),
+                Size = Files.FileAnliz.Size(url),
+                Url = url
+            };
         }
 
         [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = true)]

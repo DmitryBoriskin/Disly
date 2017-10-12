@@ -71,6 +71,7 @@
     </Compile>
     <Compile Include="entity\cms\MaterialsModel.cs" />
     <Compile Include="entity\FilterParams.cs" />
+    <Compile Include="entity\Photo.cs" />
     <Compile Include="entity\SettingsModel.cs">
       <SubType>Code</SubType>
     </Compile>

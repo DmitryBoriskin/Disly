@@ -27,9 +27,9 @@ namespace cms.dbModel.entity.cms
         public string Title { get; set; }
 
         /// <summary>
-        /// Изображени
+        /// Изображение
         /// </summary>
-        public string Photo { get; set; }
+        public Photo Photo { get; set; }
 
         /// <summary>
         /// Ссылка

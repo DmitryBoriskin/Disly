@@ -1,3 +1,4 @@
+using cms.dbModel.entity;
 using Disly.Areas.Admin.Service;
 using System;
 using System.Drawing;
@@ -39,6 +40,30 @@ public class Files
 
         return Path + imageName + extension;
     }
+
+    public static string SaveImageResizeRename(HttpPostedFileBase hpf, string Path, string Name, int FinWidth, int FinHeight)
+    {
+        ImageCodecInfo myImageCodecInfo = GetEncoderInfo("image/jpeg");
+        EncoderParameters myEncoderParameters = new EncoderParameters(1);
+        myEncoderParameters.Param[0] = new EncoderParameter(Encoder.Quality, 100L);
+
+        Bitmap _File = (Bitmap)Bitmap.FromStream(hpf.InputStream);
+        if (!(FinWidth == 0 && FinHeight == 0))
+            _File = Imaging.Resize(_File, FinWidth, FinHeight, "top", "left");
+        
+        if (!Directory.Exists(Path)) { Directory.CreateDirectory(HttpContext.Current.Server.MapPath(Path)); }
+        
+        string extension = hpf.FileName.Substring(hpf.FileName.IndexOf("."));
+        string filePath = HttpContext.Current.Server.MapPath(Path + Name + extension);
+
+        if (File.Exists(filePath))
+            File.Delete(filePath);
+        _File.Save(filePath, myImageCodecInfo, myEncoderParameters);
+        _File.Dispose();
+
+        return Path + Name + extension;
+    }
+
     public static string SaveImageResizeProp(HttpPostedFileBase hpf, string Path, int maxWidth, int maxHeight)
     {
         string filePath = string.Empty;
@@ -129,14 +154,47 @@ public class Files
             {
                 //FileSize = FileSize;
                 //FileSizeName = FileSizeName;
-        }
+            }
             else if (FileSize <= 1048576)
             {
                 FileSize = Convert.ToInt32(Convert.ToDouble(_File.Length) / 1024); FileSizeName = "kb";
-    }
+            }
             else
             {
                 FileSize = Convert.ToInt32(Convert.ToDouble(_File.Length) / 1024);
+                FileSize = Convert.ToInt32(Convert.ToDouble(FileSize) / 1024);
+
+                FileSizeName = "mb";
+            }
+            Resalt = FileSize.ToString() + " " + FileSizeName;
+
+            return Resalt;
+        }
+
+        /// <summary>
+        /// Определяет размер файла у переданного файла
+        /// </summary>
+        /// <param name="file"></param>
+        /// <returns></returns>
+        public static string SizeFromUpload(HttpPostedFileBase file)
+        {
+            string Resalt = String.Empty;
+
+            int FileSize = Convert.ToInt32(file.ContentLength.ToString());
+            string FileSizeName = "byte";
+
+            if (FileSize < 1024)
+            {
+                //FileSize = FileSize;
+                //FileSizeName = FileSizeName;
+            }
+            else if (FileSize <= 1048576)
+            {
+                FileSize = Convert.ToInt32(Convert.ToDouble(file.ContentLength) / 1024); FileSizeName = "kb";
+            }
+            else
+            {
+                FileSize = Convert.ToInt32(Convert.ToDouble(file.ContentLength) / 1024);
                 FileSize = Convert.ToInt32(Convert.ToDouble(FileSize) / 1024);
 
                 FileSizeName = "mb";
@@ -160,8 +218,6 @@ public class Files
 
             return Resalt;
         }
-
-
     }
 
     private static ImageCodecInfo GetEncoderInfo(String mimeType)

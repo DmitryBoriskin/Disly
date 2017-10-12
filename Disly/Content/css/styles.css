@@ -1019,3 +1019,6 @@ a.button.icon-cancel{
 .del_domain:hover{text-decoration:none;}
 .del_domain:before{content:'\ec5b';font-family:fontello;color:red;}
 .del_domain:hover:before{color:#c50505;}
+
+/*banners*/
+.list_img_preview{width:145px;}
