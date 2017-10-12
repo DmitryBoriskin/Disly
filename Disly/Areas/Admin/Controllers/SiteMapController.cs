@@ -16,10 +16,7 @@ namespace Disly.Areas.Admin.Controllers
 
         // Кол-во элементов на странице
         int pageSize = 100;
-
-        // Доменное имя сайта
-        private string domain;
-
+        
         /// <summary>
         /// Обрабатывается до вызыва экшена
         /// </summary>
@@ -40,15 +37,6 @@ namespace Disly.Areas.Admin.Controllers
                 MenuTypes = _cmsRepository.getSiteMapMenuTypes()
             };
 
-            string _domain = HttpContext.Request.Url.Host.ToString().ToLower().Replace("www.", "").Replace("new.", "");
-
-            try { domain = _cmsRepository.getSiteId(_domain); }
-            catch
-            {
-                if (_domain != ConfigurationManager.AppSettings["BaseURL"]) filterContext.Result = Redirect("/Error/");
-                else domain = String.Empty;
-            }
-
             #region Метатеги
             ViewBag.Title = UserResolutionInfo.Title;
             ViewBag.Description = "";
@@ -67,7 +55,7 @@ namespace Disly.Areas.Admin.Controllers
             filter = getFilter(pageSize);
 
             // Наполняем модель списка данными
-            model.List = _cmsRepository.getSiteMapList(domain, filter);
+            model.List = _cmsRepository.getSiteMapList(Domain, filter);
 
             ViewBag.Group = filter.Group;
 
@@ -125,7 +113,7 @@ namespace Disly.Areas.Admin.Controllers
             back_model.Item.Path = p == null ? "/" :
                 p.Path.Equals("/") ? p.Path + p.Alias : p.Path + "/" + p.Alias;
 
-            back_model.Item.Site = domain;
+            back_model.Item.Site = Domain;
 
             if (String.IsNullOrEmpty(back_model.Item.Alias))
             {

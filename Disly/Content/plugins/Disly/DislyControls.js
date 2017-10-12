@@ -284,7 +284,6 @@
     })
 
     $(document).on('click.bs.inputFile', '.preview_del', function (e) {
-        //var $file = $(this).parent().parent().parent().parent().parent().find('input:file')
         var $file = $(this).parents('.fileupload').find('input:file');
 
         $file.removeAttr('data-url');
@@ -312,6 +311,7 @@
         }
 
         $(this).attr('data-name', fileName);
+        $(this).attr('name', 'upload');
         $(this).siblings('.preview').remove();
         $(this).DislyFile('create');
     })

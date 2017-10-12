@@ -708,7 +708,8 @@ a.tree-btn.new:before {
 
 
 /* Сортировка */
-.sort_list.sort_list_on table{    border: 2px dashed #006bb3!important;}
+.sort_list.sort_list_on table,
+.sort_list.sort_list_on .sort_parent{    border: 2px dashed #006bb3!important;}
 .sort_list.sort_list_on .sortable{border-left:inherit;}
 .sortable {
     margin-bottom: 15px;
@@ -780,6 +781,9 @@ a.button:hover {
 }
 a.button  {
     float: none;
+}
+a.button.icon-cancel{
+    float:left !important;
 }
 .button.green {
     background: #00baa4;
@@ -938,7 +942,7 @@ a.button  {
 }
 
 /* Иконки вложенностей */
-h3.nesting_title{
+.nesting_title{
     font-weight:300 !important;
     margin-top:12px;
 }

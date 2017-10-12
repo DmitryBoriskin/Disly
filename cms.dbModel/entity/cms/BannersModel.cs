@@ -17,6 +17,11 @@ namespace cms.dbModel.entity.cms
         public Guid Id { get; set; }
 
         /// <summary>
+        /// Сайт
+        /// </summary>
+        public string Site { get; set; }
+
+        /// <summary>
         /// Название
         /// </summary>
         public string Title { get; set; }
@@ -32,12 +37,17 @@ namespace cms.dbModel.entity.cms
         public string Url { get; set; }
 
         /// <summary>
+        /// Текст
+        /// </summary>
+        public string Text { get; set; }
+
+        /// <summary>
         /// Дата
         /// </summary>
         public DateTime Date { get; set; }
 
         /// <summary>
-        /// Порядок
+        /// Порядок сортировки
         /// </summary>
         public int Sort { get; set; }
 
@@ -45,5 +55,72 @@ namespace cms.dbModel.entity.cms
         /// Флаг запрещённости эл-та
         /// </summary>
         public bool Disabled { get; set; }
+
+        /// <summary>
+        /// Секция
+        /// </summary>
+        public Guid? Section { get; set; }
+    }
+
+    /// <summary>
+    /// Модель, описывающая список баннеров
+    /// </summary>
+    public class BannersListModel
+    {
+        /// <summary>
+        /// Список баннеров
+        /// </summary>
+        public BannersModel[] Data { get; set; }
+
+        /// <summary>
+        /// Пэйджер
+        /// </summary>
+        public Pager Pager { get; set; }
+    }
+
+    /// <summary>
+    /// Модель, описывающая секции баннеров
+    /// </summary>
+    public class BannersSectionModel
+    {
+        /// <summary>
+        /// Идентификатор
+        /// </summary>
+        public Guid Id { get; set; }
+
+        /// <summary>
+        /// Название
+        /// </summary>
+        public string Title { get; set; }
+
+        /// <summary>
+        /// Порядок сортировки
+        /// </summary>
+        public int Sort { get; set; }
+
+        /// <summary>
+        /// Флаг запрещённости эл-та
+        /// </summary>
+        public bool Disabled { get; set; }
+        
+        /// <summary>
+        /// Кол-во баннеров для данной секции и домена
+        /// </summary>
+        public int CountBanners { get; set; }
+
+        /// <summary>
+        /// Ширина
+        /// </summary>
+        public int Width { get; set; }
+
+        /// <summary>
+        /// Высота
+        /// </summary>
+        public int Height { get; set; }
+
+        /// <summary>
+        /// Список баннеров
+        /// </summary>
+        public BannersListModel BannerList { get; set; }
     }
 }

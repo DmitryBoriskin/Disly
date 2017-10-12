@@ -1,4 +1,5 @@
-﻿using System;
+﻿using cms.dbModel.entity.cms;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,5 +12,19 @@ namespace Disly.Areas.Admin.Models
     /// </summary>
     public class BannersViewModel : CoreViewModel
     {
+        /// <summary>
+        /// Отдельный баннер
+        /// </summary>
+        public BannersModel Item { get; set; }
+
+        /// <summary>
+        /// Одельная секция баннеров
+        /// </summary>
+        public BannersSectionModel SectionItem { get; set; }
+
+        /// <summary>
+        /// Секции баннеров
+        /// </summary>
+        public BannersSectionModel[] Sections { get; set; }
     }
 }

@@ -207,6 +207,13 @@ $(document).ready(function () {
         $('.sort_list').addClass('sort_list_on');
         
         $('.sort_list').find('tbody').addClass('sortable');
+
+        // сортировка для нетабличных записей
+        if ($('.sort_parent').length > 0) {
+            $('.sort_list').find('.sort_parent').addClass('sortable');
+        }
+
+
         $('.sortable').each(function () {
             Sorting_init($(this));
         });
