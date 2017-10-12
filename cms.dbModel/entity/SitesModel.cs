@@ -33,6 +33,7 @@ namespace cms.dbModel.entity
         public string Logo { get; set; }
         public string Scripts { get; set; }
         public Domain[] DomainList { get; set; }
+        public bool SiteOff { get; set; }
     }
 
     public class Domain

@@ -40,34 +40,11 @@ namespace Disly.Areas.Admin.Controllers
         /// <returns></returns>
         public ActionResult Index()
         {
-            // 
+
             string return_url = ViewBag.urlQuery = HttpUtility.UrlDecode(Request.Url.Query);
 
-            #region Получаем значения фильров из адресной строки
-            // если в URL номер страницы равен значению по умолчанию - удаляем его из URL
-            return_url = (Convert.ToInt32(Request.QueryString["page"]) == page) ? addFiltrParam(return_url, "page", String.Empty) : return_url;
-            // записываем в переменную значение "page" из URL
-            page = (Convert.ToInt32(Request.QueryString["page"]) > 0) ? Convert.ToInt32(Request.QueryString["page"]) : page;
-            // если в URL кол-во записей на странице равно значению по умолчанию - удаляем его из URL
-            return_url = (Convert.ToInt32(Request.QueryString["size"]) == page_size) ? addFiltrParam(return_url, "size", String.Empty) : return_url;
-            // записываем в переменную значение "size" из URL
-            page_size = (Convert.ToInt32(Request.QueryString["size"]) > 0) ? Convert.ToInt32(Request.QueryString["size"]) : page_size;
-            // записываем в переменную значение "filter" из URL
-            filter = String.IsNullOrEmpty(Request.QueryString["filter"]) ? String.Empty : Request.QueryString["filter"];
-            // записываем в переменную значение "group" из URL
-            //group = String.IsNullOrEmpty(Request.QueryString["group"]) ? String.Empty : Request.QueryString["group"];
-            // записываем в переменную значение "enabeld" из URL
-            enabeld = String.IsNullOrEmpty(Request.QueryString["enabeld"]);
-            // разделяем значения из переменной "filter" по словам
-            string[] SearchParams = filter.Split(' ');
-
-            // Если парамметры из адресной строки равны значениям по умолчанию - удаляем их из URL
-            if (return_url.ToLower() != HttpUtility.UrlDecode(Request.Url.Query).ToLower())
-                return Redirect(StartUrl + return_url);
-            #endregion
-
-            // Наполняем модель данными
-            model.List = _cmsRepository.getSiteList(SearchParams, page, page_size);
+            FilterParams filter = getFilter();            
+            model.List = _cmsRepository.getSiteList(filter, page, page_size);
 
             return View(model);
         }
@@ -98,7 +75,7 @@ namespace Disly.Areas.Admin.Controllers
                     break;
                 case "event":
                     var data_e = _cmsRepository.getEvent(model.Item.ContentId);
-                    ViewBag.ContentLink = "/admin/Person/item/" + data_e.Id;
+                    ViewBag.ContentLink = "/admin/events/item/" + data_e.Id;
                     ViewBag.ContentType = "события";
                     ViewBag.ContentTitle = data_e.Title;
                     break;
@@ -156,16 +133,14 @@ namespace Disly.Areas.Admin.Controllers
         /// <returns></returns>
         [HttpPost]
         [MultiButton(MatchFormKey = "action", MatchFormValue = "search-btn")]
-        public ActionResult Search(string filter, bool enabeld, string size)
+        public ActionResult Search(string filter, bool disabled, string size)
         {
             string query = HttpUtility.UrlDecode(Request.Url.Query);
-            query = addFiltrParam(query, "filter", filter);
-            if (enabeld) query = addFiltrParam(query, "enabeld", String.Empty);
-            else query = addFiltrParam(query, "enabeld", enabeld.ToString().ToLower());
-
+            query = addFiltrParam(query, "searchtext", filter);
+            if (disabled) query = addFiltrParam(query, "disabled", String.Empty);
+            else query = addFiltrParam(query, "disabled", enabeld.ToString().ToLower());
             query = addFiltrParam(query, "page", String.Empty);
             query = addFiltrParam(query, "size", size);
-
             return Redirect(StartUrl + query);
         }
 
@@ -198,8 +173,6 @@ namespace Disly.Areas.Admin.Controllers
         {
             ErrorMassege userMassege = new ErrorMassege();
             userMassege.title = "Информация";
-
-            
             if (!_cmsRepository.check_Site(Id) && back_model.Item.ContentId == null)
             {
                 ModelState.AddModelError("Name", "Необходимо выбрать тип и контент сайта");
@@ -258,11 +231,46 @@ namespace Disly.Areas.Admin.Controllers
                 model.Item = _cmsRepository.getSite(Id);
                 model.ErrorInfo = userMassege;
 
-                return View("Mater", model);
+                return View("Master", model);
             }
 
             model.Item = _cmsRepository.getSite(Id);
             model.ErrorInfo = userMassege;
+
+
+            #region Данные из адресной строки(для случаев когда сайт создается со страницы того кому создается сайт)
+            FilterParams filter = new FilterParams()
+            {
+                Page = 1,
+                Size = 999999
+            };
+            string OrgType = Request.QueryString["type"];
+            string ContentId = Request.QueryString["contentid"];
+
+            if (!String.IsNullOrEmpty(OrgType))
+            {
+                ViewBag.OrgType = OrgType;
+            }
+            else { }
+            if (!String.IsNullOrEmpty(ContentId))
+            {
+                ViewBag.ContentId = Guid.Parse(ContentId);
+            }
+            #endregion
+            #region данные для выпадающих списков
+            model.TypeList = new SelectList(
+                    new List<SelectListItem>
+                    {
+                        new SelectListItem { Text = "Не выбрано", Value =""},
+                        new SelectListItem { Text = "Организация", Value ="org"},
+                        new SelectListItem { Text = "Врач", Value = "people" },
+                        new SelectListItem { Text = "Событие", Value = "event" }
+                    }, "Value", "Text", OrgType
+                );
+            model.OrgsList = new SelectList(_cmsRepository.getOrgs(filter), "Id", "Title", ContentId);
+            model.PeopleList = new SelectList(_cmsRepository.getPersonList(filter).Data, "Id", "FIO", ContentId);
+            model.EventsList = new SelectList(_cmsRepository.getEventsList(filter).Data, "Id", "Title", ContentId);
+            #endregion
 
             return View("Item", model);
         }

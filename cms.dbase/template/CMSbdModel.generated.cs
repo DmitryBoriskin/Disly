@@ -370,6 +370,7 @@ namespace cms.dbase.models
 		[Column,        Nullable] public Guid?  f_content      { get; set; } // uniqueidentifier
 		[Column,        Nullable] public string c_content_type { get; set; } // varchar(64)
 		[Column,        Nullable] public string c_scripts      { get; set; } // nvarchar(max)
+		[Column,     NotNull    ] public bool   b_site_off     { get; set; } // bit
 
 		#region Associations
 

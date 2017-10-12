@@ -31,7 +31,7 @@ namespace cms.dbModel
         public abstract bool permit_cmsMenu(Guid id, int num, Guid UserId, string IP);
 
         // Все сайты портала
-        public abstract SitesList getSiteList(string[] filtr, int page, int size);
+        public abstract SitesList getSiteList(FilterParams filtr, int page, int size);
         public abstract bool check_Site(Guid id);
         public abstract bool insSite(SitesModel ins, Guid UserId, String IP);
         public abstract bool updSite(Guid id, SitesModel ins, Guid UserId, String IP);

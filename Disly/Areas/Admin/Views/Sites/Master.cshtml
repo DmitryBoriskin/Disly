@@ -16,7 +16,8 @@
         </div>
         <div class="row">
             <div class="col-xs-6">                  
-                @Html.DropDownListFor(m => m.Item.Type, Model.TypeList, new { @title = "Тип сайта", @class = "selectpicker",id="site_type", @value= @ViewBag.OrgType, @required = "" })
+           
+                     @Html.DropDownListFor(m => m.Item.Type, Model.TypeList, new { @title = "Тип сайта", @class = "selectpicker",id="site_type", @value= @ViewBag.OrgType, @required = "" })
             </div>
             <div class="col-xs-6">
                 <div id="contid_wr">

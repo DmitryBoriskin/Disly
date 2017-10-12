@@ -68,8 +68,9 @@ namespace cms.dbase
                         Worktime = s.c_worktime,
                         Logo = s.c_logo,
                         DomainList = getSiteDomains(s.c_alias),
-                        ContentId = (Guid)s.f_content,
-                        Type = s.c_content_type
+                        ContentId=(Guid)s.f_content,
+                        Type=s.c_content_type,
+                        SiteOff= s.b_site_off
                     });
 
                 if (!data.Any()) { return null; }
@@ -407,18 +408,23 @@ namespace cms.dbase
         #endregion
 
         #region Site
-        public override SitesList getSiteList(string[] filtr, int page, int size)
-        {
+        public override SitesList getSiteList(FilterParams filtr, int page, int size)
+        {            
             using (var db = new CMSdb(_context))
             {
                 var query = db.cms_sitess.Where(w => w.c_alias != String.Empty);
-                foreach (string param in filtr)
+                if (filtr.Disabled != null) //в данном случае используется для определения отключенных/включенных сайтов
                 {
-                    if (param != String.Empty)
-                    {
-                        query = query.Where(w => w.c_alias.Contains(param) || w.c_name.Contains(param));
-                    }
+                    if ((bool)filtr.Disabled) {
+                        query = query.Where(w => w.b_site_off == filtr.Disabled);
+                    }                    
                 }
+
+                if (filtr.SearchText != null)
+                {
+                    query = query.Where(w => w.c_name.Contains(filtr.SearchText));
+                }
+            
 
                 query = query.OrderBy(o => new { o.c_name });
 
@@ -431,7 +437,8 @@ namespace cms.dbase
                         {
                             Id = s.id,
                             Title = s.c_name,
-                            Alias = s.c_alias
+                            Alias = s.c_alias,
+                            SiteOff=s.b_site_off
                         }).
                         Skip(size * (page - 1)).
                         Take(size);
@@ -498,6 +505,7 @@ namespace cms.dbase
                         .Set(s => s.c_worktime, upd.Worktime)
                         .Set(s => s.c_logo, upd.Logo)
                         .Set(s => s.c_scripts, upd.Scripts)
+                        .Set(s => s.b_site_off, upd.SiteOff)
                         .Update();
                     //Логирование
                     insertLog(UserId, IP, "update", id, String.Empty, "Sites", upd.Title);

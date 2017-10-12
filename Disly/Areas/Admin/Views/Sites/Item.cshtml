@@ -68,6 +68,7 @@
             @Html.TextBoxFor(m => Model.Item.Site, new { @class = "uc_input", @title = "Адрес сайта", @placeholder = "Адрес сайта", @MaxLength = "128" })
             @Html.TextBoxFor(m => Model.Item.Worktime, new { @class = "uc_input", @title = "Режим работы", @placeholder = "Режим работы", @MaxLength = "512" })
         </div>
+        @Html.CheckBoxFor(m => m.Item.SiteOff, new { @class = "checkbox", @title = "Состояние сайта", @data_toggle = "toggle", @data_off = "Включен", @data_on = "Отключен", @data_onstyle = "danger", @data_offstyle = "success", @data_width = "270" })
         @if (Model.Item != null)
         {            
             @Html.ActionLink("Журнал изменений", "log", "services", new { @id = Model.Item.Id }, new { @id = "LogLists", @class = "button pop-up_frame icon-archive", @data_class = "LogList", @title = "Журнал изменений" })
