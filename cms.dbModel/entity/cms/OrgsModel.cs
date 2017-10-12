@@ -26,6 +26,7 @@ namespace cms.dbModel.entity
         public bool Disabled { get; set; }
         public int Sort { get; set; }
         public StructureModel[] Structure { get; set; }
+        public string SiteId { get; set; }
     }
 
     /// <summary>

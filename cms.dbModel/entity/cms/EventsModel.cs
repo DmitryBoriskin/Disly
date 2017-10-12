@@ -75,5 +75,9 @@ namespace cms.dbModel.entity
         /// 
         /// </summary>
         public bool Disabled { get; set; }
+        /// <summary>
+        /// Ссылка на редактирование сайта. будет заполнено если у события есть сайт
+        /// </summary>
+        public string SiteId { get; set; }        
     }
 }

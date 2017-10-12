@@ -530,6 +530,7 @@ namespace cms.dbase
                 return false;
             }
         }
+        //список доменных имен по алиасу сайта
         public override Domain[] getSiteDomains(string SiteId)
         {
             using (var db = new CMSdb(_context))
@@ -544,6 +545,7 @@ namespace cms.dbase
                 return null;
             }
         }
+
         public override bool insDomain(String SiteId, string NewDomain, Guid UserId, String IP)
         {
             using (var db = new CMSdb(_context))
@@ -580,6 +582,20 @@ namespace cms.dbase
                     return true;
                 }
                 else return false;
+            }
+        }
+        /// <summary>
+        /// Служит для определения идентификатора сайта
+        /// </summary>
+        /// <param name="ContentId">идентификатор контента</param>
+        /// <returns></returns>
+        public override string getIdSite(Guid ContentId)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var data = db.cms_sitess.Where(w => w.f_content == ContentId);
+                if (data.Any()) return data.First().id.ToString();
+                return null;
             }
         }
         #endregion
@@ -1149,15 +1165,13 @@ namespace cms.dbase
                         Annually = s.b_annually,
                         KeyW = s.c_keyw,
                         Desc = s.c_desc,
-                        Disabled = s.b_disabled
+                        Disabled = s.b_disabled,
+                        SiteId = getIdSite(s.id)                        
                     });
-
-
                 if (!data.Any()) { return null; }
                 else { return data.First(); }
             }
         }
-
         public override EventsList getEventsList(FilterParams filtr)
         {
             using (var db = new CMSdb(_context))
@@ -1209,7 +1223,7 @@ namespace cms.dbase
                 return null;
             }
         }
-
+        
         public override bool insertCmsEvent(EventModel eventData)
         {
             try
