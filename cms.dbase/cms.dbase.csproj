@@ -60,6 +60,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Repository\cms\cmsRepository.cs" />
+    <Compile Include="Repository\cms\cmsRepository_Banners.cs" />
     <Compile Include="Repository\cms\cmsRepository_Orgs.cs" />
     <Compile Include="Repository\cms\cmsRepository_SiteMap.cs" />
     <Compile Include="Repository\FrontRepository.cs" />

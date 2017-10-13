@@ -1,16 +1,11 @@
-﻿@{ 
+﻿@{
     Layout = "~/Areas/Admin/Views/Shared/_popUp.cshtml";
 }
 @model SiteMapMenu
 
-<div class="row">
-    <div class="col-xs-4">
-        @Html.TextBoxFor(m => m.Text, new { @class = "uc_input", @title = "Название группы меню" })
-    </div>
-    <div class="col-xs-5">
-        <div id="Buttons" class="ButtonsFrame">
-            <button type="submit" name="action" value="save-group-sitemapmenu" class="button icon-save">Сохранить</button>
-        </div>
-
-    </div>
+<div class="form-group">
+    @Html.LabelFor(m => m.Text, "Название")
+    @Html.TextBoxFor(m => m.Text, new { @class = "form-control", @required = "" })
+    @Html.HiddenFor(m => m.Id)
 </div>
+<button type="submit" name="action" value="save-group-sitemapmenu" class="button icon-save">Сохранить</button>
