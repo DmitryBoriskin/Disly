@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using cms.dbModel.entity.cms;
-using System.Text;
-using System.Threading.Tasks;
 using cms.dbModel;
 using cms.dbModel.entity;
 using cms.dbase.models;
@@ -411,6 +408,28 @@ namespace cms.dbase
         }
 
         /// <summary>
+        /// Получаем единичную запись группы меню
+        /// </summary>
+        /// <returns></returns>
+        public override SiteMapMenu getSiteMapMenu(Guid id)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var query = db.content_sitemap_menuss
+                    .Where(w => w.id.Equals(id))
+                    .Select(s => new SiteMapMenu
+                    {
+                        Id = s.id,
+                        Text = s.c_title,
+                        Sort = s.n_sort
+                    });
+
+                if (!query.Any()) return null;
+                else return query.FirstOrDefault();
+            }
+        }
+
+        /// <summary>
         /// Список доступных типов меню для элемента карты сайта
         /// </summary>
         /// <returns></returns>
@@ -435,26 +454,31 @@ namespace cms.dbase
         /// </summary>
         /// <param name="item">Элемент карты сайта</param>
         /// <returns></returns>
-        public override bool createSiteMapMenu(SiteMapMenu item)
+        public override bool createOrUpdateSiteMapMenu(SiteMapMenu item)
         {
             using (var db = new CMSdb(_context))
             {
                 var query = db.content_sitemap_menuss.Where(w => w.id.Equals(item.Id));
                 if (!query.Any())
                 {
-                    var sortMax = db.content_sitemap_menuss.Select(s => s.n_sort).Max();
+                    var sortMax = db.content_sitemap_menuss.Select(s => s.n_sort);
+
+                    int max = sortMax.Any() ? sortMax.Max() + 1 : 1;
 
                     db.content_sitemap_menuss
-                        .Value(v => v.id, Guid.NewGuid())
                         .Value(v => v.c_title, item.Text)
-                        .Value(v => v.n_sort, sortMax + 1)
+                        .Value(v => v.n_sort, max)
                         .Insert();
 
                     return true;
                 }
                 else
                 {
-                    return false;
+                    db.content_sitemap_menuss
+                        .Where(w => w.id.Equals(item.Id))
+                        .Set(u => u.c_title, item.Text)
+                        .Update();
+                    return true;
                 }
             }
         }

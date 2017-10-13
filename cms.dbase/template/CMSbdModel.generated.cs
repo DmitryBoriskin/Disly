@@ -907,6 +907,7 @@ namespace cms.dbase.models
 		[Column,        Nullable] public double? n_geopoint_y      { get; set; } // float
 		[Column,        Nullable] public string  c_adress          { get; set; } // nvarchar(512)
 		[Column,     NotNull    ] public int     n_sort            { get; set; } // int
+		[Column,        Nullable] public string  f_frmp            { get; set; } // varchar(64)
 
 		#region Associations
 
@@ -1251,16 +1252,16 @@ namespace cms.dbase.models
 		public front_page_views sitefrontsectionpageviews { get; set; }
 
 		/// <summary>
-		/// FK_site_front_section
-		/// </summary>
-		[Association(ThisKey="f_site", OtherKey="c_alias", CanBeNull=false, KeyName="FK_site_front_section", BackReferenceName="sitefrontsections")]
-		public cms_sites sitefrontsection { get; set; }
-
-		/// <summary>
 		/// FK_front_section_site
 		/// </summary>
 		[Association(ThisKey="f_front_section", OtherKey="c_alias", CanBeNull=false, KeyName="FK_front_section_site", BackReferenceName="frontsectionsites")]
 		public front_section frontsectionsite { get; set; }
+
+		/// <summary>
+		/// FK_site_front_section
+		/// </summary>
+		[Association(ThisKey="f_site", OtherKey="c_alias", CanBeNull=false, KeyName="FK_site_front_section", BackReferenceName="sitefrontsections")]
+		public cms_sites sitefrontsection { get; set; }
 
 		#endregion
 	}

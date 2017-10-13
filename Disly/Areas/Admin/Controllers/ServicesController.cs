@@ -232,7 +232,20 @@ namespace Disly.Areas.Admin.Controllers
         {
             SiteMapMenu model = new SiteMapMenu();
 
+            if (!string.IsNullOrEmpty(id))
+                model = _cmsRepository.getSiteMapMenu(Guid.Parse(id));
+
             return PartialView("SiteMapMenuGroup", model);
+        }
+
+        [HttpPost]
+        [MultiButton(MatchFormKey = "action", MatchFormValue = "save-group-sitemapmenu")]
+        public ActionResult SitemapMenu(SiteMapMenu model)
+        {
+            if (ModelState.IsValid)
+                _cmsRepository.createOrUpdateSiteMapMenu(model);
+
+            return Redirect("/admin/sitemap");
         }
         #endregion
 
