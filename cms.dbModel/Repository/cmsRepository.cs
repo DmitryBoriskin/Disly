@@ -1,7 +1,6 @@
 ﻿using cms.dbModel.entity;
 using cms.dbModel.entity.cms;
 using System;
-using System.Collections.Generic;
 
 namespace cms.dbModel
 {
@@ -118,6 +117,9 @@ namespace cms.dbModel
         public abstract bool insDepartament(Guid id, Guid Structure, Departments insert, Guid UserId, String IP);
         public abstract bool updDepartament(Guid id,  Departments update, Guid UserId, String IP);
         public abstract bool delDepartament(Guid id, Guid UserId, String IP);
+        public abstract People[] getPersonsThisDepartment(Guid idStructure);
+        public abstract bool insPersonsThisDepartment(Guid idDepart, Guid IdLinkPeopleForOrg, string status, string post);
+        public abstract bool delPersonsThisDepartment(Guid idDep, Guid idPeople);
         //Feedbacks
         public abstract FeedbacksList getFeedbacksList(FilterParams filtr);
         public abstract FeedbackModel getFeedback(Guid id);

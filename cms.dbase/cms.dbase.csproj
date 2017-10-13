@@ -51,6 +51,7 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Net.Http" />
+    <Reference Include="System.Web.Mvc, Version=4.0.0.1, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -59,6 +60,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Repository\cms\cmsRepository.cs" />
+    <Compile Include="Repository\cms\cmsRepository_Orgs.cs" />
     <Compile Include="Repository\cms\cmsRepository_SiteMap.cs" />
     <Compile Include="Repository\FrontRepository.cs" />
     <Compile Include="Repository\AccountRepository.cs" />

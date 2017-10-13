@@ -1,4 +1,8 @@
 ﻿@model OrgsViewModel
+@{
+    string strucid = Request.Params["strucid"] != null ? Request.Params["strucid"] : ViewBag.StrucId;
+}
+
 @{ 
     SelectList PeopleList = null;
     if (Model.DepartmentItem != null)
@@ -16,6 +20,7 @@
     <div class="content">
         <h1>@ViewBag.Title</h1>
         @Html.Partial("part/bread")
+        @Html.Hidden("strucid", strucid)
         @Html.TextBoxFor(m => m.DepartmentItem.Title, new { required = "", type = "text", maxlength = "256", title = "Название отделения" })                       
         <div class="group-block open" title="Адрес">
             @if (Model.DepartmentItem != null)
@@ -59,12 +64,39 @@
         </div>
         @if (Model.DepartmentItem != null)
         {
+            
             <div class="child-list">
                 <div class="child-list_head">
                     <div class="row">
-                        <div class="col-lg-8"><h1>Врачи отделения</h1></div>
-                        <div class="col-lg-4 text-right"><a class="button icon-create green pull-right" href="#">Добавить</a></div>
+                        <div class="col-lg-12"><h1>Врачи отделения</h1></div>
+                        @*<div class="col-lg-4 text-right"><a class="button icon-create green pull-right" href="#">Добавить</a></div>*@
                     </div>
+                    @if (Model.PeopleList != null)
+                    {
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <h5>Добавить врача в отделение</h5>
+                            </div>
+                            <div class="col-md-4">
+                                @Html.DropDownList("s_people", Model.PeopleList, new { @title = "Выберите врача", @class = "selectpicker", @data_live_search = "true" })
+                            </div>
+                            <div class="col-md-3">
+                                @Html.DropDownList("s_people_status", Model.PeopleLStatus, new { @title = "Статус", @class = "selectpicker" })
+                            </div>
+                            <div class="col-md-3">
+                                <input type="text" title="Должность" name="s_people_post" />
+                            </div>
+                            <div class="col-md-2 ">
+                                <button style="margin-top: 27px; margin-right:0; padding:7px 20px 7px 9px;" class="button icon-create green pull-right" type="submit" name="action" value="add-new-people-depart">Добавить</button>
+                            </div>
+
+                        </div>
+                    }
+                    else
+                    {
+                        <p>Не существует персон, которых можно добавить к данной организации.</p>
+                    }
+
                 </div>
             </div>
             <div class="sort_list">
@@ -81,6 +113,9 @@
                                 <td class="map_site_icon"></td>
                                 <td>
                                     <a href="@item.Id">@item.FIO</a>
+                                </td>
+                                <td class="text-right">
+                                    <a class="del_icon del_people_for_dep" data-dep="@Model.DepartmentItem.Id" data-people="@item.Id" ></a>
                                 </td>
                             </tr>
                         }

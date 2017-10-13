@@ -9,7 +9,7 @@ namespace cms.dbModel.entity
     public class OrgsModel
     {        
         public Guid Id { get; set; }
-        [Required(ErrorMessage = "Поле «Название организации» не должно быть пустым.")]
+        //[Required(ErrorMessage = "Поле «Название организации» не должно быть пустым.")]
         public string Title { get; set; }
         public string ShortTitle { get; set; }
         public string Logo { get; set; }
@@ -27,6 +27,7 @@ namespace cms.dbModel.entity
         public int Sort { get; set; }
         public StructureModel[] Structure { get; set; }
         public string SiteId { get; set; }
+        public string Frmp { get; set; }
     }
 
     /// <summary>
@@ -92,7 +93,8 @@ namespace cms.dbModel.entity
     {
         [Required]
         public Guid Id { get; set; }
-        public string FIO { get; set; }        
+        public string FIO { get; set; }
+        public Guid IdLinkOrg { get; set; }
     }
     
 

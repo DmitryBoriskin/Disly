@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc;
 
 namespace Disly.Areas.Admin.Models
 {
@@ -14,5 +15,7 @@ namespace Disly.Areas.Admin.Models
         public Departments DepartmentItem { get; set; }
 
         public BreadCrumb[] BreadCrumbOrg { get; set; }
+        public SelectList PeopleList { get; set; }
+        public SelectList PeopleLStatus { get; set; }
     }
 }

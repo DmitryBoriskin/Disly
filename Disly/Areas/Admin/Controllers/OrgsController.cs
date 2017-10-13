@@ -259,6 +259,7 @@ namespace Disly.Areas.Admin.Controllers
                     var OrgId = Request.Params["orgid"];
                     if (OrgId != null)
                     {
+                        ViewBag.OrgId = OrgId;
                         Guid OrgGuid = Guid.Parse(OrgId);
                         if (_cmsRepository.insStructure(id, OrgGuid, back_model.StructureItem, AccountInfo.id, RequestUserInfo.IP))
                         {
@@ -476,12 +477,30 @@ namespace Disly.Areas.Admin.Controllers
             if (model.DepartmentItem != null)
             {
                 model.BreadCrumbOrg = _cmsRepository.getBreadCrumbOrgs(id, ViewBag.ActionName);
+
+                var _peopList = _cmsRepository.getPersonsThisDepartment(id);
+
+                if (_peopList != null)
+                {
+                    model.PeopleList = new SelectList(_peopList, "Id", "FIO");
+                }
+                
+
+                model.PeopleLStatus = new SelectList(
+                   new List<SelectListItem>
+                   {
+                        new SelectListItem { Text = "Не выбрано", Value =""},
+                        new SelectListItem { Text = "Начальник отделения", Value ="boss"},
+                        new SelectListItem { Text = "Старшая медсестра", Value = "sister" },                        
+                   }, "Value", "Text"
+               );
             }
             else
             {
                 var StrucId = Request.Params["strucid"];
                 if (StrucId.Length > 0)
                 {
+                    ViewBag.StrucId = StrucId;
                     model.BreadCrumbOrg = _cmsRepository.getBreadCrumbOrgs(Guid.Parse(StrucId), "structure");
                 }                
             }
@@ -500,7 +519,7 @@ namespace Disly.Areas.Admin.Controllers
                 if (model.DepartmentItem == null)
                 {
                     #region создание
-                    var StrucId = Request.Params["strucid"];
+                    var StrucId = Request.Form["strucid"];// Request.Params["strucid"];
                     if (StrucId != null)
                     {
                         Guid StrucGuid = Guid.Parse(StrucId);
@@ -574,11 +593,30 @@ namespace Disly.Areas.Admin.Controllers
             _cmsRepository.insDepartmentsPhone(Guid.Parse(IdDepartment), PhoneLabel, PhoneValue, AccountInfo.id, RequestUserInfo.IP);
             return Redirect(((System.Web.HttpRequestWrapper)Request).RawUrl);
         }
-
         public ActionResult DelPhoneDepart(int id)
         {
             _cmsRepository.delDepartmentsPhone(id);
             return null;
-        }        
+        }
+
+        
+        [HttpPost]
+        [MultiButton(MatchFormKey = "action", MatchFormValue = "add-new-people-depart")]
+        public ActionResult AddPeople()
+        {
+            string IdDepartment = Request["DepartmentItem.Id"];
+            string IdLinkPeopleForOrg = Request["s_people"];
+            string PeopleStatus = Request["s_people_status"];
+            string PeoplePost = Request["s_people_post"];
+            _cmsRepository.insPersonsThisDepartment(Guid.Parse(IdDepartment), Guid.Parse(IdLinkPeopleForOrg), PeopleStatus, PeoplePost);
+            return Redirect(((System.Web.HttpRequestWrapper)Request).RawUrl);
+        }
+
+
+        public ActionResult delPeople(string iddep, string idpeople)
+        {
+            _cmsRepository.delPersonsThisDepartment(Guid.Parse(iddep), Guid.Parse(idpeople));
+            return null;
+        }
     }
 }
