@@ -228,7 +228,7 @@ namespace Disly.Areas.Admin.Controllers
 
         #region Карта сайта
         [HttpGet]
-        public ActionResult MenuGroup(string id)
+        public ActionResult SitemapMenu(string id)
         {
             SiteMapMenu model = new SiteMapMenu();
 

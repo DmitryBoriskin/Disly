@@ -58,7 +58,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Repository\cmsRepository.cs" />
+    <Compile Include="Repository\cms\cmsRepository.cs" />
+    <Compile Include="Repository\cms\cmsRepository_SiteMap.cs" />
     <Compile Include="Repository\FrontRepository.cs" />
     <Compile Include="Repository\AccountRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
