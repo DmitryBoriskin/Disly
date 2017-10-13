@@ -2558,10 +2558,10 @@ namespace cms.dbase
             {
                 //write to log ex
                 return false;
-            }
+                }
         }
         #endregion
-        
+
         #region Баннеры
         /// <summary>
         /// Получаем список секций баннеров
