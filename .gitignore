@@ -6,6 +6,7 @@
 cms.dbase/template/CMSbdModel.tt
 ImportFRMP/template/CMSbdModel.tt
 Integration.Frmp.library/template/CMSbdModel.tt
+Integration.Frmp.library/Data
 App.config
 app.config
 Web.config
