@@ -206,15 +206,16 @@ namespace Integration.Frmp.library
                 SrvcLogger.Debug("{WORK}", "Данные по сотрудникам успешно добавлены в таблицу dbo.import_frmp_peoples");
                 SrvcLogger.Debug("{WORK}", "Данные связей сотрудников и организаций успешно добавлены в таблицу dbo.import_frmp_orgs_peoples");
 
-                // обновляем данные в таблице dbo.content_people
+                // обновляем данные в таблицах dbo.content_people, dbo.content_people_org_link
                 try
                 {
                     db.ImportFrmpEmployees();
                     SrvcLogger.Debug("{WORK}", "Данные из таблицы импорта сотрудников dbo.import_frmp_peoples перенесены в таблицу dbo.content_people");
+                    SrvcLogger.Debug("{WORK}", "Данные из таблицы импорта сотрудников dbo.import_frmp_orgs_peoples перенесены в таблицу dbo.content_people_org_link");
                 }
                 catch (Exception e)
                 {
-                    SrvcLogger.Fatal("{WORK}", "Ошибка при обновление таблицы dbo.content_people" + Environment.NewLine + " " + e.ToString());
+                    SrvcLogger.Fatal("{WORK}", "Ошибка при обновлении таблицы dbo.content_people" + Environment.NewLine + " " + e.ToString());
                 }
             }
         }
