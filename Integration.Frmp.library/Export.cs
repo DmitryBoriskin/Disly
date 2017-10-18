@@ -147,7 +147,7 @@ namespace Integration.Frmp.library
                     string name = employees[i].Name; // имя 
                     string surname = employees[i].Surname;  // фамилия
                     string patroname = employees[i].Patroname; // отчество
-                    bool sex = employees[i].Sex.Equals(SexEnum.Male); // пол
+                    bool sex = employees[i].Sex == Models.SexEnum.Male; // пол
                     DateTime? birthDate = employees[i].Birthdate; // дата рождения
                     DateTime? modifyDate = employees[i].ChangeTime; // дата изменения записи
                     string snilsToCheck = employees[i].SNILS; // СНИЛС для проверки
