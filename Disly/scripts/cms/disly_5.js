@@ -185,6 +185,24 @@ $(document).ready(function () {
         });
     });
 
+    //отцепление врача от отделения
+    $('del_people_for_dep').click(function (e) {
+        e.preventDefault();
+        var idDep = $(this).attr("data-dep");
+        var idPeople = $(this).attr("data-people");
+        var $Container = $(this).parent().parent();
+        $.ajax({
+            type: "POST",
+            async: false,
+            url: "/admin/orgs/delPeople",
+            data: { id: idDomain },
+            error: function () { alert("error"); },
+            success: function (data) {
+                $Container.remove();
+            }
+        });
+    });
+
 
 
     // валидация обязательных полей для заполнения 
