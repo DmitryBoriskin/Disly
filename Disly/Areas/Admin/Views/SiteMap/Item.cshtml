@@ -80,7 +80,6 @@
         </div>
                 <div class="dop_info-block">
                     @Html.DropDownListFor(m => m.Item.FrontSection, new SelectList(Model.FrontSectionList, "Value", "Text", "page"), new { @title = "Шаблон", @class = "selectpicker", @data_help = "Выбор шаблона страницы", @required = "" })
-                    @*@Html.DropDownListFor(m => m.Item.MenuGroups, new MultiSelectList(Model.MenuTypes, "value", "text", Model.Item.MenuGroups), new { @title = "Группы меню", @class = "selectpicker", @multiple = "multiple" })*@
                     @Html.DropDownListFor(m => m.Item.MenuGroups, (MultiSelectList)ViewBag.GroupMenu, new { @title = "Группы меню", @class = "selectpicker", @multiple = "multiple" })
                     <div class="group-block" title="Мета теги">
                         @Html.TextAreaFor(m => m.Item.Keyw, new { type = "text", title = "Ключевые слова", data_help = "Данный тег используется при создании краткого описания страницы, используется поисковыми системами для индексации, а также при создании аннотации в выдаче по запросу. При отсутствии тега поисковые системы выдают в аннотации первую строку документа или отрывок, содержащий ключевые слова." })

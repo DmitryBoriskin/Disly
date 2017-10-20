@@ -34,7 +34,8 @@ namespace Disly.Areas.Admin.Controllers
                 Settings = SettingsInfo,
                 UserResolution = UserResolutionInfo,
                 ControllerName = ControllerName,
-                ActionName = ActionName
+                ActionName = ActionName,
+                Groups = _cmsRepository.getMaterialsGroups()
              };
 
             #region Метатеги
@@ -182,6 +183,24 @@ namespace Disly.Areas.Admin.Controllers
             model.ErrorInfo = userMassege;
 
             return View("Item", model);
+        }
+
+        /// <summary>
+        /// Список организаций для размещения новости
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public ActionResult Orgs(Guid id)
+        {
+            model.OrgsByType = _cmsRepository.getOrgByType();
+            return PartialView("Orgs", model.OrgsByType);
+        }
+
+        [HttpPost]
+        public ActionResult Orgs(OrgType[] model)
+        {
+            var orgs = _cmsRepository.getOrgByType();
+            return PartialView("Orgs", orgs);
         }
     }
 }

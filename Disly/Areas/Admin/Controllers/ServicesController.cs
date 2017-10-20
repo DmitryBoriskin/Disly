@@ -33,7 +33,7 @@ namespace Disly.Areas.Admin.Controllers
 
             return PartialView("Log", model);
         }
-
+        
         #region Смена пароля
         /// <summary>
         /// Смена пароля

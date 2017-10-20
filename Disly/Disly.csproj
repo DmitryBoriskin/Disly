@@ -445,6 +445,7 @@
     <Content Include="Areas\Admin\Views\Services\SiteMapMenuGroup.cshtml" />
     <Content Include="Areas\Admin\Views\Banners\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Banners\Item.cshtml" />
+    <Content Include="Areas\Admin\Views\Materials\Orgs.cshtml" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <Content Include="Views\_ViewStart.cshtml" />
     <None Include="Web.Debug.config">

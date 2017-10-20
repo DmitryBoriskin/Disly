@@ -3,30 +3,116 @@ using System.ComponentModel.DataAnnotations;
 
 namespace cms.dbModel.entity
 {
+    /// <summary>
+    /// Модель, описывающая список новостей
+    /// </summary>
     public class MaterialsList
     {
+        /// <summary>
+        /// Список новостей
+        /// </summary>
         public MaterialsModel[] Data;
+
+        /// <summary>
+        /// Пейджер
+        /// </summary>
         public Pager Pager;
     }
 
+    /// <summary>
+    /// Модель, описывающая новости пресс-центра
+    /// </summary>
     public class MaterialsModel
     {
+        /// <summary>
+        /// Идентификатор
+        /// </summary>
         public Guid Id { get; set; }
+
+        /// <summary>
+        /// Название
+        /// </summary>
         [Required(ErrorMessage = "Поле «Заголовок» не должно быть пустым.")]
         public string Title { get; set; }
+
+        /// <summary>
+        /// Алиас
+        /// </summary>
         public string Alias { get; set; }
+
+        /// <summary>
+        /// Изображнение
+        /// </summary>
         public string Preview { get; set; }
+
+        /// <summary>
+        /// Ссылка 
+        /// </summary>
         public string Url { get; set; }
+
+        /// <summary>
+        /// Название ссылки
+        /// </summary>
         public string UrlName { get; set; }
+
+        /// <summary>
+        /// Текст новости
+        /// </summary>
         public string Text { get; set; }
+
+        /// <summary>
+        /// Дата
+        /// </summary>
         [Required]
         [Display(Name = "Дата")]
         public DateTime Date { get; set; }
+
+        /// <summary>
+        /// Ключевые слова
+        /// </summary>
         public string Keyw { get; set; }
+
+        /// <summary>
+        /// Описание
+        /// </summary>
         public string Desc { get; set; }
+
+        /// <summary>
+        /// Флаг важности
+        /// </summary>
         [Required]
         public bool Important { get; set; }
+
+        /// <summary>
+        /// Флаг запрещённости
+        /// </summary>
         [Required]
         public bool Disabled { get; set; }
+
+        /// <summary>
+        /// Группа
+        /// </summary>
+        public Guid Group { get; set; }
+    }
+
+    /// <summary>
+    /// Модель, описывающая группы новостей
+    /// </summary>
+    public class MaterialsGroup
+    {
+        /// <summary>
+        /// Идентификатор
+        /// </summary>
+        public Guid Id { get; set; }
+
+        /// <summary>
+        /// Название
+        /// </summary>
+        public string Title { get; set; }
+
+        /// <summary>
+        /// Сортировка
+        /// </summary>
+        public int Sort { get; set; }
     }
 }

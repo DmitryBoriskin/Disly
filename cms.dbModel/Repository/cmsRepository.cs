@@ -65,7 +65,7 @@ namespace cms.dbModel
         public abstract bool insertCmsMaterial(MaterialsModel material);
         public abstract bool updateCmsMaterial(MaterialsModel material);
         public abstract bool deleteCmsMaterial(Guid id);
-
+        public abstract MaterialsGroup[] getMaterialsGroups();
 
         // Events
         public abstract EventsList getEventsList(FilterParams filtr);
@@ -120,6 +120,11 @@ namespace cms.dbModel
         public abstract People[] getPersonsThisDepartment(Guid idStructure);
         public abstract bool insPersonsThisDepartment(Guid idDepart, Guid IdLinkPeopleForOrg, string status, string post);
         public abstract bool delPersonsThisDepartment(Guid idDep, Guid idPeople);
+        public abstract OrgType[] getOrgTypes();
+        public abstract Guid[] getOrgTypes(Guid id);
+        public abstract OrgType[] getOrgByType();
+        public abstract OrgsModelSmall[] getOrgSmall(Guid id);
+
         //Feedbacks
         public abstract FeedbacksList getFeedbacksList(FilterParams filtr);
         public abstract FeedbackModel getFeedback(Guid id);

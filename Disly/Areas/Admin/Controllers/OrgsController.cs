@@ -29,7 +29,8 @@ namespace Disly.Areas.Admin.Controllers
                 Settings = SettingsInfo,
                 UserResolution = UserResolutionInfo,
                 ControllerName = ControllerName,
-                ActionName = ActionName
+                ActionName = ActionName,
+                Types = _cmsRepository.getOrgTypes()
             };
 
             #region Метатеги
@@ -38,13 +39,15 @@ namespace Disly.Areas.Admin.Controllers
             ViewBag.KeyWords = "";
             #endregion
         }
+
         // GET: Admin/Orgs
         public ActionResult Index()
         {
             filter = getFilter();
             model.OrgList = _cmsRepository.getOrgs(filter);//+ список организаций
             return View(model);
-        }        
+        }   
+             
         /// <summary>
         /// Формируем строку фильтра
         /// </summary>
@@ -59,6 +62,7 @@ namespace Disly.Areas.Admin.Controllers
             query = addFiltrParam(query, "disabled", disabled.ToString().ToLower());
             return Redirect(StartUrl + query);
         }
+
         /// <summary>
         /// Очищаем фильтр
         /// </summary>
@@ -82,12 +86,18 @@ namespace Disly.Areas.Admin.Controllers
 
         public ActionResult Item(Guid Id)
         {
-            model.Item = _cmsRepository.getOrgItem(Id);    //+ список структур        
+            model.Item = _cmsRepository.getOrgItem(Id);    //+ список структур    
+
+            // типы организаций
+            var types = new MultiSelectList(model.Types, "Id", "Title", model.Item != null ? model.Item.Types : null);
+            ViewBag.Types = types;
+
             if (model.Item != null)
             {
                 ViewBag.Titlecoord = model.Item.ShortTitle;
                 ViewBag.Xcoord = model.Item.GeopointX;
                 ViewBag.Ycoord = model.Item.GeopointY;
+                model.Item.Types = null;
             }
             
             return View("Item", model);
@@ -126,8 +136,6 @@ namespace Disly.Areas.Admin.Controllers
                 #region обновление
                 if (ModelState.IsValid)
                 {
-                    
-
                     _cmsRepository.setOrgs(id, back_model.Item, AccountInfo.id, RequestUserInfo.IP);
                     userMessege.info = "Запись сохранена";
                     userMessege.buttons = new ErrorMassegeBtn[]{
@@ -167,7 +175,12 @@ namespace Disly.Areas.Admin.Controllers
                 }
                 #endregion
             }
-            
+
+            // типы организаций
+            var types = new MultiSelectList(model.Types, "Id", "Title", model.Item != null ? model.Item.Types : null);
+            ViewBag.Types = types;
+            model.Item.Types = null;
+
             model.ErrorInfo = userMessege;
             return View("Item", model);
         }

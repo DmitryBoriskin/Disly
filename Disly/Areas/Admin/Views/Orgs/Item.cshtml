@@ -17,10 +17,7 @@
                 </select>
             </div>
             <div class="col-lg-6">
-                <select title="Тип мед. учреждения" class="selectpicker">
-                    <option value="1">Стоматология</option>
-                    <option value="2">Трамвотология</option>                    
-                </select>
+                @Html.DropDownListFor(m => m.Item.Types, (MultiSelectList)ViewBag.Types, new { @title = "Типы мед. учреждений", @class = "selectpicker", @multiple = "multiple" })
             </div>
         </div>
         

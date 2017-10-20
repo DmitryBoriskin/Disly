@@ -194,11 +194,11 @@
     // ===============
 
     $(function () {
-        $('input[type=checkbox]').bootstrapToggle()
+        $('input[type=checkbox][data-init!=false]').bootstrapToggle()
     })
-
+    
     $(document).on('click.bs.toggle', 'div[data-toggle^=toggle]', function (e) {
-        var $checkbox = $(this).find('input[type=checkbox]')
+        var $checkbox = $(this).find('input[type=checkbox][data-init!=false]')
         $checkbox.bootstrapToggle('toggle')
         e.preventDefault()
     })
