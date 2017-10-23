@@ -71,6 +71,9 @@ namespace Disly.Areas.Admin.Controllers
             #endregion
             #region Ограничение пользователя (не администратора портала и не разработчика) на доступ только к своим сайтам (доменам)
             int IsRedirect = 0;
+
+            SiteInfo = _cmsRepository.getSite(Domain); // информация по сайту
+
             if (AccountInfo.Group.ToLower() != "developer" && AccountInfo.Group.ToLower() != "administrator")
             {
                 foreach (DomainList domain in AccountInfo.Domains)

@@ -93,6 +93,11 @@ namespace cms.dbModel.entity
         /// Группа
         /// </summary>
         public Guid Group { get; set; }
+
+        /// <summary>
+        /// Сайт по умолчанию
+        /// </summary>
+        public Guid DefaultSite { get; set; }
     }
 
     /// <summary>

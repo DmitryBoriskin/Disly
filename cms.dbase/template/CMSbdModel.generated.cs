@@ -66,6 +66,7 @@ namespace cms.dbase.models
 		public ITable<content_sitemap_menus>            content_sitemap_menuss            { get { return this.GetTable<content_sitemap_menus>(); } }
 		public ITable<content_sitemap_menutypes>        content_sitemap_menutypess        { get { return this.GetTable<content_sitemap_menutypes>(); } }
 		public ITable<content_sv_banner_sections_sites> content_sv_banner_sections_sitess { get { return this.GetTable<content_sv_banner_sections_sites>(); } }
+		public ITable<content_sv_materials_links>       content_sv_materials_linkss       { get { return this.GetTable<content_sv_materials_links>(); } }
 		public ITable<content_sv_orgs_by_type>          content_sv_orgs_by_types          { get { return this.GetTable<content_sv_orgs_by_type>(); } }
 		public ITable<content_sv_people_department>     content_sv_people_departments     { get { return this.GetTable<content_sv_people_department>(); } }
 		public ITable<content_sv_people_org>            content_sv_people_orgs            { get { return this.GetTable<content_sv_people_org>(); } }
@@ -827,15 +828,8 @@ namespace cms.dbase.models
 		[Column,     NotNull    ] public string   c_alias     { get; set; } // varchar(512)
 		[Column,     NotNull    ] public bool     b_disabled  { get; set; } // bit
 		[Column,     NotNull    ] public bool     b_important { get; set; } // bit
-		[Column,     NotNull    ] public Guid     f_group     { get; set; } // uniqueidentifier
 
 		#region Associations
-
-		/// <summary>
-		/// FK_content_materials_materials_groups
-		/// </summary>
-		[Association(ThisKey="f_group", OtherKey="id", CanBeNull=false, KeyName="FK_content_materials_materials_groups", BackReferenceName="contentmaterialsmaterialsgroupss")]
-		public content_materials_groups contentmaterialsmaterialsgroups { get; set; }
 
 		/// <summary>
 		/// fk_content_materials_link_BackReference
@@ -852,16 +846,6 @@ namespace cms.dbase.models
 		[PrimaryKey, NotNull] public Guid   id      { get; set; } // uniqueidentifier
 		[Column,     NotNull] public string c_title { get; set; } // nvarchar(256)
 		[Column,     NotNull] public int    n_sort  { get; set; } // int
-
-		#region Associations
-
-		/// <summary>
-		/// FK_content_materials_materials_groups_BackReference
-		/// </summary>
-		[Association(ThisKey="id", OtherKey="f_group", CanBeNull=true, IsBackReference=true)]
-		public IEnumerable<content_materials> contentmaterialsmaterialsgroupss { get; set; }
-
-		#endregion
 	}
 
 	[Table(Schema="dbo", Name="content_materials_link")]
@@ -1172,6 +1156,30 @@ namespace cms.dbase.models
 		[Column, NotNull] public string domain     { get; set; } // varchar(64)
 		[Column, NotNull] public string site_name  { get; set; } // nvarchar(512)
 		[Column, NotNull] public Guid   section_id { get; set; } // uniqueidentifier
+	}
+
+	// View
+	[Table(Schema="dbo", Name="content_sv_materials_links")]
+	public partial class content_sv_materials_links
+	{
+		[Column, NotNull    ] public Guid     id          { get; set; } // uniqueidentifier
+		[Column, NotNull    ] public DateTime d_date      { get; set; } // datetime
+		[Column, NotNull    ] public string   c_title     { get; set; } // varchar(512)
+		[Column,    Nullable] public string   c_preview   { get; set; } // varchar(512)
+		[Column,    Nullable] public string   c_text      { get; set; } // varchar(max)
+		[Column,    Nullable] public string   c_url       { get; set; } // varchar(1024)
+		[Column,    Nullable] public string   c_url_name  { get; set; } // varchar(512)
+		[Column,    Nullable] public string   c_desc      { get; set; } // varchar(1024)
+		[Column,    Nullable] public string   c_keyw      { get; set; } // varchar(512)
+		[Column, NotNull    ] public int      n_year      { get; set; } // int
+		[Column, NotNull    ] public int      n_month     { get; set; } // int
+		[Column, NotNull    ] public int      n_day       { get; set; } // int
+		[Column, NotNull    ] public string   c_alias     { get; set; } // varchar(512)
+		[Column, NotNull    ] public bool     b_disabled  { get; set; } // bit
+		[Column, NotNull    ] public bool     b_important { get; set; } // bit
+		[Column, NotNull    ] public Guid     f_link_id   { get; set; } // uniqueidentifier
+		[Column, NotNull    ] public string   f_link_type { get; set; } // varchar(16)
+		[Column,    Nullable] public Guid?    f_group     { get; set; } // uniqueidentifier
 	}
 
 	// View
@@ -1751,3 +1759,4 @@ namespace cms.dbase.models
 		}
 	}
 }
+ 

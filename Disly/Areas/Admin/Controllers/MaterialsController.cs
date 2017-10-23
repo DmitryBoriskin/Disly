@@ -1,5 +1,6 @@
 ﻿using cms.dbModel.entity;
 using Disly.Areas.Admin.Models;
+using Disly.Areas.Admin.Service;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -128,6 +129,17 @@ namespace Disly.Areas.Admin.Controllers
                 var getMaterial = _cmsRepository.getMaterial(Id);
 
                 bindData.Item.Id = Id;
+                bindData.Item.DefaultSite = SiteInfo.Id;
+
+                if (String.IsNullOrEmpty(bindData.Item.Alias))
+                {
+                    bindData.Item.Alias = Transliteration.Translit(bindData.Item.Title);
+                }
+                else
+                {
+                    bindData.Item.Alias = Transliteration.Translit(bindData.Item.Alias);
+                }
+
                 //Определяем Insert или Update
                 if (getMaterial != null)
                     res = _cmsRepository.updateCmsMaterial(bindData.Item);
@@ -153,7 +165,7 @@ namespace Disly.Areas.Admin.Controllers
                  };
             }
 
-            //model.Item = _cmsRepository.getEvent(Id);
+            model.Item = _cmsRepository.getMaterial(Id);
             model.ErrorInfo = userMessage;
 
             return View("Item", model);

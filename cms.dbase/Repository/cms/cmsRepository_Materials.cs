@@ -42,8 +42,7 @@ namespace cms.dbase
                             Keyw = s.c_keyw,
                             Desc = s.c_desc,
                             Disabled = s.b_disabled,
-                            Important = s.b_important,
-                            Group = s.f_group
+                            Important = s.b_important
                         }).
                         Skip(filtr.Size * (filtr.Page - 1)).
                         Take(filtr.Size);
@@ -75,9 +74,9 @@ namespace cms.dbase
         {
             using (var db = new CMSdb(_context))
             {
-                var data = db.content_materialss.
-                    Where(w => w.id == id).
-                    Select(s => new MaterialsModel
+                var data = db.content_materialss
+                    .Where(w => w.id == id)
+                    .Select(s => new MaterialsModel
                     {
                         Id = s.id,
                         Title = s.c_title,
@@ -91,7 +90,11 @@ namespace cms.dbase
                         Desc = s.c_desc,
                         Disabled = s.b_disabled,
                         Important = s.b_important,
-                        Group = s.f_group
+                        Group = (Guid)db.content_materials_links
+                            .Where(w => w.f_material.Equals(id))
+                            .Where(w => w.f_link_type.Equals("site"))
+                            .Select(t => t.f_group)
+                            .SingleOrDefault()
                     });
 
 
@@ -135,16 +138,24 @@ namespace cms.dbase
                         b_disabled = material.Disabled,
                         n_day = material.Date.Day,
                         n_month = material.Date.Month,
-                        n_year = material.Date.Year,
+                        n_year = material.Date.Year
+                    };
+
+                    var materialLink = new content_materials_link
+                    {
+                        f_material = material.Id,
+                        f_link_id = material.DefaultSite,
+                        f_link_type = "site",
                         f_group = material.Group
                     };
 
                     using (var tran = db.BeginTransaction())
                     {
                         db.Insert(cdMaterial);
+                        db.Insert(materialLink);
                         tran.Commit();
                         return true;
-                    }
+                    }    
                 }
             }
             catch (Exception ex)
@@ -187,7 +198,22 @@ namespace cms.dbase
                     cdMaterial.n_day = material.Date.Day;
                     cdMaterial.n_month = material.Date.Month;
                     cdMaterial.n_year = material.Date.Year;
-                    cdMaterial.f_group = material.Group;
+
+                    // обновляем группу
+                    //var materialLink = db.content_materials_links
+                    //    .Where(w => w.f_material.Equals(material.Id))
+                    //    .Where(w => w.f_link_type.Equals("site"))
+                    //    .Where(w => w.f_link_id.Equals(material.DefaultSite))
+                    //    .SingleOrDefault();
+
+                    //materialLink.f_group = material.Group;
+
+                    db.content_materials_links
+                         .Where(w => w.f_material.Equals(material.Id))
+                         .Where(w => w.f_link_type.Equals("site"))
+                         .Where(w => w.f_link_id.Equals(material.DefaultSite))
+                         .Set(u => u.f_group, material.Group)
+                         .Update();
 
                     using (var tran = db.BeginTransaction())
                     {
