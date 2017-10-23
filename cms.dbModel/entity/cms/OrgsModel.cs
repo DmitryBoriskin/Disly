@@ -372,5 +372,21 @@ namespace cms.dbModel.entity
         /// </summary>
         public bool Check { get; set; }
     }
+
+    /// <summary>
+    /// Модель, описывающая совокупность новости и привязанных к ней организаций
+    /// </summary>
+    public class MaterialOrgType
+    {
+        /// <summary>
+        /// Типы организаций
+        /// </summary>
+        public OrgType[] OrgTypes { get; set; }
+
+        /// <summary>
+        /// Новость
+        /// </summary>
+        public MaterialsModel Material { get; set; }
+    }
 }
 

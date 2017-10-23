@@ -1,30 +1,32 @@
-﻿@model OrgType[]
+﻿@model MaterialsViewModel
 @{Layout = "~/Areas/Admin/Views/Shared/_popUp.cshtml";}
 
 <div>
     @if (Model != null)
     {
+        <button type="submit" name="action" value="save-org-btn" class="btn btn-primary">Сохранить</button>
+
         <ul style="list-style-type:none">
-            @for (int i = 0; i < Model.Count(); i++)
+            @for (int i = 0; i < Model.OrgsByType.Count(); i++)
             {
                 <li>
-                    @Html.CheckBoxFor(m => Model[i].Check, new { type = "checkbox", @data_init = "false" })
-                    @Html.LabelFor(m => Model[i].Check, Model[i].Title)
-                    @Html.HiddenFor(m => Model[i].Id)
-                    @Html.HiddenFor(m => Model[i].Sort)
-                    @Html.HiddenFor(m => Model[i].Title)
+                    @Html.CheckBoxFor(m => Model.OrgsByType[i].Check, new { type = "checkbox", @data_init = "false" })
+                    @Html.LabelFor(m => Model.OrgsByType[i].Check, Model.OrgsByType[i].Title)
+                    @Html.HiddenFor(m => Model.OrgsByType[i].Id)
+                    @Html.HiddenFor(m => Model.OrgsByType[i].Sort)
+                    @Html.HiddenFor(m => Model.OrgsByType[i].Title)
 
-                    @if (Model[i].Orgs != null)
+                    @if (Model.OrgsByType[i].Orgs != null)
                     {
                         <ul style="list-style-type:none">
-                            @for (int j = 0; j < Model[i].Orgs.Count(); j++)
+                            @for (int j = 0; j < Model.OrgsByType[i].Orgs.Count(); j++)
                             {
                                 <li>
-                                    @Html.CheckBoxFor(m => Model[i].Orgs[j].Check, new { type = "checkbox", @data_init = "false" })
-                                    @Html.LabelFor(m => Model[i].Orgs[j].Check, Model[i].Orgs[j].Title)
-                                    @Html.HiddenFor(m => Model[i].Orgs[j].Id)
-                                    @Html.HiddenFor(m => Model[i].Orgs[j].Sort)
-                                    @Html.HiddenFor(m => Model[i].Orgs[j].Title)
+                                    @Html.CheckBoxFor(m => Model.OrgsByType[i].Orgs[j].Check, new { type = "checkbox", @data_init = "false" })
+                                    @Html.LabelFor(m => Model.OrgsByType[i].Orgs[j].Check, Model.OrgsByType[i].Orgs[j].Title)
+                                    @Html.HiddenFor(m => Model.OrgsByType[i].Orgs[j].Id)
+                                    @Html.HiddenFor(m => Model.OrgsByType[i].Orgs[j].Sort)
+                                    @Html.HiddenFor(m => Model.OrgsByType[i].Orgs[j].Title)
                                 </li>
                             }
                         </ul>
@@ -32,7 +34,8 @@
                 </li>
             }
         </ul>
-        <button type="submit" class="btn btn-primary">Сохранить</button>
+        @Html.HiddenFor(m => m.Item.Id)
+        @Html.HiddenFor(m => m.Item.Group)
     }
     else
     {

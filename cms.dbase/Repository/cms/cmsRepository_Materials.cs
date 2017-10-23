@@ -4,6 +4,7 @@ using cms.dbModel;
 using cms.dbModel.entity;
 using cms.dbase.models;
 using LinqToDB;
+using System.Collections.Generic;
 
 namespace cms.dbase
 {
@@ -141,6 +142,7 @@ namespace cms.dbase
                         n_year = material.Date.Year
                     };
 
+                    // добавляем группу
                     var materialLink = new content_materials_link
                     {
                         f_material = material.Id,
@@ -155,7 +157,7 @@ namespace cms.dbase
                         db.Insert(materialLink);
                         tran.Commit();
                         return true;
-                    }    
+                    }
                 }
             }
             catch (Exception ex)
@@ -200,14 +202,6 @@ namespace cms.dbase
                     cdMaterial.n_year = material.Date.Year;
 
                     // обновляем группу
-                    //var materialLink = db.content_materials_links
-                    //    .Where(w => w.f_material.Equals(material.Id))
-                    //    .Where(w => w.f_link_type.Equals("site"))
-                    //    .Where(w => w.f_link_id.Equals(material.DefaultSite))
-                    //    .SingleOrDefault();
-
-                    //materialLink.f_group = material.Group;
-
                     db.content_materials_links
                          .Where(w => w.f_material.Equals(material.Id))
                          .Where(w => w.f_link_type.Equals("site"))
@@ -283,6 +277,55 @@ namespace cms.dbase
 
                 if (!data.Any()) return null;
                 else return data.ToArray();
+            }
+        }
+
+        /// <summary>
+        /// Добавляем связи новостей и организаций
+        /// </summary>
+        /// <param name="material">Запись новости</param>
+        /// <param name="orgTypes">Типы организаций</param>
+        /// <returns></returns>
+        public override bool insertMaterialsLinksToOrgs(MaterialOrgType model)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                if (model.OrgTypes != null && model.OrgTypes.Count() > 0)
+                {
+                    db.content_materials_links
+                        .Where(w => w.f_material.Equals(model.Material.Id))
+                        .Where(w => w.f_link_type.Equals("org"))
+                        .Delete();
+
+                    foreach (var t in model.OrgTypes)
+                    {
+                        if (t.Orgs != null)
+                        {
+                            foreach (var o in t.Orgs)
+                            {
+                                if (o.Check)
+                                {
+                                    bool isExist = db.content_materials_links
+                                        .Where(w => w.f_material.Equals(model.Material.Id))
+                                        .Where(w => w.f_link_id.Equals(o.Id))
+                                        .Where(w => w.f_link_type.Equals("org")).Any();
+
+                                    if (!isExist)
+                                    {
+                                        db.content_materials_links
+                                            .Value(v => v.f_material, model.Material.Id)
+                                            .Value(v => v.f_link_id, o.Id)
+                                            .Value(v => v.f_link_type, "org")
+                                            .Value(v => v.f_group, model.Material.Group)
+                                            .Insert();
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                return true;
             }
         }
     }

@@ -28,8 +28,8 @@ namespace Disly.Areas.Admin.Controllers
 
             ViewBag.HttpKeys = Request.QueryString.AllKeys;
             ViewBag.Query = Request.QueryString;
-            
-             model = new MaterialsViewModel()
+
+            model = new MaterialsViewModel()
             {
                 Account = AccountInfo,
                 Settings = SettingsInfo,
@@ -37,7 +37,7 @@ namespace Disly.Areas.Admin.Controllers
                 ControllerName = ControllerName,
                 ActionName = ActionName,
                 Groups = _cmsRepository.getMaterialsGroups()
-             };
+            };
 
             #region Метатеги
             ViewBag.Title = UserResolutionInfo.Title;
@@ -56,7 +56,7 @@ namespace Disly.Areas.Admin.Controllers
 
             return View(model);
         }
-        
+
         /// <summary>
         /// Форма редактирования записи
         /// </summary>
@@ -85,8 +85,8 @@ namespace Disly.Areas.Admin.Controllers
             string query = HttpUtility.UrlDecode(Request.Url.Query);
             query = addFiltrParam(query, "searchtext", searchtext);
             query = addFiltrParam(query, "disabled", disabled.ToString().ToLower());
-            query = (date == null) ? addFiltrParam(query, "date", String.Empty): addFiltrParam(query, "date", ((DateTime)date).ToString("dd.MM.yyyy").ToLower());
-            query = (dateend == null) ? addFiltrParam(query, "dateend", String.Empty): addFiltrParam(query, "dateend", ((DateTime)dateend).ToString("dd.MM.yyyy").ToString().ToLower());
+            query = (date == null) ? addFiltrParam(query, "date", String.Empty) : addFiltrParam(query, "date", ((DateTime)date).ToString("dd.MM.yyyy").ToLower());
+            query = (dateend == null) ? addFiltrParam(query, "dateend", String.Empty) : addFiltrParam(query, "dateend", ((DateTime)dateend).ToString("dd.MM.yyyy").ToString().ToLower());
             query = addFiltrParam(query, "page", String.Empty);
             query = addFiltrParam(query, "size", size);
 
@@ -103,7 +103,7 @@ namespace Disly.Areas.Admin.Controllers
         {
             return Redirect(StartUrl);
         }
-        
+
         [HttpPost]
         [MultiButton(MatchFormKey = "action", MatchFormValue = "insert-btn")]
         public ActionResult Insert()
@@ -204,15 +204,23 @@ namespace Disly.Areas.Admin.Controllers
         [HttpGet]
         public ActionResult Orgs(Guid id)
         {
-            model.OrgsByType = _cmsRepository.getOrgByType();
-            return PartialView("Orgs", model.OrgsByType);
+            model.Item = _cmsRepository.getMaterial(id);
+            model.OrgsByType = _cmsRepository.getOrgByType(id);
+            return PartialView("Orgs", model);
         }
 
         [HttpPost]
-        public ActionResult Orgs(OrgType[] model)
+        [MultiButton(MatchFormKey = "action", MatchFormValue = "save-org-btn")]
+        public ActionResult Orgs(MaterialsViewModel model)
         {
-            var orgs = _cmsRepository.getOrgByType();
-            return PartialView("Orgs", orgs);
+            MaterialOrgType modelInsert = new MaterialOrgType
+            {
+                OrgTypes = model.OrgsByType,
+                Material = model.Item
+            };
+
+            _cmsRepository.insertMaterialsLinksToOrgs(modelInsert);
+            return RedirectToAction("Item", new { id = model.Item.Id });
         }
     }
 }

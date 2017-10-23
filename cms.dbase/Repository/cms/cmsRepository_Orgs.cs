@@ -1090,7 +1090,7 @@ namespace cms.dbase
         /// Получим список типов организаций с привязанными к ним организациями
         /// </summary>
         /// <returns></returns>
-        public override OrgType[] getOrgByType()
+        public override OrgType[] getOrgByType(Guid material)
         {
             using (var db = new CMSdb(_context))
             {
@@ -1101,7 +1101,7 @@ namespace cms.dbase
                         Id = s.id,
                         Title = s.c_title,
                         Sort = s.n_sort,
-                        Orgs = getOrgSmall(s.id)
+                        Orgs = getOrgSmall(s.id, material)
                     });
 
                 if (!data.Any()) return null;
@@ -1114,7 +1114,7 @@ namespace cms.dbase
         /// </summary>
         /// <param name="id">Тип</param>
         /// <returns></returns>
-        public override OrgsModelSmall[] getOrgSmall(Guid id)
+        public override OrgsModelSmall[] getOrgSmall(Guid id, Guid material)
         {
             using (var db = new CMSdb(_context))
             {
@@ -1125,11 +1125,28 @@ namespace cms.dbase
                     {
                         Id = s.id,
                         Title = s.c_title,
-                        Sort = s.n_sort
+                        Sort = s.n_sort,
+                        Check = setCheckedOrgs(s.id, material)
                     });
 
                 if (!data.Any()) return null;
                 else return data.ToArray();
+            }
+        }
+
+        /// <summary>
+        /// Отметим выбранные организации
+        /// <param name="id">Идентификатор</param>
+        /// </summary>
+        public override bool setCheckedOrgs(Guid id, Guid material)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var data = db.content_materials_links
+                    .Where(w => w.f_material.Equals(material))
+                    .Where(w => w.f_link_id.Equals(id));
+
+                return data.Any();
             }
         }
     }
