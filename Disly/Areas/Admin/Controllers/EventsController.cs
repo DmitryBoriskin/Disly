@@ -71,6 +71,14 @@
                 {
                     DateBegin = DateTime.Now
                 };
+            if (model.Item != null)
+            {
+                var photo = model.Item.PreviewImage;
+                if (!string.IsNullOrEmpty(photo.Url))
+                {
+                    model.Item.PreviewImage = getInfoPhoto(photo.Url);
+                }
+            }
             return View("Item", model);
          }
  
@@ -152,6 +160,23 @@
                 if (upload != null && upload.ContentLength > 0)
                 {
                     string fileExtension = upload.FileName.Substring(upload.FileName.IndexOf("."));
+
+                    var validExtension = (!string.IsNullOrEmpty(Settings.PicTypes)) ? Settings.PicTypes.Split(',') : "jpg,jpeg,png,gif".Split(',');
+                    if (!validExtension.Contains(fileExtension.ToLower()))
+                    {
+                        model.Item = _cmsRepository.getEvent(Id);
+                        model.ErrorInfo = new ErrorMassege()
+                        {
+                            title = "Ошибка",
+                            info = "Вы не можете загружать файлы данного формата",
+                            buttons = new ErrorMassegeBtn[]
+                            {
+                             new ErrorMassegeBtn { url = "#", text = "ок", action = "false", style="primary" }
+                            }
+                        };
+
+                        return View("Item", model);
+                    }
 
                     var sizes = (!string.IsNullOrEmpty(Settings.MaterialPreviewImgSize)) ? Settings.MaterialPreviewImgSize.Split(',') : defaultPreviewSizes;
                     int.TryParse(sizes[0], out width);

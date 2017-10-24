@@ -95,12 +95,12 @@ namespace cms.dbase
                         Keyw = s.c_keyw,
                         Desc = s.c_desc,
                         Disabled = s.b_disabled,
-                        Important = s.b_important,
-                        Group = (Guid)db.content_materials_links
+                        Important = s.b_important
+                        /*Group = (Guid)db.content_materials_links
                             .Where(w => w.f_material.Equals(id))
                             .Where(w => w.f_link_type.Equals("site"))
                             .Select(t => t.f_group)
-                            .SingleOrDefault()
+                            .SingleOrDefault()*/
                     });
 
 

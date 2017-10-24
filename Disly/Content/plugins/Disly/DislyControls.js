@@ -226,7 +226,7 @@
             $InfoBlock.append('<div class="preview_size">' + 'Размер: ' + this.$element.attr('data-size') + '</div>');
 
             $DelPreview = $("<div/>", { 'class': 'preview_btn' });
-            $DelLink = $('<a class="preview_del">Удалить</a>');
+            $DelLink = $('<a class="preview_del button icon-delete">Удалить</a>');
             $DelPreview.append($DelLink);
             $InfoBlock.append($DelPreview);
             $Wrap.append($InfoBlock);
@@ -239,8 +239,8 @@
         $PreviewBlock.append($Wrap);
 
         if (this.$element.attr('data-help')) {
-            $Wrap.addClass('col-md-4');
-            var $FileHelp = $('<div class="file_help col-md-8">' + this.$element.attr('data-help') + '</div>');
+            $Wrap.addClass('col-md-12');
+            var $FileHelp = $('<div class="file_help col-md-12">' + this.$element.attr('data-help') + '</div>');
             $PreviewBlock.append($FileHelp);
         }
 

@@ -1,4 +1,9 @@
 ﻿@model MaterialsViewModel
+@{ 
+    string fileName = (Model.Item != null && Model.Item.PreviewImage != null) ? Model.Item.PreviewImage.Name : null;
+    string fileSize = (Model.Item != null && Model.Item.PreviewImage != null) ? Model.Item.PreviewImage.Size : null;
+    string fileUrl = (Model.Item != null && Model.Item.PreviewImage != null) ? Model.Item.PreviewImage.Url : null;
+}
 
 @if (Model.UserResolution.Write)
 {
@@ -8,7 +13,7 @@
             <div class="col-lg-7">@Html.TextBoxFor(m => m.Item.Title, new { required = "", type = "text", maxlength = "128", title = "Заголовок" })</div>
             <div class="col-lg-5">@Html.TextBoxFor(m => m.Item.Alias, new { type = "text", title = "Название страницы", placeholder = "news-name", MaxLength = "128", data_help = "описание"})</div>
         </div>
-        @Html.TextBoxFor(m => m.Item.PreviewImage.Url, new { type = "file", title = "Картинка для предпросмотра", data_name = "", data_size = "", data_url = "", data_help = "размер фотографии должен быть не менне 400 точек по ширине и пропорции картинки - 4х3" })
+        @Html.TextBoxFor(m => m.Item.PreviewImage.Url, new { type = "file", title = "Картинка для предпросмотра", data_name = fileName, data_size = fileSize, data_url = fileUrl, data_help = "Размер фотографии должен быть не менне 400 точек по ширине и пропорции картинки - 4х3", accept = ".jpg,.jpeg,.png,.gif" })
         @Html.TextAreaFor(m => m.Item.Text, new { type = "editor", title = "Текст",  height = "300" })
         @Html.TextBoxFor(m => m.Item.Url, new { type = "text", title = "Первоисточник", placeholder = "http://", MaxLength = "128" })
         @Html.TextBoxFor(m => m.Item.UrlName, new { type = "text", title = "Название источника" })

@@ -63,6 +63,9 @@ public class Settings
     public static string mailAddresName = ConfigurationManager.AppSettings["MailAddresName"];
     public static string mailTo = ConfigurationManager.AppSettings["MailTo"];
 
+
+    public static string DocTypes = ReadAppSetting("DocTypes");//ConfigurationManager.AppSettings["MaterialPreviewImgSize"];
+    public static string PicTypes = ReadAppSetting("PicTypes");//ConfigurationManager.AppSettings["MaterialPreviewImgSize"];
     public static string MaterialPreviewImgSize = ReadAppSetting("MaterialPreviewImgSize");//ConfigurationManager.AppSettings["MaterialPreviewImgSize"];
     public static string MaterialContentImgSize = ReadAppSetting("MaterialContentImgSize"); //ConfigurationManager.AppSettings["MaterialContentImgSize"];
 

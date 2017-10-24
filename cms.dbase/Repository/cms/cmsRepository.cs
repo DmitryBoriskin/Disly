@@ -1111,7 +1111,7 @@ namespace cms.dbase
                     cdEvent.c_text = eventData.Text;
                     cdEvent.c_place = eventData.Place;
                     cdEvent.c_organizer = eventData.EventMaker;
-                    cdEvent.c_preview = (eventData.PreviewImage != null)? eventData.Url: null;
+                    cdEvent.c_preview = (eventData.PreviewImage != null)? eventData.PreviewImage.Url: null;
                     cdEvent.c_desc = eventData.Desc;
                     cdEvent.c_keyw = eventData.KeyW;
                     cdEvent.b_annually = eventData.Annually;

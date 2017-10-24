@@ -4,6 +4,7 @@ using System;
 using System.Web;
 using cms.dbModel.entity;
 using System.IO;
+using System.Linq;
 
 namespace Disly.Areas.Admin.Controllers
 {
@@ -119,6 +120,23 @@ namespace Disly.Areas.Admin.Controllers
                 if (upload != null && upload.ContentLength > 0)
                 {
                     string fileExtension = upload.FileName.Substring(upload.FileName.IndexOf("."));
+
+                    var validExtension = (!string.IsNullOrEmpty(Settings.PicTypes)) ? Settings.PicTypes.Split(',') : "jpg,jpeg,png,gif".Split(',');
+                    if (!validExtension.Contains(fileExtension.ToLower()))
+                    {
+                        model.Item = _cmsRepository.getBanner(id);
+                        model.ErrorInfo = new ErrorMassege()
+                        {
+                            title = "Ошибка",
+                            info = "Вы не можете загружать файлы данного формата",
+                            buttons = new ErrorMassegeBtn[]
+                            {
+                             new ErrorMassegeBtn { url = "#", text = "ок", action = "false", style="primary" }
+                            }
+                        };
+
+                        return View("Item", model);
+                    }
 
                     Photo photoNew = new Photo()
                     {
