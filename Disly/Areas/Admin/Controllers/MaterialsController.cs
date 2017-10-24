@@ -2,11 +2,6 @@
 using Disly.Areas.Admin.Models;
 using Disly.Areas.Admin.Service;
 using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.IO;
-using System.Linq;
-using System.Net;
 using System.Web;
 using System.Web.Mvc;
 
@@ -28,16 +23,17 @@ namespace Disly.Areas.Admin.Controllers
 
             ViewBag.HttpKeys = Request.QueryString.AllKeys;
             ViewBag.Query = Request.QueryString;
-            
-             model = new MaterialsViewModel()
+
+            model = new MaterialsViewModel()
             {
                 Account = AccountInfo,
                 Settings = SettingsInfo,
                 UserResolution = UserResolutionInfo,
                 ControllerName = ControllerName,
                 ActionName = ActionName,
-                Groups = _cmsRepository.getMaterialsGroups()
-             };
+                Groups = _cmsRepository.getMaterialsGroups(),
+                Events = _cmsRepository.getMaterialsEvents()
+            };
 
             #region Метатеги
             ViewBag.Title = UserResolutionInfo.Title;
@@ -56,7 +52,7 @@ namespace Disly.Areas.Admin.Controllers
 
             return View(model);
         }
-        
+
         /// <summary>
         /// Форма редактирования записи
         /// </summary>
@@ -94,8 +90,8 @@ namespace Disly.Areas.Admin.Controllers
             string query = HttpUtility.UrlDecode(Request.Url.Query);
             query = addFiltrParam(query, "searchtext", searchtext);
             query = addFiltrParam(query, "disabled", disabled.ToString().ToLower());
-            query = (date == null) ? addFiltrParam(query, "date", String.Empty): addFiltrParam(query, "date", ((DateTime)date).ToString("dd.MM.yyyy").ToLower());
-            query = (dateend == null) ? addFiltrParam(query, "dateend", String.Empty): addFiltrParam(query, "dateend", ((DateTime)dateend).ToString("dd.MM.yyyy").ToString().ToLower());
+            query = (date == null) ? addFiltrParam(query, "date", String.Empty) : addFiltrParam(query, "date", ((DateTime)date).ToString("dd.MM.yyyy").ToLower());
+            query = (dateend == null) ? addFiltrParam(query, "dateend", String.Empty) : addFiltrParam(query, "dateend", ((DateTime)dateend).ToString("dd.MM.yyyy").ToString().ToLower());
             query = addFiltrParam(query, "page", String.Empty);
             query = addFiltrParam(query, "size", size);
 
@@ -112,7 +108,7 @@ namespace Disly.Areas.Admin.Controllers
         {
             return Redirect(StartUrl);
         }
-        
+
         [HttpPost]
         [MultiButton(MatchFormKey = "action", MatchFormValue = "insert-btn")]
         public ActionResult Insert()
@@ -137,6 +133,7 @@ namespace Disly.Areas.Admin.Controllers
                 var res = false;
                 var getMaterial = _cmsRepository.getMaterial(Id);
 
+                // добавление необходимых полей перед сохранением модели
                 bindData.Item.Id = Id;
                 bindData.Item.DefaultSite = SiteInfo.Id;
 
@@ -194,7 +191,11 @@ namespace Disly.Areas.Admin.Controllers
                 if (getMaterial != null)
                     res = _cmsRepository.updateCmsMaterial(bindData.Item);
                 else
+                {
+                    bindData.Item.DefaultSite =  SiteInfo.ContentId;
+                    bindData.Item.DefaultSiteType = SiteInfo.Type;
                     res = _cmsRepository.insertCmsMaterial(bindData.Item);
+                }
                 //Сообщение пользователю
                 if (res)
                     userMessage.info = "Запись обновлена";
@@ -232,7 +233,7 @@ namespace Disly.Areas.Admin.Controllers
         [MultiButton(MatchFormKey = "action", MatchFormValue = "delete-btn")]
         public ActionResult Delete(Guid Id)
         {
-            //var res = _cmsRepository.deleteCmsMaterial(Id);
+            var res = _cmsRepository.deleteCmsMaterial(Id);
 
             // записываем информацию о результатах
             ErrorMassege userMassege = new ErrorMassege();
@@ -244,25 +245,31 @@ namespace Disly.Areas.Admin.Controllers
 
             model.ErrorInfo = userMassege;
 
-            return View("Item", model);
+            return RedirectToAction("Index");
         }
 
-        /// <summary>
-        /// Список организаций для размещения новости
-        /// </summary>
-        /// <returns></returns>
+        // admin/materials/orgs/{id}
         [HttpGet]
         public ActionResult Orgs(Guid id)
         {
-            model.OrgsByType = _cmsRepository.getOrgByType();
-            return PartialView("Orgs", model.OrgsByType);
+            model.Item = _cmsRepository.getMaterial(id);
+            model.OrgsByType = _cmsRepository.getOrgByType(id);
+            return PartialView("Orgs", model);
         }
 
         [HttpPost]
-        public ActionResult Orgs(OrgType[] model)
+        [MultiButton(MatchFormKey = "action", MatchFormValue = "save-org-btn")]
+        public ActionResult Orgs(MaterialsViewModel model)
         {
-            var orgs = _cmsRepository.getOrgByType();
-            return PartialView("Orgs", orgs);
+            MaterialOrgType modelInsert = new MaterialOrgType
+            {
+                OrgTypes = model.OrgsByType,
+                Material = model.Item
+            };
+
+            _cmsRepository.insertMaterialsLinksToOrgs(modelInsert);
+            
+            return PartialView("OrgsSaved");
         }
     }
 }

@@ -4,6 +4,7 @@ using cms.dbModel;
 using cms.dbModel.entity;
 using cms.dbase.models;
 using LinqToDB;
+using System.Collections.Generic;
 
 namespace cms.dbase
 {
@@ -72,6 +73,7 @@ namespace cms.dbase
         /// Получим единичную запись новости
         /// </summary>
         /// <param name="id">Идентификатор</param>
+        /// <param name="substance">Сущность</param>
         /// <returns></returns>
         public override MaterialsModel getMaterial(Guid id)
         {
@@ -95,12 +97,19 @@ namespace cms.dbase
                         Keyw = s.c_keyw,
                         Desc = s.c_desc,
                         Disabled = s.b_disabled,
-                        Important = s.b_important
-                        /*Group = (Guid)db.content_materials_links
-                            .Where(w => w.f_material.Equals(id))
-                            .Where(w => w.f_link_type.Equals("site"))
+                        Important = s.b_important,
+                        DefaultSite = (Guid)s.uui_origin,
+                        DefaultSiteType = s.c_origin_type,
+                        Group = (Guid)s.fkcontentmaterialslinks
+                            .Where(w => w.f_link_id.Equals(s.uui_origin))
+                            .Where(w => w.f_link_type.Equals(s.c_origin_type))
                             .Select(t => t.f_group)
-                            .SingleOrDefault()*/
+                            .SingleOrDefault(),
+                        Event = db.content_materials_links
+                            .Where(w => w.f_material.Equals(s.id))
+                            .Where(w => w.f_link_type.Equals("event"))
+                            .Select(t => t.f_link_id)
+                            .SingleOrDefault()
                     });
 
 
@@ -144,14 +153,17 @@ namespace cms.dbase
                         b_disabled = material.Disabled,
                         n_day = material.Date.Day,
                         n_month = material.Date.Month,
-                        n_year = material.Date.Year
+                        n_year = material.Date.Year,
+                        uui_origin = material.DefaultSite,
+                        c_origin_type = material.DefaultSiteType
                     };
 
+                    // добавляем группу
                     var materialLink = new content_materials_link
                     {
                         f_material = material.Id,
                         f_link_id = material.DefaultSite,
-                        f_link_type = "site",
+                        f_link_type = material.DefaultSiteType,
                         f_group = material.Group
                     };
 
@@ -161,7 +173,7 @@ namespace cms.dbase
                         db.Insert(materialLink);
                         tran.Commit();
                         return true;
-                    }    
+                    }
                 }
             }
             catch (Exception ex)
@@ -206,20 +218,38 @@ namespace cms.dbase
                     cdMaterial.n_year = material.Date.Year;
 
                     // обновляем группу
-                    //var materialLink = db.content_materials_links
-                    //    .Where(w => w.f_material.Equals(material.Id))
-                    //    .Where(w => w.f_link_type.Equals("site"))
-                    //    .Where(w => w.f_link_id.Equals(material.DefaultSite))
-                    //    .SingleOrDefault();
-
-                    //materialLink.f_group = material.Group;
-
                     db.content_materials_links
                          .Where(w => w.f_material.Equals(material.Id))
-                         .Where(w => w.f_link_type.Equals("site"))
                          .Where(w => w.f_link_id.Equals(material.DefaultSite))
                          .Set(u => u.f_group, material.Group)
                          .Update();
+
+                    // обновляем событие
+                    if (material.Event != null)
+                    {
+                        var e = db.content_materials_links
+                            .Where(w => w.f_material.Equals(material.Id))
+                            .Where(w => w.f_link_type.Equals("event"));
+
+                        if (e.Any())
+                        {
+                            db.content_materials_links
+                                .Where(w => w.f_material.Equals(material.Id))
+                                .Where(w => w.f_link_type.Equals("event"))
+                                .Set(u => u.f_link_id, material.Event)
+                                .Set(u => u.f_group, material.Group)
+                                .Update();
+                        }
+                        else
+                        {
+                            db.content_materials_links
+                                .Value(u => u.f_material, material.Id)
+                                .Value(u => u.f_link_id, material.Event)
+                                .Value(u => u.f_link_type, "event")
+                                .Value(u => u.f_group, material.Group)
+                                .Insert();
+                        }
+                    }
 
                     using (var tran = db.BeginTransaction())
                     {
@@ -285,6 +315,77 @@ namespace cms.dbase
                         Id = s.id,
                         Title = s.c_title,
                         Sort = s.n_sort
+                    });
+
+                if (!data.Any()) return null;
+                else return data.ToArray();
+            }
+        }
+
+        /// <summary>
+        /// Добавляем связи новостей и организаций
+        /// </summary>
+        /// <param name="material">Запись новости</param>
+        /// <param name="orgTypes">Типы организаций</param>
+        /// <returns></returns>
+        public override bool insertMaterialsLinksToOrgs(MaterialOrgType model)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                if (model.OrgTypes != null && model.OrgTypes.Count() > 0)
+                {
+                    db.content_materials_links
+                        .Where(w => w.f_material.Equals(model.Material.Id))
+                        .Where(w => !w.f_link_id.Equals(model.Material.DefaultSite))
+                        .Delete();
+
+                    foreach (var t in model.OrgTypes)
+                    {
+                        if (t.Orgs != null)
+                        {
+                            foreach (var o in t.Orgs)
+                            {
+                                if (o.Check)
+                                {
+                                    bool isExist = db.content_materials_links
+                                        .Where(w => w.f_material.Equals(model.Material.Id))
+                                        .Where(w => w.f_link_id.Equals(o.Id))
+                                        .Any();
+
+                                    if (!isExist)
+                                    {
+                                        db.content_materials_links
+                                            .Value(v => v.f_material, model.Material.Id)
+                                            .Value(v => v.f_link_id, o.Id)
+                                            .Value(v => v.f_link_type, "org")
+                                            .Value(v => v.f_group, model.Material.Group)
+                                            .Insert();
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                return true;
+            }
+        }
+
+        /// <summary>
+        /// Получаем список событий для новостей
+        /// </summary>
+        /// <returns></returns>
+        public override MaterialsEvents[] getMaterialsEvents()
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var data = db.content_eventss
+                    .Where(w => !w.b_disabled)
+                    .OrderByDescending(o => o.d_date)
+                    .Select(s => new MaterialsEvents
+                    {
+                        Id = s.id,
+                        Title = s.c_title
                     });
 
                 if (!data.Any()) return null;

@@ -242,11 +242,11 @@ namespace Disly.Areas.Admin.Controllers
             if (_IsAuthenticated) 
                 return RedirectToAction("", "Main");
 
-            string ViewName = "~/Areas/Admin/Views/ChangePass.cshtml";
+            string ViewName = "~/Areas/Admin/Views/Account/ChangePass.cshtml";
 
             // Проверка кода востановления пароля
             if (!_accountRepository.getCmsAccountCode(id))
-                ViewName = "~/Areas/Admin/Views/MsgFailRestore.cshtml";
+                ViewName = "~/Areas/Admin/Views/Account/MsgFailRestore.cshtml";
 
 
             return View(ViewName);

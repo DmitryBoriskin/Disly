@@ -1,6 +1,7 @@
 ﻿using cms.dbModel.entity;
 using cms.dbModel.entity.cms;
 using System;
+using System.Collections.Generic;
 
 namespace cms.dbModel
 {
@@ -66,6 +67,8 @@ namespace cms.dbModel
         public abstract bool updateCmsMaterial(MaterialsModel material);
         public abstract bool deleteCmsMaterial(Guid id);
         public abstract MaterialsGroup[] getMaterialsGroups();
+        public abstract bool insertMaterialsLinksToOrgs(MaterialOrgType model);
+        public abstract MaterialsEvents[] getMaterialsEvents();
 
         // Events
         public abstract EventsList getEventsList(FilterParams filtr);
@@ -122,8 +125,9 @@ namespace cms.dbModel
         public abstract bool delPersonsThisDepartment(Guid idDep, Guid idPeople);
         public abstract OrgType[] getOrgTypes();
         public abstract Guid[] getOrgTypes(Guid id);
-        public abstract OrgType[] getOrgByType();
-        public abstract OrgsModelSmall[] getOrgSmall(Guid id);
+        public abstract OrgType[] getOrgByType(Guid id);
+        public abstract OrgsModelSmall[] getOrgSmall(Guid id, Guid material);
+        public abstract bool setCheckedOrgs(Guid id, Guid material);
 
         //Feedbacks
         public abstract FeedbacksList getFeedbacksList(FilterParams filtr);

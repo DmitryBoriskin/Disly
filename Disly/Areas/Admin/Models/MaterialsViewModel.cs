@@ -26,5 +26,10 @@ namespace Disly.Areas.Admin.Models
         /// Список организаций, разбитых на группы
         /// </summary>
         public OrgType[] OrgsByType { get; set; }
+
+        /// <summary>
+        /// Список событий
+        /// </summary>
+        public MaterialsEvents[] Events { get; set; }
     }
 }

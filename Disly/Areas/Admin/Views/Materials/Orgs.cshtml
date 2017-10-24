@@ -1,38 +1,53 @@
-﻿@model OrgType[]
+﻿@model MaterialsViewModel
 @{Layout = "~/Areas/Admin/Views/Shared/_popUp.cshtml";}
 
+<link href="~/Content/plugins/bonsai/css/jquery.bonsai.css" rel="stylesheet" />
 <div>
     @if (Model != null)
     {
-        <ul style="list-style-type:none">
-            @for (int i = 0; i < Model.Count(); i++)
-            {
-                <li>
-                    @Html.CheckBoxFor(m => Model[i].Check, new { type = "checkbox", @data_init = "false" })
-                    @Html.LabelFor(m => Model[i].Check, Model[i].Title)
-                    @Html.HiddenFor(m => Model[i].Id)
-                    @Html.HiddenFor(m => Model[i].Sort)
-                    @Html.HiddenFor(m => Model[i].Title)
+        <div class="buttons">
+            <button type="submit" name="action" value="save-org-btn" class="btn btn-primary icon-create">СОХРАНИТЬ</button>
+        </div>
 
-                    @if (Model[i].Orgs != null)
-                    {
-                        <ul style="list-style-type:none">
-                            @for (int j = 0; j < Model[i].Orgs.Count(); j++)
-                            {
-                                <li>
-                                    @Html.CheckBoxFor(m => Model[i].Orgs[j].Check, new { type = "checkbox", @data_init = "false" })
-                                    @Html.LabelFor(m => Model[i].Orgs[j].Check, Model[i].Orgs[j].Title)
-                                    @Html.HiddenFor(m => Model[i].Orgs[j].Id)
-                                    @Html.HiddenFor(m => Model[i].Orgs[j].Sort)
-                                    @Html.HiddenFor(m => Model[i].Orgs[j].Title)
-                                </li>
-                            }
-                        </ul>
-                    }
-                </li>
-            }
-        </ul>
-        <button type="submit" class="btn btn-primary">Сохранить</button>
+        <div class="scrollbar log-list">
+            <ol id="checkboxes">
+                @for (int i = 0; i < Model.OrgsByType.Count(); i++)
+                {
+                    <li>
+                        @Html.CheckBoxFor(m => Model.OrgsByType[i].Check, new { type = "checkbox", @data_init = "false" })
+                        @Html.LabelFor(m => Model.OrgsByType[i].Check, Model.OrgsByType[i].Title)
+                        @Html.HiddenFor(m => Model.OrgsByType[i].Id)
+                        @Html.HiddenFor(m => Model.OrgsByType[i].Sort)
+                        @Html.HiddenFor(m => Model.OrgsByType[i].Title)
+
+                        @if (Model.OrgsByType[i].Orgs != null)
+                        {
+                            <ol>
+                                @for (int j = 0; j < Model.OrgsByType[i].Orgs.Count(); j++)
+                                {
+                                    <li>
+                                        <div class="row">
+                                            <div class="check_sm col-sm-1">
+                                                @Html.CheckBoxFor(m => Model.OrgsByType[i].Orgs[j].Check, new { type = "checkbox", @data_init = "false" })
+                                            </div>
+                                            <div class="col-sm-11">
+                                                @Html.LabelFor(m => Model.OrgsByType[i].Orgs[j].Check, Model.OrgsByType[i].Orgs[j].Title)
+                                            </div>
+                                        </div>
+                                        @Html.HiddenFor(m => Model.OrgsByType[i].Orgs[j].Id)
+                                        @Html.HiddenFor(m => Model.OrgsByType[i].Orgs[j].Sort)
+                                        @Html.HiddenFor(m => Model.OrgsByType[i].Orgs[j].Title)
+                                    </li>
+                                }
+                            </ol>
+                        }
+                    </li>
+                }
+            </ol>
+        </div>
+        @Html.HiddenFor(m => m.Item.Id)
+        @Html.HiddenFor(m => m.Item.Group)
+        @Html.HiddenFor(m => m.Item.DefaultSite)
     }
     else
     {
@@ -42,55 +57,12 @@
     }
 </div>
 
+<script src="~/Content/plugins/bonsai/js/jquery.bonsai.js"></script>
+<script src="~/Content/plugins/bonsai/js/jquery.qubit.js"></script>
 <script>
-    $('document').ready(function () {
-        $('input[type="checkbox"]').change(function (e) {
-            var checked = $(this).prop("checked"),
-                container = $(this).parent(),
-                siblings = container.siblings();
-
-            container.find('input[type="checkbox"]').prop({
-                indeterminate: false,
-                checked: checked
-            });
-
-            function checkSiblings(el) {
-
-                var parent = el.parent().parent(),
-                    all = true;
-
-                el.siblings().each(function () {
-                    return all = ($(this).children('input[type="checkbox"]').prop("checked") === checked);
-                });
-
-                if (all && checked) {
-
-                    parent.children('input[type="checkbox"]').prop({
-                        indeterminate: false,
-                        checked: checked
-                    });
-
-                    checkSiblings(parent);
-
-                } else if (all && !checked) {
-
-                    parent.children('input[type="checkbox"]').prop("checked", checked);
-                    parent.children('input[type="checkbox"]').prop("indeterminate", (parent.find('input[type="checkbox"]:checked').length > 0));
-                    checkSiblings(parent);
-
-                } else {
-
-                    el.parents("li").children('input[type="checkbox"]').prop({
-                        indeterminate: true,
-                        checked: false
-                    });
-
-                }
-
-            }
-
-            checkSiblings(container);
-        });
-
+    $('#checkboxes').bonsai({
+        expandAll: false,
+        checkboxes: true, // depends on jquery.qubit plugin
+        handleDuplicateCheckboxes: true // optional
     });
 </script>

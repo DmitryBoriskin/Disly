@@ -95,9 +95,19 @@ namespace cms.dbModel.entity
         public Guid Group { get; set; }
 
         /// <summary>
-        /// Сайт по умолчанию
+        /// Организация(персона) по умолчанию
         /// </summary>
         public Guid DefaultSite { get; set; }
+
+        /// <summary>
+        /// Тип сайта по умолчанию
+        /// </summary>
+        public string DefaultSiteType { get; set; }
+
+        /// <summary>
+        /// Событие
+        /// </summary>
+        public Guid? Event { get; set; }
     }
 
     /// <summary>
@@ -119,5 +129,21 @@ namespace cms.dbModel.entity
         /// Сортировка
         /// </summary>
         public int Sort { get; set; }
+    }
+
+    /// <summary>
+    /// Модель, описывающая события для привязки к новостям
+    /// </summary>
+    public class MaterialsEvents
+    {
+        /// <summary>
+        /// Идентификатор
+        /// </summary>
+        public Guid Id { get; set; }
+
+        /// <summary>
+        /// Название
+        /// </summary>
+        public string Title { get; set; }
     }
 }

@@ -93,9 +93,9 @@ namespace cms.dbase
                         Email = s.c_email,
                         Site = s.c_url,
                         Worktime = s.c_worktime,
-                        Logo = s.c_logo
-                        //,
-                        //DomainList= getSiteDomains(s.c_alias)
+                        Logo = s.c_logo,
+                        ContentId = (Guid)s.f_content,
+                        Type = s.c_content_type
                     });
 
                 if (!data.Any()) { return null; }
