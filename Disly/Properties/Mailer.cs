@@ -160,7 +160,7 @@ public class Mailer
                 server = Settings.mailServer;
                 port = Settings.mailServerPort;
                 ssl = Settings.mailServerSSL;
-                mailname = Settings.MailAdresName;
+                mailname = Settings.mailAddresName;
                 mailfrom = Settings.mailUser;
                 server = Settings.mailServer;
                 password = Settings.mailPass;
@@ -181,7 +181,7 @@ public class Mailer
             //if (model.User.C_EMail.ToString() != String.Empty)
             //    maillist = maillist + ";" + model.User.C_EMail.ToString();
 
-            if(maillist==string.Empty) maillist= Settings.MailTo;
+            if(maillist==string.Empty) maillist= Settings.mailTo;
         }
 
         public string SendMail()

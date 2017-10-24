@@ -34,7 +34,10 @@ namespace cms.dbase
                             Id = s.id,
                             Title = s.c_title,
                             Alias = s.c_alias,
-                            Preview = s.c_preview,
+                            PreviewImage = new Photo()
+                            {
+                                Url = s.c_preview
+                            },
                             Text = s.c_text,
                             Url = s.c_url,
                             UrlName = s.c_url_name,
@@ -81,7 +84,10 @@ namespace cms.dbase
                         Id = s.id,
                         Title = s.c_title,
                         Alias = s.c_alias,
-                        Preview = s.c_preview,
+                        PreviewImage = new Photo()
+                        {
+                            Url = s.c_preview
+                        },
                         Text = s.c_text,
                         Url = s.c_url,
                         UrlName = s.c_url_name,
@@ -129,7 +135,7 @@ namespace cms.dbase
                         c_alias = material.Alias,
                         c_text = material.Text,
                         d_date = material.Date,
-                        c_preview = material.Preview,
+                        c_preview = (material.PreviewImage != null)? material.PreviewImage.Url : null,
                         c_url = material.Url,
                         c_url_name = material.UrlName,
                         c_desc = material.Desc,
@@ -188,7 +194,7 @@ namespace cms.dbase
                     cdMaterial.c_alias = material.Alias;
                     cdMaterial.c_text = material.Text;
                     cdMaterial.d_date = material.Date;
-                    cdMaterial.c_preview = material.Preview;
+                    cdMaterial.c_preview = (material.PreviewImage != null)? material.PreviewImage.Url : null ;
                     cdMaterial.c_url = material.Url;
                     cdMaterial.c_url_name = material.UrlName;
                     cdMaterial.c_desc = material.Desc;

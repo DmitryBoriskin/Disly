@@ -43,7 +43,7 @@ namespace cms.dbModel.entity
         /// <summary>
         /// Изображнение
         /// </summary>
-        public string Preview { get; set; }
+        public Photo PreviewImage { get; set; }
 
         /// <summary>
         /// Ссылка 
