@@ -61,7 +61,7 @@ namespace cms.dbModel
         
         // Материалы
         public abstract MaterialsList getMaterialsList(FilterParams filtr);
-        public abstract MaterialsModel getMaterial(Guid id);
+        public abstract MaterialsModel getMaterial(Guid id, Guid substance);
 
         public abstract bool insertCmsMaterial(MaterialsModel material);
         public abstract bool updateCmsMaterial(MaterialsModel material);

@@ -70,8 +70,9 @@ namespace cms.dbase
         /// Получим единичную запись новости
         /// </summary>
         /// <param name="id">Идентификатор</param>
+        /// <param name="substance">Сущность</param>
         /// <returns></returns>
-        public override MaterialsModel getMaterial(Guid id)
+        public override MaterialsModel getMaterial(Guid id, Guid substance)
         {
             using (var db = new CMSdb(_context))
             {
@@ -93,7 +94,7 @@ namespace cms.dbase
                         Important = s.b_important,
                         Group = (Guid)db.content_materials_links
                             .Where(w => w.f_material.Equals(id))
-                            .Where(w => w.f_link_type.Equals("site"))
+                            .Where(w => w.f_link_id.Equals(substance))
                             .Select(t => t.f_group)
                             .SingleOrDefault()
                     });
@@ -293,7 +294,7 @@ namespace cms.dbase
                 {
                     db.content_materials_links
                         .Where(w => w.f_material.Equals(model.Material.Id))
-                        .Where(w => w.f_link_type.Equals("org"))
+                        .Where(w => !w.f_link_id.Equals(model.NotDeletable))
                         .Delete();
 
                     foreach (var t in model.OrgTypes)
@@ -307,7 +308,7 @@ namespace cms.dbase
                                     bool isExist = db.content_materials_links
                                         .Where(w => w.f_material.Equals(model.Material.Id))
                                         .Where(w => w.f_link_id.Equals(o.Id))
-                                        .Where(w => w.f_link_type.Equals("org")).Any();
+                                        .Any();
 
                                     if (!isExist)
                                     {

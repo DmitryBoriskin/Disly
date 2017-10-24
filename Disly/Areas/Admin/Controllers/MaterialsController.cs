@@ -63,7 +63,7 @@ namespace Disly.Areas.Admin.Controllers
         /// <returns></returns>
         public ActionResult Item(Guid Id)
         {
-            model.Item = _cmsRepository.getMaterial(Id);
+            model.Item = _cmsRepository.getMaterial(Id, SiteInfo.ContentId);
             if (model.Item == null)
                 model.Item = new MaterialsModel()
                 {
@@ -126,7 +126,7 @@ namespace Disly.Areas.Admin.Controllers
             if (ModelState.IsValid)
             {
                 var res = false;
-                var getMaterial = _cmsRepository.getMaterial(Id);
+                var getMaterial = _cmsRepository.getMaterial(Id, SiteInfo.ContentId);
 
                 // добавление необходимых полей перед сохранением модели
                 bindData.Item.Id = Id;
@@ -162,7 +162,7 @@ namespace Disly.Areas.Admin.Controllers
                  };
             }
 
-            model.Item = _cmsRepository.getMaterial(Id);
+            model.Item = _cmsRepository.getMaterial(Id, SiteInfo.ContentId);
             model.ErrorInfo = userMessage;
 
             return View("Item", model);
@@ -201,7 +201,7 @@ namespace Disly.Areas.Admin.Controllers
         [HttpGet]
         public ActionResult Orgs(Guid id)
         {
-            model.Item = _cmsRepository.getMaterial(id);
+            model.Item = _cmsRepository.getMaterial(id, SiteInfo.ContentId);
             model.OrgsByType = _cmsRepository.getOrgByType(id);
             return PartialView("Orgs", model);
         }
@@ -213,7 +213,8 @@ namespace Disly.Areas.Admin.Controllers
             MaterialOrgType modelInsert = new MaterialOrgType
             {
                 OrgTypes = model.OrgsByType,
-                Material = model.Item
+                Material = model.Item,
+                NotDeletable = SiteInfo.ContentId
             };
 
             _cmsRepository.insertMaterialsLinksToOrgs(modelInsert);

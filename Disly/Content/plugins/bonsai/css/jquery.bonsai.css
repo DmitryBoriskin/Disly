@@ -12,17 +12,19 @@
 }
 
 li .thumb {
-  margin: -1px 0 0 -1em; /* negative margin into the padding of the li */
+  margin: 2px 0 0 -18px;
   position: absolute;
   cursor: pointer;
 }
 
 li.has-children > .thumb:after {
-  content: '▸';
+  font-family: fontello;
+  content:'\ea7f';
 }
 
 li.has-children.expanded > .thumb:after {
-  content: '▾';
+  font-family: fontello;
+  content:'\ea7d';
 }
 
 li.collapsed > ol.bonsai {
@@ -35,6 +37,5 @@ li.collapsed > ol.bonsai {
   cursor: pointer;
 }
 
-.check_sm {
-    width:2% !important;
-}
+.check_sm {width: 2% !important;}
+.log-list {padding-top: 15px;}
