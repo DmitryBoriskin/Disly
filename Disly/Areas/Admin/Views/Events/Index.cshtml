@@ -13,14 +13,24 @@
             foreach (EventModel Item in Model.List.Data)
             {
 
-                string ImgUrl = @Item.Preview;
-                if (@Item.Preview == string.Empty || @Item.Preview == null) ImgUrl = "/Content/img/nophoto.jpg";
-                else if (ImgUrl.IndexOf("http") == -1) if (!File.Exists(Server.MapPath(ImgUrl))) ImgUrl = "/Content/img/nophoto.jpg";
+                string ImgUrl = (Item.PreviewImage != null) ? Item.PreviewImage.Url : null;
+                if (ImgUrl == string.Empty || ImgUrl == null)
+                {
+                    ImgUrl = "/Content/img/nophoto.jpg";
+                }
+                else if (ImgUrl.IndexOf("http") == -1)
+                {
+                    if (!File.Exists(Server.MapPath(ImgUrl)))
+                    {
+                        ImgUrl = "/Content/img/nophoto.jpg";
+                    }
+                }
+
                 string disabled = (Item.Disabled) ? "disabled" : "";
 
-                <div class="list-item  @disabled">
-                    <a class="li-image" href="/admin/events/item/@Item.Id/@ViewBag.urlQuery">
-                        <img src="@ImgUrl" alt="">
+                <div class="list-item event-list @disabled">
+                    <a href="/admin/events/item/@Item.Id/@ViewBag.urlQuery">
+                        <img src="@ImgUrl" alt="" class="li-image">
                     </a>
                     <div class="li-desc">
                         <a title="@Item.Title" class="li-caption" href="/admin/events/item/@Item.Id/@ViewBag.urlQuery">@Item.Title</a><br />
@@ -34,11 +44,6 @@
                     </div>
 
                 </div>
-
-
-
-
-                
             }
             Html.RenderAction("Pager", "Templates", new { @Model = Model.List.Pager });
         }

@@ -71,6 +71,14 @@
                 {
                     DateBegin = DateTime.Now
                 };
+            if (model.Item != null)
+            {
+                var photo = model.Item.PreviewImage;
+                if (!string.IsNullOrEmpty(photo.Url))
+                {
+                    model.Item.PreviewImage = getInfoPhoto(photo.Url);
+                }
+            }
             return View("Item", model);
          }
  
@@ -130,7 +138,7 @@
          [HttpPost]
          [ValidateInput(false)]
          [MultiButton(MatchFormKey = "action", MatchFormValue = "save-btn")]
-         public ActionResult Save(Guid Id, EventsViewModel bindData)
+         public ActionResult Save(Guid Id, EventsViewModel bindData, HttpPostedFileBase upload)
          {
              ErrorMassege userMessage = new ErrorMassege();
              userMessage.title = "Информация";
@@ -141,8 +149,49 @@
                  var getEvent = _cmsRepository.getEvent(Id);
  
                  bindData.Item.Id = Id;
-                 //Определяем Insert или Update
-                 if (getEvent != null)
+
+                #region Сохранение изображения
+                var width = 0;
+                var height = 0;
+                var defaultPreviewSizes  = new string[] { "540","360" };
+
+                // путь для сохранения изображения //Preview image
+                string savePath = Settings.UserFiles + Domain + Settings.EventsDir;
+                if (upload != null && upload.ContentLength > 0)
+                {
+                    string fileExtension = upload.FileName.Substring(upload.FileName.IndexOf("."));
+
+                    var validExtension = (!string.IsNullOrEmpty(Settings.PicTypes)) ? Settings.PicTypes.Split(',') : "jpg,jpeg,png,gif".Split(',');
+                    if (!validExtension.Contains(fileExtension.ToLower()))
+                    {
+                        model.Item = _cmsRepository.getEvent(Id);
+                        model.ErrorInfo = new ErrorMassege()
+                        {
+                            title = "Ошибка",
+                            info = "Вы не можете загружать файлы данного формата",
+                            buttons = new ErrorMassegeBtn[]
+                            {
+                             new ErrorMassegeBtn { url = "#", text = "ок", action = "false", style="primary" }
+                            }
+                        };
+
+                        return View("Item", model);
+                    }
+
+                    var sizes = (!string.IsNullOrEmpty(Settings.MaterialPreviewImgSize)) ? Settings.MaterialPreviewImgSize.Split(',') : defaultPreviewSizes;
+                    int.TryParse(sizes[0], out width);
+                    int.TryParse(sizes[1], out height);
+                    bindData.Item.PreviewImage = new Photo() 
+                    {
+                        Name = Id.ToString() + fileExtension,
+                        Size = Files.FileAnliz.SizeFromUpload(upload),
+                        Url = Files.SaveImageResizeRename(upload, savePath, Id.ToString(), width, height)
+                    };
+                }
+                #endregion
+
+                //Определяем Insert или Update
+                if (getEvent != null)
                      res = _cmsRepository.updateCmsEvent(bindData.Item);
                  else
                      res = _cmsRepository.insertCmsEvent(bindData.Item);

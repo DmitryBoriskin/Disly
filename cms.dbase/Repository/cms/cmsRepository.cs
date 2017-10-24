@@ -960,7 +960,10 @@ namespace cms.dbase
                         Alias = s.c_alias,
                         Place = s.c_place,
                         EventMaker = s.c_organizer,
-                        Preview = s.c_preview,
+                        PreviewImage = new Photo()
+                        {
+                            Url = s.c_preview
+                        },
                         Text = s.c_text,
                         Url = s.c_url,
                         UrlName = s.c_url_name,
@@ -996,7 +999,10 @@ namespace cms.dbase
                             Alias = s.c_alias,
                             Place = s.c_place,
                             EventMaker = s.c_organizer,
-                            Preview = s.c_preview,
+                            PreviewImage = new Photo()
+                            {
+                                Url = s.c_preview
+                            },
                             Text = s.c_text,
                             Url = s.c_url,
                             UrlName = s.c_url_name,
@@ -1051,7 +1057,7 @@ namespace cms.dbase
                         c_text = eventData.Text,
                         c_place = eventData.Place,
                         c_organizer = eventData.EventMaker,
-                        c_preview = eventData.Preview,
+                        c_preview = (eventData.PreviewImage != null)? eventData.PreviewImage.Url: null,
                         c_desc = eventData.Desc,
                         c_keyw = eventData.KeyW,
                         b_annually = eventData.Annually,
@@ -1105,7 +1111,7 @@ namespace cms.dbase
                     cdEvent.c_text = eventData.Text;
                     cdEvent.c_place = eventData.Place;
                     cdEvent.c_organizer = eventData.EventMaker;
-                    cdEvent.c_preview = eventData.Preview;
+                    cdEvent.c_preview = (eventData.PreviewImage != null)? eventData.PreviewImage.Url: null;
                     cdEvent.c_desc = eventData.Desc;
                     cdEvent.c_keyw = eventData.KeyW;
                     cdEvent.b_annually = eventData.Annually;

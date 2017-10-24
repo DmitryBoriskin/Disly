@@ -62,8 +62,8 @@
     <Compile Include="ServiceLogger.cs" />
     <Compile Include="template\CMSbdModel1.generated.cs">
       <DependentUpon>CMSbdModel.tt</DependentUpon>
-      <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
     </Compile>
   </ItemGroup>
   <ItemGroup>
