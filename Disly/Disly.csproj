@@ -155,6 +155,9 @@
     <Content Include="Content\img\nophoto.jpg" />
     <Content Include="Content\img\preloader_planet.svg" />
     <Content Include="Content\img\preloader.svg" />
+    <Content Include="Content\plugins\bonsai\css\jquery.bonsai.css" />
+    <Content Include="Content\plugins\bonsai\js\jquery.bonsai.js" />
+    <Content Include="Content\plugins\bonsai\js\jquery.qubit.js" />
     <Content Include="Content\plugins\bootstrap\css\bootstrap-theme.css" />
     <Content Include="Content\plugins\bootstrap\css\bootstrap-theme.min.css" />
     <Content Include="Content\plugins\bootstrap\css\bootstrap.css" />
@@ -446,6 +449,7 @@
     <Content Include="Areas\Admin\Views\Banners\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Banners\Item.cshtml" />
     <Content Include="Areas\Admin\Views\Materials\Orgs.cshtml" />
+    <Content Include="Areas\Admin\Views\Materials\OrgsSaved.cshtml" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <Content Include="Views\_ViewStart.cshtml" />
     <None Include="Web.Debug.config">

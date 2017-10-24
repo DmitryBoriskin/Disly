@@ -220,7 +220,9 @@ namespace Disly.Areas.Admin.Controllers
             };
 
             _cmsRepository.insertMaterialsLinksToOrgs(modelInsert);
-            return RedirectToAction("Item", new { id = model.Item.Id });
+
+            //return PartialView("Orgs", model);
+            return PartialView("OrgsSaved");
         }
     }
 }
