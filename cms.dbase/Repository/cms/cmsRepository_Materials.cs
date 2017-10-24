@@ -94,9 +94,9 @@ namespace cms.dbase
                         Important = s.b_important,
                         DefaultSite = (Guid)s.uui_origin,
                         DefaultSiteType = s.c_origin_type,
-                        Group = (Guid)db.content_materials_links
-                            .Where(w => w.f_material.Equals(id))
+                        Group = (Guid)s.fkcontentmaterialslinks
                             .Where(w => w.f_link_id.Equals(s.uui_origin))
+                            .Where(w => w.f_link_type.Equals(s.c_origin_type))
                             .Select(t => t.f_group)
                             .SingleOrDefault(),
                         Event = db.content_materials_links

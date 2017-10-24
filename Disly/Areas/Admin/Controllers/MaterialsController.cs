@@ -177,7 +177,7 @@ namespace Disly.Areas.Admin.Controllers
         [MultiButton(MatchFormKey = "action", MatchFormValue = "delete-btn")]
         public ActionResult Delete(Guid Id)
         {
-            //var res = _cmsRepository.deleteCmsMaterial(Id);
+            var res = _cmsRepository.deleteCmsMaterial(Id);
 
             // записываем информацию о результатах
             ErrorMassege userMassege = new ErrorMassege();
@@ -189,7 +189,7 @@ namespace Disly.Areas.Admin.Controllers
 
             model.ErrorInfo = userMassege;
 
-            return View("Item", model);
+            return RedirectToAction("Index");
         }
 
         /// <summary>
