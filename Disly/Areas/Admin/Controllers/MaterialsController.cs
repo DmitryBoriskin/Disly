@@ -192,10 +192,7 @@ namespace Disly.Areas.Admin.Controllers
             return RedirectToAction("Index");
         }
 
-        /// <summary>
-        /// Список организаций для размещения новости
-        /// </summary>
-        /// <returns></returns>
+        // admin/materials/orgs/{id}
         [HttpGet]
         public ActionResult Orgs(Guid id)
         {
