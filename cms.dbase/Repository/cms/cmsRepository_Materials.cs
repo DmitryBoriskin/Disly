@@ -18,11 +18,14 @@ namespace cms.dbase
         /// </summary>
         /// <param name="filtr">Фильтр</param>
         /// <returns></returns>
-        public override MaterialsList getMaterialsList(FilterParams filtr)
+        public override MaterialsList getMaterialsList(FilterParams filtr, string domain)
         {
             using (var db = new CMSdb(_context))
             {
-                var query = db.content_materialss.Where(w => w.id != null);
+                var query = db.content_sv_materials_sitess
+                    .Where(w => w.id != null)
+                    .Where(w => w.domain.Equals(domain));
+
                 query = query.OrderByDescending(o => o.d_date);
 
                 if (query.Any())

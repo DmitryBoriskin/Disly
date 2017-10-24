@@ -66,6 +66,7 @@ namespace cms.dbase.models
 		public ITable<content_sitemap_menus>            content_sitemap_menuss            { get { return this.GetTable<content_sitemap_menus>(); } }
 		public ITable<content_sitemap_menutypes>        content_sitemap_menutypess        { get { return this.GetTable<content_sitemap_menutypes>(); } }
 		public ITable<content_sv_banner_sections_sites> content_sv_banner_sections_sitess { get { return this.GetTable<content_sv_banner_sections_sites>(); } }
+		public ITable<content_sv_materials_sites>       content_sv_materials_sitess       { get { return this.GetTable<content_sv_materials_sites>(); } }
 		public ITable<content_sv_orgs_by_type>          content_sv_orgs_by_types          { get { return this.GetTable<content_sv_orgs_by_type>(); } }
 		public ITable<content_sv_people_department>     content_sv_people_departments     { get { return this.GetTable<content_sv_people_department>(); } }
 		public ITable<content_sv_people_org>            content_sv_people_orgs            { get { return this.GetTable<content_sv_people_org>(); } }
@@ -1173,6 +1174,28 @@ namespace cms.dbase.models
 		[Column, NotNull] public string domain     { get; set; } // varchar(64)
 		[Column, NotNull] public string site_name  { get; set; } // nvarchar(512)
 		[Column, NotNull] public Guid   section_id { get; set; } // uniqueidentifier
+	}
+
+	// View
+	[Table(Schema="dbo", Name="content_sv_materials_sites")]
+	public partial class content_sv_materials_sites
+	{
+		[Column, NotNull    ] public Guid     id          { get; set; } // uniqueidentifier
+		[Column, NotNull    ] public DateTime d_date      { get; set; } // datetime
+		[Column, NotNull    ] public string   c_title     { get; set; } // varchar(512)
+		[Column,    Nullable] public string   c_preview   { get; set; } // varchar(512)
+		[Column,    Nullable] public string   c_text      { get; set; } // varchar(max)
+		[Column,    Nullable] public string   c_url       { get; set; } // varchar(1024)
+		[Column,    Nullable] public string   c_url_name  { get; set; } // varchar(512)
+		[Column,    Nullable] public string   c_desc      { get; set; } // varchar(1024)
+		[Column,    Nullable] public string   c_keyw      { get; set; } // varchar(512)
+		[Column, NotNull    ] public int      n_year      { get; set; } // int
+		[Column, NotNull    ] public int      n_month     { get; set; } // int
+		[Column, NotNull    ] public int      n_day       { get; set; } // int
+		[Column, NotNull    ] public string   c_alias     { get; set; } // varchar(512)
+		[Column, NotNull    ] public bool     b_disabled  { get; set; } // bit
+		[Column, NotNull    ] public bool     b_important { get; set; } // bit
+		[Column, NotNull    ] public string   domain      { get; set; } // varchar(64)
 	}
 
 	// View

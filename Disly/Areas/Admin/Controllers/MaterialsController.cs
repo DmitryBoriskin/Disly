@@ -48,7 +48,7 @@ namespace Disly.Areas.Admin.Controllers
             // Наполняем фильтр значениями
             filter = getFilter(page_size);
             // Наполняем модель данными
-            model.List = _cmsRepository.getMaterialsList(filter);
+            model.List = _cmsRepository.getMaterialsList(filter, Domain);
 
             return View(model);
         }
