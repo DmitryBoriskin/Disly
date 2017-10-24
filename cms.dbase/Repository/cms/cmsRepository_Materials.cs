@@ -147,7 +147,7 @@ namespace cms.dbase
                     {
                         f_material = material.Id,
                         f_link_id = material.DefaultSite,
-                        f_link_type = "site",
+                        f_link_type = material.DefaultSiteType,
                         f_group = material.Group
                     };
 
@@ -204,7 +204,6 @@ namespace cms.dbase
                     // обновляем группу
                     db.content_materials_links
                          .Where(w => w.f_material.Equals(material.Id))
-                         .Where(w => w.f_link_type.Equals("site"))
                          .Where(w => w.f_link_id.Equals(material.DefaultSite))
                          .Set(u => u.f_group, material.Group)
                          .Update();

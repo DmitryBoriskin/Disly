@@ -95,9 +95,14 @@ namespace cms.dbModel.entity
         public Guid Group { get; set; }
 
         /// <summary>
-        /// Сайт по умолчанию
+        /// Организация(персона) по умолчанию
         /// </summary>
         public Guid DefaultSite { get; set; }
+
+        /// <summary>
+        /// Тип сайта по умолчанию
+        /// </summary>
+        public string DefaultSiteType { get; set; }
     }
 
     /// <summary>

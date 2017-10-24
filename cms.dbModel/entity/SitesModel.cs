@@ -7,38 +7,120 @@ using System.Threading.Tasks;
 
 namespace cms.dbModel.entity
 {
+    /// <summary>
+    /// Модель, описывающая список сайтов и пейджер
+    /// </summary>
     public class SitesList
     {
+        /// <summary>
+        /// Список сайтов 
+        /// </summary>
         public SitesModel[] Data;
+
+        /// <summary>
+        /// Пейджер
+        /// </summary>
         public Pager Pager;
     }
 
+    /// <summary>
+    /// Модель, описывающая сайт
+    /// </summary>
     public class SitesModel
     {
+        /// <summary>
+        /// Идентификатор
+        /// </summary>
         [Required]
         public Guid Id { get; set; }
+
+        /// <summary>
+        /// Название
+        /// </summary>
         [Required(ErrorMessage = "Поле «Название» не должно быть пустым.")]
         public string Title { get; set; }
+
+        /// <summary>
+        /// Алиас
+        /// </summary>
         [Required(ErrorMessage = "Поле «Доменное имя» не должно быть пустым.")]
         [RegularExpression(@"^[^-]([a-zA-Z0-9-]+)$", ErrorMessage = "Поле «Доменное имя» может содержать только буквы латинского алфавита и символ - (дефис). Доменное имя не может начинаться с дефиса.")]
         public string Alias { get; set; }
+
+        /// <summary>
+        /// Тип
+        /// </summary>
         public string Type { get; set; }
+
+        /// <summary>
+        /// Идентификатор контента
+        /// </summary>
         public Guid ContentId { get; set; }
+
+        /// <summary>
+        /// Адрес
+        /// </summary>
         public string Adress { get; set; }
+
+        /// <summary>
+        /// Телефон
+        /// </summary>
         public string Phone { get; set; }
+
+        /// <summary>
+        /// Факс
+        /// </summary>
         public string Fax { get; set; }
+
+        /// <summary>
+        /// Email
+        /// </summary>
         public string Email { get; set; }
+
+        /// <summary>
+        /// Ссылка на сайт
+        /// </summary>
         public string Site { get; set; }
+
+        /// <summary>
+        /// Рабочее время
+        /// </summary>
         public string Worktime { get; set; }
+
+        /// <summary>
+        /// Логотип
+        /// </summary>
         public string Logo { get; set; }
+
+        /// <summary>
+        /// Пользовательские скрипты
+        /// </summary>
         public string Scripts { get; set; }
+
+        /// <summary>
+        /// Список доменов
+        /// </summary>
         public Domain[] DomainList { get; set; }
+
+        /// <summary>
+        /// Флаг отключенного сайта
+        /// </summary>
         public bool SiteOff { get; set; }
     }
 
+    /// <summary>
+    /// Модель, описывающая домен
+    /// </summary>
     public class Domain
     {
+        /// <summary>
+        /// Идентификатор
+        /// </summary>
         public Guid id { get; set;}
+
+        /// <summary>
+        /// Доменное имя
+        /// </summary>
         public string DomainName { get; set; }
     }
 }

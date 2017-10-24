@@ -128,17 +128,14 @@ namespace Disly.Areas.Admin.Controllers
                 var res = false;
                 var getMaterial = _cmsRepository.getMaterial(Id);
 
+                // добавление необходимых полей перед сохранением модели
                 bindData.Item.Id = Id;
-                bindData.Item.DefaultSite = SiteInfo.Id;
-
-                if (String.IsNullOrEmpty(bindData.Item.Alias))
-                {
-                    bindData.Item.Alias = Transliteration.Translit(bindData.Item.Title);
-                }
-                else
-                {
-                    bindData.Item.Alias = Transliteration.Translit(bindData.Item.Alias);
-                }
+                bindData.Item.DefaultSite = SiteInfo.ContentId;
+                bindData.Item.DefaultSiteType = SiteInfo.Type;
+                
+                bindData.Item.Alias = String.IsNullOrEmpty(bindData.Item.Alias) ?
+                    Transliteration.Translit(bindData.Item.Title) :
+                    Transliteration.Translit(bindData.Item.Alias);
 
                 //Определяем Insert или Update
                 if (getMaterial != null)
@@ -220,8 +217,7 @@ namespace Disly.Areas.Admin.Controllers
             };
 
             _cmsRepository.insertMaterialsLinksToOrgs(modelInsert);
-
-            //return PartialView("Orgs", model);
+            
             return PartialView("OrgsSaved");
         }
     }
