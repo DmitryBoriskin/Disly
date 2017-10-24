@@ -387,11 +387,6 @@ namespace cms.dbModel.entity
         /// Новость
         /// </summary>
         public MaterialsModel Material { get; set; }
-
-        /// <summary>
-        /// Идентификатор неудаляемой записи
-        /// </summary>
-        public Guid NotDeletable { get; set; }
     }
 }
 

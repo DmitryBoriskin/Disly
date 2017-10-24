@@ -2,11 +2,6 @@
 using Disly.Areas.Admin.Models;
 using Disly.Areas.Admin.Service;
 using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.IO;
-using System.Linq;
-using System.Net;
 using System.Web;
 using System.Web.Mvc;
 
@@ -36,7 +31,8 @@ namespace Disly.Areas.Admin.Controllers
                 UserResolution = UserResolutionInfo,
                 ControllerName = ControllerName,
                 ActionName = ActionName,
-                Groups = _cmsRepository.getMaterialsGroups()
+                Groups = _cmsRepository.getMaterialsGroups(),
+                Events = _cmsRepository.getMaterialsEvents()
             };
 
             #region Метатеги
@@ -63,7 +59,7 @@ namespace Disly.Areas.Admin.Controllers
         /// <returns></returns>
         public ActionResult Item(Guid Id)
         {
-            model.Item = _cmsRepository.getMaterial(Id, SiteInfo.ContentId);
+            model.Item = _cmsRepository.getMaterial(Id);
             if (model.Item == null)
                 model.Item = new MaterialsModel()
                 {
@@ -126,12 +122,10 @@ namespace Disly.Areas.Admin.Controllers
             if (ModelState.IsValid)
             {
                 var res = false;
-                var getMaterial = _cmsRepository.getMaterial(Id, SiteInfo.ContentId);
+                var getMaterial = _cmsRepository.getMaterial(Id);
 
                 // добавление необходимых полей перед сохранением модели
                 bindData.Item.Id = Id;
-                bindData.Item.DefaultSite = SiteInfo.ContentId;
-                bindData.Item.DefaultSiteType = SiteInfo.Type;
                 
                 bindData.Item.Alias = String.IsNullOrEmpty(bindData.Item.Alias) ?
                     Transliteration.Translit(bindData.Item.Title) :
@@ -141,7 +135,11 @@ namespace Disly.Areas.Admin.Controllers
                 if (getMaterial != null)
                     res = _cmsRepository.updateCmsMaterial(bindData.Item);
                 else
+                {
+                    bindData.Item.DefaultSite =  SiteInfo.ContentId;
+                    bindData.Item.DefaultSiteType = SiteInfo.Type;
                     res = _cmsRepository.insertCmsMaterial(bindData.Item);
+                }
                 //Сообщение пользователю
                 if (res)
                     userMessage.info = "Запись обновлена";
@@ -162,7 +160,7 @@ namespace Disly.Areas.Admin.Controllers
                  };
             }
 
-            model.Item = _cmsRepository.getMaterial(Id, SiteInfo.ContentId);
+            model.Item = _cmsRepository.getMaterial(Id);
             model.ErrorInfo = userMessage;
 
             return View("Item", model);
@@ -201,7 +199,7 @@ namespace Disly.Areas.Admin.Controllers
         [HttpGet]
         public ActionResult Orgs(Guid id)
         {
-            model.Item = _cmsRepository.getMaterial(id, SiteInfo.ContentId);
+            model.Item = _cmsRepository.getMaterial(id);
             model.OrgsByType = _cmsRepository.getOrgByType(id);
             return PartialView("Orgs", model);
         }
@@ -213,8 +211,7 @@ namespace Disly.Areas.Admin.Controllers
             MaterialOrgType modelInsert = new MaterialOrgType
             {
                 OrgTypes = model.OrgsByType,
-                Material = model.Item,
-                NotDeletable = SiteInfo.ContentId
+                Material = model.Item
             };
 
             _cmsRepository.insertMaterialsLinksToOrgs(modelInsert);

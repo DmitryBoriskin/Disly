@@ -812,21 +812,23 @@ namespace cms.dbase.models
 	[Table(Schema="dbo", Name="content_materials")]
 	public partial class content_materials
 	{
-		[PrimaryKey, NotNull    ] public Guid     id          { get; set; } // uniqueidentifier
-		[Column,     NotNull    ] public DateTime d_date      { get; set; } // datetime
-		[Column,     NotNull    ] public string   c_title     { get; set; } // varchar(512)
-		[Column,        Nullable] public string   c_preview   { get; set; } // varchar(512)
-		[Column,        Nullable] public string   c_text      { get; set; } // varchar(max)
-		[Column,        Nullable] public string   c_url       { get; set; } // varchar(1024)
-		[Column,        Nullable] public string   c_url_name  { get; set; } // varchar(512)
-		[Column,        Nullable] public string   c_desc      { get; set; } // varchar(1024)
-		[Column,        Nullable] public string   c_keyw      { get; set; } // varchar(512)
-		[Column,     NotNull    ] public int      n_year      { get; set; } // int
-		[Column,     NotNull    ] public int      n_month     { get; set; } // int
-		[Column,     NotNull    ] public int      n_day       { get; set; } // int
-		[Column,     NotNull    ] public string   c_alias     { get; set; } // varchar(512)
-		[Column,     NotNull    ] public bool     b_disabled  { get; set; } // bit
-		[Column,     NotNull    ] public bool     b_important { get; set; } // bit
+		[PrimaryKey, NotNull    ] public Guid     id            { get; set; } // uniqueidentifier
+		[Column,     NotNull    ] public DateTime d_date        { get; set; } // datetime
+		[Column,     NotNull    ] public string   c_title       { get; set; } // varchar(512)
+		[Column,        Nullable] public string   c_preview     { get; set; } // varchar(512)
+		[Column,        Nullable] public string   c_text        { get; set; } // varchar(max)
+		[Column,        Nullable] public string   c_url         { get; set; } // varchar(1024)
+		[Column,        Nullable] public string   c_url_name    { get; set; } // varchar(512)
+		[Column,        Nullable] public string   c_desc        { get; set; } // varchar(1024)
+		[Column,        Nullable] public string   c_keyw        { get; set; } // varchar(512)
+		[Column,     NotNull    ] public int      n_year        { get; set; } // int
+		[Column,     NotNull    ] public int      n_month       { get; set; } // int
+		[Column,     NotNull    ] public int      n_day         { get; set; } // int
+		[Column,     NotNull    ] public string   c_alias       { get; set; } // varchar(512)
+		[Column,     NotNull    ] public bool     b_disabled    { get; set; } // bit
+		[Column,     NotNull    ] public bool     b_important   { get; set; } // bit
+		[Column,        Nullable] public Guid?    uui_origin    { get; set; } // uniqueidentifier
+		[Column,        Nullable] public string   c_origin_type { get; set; } // varchar(64)
 
 		#region Associations
 
@@ -860,10 +862,10 @@ namespace cms.dbase.models
 	[Table(Schema="dbo", Name="content_materials_link")]
 	public partial class content_materials_link
 	{
-		[Column, NotNull    ] public Guid   f_material  { get; set; } // uniqueidentifier
-		[Column, NotNull    ] public Guid   f_link_id   { get; set; } // uniqueidentifier
-		[Column, NotNull    ] public string f_link_type { get; set; } // varchar(16)
-		[Column,    Nullable] public Guid?  f_group     { get; set; } // uniqueidentifier
+		[PrimaryKey(1), NotNull    ] public Guid   f_material  { get; set; } // uniqueidentifier
+		[PrimaryKey(2), NotNull    ] public Guid   f_link_id   { get; set; } // uniqueidentifier
+		[PrimaryKey(3), NotNull    ] public string f_link_type { get; set; } // varchar(16)
+		[Column,           Nullable] public Guid?  f_group     { get; set; } // uniqueidentifier
 
 		#region Associations
 
@@ -1662,6 +1664,14 @@ namespace cms.dbase.models
 		{
 			return table.FirstOrDefault(t =>
 				t.id == id);
+		}
+
+		public static content_materials_link Find(this ITable<content_materials_link> table, Guid f_material, Guid f_link_id, string f_link_type)
+		{
+			return table.FirstOrDefault(t =>
+				t.f_material  == f_material &&
+				t.f_link_id   == f_link_id  &&
+				t.f_link_type == f_link_type);
 		}
 
 		public static content_org_structure Find(this ITable<content_org_structure> table, Guid id)

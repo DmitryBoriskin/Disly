@@ -61,13 +61,14 @@ namespace cms.dbModel
         
         // Материалы
         public abstract MaterialsList getMaterialsList(FilterParams filtr);
-        public abstract MaterialsModel getMaterial(Guid id, Guid substance);
+        public abstract MaterialsModel getMaterial(Guid id);
 
         public abstract bool insertCmsMaterial(MaterialsModel material);
         public abstract bool updateCmsMaterial(MaterialsModel material);
         public abstract bool deleteCmsMaterial(Guid id);
         public abstract MaterialsGroup[] getMaterialsGroups();
         public abstract bool insertMaterialsLinksToOrgs(MaterialOrgType model);
+        public abstract MaterialsEvents[] getMaterialsEvents();
 
         // Events
         public abstract EventsList getEventsList(FilterParams filtr);
