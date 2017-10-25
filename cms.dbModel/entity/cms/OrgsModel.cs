@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace cms.dbModel.entity
@@ -381,7 +382,7 @@ namespace cms.dbModel.entity
         /// <summary>
         /// Типы организаций
         /// </summary>
-        public OrgType[] OrgTypes { get; set; }
+        public List<OrgType> OrgTypes { get; set; }
 
         /// <summary>
         /// Новость

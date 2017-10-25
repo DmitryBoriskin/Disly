@@ -255,6 +255,19 @@ namespace Disly.Areas.Admin.Controllers
         {
             model.Item = _cmsRepository.getMaterial(id);
             model.OrgsByType = _cmsRepository.getOrgByType(id);
+
+            // прочие организации, непривязанные к типам
+            OrgType anotherOrgs = new OrgType
+            {
+                Id = Guid.Parse("4D30E508-5C56-43A0-9F25-EEFF026F95EF"),
+                Title = "Прочие организации",
+                Sort = model.OrgsByType.Select(s => s.Sort).Max() + 1,
+                Orgs = _cmsRepository.getOrgAttachedToTypes(id)
+            };
+            
+            if (anotherOrgs.Orgs != null)
+                model.OrgsByType.Add(anotherOrgs);
+
             return PartialView("Orgs", model);
         }
 
