@@ -67,7 +67,7 @@ namespace Disly.Areas.Admin.Controllers
                     Date = DateTime.Now
                 };
 
-            if (model.Item != null)
+            if (model.Item != null && model.Item.PreviewImage != null)
             {
                 var photo = model.Item.PreviewImage;
                 if (!string.IsNullOrEmpty(photo.Url))
@@ -77,8 +77,7 @@ namespace Disly.Areas.Admin.Controllers
             }
             return View("Item", model);
         }
-
-
+        
         /// <summary>
         /// Формируем строку фильтра
         /// </summary>
