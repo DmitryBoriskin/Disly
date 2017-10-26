@@ -310,8 +310,9 @@ $(document).ready(function () {
     }
     
     //коррективы selectpicker 
-    $('select.selectpicker[required]').each(function () {
+    $('select.selectpicker:required').each(function () {
         $parentBl = $(this).parent();
+        //alert($(this).find('option:selected').val());
         $parentBl.addClass('invalid');
 
         $(this).change(function () {

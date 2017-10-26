@@ -77,7 +77,7 @@ namespace Disly.Areas.Admin.Controllers
             }
             return View("Item", model);
         }
-        
+
         /// <summary>
         /// Формируем строку фильтра
         /// </summary>
@@ -148,8 +148,8 @@ namespace Disly.Areas.Admin.Controllers
                 {
                     string fileExtension = upload.FileName.Substring(upload.FileName.IndexOf("."));
 
-                    var validExtension = (!string.IsNullOrEmpty(Settings.PicTypes)) ? Settings.PicTypes.Split(',') : "jpg,jpeg,png,gif".Split(',');
-                    if(!validExtension.Contains(fileExtension.ToLower()))
+                    var validExtension = (!string.IsNullOrEmpty(Settings.PicTypes)) ? Settings.PicTypes.Split(',') : ".jpg,.jpeg,.png,.gif".Split(',');
+                    if (!validExtension.Contains(fileExtension.ToLower()))
                     {
                         model.Item = _cmsRepository.getMaterial(Id);
 
@@ -161,7 +161,7 @@ namespace Disly.Areas.Admin.Controllers
                             {
                              new ErrorMassegeBtn { url = "#", text = "ок", action = "false", style="primary" }
                             }
-                    };
+                        };
 
                         return View("Item", model);
                     }
@@ -192,7 +192,7 @@ namespace Disly.Areas.Admin.Controllers
                     res = _cmsRepository.updateCmsMaterial(bindData.Item);
                 else
                 {
-                    bindData.Item.DefaultSite =  SiteInfo.ContentId;
+                    bindData.Item.DefaultSite = SiteInfo.ContentId;
                     bindData.Item.DefaultSiteType = SiteInfo.Type;
                     res = _cmsRepository.insertCmsMaterial(bindData.Item);
                 }
@@ -217,6 +217,12 @@ namespace Disly.Areas.Admin.Controllers
             }
 
             model.Item = _cmsRepository.getMaterial(Id);
+            var photo = model.Item.PreviewImage;
+            if (!string.IsNullOrEmpty(photo.Url))
+            {
+                model.Item.PreviewImage = getInfoPhoto(photo.Url);
+            }
+            
             model.ErrorInfo = userMessage;
 
             return View("Item", model);
@@ -263,7 +269,7 @@ namespace Disly.Areas.Admin.Controllers
                 Sort = model.OrgsByType.Select(s => s.Sort).Max() + 1,
                 Orgs = _cmsRepository.getOrgAttachedToTypes(id)
             };
-            
+
             if (anotherOrgs.Orgs != null)
                 model.OrgsByType.Add(anotherOrgs);
 
@@ -281,7 +287,7 @@ namespace Disly.Areas.Admin.Controllers
             };
 
             _cmsRepository.insertMaterialsLinksToOrgs(modelInsert);
-            
+
             return PartialView("OrgsSaved");
         }
     }

@@ -209,7 +209,7 @@ namespace cms.dbase
                     cdMaterial.c_alias = material.Alias;
                     cdMaterial.c_text = material.Text;
                     cdMaterial.d_date = material.Date;
-                    cdMaterial.c_preview = (material.PreviewImage != null)? material.PreviewImage.Url : null ;
+                    cdMaterial.c_preview = (material.PreviewImage == null) ? cdMaterial.c_preview : material.PreviewImage.Url;
                     cdMaterial.c_url = material.Url;
                     cdMaterial.c_url_name = material.UrlName;
                     cdMaterial.c_desc = material.Desc;

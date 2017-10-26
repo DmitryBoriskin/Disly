@@ -226,7 +226,7 @@
             $InfoBlock.append('<div class="preview_size">' + 'Размер: ' + this.$element.attr('data-size') + '</div>');
 
             $DelPreview = $("<div/>", { 'class': 'preview_btn' });
-            $DelLink = $('<a class="preview_del button icon-delete">Удалить</a>');
+            $DelLink = $('<a class="preview_del button icon-delete" value="no-preloader-btn">Удалить</a>');
             $DelPreview.append($DelLink);
             $InfoBlock.append($DelPreview);
             $Wrap.append($InfoBlock);
