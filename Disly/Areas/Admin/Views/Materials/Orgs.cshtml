@@ -2,6 +2,7 @@
 @{Layout = "~/Areas/Admin/Views/Shared/_popUp.cshtml";}
 
 <link href="~/Content/plugins/bonsai/css/jquery.bonsai.css" rel="stylesheet" />
+@*<link href="~/Content/plugins/icheck/skins/all.css" rel="stylesheet" />*@
 <div>
     @if (Model != null)
     {
@@ -30,7 +31,7 @@
                                             <div class="check_sm col-sm-1">
                                                 @Html.CheckBoxFor(m => Model.OrgsByType[i].Orgs[j].Check, new { type = "checkbox", @data_init = "false" })
                                             </div>
-                                            <div class="col-sm-11">
+                                            <div class="check_sm_title col-sm-11">
                                                 @Html.LabelFor(m => Model.OrgsByType[i].Orgs[j].Check, Model.OrgsByType[i].Orgs[j].Title)
                                             </div>
                                         </div>
@@ -59,10 +60,15 @@
 
 <script src="~/Content/plugins/bonsai/js/jquery.bonsai.js"></script>
 <script src="~/Content/plugins/bonsai/js/jquery.qubit.js"></script>
+@*<script src="~/Content/plugins/icheck/icheck.min.js"></script>*@
 <script>
     $('#checkboxes').bonsai({
         expandAll: false,
         checkboxes: true, // depends on jquery.qubit plugin
         handleDuplicateCheckboxes: true // optional
     });
+    //$('input').iCheck({
+    //    checkboxClass: 'icheckbox_flat-blue',
+    //    radioClass: 'iradio_flat-blue'
+    //});
 </script>
