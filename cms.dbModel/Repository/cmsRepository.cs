@@ -60,7 +60,7 @@ namespace cms.dbModel
         public abstract ResolutionsModel[] getGroupResolutions(string alias);
         
         // Материалы
-        public abstract MaterialsList getMaterialsList(FilterParams filtr);
+        public abstract MaterialsList getMaterialsList(FilterParams filtr, string domain);
         public abstract MaterialsModel getMaterial(Guid id);
 
         public abstract bool insertCmsMaterial(MaterialsModel material);
@@ -125,9 +125,10 @@ namespace cms.dbModel
         public abstract bool delPersonsThisDepartment(Guid idDep, Guid idPeople);
         public abstract OrgType[] getOrgTypes();
         public abstract Guid[] getOrgTypes(Guid id);
-        public abstract OrgType[] getOrgByType(Guid id);
+        public abstract List<OrgType> getOrgByType(Guid id);
         public abstract OrgsModelSmall[] getOrgSmall(Guid id, Guid material);
         public abstract bool setCheckedOrgs(Guid id, Guid material);
+        public abstract OrgsModelSmall[] getOrgAttachedToTypes(Guid id);
 
         //Feedbacks
         public abstract FeedbacksList getFeedbacksList(FilterParams filtr);

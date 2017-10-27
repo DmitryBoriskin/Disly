@@ -23,6 +23,7 @@ checkbox (документация на сайте http://www.bootstraptoggle.co
 	@data_onstyle = "primary,success,info,warning,danger,default"	- Цвет выбранного checkbox (по умолчанию - default)
 
 select (документация на сайте https://silviomoreto.github.io/bootstrap-select/)
+	при добавление атрибута required необходимо обернуть в div.required
 
 input type=text
 	@data_focus = false		- отменяет получене фокуса при загрузке страницы

@@ -18,11 +18,14 @@ namespace cms.dbase
         /// </summary>
         /// <param name="filtr">Фильтр</param>
         /// <returns></returns>
-        public override MaterialsList getMaterialsList(FilterParams filtr)
+        public override MaterialsList getMaterialsList(FilterParams filtr, string domain)
         {
             using (var db = new CMSdb(_context))
             {
-                var query = db.content_materialss.Where(w => w.id != null);
+                var query = db.content_sv_materials_sitess
+                    .Where(w => w.id != null)
+                    .Where(w => w.domain.Equals(domain));
+
                 query = query.OrderByDescending(o => o.d_date);
 
                 if (query.Any())
@@ -206,7 +209,7 @@ namespace cms.dbase
                     cdMaterial.c_alias = material.Alias;
                     cdMaterial.c_text = material.Text;
                     cdMaterial.d_date = material.Date;
-                    cdMaterial.c_preview = (material.PreviewImage != null)? material.PreviewImage.Url : null ;
+                    cdMaterial.c_preview = (material.PreviewImage == null) ? cdMaterial.c_preview : material.PreviewImage.Url;
                     cdMaterial.c_url = material.Url;
                     cdMaterial.c_url_name = material.UrlName;
                     cdMaterial.c_desc = material.Desc;

@@ -1,4 +1,5 @@
 ﻿using cms.dbModel.entity;
+using System.Collections.Generic;
 
 namespace Disly.Areas.Admin.Models
 {
@@ -25,7 +26,7 @@ namespace Disly.Areas.Admin.Models
         /// <summary>
         /// Список организаций, разбитых на группы
         /// </summary>
-        public OrgType[] OrgsByType { get; set; }
+        public List<OrgType> OrgsByType { get; set; }
 
         /// <summary>
         /// Список событий

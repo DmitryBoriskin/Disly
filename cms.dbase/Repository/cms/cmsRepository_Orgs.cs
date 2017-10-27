@@ -1090,7 +1090,7 @@ namespace cms.dbase
         /// Получим список типов организаций с привязанными к ним организациями
         /// </summary>
         /// <returns></returns>
-        public override OrgType[] getOrgByType(Guid material)
+        public override List<OrgType> getOrgByType(Guid material)
         {
             using (var db = new CMSdb(_context))
             {
@@ -1105,7 +1105,7 @@ namespace cms.dbase
                     });
 
                 if (!data.Any()) return null;
-                else return data.ToArray();
+                else return data.ToList();
             }
         }
 
@@ -1147,6 +1147,28 @@ namespace cms.dbase
                     .Where(w => w.f_link_id.Equals(id));
 
                 return data.Any();
+            }
+        }
+
+        /// <summary>
+        /// Получаем список организаций, прикреплённых к каким-то типам
+        /// </summary>
+        /// <returns></returns>
+        public override OrgsModelSmall[] getOrgAttachedToTypes(Guid material)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var data = db.content_sv_orgs_not_attacheds
+                    .OrderBy(o => o.c_title)
+                    .Select(s => new OrgsModelSmall
+                    {
+                        Id = s.id,
+                        Title = s.c_title,
+                        Check = setCheckedOrgs(s.id, material)
+                    });
+
+                if (!data.Any()) return null;
+                else return data.ToArray();
             }
         }
     }

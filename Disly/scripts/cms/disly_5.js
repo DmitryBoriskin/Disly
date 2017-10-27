@@ -317,7 +317,7 @@ $(document).ready(function () {
     }
 
     //коррективы selectpicker 
-    $('select.selectpicker[required]').each(function () {
+    $('select.selectpicker:required').each(function () {
         $parentBl = $(this).parent();
         $parentBl.addClass('invalid');
 
