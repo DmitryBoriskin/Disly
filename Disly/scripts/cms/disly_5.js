@@ -30,6 +30,7 @@ $(document).ready(function () {
                 switch (Action) {
                     case "delete":
                         $('form input[required]').removeAttr('required');
+                        $('form select[required]').removeAttr('required');
                         Confirm('Уведомление', 'Вы хотите удалить эту запись?', $(this));
                         break;
                     case "cancel":
@@ -38,12 +39,12 @@ $(document).ready(function () {
                         }
                         else {
                             $('form input[required]').removeAttr('required');
+                            $('form select[required]').removeAttr('required');
                             $(this).trigger('click');
                         }
 
                         break;
                     case "noPreloader-accept":
-                        $(this).trigger('click');
                         break;
                         //case
                     default: return false; break;
