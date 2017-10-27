@@ -161,7 +161,7 @@
                 {
                     string fileExtension = upload.FileName.Substring(upload.FileName.IndexOf("."));
 
-                    var validExtension = (!string.IsNullOrEmpty(Settings.PicTypes)) ? Settings.PicTypes.Split(',') : "jpg,jpeg,png,gif".Split(',');
+                    var validExtension = (!string.IsNullOrEmpty(Settings.PicTypes)) ? Settings.PicTypes.Split(',') : ".jpg,.jpeg,.png,.gif".Split(',');
                     if (!validExtension.Contains(fileExtension.ToLower()))
                     {
                         model.Item = _cmsRepository.getEvent(Id);
