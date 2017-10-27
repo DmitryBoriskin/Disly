@@ -40,9 +40,7 @@
     <div class="dop_info-block">
         <div class="dop-caption">Настройки</div>
         @Html.TextBoxFor(m => m.Item.Date, new { required = "", data_type = "datetime", title = "Дата публикации", value = ViewBag.Date })
-        <div class="required">
-            @Html.DropDownListFor(m => m.Item.Group, new SelectList(Model.Groups, "Id", "Title", null), new { @title = "Группа", @class = "selectpicker", @data_help = "Выбор группы", @required = "" })
-        </div>
+        @Html.DropDownListFor(m => m.Item.Group, new SelectList(Model.Groups, "Id", "Title", null), new { @title = "Группа", @class = "selectpicker", @data_help = "Выбор группы", @required = "" })
         @Html.DropDownListFor(m => m.Item.Event, new SelectList(Model.Events, "Id", "Title", null), new { @title = "Событие", @class = "selectpicker", @data_help = "Выбор события" })
         <div class="group-block open" title="Мета теги">
             @Html.TextAreaFor(m => m.Item.Keyw, new { type = "text", title = "Ключевые слова", data_help = "Данный тег используется при создании краткого описания страницы, используется поисковыми системами для индексации, а также при создании аннотации в выдаче по запросу. При отсутствии тега поисковые системы выдают в аннотации первую строку документа или отрывок, содержащий ключевые слова." })

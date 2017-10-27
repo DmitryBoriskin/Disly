@@ -378,6 +378,7 @@
         windowPadding: 0,
         readonly: null,
         help: null,
+        required: null
     };
 
     Selectpicker.prototype = {
@@ -391,9 +392,14 @@
             // ----- dislyStyle
             this.options.readonly = (this.$element.attr('readonly') === null) ? Selectpicker.DEFAULTS.readonly : this.$element.attr('readonly');
             this.options.help = (this.$element.attr('data-help') === null) ? Selectpicker.DEFAULTS.help : this.$element.attr('data-help');
+            this.options.required = (this.$element.attr('required') === null) ? Selectpicker.DEFAULTS.required : this.$element.attr('required');
 
-
-            this.$element.wrap('<div class="form-group">');
+            if (this.options.required) {
+                this.$element.wrap('<div class="form-group invalid">');        
+            }
+            else {
+                this.$element.wrap('<div class="form-group">');
+            }
 
             if (this.options.title) {
                 var $toggleTitle = $('<label for="' + this.$element.attr('id') + '">').html(this.options.title + ':');

@@ -164,7 +164,7 @@
     <Content Include="Content\plugins\bootstrap\css\bootstrap.min.css" />
     <Content Include="Content\plugins\bootstrap\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Content\plugins\bootstrap\css\bootstrap-select.css" />
-    <Content Include="Content\plugins\bootstrap\js\bootstrap-select.js" />
+    <Content Include="Content\plugins\bootstrap\js\.js" />
     <Content Include="Content\plugins\bootstrap\js\bootstrap-toggle.js" />
     <Content Include="Content\plugins\bootstrap\js\bootstrap-toggle.min.js" />
     <Content Include="Content\plugins\bootstrap\js\bootstrap.js" />
