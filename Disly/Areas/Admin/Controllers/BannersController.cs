@@ -119,10 +119,10 @@ namespace Disly.Areas.Admin.Controllers
 
                 if (upload != null && upload.ContentLength > 0)
                 {
-                    string fileExtension = upload.FileName.Substring(upload.FileName.IndexOf("."));
+                    string fileExtension = upload.FileName.Substring(upload.FileName.IndexOf(".")).ToLower();
 
                     var validExtension = (!string.IsNullOrEmpty(Settings.PicTypes)) ? Settings.PicTypes.Split(',') : "jpg,jpeg,png,gif".Split(',');
-                    if (!validExtension.Contains(fileExtension.ToLower()))
+                    if (!validExtension.Contains(fileExtension.Replace(".", "")))
                     {
                         model.Item = _cmsRepository.getBanner(id);
                         model.ErrorInfo = new ErrorMassege()
@@ -178,10 +178,9 @@ namespace Disly.Areas.Admin.Controllers
 
             model.Item = _cmsRepository.getBanner(id);
 
-            var photo = model.Item.Photo;
-            if (!string.IsNullOrEmpty(photo.Url))
+            if (model.Item != null && model.Item.Photo != null && !string.IsNullOrEmpty(model.Item.Photo.Url))
             {
-                model.Item.Photo = getInfoPhoto(photo.Url);
+                model.Item.Photo = getInfoPhoto(model.Item.Photo.Url);
             }
 
             return View(model);

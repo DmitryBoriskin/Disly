@@ -246,13 +246,12 @@ namespace cms.dbase
 
                 if (query.Any())
                 {
-                    var oldRecord = query.FirstOrDefault();
 
-                    string img = item.Photo == null ? oldRecord.c_photo : item.Photo.Url;
+                    string img = (item.Photo != null) ? item.Photo.Url: null;
 
                     query
                         .Set(s => s.c_title, item.Title)
-                        .Set(s => s.c_photo, img)
+                        .Set(s => s.c_photo, item.Photo.Url)
                         .Set(s => s.c_url, item.Url)
                         .Set(s => s.c_text, item.Text)
                         .Set(s => s.d_date, item.Date)

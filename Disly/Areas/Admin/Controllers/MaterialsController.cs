@@ -147,10 +147,10 @@ namespace Disly.Areas.Admin.Controllers
                 string savePath = Settings.UserFiles + Domain + Settings.MaterialsDir; //+2017_09
                 if (upload != null && upload.ContentLength > 0)
                 {
-                    string fileExtension = upload.FileName.Substring(upload.FileName.IndexOf("."));
+                    string fileExtension = upload.FileName.Substring(upload.FileName.IndexOf(".")).ToLower();
 
                     var validExtension = (!string.IsNullOrEmpty(Settings.PicTypes)) ? Settings.PicTypes.Split(',') : "jpg,jpeg,png,gif".Split(',');
-                    if(!validExtension.Contains(fileExtension.ToLower()))
+                    if(!validExtension.Contains(fileExtension.Replace(".","")))
                     {
                         model.Item = _cmsRepository.getMaterial(Id);
 
@@ -218,6 +218,10 @@ namespace Disly.Areas.Admin.Controllers
             }
 
             model.Item = _cmsRepository.getMaterial(Id);
+            if (model.Item != null && model.Item.PreviewImage != null && !string.IsNullOrEmpty(model.Item.PreviewImage.Url))
+            {
+                model.Item.PreviewImage = getInfoPhoto(model.Item.PreviewImage.Url);
+            }
             model.ErrorInfo = userMessage;
 
             return View("Item", model);

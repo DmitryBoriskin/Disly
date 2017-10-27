@@ -105,11 +105,11 @@ namespace cms.dbase
                             .Where(w => w.f_link_type.Equals(s.c_origin_type))
                             .Select(t => t.f_group)
                             .SingleOrDefault(),
-                        Event = db.content_materials_links
-                            .Where(w => w.f_material.Equals(s.id))
+                        Event = (Guid?)s.fkcontentmaterialslinks
+                            //(Guid?)db.content_materials_links
+                            //.Where(w => w.f_material.Equals(s.id))
                             .Where(w => w.f_link_type.Equals("event"))
-                            .Select(t => t.f_link_id)
-                            .SingleOrDefault()
+                            .Select(t => t.f_link_id).SingleOrDefault()
                     });
 
 
