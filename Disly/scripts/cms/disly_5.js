@@ -159,6 +159,11 @@ $(document).ready(function () {
         }
     });
 
+    $('.preview_del').on('click', function () {
+        change = 1;
+        requiredTest();
+    });
+
     //телефонные номер  в отделениях
     $('.depart_phone_del').click(function (e) {
         e.preventDefault();

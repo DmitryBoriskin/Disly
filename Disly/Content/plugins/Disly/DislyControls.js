@@ -296,6 +296,7 @@
         $file.siblings('.preview').remove();
 
         $file.siblings('input[type=hidden]#' + $file.attr('id')).removeAttr('value');
+        $('.fileupload').siblings('input[type=hidden]').removeAttr('value');
 
         $file.DislyFile('create');
     })
