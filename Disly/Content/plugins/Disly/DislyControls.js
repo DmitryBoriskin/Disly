@@ -19,7 +19,8 @@
         help: null,
         type: 'text',
         width: null,
-        height: null
+        height: null,
+        required: null
     }
 
     inputText.prototype.defaults = function () {
@@ -28,12 +29,13 @@
             help: this.$element.attr('data-help') || inputText.DEFAULTS.help,
             type: this.$element.attr('data-type') || inputText.DEFAULTS.type,
             width: this.$element.attr('data-width') || inputText.DEFAULTS.width,
-            height: this.$element.attr('data-height') || inputText.DEFAULTS.height
+            height: this.$element.attr('data-height') || inputText.DEFAULTS.height,
+            required: this.$element.attr('required') || inputText.DEFAULTS.required
         }
     }
 
     inputText.prototype.render = function () {
-        this.$element.wrap('<div class="form-group">');        
+        this.$element.wrap('<div class="form-group">');
 
         if (this.options.title) {
             var $toggleTitle = $('<label for="' + this.$element.attr('id') + '">').html(this.options.title + ':');

@@ -315,23 +315,6 @@ $(document).ready(function () {
             }
         }
     }
-
-    //коррективы selectpicker 
-    $('select.selectpicker:required').each(function () {
-        $parentBl = $(this).parent();
-        $parentBl.addClass('invalid');
-
-        $(this).change(function () {
-            if ($(this).val() != '') {
-                $parentBl.removeClass('invalid');
-            }
-        });
-
-    });
-
-
-
-
 });
 var validSumm = $('.validation-summary-valid');
 if (validSumm.length > 0 && validSumm.find('li')[0].innerHTML != '') validSumm.css('display', 'block');
