@@ -49,7 +49,7 @@ namespace Disly.Areas.Admin.Controllers
             // Наполняем фильтр значениями
             filter = getFilter(page_size);
             // Наполняем модель данными
-            model.List = _cmsRepository.getMaterialsList(filter, Domain);
+            model.List = _cmsRepository.getMaterialsList(filter);
 
             return View(model);
         }
@@ -60,14 +60,14 @@ namespace Disly.Areas.Admin.Controllers
         /// <returns></returns>
         public ActionResult Item(Guid Id)
         {
-            model.Item = _cmsRepository.getMaterial(Id);
+            model.Item = _cmsRepository.getMaterial(Id, Domain);
             if (model.Item == null)
                 model.Item = new MaterialsModel()
                 {
                     Date = DateTime.Now
                 };
 
-            if (model.Item != null && model.Item.PreviewImage != null)
+            if (model.Item.PreviewImage != null)
             {
                 var photo = model.Item.PreviewImage;
                 if (!string.IsNullOrEmpty(photo.Url))
@@ -75,6 +75,7 @@ namespace Disly.Areas.Admin.Controllers
                     model.Item.PreviewImage = getInfoPhoto(photo.Url);
                 }
             }
+           
             return View("Item", model);
         }
 
@@ -131,11 +132,11 @@ namespace Disly.Areas.Admin.Controllers
             if (ModelState.IsValid)
             {
                 var res = false;
-                var getMaterial = _cmsRepository.getMaterial(Id);
+                var getMaterial = _cmsRepository.getMaterial(Id, Domain);
 
                 // добавление необходимых полей перед сохранением модели
                 bindData.Item.Id = Id;
-                bindData.Item.DefaultSite = SiteInfo.Id;
+                bindData.Item.ContentLink = SiteInfo.Id;
 
                 #region Сохранение изображения
                 var width = 0;
@@ -151,7 +152,7 @@ namespace Disly.Areas.Admin.Controllers
                     var validExtension = (!string.IsNullOrEmpty(Settings.PicTypes)) ? Settings.PicTypes.Split(',') : "jpg,jpeg,png,gif".Split(',');
                     if(!validExtension.Contains(fileExtension.Replace(".","")))
                     {
-                        model.Item = _cmsRepository.getMaterial(Id);
+                        model.Item = _cmsRepository.getMaterial(Id, Domain);
 
                         model.ErrorInfo = new ErrorMassege()
                         {
@@ -162,7 +163,6 @@ namespace Disly.Areas.Admin.Controllers
                              new ErrorMassegeBtn { url = "#", text = "ок", action = "false", style="primary" }
                             }
                         };
-
                         return View("Item", model);
                     }
 
@@ -192,8 +192,8 @@ namespace Disly.Areas.Admin.Controllers
                     res = _cmsRepository.updateCmsMaterial(bindData.Item);
                 else
                 {
-                    bindData.Item.DefaultSite = SiteInfo.ContentId;
-                    bindData.Item.DefaultSiteType = SiteInfo.Type;
+                    bindData.Item.ContentLink = SiteInfo.ContentId;
+                    bindData.Item.ContentLinkType = SiteInfo.Type;
                     res = _cmsRepository.insertCmsMaterial(bindData.Item);
                 }
                 //Сообщение пользователю
@@ -216,7 +216,7 @@ namespace Disly.Areas.Admin.Controllers
                  };
             }
 
-            model.Item = _cmsRepository.getMaterial(Id);
+            model.Item = _cmsRepository.getMaterial(Id, Domain);
             if (model.Item != null && model.Item.PreviewImage != null && !string.IsNullOrEmpty(model.Item.PreviewImage.Url))
             {
                 model.Item.PreviewImage = getInfoPhoto(model.Item.PreviewImage.Url);
@@ -256,7 +256,7 @@ namespace Disly.Areas.Admin.Controllers
         [HttpGet]
         public ActionResult Orgs(Guid id)
         {
-            model.Item = _cmsRepository.getMaterial(id);
+            model.Item = _cmsRepository.getMaterial(id, Domain);
             model.OrgsByType = _cmsRepository.getOrgByType(id);
 
             // прочие организации, непривязанные к типам

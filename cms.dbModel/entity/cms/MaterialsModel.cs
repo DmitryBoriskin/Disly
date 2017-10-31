@@ -4,6 +4,31 @@ using System.ComponentModel.DataAnnotations;
 namespace cms.dbModel.entity
 {
     /// <summary>
+    ///  сайт организации, события или персоны
+    /// </summary>
+    public class SiteContentType
+    {
+        /// <summary>
+        /// 
+        /// </summary>
+        public Guid? Id;
+
+        /// <summary>
+        /// тип
+        /// </summary>
+        public string CType;
+    }
+
+    /// <summary>
+    /// Группа новости
+    /// </summary>
+    public class MaterialGroup
+    {
+        public Guid Id;
+        public string Name;
+    }
+
+    /// <summary>
     /// Модель, описывающая список новостей
     /// </summary>
     public class MaterialsList
@@ -92,17 +117,17 @@ namespace cms.dbModel.entity
         /// <summary>
         /// Группа
         /// </summary>
-        public Guid Group { get; set; }
+        public MaterialGroup[] Groups { get; set; }
 
         /// <summary>
-        /// Организация(персона) по умолчанию
+        /// ссылка на организацию/событие/персону по умолчанию
         /// </summary>
-        public Guid DefaultSite { get; set; }
+        public Guid ContentLink { get; set; }
 
         /// <summary>
-        /// Тип сайта по умолчанию
+        /// Тип (организация/событие/персона) по умолчанию
         /// </summary>
-        public string DefaultSiteType { get; set; }
+        public string ContentLinkType { get; set; }
 
         /// <summary>
         /// Событие
