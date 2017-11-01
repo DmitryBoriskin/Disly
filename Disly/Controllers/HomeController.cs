@@ -7,6 +7,20 @@ namespace Disly.Controllers
 {
     public class HomeController : RootController
     {
+        private HomePageViewModel model;
+
+        protected override void OnActionExecuting(ActionExecutingContext filterContext)
+        {
+            base.OnActionExecuting(filterContext);
+
+            model = new HomePageViewModel
+            {
+                SitesInfo = siteModel,
+                SiteMapArray = siteMapArray,
+                BannerArray = bannerArray
+            };
+        }
+
         /// <summary>
         /// Сраница по умолчанию
         /// </summary>
@@ -14,7 +28,6 @@ namespace Disly.Controllers
         public ActionResult Index()
         {
             #region Создаем переменные (значения по умолчанию)
-            PageViewModel Model = new PageViewModel();
             string _ViewName = (ViewName != String.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";
 
             string PageTitle = "Главная страница";
@@ -28,7 +41,7 @@ namespace Disly.Controllers
             ViewBag.KeyWords = PageKeyw;
             #endregion
 
-            return View(_ViewName, Model);
+            return View(_ViewName, model);
         }
     }
 }

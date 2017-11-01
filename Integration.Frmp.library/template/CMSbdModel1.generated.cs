@@ -27,9 +27,9 @@ namespace Integration.Frmp.models
 	/// </summary>
 	public partial class DbModel : LinqToDB.Data.DataConnection
 	{
-		public ITable<ContentPeople>     ContentPeoples     { get { return this.GetTable<ContentPeople>(); } }
-		public ITable<ImportFrmpOrgs>    ImportFrmpOrgss    { get { return this.GetTable<ImportFrmpOrgs>(); } }
-		public ITable<ImportFrmpPeoples> ImportFrmpPeopless { get { return this.GetTable<ImportFrmpPeoples>(); } }
+		public ITable<ImportFrmpOrgs>        ImportFrmpOrgss        { get { return this.GetTable<ImportFrmpOrgs>(); } }
+		public ITable<ImportFrmpOrgsPeoples> ImportFrmpOrgsPeopless { get { return this.GetTable<ImportFrmpOrgsPeoples>(); } }
+		public ITable<ImportFrmpPeoples>     ImportFrmpPeopless     { get { return this.GetTable<ImportFrmpPeoples>(); } }
 
 		public DbModel()
 			: base("DbModel")
@@ -44,48 +44,6 @@ namespace Integration.Frmp.models
 		}
 
 		partial void InitDataContext();
-
-		#region Table Functions
-
-		#region SFSplitString
-
-		[Sql.TableFunction(Schema="dbo", Name="SF_SplitString")]
-		public ITable<SFSplitStringResult> SFSplitString(string @List, char? @Splitter)
-		{
-			return this.GetTable<SFSplitStringResult>(this, (MethodInfo)MethodBase.GetCurrentMethod(),
-				@List,
-				@Splitter);
-		}
-
-		public partial class SFSplitStringResult
-		{
-			public int    ID { get; set; }
-			public string V  { get; set; }
-		}
-
-		#endregion
-
-		#region SFUserResolutions
-
-		[Sql.TableFunction(Schema="dbo", Name="SF_UserResolutions")]
-		public ITable<SFUserResolutionsResult> SFUserResolutions(string @Url, Guid? @User)
-		{
-			return this.GetTable<SFUserResolutionsResult>(this, (MethodInfo)MethodBase.GetCurrentMethod(),
-				@Url,
-				@User);
-		}
-
-		public partial class SFUserResolutionsResult
-		{
-			public bool? B_Read   { get; set; }
-			public bool? B_Write  { get; set; }
-			public bool? B_Change { get; set; }
-			public bool? B_Delete { get; set; }
-		}
-
-		#endregion
-
-		#endregion
 
 		#region FreeTextTable
 
@@ -127,15 +85,6 @@ namespace Integration.Frmp.models
 		#endregion
 	}
 
-	[Table(Schema="dbo", Name="content_people")]
-	public partial class ContentPeople
-	{
-		[Column(@"id"),           PrimaryKey,  NotNull] public Guid   Id          { get; set; } // uniqueidentifier
-		[Column(@"c_surname"),       Nullable         ] public string CSurname    { get; set; } // varchar(64)
-		[Column(@"c_name"),          Nullable         ] public string CName       { get; set; } // varchar(64)
-		[Column(@"c_patronymic"),    Nullable         ] public string CPatronymic { get; set; } // varchar(64)
-	}
-
 	[Table(Schema="dbo", Name="import_frmp_orgs")]
 	public partial class ImportFrmpOrgs
 	{
@@ -145,119 +94,33 @@ namespace Integration.Frmp.models
 		[Column(@"d_modify"),              NotNull] public DateTime DModify { get; set; } // datetime
 	}
 
+	[Table(Schema="dbo", Name="import_frmp_orgs_peoples")]
+	public partial class ImportFrmpOrgsPeoples
+	{
+		[Column(@"f_oid"),    NotNull] public string FOid    { get; set; } // varchar(64)
+		[Column(@"f_people"), NotNull] public Guid   FPeople { get; set; } // uniqueidentifier
+	}
+
 	[Table(Schema="dbo", Name="import_frmp_peoples")]
 	public partial class ImportFrmpPeoples
 	{
 		[Column(@"id"),           PrimaryKey,  NotNull] public Guid      Id          { get; set; } // uniqueidentifier
-		[Column(@"f_org"),           Nullable         ] public string    FOrg        { get; set; } // varchar(64)
 		[Column(@"c_surname"),       Nullable         ] public string    CSurname    { get; set; } // varchar(64)
 		[Column(@"c_name"),          Nullable         ] public string    CName       { get; set; } // varchar(64)
 		[Column(@"c_patronymic"),    Nullable         ] public string    CPatronymic { get; set; } // varchar(64)
-		[Column(@"c_snils"),                   NotNull] public string    CSnils      { get; set; } // varchar(64)
+		[Column(@"c_snils"),                   NotNull] public string    CSnils      { get; set; } // char(11)
 		[Column(@"b_sex"),           Nullable         ] public bool?     BSex        { get; set; } // bit
-		[Column(@"d_birthdate"),     Nullable         ] public DateTime? DBirthdate  { get; set; } // datetime
-		[Column(@"d_modify"),        Nullable         ] public DateTime? DModify     { get; set; } // datetime
-		[Column(@"b_changed"),       Nullable         ] public bool?     BChanged    { get; set; } // bit
-		[Column(@"c_info"),          Nullable         ] public string    CInfo       { get; set; } // nvarchar(max)
+		[Column(@"d_birthdate"),     Nullable         ] public DateTime? DBirthdate  { get; set; } // datetime2(7)
+		[Column(@"d_modify"),        Nullable         ] public DateTime? DModify     { get; set; } // datetime2(7)
 	}
 
 	public static partial class DbModelStoredProcedures
 	{
-		#region SpAlterdiagram
+		#region ImportFrmpEmployees
 
-		public static int SpAlterdiagram(this DataConnection dataConnection, string @diagramname, int? @owner_id, int? @version, byte[] @definition)
+		public static int ImportFrmpEmployees(this DataConnection dataConnection)
 		{
-			return dataConnection.ExecuteProc("[dbo].[sp_alterdiagram]",
-				new DataParameter("@diagramname", @diagramname, DataType.NVarChar),
-				new DataParameter("@owner_id",    @owner_id,    DataType.Int32),
-				new DataParameter("@version",     @version,     DataType.Int32),
-				new DataParameter("@definition",  @definition,  DataType.VarBinary));
-		}
-
-		#endregion
-
-		#region SpCreatediagram
-
-		public static int SpCreatediagram(this DataConnection dataConnection, string @diagramname, int? @owner_id, int? @version, byte[] @definition)
-		{
-			return dataConnection.ExecuteProc("[dbo].[sp_creatediagram]",
-				new DataParameter("@diagramname", @diagramname, DataType.NVarChar),
-				new DataParameter("@owner_id",    @owner_id,    DataType.Int32),
-				new DataParameter("@version",     @version,     DataType.Int32),
-				new DataParameter("@definition",  @definition,  DataType.VarBinary));
-		}
-
-		#endregion
-
-		#region SpDropdiagram
-
-		public static int SpDropdiagram(this DataConnection dataConnection, string @diagramname, int? @owner_id)
-		{
-			return dataConnection.ExecuteProc("[dbo].[sp_dropdiagram]",
-				new DataParameter("@diagramname", @diagramname, DataType.NVarChar),
-				new DataParameter("@owner_id",    @owner_id,    DataType.Int32));
-		}
-
-		#endregion
-
-		#region SpHelpdiagramdefinition
-
-		public static IEnumerable<SpHelpdiagramdefinitionResult> SpHelpdiagramdefinition(this DataConnection dataConnection, string @diagramname, int? @owner_id)
-		{
-			return dataConnection.QueryProc<SpHelpdiagramdefinitionResult>("[dbo].[sp_helpdiagramdefinition]",
-				new DataParameter("@diagramname", @diagramname, DataType.NVarChar),
-				new DataParameter("@owner_id",    @owner_id,    DataType.Int32));
-		}
-
-		public partial class SpHelpdiagramdefinitionResult
-		{
-			public int?   version    { get; set; }
-			public byte[] definition { get; set; }
-		}
-
-		#endregion
-
-		#region SpHelpdiagrams
-
-		public static IEnumerable<SpHelpdiagramsResult> SpHelpdiagrams(this DataConnection dataConnection, string @diagramname, int? @owner_id)
-		{
-			return dataConnection.QueryProc<SpHelpdiagramsResult>("[dbo].[sp_helpdiagrams]",
-				new DataParameter("@diagramname", @diagramname, DataType.NVarChar),
-				new DataParameter("@owner_id",    @owner_id,    DataType.Int32));
-		}
-
-		public partial class SpHelpdiagramsResult
-		{
-			public string Database { get; set; }
-			public string Name     { get; set; }
-			public int    ID       { get; set; }
-			public string Owner    { get; set; }
-			public int    OwnerID  { get; set; }
-		}
-
-		#endregion
-
-		#region SpRenamediagram
-
-		public static int SpRenamediagram(this DataConnection dataConnection, string @diagramname, int? @owner_id, string @new_diagramname)
-		{
-			return dataConnection.ExecuteProc("[dbo].[sp_renamediagram]",
-				new DataParameter("@diagramname",     @diagramname,     DataType.NVarChar),
-				new DataParameter("@owner_id",        @owner_id,        DataType.Int32),
-				new DataParameter("@new_diagramname", @new_diagramname, DataType.NVarChar));
-		}
-
-		#endregion
-	}
-
-	public static partial class SqlFunctions
-	{
-		#region FnDiagramobjects
-
-		[Sql.Function(Name="dbo.fn_diagramobjects", ServerSideOnly=true)]
-		public static int? FnDiagramobjects()
-		{
-			throw new InvalidOperationException();
+			return dataConnection.ExecuteProc("[dbo].[import_frmp_employees]");
 		}
 
 		#endregion
@@ -265,12 +128,6 @@ namespace Integration.Frmp.models
 
 	public static partial class TableExtensions
 	{
-		public static ContentPeople Find(this ITable<ContentPeople> table, Guid Id)
-		{
-			return table.FirstOrDefault(t =>
-				t.Id == Id);
-		}
-
 		public static ImportFrmpOrgs Find(this ITable<ImportFrmpOrgs> table, string COid)
 		{
 			return table.FirstOrDefault(t =>

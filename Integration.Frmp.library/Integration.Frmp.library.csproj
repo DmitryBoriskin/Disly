@@ -62,8 +62,8 @@
     <Compile Include="ServiceLogger.cs" />
     <Compile Include="template\CMSbdModel1.generated.cs">
       <DependentUpon>CMSbdModel.tt</DependentUpon>
-      <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -105,10 +105,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Data\data.xml" />
-    <Content Include="Data\data2.xml">
-      <SubType>Designer</SubType>
-    </Content>
     <Content Include="LinqToDB.Templates\CopyMe.SqlServer.tt.txt" />
     <Content Include="template\CMSbdModel.tt">
       <Generator>TextTemplatingFileGenerator</Generator>

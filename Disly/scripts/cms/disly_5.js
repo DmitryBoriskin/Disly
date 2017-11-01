@@ -12,7 +12,7 @@ $(document).ready(function () {
         top.location.href = location.href;
     }
 
-    
+
 
 
     // Полоса прокрутки главного меню
@@ -20,40 +20,48 @@ $(document).ready(function () {
     // Полоса прокрутки
     $('.scrollbar').mCustomScrollbar();
 
-    
+
     // События Кнопок
     $('input[type=submit], .button').bind({
         mousedown: function () {
             //логика всплывающих окон            
             var Action = $(this).attr('data-action');
-            if (Action != undefined)
-            {
+            if (Action != undefined) {
                 switch (Action) {
                     case "delete":
                         $('form input[required]').removeAttr('required');
+                        $('form select[required]').removeAttr('required');
                         Confirm('Уведомление', 'Вы хотите удалить эту запись?', $(this));
                         break;
                     case "cancel":
-                            if (change != 0) {
-                                Confirm('Уведомление', 'Выйти без изменений?', $(this));
-                            }
-                            else {
-                                $('form input[required]').removeAttr('required');
-                                $(this).trigger('click');
-                            }
+                        if (change != 0) {
+                            Confirm('Уведомление', 'Выйти без изменений?', $(this));
+                        }
+                        else {
+                            $('form input[required]').removeAttr('required');
+                            $('form select[required]').removeAttr('required');
+                            $(this).trigger('click');
+                        }
+
+                        break;
+                    case "noPreloader-accept":
                         break;
                         //case
                     default: return false; break;
                 }
             }
-            
+
         },
         click: function () {
             var btn_class = $(this).attr('value');
+            var dataAction = $(this).attr('data-action');
             var req_count = $('form input[required]:invalid').length
 
-            if (req_count > 0 && btn_class == 'save-btn') {
-            } else if (btn_class == 'no-preloader-btn') {
+            if (req_count > 0 && btn_class == 'save-btn')
+            {
+            }
+            else if (dataAction == 'noPreloader-accept')
+            {
             }
             else {
                 // показываем preloader при клике на кнопку
@@ -82,7 +90,7 @@ $(document).ready(function () {
     $('.account-info').click(function () {
         $('.admin-settings').toggle();
     });
-    
+
     // Показывает в модальном окне фрейм
     $('a.pop-up_frame').mousedown(function () {
         PopUpFrame($(this));
@@ -113,15 +121,15 @@ $(document).ready(function () {
     // Инициализация полей выбора файлов
     // Инициализация полей с выпадающим списком
 
-    
+
     //Вызов плагина маски ввода
     //alert($('input[data - mask]').data('mask'));
     $('input[data-mask]').each(function () {
         $(this).mask($(this).attr('data-mask'));
     });
-    
 
-    
+
+
 
     // Изменение приоритета
     if ($(".sortable").length > 0) $('.sortable').each(function () {
@@ -151,6 +159,11 @@ $(document).ready(function () {
         }
     });
 
+    $('.preview_del').on('click', function () {
+        change = 1;
+        requiredTest();
+    });
+
     //телефонные номер  в отделениях
     $('.depart_phone_del').click(function (e) {
         e.preventDefault();
@@ -163,7 +176,7 @@ $(document).ready(function () {
             data: { id: idPhone },
             error: function () { alert("error"); },
             success: function (data) {
-                $Container.remove();                
+                $Container.remove();
             }
         });
     });
@@ -178,7 +191,7 @@ $(document).ready(function () {
             async: false,
             url: "/admin/sites/DelDomain",
             data: { id: idDomain },
-            error: function () {alert("error");},
+            error: function () { alert("error"); },
             success: function (data) {
                 $Container.remove();
             }
@@ -223,7 +236,7 @@ $(document).ready(function () {
             location.reload();
         }
         $('.sort_list').addClass('sort_list_on');
-        
+
         $('.sort_list').find('tbody').addClass('sortable');
 
         // сортировка для нетабличных записей
@@ -249,7 +262,7 @@ $(document).ready(function () {
         $Type.change(function () {
             $ContentId.val('');
             SpotTypeSite();
-        });        
+        });
 
         function SpotTypeSite() {
             $Org.hide();
@@ -262,7 +275,7 @@ $(document).ready(function () {
                     }
                     else {
                         $Org.removeClass('invalid');
-                    }                   
+                    }
 
                     $People.removeClass('invalid');
                     $Event.removeClass('invalid');
@@ -305,26 +318,9 @@ $(document).ready(function () {
                 $Org.removeClass('invalid');
                 $People.removeClass('invalid');
                 $Event.removeClass('invalid');
-            }            
+            }
         }
     }
-    
-    //коррективы selectpicker 
-    $('select.selectpicker[required]').each(function () {
-        $parentBl = $(this).parent();
-        $parentBl.addClass('invalid');
-
-        $(this).change(function () {
-            if ($(this).val() != '') {
-                $parentBl.removeClass('invalid');
-            }
-        });
-
-    });
-
-
-    
-
 });
 var validSumm = $('.validation-summary-valid');
 if (validSumm.length > 0 && validSumm.find('li')[0].innerHTML != '') validSumm.css('display', 'block');
@@ -377,16 +373,16 @@ function Confirm(Title, Body, Object) {
     $modalTitle.append(Title);
     $modalBody.append('<p>' + Body + '</p>');
     $modalFooter.append($BtnOk).append($BtnNo);
-    
+
     $modal.modal('toggle');
 }
 
 // Всплывающие окна с активным контентом
 function PopUpFrame(Object) {
     clear_modal();
-    
+
     $frale = $('<iframe/>', { 'class': 'modal_frame', 'frameborder': '0', 'width': '100%', 'height': '20', 'src': Object.attr("href") });
-    
+
     $modal.find('.modal-dialog').addClass(' modal-lg'),
     $modalTitle.append(Object.attr("title"));
     $modalBody.append($frale);
@@ -466,8 +462,7 @@ function GroupBlock_init() {
 }
 
 // устанавливаем курсор
-function setCursor()
-{
+function setCursor() {
     if ($('.content input.input-validation-error').length > 0) $('.content input.input-validation-error:first').focus();
     else if ($('.content input[required]').val() == '') $('.content input[required]:first').focus();
     else if ($('.content input:not([type=file]):not([data-focus=False])').length > 0) $('.content input:not([type=file]):not([data-focus=False]):first').focus();
@@ -553,19 +548,19 @@ function InitTinyMCE_new(id, _width, _height, directory) {
         height: _height,
 
         automatic_uploads: true,
-        images_upload_url: 'http://' + window.location.hostname +(location.port ? ':'+location.port: '')+ '/Admin/Services/GetFile/',
-        file_picker_callback: function(cb, value, meta) {
+        images_upload_url: 'http://' + window.location.hostname + (location.port ? ':' + location.port : '') + '/Admin/Services/GetFile/',
+        file_picker_callback: function (cb, value, meta) {
             var input = document.createElement('input');
             input.setAttribute('type', 'file');
             input.setAttribute('accept', 'image/*');
-            input.onchange = function() {
+            input.onchange = function () {
                 var file = this.files[0];
-      
+
                 var reader = new FileReader();
                 reader.readAsDataURL(file);
                 reader.onload = function () {
                     var id = 'blobid' + (new Date()).getTime();
-                    var blobCache =  tinymce.activeEditor.editorUpload.blobCache;
+                    var blobCache = tinymce.activeEditor.editorUpload.blobCache;
                     var base64 = reader.result.split(',')[1];
                     var blobInfo = blobCache.create(id, file, base64);
                     blobCache.add(blobInfo);
@@ -573,7 +568,7 @@ function InitTinyMCE_new(id, _width, _height, directory) {
                     cb(blobInfo.blobUri(), { title: file.name });
                 };
             };
-    
+
             input.click();
         }
 
@@ -607,7 +602,7 @@ function Coords(x, y, title, desc, zoom) {
                     if (desc == '') { desc = "Описание организации"; }
                     var myMap = new ymaps.Map("map", { center: [y, x], zoom: zoom }),
                 myPlacemark = new ymaps.Placemark([y, x], {
-                    hasBalloon: false,                    
+                    hasBalloon: false,
                 }, { draggable: true });
                     //Перемещение метки 
                     myPlacemark.events.add("dragend", function () {
@@ -627,9 +622,9 @@ function Coords(x, y, title, desc, zoom) {
                         CoordPoint(xMap, yMap);
                         return false;
                     });
-                    myMap.controls                    
-                    .add('zoomControl', { left: 5, top: 5 })                    
-                    .add('typeSelector')                    
+                    myMap.controls
+                    .add('zoomControl', { left: 5, top: 5 })
+                    .add('typeSelector')
                     .add('mapTools', { left: 35, top: 5 });
                     myMap.geoObjects.add(myPlacemark);
                 });
@@ -647,7 +642,7 @@ function Coords(x, y, title, desc, zoom) {
 
 
 function CoordPoint(xMap, yMap) {
-    $(document).ready(function () {        
+    $(document).ready(function () {
         var pointX = $('.Item_CoordX');
         pointX.val(String(xMap).replace(/[.]/g, ","))
         var pointY = $('.Item_CoordY');

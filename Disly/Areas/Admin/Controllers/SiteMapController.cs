@@ -81,10 +81,18 @@ namespace Disly.Areas.Admin.Controllers
             if (model.Item != null)
                 model.Item.MenuGroups = null;
 
-            Guid? _parent = (string.IsNullOrEmpty(Request.QueryString["parent"]) && model.Item != null) ? model.Item.ParentId : Guid.Parse(Request.QueryString["parent"]);
+            if (!string.IsNullOrEmpty(Request.QueryString["parent"]))
+            {
+                Guid? _parent = (string.IsNullOrEmpty(Request.QueryString["parent"]) && model.Item != null) ? model.Item.ParentId 
+                        : Guid.Parse(Request.QueryString["parent"]);
 
-            // хлебные крошки
-            model.BreadCrumbs = _cmsRepository.getSiteMapBreadCrumbs(_parent);
+                // хлебные крошки
+                model.BreadCrumbs = _cmsRepository.getSiteMapBreadCrumbs(_parent);
+            }
+            else
+            {
+                model.BreadCrumbs = _cmsRepository.getSiteMapBreadCrumbs(null);
+            }
 
             // список дочерних элементов
             model.Childrens = _cmsRepository.getSiteMapChildrens(id);
@@ -108,7 +116,14 @@ namespace Disly.Areas.Admin.Controllers
             userMessage.title = "Информация";
 
             #region Данные необходимые для сохранения
-            back_model.Item.ParentId = back_model.Item.ParentId != null ? back_model.Item.ParentId : Guid.Parse(Request.Form["Item_ParentId"]); // родительский id
+            if (string.IsNullOrEmpty(Request.Form["Item_ParentId"]))
+            {
+                back_model.Item.ParentId = null;
+            }
+            else
+            {
+                back_model.Item.ParentId = back_model.Item.ParentId != null ? back_model.Item.ParentId :  Guid.Parse(Request.Form["Item_ParentId"]); // родительский id
+            }
 
             var p = back_model.Item.ParentId != null ? _cmsRepository.getSiteMapItem((Guid)back_model.Item.ParentId) : null;
 

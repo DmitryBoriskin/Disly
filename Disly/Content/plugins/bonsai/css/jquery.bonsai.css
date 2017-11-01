@@ -1,0 +1,42 @@
+﻿.bonsai,
+.bonsai li {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  overflow: hidden;
+}
+
+.bonsai li {
+  position: relative;
+  padding-left: 1.3em; /* padding for the thumb */
+}
+
+li .thumb {
+  margin: 2px 0 0 -18px;
+  position: absolute;
+  cursor: pointer;
+}
+
+li.has-children > .thumb:after {
+  font-family: fontello;
+  content:'\ea7f';
+}
+
+li.has-children.expanded > .thumb:after {
+  font-family: fontello;
+  content:'\ea7d';
+}
+
+li.collapsed > ol.bonsai {
+  height: 0;
+  overflow: hidden;
+}
+
+.bonsai .all,
+.bonsai .none {
+  cursor: pointer;
+}
+
+.check_sm {width: 2% !important;}
+/*.check_sm_title {margin-left: 7px !important;}*/
+.log-list {padding-top: 15px;}

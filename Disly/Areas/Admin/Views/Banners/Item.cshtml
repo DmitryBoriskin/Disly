@@ -9,7 +9,9 @@
 <div class="content">
     <h1>@ViewBag.Title</h1>
     @Html.TextBoxFor(m => m.Item.Title, new { @title = "Название", @required = "" })
-    @Html.TextBox("upload", null, new { type = "file", title = "Изображение", data_name = fileName, data_size = fileSize, data_url = fileUrl, accept = ".jpg,.jpeg,.png,.gif,.svg" })
+    @Html.TextBox("upload", null, new { type = "file", title = "Изображение", data_name = fileName, data_size = fileSize, data_url = fileUrl, accept = ".jpg,.jpeg,.png,.gif" })
+    @Html.TextBoxFor(m => m.Item.Photo.Url, new { type = "hidden", value = fileUrl })
+
     @Html.TextAreaFor(m => m.Item.Text, new { type = "editor", title = "Текст", height = "300" })
     @Html.TextBoxFor(m => m.Item.Url, new { type = "text", title = "Ссылка", placeholder = "http://", MaxLength = "128" })
     @Html.Hidden("Item_Section", section)

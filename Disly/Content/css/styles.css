@@ -390,7 +390,10 @@ a.link-close:before {
     padding: 20px 0 18px;
 }
 .li-image{
-    display:block;float:left;max-width:150px;
+    display:block;
+    float:left;
+    max-width:150px;
+    margin-right: 15px;
 }
 .li-caption {
     font-size: 1.3em;
@@ -410,10 +413,13 @@ a.link-close:before {
     margin-top: 6px;
 }
 .li-date{
-    margin-top: 6px;
-    background-color: rgb(245, 248, 250);
+    /*background-color: rgb(245, 248, 250);*/
     padding: 5px;
-    padding-left:10px;
+    padding-left: 10px;
+    /* border-top: 1px solid #dfe4ec; */
+    margin-bottom: 5px;
+    font-size: 0.9em;
+    font-weight: 500;
 }
 
 .disabled,

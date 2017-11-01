@@ -45,6 +45,7 @@ namespace cms.dbase
                 return SiteId;
             }
         }
+
         /// <summary>
         /// Данные сайта по id или доменному имени
         /// </summary>
@@ -59,6 +60,7 @@ namespace cms.dbase
                     {
                         Id = s.id,
                         Title = s.c_name,
+                        LongTitle = s.c_name_long,
                         Alias = s.c_alias,
                         Adress = s.c_adress,
                         Phone = s.c_phone,
@@ -77,6 +79,7 @@ namespace cms.dbase
                 else { return data.First(); }
             }
         }
+
         public override SitesModel getSite(string domain)
         {
             using (var db = new CMSdb(_context))
@@ -86,6 +89,7 @@ namespace cms.dbase
                     {
                         Id = s.id,
                         Title = s.c_name,
+                        LongTitle = s.c_name_long,
                         Alias = s.c_alias,
                         Adress = s.c_adress,
                         Phone = s.c_phone,
@@ -93,13 +97,54 @@ namespace cms.dbase
                         Email = s.c_email,
                         Site = s.c_url,
                         Worktime = s.c_worktime,
-                        Logo = s.c_logo
-                        //,
-                        //DomainList= getSiteDomains(s.c_alias)
+                        Logo = s.c_logo,
+                        ContentId = (Guid)s.f_content,
+                        Type = s.c_content_type,
+                        Facebook = s.c_facebook,
+                        Vk = s.c_vk,
+                        Instagramm = s.c_instagramm,
+                        Odnoklassniki = s.c_odnoklassniki,
+                        Twitter = s.c_twitter
                     });
 
                 if (!data.Any()) { return null; }
                 else { return data.First(); }
+            }
+        }
+
+        /// <summary>
+        /// Обновляется информация по сайту
+        /// </summary>
+        /// <param name="item">модель сайта</param>
+        /// <returns></returns>
+        public override bool updateSiteInfo(SitesModel item, Guid user, string ip)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var query = db.cms_sitess
+                    .Where(w => w.id.Equals(item.Id));
+
+                if (query.Any())
+                {
+                    db.cms_sitess
+                        .Where(w => w.id.Equals(item.Id))
+                        .Set(u => u.c_name, item.Title)
+                        .Set(u => u.c_name_long, item.LongTitle)
+                        .Set(u => u.c_alias, item.Alias)
+                        .Set(u => u.c_facebook, item.Facebook)
+                        .Set(u => u.c_vk, item.Vk)
+                        .Set(u => u.c_instagramm, item.Instagramm)
+                        .Set(u => u.c_odnoklassniki, item.Odnoklassniki)
+                        .Set(u => u.c_twitter, item.Twitter)
+                        .Update();
+                    
+                    insertLog(user, ip, "update", item.Id, String.Empty, "Sites", item.Title);
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
         }
 
@@ -944,203 +989,7 @@ namespace cms.dbase
             }
         }
         #endregion
-
-        #region Materials
-        public override MaterialsList getMaterialsList(FilterParams filtr)
-        {
-            using (var db = new CMSdb(_context))
-            {
-                var query = db.content_materialss.Where(w => w.id != null);
-                query = query.OrderByDescending(o => o.d_date);
-
-                if (query.Any())
-                {
-                    int ItemCount = query.Count();
-
-                    var List = query
-                        .Select(s => new MaterialsModel
-                        {
-                            Id = s.id,
-                            Title = s.c_title,
-                            Alias = s.c_alias,
-                            Preview = s.c_preview,
-                            Text = s.c_text,
-                            Url = s.c_url,
-                            UrlName = s.c_url_name,
-                            Date = s.d_date,
-                            Keyw = s.c_keyw,
-                            Desc = s.c_desc,
-                            Disabled = s.b_disabled,
-                            Important = s.b_important
-                        }).
-                        Skip(filtr.Size * (filtr.Page - 1)).
-                        Take(filtr.Size);
-
-                    MaterialsModel[] materialsInfo = List.ToArray();
-
-                    return new MaterialsList
-                    {
-                        Data = materialsInfo,
-                        Pager = new Pager
-                        {
-                            page = filtr.Page,
-                            size = filtr.Size,
-                            items_count = ItemCount,
-                            page_count = (ItemCount % filtr.Size > 0) ? (ItemCount / filtr.Size) + 1 : ItemCount / filtr.Size
-                        }
-                    };
-                }
-                return null;
-            }
-        }
-        public override MaterialsModel getMaterial(Guid id)
-        {
-            using (var db = new CMSdb(_context))
-            {
-                var data = db.content_materialss.
-                    Where(w => w.id == id).
-                    Select(s => new MaterialsModel
-                    {
-                        Id = s.id,
-                        Title = s.c_title,
-                        Alias = s.c_alias,
-                        Preview = s.c_preview,
-                        Text = s.c_text,
-                        Url = s.c_url,
-                        UrlName = s.c_url_name,
-                        Date = s.d_date,
-                        Keyw = s.c_keyw,
-                        Desc = s.c_desc,
-                        Disabled = s.b_disabled,
-                        Important = s.b_important
-                    });
-
-
-                if (!data.Any()) { return null; }
-                else { return data.First(); }
-            }
-        }
-
-        public override bool insertCmsMaterial(MaterialsModel material)
-        {
-            try
-            {
-                using (var db = new CMSdb(_context))
-                {
-                    content_materials cdMaterial = db.content_materialss
-                                                .Where(p => p.id == material.Id)
-                                                .SingleOrDefault();
-                    if (cdMaterial != null)
-                    {
-                        throw new Exception("Запись с таким Id уже существует");
-                    }
-
-                    cdMaterial = new content_materials
-                    {
-                        id = material.Id,
-                        c_title = material.Title,
-                        c_alias = material.Alias,
-                        c_text = material.Text,
-                        d_date = material.Date,
-                        c_preview = material.Preview,
-                        c_url = material.Url,
-                        c_url_name = material.UrlName,
-                        c_desc = material.Desc,
-                        c_keyw = material.Keyw,
-                        b_important = material.Important,
-                        b_disabled = material.Disabled,
-                        n_day = material.Date.Day,
-                        n_month = material.Date.Month,
-                        n_year = material.Date.Year
-                    };
-
-                    using (var tran = db.BeginTransaction())
-                    {
-                        db.Insert(cdMaterial);
-                        tran.Commit();
-                        return true;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                //write to log ex
-                return false;
-            }
-        }
-        public override bool updateCmsMaterial(MaterialsModel material)
-        {
-            try
-            {
-                using (var db = new CMSdb(_context))
-                {
-                    content_materials cdMaterial = db.content_materialss
-                                                .Where(p => p.id == material.Id)
-                                                .SingleOrDefault();
-                    if (cdMaterial == null)
-                    {
-                        throw new Exception("Запись с таким Id не найдена");
-                    }
-
-                    cdMaterial.c_title = material.Title;
-                    cdMaterial.c_alias = material.Alias;
-                    cdMaterial.c_text = material.Text;
-                    cdMaterial.d_date = material.Date;
-                    cdMaterial.c_preview = material.Preview;
-                    cdMaterial.c_url = material.Url;
-                    cdMaterial.c_url_name = material.UrlName;
-                    cdMaterial.c_desc = material.Desc;
-                    cdMaterial.c_keyw = material.Keyw;
-                    cdMaterial.b_important = material.Important;
-                    cdMaterial.b_disabled = material.Disabled;
-                    cdMaterial.n_day = material.Date.Day;
-                    cdMaterial.n_month = material.Date.Month;
-                    cdMaterial.n_year = material.Date.Year;
-
-                    using (var tran = db.BeginTransaction())
-                    {
-                        db.Update(cdMaterial);
-                        tran.Commit();
-                        return true;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                //write to log ex
-                return false;
-            }
-        }
-        public override bool deleteCmsMaterial(Guid id)
-        {
-            try
-            {
-                using (var db = new CMSdb(_context))
-                {
-                    content_materials cdMaterial = db.content_materialss
-                                                .Where(p => p.id == id)
-                                                .SingleOrDefault();
-                    if (cdMaterial == null)
-                    {
-                        throw new Exception("Запись с таким Id не найдена");
-                    }
-
-                    using (var tran = db.BeginTransaction())
-                    {
-                        db.Delete(cdMaterial);
-                        tran.Commit();
-                        return true;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                //write to log ex
-                return false;
-            }
-        }
-        #endregion
-
+        
         #region Events
         public override EventModel getEvent(Guid id)
         {
@@ -1156,7 +1005,10 @@ namespace cms.dbase
                         Alias = s.c_alias,
                         Place = s.c_place,
                         EventMaker = s.c_organizer,
-                        Preview = s.c_preview,
+                        PreviewImage = new Photo()
+                        {
+                            Url = s.c_preview
+                        },
                         Text = s.c_text,
                         Url = s.c_url,
                         UrlName = s.c_url_name,
@@ -1192,7 +1044,10 @@ namespace cms.dbase
                             Alias = s.c_alias,
                             Place = s.c_place,
                             EventMaker = s.c_organizer,
-                            Preview = s.c_preview,
+                            PreviewImage = new Photo()
+                            {
+                                Url = s.c_preview
+                            },
                             Text = s.c_text,
                             Url = s.c_url,
                             UrlName = s.c_url_name,
@@ -1247,7 +1102,7 @@ namespace cms.dbase
                         c_text = eventData.Text,
                         c_place = eventData.Place,
                         c_organizer = eventData.EventMaker,
-                        c_preview = eventData.Preview,
+                        c_preview = (eventData.PreviewImage != null)? eventData.PreviewImage.Url: null,
                         c_desc = eventData.Desc,
                         c_keyw = eventData.KeyW,
                         b_annually = eventData.Annually,
@@ -1301,7 +1156,7 @@ namespace cms.dbase
                     cdEvent.c_text = eventData.Text;
                     cdEvent.c_place = eventData.Place;
                     cdEvent.c_organizer = eventData.EventMaker;
-                    cdEvent.c_preview = eventData.Preview;
+                    cdEvent.c_preview = (eventData.PreviewImage != null)? eventData.PreviewImage.Url: null;
                     cdEvent.c_desc = eventData.Desc;
                     cdEvent.c_keyw = eventData.KeyW;
                     cdEvent.b_annually = eventData.Annually;

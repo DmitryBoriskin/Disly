@@ -1,22 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using cms.dbModel.entity.cms;
-using System.Text;
-using System.Threading.Tasks;
 using cms.dbModel;
 using cms.dbModel.entity;
 using cms.dbase.models;
 using LinqToDB;
-using System.Web.Mvc;
 
 namespace cms.dbase
 {
     /// <summary>
-    /// Репозиторий для работы с картой сайта
+    /// Репозиторий для работы с организациями
     /// </summary>
     public partial class cmsRepository : abstract_cmsRepository
-    {        
+    {
+        /// <summary>
+        /// Получаем список организаций
+        /// </summary>
+        /// <param name="filtr">Фильтр</param>
+        /// <returns></returns>         
         public override OrgsModel[] getOrgs(FilterParams filtr)
         {
             using (var db = new CMSdb(_context))
@@ -37,34 +38,50 @@ namespace cms.dbase
                 return null;
             }
         }
+
+        /// <summary>
+        /// Получаем организацию
+        /// </summary>
+        /// <param name="id">Идентификатор</param>
+        /// <returns></returns>
         public override OrgsModel getOrgItem(Guid id)
         {
             using (var db = new CMSdb(_context))
             {
                 var data = db.content_orgss.Where(w => w.id == id)
-                            .Select(s => new OrgsModel
-                            {
-                                Id = s.id,
-                                Title = s.c_title,
-                                ShortTitle = s.c_title_short,
-                                Phone = s.c_phone,
-                                PhoneReception = s.c_phone_reception,
-                                Fax = s.c_fax,
-                                Email = s.c_email,
-                                DirecorPost = s.c_director_post,
-                                DirectorF = s.f_director,
-                                Contacts = s.c_contacts,
-                                Address = s.c_adress,
-                                GeopointX = s.n_geopoint_x,
-                                GeopointY = s.n_geopoint_y,
-                                Structure = getStructureList(s.id),
-                                Frmp=s.f_frmp
-                            })
-                            .FirstOrDefault();
-                if (data != null) return data;
-                return null;
+                    .Select(s => new OrgsModel
+                    {
+                        Id = s.id,
+                        Title = s.c_title,
+                        ShortTitle = s.c_title_short,
+                        Phone = s.c_phone,
+                        PhoneReception = s.c_phone_reception,
+                        Fax = s.c_fax,
+                        Email = s.c_email,
+                        DirecorPost = s.c_director_post,
+                        DirectorF = s.f_director,
+                        Contacts = s.c_contacts,
+                        Address = s.c_adress,
+                        GeopointX = s.n_geopoint_x,
+                        GeopointY = s.n_geopoint_y,
+                        Structure = getStructureList(s.id),
+                        Frmp = s.f_frmp,
+                        Types = getOrgTypes(id)
+                    });
+
+                if (!data.Any()) return null;
+                else return data.FirstOrDefault();
             }
         }
+
+        /// <summary>
+        /// Добавляем организацию
+        /// </summary>
+        /// <param name="id">Идентификатор</param>
+        /// <param name="model">Организация</param>
+        /// <param name="UserId">Пользователь</param>
+        /// <param name="IP">ip-адрес</param>
+        /// <returns></returns>
         public override bool insOrgs(Guid id, OrgsModel model, Guid UserId, String IP)
         {
             using (var db = new CMSdb(_context))
@@ -96,6 +113,28 @@ namespace cms.dbase
                         .Value(s => s.n_geopoint_y, model.GeopointY)
                         .Value(s => s.f_frmp, model.Frmp)
                         .Insert();
+
+                    // обновляем типы мед. учреждений
+                    if (model.Types != null)
+                    {
+                        // удаляем старые типы
+                        db.content_orgs_types_links.Where(w => w.f_org.Equals(id)).Delete();
+
+                        foreach (var t in model.Types)
+                        {
+                            var maxSortQuery = db.content_orgs_types_links
+                                .Where(w => w.f_org.Equals(id)).Select(s => s.n_sort);
+
+                            int maxSort = maxSortQuery.Any() ? maxSortQuery.Max() : 0;
+
+                            db.content_orgs_types_links
+                                .Value(v => v.f_org, id)
+                                .Value(v => v.f_type, t)
+                                .Value(v => v.n_sort, maxSort + 1)
+                                .Insert();
+                        }
+                    }
+
                     //логирование
                     insertLog(UserId, IP, "insert", id, String.Empty, "Orgs", model.Title);
                     return true;
@@ -103,6 +142,15 @@ namespace cms.dbase
                 return false;
             }
         }
+
+        /// <summary>
+        /// Обновляем организацию
+        /// </summary>
+        /// <param name="id">Идентификатор</param>
+        /// <param name="model">Организация</param>
+        /// <param name="UserId">Пользователь</param>
+        /// <param name="IP">ip-адрес</param>
+        /// <returns></returns>
         public override bool setOrgs(Guid id, OrgsModel model, Guid UserId, String IP)
         {
             using (var db = new CMSdb(_context))
@@ -125,6 +173,28 @@ namespace cms.dbase
                         .Set(s => s.n_geopoint_y, model.GeopointY)
                         .Set(s => s.f_frmp, model.Frmp)
                         .Update();
+
+                    // обновляем типы мед. учреждений
+                    if (model.Types != null)
+                    {
+                        // удаляем старые типы
+                        db.content_orgs_types_links.Where(w => w.f_org.Equals(id)).Delete();
+
+                        foreach (var t in model.Types)
+                        {
+                            var maxSortQuery = db.content_orgs_types_links
+                                .Where(w => w.f_org.Equals(id)).Select(s => s.n_sort);
+
+                            int maxSort = maxSortQuery.Any() ? maxSortQuery.Max() : 0;
+
+                            db.content_orgs_types_links
+                                .Value(v => v.f_org, id)
+                                .Value(v => v.f_type, t)
+                                .Value(v => v.n_sort, maxSort + 1)
+                                .Insert();
+                        }
+                    }
+
                     //логирование
                     insertLog(UserId, IP, "update", id, String.Empty, "Orgs", model.Title);
                     return true;
@@ -132,6 +202,14 @@ namespace cms.dbase
                 return false;
             }
         }
+
+        /// <summary>
+        /// Удаляем организацию
+        /// </summary>
+        /// <param name="id">Идентификатор</param>
+        /// <param name="UserId">Пользователь</param>
+        /// <param name="IP">ip-адрес</param>
+        /// <returns></returns>
         public override bool delOrgs(Guid id, Guid UserId, String IP)
         {
             using (var db = new CMSdb(_context))
@@ -150,6 +228,13 @@ namespace cms.dbase
                 return false;
             }
         }
+
+        /// <summary>
+        /// Сортировка организаций
+        /// </summary>
+        /// <param name="id">Идентификатор</param>
+        /// <param name="new_num">Новое значение сортировки</param>
+        /// <returns></returns>
         public override bool sortOrgs(Guid id, int new_num)
         {
             using (var db = new CMSdb(_context))
@@ -177,6 +262,12 @@ namespace cms.dbase
                 return true;
             }
         }
+
+        /// <summary>
+        /// Получаем список структурных подразделений
+        /// </summary>
+        /// <param name="id">Организация</param>
+        /// <returns></returns>
         public override StructureModel[] getStructureList(Guid id)
         {
             using (var db = new CMSdb(_context))
@@ -196,6 +287,12 @@ namespace cms.dbase
                 return null;
             }
         }
+
+        /// <summary>
+        /// Получаем структурное подразделение
+        /// </summary>
+        /// <param name="id">Идентификатор</param>
+        /// <returns></returns>
         public override StructureModel getStructure(Guid id)
         {
             using (var db = new CMSdb(_context))
@@ -227,6 +324,16 @@ namespace cms.dbase
                 return null;
             }
         }
+
+        /// <summary>
+        /// Добавляем структуру
+        /// </summary>
+        /// <param name="id">Идентификатор</param>
+        /// <param name="OrgId">Организация</param>
+        /// <param name="insert">Структура</param>
+        /// <param name="UserId">Пользователь</param>
+        /// <param name="IP">ip-адрес</param>
+        /// <returns></returns>
         public override bool insStructure(Guid id, Guid OrgId, StructureModel insert, Guid UserId, String IP)
         {
             using (var db = new CMSdb(_context))
@@ -261,6 +368,15 @@ namespace cms.dbase
                 return true;
             }
         }
+
+        /// <summary>
+        /// Обновляем структуру
+        /// </summary>
+        /// <param name="id">Идентификатор</param>
+        /// <param name="insert">Структура</param>
+        /// <param name="UserId">Пользователь</param>
+        /// <param name="IP">ip-адрес</param>
+        /// <returns></returns>
         public override bool setStructure(Guid id, StructureModel insert, Guid UserId, String IP)
         {
             using (var db = new CMSdb(_context))
@@ -292,6 +408,14 @@ namespace cms.dbase
                 }
             }
         }
+
+        /// <summary>
+        /// Удаляем структуру
+        /// </summary>
+        /// <param name="id">Идентификатор</param>
+        /// <param name="UserId">Пользователь</param>
+        /// <param name="IP">ip-адрес</param>
+        /// <returns></returns>
         public override bool delStructure(Guid id, Guid UserId, String IP)
         {
             using (var db = new CMSdb(_context))
@@ -312,6 +436,13 @@ namespace cms.dbase
                 return false;
             }
         }
+
+        /// <summary>
+        /// Сортировка структуры
+        /// </summary>
+        /// <param name="id">Идентификатор</param>
+        /// <param name="new_num">Новое значение сортировки</param>
+        /// <returns></returns>
         public override bool sortStructure(Guid id, int new_num)
         {
             using (var db = new CMSdb(_context))
@@ -341,6 +472,7 @@ namespace cms.dbase
                 return true;
             }
         }
+
         /// <summary>
         /// Добавляем ОВП
         /// </summary>        
@@ -401,6 +533,15 @@ namespace cms.dbase
                 }
             }
         }
+
+        /// <summary>
+        /// Обновляем ОВП
+        /// </summary>
+        /// <param name="IdStructure">Идентификатор структура</param>
+        /// <param name="updStructure">Структура</param>
+        /// <param name="UserId">Пользователь</param>
+        /// <param name="IP">ip-адрес</param>
+        /// <returns></returns>
         public override bool setOvp(Guid IdStructure, StructureModel updStructure, Guid UserId, String IP)
         {
             using (var db = new CMSdb(_context))
@@ -439,6 +580,7 @@ namespace cms.dbase
                 }
             }
         }
+
         /// <summary>
         /// Отделение
         /// </summary>
@@ -460,6 +602,7 @@ namespace cms.dbase
                 return null;
             }
         }
+
         /// <summary>
         /// Возвращает департамент, если подходящего значения нет. то возвращает пустую модель Departments
         /// </summary>
@@ -484,6 +627,7 @@ namespace cms.dbase
                 return null;
             }
         }
+
         /// <summary>
         /// Телефонные номера департамента
         /// </summary>
@@ -506,6 +650,7 @@ namespace cms.dbase
             }
             return null;
         }
+
         /// <summary>
         /// Хлебные крошки раздела Orgs
         /// </summary>
@@ -596,6 +741,7 @@ namespace cms.dbase
                 return MyBread.Reverse().ToArray();
             }
         }
+
         /// <summary>
         /// Добавляет значение в список телефонов отдела
         /// </summary>
@@ -621,6 +767,12 @@ namespace cms.dbase
                 return true;
             }
         }
+
+        /// <summary>
+        /// Удаление телефона
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public override bool delDepartmentsPhone(int id)
         {
             using (var db = new CMSdb(_context))
@@ -635,6 +787,12 @@ namespace cms.dbase
             }
             return true;
         }
+
+        /// <summary>
+        /// Получаем список сотрудников по департаменту
+        /// </summary>
+        /// <param name="idDepart">Департамент</param>
+        /// <returns></returns>
         public override People[] getPeopleDepartment(Guid idDepart)
         {
             using (var db = new CMSdb(_context))
@@ -652,6 +810,16 @@ namespace cms.dbase
                 return null;
             }
         }
+
+        /// <summary>
+        /// Добавляем департамент
+        /// </summary>
+        /// <param name="id">Идентификатор</param>
+        /// <param name="Structure">Структура</param>
+        /// <param name="insert">Департамент</param>
+        /// <param name="UserId">Пользователь</param>
+        /// <param name="IP">ip-адрес</param>
+        /// <returns></returns>
         public override bool insDepartament(Guid id, Guid Structure, Departments insert, Guid UserId, String IP)
         {
             using (var db = new CMSdb(_context))
@@ -686,6 +854,15 @@ namespace cms.dbase
                 return true;
             }
         }
+
+        /// <summary>
+        /// Обновляем департамент
+        /// </summary>
+        /// <param name="id">Идентификатор</param>
+        /// <param name="insert">Департамент</param>
+        /// <param name="UserId">Пользователь</param>
+        /// <param name="IP">ip-адрес</param>
+        /// <returns></returns>
         public override bool updDepartament(Guid id, Departments insert, Guid UserId, String IP)
         {
             using (var db = new CMSdb(_context))
@@ -706,6 +883,14 @@ namespace cms.dbase
                 return true;
             }
         }
+
+        /// <summary>
+        /// Удаляем департамент
+        /// </summary>
+        /// <param name="id">Идентификатор</param>
+        /// <param name="UserId">Пользователь</param>
+        /// <param name="IP">ip-адрес</param>
+        /// <returns></returns>
         public override bool delDepartament(Guid id, Guid UserId, String IP)
         {
             using (var db = new CMSdb(_context))
@@ -729,6 +914,13 @@ namespace cms.dbase
                 return true;
             }
         }
+
+        /// <summary>
+        /// Сортируем департаменты
+        /// </summary>
+        /// <param name="id">Идентификатор</param>
+        /// <param name="new_num">Новое значение сортировки</param>
+        /// <returns></returns>
         public override bool sortDepartament(Guid id, int new_num)
         {
             using (var db = new CMSdb(_context))
@@ -757,9 +949,13 @@ namespace cms.dbase
 
                 return true;
             }
-        }        
+        }
 
-
+        /// <summary>
+        /// Получаем список сотрудников по департаменту
+        /// </summary>
+        /// <param name="idDepar">Департамент</param>
+        /// <returns></returns>
         public override People[] getPersonsThisDepartment(Guid idDepar)
         {
             using (var db = new CMSdb(_context))
@@ -767,7 +963,7 @@ namespace cms.dbase
                 var data_dep = db.content_departmentss.Where(w => w.id == idDepar);
                 if (data_dep.Any())
                 {
-                    Guid idStructure=data_dep.First().f_structure;
+                    Guid idStructure = data_dep.First().f_structure;
 
                     var data_str = db.content_org_structures.Where(w => w.id == idStructure);
                     if (data_str.Any())
@@ -776,23 +972,24 @@ namespace cms.dbase
                         Guid OrgId = data_str.First().f_ord;
                         var PeopleList = db.content_people_org_links
                                            .Where(w => w.f_org == OrgId)
-                                           .Where(w =>(w.fkcontentpeopleorgdepartmentlinks == null || w.fkcontentpeopleorgdepartmentlinks.FirstOrDefault().f_department!=idDepar))                                           
+                                           .Where(w => (w.fkcontentpeopleorgdepartmentlinks == null || w.fkcontentpeopleorgdepartmentlinks.FirstOrDefault().f_department != idDepar))
                                            .Select(s => new People
                                            {
-                                               FIO = s.fkcontentpeopleorglink.c_surname+" "+ s.fkcontentpeopleorglink.c_name + " " + s.fkcontentpeopleorglink.c_patronymic,
+                                               FIO = s.fkcontentpeopleorglink.c_surname + " " + s.fkcontentpeopleorglink.c_name + " " + s.fkcontentpeopleorglink.c_patronymic,
                                                Id = s.id
-                                           }).ToArray();                                           
-                        return PeopleList.Any() ? PeopleList : null;                        
+                                           }).ToArray();
+                        return PeopleList.Any() ? PeopleList : null;
                     }
 
                 }
-                
 
-                
-                
+
+
+
             }
             return null;
         }
+
         /// <summary>
         /// Цепяет врача к департаменту(отделу)
         /// </summary>
@@ -811,34 +1008,168 @@ namespace cms.dbase
                     var data = db.content_people_department_links.Where(w => (w.f_department == idDepart && w.f_people == IdLinkPeopleForOrg));
                     if (!data.Any())
                     {
-                        content_people_department_link newdata = new content_people_department_link {
-                            f_department=idDepart,
-                            f_people= IdLinkPeopleForOrg,
-                            c_status=status,
-                            c_post=post
+                        content_people_department_link newdata = new content_people_department_link
+                        {
+                            f_department = idDepart,
+                            f_people = IdLinkPeopleForOrg,
+                            c_status = status,
+                            c_post = post
                         };
                         db.Insert(newdata);
                         tran.Commit();
                         return true;
                     }
                 }
-                    
+
             }
             return false;
         }
 
+        /// <summary>
+        /// Удаляем связь сотрудника из департамента
+        /// </summary>
+        /// <param name="idDep">Департамент</param>
+        /// <param name="idPeople">Сотрудник</param>
+        /// <returns></returns>
         public override bool delPersonsThisDepartment(Guid idDep, Guid idPeople)
         {
             using (var db = new CMSdb(_context))
             {
-                var data = db.content_people_department_links.Where(w => w.f_department == idDep && w.f_people== idPeople);
+                var data = db.content_people_department_links.Where(w => w.f_department == idDep && w.f_people == idPeople);
 
                 if (data.Any())
-                {                    
+                {
                     data.Delete();
                 }
             }
             return true;
+        }
+
+        /// <summary>
+        /// Получаем список типов, доступных для организаций
+        /// </summary>
+        /// <returns></returns>
+        public override OrgType[] getOrgTypes()
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var data = db.content_orgs_typess
+                    .OrderBy(o => o.n_sort)
+                    .Select(s => new OrgType
+                    {
+                        Id = s.id,
+                        Title = s.c_title,
+                        Sort = s.n_sort
+                    });
+
+                if (!data.Any()) return null;
+                else return data.ToArray();
+            }
+        }
+
+        /// <summary>
+        /// Получим список типов для данной организации
+        /// </summary>
+        /// <param name="id">Организация</param>
+        /// <returns></returns>
+        public override Guid[] getOrgTypes(Guid id)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var data = db.content_orgs_types_links
+                    .Where(w => w.f_org.Equals(id))
+                    .OrderBy(o => o.n_sort)
+                    .Select(s => s.f_type);
+
+                if (!data.Any()) return null;
+                else return data.ToArray();
+            }
+        }
+
+        /// <summary>
+        /// Получим список типов организаций с привязанными к ним организациями
+        /// </summary>
+        /// <returns></returns>
+        public override List<OrgType> getOrgByType(Guid material)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var data = db.content_orgs_typess
+                    .OrderBy(o => o.n_sort)
+                    .Select(s => new OrgType
+                    {
+                        Id = s.id,
+                        Title = s.c_title,
+                        Sort = s.n_sort,
+                        Orgs = getOrgSmall(s.id, material)
+                    });
+
+                if (!data.Any()) return null;
+                else return data.ToList();
+            }
+        }
+
+        /// <summary>
+        /// Получим список организаций по типу
+        /// </summary>
+        /// <param name="id">Тип</param>
+        /// <returns></returns>
+        public override OrgsModelSmall[] getOrgSmall(Guid id, Guid material)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var data = db.content_sv_orgs_by_types
+                    .Where(w => w.f_type.Equals(id))
+                    .OrderBy(o => o.n_sort)
+                    .Select(s => new OrgsModelSmall
+                    {
+                        Id = s.id,
+                        Title = s.c_title,
+                        Sort = s.n_sort,
+                        Check = setCheckedOrgs(s.id, material)
+                    });
+
+                if (!data.Any()) return null;
+                else return data.ToArray();
+            }
+        }
+
+        /// <summary>
+        /// Отметим выбранные организации
+        /// <param name="id">Идентификатор</param>
+        /// </summary>
+        public override bool setCheckedOrgs(Guid id, Guid material)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var data = db.content_materials_links
+                    .Where(w => w.f_material.Equals(material))
+                    .Where(w => w.f_link_id.Equals(id));
+
+                return data.Any();
+            }
+        }
+
+        /// <summary>
+        /// Получаем список организаций, прикреплённых к каким-то типам
+        /// </summary>
+        /// <returns></returns>
+        public override OrgsModelSmall[] getOrgAttachedToTypes(Guid material)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var data = db.content_sv_orgs_not_attacheds
+                    .OrderBy(o => o.c_title)
+                    .Select(s => new OrgsModelSmall
+                    {
+                        Id = s.id,
+                        Title = s.c_title,
+                        Check = setCheckedOrgs(s.id, material)
+                    });
+
+                if (!data.Any()) return null;
+                else return data.ToArray();
+            }
         }
     }
 }

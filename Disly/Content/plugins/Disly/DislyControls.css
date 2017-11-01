@@ -419,18 +419,24 @@ input.form-control.page_size {
 .fileupload .preview_img {
     float: left;
     overflow: hidden;
-    width: 90px;
-    height:60px;
+    width: 150px;
+    height:110px;
+    overflow:hidden;
     margin-right: 10px;
     text-align: center;
     vertical-align: middle;
     background: #F2F3F4;
 }
 
-    .fileupload .preview_img img {
-        max-width: 90px;
-        vertical-align: middle;
-    }
+.fileupload .preview_img img {
+    max-width: 150px;
+    vertical-align: middle;
+    border:1px solid #ccc;
+}
+
+.preview_size{
+    margin-bottom:20px;
+}
 
 .fileupload .preview_info {
     float: left;
@@ -438,7 +444,12 @@ input.form-control.page_size {
 
 .fileupload .preview_del {
     cursor: pointer;
-    z-index: 999999;
+    z-index: 999;
+    width:160px;
+}
+
+.preview_del{
+
 }
 
 .fileupload .preview_name {

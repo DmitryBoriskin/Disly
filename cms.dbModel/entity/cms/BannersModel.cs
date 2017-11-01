@@ -60,6 +60,11 @@ namespace cms.dbModel.entity.cms
         /// Секция
         /// </summary>
         public Guid? Section { get; set; }
+
+        /// <summary>
+        /// Алиас секции
+        /// </summary>
+        public string SectionAlias { get; set; }
     }
 
     /// <summary>

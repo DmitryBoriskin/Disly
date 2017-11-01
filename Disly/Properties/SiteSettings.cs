@@ -11,6 +11,10 @@ public class Settings
     public static string BaseURL = ConfigurationManager.AppSettings["BaseURL"];
     public static string UserFiles = ConfigurationManager.AppSettings["UserFiles"];
     public static string BannersDir = ConfigurationManager.AppSettings["BannersDir"];
+
+    public static string EventsDir = ReadAppSetting("EventsDir");  // ConfigurationManager.AppSettings["EventsDir"];
+    public static string MaterialsDir = ReadAppSetting("MaterialsDir"); // ConfigurationManager.AppSettings["MaterialsDir"];
+
     //public static string BaseAdminURL = ConfigurationManager.AppSettings["BaseAdminURL"];
 
     //public static string AdminCooke = ConfigurationManager.AppSettings["AdminCooke"];
@@ -50,12 +54,44 @@ public class Settings
     //public static string VideoEncoderInfo = ConfigurationManager.AppSettings["VideoEncoderInfo"];
     //public static string VideoEncoderProcces = ConfigurationManager.AppSettings["VideoEncoderProcces"];
 
-    public static string mailServer = ConfigurationManager.AppSettings["mailServer"];
+    public static string mailServer = ConfigurationManager.AppSettings["MailServer"];
     public static int mailServerPort = Convert.ToInt32(ConfigurationManager.AppSettings["MailServerPort"]);
     public static bool mailServerSSL = Convert.ToBoolean(ConfigurationManager.AppSettings["MailServerSSL"]);
-    public static string mailUser = ConfigurationManager.AppSettings["mailFrom"];
-    public static string mailPass = ConfigurationManager.AppSettings["mailPass"];
-    public static string mailEncoding = ConfigurationManager.AppSettings["mailEncoding"];
-    public static string MailAdresName = ConfigurationManager.AppSettings["MailAdresName"];
-    public static string MailTo = ConfigurationManager.AppSettings["MailTo"];
+    public static string mailUser = ConfigurationManager.AppSettings["MailFrom"];
+    public static string mailPass = ConfigurationManager.AppSettings["MailPass"];
+    public static string mailEncoding = ConfigurationManager.AppSettings["MailEncoding"];
+    public static string mailAddresName = ConfigurationManager.AppSettings["MailAddresName"];
+    public static string mailTo = ConfigurationManager.AppSettings["MailTo"];
+
+    public static string MedCap = ConfigurationManager.AppSettings["MedCap"];
+    public static string Quote = ConfigurationManager.AppSettings["Quote"];
+    public static string Concept = ConfigurationManager.AppSettings["Concept"];
+    public static string Coordination = ConfigurationManager.AppSettings["Coordination"];
+
+    public static string DocTypes = ReadAppSetting("DocTypes");//ConfigurationManager.AppSettings["MaterialPreviewImgSize"];
+    public static string PicTypes = ReadAppSetting("PicTypes");//ConfigurationManager.AppSettings["MaterialPreviewImgSize"];
+    public static string MaterialPreviewImgSize = ReadAppSetting("MaterialPreviewImgSize");//ConfigurationManager.AppSettings["MaterialPreviewImgSize"];
+    public static string MaterialContentImgSize = ReadAppSetting("MaterialContentImgSize"); //ConfigurationManager.AppSettings["MaterialContentImgSize"];
+
+    public static string GalleryPreviewImgSize = ReadAppSetting("GalleryPreviewImgSize"); //ConfigurationManager.AppSettings["GalleryPreviewImgSize"];
+    public static string GalleryContentImgSize = ReadAppSetting("GalleryContentImgSize"); //ConfigurationManager.AppSettings["GalleryContentImgSize"];
+
+
+    //Read AppSettings
+    static string ReadAppSetting(string key)
+    {
+        string result = null;
+        try
+        {
+            var appSettings = ConfigurationManager.AppSettings;
+            result = appSettings[key] ?? ""; // "Not Found";
+            return result;
+        }
+        catch (ConfigurationErrorsException)
+        {
+            //Console.WriteLine("Error reading app settings"+ key);
+            throw new Exception("Error reading app settings" + key);
+        }
+    }
+
 }

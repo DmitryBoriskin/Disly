@@ -3,9 +3,10 @@
 }
 @model SiteMapMenu
 
-<div class="form-group">
-    @Html.LabelFor(m => m.Text, "Название")
-    @Html.TextBoxFor(m => m.Text, new { @class = "form-control", @required = "" })
-    @Html.HiddenFor(m => m.Id)
+<div>
+    <div style="overflow:hidden">
+        @Html.TextBoxFor(m => m.Text, new { @title = "Название группы", @required = "" })
+        @Html.HiddenFor(m => m.Id)
+        <button type="submit" name="action" value="save-group-sitemapmenu" class="button icon-save">Сохранить</button>
+    </div>
 </div>
-<button type="submit" name="action" value="save-group-sitemapmenu" class="button icon-save">Сохранить</button>

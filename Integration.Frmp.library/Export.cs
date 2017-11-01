@@ -6,6 +6,8 @@ using LinqToDB;
 using System.Xml.Linq;
 using Integration.Frmp.models;
 using AutoMapper;
+using System.Xml.Serialization;
+using Integration.Frmp.library.Models;
 
 namespace Integration.Frmp.library
 {
@@ -29,38 +31,48 @@ namespace Integration.Frmp.library
                 DirectoryInfo info = new DirectoryInfo(param.DirName);
                 var fileInfo = info.GetFiles(param.FileName).OrderByDescending(p => p.CreationTime).FirstOrDefault();
 
-                SrvcLogger.Info("{PREPARING}", "Файл для импорта данных '" + fileInfo.FullName + "'");
+                SrvcLogger.Debug("{PREPARING}", "Файл для импорта данных '" + fileInfo.FullName + "'");
                 SrvcLogger.Debug("{PREPARING}", "Начало чтения XML-данных");
 
-                // загружаем xml-документ
-                XDocument xdoc = XDocument.Load(fileInfo.FullName);
-
-                SrvcLogger.Debug("{PREPARING}", string.Format("XML-данные успешно прочитаны из файла {0}", fileInfo.Name));
-
-                var employees = xdoc.Element("ArrayOfEmployee").Elements("Employee");
-
-                // импорт организаций
-                var orgs = employees.Elements("UZ");
-                try
+                XmlSerializer serializer = new XmlSerializer(typeof(ArrayOfEmployee));
+                using (FileStream fileStream = new FileStream(fileInfo.FullName, FileMode.Open))
                 {
-                    ImportOrganization(orgs);
-                    SrvcLogger.Debug("{WORK}", "Данные по организациям успешно добавлены в таблицу dbo.import_frmp_orgs");
-                }
-                catch (Exception e)
-                {
-                    SrvcLogger.Fatal("{WORK}", "Ошибка при добавлении данных об организациях в таблицу dbo.import_frmp_orgs" + Environment.NewLine + " " + e.ToString());
-                }
+                    SrvcLogger.Debug("{PREPARING}", string.Format("XML-данные успешно прочитаны из файла {0}", fileInfo.Name));
 
-                // импорт сотрудников
-                try
-                {
-                    ImportEmployees(employees);
-                }
-                catch (Exception e)
-                {
-                    SrvcLogger.Fatal("{WORK}", "Ошибка при добавлении данных об сотрудниках в таблицу dbo.import_frmp_peoples" + Environment.NewLine + " " + e.ToString());
-                }
+                    var arrayOfEmployees = (ArrayOfEmployee)serializer.Deserialize(fileStream);
 
+                    // импорт организаций
+                    var orgs = arrayOfEmployees.Employee.Select(s => new Organization
+                    {
+                        ID = s.Organization.ID,
+                        Name = s.Organization.Name,
+                        OID = s.Organization.OID,
+                        KPP = s.Organization.KPP,
+                        OGRN = s.Organization.OGRN
+                    });
+                    try
+                    {
+                        ImportOrganization(orgs);
+                    }
+                    catch (Exception e)
+                    {
+                        SrvcLogger.Fatal("{WORK}", "Ошибка при добавлении данных об организациях в таблицу dbo.import_frmp_orgs" + Environment.NewLine + " " + e.ToString());
+                    }
+
+                    // импорт сотрудников
+                    var employees = arrayOfEmployees.Employee
+                        .OrderBy(o => o.SNILS)
+                        .ThenByDescending(t => t.ChangeTime)
+                        .ToArray();
+                    try
+                    {
+                        ImportEmployees(employees);
+                    }
+                    catch (Exception e)
+                    {
+                        SrvcLogger.Fatal("{WORK}", "Ошибка при добавлении данных об сотрудниках в таблицу dbo.import_frmp_peoples" + Environment.NewLine + " " + e.ToString());
+                    }
+                }
             }
             catch (Exception e)
             {
@@ -69,207 +81,176 @@ namespace Integration.Frmp.library
         }
 
         /// <summary>
-        /// Импорт организаций
+        /// Запись данных по организациям в таблицу dbo.import_frmp_orgs
         /// </summary>
         /// <param name="orgs">Организации</param>
-        private static void ImportOrganization(IEnumerable<XElement> orgs)
+        private static void ImportOrganization(IEnumerable<Organization> orgs)
         {
             var distinctOrgs = (from e in orgs
-                                select e).GroupBy(x => x.Value).Select(x => x.First()).ToList();
+                                select e).GroupBy(x => x.OID).Select(x => x.First()).ToList();
+
             using (var db = new DbModel(connectionString))
             {
                 using (var tr = db.BeginTransaction())
                 {
                     foreach (var org in distinctOrgs)
                     {
-                        XElement orgID = org.Element("ID");
-                        XElement orgOID = org.Element("OID");
-                        XElement orgName = org.Element("Name");
-
-                        string oid = (orgOID != null && !string.IsNullOrEmpty(orgOID.Value)) ? orgOID.Value : orgID.Value;
+                        Guid id = org.ID; // идентификатор
+                        string name = org.Name; // название
+                        string oid = org.OID; // OID
+                        string kpp = org.KPP; // кпп
+                        string orgn = org.OGRN; // OGRN
 
                         // проверим существует ли запись с таким идентификатором в базе
                         var query = db.ImportFrmpOrgss.Where(w => w.COid.Equals(oid));
-                        bool isExist = query.Any() ? true : false;
+
+                        bool isExist = query.Any();
                         if (!isExist)
                         {
                             db.ImportFrmpOrgss
-                                .Value(v => v.Guid, Guid.Parse(orgID.Value))
+                                .Value(v => v.Guid, id)
                                 .Value(v => v.COid, oid)
-                                .Value(v => v.CName, orgName.Value)
+                                .Value(v => v.CName, name)
                                 .Value(v => v.DModify, DateTime.Now)
                                 .Insert();
                         }
                         else
                         {
                             db.ImportFrmpOrgss
-                                .Where(w => w.COid.Equals(oid))
-                                .Set(u => u.CName, orgName.Value)
+                                .Where(w => w.COid.Equals(org.OID))
+                                .Set(u => u.CName, name)
                                 .Set(u => u.DModify, DateTime.Now)
                                 .Update();
                         }
                     }
 
                     tr.Commit();
+                    SrvcLogger.Debug("{WORK}", "Данные по организациям успешно добавлены в таблицу dbo.import_frmp_orgs");
                 }
             }
         }
 
         /// <summary>
-        /// Импорт сотрудников
+        /// Запись данных по сотрудникам в таблицу dbo.import_frmp_peoples
         /// </summary>
-        /// <param name="employees">Сотрудники</param>
-        private static void ImportEmployees(IEnumerable<XElement> employees)
+        /// <param name="employyes">Список сотрудников</param>
+        private static void ImportEmployees(Models.Employee[] employees)
         {
             using (var db = new DbModel(connectionString))
             {
-                using (var tr = db.BeginTransaction())
+                // очистим таблицу dbo.import_frmp_peoples перед новым импортом
+                db.ImportFrmpPeopless.Delete();
+                
+                for (int i = 0; i < employees.Count(); i++)
                 {
-                    // выставим флаг для всех уже имеющихся записей в бд как немодифицированные
-                    db.ImportFrmpPeopless.Set(u => u.BChanged, false).Update();
+                    Guid id = employees[i].ID; // идентификатор
+                    string name = employees[i].Name; // имя 
+                    string surname = employees[i].Surname;  // фамилия
+                    string patroname = employees[i].Patroname; // отчество
+                    bool sex = employees[i].Sex == Models.SexEnum.Male; // пол
+                    DateTime? birthDate = employees[i].Birthdate; // дата рождения
+                    DateTime? modifyDate = employees[i].ChangeTime; // дата изменения записи
+                    string snilsToCheck = employees[i].SNILS; // СНИЛС для проверки
+                    string orgOid = employees[i].Organization.OID; // идентификатор организации
 
-                    foreach (var employee in employees)
+                    // проверка валидности СНИЛС
+                    string snils = string.Empty;
+
+                    if (CheckSnils(snilsToCheck))
                     {
-                        XElement idElement = employee.Element("ID");
-                        XElement surnameElement = employee.Element("Surname");
-                        XElement nameElement = employee.Element("Name");
-                        XElement patronameElement = employee.Element("Patroname");
-                        XElement snilsElement = employee.Element("SNILS");
-                        XElement sexElement = employee.Element("Sex");
-                        XElement birthDateElement = employee.Element("Birthdate");
-                        XElement modifyDateElement = employee.Element("ChangeTime");
-                        XElement orgEmployee = employee.Element("UZ").Element("ID");
+                        snils = snilsToCheck.Replace("-", "");
 
-                        Guid idEmp = Guid.Parse(idElement.Value);
-                        bool sex = sexElement.Value.ToLower().Equals("male") ? true : false;
-                        DateTime birthDate = DateTime.Parse(birthDateElement.Value);
-                        DateTime modifyDate = DateTime.Parse(modifyDateElement.Value);
+                        // проверим существует ли запись с таким СНИЛС в таблице dbo.import_frmp_peoples
+                        var query = db.ImportFrmpPeopless.Where(w => w.CSnils.Equals(snils));
+                        bool isExist = query.Any();
 
-                        // Пришедшая информация по сотруднику
-                        string xmlEmployee = employee.ToString();
-
-                        // проверим существует ли запись с таким идентификатором в бд
-                        var query = db.ImportFrmpPeopless.Where(w => w.Id.Equals(idEmp));
-                        bool isExist = query.Any() ? true : false;
-
+                        // записываем данные в таблицу dbo.import_frmp_peoples
                         if (!isExist)
                         {
                             db.ImportFrmpPeopless
-                                .Value(v => v.Id, idEmp)
-                                .Value(v => v.FOrg, orgEmployee.Value)
-                                .Value(v => v.CSurname, surnameElement.Value)
-                                .Value(v => v.CName, nameElement.Value)
-                                .Value(v => v.CPatronymic, patronameElement.Value)
-                                .Value(v => v.CSnils, snilsElement.Value)
+                                .Value(v => v.Id, id)
+                                .Value(v => v.CSurname, surname)
+                                .Value(v => v.CName, name)
+                                .Value(v => v.CPatronymic, patroname)
+                                .Value(v => v.CSnils, snils)
                                 .Value(v => v.BSex, sex)
                                 .Value(v => v.DBirthdate, birthDate)
                                 .Value(v => v.DModify, modifyDate)
-                                .Value(v => v.BChanged, true)
-                                .Value(v => v.CInfo, xmlEmployee)
                                 .Insert();
                         }
-                        else
+
+                        // записываем данные в таблицу dbo.import_frmp_orgs_peoples
+                        var queryLink = db.ImportFrmpOrgsPeopless
+                                .Where(w => w.FOid.Equals(orgOid))
+                                .Where(w => w.FPeople.Equals(id));
+
+                        // проверим существует ли связь сотрудника с организацией
+                        bool isLinkExist = queryLink.Any();
+                        if (!isLinkExist)
                         {
-                            db.ImportFrmpPeopless
-                                .Where(w => w.Id.Equals(idEmp))
-                                .Set(u => u.FOrg, orgEmployee.Value)
-                                .Set(u => u.CSurname, surnameElement.Value)
-                                .Set(u => u.CName, nameElement.Value)
-                                .Set(u => u.CPatronymic, patronameElement.Value)
-                                .Set(u => u.CSnils, snilsElement.Value)
-                                .Set(u => u.BSex, sex)
-                                .Set(u => u.DBirthdate, birthDate)
-                                .Set(u => u.DModify, modifyDate)
-                                .Set(u => u.BChanged, true)
-                                .Set(u => u.CInfo, xmlEmployee)
-                                .Update();
+                            db.ImportFrmpOrgsPeopless
+                                .Value(v => v.FOid, orgOid)
+                                .Value(v => v.FPeople, id)
+                                .Insert();
                         }
+
+                        if (i > 0 && i % 1000 == 0)
+                            SrvcLogger.Debug("{WORK}", string.Format("Импортированно {0} сотрудников из {1}", i, employees.Count()));
+                    }
+                    else
+                    {
+                        SrvcLogger.Error("{WORK}", string.Format("Неправильный формат СНИЛС для записи --> id: {0}, фамилия: {1}, имя: {2}, отчество: {3}, СНИЛС: {4}", id, surname, name, patroname, snilsToCheck));
                     }
 
-                    tr.Commit();
                 }
-            }
+                SrvcLogger.Debug("{WORK}", "Данные по сотрудникам успешно добавлены в таблицу dbo.import_frmp_peoples");
+                SrvcLogger.Debug("{WORK}", "Данные связей сотрудников и организаций успешно добавлены в таблицу dbo.import_frmp_orgs_peoples");
 
-            SrvcLogger.Debug("{WORK}", "Данные по сотрудникам успешно добавлены в таблицу dbo.import_frmp_peoples");
-
-            #region создадим карту для импортированных и существующих пользователей
-
-            // получим импортированных пользователей
-            var listImportedEmployees = GetImportedEmployees();
-
-            if (listImportedEmployees != null)
-            {
+                // обновляем данные в таблицах dbo.content_people, dbo.content_people_org_link
                 try
                 {
-                    Mapper.Initialize(cfg => cfg.CreateMap<ImportFrmpPeoples, ContentPeople>());
-                    var result = Mapper.Map<List<ContentPeople>>(listImportedEmployees);
-                    InsertOrUpdateEmployees(result);
-
-                    SrvcLogger.Debug("{WORK}", string.Format("Данные по сотрудникам успешно добавлены в таблицу dbo.content_people, кол-во сотрудников для обновления: {0}", listImportedEmployees.Count()));
+                    db.ImportFrmpEmployees();
+                    SrvcLogger.Debug("{WORK}", "Данные из таблицы импорта сотрудников dbo.import_frmp_peoples перенесены в таблицу dbo.content_people");
+                    SrvcLogger.Debug("{WORK}", "Данные из таблицы импорта сотрудников dbo.import_frmp_orgs_peoples перенесены в таблицу dbo.content_people_org_link");
                 }
                 catch (Exception e)
                 {
-                    SrvcLogger.Fatal("{WORK}", "Ошибка при добавлении данных об сотрудниках в таблицу dbo.content_people" + Environment.NewLine + " " + e.ToString());
+                    SrvcLogger.Fatal("{WORK}", "Ошибка при обновлении таблицы dbo.content_people" + Environment.NewLine + " " + e.ToString());
                 }
             }
-            else
-            {
-                SrvcLogger.Debug("{WORK}", "Новых данных по сотрудникам нет");
-            }
-            #endregion
         }
 
         /// <summary>
-        /// Получаем всех новых/изменённых сотрудников
+        /// Проверим корректность СНИЛС
         /// </summary>
-        /// <returns></returns>
-        private static List<ImportFrmpPeoples> GetImportedEmployees()
+        /// <param name="snilsToCheck">СНИЛС для проверки</param>
+        /// <returns>Валидность СНИЛС</returns>
+        private static bool CheckSnils(string snilsToCheck)
         {
-            using (var db = new DbModel(connectionString))
-            {
-                var query = db.ImportFrmpPeopless.Where(w => w.BChanged.Equals(true)).Select(s => s).ToList();
+            string snils = string.Empty;
+            string control = string.Empty;
+            string number = string.Empty;
 
-                if (!query.Any()) return null;
-                else { return query.ToList(); }
-            }
-        }
+            snilsToCheck = snilsToCheck.Replace("-", "");
+            double result = 0;
+            number = snilsToCheck.Substring(0, 9);
+            control = snilsToCheck.Substring(9, 2);
 
-        /// <summary>
-        /// Вставляем или обновляем сотрудников
-        /// </summary>
-        private static void InsertOrUpdateEmployees(IEnumerable<ContentPeople> employees)
-        {
-            using (var db = new DbModel(connectionString))
+            if (Convert.ToInt32(number) > 001001998)
             {
-                using (var tr = db.BeginTransaction())
+                for (int i = 0; i < number.Length; i++)
                 {
-                    foreach (var empl in employees)
-                    {
-                        // проверим существует ли данный сотрудник
-                        var query = db.ContentPeoples.Where(w => w.Id.Equals(empl.Id));
-
-                        if (!query.Any())
-                        {
-                            db.ContentPeoples
-                                .Value(v => v.Id, empl.Id)
-                                .Value(v => v.CSurname, empl.CSurname)
-                                .Value(v => v.CName, empl.CName)
-                                .Value(v => v.CPatronymic, empl.CPatronymic)
-                                .Insert();
-                        }
-                        else
-                        {
-                            db.ContentPeoples
-                                .Where(w => w.Id.Equals(empl.Id))
-                                .Set(u => u.CSurname, empl.CSurname)
-                                .Set(u => u.CName, empl.CName)
-                                .Set(u => u.CPatronymic, empl.CPatronymic)
-                                .Update();
-                        }
-                    }
-                    tr.Commit();
+                    result += (number.Length - i) * Convert.ToInt32(number.Substring(i, 1));
                 }
+
+                if (result > 101) result %= 101;
+
+                if (result == 100 || result == 101) result = 0;
+
+                return result == Convert.ToDouble(control);
             }
+
+            return false;
         }
     }
 }

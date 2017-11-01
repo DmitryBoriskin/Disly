@@ -1,6 +1,7 @@
 ﻿using cms.dbModel.entity;
 using cms.dbModel.entity.cms;
 using System;
+using System.Collections.Generic;
 
 namespace cms.dbModel
 {
@@ -10,6 +11,7 @@ namespace cms.dbModel
 
         public abstract SitesModel getSite(Guid? Id);
         public abstract SitesModel getSite(string domain);
+        public abstract bool updateSiteInfo(SitesModel item, Guid user, string ip);
 
         // Работа с логами
         public abstract cmsLogModel[] getCmsUserLog(Guid UserId);
@@ -57,15 +59,19 @@ namespace cms.dbModel
         public abstract UsersGroupModel getUsersGroup(string alias);
 
         public abstract ResolutionsModel[] getGroupResolutions(string alias);
-        
+
         // Материалы
+        public abstract MaterialGroup[] getMaterialGroups(Guid materialId, string domain);
+
         public abstract MaterialsList getMaterialsList(FilterParams filtr);
-        public abstract MaterialsModel getMaterial(Guid id);
+        public abstract MaterialsModel getMaterial(Guid id, string domain);
 
         public abstract bool insertCmsMaterial(MaterialsModel material);
         public abstract bool updateCmsMaterial(MaterialsModel material);
         public abstract bool deleteCmsMaterial(Guid id);
-
+        public abstract MaterialsGroup[] getMaterialsGroups();
+        public abstract bool insertMaterialsLinksToOrgs(MaterialOrgType model);
+        public abstract MaterialsEvents[] getMaterialsEvents();
 
         // Events
         public abstract EventsList getEventsList(FilterParams filtr);
@@ -120,6 +126,13 @@ namespace cms.dbModel
         public abstract People[] getPersonsThisDepartment(Guid idStructure);
         public abstract bool insPersonsThisDepartment(Guid idDepart, Guid IdLinkPeopleForOrg, string status, string post);
         public abstract bool delPersonsThisDepartment(Guid idDep, Guid idPeople);
+        public abstract OrgType[] getOrgTypes();
+        public abstract Guid[] getOrgTypes(Guid id);
+        public abstract List<OrgType> getOrgByType(Guid id);
+        public abstract OrgsModelSmall[] getOrgSmall(Guid id, Guid material);
+        public abstract bool setCheckedOrgs(Guid id, Guid material);
+        public abstract OrgsModelSmall[] getOrgAttachedToTypes(Guid id);
+
         //Feedbacks
         public abstract FeedbacksList getFeedbacksList(FilterParams filtr);
         public abstract FeedbackModel getFeedback(Guid id);

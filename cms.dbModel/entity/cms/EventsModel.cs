@@ -25,10 +25,7 @@ namespace cms.dbModel.entity
         /// varchar(512)
         /// </summary>
         public string Alias { get; set; }
-        /// <summary>
-        ///  varchar(1024)
-        /// </summary>
-        public string Preview { get; set; }
+
         /// <summary>
         /// varchar(512)
         /// </summary>
@@ -78,6 +75,11 @@ namespace cms.dbModel.entity
         /// <summary>
         /// Ссылка на редактирование сайта. будет заполнено если у события есть сайт
         /// </summary>
-        public string SiteId { get; set; }        
+        public string SiteId { get; set; }
+
+        /// <summary>
+        /// Изображение
+        /// </summary>
+        public Photo PreviewImage { get; set; }
     }
 }

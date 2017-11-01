@@ -19,7 +19,8 @@
         help: null,
         type: 'text',
         width: null,
-        height: null
+        height: null,
+        required: null
     }
 
     inputText.prototype.defaults = function () {
@@ -28,12 +29,13 @@
             help: this.$element.attr('data-help') || inputText.DEFAULTS.help,
             type: this.$element.attr('data-type') || inputText.DEFAULTS.type,
             width: this.$element.attr('data-width') || inputText.DEFAULTS.width,
-            height: this.$element.attr('data-height') || inputText.DEFAULTS.height
+            height: this.$element.attr('data-height') || inputText.DEFAULTS.height,
+            required: this.$element.attr('required') || inputText.DEFAULTS.required
         }
     }
 
     inputText.prototype.render = function () {
-        this.$element.wrap('<div class="form-group">');        
+        this.$element.wrap('<div class="form-group">');
 
         if (this.options.title) {
             var $toggleTitle = $('<label for="' + this.$element.attr('id') + '">').html(this.options.title + ':');
@@ -226,7 +228,7 @@
             $InfoBlock.append('<div class="preview_size">' + 'Размер: ' + this.$element.attr('data-size') + '</div>');
 
             $DelPreview = $("<div/>", { 'class': 'preview_btn' });
-            $DelLink = $('<a class="preview_del">Удалить</a>');
+            $DelLink = $('<a class="preview_del button icon-delete" data-action="noPreloader-accept">Удалить</a>');
             $DelPreview.append($DelLink);
             $InfoBlock.append($DelPreview);
             $Wrap.append($InfoBlock);
@@ -239,8 +241,8 @@
         $PreviewBlock.append($Wrap);
 
         if (this.$element.attr('data-help')) {
-            $Wrap.addClass('col-md-4');
-            var $FileHelp = $('<div class="file_help col-md-8">' + this.$element.attr('data-help') + '</div>');
+            $Wrap.addClass('col-md-12');
+            var $FileHelp = $('<div class="file_help col-md-12">' + this.$element.attr('data-help') + '</div>');
             $PreviewBlock.append($FileHelp);
         }
 
@@ -294,6 +296,7 @@
         $file.siblings('.preview').remove();
 
         $file.siblings('input[type=hidden]#' + $file.attr('id')).removeAttr('value');
+        $('.fileupload').siblings('input[type=hidden]').removeAttr('value');
 
         $file.DislyFile('create');
     })

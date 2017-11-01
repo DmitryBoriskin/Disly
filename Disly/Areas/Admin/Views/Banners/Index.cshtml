@@ -49,7 +49,7 @@
                         }
                         @if (Model.SectionItem.CountBanners > 1)
                         {
-                            <a class="button icon-sort" value="no-preloader-btn" id="sorting_element" title="Добавляет возможность сортировки элементов списка">Сортировать</a>
+                            <a class="button icon-sort" data-action="noPreloader-accept" id="sorting_element" title="Добавляет возможность сортировки элементов списка">Сортировать</a>
                         }
                     </div>
                 </div>
@@ -111,7 +111,10 @@
                     <tbody>
                         @foreach (var item in Model.Sections)
                         {
-                            string size = item.Width + "x" + item.Height;
+                            string width = item.Width.Equals(0) ? "auto" : item.Width.ToString();
+                            string height = item.Height.Equals(0) ? "auto" : item.Height.ToString();
+
+                            string size = width + " x " + height;
                             <tr>
                                 <td>@item.Title</td>
                                 <td>

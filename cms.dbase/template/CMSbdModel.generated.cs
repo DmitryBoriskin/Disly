@@ -52,17 +52,27 @@ namespace cms.dbase.models
 		public ITable<content_events>                   content_eventss                   { get { return this.GetTable<content_events>(); } }
 		public ITable<content_events_link>              content_events_links              { get { return this.GetTable<content_events_link>(); } }
 		public ITable<content_feedbacks>                content_feedbackss                { get { return this.GetTable<content_feedbacks>(); } }
+		public ITable<content_material_links_groups>    content_material_links_groupss    { get { return this.GetTable<content_material_links_groups>(); } }
 		public ITable<content_materials>                content_materialss                { get { return this.GetTable<content_materials>(); } }
+		public ITable<content_materials_groups>         content_materials_groupss         { get { return this.GetTable<content_materials_groups>(); } }
 		public ITable<content_materials_link>           content_materials_links           { get { return this.GetTable<content_materials_link>(); } }
+		public ITable<content_org_services>             content_org_servicess             { get { return this.GetTable<content_org_services>(); } }
 		public ITable<content_org_structure>            content_org_structures            { get { return this.GetTable<content_org_structure>(); } }
 		public ITable<content_orgs>                     content_orgss                     { get { return this.GetTable<content_orgs>(); } }
+		public ITable<content_orgs_types>               content_orgs_typess               { get { return this.GetTable<content_orgs_types>(); } }
+		public ITable<content_orgs_types_link>          content_orgs_types_links          { get { return this.GetTable<content_orgs_types_link>(); } }
 		public ITable<content_people>                   content_peoples                   { get { return this.GetTable<content_people>(); } }
 		public ITable<content_people_department_link>   content_people_department_links   { get { return this.GetTable<content_people_department_link>(); } }
 		public ITable<content_people_org_link>          content_people_org_links          { get { return this.GetTable<content_people_org_link>(); } }
+		public ITable<content_services>                 content_servicess                 { get { return this.GetTable<content_services>(); } }
 		public ITable<content_sitemap>                  content_sitemaps                  { get { return this.GetTable<content_sitemap>(); } }
 		public ITable<content_sitemap_menus>            content_sitemap_menuss            { get { return this.GetTable<content_sitemap_menus>(); } }
 		public ITable<content_sitemap_menutypes>        content_sitemap_menutypess        { get { return this.GetTable<content_sitemap_menutypes>(); } }
 		public ITable<content_sv_banner_sections_sites> content_sv_banner_sections_sitess { get { return this.GetTable<content_sv_banner_sections_sites>(); } }
+		public ITable<content_sv_banners_section>       content_sv_banners_sections       { get { return this.GetTable<content_sv_banners_section>(); } }
+		public ITable<content_sv_materials_sites>       content_sv_materials_sitess       { get { return this.GetTable<content_sv_materials_sites>(); } }
+		public ITable<content_sv_orgs_by_type>          content_sv_orgs_by_types          { get { return this.GetTable<content_sv_orgs_by_type>(); } }
+		public ITable<content_sv_orgs_not_attached>     content_sv_orgs_not_attacheds     { get { return this.GetTable<content_sv_orgs_not_attached>(); } }
 		public ITable<content_sv_people_department>     content_sv_people_departments     { get { return this.GetTable<content_sv_people_department>(); } }
 		public ITable<content_sv_people_org>            content_sv_people_orgs            { get { return this.GetTable<content_sv_people_org>(); } }
 		public ITable<content_sv_sitemap_menu>          content_sv_sitemap_menus          { get { return this.GetTable<content_sv_sitemap_menu>(); } }
@@ -73,6 +83,7 @@ namespace cms.dbase.models
 		public ITable<front_site_section>               front_site_sections               { get { return this.GetTable<front_site_section>(); } }
 		public ITable<front_sv_page_veiw>               front_sv_page_veiws               { get { return this.GetTable<front_sv_page_veiw>(); } }
 		public ITable<import_frmp_orgs>                 import_frmp_orgss                 { get { return this.GetTable<import_frmp_orgs>(); } }
+		public ITable<import_frmp_orgs_peoples>         import_frmp_orgs_peopless         { get { return this.GetTable<import_frmp_orgs_peoples>(); } }
 		public ITable<import_frmp_peoples>              import_frmp_peopless              { get { return this.GetTable<import_frmp_peoples>(); } }
 
 		public CMSdb()
@@ -312,16 +323,16 @@ namespace cms.dbase.models
 		#region Associations
 
 		/// <summary>
-		/// fk_user_resolutions
-		/// </summary>
-		[Association(ThisKey="c_user_id", OtherKey="id", CanBeNull=false, KeyName="fk_user_resolutions", BackReferenceName="fkuserresolutionss")]
-		public cms_users fkuserresolutions { get; set; }
-
-		/// <summary>
 		/// fk_menu_resolutions
 		/// </summary>
 		[Association(ThisKey="c_menu_id", OtherKey="id", CanBeNull=false, KeyName="fk_menu_resolutions", BackReferenceName="fkmenuresolutionss")]
 		public cms_menu fkmenuresolutions { get; set; }
+
+		/// <summary>
+		/// fk_user_resolutions
+		/// </summary>
+		[Association(ThisKey="c_user_id", OtherKey="id", CanBeNull=false, KeyName="fk_user_resolutions", BackReferenceName="fkuserresolutionss")]
+		public cms_users fkuserresolutions { get; set; }
 
 		#endregion
 	}
@@ -340,16 +351,16 @@ namespace cms.dbase.models
 		#region Associations
 
 		/// <summary>
-		/// fk_user_group_resolutions
-		/// </summary>
-		[Association(ThisKey="f_user_group", OtherKey="c_alias", CanBeNull=false, KeyName="fk_user_group_resolutions", BackReferenceName="fkusergroupresolutionss")]
-		public cms_users_group fkusergroupresolutions { get; set; }
-
-		/// <summary>
 		/// fk_menu_template_resolutions
 		/// </summary>
 		[Association(ThisKey="f_menu_id", OtherKey="id", CanBeNull=false, KeyName="fk_menu_template_resolutions", BackReferenceName="fkmenutemplateresolutionss")]
 		public cms_menu fkmenutemplateresolutions { get; set; }
+
+		/// <summary>
+		/// fk_user_group_resolutions
+		/// </summary>
+		[Association(ThisKey="f_user_group", OtherKey="c_alias", CanBeNull=false, KeyName="fk_user_group_resolutions", BackReferenceName="fkusergroupresolutionss")]
+		public cms_users_group fkusergroupresolutions { get; set; }
 
 		#endregion
 	}
@@ -357,20 +368,26 @@ namespace cms.dbase.models
 	[Table(Schema="dbo", Name="cms_sites")]
 	public partial class cms_sites
 	{
-		[Column,     NotNull    ] public Guid   id             { get; set; } // uniqueidentifier
-		[PrimaryKey, NotNull    ] public string c_alias        { get; set; } // varchar(64)
-		[Column,     NotNull    ] public string c_name         { get; set; } // nvarchar(512)
-		[Column,        Nullable] public string c_adress       { get; set; } // varchar(512)
-		[Column,        Nullable] public string c_phone        { get; set; } // varchar(64)
-		[Column,        Nullable] public string c_fax          { get; set; } // varchar(64)
-		[Column,        Nullable] public string c_email        { get; set; } // varchar(64)
-		[Column,        Nullable] public string c_url          { get; set; } // varchar(128)
-		[Column,        Nullable] public string c_worktime     { get; set; } // varchar(512)
-		[Column,        Nullable] public string c_logo         { get; set; } // varchar(512)
-		[Column,        Nullable] public Guid?  f_content      { get; set; } // uniqueidentifier
-		[Column,        Nullable] public string c_content_type { get; set; } // varchar(64)
-		[Column,        Nullable] public string c_scripts      { get; set; } // nvarchar(max)
-		[Column,     NotNull    ] public bool   b_site_off     { get; set; } // bit
+		[Column,     NotNull    ] public Guid   id              { get; set; } // uniqueidentifier
+		[PrimaryKey, NotNull    ] public string c_alias         { get; set; } // varchar(64)
+		[Column,     NotNull    ] public string c_name          { get; set; } // nvarchar(512)
+		[Column,        Nullable] public string c_name_long     { get; set; } // nvarchar(1024)
+		[Column,        Nullable] public string c_adress        { get; set; } // varchar(512)
+		[Column,        Nullable] public string c_phone         { get; set; } // varchar(64)
+		[Column,        Nullable] public string c_fax           { get; set; } // varchar(64)
+		[Column,        Nullable] public string c_email         { get; set; } // varchar(64)
+		[Column,        Nullable] public string c_url           { get; set; } // varchar(128)
+		[Column,        Nullable] public string c_worktime      { get; set; } // varchar(512)
+		[Column,        Nullable] public string c_logo          { get; set; } // varchar(512)
+		[Column,        Nullable] public Guid?  f_content       { get; set; } // uniqueidentifier
+		[Column,        Nullable] public string c_content_type  { get; set; } // varchar(64)
+		[Column,        Nullable] public string c_scripts       { get; set; } // nvarchar(max)
+		[Column,     NotNull    ] public bool   b_site_off      { get; set; } // bit
+		[Column,        Nullable] public string c_facebook      { get; set; } // nvarchar(512)
+		[Column,        Nullable] public string c_vk            { get; set; } // nvarchar(512)
+		[Column,        Nullable] public string c_instagramm    { get; set; } // nvarchar(512)
+		[Column,        Nullable] public string c_odnoklassniki { get; set; } // nvarchar(512)
+		[Column,        Nullable] public string c_twitter       { get; set; } // nvarchar(512)
 
 		#region Associations
 
@@ -634,12 +651,13 @@ namespace cms.dbase.models
 	[Table(Schema="dbo", Name="content_banner_sections")]
 	public partial class content_banner_sections
 	{
-		[PrimaryKey, NotNull] public Guid   id         { get; set; } // uniqueidentifier
-		[Column,     NotNull] public string c_title    { get; set; } // nvarchar(512)
-		[Column,     NotNull] public int    n_sort     { get; set; } // int
-		[Column,     NotNull] public bool   b_disabled { get; set; } // bit
-		[Column,     NotNull] public int    n_width    { get; set; } // int
-		[Column,     NotNull] public int    n_height   { get; set; } // int
+		[PrimaryKey, NotNull    ] public Guid   id         { get; set; } // uniqueidentifier
+		[Column,     NotNull    ] public string c_title    { get; set; } // nvarchar(512)
+		[Column,        Nullable] public string c_alias    { get; set; } // nvarchar(512)
+		[Column,     NotNull    ] public int    n_sort     { get; set; } // int
+		[Column,     NotNull    ] public bool   b_disabled { get; set; } // bit
+		[Column,     NotNull    ] public int    n_width    { get; set; } // int
+		[Column,     NotNull    ] public int    n_height   { get; set; } // int
 
 		#region Associations
 
@@ -669,16 +687,16 @@ namespace cms.dbase.models
 		#region Associations
 
 		/// <summary>
-		/// FK_content_banners_content_banner_sections
-		/// </summary>
-		[Association(ThisKey="f_section", OtherKey="id", CanBeNull=false, KeyName="FK_content_banners_content_banner_sections", BackReferenceName="contentbannerscontentbannersectionss")]
-		public content_banner_sections contentbannerscontentbannersections { get; set; }
-
-		/// <summary>
 		/// FK_content_banners_cms_sites
 		/// </summary>
 		[Association(ThisKey="f_site", OtherKey="c_alias", CanBeNull=false, KeyName="FK_content_banners_cms_sites", BackReferenceName="contentbannerscmssitess")]
 		public cms_sites contentbannerscmssites { get; set; }
+
+		/// <summary>
+		/// FK_content_banners_content_banner_sections
+		/// </summary>
+		[Association(ThisKey="f_section", OtherKey="id", CanBeNull=false, KeyName="FK_content_banners_content_banner_sections", BackReferenceName="contentbannerscontentbannersectionss")]
+		public content_banner_sections contentbannerscontentbannersections { get; set; }
 
 		#endregion
 	}
@@ -804,32 +822,76 @@ namespace cms.dbase.models
 		[Column,     NotNull    ] public bool     b_disabled     { get; set; } // bit
 	}
 
-	[Table(Schema="dbo", Name="content_materials")]
-	public partial class content_materials
+	[Table(Schema="dbo", Name="content_material_links_groups")]
+	public partial class content_material_links_groups
 	{
-		[PrimaryKey, NotNull    ] public Guid     id          { get; set; } // uniqueidentifier
-		[Column,     NotNull    ] public DateTime d_date      { get; set; } // datetime
-		[Column,     NotNull    ] public string   c_title     { get; set; } // varchar(512)
-		[Column,        Nullable] public string   c_preview   { get; set; } // varchar(512)
-		[Column,        Nullable] public string   c_text      { get; set; } // varchar(max)
-		[Column,        Nullable] public string   c_url       { get; set; } // varchar(1024)
-		[Column,        Nullable] public string   c_url_name  { get; set; } // varchar(512)
-		[Column,        Nullable] public string   c_desc      { get; set; } // varchar(1024)
-		[Column,        Nullable] public string   c_keyw      { get; set; } // varchar(512)
-		[Column,     NotNull    ] public int      n_year      { get; set; } // int
-		[Column,     NotNull    ] public int      n_month     { get; set; } // int
-		[Column,     NotNull    ] public int      n_day       { get; set; } // int
-		[Column,     NotNull    ] public string   c_alias     { get; set; } // varchar(512)
-		[Column,     NotNull    ] public bool     b_disabled  { get; set; } // bit
-		[Column,     NotNull    ] public bool     b_important { get; set; } // bit
+		[PrimaryKey, NotNull] public Guid id                 { get; set; } // uniqueidentifier
+		[Column,     NotNull] public Guid f_material_link_id { get; set; } // uniqueidentifier
+		[Column,     NotNull] public Guid f_group            { get; set; } // uniqueidentifier
 
 		#region Associations
 
 		/// <summary>
-		/// fk_content_materials_link_BackReference
+		/// FK_fk_content_materials_link
+		/// </summary>
+		[Association(ThisKey="f_material_link_id", OtherKey="id", CanBeNull=false, KeyName="FK_fk_content_materials_link", BackReferenceName="fkcontentmaterialslinks")]
+		public content_materials_link fkcontentmaterialslink { get; set; }
+
+		/// <summary>
+		/// FK_fk_content_materials_groups
+		/// </summary>
+		[Association(ThisKey="f_group", OtherKey="id", CanBeNull=false, KeyName="FK_fk_content_materials_groups", BackReferenceName="fkcontentmaterialsgroupss")]
+		public content_materials_groups fkcontentmaterialsgroups { get; set; }
+
+		#endregion
+	}
+
+	[Table(Schema="dbo", Name="content_materials")]
+	public partial class content_materials
+	{
+		[PrimaryKey, NotNull    ] public Guid     id                    { get; set; } // uniqueidentifier
+		[Column,     NotNull    ] public DateTime d_date                { get; set; } // datetime
+		[Column,     NotNull    ] public string   c_title               { get; set; } // varchar(512)
+		[Column,        Nullable] public string   c_preview             { get; set; } // varchar(512)
+		[Column,        Nullable] public string   c_text                { get; set; } // varchar(max)
+		[Column,        Nullable] public string   c_url                 { get; set; } // varchar(1024)
+		[Column,        Nullable] public string   c_url_name            { get; set; } // varchar(512)
+		[Column,        Nullable] public string   c_desc                { get; set; } // varchar(1024)
+		[Column,        Nullable] public string   c_keyw                { get; set; } // varchar(512)
+		[Column,     NotNull    ] public int      n_year                { get; set; } // int
+		[Column,     NotNull    ] public int      n_month               { get; set; } // int
+		[Column,     NotNull    ] public int      n_day                 { get; set; } // int
+		[Column,     NotNull    ] public string   c_alias               { get; set; } // varchar(512)
+		[Column,     NotNull    ] public bool     b_disabled            { get; set; } // bit
+		[Column,     NotNull    ] public bool     b_important           { get; set; } // bit
+		[Column,        Nullable] public Guid?    f_content_origin      { get; set; } // uniqueidentifier
+		[Column,        Nullable] public string   c_content_type_origin { get; set; } // varchar(64)
+
+		#region Associations
+
+		/// <summary>
+		/// FK_fk_content_materials_BackReference
 		/// </summary>
 		[Association(ThisKey="id", OtherKey="f_material", CanBeNull=true, IsBackReference=true)]
-		public IEnumerable<content_materials_link> fkcontentmaterialslinks { get; set; }
+		public IEnumerable<content_materials_link> fkcontentmaterialss { get; set; }
+
+		#endregion
+	}
+
+	[Table(Schema="dbo", Name="content_materials_groups")]
+	public partial class content_materials_groups
+	{
+		[PrimaryKey, NotNull] public Guid   id      { get; set; } // uniqueidentifier
+		[Column,     NotNull] public string c_title { get; set; } // nvarchar(256)
+		[Column,     NotNull] public int    n_sort  { get; set; } // int
+
+		#region Associations
+
+		/// <summary>
+		/// FK_fk_content_materials_groups_BackReference
+		/// </summary>
+		[Association(ThisKey="id", OtherKey="f_group", CanBeNull=true, IsBackReference=true)]
+		public IEnumerable<content_material_links_groups> fkcontentmaterialsgroupss { get; set; }
 
 		#endregion
 	}
@@ -837,18 +899,42 @@ namespace cms.dbase.models
 	[Table(Schema="dbo", Name="content_materials_link")]
 	public partial class content_materials_link
 	{
-		[Column, NotNull    ] public Guid   f_material  { get; set; } // uniqueidentifier
-		[Column, NotNull    ] public Guid   f_link_id   { get; set; } // uniqueidentifier
-		[Column, NotNull    ] public string f_link_type { get; set; } // varchar(16)
-		[Column,    Nullable] public string c_group     { get; set; } // varchar(32)
+		[Column,     NotNull] public Guid   f_material  { get; set; } // uniqueidentifier
+		[Column,     NotNull] public Guid   f_link_id   { get; set; } // uniqueidentifier
+		[Column,     NotNull] public string f_link_type { get; set; } // varchar(16)
+		[PrimaryKey, NotNull] public Guid   id          { get; set; } // uniqueidentifier
 
 		#region Associations
 
 		/// <summary>
-		/// fk_content_materials_link
+		/// FK_fk_content_materials
 		/// </summary>
-		[Association(ThisKey="f_material", OtherKey="id", CanBeNull=false, KeyName="fk_content_materials_link", BackReferenceName="fkcontentmaterialslinks")]
-		public content_materials fkcontentmaterialslink { get; set; }
+		[Association(ThisKey="f_material", OtherKey="id", CanBeNull=false, KeyName="FK_fk_content_materials", BackReferenceName="fkcontentmaterialss")]
+		public content_materials fkcontentmaterials { get; set; }
+
+		/// <summary>
+		/// FK_fk_content_materials_link_BackReference
+		/// </summary>
+		[Association(ThisKey="id", OtherKey="f_material_link_id", CanBeNull=true, IsBackReference=true)]
+		public IEnumerable<content_material_links_groups> fkcontentmaterialslinks { get; set; }
+
+		#endregion
+	}
+
+	[Table(Schema="dbo", Name="content_org_services")]
+	public partial class content_org_services
+	{
+		[PrimaryKey, NotNull    ] public Guid  id        { get; set; } // uniqueidentifier
+		[Column,     NotNull    ] public Guid  f_org     { get; set; } // uniqueidentifier
+		[Column,        Nullable] public Guid? f_service { get; set; } // uniqueidentifier
+
+		#region Associations
+
+		/// <summary>
+		/// FK_content_org_services_content_orgs
+		/// </summary>
+		[Association(ThisKey="f_org", OtherKey="id", CanBeNull=false, KeyName="FK_content_org_services_content_orgs", BackReferenceName="contentorgservicescontentorgss")]
+		public content_orgs contentorgservicescontentorgs { get; set; }
 
 		#endregion
 	}
@@ -912,10 +998,22 @@ namespace cms.dbase.models
 		#region Associations
 
 		/// <summary>
+		/// FK_content_orgs_types_link_org_BackReference
+		/// </summary>
+		[Association(ThisKey="id", OtherKey="f_org", CanBeNull=true, IsBackReference=true)]
+		public IEnumerable<content_orgs_types_link> contentorgstypeslinkorgs { get; set; }
+
+		/// <summary>
 		/// FK_content_orgs_structure_BackReference
 		/// </summary>
 		[Association(ThisKey="id", OtherKey="f_ord", CanBeNull=true, IsBackReference=true)]
 		public IEnumerable<content_org_structure> contentorgsstructures { get; set; }
+
+		/// <summary>
+		/// FK_content_org_services_content_orgs_BackReference
+		/// </summary>
+		[Association(ThisKey="id", OtherKey="f_org", CanBeNull=true, IsBackReference=true)]
+		public IEnumerable<content_org_services> contentorgservicescontentorgss { get; set; }
 
 		/// <summary>
 		/// FK_content_org_people_link_BackReference
@@ -926,13 +1024,58 @@ namespace cms.dbase.models
 		#endregion
 	}
 
+	[Table(Schema="dbo", Name="content_orgs_types")]
+	public partial class content_orgs_types
+	{
+		[PrimaryKey, NotNull] public Guid   id      { get; set; } // uniqueidentifier
+		[Column,     NotNull] public string c_title { get; set; } // nvarchar(512)
+		[Column,     NotNull] public int    n_sort  { get; set; } // int
+
+		#region Associations
+
+		/// <summary>
+		/// FK_content_orgs_types_link_org_types_BackReference
+		/// </summary>
+		[Association(ThisKey="id", OtherKey="f_type", CanBeNull=true, IsBackReference=true)]
+		public IEnumerable<content_orgs_types_link> contentorgstypeslinkorgtypess { get; set; }
+
+		#endregion
+	}
+
+	[Table(Schema="dbo", Name="content_orgs_types_link")]
+	public partial class content_orgs_types_link
+	{
+		[Column, NotNull] public Guid f_org  { get; set; } // uniqueidentifier
+		[Column, NotNull] public Guid f_type { get; set; } // uniqueidentifier
+		[Column, NotNull] public int  n_sort { get; set; } // int
+
+		#region Associations
+
+		/// <summary>
+		/// FK_content_orgs_types_link_org_types
+		/// </summary>
+		[Association(ThisKey="f_type", OtherKey="id", CanBeNull=false, KeyName="FK_content_orgs_types_link_org_types", BackReferenceName="contentorgstypeslinkorgtypess")]
+		public content_orgs_types contentorgstypeslinkorgtypes { get; set; }
+
+		/// <summary>
+		/// FK_content_orgs_types_link_org
+		/// </summary>
+		[Association(ThisKey="f_org", OtherKey="id", CanBeNull=false, KeyName="FK_content_orgs_types_link_org", BackReferenceName="contentorgstypeslinkorgs")]
+		public content_orgs contentorgstypeslinkorg { get; set; }
+
+		#endregion
+	}
+
 	[Table(Schema="dbo", Name="content_people")]
 	public partial class content_people
 	{
-		[PrimaryKey, NotNull    ] public Guid   id           { get; set; } // uniqueidentifier
-		[Column,        Nullable] public string c_surname    { get; set; } // varchar(64)
-		[Column,        Nullable] public string c_name       { get; set; } // varchar(64)
-		[Column,        Nullable] public string c_patronymic { get; set; } // varchar(64)
+		[PrimaryKey, NotNull    ] public Guid      id           { get; set; } // uniqueidentifier
+		[Column,        Nullable] public string    c_surname    { get; set; } // varchar(64)
+		[Column,        Nullable] public string    c_name       { get; set; } // varchar(64)
+		[Column,        Nullable] public string    c_patronymic { get; set; } // varchar(64)
+		[Column,        Nullable] public DateTime? d_birthdate  { get; set; } // datetime2(7)
+		[Column,     NotNull    ] public string    c_snils      { get; set; } // char(11)
+		[Column,     NotNull    ] public bool      b_deleted    { get; set; } // bit
 
 		#region Associations
 
@@ -973,9 +1116,11 @@ namespace cms.dbase.models
 	[Table(Schema="dbo", Name="content_people_org_link")]
 	public partial class content_people_org_link
 	{
-		[PrimaryKey, NotNull] public Guid id       { get; set; } // uniqueidentifier
-		[Column,     NotNull] public Guid f_org    { get; set; } // uniqueidentifier
-		[Column,     NotNull] public Guid f_people { get; set; } // uniqueidentifier
+		[PrimaryKey, NotNull    ] public Guid   id          { get; set; } // uniqueidentifier
+		[Column,     NotNull    ] public Guid   f_org       { get; set; } // uniqueidentifier
+		[Column,     NotNull    ] public Guid   f_people    { get; set; } // uniqueidentifier
+		[Column,        Nullable] public string f_oid       { get; set; } // varchar(64)
+		[Column,     NotNull    ] public bool   b_dismissed { get; set; } // bit
 
 		#region Associations
 
@@ -998,6 +1143,18 @@ namespace cms.dbase.models
 		public IEnumerable<content_people_department_link> fkcontentpeopleorgdepartmentlinks { get; set; }
 
 		#endregion
+	}
+
+	[Table(Schema="dbo", Name="content_services")]
+	public partial class content_services
+	{
+		[PrimaryKey, NotNull    ] public Guid   id         { get; set; } // uniqueidentifier
+		[Column,     NotNull    ] public char   c_class    { get; set; } // varchar(1)
+		[Column,        Nullable] public string c_code     { get; set; } // varchar(50)
+		[Column,        Nullable] public string c_name     { get; set; } // varchar(500)
+		[Column,        Nullable] public string c_desc     { get; set; } // varchar(1000)
+		[Column,     NotNull    ] public bool   b_disabled { get; set; } // bit
+		[Column,        Nullable] public int?   n_level    { get; set; } // int
 	}
 
 	[Table(Schema="dbo", Name="content_sitemap")]
@@ -1042,9 +1199,10 @@ namespace cms.dbase.models
 	[Table(Schema="dbo", Name="content_sitemap_menus")]
 	public partial class content_sitemap_menus
 	{
-		[PrimaryKey, NotNull] public Guid   id      { get; set; } // uniqueidentifier
-		[Column,     NotNull] public string c_title { get; set; } // nvarchar(256)
-		[Column,     NotNull] public int    n_sort  { get; set; } // int
+		[PrimaryKey, NotNull    ] public Guid   id      { get; set; } // uniqueidentifier
+		[Column,     NotNull    ] public string c_title { get; set; } // nvarchar(256)
+		[Column,     NotNull    ] public int    n_sort  { get; set; } // int
+		[Column,        Nullable] public string c_alias { get; set; } // nvarchar(256)
 
 		#region Associations
 
@@ -1092,6 +1250,64 @@ namespace cms.dbase.models
 	}
 
 	// View
+	[Table(Schema="dbo", Name="content_sv_banners_section")]
+	public partial class content_sv_banners_section
+	{
+		[Column, NotNull    ] public Guid     id         { get; set; } // uniqueidentifier
+		[Column, NotNull    ] public string   f_site     { get; set; } // varchar(64)
+		[Column, NotNull    ] public string   c_title    { get; set; } // nvarchar(512)
+		[Column,    Nullable] public string   c_photo    { get; set; } // nvarchar(1024)
+		[Column,    Nullable] public string   c_url      { get; set; } // nvarchar(1024)
+		[Column,    Nullable] public string   c_text     { get; set; } // nvarchar(max)
+		[Column, NotNull    ] public DateTime d_date     { get; set; } // datetime
+		[Column, NotNull    ] public int      n_sort     { get; set; } // int
+		[Column, NotNull    ] public bool     b_disabled { get; set; } // bit
+		[Column, NotNull    ] public Guid     f_section  { get; set; } // uniqueidentifier
+		[Column, NotNull    ] public Guid     Expr2      { get; set; } // uniqueidentifier
+		[Column,    Nullable] public string   c_alias    { get; set; } // nvarchar(512)
+	}
+
+	// View
+	[Table(Schema="dbo", Name="content_sv_materials_sites")]
+	public partial class content_sv_materials_sites
+	{
+		[Column, NotNull    ] public Guid     id          { get; set; } // uniqueidentifier
+		[Column, NotNull    ] public DateTime d_date      { get; set; } // datetime
+		[Column, NotNull    ] public string   c_title     { get; set; } // varchar(512)
+		[Column,    Nullable] public string   c_preview   { get; set; } // varchar(512)
+		[Column,    Nullable] public string   c_text      { get; set; } // varchar(max)
+		[Column,    Nullable] public string   c_url       { get; set; } // varchar(1024)
+		[Column,    Nullable] public string   c_url_name  { get; set; } // varchar(512)
+		[Column,    Nullable] public string   c_desc      { get; set; } // varchar(1024)
+		[Column,    Nullable] public string   c_keyw      { get; set; } // varchar(512)
+		[Column, NotNull    ] public int      n_year      { get; set; } // int
+		[Column, NotNull    ] public int      n_month     { get; set; } // int
+		[Column, NotNull    ] public int      n_day       { get; set; } // int
+		[Column, NotNull    ] public string   c_alias     { get; set; } // varchar(512)
+		[Column, NotNull    ] public bool     b_disabled  { get; set; } // bit
+		[Column, NotNull    ] public bool     b_important { get; set; } // bit
+		[Column, NotNull    ] public string   domain      { get; set; } // varchar(64)
+	}
+
+	// View
+	[Table(Schema="dbo", Name="content_sv_orgs_by_type")]
+	public partial class content_sv_orgs_by_type
+	{
+		[Column, NotNull] public Guid   id      { get; set; } // uniqueidentifier
+		[Column, NotNull] public string c_title { get; set; } // nvarchar(512)
+		[Column, NotNull] public int    n_sort  { get; set; } // int
+		[Column, NotNull] public Guid   f_type  { get; set; } // uniqueidentifier
+	}
+
+	// View
+	[Table(Schema="dbo", Name="content_sv_orgs_not_attached")]
+	public partial class content_sv_orgs_not_attached
+	{
+		[Column, NotNull] public Guid   id      { get; set; } // uniqueidentifier
+		[Column, NotNull] public string c_title { get; set; } // nvarchar(512)
+	}
+
+	// View
 	[Table(Schema="dbo", Name="content_sv_people_department")]
 	public partial class content_sv_people_department
 	{
@@ -1136,6 +1352,7 @@ namespace cms.dbase.models
 		[Column, NotNull    ] public string menu_title      { get; set; } // nvarchar(256)
 		[Column, NotNull    ] public int    menu_sort       { get; set; } // int
 		[Column, NotNull    ] public Guid   f_menutype      { get; set; } // uniqueidentifier
+		[Column,    Nullable] public string menu_alias      { get; set; } // nvarchar(256)
 	}
 
 	[Table(Schema="dbo", Name="content_vacancies")]
@@ -1255,16 +1472,16 @@ namespace cms.dbase.models
 		public front_page_views sitefrontsectionpageviews { get; set; }
 
 		/// <summary>
-		/// FK_front_section_site
-		/// </summary>
-		[Association(ThisKey="f_front_section", OtherKey="c_alias", CanBeNull=false, KeyName="FK_front_section_site", BackReferenceName="frontsectionsites")]
-		public front_section frontsectionsite { get; set; }
-
-		/// <summary>
 		/// FK_site_front_section
 		/// </summary>
 		[Association(ThisKey="f_site", OtherKey="c_alias", CanBeNull=false, KeyName="FK_site_front_section", BackReferenceName="sitefrontsections")]
 		public cms_sites sitefrontsection { get; set; }
+
+		/// <summary>
+		/// FK_front_section_site
+		/// </summary>
+		[Association(ThisKey="f_front_section", OtherKey="c_alias", CanBeNull=false, KeyName="FK_front_section_site", BackReferenceName="frontsectionsites")]
+		public front_section frontsectionsite { get; set; }
 
 		#endregion
 	}
@@ -1287,26 +1504,75 @@ namespace cms.dbase.models
 		[PrimaryKey, NotNull    ] public string   c_oid    { get; set; } // varchar(64)
 		[Column,        Nullable] public string   c_name   { get; set; } // nvarchar(512)
 		[Column,     NotNull    ] public DateTime d_modify { get; set; } // datetime
+
+		#region Associations
+
+		/// <summary>
+		/// FK_import_frmp_orgs_peoples_import_frmp_orgs_BackReference
+		/// </summary>
+		[Association(ThisKey="c_oid", OtherKey="f_oid", CanBeNull=true, IsBackReference=true)]
+		public IEnumerable<import_frmp_orgs_peoples> importfrmporgspeoplesimportfrmporgss { get; set; }
+
+		#endregion
+	}
+
+	[Table(Schema="dbo", Name="import_frmp_orgs_peoples")]
+	public partial class import_frmp_orgs_peoples
+	{
+		[Column, NotNull] public string f_oid    { get; set; } // varchar(64)
+		[Column, NotNull] public Guid   f_people { get; set; } // uniqueidentifier
+
+		#region Associations
+
+		/// <summary>
+		/// FK_import_frmp_orgs_peoples_import_frmp_peoples
+		/// </summary>
+		[Association(ThisKey="f_people", OtherKey="id", CanBeNull=false, KeyName="FK_import_frmp_orgs_peoples_import_frmp_peoples", BackReferenceName="importfrmporgspeoplesimportfrmppeopless")]
+		public import_frmp_peoples importfrmporgspeoplesimportfrmppeoples { get; set; }
+
+		/// <summary>
+		/// FK_import_frmp_orgs_peoples_import_frmp_orgs
+		/// </summary>
+		[Association(ThisKey="f_oid", OtherKey="c_oid", CanBeNull=false, KeyName="FK_import_frmp_orgs_peoples_import_frmp_orgs", BackReferenceName="importfrmporgspeoplesimportfrmporgss")]
+		public import_frmp_orgs importfrmporgspeoplesimportfrmporgs { get; set; }
+
+		#endregion
 	}
 
 	[Table(Schema="dbo", Name="import_frmp_peoples")]
 	public partial class import_frmp_peoples
 	{
 		[PrimaryKey, NotNull    ] public Guid      id           { get; set; } // uniqueidentifier
-		[Column,        Nullable] public string    f_org        { get; set; } // varchar(64)
 		[Column,        Nullable] public string    c_surname    { get; set; } // varchar(64)
 		[Column,        Nullable] public string    c_name       { get; set; } // varchar(64)
 		[Column,        Nullable] public string    c_patronymic { get; set; } // varchar(64)
-		[Column,     NotNull    ] public string    c_snils      { get; set; } // varchar(64)
+		[Column,     NotNull    ] public string    c_snils      { get; set; } // char(11)
 		[Column,        Nullable] public bool?     b_sex        { get; set; } // bit
-		[Column,        Nullable] public DateTime? d_birthdate  { get; set; } // datetime
-		[Column,        Nullable] public DateTime? d_modify     { get; set; } // datetime
-		[Column,        Nullable] public bool?     b_changed    { get; set; } // bit
-		[Column,        Nullable] public string    c_info       { get; set; } // nvarchar(max)
+		[Column,        Nullable] public DateTime? d_birthdate  { get; set; } // datetime2(7)
+		[Column,        Nullable] public DateTime? d_modify     { get; set; } // datetime2(7)
+
+		#region Associations
+
+		/// <summary>
+		/// FK_import_frmp_orgs_peoples_import_frmp_peoples_BackReference
+		/// </summary>
+		[Association(ThisKey="id", OtherKey="f_people", CanBeNull=true, IsBackReference=true)]
+		public IEnumerable<import_frmp_orgs_peoples> importfrmporgspeoplesimportfrmppeopless { get; set; }
+
+		#endregion
 	}
 
 	public static partial class CMSdbStoredProcedures
 	{
+		#region import_frmp_employees
+
+		public static int import_frmp_employees(this DataConnection dataConnection)
+		{
+			return dataConnection.ExecuteProc("[dbo].[import_frmp_employees]");
+		}
+
+		#endregion
+
 		#region sp_alterdiagram
 
 		public static int sp_alterdiagram(this DataConnection dataConnection, string @diagramname, int? @owner_id, int? @version, byte[] @definition)
@@ -1511,7 +1777,31 @@ namespace cms.dbase.models
 				t.id == id);
 		}
 
+		public static content_material_links_groups Find(this ITable<content_material_links_groups> table, Guid id)
+		{
+			return table.FirstOrDefault(t =>
+				t.id == id);
+		}
+
 		public static content_materials Find(this ITable<content_materials> table, Guid id)
+		{
+			return table.FirstOrDefault(t =>
+				t.id == id);
+		}
+
+		public static content_materials_groups Find(this ITable<content_materials_groups> table, Guid id)
+		{
+			return table.FirstOrDefault(t =>
+				t.id == id);
+		}
+
+		public static content_materials_link Find(this ITable<content_materials_link> table, Guid id)
+		{
+			return table.FirstOrDefault(t =>
+				t.id == id);
+		}
+
+		public static content_org_services Find(this ITable<content_org_services> table, Guid id)
 		{
 			return table.FirstOrDefault(t =>
 				t.id == id);
@@ -1524,6 +1814,12 @@ namespace cms.dbase.models
 		}
 
 		public static content_orgs Find(this ITable<content_orgs> table, Guid id)
+		{
+			return table.FirstOrDefault(t =>
+				t.id == id);
+		}
+
+		public static content_orgs_types Find(this ITable<content_orgs_types> table, Guid id)
 		{
 			return table.FirstOrDefault(t =>
 				t.id == id);
@@ -1543,6 +1839,12 @@ namespace cms.dbase.models
 		}
 
 		public static content_people_org_link Find(this ITable<content_people_org_link> table, Guid id)
+		{
+			return table.FirstOrDefault(t =>
+				t.id == id);
+		}
+
+		public static content_services Find(this ITable<content_services> table, Guid id)
 		{
 			return table.FirstOrDefault(t =>
 				t.id == id);
@@ -1597,3 +1899,4 @@ namespace cms.dbase.models
 		}
 	}
 }
+ 

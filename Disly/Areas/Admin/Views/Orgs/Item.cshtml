@@ -17,10 +17,7 @@
                 </select>
             </div>
             <div class="col-lg-6">
-                <select title="Тип мед. учреждения" class="selectpicker">
-                    <option value="1">Стоматология</option>
-                    <option value="2">Трамвотология</option>                    
-                </select>
+                @Html.DropDownListFor(m => m.Item.Types, (MultiSelectList)ViewBag.Types, new { @title = "Типы мед. учреждений", @class = "selectpicker", @multiple = "multiple" })
             </div>
         </div>
         
@@ -75,7 +72,7 @@
                     <div class="col-sm-7">
                         <a class="button icon-create green pull-right" href="/admin/orgs/structure/@Guid.NewGuid()?orgid=@Model.Item.Id">Добавить</a>
                         <a class="button icon-create green pull-right" href="/admin/orgs/ovp/@Guid.NewGuid()?orgid=@Model.Item.Id">Добавить ОВП/ФАП</a>
-                        <a class="button icon-sort pull-right" style="max-width:150px;" value="no-preloader-btn" id="sorting_element" title="Добавляет возможность сортировки элементов списка">Сортировать</a>
+                        <a class="button icon-sort pull-right" style="max-width:150px;" data-action="noPreloader-accept" id="sorting_element" title="Добавляет возможность сортировки элементов списка">Сортировать</a>
                     </div>
                 </div>
 
