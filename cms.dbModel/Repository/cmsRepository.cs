@@ -59,10 +59,12 @@ namespace cms.dbModel
         public abstract UsersGroupModel getUsersGroup(string alias);
 
         public abstract ResolutionsModel[] getGroupResolutions(string alias);
-        
+
         // Материалы
-        public abstract MaterialsList getMaterialsList(FilterParams filtr, string domain);
-        public abstract MaterialsModel getMaterial(Guid id);
+        public abstract MaterialGroup[] getMaterialGroups(Guid materialId, string domain);
+
+        public abstract MaterialsList getMaterialsList(FilterParams filtr);
+        public abstract MaterialsModel getMaterial(Guid id, string domain);
 
         public abstract bool insertCmsMaterial(MaterialsModel material);
         public abstract bool updateCmsMaterial(MaterialsModel material);
