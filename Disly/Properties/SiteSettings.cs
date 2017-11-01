@@ -63,6 +63,10 @@ public class Settings
     public static string mailAddresName = ConfigurationManager.AppSettings["MailAddresName"];
     public static string mailTo = ConfigurationManager.AppSettings["MailTo"];
 
+    public static string MedCap = ConfigurationManager.AppSettings["MedCap"];
+    public static string Quote = ConfigurationManager.AppSettings["Quote"];
+    public static string Concept = ConfigurationManager.AppSettings["Concept"];
+    public static string Coordination = ConfigurationManager.AppSettings["Coordination"];
 
     public static string DocTypes = ReadAppSetting("DocTypes");//ConfigurationManager.AppSettings["MaterialPreviewImgSize"];
     public static string PicTypes = ReadAppSetting("PicTypes");//ConfigurationManager.AppSettings["MaterialPreviewImgSize"];

@@ -1,0 +1,35 @@
+﻿@model SitesViewModel
+
+<div class="content">
+    <h1>@ViewBag.Title</h1>
+    @Html.TextBoxFor(m => m.Item.Title, new { @title = "Название", @required = "" })
+    @Html.TextBoxFor(m => m.Item.LongTitle, new { @title = "Полное название" })
+    <div class="group-block" title="Пользовательские скрипты">
+        @Html.TextAreaFor(m => m.Item.Scripts, new { @type = "editor", @height = "300" })
+    </div>
+    @Html.HiddenFor(m => m.Item.Id)
+</div>
+
+<div class="dop_info-block">
+    @Html.TextBoxFor(m => m.Item.Alias, new { @title = "Домен" })
+    @Html.TextBoxFor(m => m.Item.Site, new { @title = "Ссылка" })
+    <div class="group-block" title="Социальные сети">
+        @Html.TextBoxFor(m => m.Item.Facebook, new { @title = "Facebook" })
+        @Html.TextBoxFor(m => m.Item.Vk, new { @title = "Вконтакте" })
+        @Html.TextBoxFor(m => m.Item.Instagramm, new { @title = "Instagramm" })
+        @Html.TextBoxFor(m => m.Item.Odnoklassniki, new { @title = "Одноклассники" })
+        @Html.TextBoxFor(m => m.Item.Twitter, new { @title = "Twitter" })
+    </div>
+    @if (Model.Item != null)
+    {
+        @Html.ActionLink("Журнал изменений", "log", "services", new { @id = Model.Item.Id }, new { @id = "LogLists", @class = "button pop-up_frame icon-archive", @data_class = "LogList", @title = "Журнал изменений" })
+    }
+</div>
+
+<div class="buttons">
+    @if ((Model.Item != null && Model.UserResolution.Change) || (Model.Item == null && Model.UserResolution.Write))
+    {
+        <button type="submit" name="action" value="save-btn" data-primary="true" class="button icon-create">Сохранить</button>
+    }
+    <button type="submit" name="action" value="cancel-btn" data-action="cancel" class="button icon-cancel">Назад</button>
+</div>

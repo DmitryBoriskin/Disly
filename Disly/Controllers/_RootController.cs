@@ -1,4 +1,6 @@
 ﻿using cms.dbase;
+using cms.dbModel.entity;
+using cms.dbModel.entity.cms;
 using System;
 using System.Configuration;
 using System.Reflection;
@@ -16,8 +18,16 @@ namespace Disly.Controllers
         public string Domain;
         public string ControllerName;
         public string ActionName;
-
         public string ViewName;
+
+        protected SitesModel siteModel;
+        protected SiteMapModel[] siteMapArray;
+        protected BannersModel[] bannerArray;
+
+        protected string MedCap;
+        protected string Quote;
+        protected string Concept;
+        protected string Coordination;
 
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
@@ -32,8 +42,16 @@ namespace Disly.Controllers
 
             ControllerName = filterContext.RouteData.Values["Controller"].ToString().ToLower();
             ActionName = filterContext.RouteData.Values["Action"].ToString().ToLower();
-
             ViewName = _repository.getView(Domain, ControllerName);
+
+            siteModel = _repository.getSiteInfo(Domain);
+            siteMapArray = _repository.getSiteMapList(Domain);
+            bannerArray = _repository.getBanners(Domain);
+
+            ViewBag.MedCap = MedCap = Settings.MedCap;
+            ViewBag.Quote = Quote = Settings.Quote;
+            ViewBag.Concept = Concept = Settings.Concept;
+            ViewBag.Coordination = Coordination = Settings.Coordination;
         }
 
         public RootController()

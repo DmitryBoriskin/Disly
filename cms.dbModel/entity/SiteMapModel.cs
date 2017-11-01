@@ -96,6 +96,16 @@ namespace cms.dbModel.entity
         /// Идентификатор меню для сортировки
         /// </summary>
         public Guid? MenuGr { get; set; }
+
+        /// <summary>
+        /// Алиас для группы меню
+        /// </summary>
+        public string MenuAlias { get; set; }
+
+        /// <summary>
+        /// Сортировка внутри меню
+        /// </summary>
+        public int MenuSort { get; set; }
     }
 
     /// <summary>
