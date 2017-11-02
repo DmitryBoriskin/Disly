@@ -1,4 +1,5 @@
-﻿using Disly.Areas.Admin.Models;
+﻿using cms.dbModel.entity;
+using Disly.Areas.Admin.Models;
 using Disly.Areas.Admin.Service;
 using System;
 using System.Collections.Generic;
@@ -12,7 +13,7 @@ namespace Disly.Areas.Admin.Controllers
     {
         //ovp- это вьюха объединяющая в себе структурное подразделение и департамент(отдел)
         OrgsViewModel model;
-        FilterParams filter;
+
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             base.OnActionExecuting(filterContext);
@@ -30,7 +31,7 @@ namespace Disly.Areas.Admin.Controllers
                 UserResolution = UserResolutionInfo,
                 ControllerName = ControllerName,
                 ActionName = ActionName,
-                Types = _cmsRepository.getOrgTypes()
+                Types = _cmsRepository.getOrgTypesList(new OrgTypeFilter() { })
             };
 
             #region Метатеги
@@ -43,8 +44,8 @@ namespace Disly.Areas.Admin.Controllers
         // GET: Admin/Orgs
         public ActionResult Index()
         {
-            filter = getFilter();
-            model.OrgList = _cmsRepository.getOrgs(filter);//+ список организаций
+            var filter = (OrgFilter)getFilter();
+            model.OrgList = _cmsRepository.getOrgsList(filter);//+ список организаций
             return View(model);
         }   
              
@@ -630,5 +631,57 @@ namespace Disly.Areas.Admin.Controllers
             _cmsRepository.delPersonsThisDepartment(Guid.Parse(iddep), Guid.Parse(idpeople));
             return null;
         }
+
+
+
+        //Получение списка организаций по параметрам
+        [HttpGet]
+        public ActionResult OrgsList(Guid materialId)
+        {
+            var filtr = new OrgFilter()
+            {
+                MaterialId = materialId,
+                Domain = Domain
+            };
+
+
+            var model = new OrgsModalViewModel()
+            {
+                OrgsList = _cmsRepository.getOrgsList(filtr),
+                OrgsAll = _cmsRepository.getOrgsList(new OrgFilter(){ }),
+                OrgsTypes = _cmsRepository.getOrgTypesList(new OrgTypeFilter(){ })
+            };
+
+            //model.OrgsByType = _cmsRepository.getOrgByType(id);
+
+            // прочие организации, непривязанные к типам
+            /*OrgType anotherOrgs = new OrgType
+            {
+                Id = Guid.Parse("4D30E508-5C56-43A0-9F25-EEFF026F95EF"),
+                Title = "Прочие организации",
+                Sort = model.OrgsByType.Select(s => s.Sort).Max() + 1,
+                Orgs = _cmsRepository.getOrgAttachedToTypes(id)
+            };
+
+            if (anotherOrgs.Orgs != null)
+                model.OrgsByType.Add(anotherOrgs);*/
+
+            return PartialView("Orgs", model);
+        }
+
+        // [HttpPost]
+        // [MultiButton(MatchFormKey = "action", MatchFormValue = "save-org-btn")]
+        // public ActionResult Orgs(MaterialsViewModel model)
+        // {
+        //     MaterialOrgType modelInsert = new MaterialOrgType
+        //     {
+        //         OrgTypes = model.OrgsByType,
+        //         Material = model.Item
+        //     };
+
+        //     _cmsRepository.insertMaterialsLinksToOrgs(modelInsert);
+
+        //     return PartialView("OrgsSaved");
+        // }
     }
 }

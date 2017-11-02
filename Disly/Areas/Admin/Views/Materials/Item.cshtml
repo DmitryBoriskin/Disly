@@ -35,6 +35,56 @@
                 @Html.HiddenFor(m => m.Item.ContentLink)
             </div>
         </div>
+
+        @if ((Model.Account.Group.ToLower().Equals("developer") || Model.Account.Group.ToLower().Equals("administrator"))
+                                    && Model.Item.Id != Guid.Empty)
+        {
+       
+        <div class="group-block open topIndent-20" title="Привязка к организациям">
+            <div class="row">
+                <div class="col-lg-10">
+                    Новость не привязана ни к одной организации
+                </div>
+                <div class="col-lg-2">
+                    @Html.ActionLink("Привязать", "OrgsList", "Orgs", new { @id = Model.Item.Id }, new { @id = "LogLists", @class = "button pop-up_frame icon-location-5", @data_class = "LogList", @title = "Организации для размещения" })
+                </div>
+            </div>
+        </div>
+
+        <div class="group-block open topIndent-20" title="Привязка к событиям">
+            <div class="row">
+                <div class="col-lg-10">
+                    Новость не привязана ни к однму событию
+                </div>
+                <div class="col-lg-2">
+                    @Html.ActionLink("Привязать", "orgs", "materials", new { @id = Model.Item.Id }, new { @id = "LogLists", @class = "button pop-up_frame icon-location-5", @data_class = "LogList", @title = "Организации для размещения" })
+                </div>
+            </div>
+        </div>
+
+        <div class="group-block open topIndent-20" title="Привязка к новостям">
+            <div class="row">
+                <div class="col-lg-10">
+                    Новость не привязана ни к одной новости
+                </div>
+                <div class="col-lg-2">
+                    @Html.ActionLink("Привязать", "orgs", "materials", new { @id = Model.Item.Id }, new { @id = "LogLists", @class = "button pop-up_frame icon-location-5", @data_class = "LogList", @title = "Организации для размещения" })
+                </div>
+            </div>
+        </div>
+
+        <div class="group-block open topIndent-20" title="Привязка к персонам">
+            <div class="row">
+                <div class="col-lg-10">
+                    Новость не привязана ни к одной персоне
+                </div>
+                <div class="col-lg-2">
+                    @Html.ActionLink("Привязать", "orgs", "materials", new { @id = Model.Item.Id }, new { @id = "LogLists", @class = "button pop-up_frame icon-location-5", @data_class = "LogList", @title = "Организации для размещения" })
+                </div>
+            </div>
+        </div>
+        }
+
     </div>
 
     <div class="dop_info-block">
@@ -43,7 +93,7 @@
 
         @*@Html.DropDownListFor(m => m.Item.GroupsId, (MultiSelectList)ViewBag.GroupsValues, new { @title = "Группа", @class = "selectpicker", @multiple = "multiple" })*@
         <div class="form-group">
-            <label for="itemGroups-select">Группы новостей:</label>
+            <label for="itemGroups-select">Категория новости:</label>
             <select name="Item.GroupsId" id="itemGroups-select" class="form-control select2" multiple>
                 @if (Model.Item != null)
                 {

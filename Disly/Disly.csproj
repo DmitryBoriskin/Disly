@@ -527,6 +527,7 @@
     <Compile Include="Areas\Admin\Controllers\CoreController.cs" />
     <Compile Include="Areas\Admin\Models\BannersViewModel.cs" />
     <Compile Include="Areas\Admin\Models\cmsMenuViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\ModalViewModels\OrgsModalViewModel.cs" />
     <Compile Include="Areas\Admin\Models\VacancyViewModel.cs" />
     <Compile Include="Areas\Admin\Models\FeadbacksViewModel.cs" />
     <Compile Include="Areas\Admin\Models\EventsViewModel.cs" />
@@ -733,6 +734,8 @@
     <Content Include="Content\fonts\themify\themify.ttf" />
     <Content Include="Content\fonts\themify\themify.woff" />
     <Content Include="Content\fonts\themify\themify.eot" />
+    <Content Include="Areas\Admin\Views\Materials\Modal\Orgs.cshtml" />
+    <Content Include="Areas\Admin\Views\Materials\Modal\OrgsSaved.cshtml" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <Content Include="Views\_ViewStart.cshtml" />
     <None Include="Web.Debug.config">

@@ -64,7 +64,7 @@ namespace cms.dbModel
         public abstract MaterialGroup[] getAllMaterialGroups();
         public abstract MaterialGroup[] getMaterialGroups(Guid materialId);
 
-        public abstract MaterialsList getMaterialsList(FilterParams filtr);
+        public abstract MaterialsList getMaterialsList(MaterialFilter filtr);
         public abstract MaterialsModel getMaterial(Guid id, string domain);
 
         public abstract bool insertCmsMaterial(MaterialsModel material);
@@ -96,8 +96,9 @@ namespace cms.dbModel
         public abstract bool deleteCmsVacancy(Guid id);
 
         //Orgs
-        public abstract OrgsModel[] getOrgs(FilterParams filtr);
+        public abstract OrgsModel[] getOrgsList(OrgFilter filtr);
         public abstract OrgsModel getOrgItem(Guid id);
+
         public abstract bool insOrgs(Guid id, OrgsModel model, Guid UserId, String IP);
         public abstract bool setOrgs(Guid id, OrgsModel model, Guid UserId, String IP);
         public abstract bool delOrgs(Guid id, Guid UserId, String IP);
@@ -127,8 +128,9 @@ namespace cms.dbModel
         public abstract People[] getPersonsThisDepartment(Guid idStructure);
         public abstract bool insPersonsThisDepartment(Guid idDepart, Guid IdLinkPeopleForOrg, string status, string post);
         public abstract bool delPersonsThisDepartment(Guid idDep, Guid idPeople);
-        public abstract OrgType[] getOrgTypes();
-        public abstract Guid[] getOrgTypes(Guid id);
+
+        public abstract OrgType[] getOrgTypesList(OrgTypeFilter filter);
+
         public abstract List<OrgType> getOrgByType(Guid id);
         public abstract OrgsModelSmall[] getOrgSmall(Guid id, Guid material);
         public abstract bool setCheckedOrgs(Guid id, Guid material);

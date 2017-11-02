@@ -14,27 +14,52 @@ namespace cms.dbase
     public partial class cmsRepository : abstract_cmsRepository
     {
         /// <summary>
-        /// Получаем список организаций
+        /// Получаем список организаций по фильтру
         /// </summary>
         /// <param name="filtr">Фильтр</param>
         /// <returns></returns>         
-        public override OrgsModel[] getOrgs(FilterParams filtr)
+        public override OrgsModel[] getOrgsList(OrgFilter filtr)
         {
             using (var db = new CMSdb(_context))
             {
-                var data = db.content_orgss.OrderBy(o => o.n_sort).AsQueryable();
-                if (filtr.SearchText != null)
+                var query = db.content_orgss
+                                .OrderBy(o => o.n_sort)
+                                .AsQueryable();
+
+                if(!string.IsNullOrEmpty(filtr.Domain))
                 {
-                    data = data.Where(w => (w.c_title.Contains(filtr.SearchText)));
+#warning  Дописать потом что должно происходить!!!
                 }
-                //data.OrderBy(o => o.n_sort); ХЗ почему эта строка нормально не сортирует                
-                var list = data.Select(s => new OrgsModel()
+
+                if (!string.IsNullOrEmpty(filtr.SearchText))
+                {
+                    query = query.Where(w => w.c_title.Contains(filtr.SearchText));
+                }
+
+                if (filtr.MaterialId.HasValue && filtr.MaterialId.Value != Guid.Empty )
+                {
+                    //В таблице content_materials_link ищем связи оранизация - новость
+                    var orgMaterials = db.content_materials_links
+                        .Where(s => s.f_material == filtr.MaterialId.Value)
+                        .Where(s=> s.f_link_type == "org");
+
+                    if (!orgMaterials.Any())
+                        return null;
+
+                    var orgMaterialsId = orgMaterials.Select(o => o.f_link_id);
+                    query = query.Where(o => orgMaterialsId.Contains(o.id));
+                }
+                //data.OrderBy(o => o.n_sort); ХЗ почему эта строка нормально не сортирует
+
+                var data = query.Select(s => new OrgsModel()
                 {
                     Id = s.id,
                     Title = s.c_title,
                     Sort = s.n_sort
                 });
-                if (list.Any()) return list.ToArray();
+                if (data.Any())
+                    return data.ToArray();
+
                 return null;
             }
         }
@@ -48,6 +73,11 @@ namespace cms.dbase
         {
             using (var db = new CMSdb(_context))
             {
+                Guid[] types = null;
+                var getTypes = getOrgTypesList(new OrgTypeFilter { OrgId = id });
+                if (getTypes != null)
+                    types = getTypes.Select(t => t.Id).ToArray();
+
                 var data = db.content_orgss.Where(w => w.id == id)
                     .Select(s => new OrgsModel
                     {
@@ -66,7 +96,7 @@ namespace cms.dbase
                         GeopointY = s.n_geopoint_y,
                         Structure = getStructureList(s.id),
                         Frmp = s.f_frmp,
-                        Types = getOrgTypes(id)
+                        Types = types
                     });
 
                 if (!data.Any()) return null;
@@ -1049,17 +1079,26 @@ namespace cms.dbase
             }
             return true;
         }
-
-        /// <summary>
-        /// Получаем список типов, доступных для организаций
-        /// </summary>
-        /// <returns></returns>
-        public override OrgType[] getOrgTypes()
+        
+        public override OrgType[] getOrgTypesList(OrgTypeFilter filter)
         {
             using (var db = new CMSdb(_context))
             {
-                var data = db.content_orgs_typess
-                    .OrderBy(o => o.n_sort)
+                var query = db.content_orgs_typess.AsQueryable();
+                             
+
+                if (filter.Id.HasValue && filter.Id.Value != Guid.Empty)
+                {
+                    query = query.Where(s => s.id == filter.Id.Value);
+                }
+
+                if (filter.OrgId.HasValue && filter.OrgId.Value != Guid.Empty)
+                {
+                    query = query.Where(s => s.contentorgstypeslinkorgtypess.Any(o => o.f_org == filter.OrgId.Value));
+                }
+
+                var data = query
+                    .OrderBy(s => s.n_sort)
                     .Select(s => new OrgType
                     {
                         Id = s.id,
@@ -1072,26 +1111,8 @@ namespace cms.dbase
             }
         }
 
-        /// <summary>
-        /// Получим список типов для данной организации
-        /// </summary>
-        /// <param name="id">Организация</param>
-        /// <returns></returns>
-        public override Guid[] getOrgTypes(Guid id)
-        {
-            using (var db = new CMSdb(_context))
-            {
-                var data = db.content_orgs_types_links
-                    .Where(w => w.f_org.Equals(id))
-                    .OrderBy(o => o.n_sort)
-                    .Select(s => s.f_type);
 
-                if (!data.Any()) return null;
-                else return data.ToArray();
-            }
-        }
-
-        /// <summary>
+         /// <summary>
         /// Получим список типов организаций с привязанными к ним организациями
         /// </summary>
         /// <returns></returns>

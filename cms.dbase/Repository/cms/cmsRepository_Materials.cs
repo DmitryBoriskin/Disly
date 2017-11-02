@@ -127,7 +127,7 @@ namespace cms.dbase
         /// </summary>
         /// <param name="filtr">Фильтр</param>
         /// <returns></returns>
-        public override MaterialsList getMaterialsList(FilterParams filtr)
+        public override MaterialsList getMaterialsList(MaterialFilter filtr)
         {
             using (var db = new CMSdb(_context))
             {

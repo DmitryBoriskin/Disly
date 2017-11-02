@@ -11,8 +11,6 @@ namespace Disly.Areas.Admin.Controllers
     public class MaterialsController : CoreController
     {
         MaterialsViewModel model;
-        FilterParams filter;
-
         int page_size = 40;
 
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
@@ -51,7 +49,7 @@ namespace Disly.Areas.Admin.Controllers
         public ActionResult Index(string category, string type)
         {
             // Наполняем фильтр значениями
-            filter = getFilter(page_size);
+            var filter = (MaterialFilter) getFilter(page_size);
             // Наполняем модель данными
             model.List = _cmsRepository.getMaterialsList(filter);
 
@@ -259,7 +257,7 @@ namespace Disly.Areas.Admin.Controllers
             return RedirectToAction("Index");
         }
 
-        // admin/materials/orgs/{id}
+        //Получение списка организаций по параметрам
         [HttpGet]
         public ActionResult Orgs(Guid id)
         {
