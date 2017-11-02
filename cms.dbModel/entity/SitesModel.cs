@@ -41,6 +41,11 @@ namespace cms.dbModel.entity
         public string Title { get; set; }
 
         /// <summary>
+        /// Длинное название
+        /// </summary>
+        public string LongTitle { get; set; }
+
+        /// <summary>
         /// Алиас
         /// </summary>
         [Required(ErrorMessage = "Поле «Доменное имя» не должно быть пустым.")]
@@ -106,6 +111,31 @@ namespace cms.dbModel.entity
         /// Флаг отключенного сайта
         /// </summary>
         public bool SiteOff { get; set; }
+
+        /// <summary>
+        /// facebook link
+        /// </summary>
+        public string Facebook { get; set; }
+
+        /// <summary>
+        /// vk link
+        /// </summary>
+        public string Vk { get; set; }
+
+        /// <summary>
+        /// instagramm link
+        /// </summary>
+        public string Instagramm { get; set; }
+
+        /// <summary>
+        /// odnoklassniki link
+        /// </summary>
+        public string Odnoklassniki { get; set; }
+
+        /// <summary>
+        /// twitter link
+        /// </summary>
+        public string Twitter { get; set; }
     }
 
     /// <summary>

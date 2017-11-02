@@ -1525,16 +1525,16 @@ namespace cms.dbase.models
 		#region Associations
 
 		/// <summary>
-		/// FK_import_frmp_orgs_peoples_import_frmp_orgs
-		/// </summary>
-		[Association(ThisKey="f_oid", OtherKey="c_oid", CanBeNull=false, KeyName="FK_import_frmp_orgs_peoples_import_frmp_orgs", BackReferenceName="importfrmporgspeoplesimportfrmporgss")]
-		public import_frmp_orgs importfrmporgspeoplesimportfrmporgs { get; set; }
-
-		/// <summary>
 		/// FK_import_frmp_orgs_peoples_import_frmp_peoples
 		/// </summary>
 		[Association(ThisKey="f_people", OtherKey="id", CanBeNull=false, KeyName="FK_import_frmp_orgs_peoples_import_frmp_peoples", BackReferenceName="importfrmporgspeoplesimportfrmppeopless")]
 		public import_frmp_peoples importfrmporgspeoplesimportfrmppeoples { get; set; }
+
+		/// <summary>
+		/// FK_import_frmp_orgs_peoples_import_frmp_orgs
+		/// </summary>
+		[Association(ThisKey="f_oid", OtherKey="c_oid", CanBeNull=false, KeyName="FK_import_frmp_orgs_peoples_import_frmp_orgs", BackReferenceName="importfrmporgspeoplesimportfrmporgss")]
+		public import_frmp_orgs importfrmporgspeoplesimportfrmporgs { get; set; }
 
 		#endregion
 	}
@@ -1899,3 +1899,4 @@ namespace cms.dbase.models
 		}
 	}
 }
+ 

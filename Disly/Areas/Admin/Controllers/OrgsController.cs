@@ -625,7 +625,6 @@ namespace Disly.Areas.Admin.Controllers
             return Redirect(((System.Web.HttpRequestWrapper)Request).RawUrl);
         }
 
-
         public ActionResult delPeople(string iddep, string idpeople)
         {
             _cmsRepository.delPersonsThisDepartment(Guid.Parse(iddep), Guid.Parse(idpeople));

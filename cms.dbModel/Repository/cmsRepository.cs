@@ -11,6 +11,7 @@ namespace cms.dbModel
 
         public abstract SitesModel getSite(Guid? Id);
         public abstract SitesModel getSite(string domain);
+        public abstract bool updateSiteInfo(SitesModel item, Guid user, string ip);
 
         // Работа с логами
         public abstract cmsLogModel[] getCmsUserLog(Guid UserId);

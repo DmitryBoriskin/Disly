@@ -47,6 +47,7 @@ namespace cms.dbase
                 return SiteId;
             }
         }
+
         /// <summary>
         /// Данные сайта по id или доменному имени
         /// </summary>
@@ -61,6 +62,7 @@ namespace cms.dbase
                     {
                         Id = s.id,
                         Title = s.c_name,
+                        LongTitle = s.c_name_long,
                         Alias = s.c_alias,
                         Adress = s.c_adress,
                         Phone = s.c_phone,
@@ -79,6 +81,7 @@ namespace cms.dbase
                 else { return data.First(); }
             }
         }
+
         public override SitesModel getSite(string domain)
         {
             using (var db = new CMSdb(_context))
@@ -88,6 +91,7 @@ namespace cms.dbase
                     {
                         Id = s.id,
                         Title = s.c_name,
+                        LongTitle = s.c_name_long,
                         Alias = s.c_alias,
                         Adress = s.c_adress,
                         Phone = s.c_phone,
@@ -97,11 +101,52 @@ namespace cms.dbase
                         Worktime = s.c_worktime,
                         Logo = s.c_logo,
                         ContentId = (Guid)s.f_content,
-                        Type = s.c_content_type
+                        Type = s.c_content_type,
+                        Facebook = s.c_facebook,
+                        Vk = s.c_vk,
+                        Instagramm = s.c_instagramm,
+                        Odnoklassniki = s.c_odnoklassniki,
+                        Twitter = s.c_twitter
                     });
 
                 if (!data.Any()) { return null; }
                 else { return data.First(); }
+            }
+        }
+
+        /// <summary>
+        /// Обновляется информация по сайту
+        /// </summary>
+        /// <param name="item">модель сайта</param>
+        /// <returns></returns>
+        public override bool updateSiteInfo(SitesModel item, Guid user, string ip)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var query = db.cms_sitess
+                    .Where(w => w.id.Equals(item.Id));
+
+                if (query.Any())
+                {
+                    db.cms_sitess
+                        .Where(w => w.id.Equals(item.Id))
+                        .Set(u => u.c_name, item.Title)
+                        .Set(u => u.c_name_long, item.LongTitle)
+                        .Set(u => u.c_alias, item.Alias)
+                        .Set(u => u.c_facebook, item.Facebook)
+                        .Set(u => u.c_vk, item.Vk)
+                        .Set(u => u.c_instagramm, item.Instagramm)
+                        .Set(u => u.c_odnoklassniki, item.Odnoklassniki)
+                        .Set(u => u.c_twitter, item.Twitter)
+                        .Update();
+                    
+                    insertLog(user, ip, "update", item.Id, String.Empty, "Sites", item.Title);
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
         }
 
