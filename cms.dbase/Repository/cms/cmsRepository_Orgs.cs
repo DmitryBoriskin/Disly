@@ -155,49 +155,54 @@ namespace cms.dbase
         {
             using (var db = new CMSdb(_context))
             {
-                var data = db.content_orgss.Where(w => w.id == id);
-                if (data.Any())
+
+                using (var tran = db.BeginTransaction())
                 {
-                    data
-                        .Set(s => s.c_title, model.Title)
-                        .Set(s => s.c_title_short, model.ShortTitle)
-                        .Set(s => s.c_phone, model.Phone)
-                        .Set(s => s.c_phone_reception, model.PhoneReception)
-                        .Set(s => s.c_fax, model.Fax)
-                        .Set(s => s.c_email, model.Email)
-                        .Set(s => s.c_director_post, model.DirecorPost)
-                        .Set(s => s.f_director, model.DirectorF)
-                        .Set(s => s.c_contacts, model.Contacts)
-                        .Set(s => s.c_adress, model.Address)
-                        .Set(s => s.n_geopoint_x, model.GeopointX)
-                        .Set(s => s.n_geopoint_y, model.GeopointY)
-                        .Set(s => s.f_frmp, model.Frmp)
-                        .Update();
-
-                    // обновляем типы мед. учреждений
-                    if (model.Types != null)
+                    var data = db.content_orgss.Where(w => w.id == id);
+                    if (data.Any())
                     {
-                        // удаляем старые типы
-                        db.content_orgs_types_links.Where(w => w.f_org.Equals(id)).Delete();
+                        data
+                            .Set(s => s.c_title, model.Title)
+                            .Set(s => s.c_title_short, model.ShortTitle)
+                            .Set(s => s.c_phone, model.Phone)
+                            .Set(s => s.c_phone_reception, model.PhoneReception)
+                            .Set(s => s.c_fax, model.Fax)
+                            .Set(s => s.c_email, model.Email)
+                            .Set(s => s.c_director_post, model.DirecorPost)
+                            .Set(s => s.f_director, model.DirectorF)
+                            .Set(s => s.c_contacts, model.Contacts)
+                            .Set(s => s.c_adress, model.Address)
+                            .Set(s => s.n_geopoint_x, model.GeopointX)
+                            .Set(s => s.n_geopoint_y, model.GeopointY)
+                            .Set(s => s.f_frmp, model.Frmp)
+                            .Update();
 
-                        foreach (var t in model.Types)
+                        // обновляем типы мед. учреждений
+                        if (model.Types != null)
                         {
-                            var maxSortQuery = db.content_orgs_types_links
-                                .Where(w => w.f_org.Equals(id)).Select(s => s.n_sort);
+                            // удаляем старые типы
+                            db.content_orgs_types_links.Where(w => w.f_org.Equals(id)).Delete();
 
-                            int maxSort = maxSortQuery.Any() ? maxSortQuery.Max() : 0;
+                            foreach (var t in model.Types)
+                            {
+                                var maxSortQuery = db.content_orgs_types_links
+                                    .Where(w => w.f_org.Equals(id)).Select(s => s.n_sort);
 
-                            db.content_orgs_types_links
-                                .Value(v => v.f_org, id)
-                                .Value(v => v.f_type, t)
-                                .Value(v => v.n_sort, maxSort + 1)
-                                .Insert();
+                                int maxSort = maxSortQuery.Any() ? maxSortQuery.Max() : 0;
+
+                                db.content_orgs_types_links
+                                    .Value(v => v.f_org, id)
+                                    .Value(v => v.f_type, t)
+                                    .Value(v => v.n_sort, maxSort + 1)
+                                    .Insert();
+                            }
                         }
+                        
+                        //логирование
+                        insertLog(UserId, IP, "update", id, String.Empty, "Orgs", model.Title);
+                        return true;
                     }
-
-                    //логирование
-                    insertLog(UserId, IP, "update", id, String.Empty, "Orgs", model.Title);
-                    return true;
+                    tran.Commit();
                 }
                 return false;
             }

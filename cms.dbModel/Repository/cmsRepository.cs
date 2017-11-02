@@ -60,7 +60,8 @@ namespace cms.dbModel
         public abstract ResolutionsModel[] getGroupResolutions(string alias);
 
         // Материалы
-        public abstract MaterialGroup[] getMaterialGroups(Guid materialId, string domain);
+        public abstract MaterialGroup[] getAllMaterialGroups();
+        public abstract MaterialGroup[] getMaterialGroups(Guid materialId);
 
         public abstract MaterialsList getMaterialsList(FilterParams filtr);
         public abstract MaterialsModel getMaterial(Guid id, string domain);

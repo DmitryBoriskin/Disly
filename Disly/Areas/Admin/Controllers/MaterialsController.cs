@@ -36,6 +36,10 @@ namespace Disly.Areas.Admin.Controllers
                 Events = _cmsRepository.getMaterialsEvents()
             };
 
+            //Категории
+            MaterialGroup[] GroupsValues = _cmsRepository.getAllMaterialGroups();//.Select(g => new {Id = g.Id, Title = g.Title}).ToArray();
+            ViewBag.AllGroups = GroupsValues;
+
             #region Метатеги
             ViewBag.Title = UserResolutionInfo.Title;
             ViewBag.Description = "";
@@ -75,7 +79,10 @@ namespace Disly.Areas.Admin.Controllers
                     model.Item.PreviewImage = getInfoPhoto(photo.Url);
                 }
             }
-           
+
+#warning Решить вопрос с ошибкой, если модель заполнена, значения из ViewBag не подставляются для
+            //ViewBag.GroupsValues = new MultiSelectList(GroupsValues, "Id", "Title", model.Item != null ? model.Item.GroupsId : null);
+            //model.Item.GroupsId = null;
             return View("Item", model);
         }
 
