@@ -293,3 +293,9 @@ a.button  {
 .icon-recovery:before { 
     content: '\f054';
 }
+
+/*Orgs*/
+.org-byType-tree li{
+    list-style:none;
+    margin:5px 0;
+}

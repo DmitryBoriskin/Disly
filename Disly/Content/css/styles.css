@@ -1034,9 +1034,15 @@ a.button.icon-cancel{
 /*banners*/
 .list_img_preview{width:145px;}
 
+/*Orgs*/
+
 
 
 .del_icon{display:block;cursor:pointer;}
 .del_icon:hover{text-decoration:none;}
 .del_icon:before{content:'\ec5b';font-family:fontello;color:red;}
 .del_icon:hover:before{color:#c50505;}
+
+.topIndent-20{
+    margin-top:20px;
+}

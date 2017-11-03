@@ -71,6 +71,22 @@ namespace Disly
                defaults: new { controller = "Page", action = "Index", path = UrlParameter.Optional }
                //constraints: new { path = @"\d{6}" }
             );
+
+
+          routes.MapRoute(
+              name: "Service",
+              url: "Service/{action}/{*id}",
+              defaults: new { controller = "Service", action = "Index", id = UrlParameter.Optional }
+           );
+
+            routes.MapRoute(
+                name: "default",
+                url:"{controller}/{action}/{id}",
+                defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
+            );
+
+
+
         }
     }
 }

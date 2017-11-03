@@ -13,28 +13,145 @@ namespace cms.dbase
     /// </summary>
     public partial class cmsRepository : abstract_cmsRepository
     {
+
         /// <summary>
-        /// Получаем список организаций
+        /// Строим запрос на основе фильтра
         /// </summary>
-        /// <param name="filtr">Фильтр</param>
-        /// <returns></returns>         
-        public override OrgsModel[] getOrgs(FilterParams filtr)
+        /// <param name="db"></param>
+        /// <param name="filtr"></param>
+        /// <returns></returns>
+        private IQueryable<content_orgs> QueryByOrgFilter(CMSdb db, OrgFilter filtr)
+        {
+            var query = db.content_orgss
+                               .OrderBy(o => o.n_sort)
+                               .AsQueryable();
+
+            if (!string.IsNullOrEmpty(filtr.Domain))
+            {
+#warning  Дописать потом что должно происходить!!!
+            }
+
+            if (!string.IsNullOrEmpty(filtr.SearchText))
+            {
+                query = query.Where(w => w.c_title.Contains(filtr.SearchText));
+            }
+
+            if (filtr.MaterialId.HasValue && filtr.MaterialId.Value != Guid.Empty)
+            {
+                //В таблице content_materials_link ищем связи оранизация - новость
+                var orgMaterials = db.content_materials_links
+                    .Where(s => s.f_material == filtr.MaterialId.Value)
+                    .Where(s => s.f_link_type == "org");
+
+                if (!orgMaterials.Any())
+                    query = query.Where(o => o.id == Guid.Empty); //Делаем заранее ложный запрос
+                else
+                {
+                    var orgMaterialsId = orgMaterials.Select(o => o.f_link_id);
+                    query = query.Where(o => orgMaterialsId.Contains(o.id));
+                }
+            }
+            if (filtr.EventId.HasValue && filtr.EventId.Value != Guid.Empty)
+            {
+                //В таблице content_materials_link ищем связи оранизация - новость
+                var orgMaterials = db.content_events_links
+                    .Where(s => s.f_event == filtr.EventId.Value)
+                    .Where(s => s.f_link_type == "org");
+
+                if (!orgMaterials.Any())
+                    query = query.Where(o => o.id == Guid.Empty); //Делаем заранее ложный запрос
+                else
+                {
+                    var orgMaterialsId = orgMaterials.Select(o => o.f_link_id);
+                    query = query.Where(o => orgMaterialsId.Contains(o.id));
+                }
+            }
+
+            return query;
+        }
+
+        public override OrgsList getOrgsList(OrgFilter filtr)
         {
             using (var db = new CMSdb(_context))
             {
-                var data = db.content_orgss.OrderBy(o => o.n_sort).AsQueryable();
-                if (filtr.SearchText != null)
-                {
-                    data = data.Where(w => (w.c_title.Contains(filtr.SearchText)));
-                }
-                //data.OrderBy(o => o.n_sort); ХЗ почему эта строка нормально не сортирует                
-                var list = data.Select(s => new OrgsModel()
+                //Получаем сформированный запрос по фильтру
+                var query = QueryByOrgFilter(db, filtr);
+
+                var itemCount = query.Count();
+
+                var data = query.Select(s => new OrgsModel()
                 {
                     Id = s.id,
                     Title = s.c_title,
-                    Sort = s.n_sort
+                    Sort = s.n_sort,
+                    Types = s.contentorgstypeslinkorgs.Select(t => t.f_type).ToArray()
                 });
-                if (list.Any()) return list.ToArray();
+                if (!data.Any())
+                    return null;
+
+                return new OrgsList
+                {
+                    Data = data.ToArray(),
+                    Pager = new Pager
+                    {
+                        page = filtr.Page,
+                        size = filtr.Size,
+                        items_count = itemCount,
+                        page_count = (itemCount % filtr.Size > 0) ? (itemCount / filtr.Size) + 1 : itemCount / filtr.Size
+                    }
+                };
+            }
+        }
+
+        /// <summary>
+        /// Получаем список организаций по фильтру
+        /// </summary>
+        /// <param name="filtr">Фильтр</param>
+        /// <returns></returns>         
+        public override OrgsModel[] getOrgs(OrgFilter filtr)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                //Получаем сформированный запрос по фильтру
+                var query = QueryByOrgFilter(db, filtr);
+
+                //data.OrderBy(o => o.n_sort); ХЗ почему эта строка нормально не сортирует
+
+                var data = query.Select(s => new OrgsModel()
+                {
+                    Id = s.id,
+                    Title = s.c_title,
+                    Sort = s.n_sort,
+                    Types = s.contentorgstypeslinkorgs.Select(t => t.f_type).ToArray()
+                });
+                if (data.Any())
+                    return data.ToArray();
+
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Получаем список организаций по фильтру
+        /// </summary>
+        /// <param name="filtr">Фильтр</param>
+        /// <returns></returns>         
+        public override OrgsShort[] getShortOrgsList(OrgFilter filtr)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                //Получаем сформированный запрос по фильтру
+                var query = QueryByOrgFilter(db, filtr);
+
+                var data = query.Select(s => new OrgsShort()
+                {
+                    Id = s.id,
+                    Title = s.c_title,
+                    Types = s.contentorgstypeslinkorgs.Select(t => t.f_type).ToArray()
+                });
+                if (data.Any())
+                    return data.ToArray();
+
                 return null;
             }
         }
@@ -48,6 +165,11 @@ namespace cms.dbase
         {
             using (var db = new CMSdb(_context))
             {
+                Guid[] types = null;
+                var getTypes = getOrgTypesList(new OrgTypeFilter { OrgId = id });
+                if (getTypes != null)
+                    types = getTypes.Select(t => t.Id).ToArray();
+
                 var data = db.content_orgss.Where(w => w.id == id)
                     .Select(s => new OrgsModel
                     {
@@ -66,7 +188,7 @@ namespace cms.dbase
                         GeopointY = s.n_geopoint_y,
                         Structure = getStructureList(s.id),
                         Frmp = s.f_frmp,
-                        Types = getOrgTypes(id)
+                        Types = types
                     });
 
                 if (!data.Any()) return null;
@@ -155,49 +277,54 @@ namespace cms.dbase
         {
             using (var db = new CMSdb(_context))
             {
-                var data = db.content_orgss.Where(w => w.id == id);
-                if (data.Any())
+
+                using (var tran = db.BeginTransaction())
                 {
-                    data
-                        .Set(s => s.c_title, model.Title)
-                        .Set(s => s.c_title_short, model.ShortTitle)
-                        .Set(s => s.c_phone, model.Phone)
-                        .Set(s => s.c_phone_reception, model.PhoneReception)
-                        .Set(s => s.c_fax, model.Fax)
-                        .Set(s => s.c_email, model.Email)
-                        .Set(s => s.c_director_post, model.DirecorPost)
-                        .Set(s => s.f_director, model.DirectorF)
-                        .Set(s => s.c_contacts, model.Contacts)
-                        .Set(s => s.c_adress, model.Address)
-                        .Set(s => s.n_geopoint_x, model.GeopointX)
-                        .Set(s => s.n_geopoint_y, model.GeopointY)
-                        .Set(s => s.f_frmp, model.Frmp)
-                        .Update();
-
-                    // обновляем типы мед. учреждений
-                    if (model.Types != null)
+                    var data = db.content_orgss.Where(w => w.id == id);
+                    if (data.Any())
                     {
-                        // удаляем старые типы
-                        db.content_orgs_types_links.Where(w => w.f_org.Equals(id)).Delete();
+                        data
+                            .Set(s => s.c_title, model.Title)
+                            .Set(s => s.c_title_short, model.ShortTitle)
+                            .Set(s => s.c_phone, model.Phone)
+                            .Set(s => s.c_phone_reception, model.PhoneReception)
+                            .Set(s => s.c_fax, model.Fax)
+                            .Set(s => s.c_email, model.Email)
+                            .Set(s => s.c_director_post, model.DirecorPost)
+                            .Set(s => s.f_director, model.DirectorF)
+                            .Set(s => s.c_contacts, model.Contacts)
+                            .Set(s => s.c_adress, model.Address)
+                            .Set(s => s.n_geopoint_x, model.GeopointX)
+                            .Set(s => s.n_geopoint_y, model.GeopointY)
+                            .Set(s => s.f_frmp, model.Frmp)
+                            .Update();
 
-                        foreach (var t in model.Types)
+                        // обновляем типы мед. учреждений
+                        if (model.Types != null)
                         {
-                            var maxSortQuery = db.content_orgs_types_links
-                                .Where(w => w.f_org.Equals(id)).Select(s => s.n_sort);
+                            // удаляем старые типы
+                            db.content_orgs_types_links.Where(w => w.f_org.Equals(id)).Delete();
 
-                            int maxSort = maxSortQuery.Any() ? maxSortQuery.Max() : 0;
+                            foreach (var t in model.Types)
+                            {
+                                var maxSortQuery = db.content_orgs_types_links
+                                    .Where(w => w.f_org.Equals(id)).Select(s => s.n_sort);
 
-                            db.content_orgs_types_links
-                                .Value(v => v.f_org, id)
-                                .Value(v => v.f_type, t)
-                                .Value(v => v.n_sort, maxSort + 1)
-                                .Insert();
+                                int maxSort = maxSortQuery.Any() ? maxSortQuery.Max() : 0;
+
+                                db.content_orgs_types_links
+                                    .Value(v => v.f_org, id)
+                                    .Value(v => v.f_type, t)
+                                    .Value(v => v.n_sort, maxSort + 1)
+                                    .Insert();
+                            }
                         }
+                        
+                        //логирование
+                        insertLog(UserId, IP, "update", id, String.Empty, "Orgs", model.Title);
+                        return true;
                     }
-
-                    //логирование
-                    insertLog(UserId, IP, "update", id, String.Empty, "Orgs", model.Title);
-                    return true;
+                    tran.Commit();
                 }
                 return false;
             }
@@ -1044,17 +1171,26 @@ namespace cms.dbase
             }
             return true;
         }
-
-        /// <summary>
-        /// Получаем список типов, доступных для организаций
-        /// </summary>
-        /// <returns></returns>
-        public override OrgType[] getOrgTypes()
+        
+        public override OrgType[] getOrgTypesList(OrgTypeFilter filter)
         {
             using (var db = new CMSdb(_context))
             {
-                var data = db.content_orgs_typess
-                    .OrderBy(o => o.n_sort)
+                var query = db.content_orgs_typess.AsQueryable();
+                             
+
+                if (filter.Id.HasValue && filter.Id.Value != Guid.Empty)
+                {
+                    query = query.Where(s => s.id == filter.Id.Value);
+                }
+
+                if (filter.OrgId.HasValue && filter.OrgId.Value != Guid.Empty)
+                {
+                    query = query.Where(s => s.contentorgstypeslinkorgtypess.Any(o => o.f_org == filter.OrgId.Value));
+                }
+
+                var data = query
+                    .OrderBy(s => s.n_sort)
                     .Select(s => new OrgType
                     {
                         Id = s.id,
@@ -1067,26 +1203,8 @@ namespace cms.dbase
             }
         }
 
-        /// <summary>
-        /// Получим список типов для данной организации
-        /// </summary>
-        /// <param name="id">Организация</param>
-        /// <returns></returns>
-        public override Guid[] getOrgTypes(Guid id)
-        {
-            using (var db = new CMSdb(_context))
-            {
-                var data = db.content_orgs_types_links
-                    .Where(w => w.f_org.Equals(id))
-                    .OrderBy(o => o.n_sort)
-                    .Select(s => s.f_type);
 
-                if (!data.Any()) return null;
-                else return data.ToArray();
-            }
-        }
-
-        /// <summary>
+         /// <summary>
         /// Получим список типов организаций с привязанными к ним организациями
         /// </summary>
         /// <returns></returns>

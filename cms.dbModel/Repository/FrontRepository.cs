@@ -1,5 +1,4 @@
 ﻿using cms.dbModel.entity;
-using cms.dbModel.entity.cms;
 using System;
 
 namespace cms.dbModel
@@ -12,5 +11,7 @@ namespace cms.dbModel
         public abstract SiteMapModel[] getSiteMapList(string domain);
         public abstract string[] getSiteMapGroupMenu(Guid id);
         public abstract BannersModel[] getBanners(string domain);
+
+        public abstract MaterialsList getMaterialsList(FilterParams filtr);
     }
 }

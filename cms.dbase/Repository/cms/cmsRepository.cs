@@ -6,7 +6,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using cms.dbModel.entity.cms;
 
 namespace cms.dbase
 {
@@ -22,10 +21,12 @@ namespace cms.dbase
         public cmsRepository()
         {
             _context = "defaultConnection";
+            LinqToDB.Common.Configuration.Linq.AllowMultipleQuery = true;
         }
         public cmsRepository(string ConnectionString)
         {
             _context = ConnectionString;
+            LinqToDB.Common.Configuration.Linq.AllowMultipleQuery = true;
         }
 
         /// <summary>
@@ -989,8 +990,59 @@ namespace cms.dbase
             }
         }
         #endregion
-        
+
         #region Events
+        private IQueryable<content_events> QueryByEventFilter(CMSdb db, EventFilter filtr)
+        {
+            var query = db.content_eventss
+                              .AsQueryable();
+
+            if (!string.IsNullOrEmpty(filtr.Domain))
+            {
+            #warning  Дописать !!!
+            }
+
+            if (!string.IsNullOrEmpty(filtr.SearchText))
+            {
+                query = query.Where(w => w.c_title.Contains(filtr.SearchText));
+            }
+
+            if (filtr.MaterialId.HasValue && filtr.MaterialId.Value != Guid.Empty)
+            {
+                //В таблице content_materials_link ищем связи оранизация - новость
+                var eventMaterials = db.content_materials_links
+                    .Where(s => s.f_material == filtr.MaterialId.Value)
+                    .Where(s => s.f_link_type == "event");
+
+                if (!eventMaterials.Any())
+                    query = query.Where(o => o.id == Guid.Empty); //Делаем заранее ложный запрос
+                else
+                {
+                    var eventMaterialsId = eventMaterials.Select(o => o.f_link_id);
+                    query = query.Where(o => eventMaterialsId.Contains(o.id));
+                }
+                
+            }
+            if (filtr.EventId.HasValue && filtr.EventId.Value != Guid.Empty)
+            {
+                //В таблице content_materials_link ищем связи оранизация - новость
+                var eventMaterials = db.content_events_links
+                    .Where(s => s.f_event == filtr.EventId.Value)
+                    .Where(s => s.f_link_type == "event");
+
+                if (!eventMaterials.Any())
+                    query = query.Where(o => o.id == Guid.Empty); //Делаем заранее ложный запрос
+                else
+                {
+                    var eventMaterialsId = eventMaterials.Select(o => o.f_link_id);
+                    query = query.Where(o => eventMaterialsId.Contains(o.id));
+                }
+
+            }
+
+            return query;
+        }
+
         public override EventModel getEvent(Guid id)
         {
             using (var db = new CMSdb(_context))
@@ -1024,61 +1076,84 @@ namespace cms.dbase
                 else { return data.First(); }
             }
         }
-        public override EventsList getEventsList(FilterParams filtr)
+        public override EventsList getEventsList(EventFilter filtr)
         {
             using (var db = new CMSdb(_context))
             {
-                var query = db.content_eventss.Where(w => w.id != null);
-                query = query.OrderByDescending(o => o.d_date);
+                //var query = db.content_eventss.AsQueryable();
 
-                if (query.Any())
-                {
-                    int ItemCount = query.Count();
+                var query = QueryByEventFilter(db, filtr);
 
-                    var List = query
-                        .Select(s => new EventModel
-                        {
-                            Id = s.id,
-                            Num = s.num,
-                            Title = s.c_title,
-                            Alias = s.c_alias,
-                            Place = s.c_place,
-                            EventMaker = s.c_organizer,
-                            PreviewImage = new Photo()
-                            {
-                                Url = s.c_preview
-                            },
-                            Text = s.c_text,
-                            Url = s.c_url,
-                            UrlName = s.c_url_name,
-                            DateBegin = s.d_date,
-                            DateEnd = s.d_date_end,
-                            Annually = s.b_annually,
-                            KeyW = s.c_keyw,
-                            Desc = s.c_desc,
-                            Disabled = s.b_disabled
-                        }).
-                        Skip(filtr.Size * (filtr.Page - 1)).
-                        Take(filtr.Size);
+                int itemCount = query.Count();
 
-                    EventModel[] eventsInfo = List.ToArray();
-
-                    return new EventsList
+                var List = query
+                    .OrderByDescending(s => s.d_date)
+                    .Skip(filtr.Size * (filtr.Page - 1))
+                    .Take(filtr.Size)
+                    .Select(s => new EventModel
                     {
-                        Data = eventsInfo,
-                        Pager = new Pager
+                        Id = s.id,
+                        Num = s.num,
+                        Title = s.c_title,
+                        Alias = s.c_alias,
+                        Place = s.c_place,
+                        EventMaker = s.c_organizer,
+                        PreviewImage = new Photo()
                         {
-                            page = filtr.Page,
-                            size = filtr.Size,
-                            items_count = ItemCount,
-                            page_count = (ItemCount % filtr.Size > 0) ? (ItemCount / filtr.Size) + 1 : ItemCount / filtr.Size
-                        }
-                    };
-                }
-                return null;
+                            Url = s.c_preview
+                        },
+                        Text = s.c_text,
+                        Url = s.c_url,
+                        UrlName = s.c_url_name,
+                        DateBegin = s.d_date,
+                        DateEnd = s.d_date_end,
+                        Annually = s.b_annually,
+                        KeyW = s.c_keyw,
+                        Desc = s.c_desc,
+                        Disabled = s.b_disabled
+                    });
+
+                if (!List.Any())
+                    return null;
+
+               return new EventsList
+               {
+                    Data = List.ToArray(),
+                    Pager = new Pager
+                    {
+                        page = filtr.Page,
+                        size = filtr.Size,
+                        items_count = itemCount,
+                        page_count = (itemCount % filtr.Size > 0) ? (itemCount / filtr.Size) + 1 : itemCount / filtr.Size
+                    }
+                };
             }
         }
-        
+        public override EventsShort[] getShortEventsList(EventFilter filtr)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var query = QueryByEventFilter(db, filtr);
+                query = query
+                            .OrderByDescending(s => s.d_date);
+
+                var List = query
+                    .Take(filtr.Size)
+                    .Select(s => new EventsShort()
+                    {
+                        Id = s.id,
+                        Title = s.c_title,
+                        DateBegin = s.d_date,
+                    });
+
+                if (!List.Any())
+                    return null;
+
+                return List.ToArray();
+
+            }
+        }
+
         public override bool insertCmsEvent(EventModel eventData)
         {
             try

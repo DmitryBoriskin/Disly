@@ -427,8 +427,67 @@
     <Content Include="Content\fonts\raleway\raleway-semibold-webfont.woff" />
     <Content Include="Content\fonts\raleway\raleway-semibold-webfont.woff2" />
     <Content Include="Areas\Admin\Views\Shared\Templates\Menu\Default.cshtml" />
-    <Content Include="scripts\bootstrap.js" />
-    <Content Include="scripts\bootstrap.min.js" />
+    <Content Include="Content\plugins\select2\css\select2_custom.css" />
+    <Content Include="Content\plugins\select2\css\select2.css" />
+    <Content Include="Content\plugins\select2\css\select2.min.css" />
+    <Content Include="Content\plugins\select2\i18n\af.js" />
+    <Content Include="Content\plugins\select2\i18n\ar.js" />
+    <Content Include="Content\plugins\select2\i18n\az.js" />
+    <Content Include="Content\plugins\select2\i18n\bg.js" />
+    <Content Include="Content\plugins\select2\i18n\bs.js" />
+    <Content Include="Content\plugins\select2\i18n\ca.js" />
+    <Content Include="Content\plugins\select2\i18n\cs.js" />
+    <Content Include="Content\plugins\select2\i18n\da.js" />
+    <Content Include="Content\plugins\select2\i18n\de.js" />
+    <Content Include="Content\plugins\select2\i18n\dsb.js" />
+    <Content Include="Content\plugins\select2\i18n\el.js" />
+    <Content Include="Content\plugins\select2\i18n\en.js" />
+    <Content Include="Content\plugins\select2\i18n\es.js" />
+    <Content Include="Content\plugins\select2\i18n\et.js" />
+    <Content Include="Content\plugins\select2\i18n\eu.js" />
+    <Content Include="Content\plugins\select2\i18n\fa.js" />
+    <Content Include="Content\plugins\select2\i18n\fi.js" />
+    <Content Include="Content\plugins\select2\i18n\fr.js" />
+    <Content Include="Content\plugins\select2\i18n\gl.js" />
+    <Content Include="Content\plugins\select2\i18n\he.js" />
+    <Content Include="Content\plugins\select2\i18n\hi.js" />
+    <Content Include="Content\plugins\select2\i18n\hr.js" />
+    <Content Include="Content\plugins\select2\i18n\hsb.js" />
+    <Content Include="Content\plugins\select2\i18n\hu.js" />
+    <Content Include="Content\plugins\select2\i18n\hy.js" />
+    <Content Include="Content\plugins\select2\i18n\id.js" />
+    <Content Include="Content\plugins\select2\i18n\is.js" />
+    <Content Include="Content\plugins\select2\i18n\it.js" />
+    <Content Include="Content\plugins\select2\i18n\ja.js" />
+    <Content Include="Content\plugins\select2\i18n\km.js" />
+    <Content Include="Content\plugins\select2\i18n\ko.js" />
+    <Content Include="Content\plugins\select2\i18n\lt.js" />
+    <Content Include="Content\plugins\select2\i18n\lv.js" />
+    <Content Include="Content\plugins\select2\i18n\mk.js" />
+    <Content Include="Content\plugins\select2\i18n\ms.js" />
+    <Content Include="Content\plugins\select2\i18n\nb.js" />
+    <Content Include="Content\plugins\select2\i18n\nl.js" />
+    <Content Include="Content\plugins\select2\i18n\pl.js" />
+    <Content Include="Content\plugins\select2\i18n\ps.js" />
+    <Content Include="Content\plugins\select2\i18n\pt-BR.js" />
+    <Content Include="Content\plugins\select2\i18n\pt.js" />
+    <Content Include="Content\plugins\select2\i18n\ro.js" />
+    <Content Include="Content\plugins\select2\i18n\ru.js" />
+    <Content Include="Content\plugins\select2\i18n\sk.js" />
+    <Content Include="Content\plugins\select2\i18n\sl.js" />
+    <Content Include="Content\plugins\select2\i18n\sr-Cyrl.js" />
+    <Content Include="Content\plugins\select2\i18n\sr.js" />
+    <Content Include="Content\plugins\select2\i18n\sv.js" />
+    <Content Include="Content\plugins\select2\i18n\th.js" />
+    <Content Include="Content\plugins\select2\i18n\tr.js" />
+    <Content Include="Content\plugins\select2\i18n\uk.js" />
+    <Content Include="Content\plugins\select2\i18n\vi.js" />
+    <Content Include="Content\plugins\select2\i18n\zh-CN.js" />
+    <Content Include="Content\plugins\select2\i18n\zh-TW.js" />
+    <Content Include="Content\plugins\select2\select2.full.js" />
+    <Content Include="Content\plugins\select2\select2.full.min.js" />
+    <Content Include="Content\plugins\select2\select2.js" />
+    <Content Include="Content\plugins\select2\select2.min.js" />
     <Content Include="test.html" />
     <Content Include="scripts\cms\disly_5_popup.js" />
     <Content Include="scripts\cms\disly_5_login.js" />
@@ -468,6 +527,8 @@
     <Compile Include="Areas\Admin\Controllers\CoreController.cs" />
     <Compile Include="Areas\Admin\Models\BannersViewModel.cs" />
     <Compile Include="Areas\Admin\Models\cmsMenuViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\ModalViewModels\EventsModalViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\ModalViewModels\OrgsModalViewModel.cs" />
     <Compile Include="Areas\Admin\Models\VacancyViewModel.cs" />
     <Compile Include="Areas\Admin\Models\FeadbacksViewModel.cs" />
     <Compile Include="Areas\Admin\Models\EventsViewModel.cs" />
@@ -485,12 +546,14 @@
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\PressController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ServiceController.cs" />
     <Compile Include="Controllers\_RootController.cs" />
     <Compile Include="Controllers\PageController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Areas\Admin\Models\CoreViewModel.cs" />
+    <Compile Include="Models\NewsViewModel.cs" />
     <Compile Include="Models\HomePageViewModel.cs" />
     <Compile Include="Models\PageViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -606,8 +669,6 @@
     <Content Include="Areas\Admin\Views\Banners\Item.cshtml" />
     <Content Include="Areas\Admin\Views\Materials\Orgs.cshtml" />
     <Content Include="Areas\Admin\Views\Materials\OrgsSaved.cshtml" />
-    <Content Include="Content\plugins\icheck\bower.json" />
-    <Content Include="Content\plugins\icheck\icheck.jquery.json" />
     <Content Include="Content\fonts\OpenSans\OpenSansBoldItalic.eot" />
     <Content Include="Content\fonts\OpenSans\OpenSansBoldItalic.ttf" />
     <Content Include="Content\fonts\OpenSans\OpenSansBoldItalic.woff" />
@@ -674,8 +735,12 @@
     <Content Include="Content\fonts\themify\themify.ttf" />
     <Content Include="Content\fonts\themify\themify.woff" />
     <Content Include="Content\fonts\themify\themify.eot" />
+    <Content Include="Areas\Admin\Views\Shared\Modal\Orgs.cshtml" />
+    <Content Include="Areas\Admin\Views\Shared\Modal\OrgsSaved.cshtml" />
+    <Content Include="Areas\Admin\Views\Shared\Modal\Events.cshtml" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Shared\services\Pager.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -687,6 +752,7 @@
     <Folder Include="App_Data\" />
     <Folder Include="Content\plugins\tinymce\plugins\colorpicker\" />
     <Folder Include="Views\Core\" />
+    <Folder Include="Views\Service\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\cms.dbase\cms.dbase.csproj">

@@ -15,7 +15,7 @@ namespace Disly
                 "~/Content/plugins/mCustomScrollbar/jquery.mCustomScrollbar.js",
                 "~/Content/plugins/jquery/jquery.mask.min.js",
                 "~/Content/plugins/Disly/DislyControls.js",
-                "~/scripts/cms/disly_5.js"
+                "~/scripts/cms/disly_5.js"                
                 ));
             
             bundles.Add(new ScriptBundle("~/bundles/popUp_js").Include(
@@ -28,6 +28,20 @@ namespace Disly
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
                 "~/Content/plugins/jquery/jquery.js",
                 "~/Content/plugins/jquery/jquery.ui.js"));
+
+            //js plugins: select2, icheck
+            bundles.Add(new ScriptBundle("~/bundles/jq_plugins/js").Include(
+               "~/Content/plugins/select2/select2.min.js",
+               "~/Content/plugins/select2/i18n/ru.js",
+               "~/Content/plugins/icheck/icheck.min.js"
+               ));
+            bundles.Add(new StyleBundle("~/bundles/jq_plugins/css").Include(
+              "~/Content/plugins/select2/css/select2.css",
+              "~/Content/plugins/select2/css/select2_custom.css",
+              "~/Content/plugins/icheck/skins/all.css"
+              ));
+
+           
 
 
             // --------- Стили ---------

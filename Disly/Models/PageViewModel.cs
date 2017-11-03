@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using cms.dbModel.entity;
-using cms.dbModel.entity.cms;
 
 namespace Disly.Models
 {
@@ -57,5 +56,16 @@ namespace Disly.Models
         /// Обратная ссылка
         /// </summary>
         public String BackUrl { get; set; }
+    }
+
+
+    /// <summary>
+    /// /Модель для пейджера
+    /// </summary>
+    public class PagerFront
+    {
+        public string text { get; set; }
+        public string url { get; set; }
+        public bool isChecked { get; set; }
     }
 }

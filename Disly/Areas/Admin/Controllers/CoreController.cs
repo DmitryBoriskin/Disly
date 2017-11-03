@@ -33,6 +33,9 @@ namespace Disly.Areas.Admin.Controllers
         public string ControllerName;
         public string ActionName;
 
+        public int page_size = 40;
+        public int last_items = 10;
+
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             base.OnActionExecuting(filterContext);
@@ -126,6 +129,7 @@ namespace Disly.Areas.Admin.Controllers
             return query;
         }
 
+#warning В будущем переписать используя json объект 
         public FilterParams getFilter(int defaultPageSize = 20)
         {
             string return_url = HttpUtility.UrlDecode(Request.Url.Query);
@@ -157,7 +161,7 @@ namespace Disly.Areas.Admin.Controllers
                 Page = (Convert.ToInt32(Request.QueryString["page"]) > 0) ? Convert.ToInt32(Request.QueryString["page"]) : 1,
                 Size = (Convert.ToInt32(Request.QueryString["size"]) > 0) ? Convert.ToInt32(Request.QueryString["size"]) : defaultPageSize,
                 Type = (String.IsNullOrEmpty(Request.QueryString["type"])) ? String.Empty : Request.QueryString["type"],
-                Categoty = (String.IsNullOrEmpty(Request.QueryString["category"])) ? String.Empty : Request.QueryString["category"],
+                Category = (String.IsNullOrEmpty(Request.QueryString["category"])) ? String.Empty : Request.QueryString["category"],
                 Group = (String.IsNullOrEmpty(Request.QueryString["group"])) ? String.Empty : Request.QueryString["group"],
                 Lang = (String.IsNullOrEmpty(Request.QueryString["lang"])) ? String.Empty : Request.QueryString["lang"],
                 Date = (String.IsNullOrEmpty(Request.QueryString["date"])) ? DateNull : DateTime.Parse(Request.QueryString["date"]),

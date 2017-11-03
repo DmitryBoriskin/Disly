@@ -1,4 +1,5 @@
-﻿using Disly.Areas.Admin.Models;
+﻿using cms.dbModel.entity;
+using Disly.Areas.Admin.Models;
 using Disly.Areas.Admin.Service;
 using System;
 using System.Collections.Generic;
@@ -13,6 +14,7 @@ namespace Disly.Areas.Admin.Controllers
         //ovp- это вьюха объединяющая в себе структурное подразделение и департамент(отдел)
         OrgsViewModel model;
         FilterParams filter;
+
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             base.OnActionExecuting(filterContext);
@@ -23,6 +25,8 @@ namespace Disly.Areas.Admin.Controllers
             ViewBag.HttpKeys = Request.QueryString.AllKeys;
             ViewBag.Query = Request.QueryString;
 
+            filter = getFilter();
+
             model = new OrgsViewModel()
             {
                 Account = AccountInfo,
@@ -30,7 +34,7 @@ namespace Disly.Areas.Admin.Controllers
                 UserResolution = UserResolutionInfo,
                 ControllerName = ControllerName,
                 ActionName = ActionName,
-                Types = _cmsRepository.getOrgTypes()
+                Types = _cmsRepository.getOrgTypesList(new OrgTypeFilter() { })
             };
 
             #region Метатеги
@@ -43,10 +47,10 @@ namespace Disly.Areas.Admin.Controllers
         // GET: Admin/Orgs
         public ActionResult Index()
         {
-            filter = getFilter();
-            model.OrgList = _cmsRepository.getOrgs(filter);//+ список организаций
+            var orgfilter = FilterParams.Extend<OrgFilter>(filter);
+            model.OrgList = _cmsRepository.getOrgs(orgfilter);//+ список организаций
             return View(model);
-        }   
+        }
              
         /// <summary>
         /// Формируем строку фильтра
@@ -625,11 +629,73 @@ namespace Disly.Areas.Admin.Controllers
             return Redirect(((System.Web.HttpRequestWrapper)Request).RawUrl);
         }
 
-
         public ActionResult delPeople(string iddep, string idpeople)
         {
             _cmsRepository.delPersonsThisDepartment(Guid.Parse(iddep), Guid.Parse(idpeople));
             return null;
+        }
+
+
+
+        //Получение списка организаций по параметрам для отображения в модальном окне
+        [HttpGet]
+        public ActionResult OrgsListModal(Guid objId, string relObj)
+        {
+            var filtr = new OrgFilter()
+            {
+                Domain = Domain
+            };
+
+            if (relObj == "material")
+            {
+                filtr.MaterialId = objId;
+            }
+            else if(relObj == "event")
+            {
+                filtr.EventId = objId;
+            }
+
+            var model = new OrgsModalViewModel()
+            {
+                OrgsList = _cmsRepository.getOrgs(filtr),
+                OrgsAll = _cmsRepository.getOrgs(new OrgFilter(){ }),
+                OrgsTypes = _cmsRepository.getOrgTypesList(new OrgTypeFilter(){ })
+            };
+
+
+            if (model.OrgsTypes != null)
+            {
+                foreach (var orgtype in model.OrgsTypes)
+                {
+                    if (orgtype.Sort == 1000)
+                    {
+                        var list1 = model.OrgsAll.Where(t => t.Types == null).ToArray();
+                    }
+
+                    else
+                    {
+                        var list2 = model.OrgsAll.Where(t => t.Types != null && t.Types.Contains(orgtype.Id)).ToArray();
+                    }
+                }
+            }
+
+            return PartialView("Modal/Orgs", model);
+        }
+
+        [HttpPost]
+        [MultiButton(MatchFormKey = "action", MatchFormValue = "save-org-btn")]
+        public ActionResult OrgsListModal(OrgsModalViewModel model, string relObjct)
+        {
+            MaterialOrgs modelInsert = new MaterialOrgs
+            {
+                Orgs = model.OrgsId,
+                MaterialId = model.MaterialId,
+                ContentLink = model.ContentLink
+            };
+
+            _cmsRepository.insertMaterialsOrgsLink(modelInsert);
+
+            return PartialView("OrgsSaved");
         }
     }
 }

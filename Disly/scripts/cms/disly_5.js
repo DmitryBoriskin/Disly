@@ -8,12 +8,21 @@ $(document).ready(function () {
     $modalFooter = $('.modal .modal-footer');
 
     // Если система администрирования загружена в frame открываем её в родительском окне
-    if (top != self) {
+    if (top !== self) {
         top.location.href = location.href;
     }
 
 
-
+    $(".select2").select2({
+        language: "ru",
+        width: "100%",
+        allowClear: false
+    });
+    $(".iCheck").iCheck({
+        checkboxClass: 'icheckbox_square-blue',
+        radioClass: 'icheckbox_square-blue'
+        //increaseArea: '%' //optional
+    });
 
     // Полоса прокрутки главного меню
     $(".menu-block").mCustomScrollbar();
@@ -26,7 +35,7 @@ $(document).ready(function () {
         mousedown: function () {
             //логика всплывающих окон            
             var Action = $(this).attr('data-action');
-            if (Action != undefined) {
+            if (Action !== undefined) {
                 switch (Action) {
                     case "delete":
                         $('form input[required]').removeAttr('required');
@@ -34,7 +43,7 @@ $(document).ready(function () {
                         Confirm('Уведомление', 'Вы хотите удалить эту запись?', $(this));
                         break;
                     case "cancel":
-                        if (change != 0) {
+                        if (change !== 0) {
                             Confirm('Уведомление', 'Выйти без изменений?', $(this));
                         }
                         else {
@@ -47,7 +56,7 @@ $(document).ready(function () {
                     case "noPreloader-accept":
                         break;
                         //case
-                    default: return false; break;
+                    default: return false;
                 }
             }
 
@@ -57,10 +66,10 @@ $(document).ready(function () {
             var dataAction = $(this).attr('data-action');
             var req_count = $('form input[required]:invalid').length
 
-            if (req_count > 0 && btn_class == 'save-btn')
+            if (req_count > 0 && btn_class === 'save-btn')
             {
             }
-            else if (dataAction == 'noPreloader-accept')
+            else if (dataAction === 'noPreloader-accept')
             {
             }
             else {
@@ -139,12 +148,12 @@ $(document).ready(function () {
     // Перехват нажатия клавиш клавиатуры
     $(window).keydown(function (e) {
         //alert(e.keyCode);
-        if (e.keyCode == 112) { $('div#HelpIcons a.HelpIcon').trigger('click'); return false; }
-        if ((e.ctrlKey) && (e.keyCode == 83)) { $('button[value="create-btn"]').trigger('click'); $('button[value="update-btn"]').trigger('click'); return false; }
-        if ((e.ctrlKey) && (e.keyCode == 68)) { $('button[value="delete-btn"]').trigger('click'); return false; }
-        if ((e.ctrlKey) && (e.keyCode == 73)) { $('button[value="insert-btn"]').trigger('click'); return false; }
-        if (e.keyCode == 27) { $('button[value="cancel-btn"]').trigger('mousedown'); return false; }
-        if ((e.ctrlKey) && (e.keyCode == 13)) { FindNext(window.getSelection().toString()); }
+        if (e.keyCode === 112) { $('div#HelpIcons a.HelpIcon').trigger('click'); return false; }
+        if ((e.ctrlKey) && (e.keyCode === 83)) { $('button[value="create-btn"]').trigger('click'); $('button[value="update-btn"]').trigger('click'); return false; }
+        if ((e.ctrlKey) && (e.keyCode === 68)) { $('button[value="delete-btn"]').trigger('click'); return false; }
+        if ((e.ctrlKey) && (e.keyCode === 73)) { $('button[value="insert-btn"]').trigger('click'); return false; }
+        if (e.keyCode === 27) { $('button[value="cancel-btn"]').trigger('mousedown'); return false; }
+        if ((e.ctrlKey) && (e.keyCode === 13)) { FindNext(window.getSelection().toString()); }
     });
 
     // Помечаем страницу при изменении контента
@@ -251,6 +260,57 @@ $(document).ready(function () {
     });
 
     //создание сайта - выбор типов создаваемого сайта
+    function SpotTypeSite() {
+        $Org.hide();
+        $People.hide();
+        $Event.hide();
+        switch ($Type.val()) {
+            case 'org': $Org.show();
+                if ($Org.find('select').val() === '') {
+                    $Org.addClass('invalid');
+                }
+                else {
+                    $Org.removeClass('invalid');
+                }
+
+                $People.removeClass('invalid');
+                $Event.removeClass('invalid');
+                $Org.find('select').attr('required', '');
+                $People.find('select').removeAttr('required');
+                $Event.find('select').removeAttr('required');
+                break;
+            case 'people':
+                $People.show();
+                $Org.removeClass('invalid');
+                $People.addClass('invalid');
+                $Event.removeClass('invalid');
+                $Org.find('select').removeAttr('required');
+                $People.find('select').attr('required', '');
+                $Event.find('select').removeAttr('required');
+                break;
+            case 'event':
+                $Event.show();
+                $Org.removeClass('invalid');
+                $People.removeClass('invalid');
+                $Event.addClass('invalid');
+                $Org.find('select').removeAttr('required');
+                $People.find('select').removeAttr('required');
+                $Event.find('select').attr('required', '');
+                break;
+            default:
+                break;
+        }
+    };
+
+    function SpotContent(obj) {
+        document.getElementById('Item_ContentId').value = obj.val();
+        if (obj.val() !== '') {
+            $Org.removeClass('invalid');
+            $People.removeClass('invalid');
+            $Event.removeClass('invalid');
+        }
+    }
+
     if ($('#site_type').length > 0) {
         var $Type = $('#site_type');
         var $Org = $('#site_org');
@@ -264,73 +324,20 @@ $(document).ready(function () {
             SpotTypeSite();
         });
 
-        function SpotTypeSite() {
-            $Org.hide();
-            $People.hide();
-            $Event.hide();
-            switch ($Type.val()) {
-                case 'org': $Org.show();
-                    if ($Org.find('select').val() == '') {
-                        $Org.addClass('invalid');
-                    }
-                    else {
-                        $Org.removeClass('invalid');
-                    }
-
-                    $People.removeClass('invalid');
-                    $Event.removeClass('invalid');
-                    $Org.find('select').attr('required', '');
-                    $People.find('select').removeAttr('required');
-                    $Event.find('select').removeAttr('required');
-                    break;
-                case 'people':
-                    $People.show();
-                    $Org.removeClass('invalid');
-                    $People.addClass('invalid');
-                    $Event.removeClass('invalid');
-                    $Org.find('select').removeAttr('required');
-                    $People.find('select').attr('required', '');
-                    $Event.find('select').removeAttr('required');
-                    break;
-                case 'event':
-                    $Event.show();
-                    $Org.removeClass('invalid');
-                    $People.removeClass('invalid');
-                    $Event.addClass('invalid');
-                    $Org.find('select').removeAttr('required');
-                    $People.find('select').removeAttr('required');
-                    $Event.find('select').attr('required', '');
-                    break;
-                default:
-                    break;
-            }
-
-
-        }
-
         $('#contid_wr select').change(function () {
             SpotContent($(this));
         });
-
-        function SpotContent(obj) {
-            document.getElementById('Item_ContentId').value = obj.val();
-            if (obj.val() != '') {
-                $Org.removeClass('invalid');
-                $People.removeClass('invalid');
-                $Event.removeClass('invalid');
-            }
-        }
     }
 });
 var validSumm = $('.validation-summary-valid');
-if (validSumm.length > 0 && validSumm.find('li')[0].innerHTML != '') validSumm.css('display', 'block');
+if (validSumm.length > 0 && validSumm.find('li')[0].innerHTML !== '') validSumm.css('display', 'block');
 
 // Если есть пустые, обязательные для заполнения поля, делаем не активной главную кнопку для сохранеиния записи
 function requiredTest() {
     var emptyRequiredLength = $('form input[required]:invalid').length;
     emptyRequiredLength = emptyRequiredLength + $('form select[required]:invalid').length;
 
-    if (emptyRequiredLength > 0 || change == 0)
+    if (emptyRequiredLength > 0 || change === 0)
         $('button[data-primary]').animate({ opacity: "0.3" }, 300).attr('disabled', '');
     else
         $('button[data-primary]').animate({ opacity: "1" }, 300).removeAttr('disabled');
@@ -450,7 +457,7 @@ function GroupBlock_init() {
 
             $BlockInfo.slideToggle(
                 function () {
-                    if (Class.indexOf('open') == -1) $(this).parent().addClass('open');
+                    if (Class.indexOf('open') === -1) $(this).parent().addClass('open');
                     else $(this).parent().removeClass('open');
                 });
 
@@ -464,7 +471,7 @@ function GroupBlock_init() {
 // устанавливаем курсор
 function setCursor() {
     if ($('.content input.input-validation-error').length > 0) $('.content input.input-validation-error:first').focus();
-    else if ($('.content input[required]').val() == '') $('.content input[required]:first').focus();
+    else if ($('.content input[required]').val() === '') $('.content input[required]:first').focus();
     else if ($('.content input:not([type=file]):not([data-focus=False])').length > 0) $('.content input:not([type=file]):not([data-focus=False]):first').focus();
 }
 
@@ -589,7 +596,7 @@ function Coords(x, y, title, desc, zoom) {
         var JQ_Ymaps = $('script[src$="//api-maps.yandex.ru/2.0/?load=package.full&lang=ru-RU"]').length;
         x = x.replace(',', '.');
         y = y.replace(',', '.');
-        if (JQ_Ymaps == 0) {
+        if (JQ_Ymaps === 0) {
 
             $.getScript("//api-maps.yandex.ru/2.0/?load=package.full&lang=ru-RU", function () {
                 var script = document.createElement('script');
@@ -598,8 +605,8 @@ function Coords(x, y, title, desc, zoom) {
                 document.head.appendChild(script);
 
                 ymaps.ready(function () {
-                    if (title == '') { title = "Название организации"; }
-                    if (desc == '') { desc = "Описание организации"; }
+                    if (title === '') { title = "Название организации"; }
+                    if (desc === '') { desc = "Описание организации"; }
                     var myMap = new ymaps.Map("map", { center: [y, x], zoom: zoom }),
                 myPlacemark = new ymaps.Placemark([y, x], {
                     hasBalloon: false,

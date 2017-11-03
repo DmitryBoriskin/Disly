@@ -18,19 +18,12 @@ namespace Disly.Areas.Admin.Models
         /// </summary>
         public MaterialsModel Item { get; set; }
 
-        /// <summary>
-        /// Группы новостей
-        /// </summary>
-        public MaterialsGroup[] Groups { get; set; }
 
         /// <summary>
         /// Список организаций, разбитых на группы
         /// </summary>
         public List<OrgType> OrgsByType { get; set; }
 
-        /// <summary>
-        /// Список событий
-        /// </summary>
-        public MaterialsEvents[] Events { get; set; }
+
     }
 }

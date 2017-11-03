@@ -4,31 +4,6 @@ using System.ComponentModel.DataAnnotations;
 namespace cms.dbModel.entity
 {
     /// <summary>
-    ///  сайт организации, события или персоны
-    /// </summary>
-    public class SiteContentType
-    {
-        /// <summary>
-        /// 
-        /// </summary>
-        public Guid? Id;
-
-        /// <summary>
-        /// тип
-        /// </summary>
-        public string CType;
-    }
-
-    /// <summary>
-    /// Группа новости
-    /// </summary>
-    public class MaterialGroup
-    {
-        public Guid Id;
-        public string Name;
-    }
-
-    /// <summary>
     /// Модель, описывающая список новостей
     /// </summary>
     public class MaterialsList
@@ -36,12 +11,12 @@ namespace cms.dbModel.entity
         /// <summary>
         /// Список новостей
         /// </summary>
-        public MaterialsModel[] Data;
+        public MaterialsModel[] Data { get; set; }
 
         /// <summary>
         /// Пейджер
         /// </summary>
-        public Pager Pager;
+        public Pager Pager { get; set; }
     }
 
     /// <summary>
@@ -115,11 +90,6 @@ namespace cms.dbModel.entity
         public bool Disabled { get; set; }
 
         /// <summary>
-        /// Группа
-        /// </summary>
-        public MaterialGroup[] Groups { get; set; }
-
-        /// <summary>
         /// ссылка на организацию/событие/персону по умолчанию
         /// </summary>
         public Guid ContentLink { get; set; }
@@ -129,10 +99,21 @@ namespace cms.dbModel.entity
         /// </summary>
         public string ContentLinkType { get; set; }
 
+        //-------------------------------------------------------------
         /// <summary>
-        /// Событие
+        /// Группа
         /// </summary>
-        public Guid? Event { get; set; }
+        //public SelectListItem[] GroupsId { get; set; }
+        public Guid[] GroupsId { get; set; }
+        /// <summary>
+        /// Группы
+        /// </summary>
+        public MaterialsGroup[] Groups { get; set; }
+
+        /// <summary>
+        /// Связь с другими объектами/сущностями
+        /// </summary>
+        public ObjectLinks Links { get; set; }
     }
 
     /// <summary>
@@ -154,21 +135,5 @@ namespace cms.dbModel.entity
         /// Сортировка
         /// </summary>
         public int Sort { get; set; }
-    }
-
-    /// <summary>
-    /// Модель, описывающая события для привязки к новостям
-    /// </summary>
-    public class MaterialsEvents
-    {
-        /// <summary>
-        /// Идентификатор
-        /// </summary>
-        public Guid Id { get; set; }
-
-        /// <summary>
-        /// Название
-        /// </summary>
-        public string Title { get; set; }
     }
 }

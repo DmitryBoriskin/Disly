@@ -1,5 +1,4 @@
 ﻿using cms.dbModel.entity;
-using cms.dbModel.entity.cms;
 using System;
 using System.Collections.Generic;
 
@@ -61,20 +60,24 @@ namespace cms.dbModel
         public abstract ResolutionsModel[] getGroupResolutions(string alias);
 
         // Материалы
-        public abstract MaterialGroup[] getMaterialGroups(Guid materialId, string domain);
+        public abstract MaterialsGroup[] getAllMaterialGroups();
+        public abstract MaterialsGroup[] getMaterialGroups(Guid materialId);
 
-        public abstract MaterialsList getMaterialsList(FilterParams filtr);
+        public abstract MaterialsList getMaterialsList(MaterialFilter filtr);
         public abstract MaterialsModel getMaterial(Guid id, string domain);
 
         public abstract bool insertCmsMaterial(MaterialsModel material);
         public abstract bool updateCmsMaterial(MaterialsModel material);
         public abstract bool deleteCmsMaterial(Guid id);
         public abstract MaterialsGroup[] getMaterialsGroups();
+
+        public abstract bool insertMaterialsOrgsLink(MaterialOrgs model);
         public abstract bool insertMaterialsLinksToOrgs(MaterialOrgType model);
-        public abstract MaterialsEvents[] getMaterialsEvents();
+
 
         // Events
-        public abstract EventsList getEventsList(FilterParams filtr);
+        public abstract EventsList getEventsList(EventFilter filtr);
+        public abstract EventsShort[] getShortEventsList(EventFilter filtr);
         public abstract EventModel getEvent(Guid id);
 
         public abstract bool updateCmsEvent(EventModel eventData);
@@ -95,8 +98,11 @@ namespace cms.dbModel
         public abstract bool deleteCmsVacancy(Guid id);
 
         //Orgs
-        public abstract OrgsModel[] getOrgs(FilterParams filtr);
+        public abstract OrgsList getOrgsList(OrgFilter filtr);
+        public abstract OrgsModel[] getOrgs(OrgFilter filtr);
+        public abstract OrgsShort[] getShortOrgsList(OrgFilter filtr);
         public abstract OrgsModel getOrgItem(Guid id);
+
         public abstract bool insOrgs(Guid id, OrgsModel model, Guid UserId, String IP);
         public abstract bool setOrgs(Guid id, OrgsModel model, Guid UserId, String IP);
         public abstract bool delOrgs(Guid id, Guid UserId, String IP);
@@ -126,8 +132,9 @@ namespace cms.dbModel
         public abstract People[] getPersonsThisDepartment(Guid idStructure);
         public abstract bool insPersonsThisDepartment(Guid idDepart, Guid IdLinkPeopleForOrg, string status, string post);
         public abstract bool delPersonsThisDepartment(Guid idDep, Guid idPeople);
-        public abstract OrgType[] getOrgTypes();
-        public abstract Guid[] getOrgTypes(Guid id);
+
+        public abstract OrgType[] getOrgTypesList(OrgTypeFilter filter);
+
         public abstract List<OrgType> getOrgByType(Guid id);
         public abstract OrgsModelSmall[] getOrgSmall(Guid id, Guid material);
         public abstract bool setCheckedOrgs(Guid id, Guid material);

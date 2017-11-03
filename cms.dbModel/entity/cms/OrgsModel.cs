@@ -4,6 +4,12 @@ using System.ComponentModel.DataAnnotations;
 
 namespace cms.dbModel.entity
 {
+    public class OrgsList
+    {
+        public OrgsModel[] Data;
+        public Pager Pager;
+    }
+
     /// <summary>
     /// Организация
     /// </summary>
@@ -105,6 +111,76 @@ namespace cms.dbModel.entity
         public string Frmp { get; set; }
 
         public Guid[] Types { get; set; }
+    }
+
+    public class OrgsShort
+    {
+        /// <summary>
+        ///  Id 
+        /// </summary>
+        public Guid Id { get; set; }
+
+        /// <summary>
+        /// название
+        /// </summary>
+        public string Title { get; set; }
+
+        /// <summary>
+        /// Список привязанных типов Организаций
+        /// </summary>
+        public Guid[] Types { get; set; }
+    }
+
+    /// <summary>
+    /// Модель, описывающая организацию для привязки к новостям/событиям/организации/персоне и т.д
+    /// </summary>
+    public class MaterialOrgs
+    {
+        /// <summary>
+        ///  Id Новости
+        /// </summary>
+        public Guid MaterialId { get; set; }
+
+        /// <summary>
+        /// Сссылка на сущность, кому принадлежит новость изначально (ее нельзя update/delete)
+        /// </summary>
+        public Guid ContentLink { get; set; }
+
+        /// <summary>
+        /// Список привязанных Организаций
+        /// </summary>
+        public Guid[] Orgs { get; set; }
+    }
+
+    /// <summary>
+    /// Модель, описывающая типы организаций
+    /// </summary>
+    public class OrgType
+    {
+        /// <summary>
+        /// Идентификатор
+        /// </summary>
+        public Guid Id { get; set; }
+
+        /// <summary>
+        /// Название
+        /// </summary>
+        public string Title { get; set; }
+
+        /// <summary>
+        /// Сортировка
+        /// </summary>
+        public int Sort { get; set; }
+
+        /// <summary>
+        /// Флаг
+        /// </summary>
+        public bool Check { get; set; }
+
+        /// <summary>
+        /// Список организаций
+        /// </summary>
+        public OrgsModelSmall[] Orgs { get; set; }
     }
 
     /// <summary>
@@ -286,22 +362,6 @@ namespace cms.dbModel.entity
     }
     
     /// <summary>
-    /// Хлебные крошки
-    /// </summary>
-    public class BreadCrumb
-    {
-        /// <summary>
-        /// Ссылка
-        /// </summary>
-        public string Url { get; set; }
-
-        /// <summary>
-        /// Название
-        /// </summary>
-        public string Title { get; set; }
-    }
-
-    /// <summary>
     /// Модель, описывающая координаты
     /// </summary>
     public class CoordModel
@@ -317,35 +377,21 @@ namespace cms.dbModel.entity
         public double? GeopointY { get; set; }
     }
 
+#warning Избавиться от моделей ниже
     /// <summary>
-    /// Модель, описывающая типы организаций
+    /// Модель, описывающая совокупность новости и привязанных к ней организаций
     /// </summary>
-    public class OrgType
+    public class MaterialOrgType
     {
         /// <summary>
-        /// Идентификатор
+        /// Типы организаций
         /// </summary>
-        public Guid Id { get; set; }
+        public List<OrgType> OrgTypes { get; set; }
 
         /// <summary>
-        /// Название
+        /// Новость
         /// </summary>
-        public string Title { get; set; }
-
-        /// <summary>
-        /// Сортировка
-        /// </summary>
-        public int Sort { get; set; }
-
-        /// <summary>
-        /// Флаг
-        /// </summary>
-        public bool Check { get; set; }
-
-        /// <summary>
-        /// Список организаций
-        /// </summary>
-        public OrgsModelSmall[] Orgs { get; set; }
+        public MaterialsModel Material { get; set; }
     }
 
     /// <summary>
@@ -372,22 +418,6 @@ namespace cms.dbModel.entity
         /// Флаг 
         /// </summary>
         public bool Check { get; set; }
-    }
-
-    /// <summary>
-    /// Модель, описывающая совокупность новости и привязанных к ней организаций
-    /// </summary>
-    public class MaterialOrgType
-    {
-        /// <summary>
-        /// Типы организаций
-        /// </summary>
-        public List<OrgType> OrgTypes { get; set; }
-
-        /// <summary>
-        /// Новость
-        /// </summary>
-        public MaterialsModel Material { get; set; }
     }
 }
 

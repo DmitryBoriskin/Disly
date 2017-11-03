@@ -4,7 +4,7 @@ using cms.dbModel;
 using cms.dbModel.entity;
 using cms.dbase.models;
 using LinqToDB;
-using System.Collections.Generic;
+using System.Web;
 
 namespace cms.dbase
 {
@@ -37,85 +37,57 @@ namespace cms.dbase
 
             return null;
         }
-        // Получение групп к которым относится новост
-        private MaterialGroup[] db_getMaterialGroups(CMSdb db, Guid materialId, Guid contentId)
+
+        // Получение групп к которым относится новость
+        private MaterialsGroup[] db_getMaterialGroups(CMSdb db, Guid materialId)
         {
-            try
+            var query = db.content_materials_groups_links.AsQueryable();
+
+            if (materialId != Guid.Empty)
             {
-                //Получаем ссылку на новость, принадлежащую конкретной сущности(org/event/person)
-                var materialLink = db.content_materials_links
-                        .Where(w => w.f_material == materialId)
-                        .Where(w => w.f_link_id == contentId).SingleOrDefault();
+                query = query.Where(w => w.f_material == materialId);
+            }
 
-                if (materialLink != null)
-                {
-                    var materialLinkId = materialLink.id;
+            var data = query
+                 .Select(s => new MaterialsGroup
+                 {
+                     Id = s.f_group,
+                     Title = s.fkcontentmaterialsgroups.c_title
+                 });
 
-                    var data = db.content_material_links_groupss
-                        .Where(w => w.f_material_link_id == materialLinkId)
-                        .Select(s => new MaterialGroup
-                        {
-                            Id = s.f_group,
-                            Name = s.fkcontentmaterialsgroups.c_title
-                        });
-                    
-                    if (!data.Any()) { return null; }
-                    else {
-                        var res = data.ToArray();
-                        return data.ToArray();
-                    }
-                }
+            if (!data.Any())
                 return null;
 
-            }
-            catch(Exception ex)
-            {
-                throw new Exception("content_materials_links: " + ex);
-            }
-
+            return data.ToArray();
         }
 
         //Данная функция должна вызываться в рамках транзакции
-        private void db_updateMaterialGroups(CMSdb db, Guid materialId, Guid contentId, MaterialGroup[] groups)
+        private void db_updateMaterialGroups(CMSdb db, Guid materialId, Guid[] groups)
         {
-            try
-            {
-                //Получаем ссылку на новость, принадлежащую конкретной сущности(org/event/person)
-                var materialLink = db.content_materials_links
-                        .Where(w => w.f_material == materialId)
-                        .Where(w => w.f_link_id == contentId).SingleOrDefault();
+            //Удаляем привязанные группы
+            db.content_materials_groups_links
+                    .Where(w => w.f_material == materialId)
+                    .Delete();
 
-                if (materialLink != null)
+            // привязываем новые группы
+            if (groups != null)
+            {
+                foreach (var group in groups)
                 {
-                    var materialLinkId = materialLink.id;
-                    //Удаляем привязанные группы
-                    db.content_material_links_groupss
-                            .Where(w => w.f_material_link_id == materialLinkId)
-                            .Delete();
-                    // привязываем новые группы
-                    if (groups != null)
+                    if (group != Guid.Empty)
                     {
-                        foreach (var group in groups)
+                        var materialGroup = new content_materials_groups_link
                         {
-                            if (group.Id != null)
-                            {
-                                var materialGroup = new content_material_links_groups
-                                {
-                                    f_material_link_id = materialLinkId,
-                                    f_group = group.Id
-                                };
-                                db.Insert(materialGroup);
-                            }
-                        }
+                            id = Guid.NewGuid(),
+                            f_material = materialId,
+                            f_group = group
+                        };
+                        db.Insert(materialGroup);
                     }
                 }
             }
-            catch (Exception ex)
-            {
-                throw new Exception("content_materials_links: " + ex);
-            }
         }
-        
+
         #endregion
 
         /// <summary>
@@ -124,26 +96,38 @@ namespace cms.dbase
         /// <param name="materialId"></param>
         /// <param name="contentId"></param>
         /// <returns></returns>
-        public override MaterialGroup[] getMaterialGroups(Guid materialId, string domain)
+        public override MaterialsGroup[] getMaterialGroups(Guid materialId)
         {
             using (var db = new CMSdb(_context))
             {
-                if (!string.IsNullOrEmpty(domain))
-                {
-                    var content = db_getDomainContentTypeId(db, domain);
-                    if (content != null && content.Id.HasValue)
-                        return db_getMaterialGroups(db, materialId, content.Id.Value);
-                }
-                return null;
+                return db_getMaterialGroups(db, materialId);
             }
         }
-        
+
+        public override MaterialsGroup[] getAllMaterialGroups()
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var data = db.content_materials_groupss
+                 .Select(s => new MaterialsGroup
+                 {
+                     Id = s.id,
+                     Title = s.c_title
+                 });
+
+                if (!data.Any())
+                    return null;
+
+                return data.ToArray();
+            }
+        }
+
         /// <summary>
-        /// Получим список новостей для определенной сущности
+        /// Получим список новостей
         /// </summary>
         /// <param name="filtr">Фильтр</param>
         /// <returns></returns>
-        public override MaterialsList getMaterialsList(FilterParams filtr)
+        public override MaterialsList getMaterialsList(MaterialFilter filtr)
         {
             using (var db = new CMSdb(_context))
             {
@@ -206,46 +190,44 @@ namespace cms.dbase
 
                 query = query.OrderByDescending(w => w.fkcontentmaterials.d_date);
 
-                if (query.Any())
-                {
-                    int ItemCount = query.Count();
+               int itemCount = query.Count();
 
-                    var materialsList = query
-                        .Select(s => new MaterialsModel
-                        {
-                            Id = s.fkcontentmaterials.id,
-                            Title = s.fkcontentmaterials.c_title,
-                            Alias = s.fkcontentmaterials.c_alias,
-                            PreviewImage = new Photo()
-                            {
-                                Url = s.fkcontentmaterials.c_preview
-                            },
-                            Text = s.fkcontentmaterials.c_text,
-                            Url = s.fkcontentmaterials.c_url,
-                            UrlName = s.fkcontentmaterials.c_url_name,
-                            Date = s.fkcontentmaterials.d_date,
-                            Keyw = s.fkcontentmaterials.c_keyw,
-                            Desc = s.fkcontentmaterials.c_desc,
-                            Disabled = s.fkcontentmaterials.b_disabled,
-                            Important = s.fkcontentmaterials.b_important
-                        })
+                var materialsList = query
                         .Skip(filtr.Size * (filtr.Page - 1))
                         .Take(filtr.Size)
-                        .ToArray();
+                        .Select(s => new MaterialsModel
+                         {
+                             Id = s.fkcontentmaterials.id,
+                             Title = s.fkcontentmaterials.c_title,
+                             Alias = s.fkcontentmaterials.c_alias,
+                             PreviewImage = new Photo()
+                             {
+                                 Url = s.fkcontentmaterials.c_preview
+                             },
+                             Text = s.fkcontentmaterials.c_text,
+                             Url = s.fkcontentmaterials.c_url,
+                             UrlName = s.fkcontentmaterials.c_url_name,
+                             Date = s.fkcontentmaterials.d_date,
+                             Keyw = s.fkcontentmaterials.c_keyw,
+                             Desc = s.fkcontentmaterials.c_desc,
+                             Disabled = s.fkcontentmaterials.b_disabled,
+                             Important = s.fkcontentmaterials.b_important
+                         });
 
-                    return new MaterialsList
+                if (!materialsList.Any())
+                    return null;
+
+                return new MaterialsList
+                {
+                    Data = materialsList.ToArray(),
+                    Pager = new Pager
                     {
-                        Data = materialsList,
-                        Pager = new Pager
-                        {
-                            page = filtr.Page,
-                            size = filtr.Size,
-                            items_count = ItemCount,
-                            page_count = (ItemCount % filtr.Size > 0) ? (ItemCount / filtr.Size) + 1 : ItemCount / filtr.Size
-                        }
-                    };
-                }
-                return null;
+                        page = filtr.Page,
+                        size = filtr.Size,
+                        items_count = itemCount,
+                        page_count = (itemCount % filtr.Size > 0) ? (itemCount / filtr.Size) + 1 : itemCount / filtr.Size
+                    }
+                };
             }
         }
 
@@ -259,16 +241,6 @@ namespace cms.dbase
         {
             using (var db = new CMSdb(_context))
             {
-                MaterialGroup[] groups = null;
-                if (!string.IsNullOrEmpty(domain))
-                {
-                    var content = db_getDomainContentTypeId(db, domain);
-                    if (content != null && content.Id.HasValue)
-                    {
-                        groups = db_getMaterialGroups(db, id, content.Id.Value);
-                    }
-                }
-
                 var data = db.content_materialss
                     .Where(w => w.id == id)
                     .Select(s => new MaterialsModel
@@ -290,17 +262,17 @@ namespace cms.dbase
                         Important = s.b_important,
                         ContentLink = (Guid)s.f_content_origin,
                         ContentLinkType = s.c_content_type_origin,
-                        Groups = groups
-                        //Groups = (Guid)s.fkcontentmaterialslinks
-                        //    .Where(w => w.f_link_id.Equals(s.uui_origin))
-                        //    .Where(w => w.f_link_type.Equals(s.c_origin_type))
-                        //    .Select(t => t.f_group)
-                        //    .SingleOrDefault(),
-                        //Event = (Guid?)s.fkcontentmaterialslinks
-                        //    //(Guid?)db.content_materials_links
-                        //    //.Where(w => w.f_material.Equals(s.id))
-                        //    .Where(w => w.f_link_type.Equals("event"))
-                        //    .Select(t => t.f_link_id).SingleOrDefault()
+
+                        GroupsId = s.fkcontentmaterialsgroupslinkmaterials
+                                    .Select(g =>
+                                    g.f_group).ToArray(),
+
+                        Groups = s.fkcontentmaterialsgroupslinkmaterials
+                                    .Select(g => new MaterialsGroup()
+                                    {
+                                        Id = g.f_group,
+                                        Title = g.fkcontentmaterialsgroups.c_title
+                                    }).ToArray()
                     });
 
                 if (!data.Any()) { return null; }
@@ -361,7 +333,9 @@ namespace cms.dbase
 
                         db.Insert(cdMaterial);
                         db.Insert(cdMaterialLink);
-                        db_updateMaterialGroups(db, material.Id, material.ContentLink, material.Groups);
+
+                        db_updateMaterialGroups(db, material.Id, material.GroupsId);
+
                         tran.Commit();
 
                         return true;
@@ -411,34 +385,34 @@ namespace cms.dbase
 
 
                         // обновляем событие
-                       /* if (material.Event != null)
-                        {
-                            var e = db.content_materials_links
-                                .Where(w => w.f_material.Equals(material.Id))
-                                .Where(w => w.f_link_type.Equals("event"));
+                        /* if (material.Event != null)
+                         {
+                             var e = db.content_materials_links
+                                 .Where(w => w.f_material.Equals(material.Id))
+                                 .Where(w => w.f_link_type.Equals("event"));
 
-                            if (e.Any())
-                            {
-                                db.content_materials_links
-                                    .Where(w => w.f_material.Equals(material.Id))
-                                    .Where(w => w.f_link_type.Equals("event"))
-                                    .Set(u => u.f_link_id, material.Event)
-                                    .Set(u => u.f_group, material.Groups)
-                                    .Update();
-                            }
-                            else
-                            {
-                                db.content_materials_links
-                                    .Value(u => u.f_material, material.Id)
-                                    .Value(u => u.f_link_id, material.Event)
-                                    .Value(u => u.f_link_type, "event")
-                                    .Value(u => u.f_group, material.Groups)
-                                    .Insert();
-                            }
-                        }*/
+                             if (e.Any())
+                             {
+                                 db.content_materials_links
+                                     .Where(w => w.f_material.Equals(material.Id))
+                                     .Where(w => w.f_link_type.Equals("event"))
+                                     .Set(u => u.f_link_id, material.Event)
+                                     .Set(u => u.f_group, material.Groups)
+                                     .Update();
+                             }
+                             else
+                             {
+                                 db.content_materials_links
+                                     .Value(u => u.f_material, material.Id)
+                                     .Value(u => u.f_link_id, material.Event)
+                                     .Value(u => u.f_link_type, "event")
+                                     .Value(u => u.f_group, material.Groups)
+                                     .Insert();
+                             }
+                         }*/
 
                         db.Update(cdMaterial);
-                        db_updateMaterialGroups(db, material.Id, material.ContentLink, material.Groups);
+                        db_updateMaterialGroups(db, material.Id, material.GroupsId);
                         tran.Commit();
 
                         return true;
@@ -508,6 +482,43 @@ namespace cms.dbase
             }
         }
 
+
+        /// Добавляем связи новостей и организаций
+        public override bool insertMaterialsOrgsLink(MaterialOrgs data)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                using (var tran = db.BeginTransaction())
+                {
+
+                    //Удаляем существующие связи, кроме той организации, которой новость принадлежит.
+                    db.content_materials_links
+                                               .Where(w => w.f_material.Equals(data.MaterialId))
+                                               .Where(w => !w.f_link_id.Equals(data.ContentLink))
+                                               .Delete();
+
+                    if (data.Orgs != null && data.Orgs.Count()>0)
+                    {
+                        foreach (var org in data.Orgs)
+                        {
+                            if (org != data.ContentLink)
+                            {
+                                db.content_materials_links
+                                               .Value(v => v.f_material, data.MaterialId)
+                                               .Value(v => v.f_link_id, org)
+                                               .Value(v => v.f_link_type, "org")
+                                               .Insert();
+                            }
+
+                        }
+
+                    }
+                    tran.Commit();
+                }
+                return true;
+            }
+        }
+
         /// <summary>
         /// Добавляем связи новостей и организаций
         /// </summary>
@@ -557,26 +568,5 @@ namespace cms.dbase
             }
         }
 
-        /// <summary>
-        /// Получаем список событий для новостей
-        /// </summary>
-        /// <returns></returns>
-        public override MaterialsEvents[] getMaterialsEvents()
-        {
-            using (var db = new CMSdb(_context))
-            {
-                var data = db.content_eventss
-                    .Where(w => !w.b_disabled)
-                    .OrderByDescending(o => o.d_date)
-                    .Select(s => new MaterialsEvents
-                    {
-                        Id = s.id,
-                        Title = s.c_title
-                    });
-
-                if (!data.Any()) return null;
-                else return data.ToArray();
-            }
-        }
     }
 }

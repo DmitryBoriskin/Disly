@@ -13,8 +13,6 @@ namespace Disly.Areas.Admin.Controllers
         MaterialsViewModel model;
         FilterParams filter;
 
-        int page_size = 40;
-
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             base.OnActionExecuting(filterContext);
@@ -25,16 +23,20 @@ namespace Disly.Areas.Admin.Controllers
             ViewBag.HttpKeys = Request.QueryString.AllKeys;
             ViewBag.Query = Request.QueryString;
 
+            filter = getFilter(page_size);
+
             model = new MaterialsViewModel()
             {
                 Account = AccountInfo,
                 Settings = SettingsInfo,
                 UserResolution = UserResolutionInfo,
                 ControllerName = ControllerName,
-                ActionName = ActionName,
-                Groups = _cmsRepository.getMaterialsGroups(),
-                Events = _cmsRepository.getMaterialsEvents()
+                ActionName = ActionName
             };
+
+            //Справочник всех доступных категорий
+            MaterialsGroup[] GroupsValues = _cmsRepository.getAllMaterialGroups();
+            ViewBag.AllGroups = GroupsValues;
 
             #region Метатеги
             ViewBag.Title = UserResolutionInfo.Title;
@@ -47,9 +49,8 @@ namespace Disly.Areas.Admin.Controllers
         public ActionResult Index(string category, string type)
         {
             // Наполняем фильтр значениями
-            filter = getFilter(page_size);
-            // Наполняем модель данными
-            model.List = _cmsRepository.getMaterialsList(filter);
+            var mfilter = FilterParams.Extend<MaterialFilter>(filter);
+            model.List = _cmsRepository.getMaterialsList(mfilter);
 
             return View(model);
         }
@@ -75,7 +76,27 @@ namespace Disly.Areas.Admin.Controllers
                     model.Item.PreviewImage = getInfoPhoto(photo.Url);
                 }
             }
-           
+
+            //Заполняем для модели связи с другими объектами
+            var eventFilter = FilterParams.Extend<EventFilter>(filter);
+            eventFilter.Size = last_items;
+            eventFilter.MaterialId = Id;
+            EventsShort[] materialToEvents = _cmsRepository.getShortEventsList(eventFilter);
+
+            var orgfilter = FilterParams.Extend<OrgFilter>(filter);
+            orgfilter.MaterialId = Id;
+            OrgsShort[] materialsToOrgs = _cmsRepository.getShortOrgsList(orgfilter);
+
+            model.Item.Links = new ObjectLinks()
+            {
+                Events = materialToEvents,
+                Orgs = materialsToOrgs,
+                //Persons = null
+            };
+
+#warning Решить вопрос с ошибкой, если модель заполнена, значения из ViewBag не подставляются для
+            //ViewBag.GroupsValues = new MultiSelectList(GroupsValues, "Id", "Title", model.Item != null ? model.Item.GroupsId : null);
+            //model.Item.GroupsId = null;
             return View("Item", model);
         }
 
@@ -252,7 +273,7 @@ namespace Disly.Areas.Admin.Controllers
             return RedirectToAction("Index");
         }
 
-        // admin/materials/orgs/{id}
+        //Получение списка организаций по параметрам
         [HttpGet]
         public ActionResult Orgs(Guid id)
         {

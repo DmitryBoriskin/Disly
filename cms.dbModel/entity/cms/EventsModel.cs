@@ -81,5 +81,32 @@ namespace cms.dbModel.entity
         /// Изображение
         /// </summary>
         public Photo PreviewImage { get; set; }
+
+
+        /// <summary>
+        /// Связь с другими объектами/сущностями
+        /// </summary>
+        public ObjectLinks Links { get; set; }
+    }
+
+    /// <summary>
+    /// Модель, описывающая события для привязки к новостям/событиям/организации/персоне и т.д
+    /// </summary>
+    public class EventsShort
+    {
+        /// <summary>
+        /// Идентификатор
+        /// </summary>
+        public Guid Id { get; set; }
+
+        /// <summary>
+        /// Название
+        /// </summary>
+        public string Title { get; set; }
+
+        /// <summary>
+        /// Дата начала события
+        /// </summary>
+        public DateTime DateBegin { get; set; }
     }
 }
