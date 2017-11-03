@@ -49,9 +49,11 @@ namespace Disly.Areas.Admin.Controllers
         public ActionResult Index(string category, string type)
         {
             // Наполняем фильтр значениями
-            var filter = (MaterialFilter) getFilter(page_size);
+            var filter = getFilter(page_size);
+            var mfilter = FilterParams.Extend<MaterialFilter>(filter);
+
             // Наполняем модель данными
-            model.List = _cmsRepository.getMaterialsList(filter);
+            model.List = _cmsRepository.getMaterialsList(mfilter);
 
             return View(model);
         }

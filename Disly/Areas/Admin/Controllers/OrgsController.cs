@@ -44,8 +44,9 @@ namespace Disly.Areas.Admin.Controllers
         // GET: Admin/Orgs
         public ActionResult Index()
         {
-            var filter = (OrgFilter)getFilter();
-            model.OrgList = _cmsRepository.getOrgsList(filter);//+ список организаций
+            var filter = getFilter();
+            var orgfilter = FilterParams.Extend<OrgFilter>(filter);
+            model.OrgList = _cmsRepository.getOrgsList(orgfilter);//+ список организаций
             return View(model);
         }   
              
