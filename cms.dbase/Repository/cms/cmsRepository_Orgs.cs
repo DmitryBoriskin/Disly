@@ -13,42 +13,108 @@ namespace cms.dbase
     /// </summary>
     public partial class cmsRepository : abstract_cmsRepository
     {
+
+        /// <summary>
+        /// Строим запрос на основе фильтра
+        /// </summary>
+        /// <param name="db"></param>
+        /// <param name="filtr"></param>
+        /// <returns></returns>
+        private IQueryable<content_orgs> QueryByOrgFilter(CMSdb db, OrgFilter filtr)
+        {
+            var query = db.content_orgss
+                               .OrderBy(o => o.n_sort)
+                               .AsQueryable();
+
+            if (!string.IsNullOrEmpty(filtr.Domain))
+            {
+#warning  Дописать потом что должно происходить!!!
+            }
+
+            if (!string.IsNullOrEmpty(filtr.SearchText))
+            {
+                query = query.Where(w => w.c_title.Contains(filtr.SearchText));
+            }
+
+            if (filtr.MaterialId.HasValue && filtr.MaterialId.Value != Guid.Empty)
+            {
+                //В таблице content_materials_link ищем связи оранизация - новость
+                var orgMaterials = db.content_materials_links
+                    .Where(s => s.f_material == filtr.MaterialId.Value)
+                    .Where(s => s.f_link_type == "org");
+
+                if (!orgMaterials.Any())
+                    query = query.Where(o => o.id == Guid.Empty); //Делаем заранее ложный запрос
+                else
+                {
+                    var orgMaterialsId = orgMaterials.Select(o => o.f_link_id);
+                    query = query.Where(o => orgMaterialsId.Contains(o.id));
+                }
+            }
+            if (filtr.EventId.HasValue && filtr.EventId.Value != Guid.Empty)
+            {
+                //В таблице content_materials_link ищем связи оранизация - новость
+                var orgMaterials = db.content_events_links
+                    .Where(s => s.f_event == filtr.EventId.Value)
+                    .Where(s => s.f_link_type == "org");
+
+                if (!orgMaterials.Any())
+                    query = query.Where(o => o.id == Guid.Empty); //Делаем заранее ложный запрос
+                else
+                {
+                    var orgMaterialsId = orgMaterials.Select(o => o.f_link_id);
+                    query = query.Where(o => orgMaterialsId.Contains(o.id));
+                }
+            }
+
+            return query;
+        }
+
+        public override OrgsList getOrgsList(OrgFilter filtr)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                //Получаем сформированный запрос по фильтру
+                var query = QueryByOrgFilter(db, filtr);
+
+                var itemCount = query.Count();
+
+                var data = query.Select(s => new OrgsModel()
+                {
+                    Id = s.id,
+                    Title = s.c_title,
+                    Sort = s.n_sort,
+                    Types = s.contentorgstypeslinkorgs.Select(t => t.f_type).ToArray()
+                });
+                if (!data.Any())
+                    return null;
+
+                return new OrgsList
+                {
+                    Data = data.ToArray(),
+                    Pager = new Pager
+                    {
+                        page = filtr.Page,
+                        size = filtr.Size,
+                        items_count = itemCount,
+                        page_count = (itemCount % filtr.Size > 0) ? (itemCount / filtr.Size) + 1 : itemCount / filtr.Size
+                    }
+                };
+            }
+        }
+
         /// <summary>
         /// Получаем список организаций по фильтру
         /// </summary>
         /// <param name="filtr">Фильтр</param>
         /// <returns></returns>         
-        public override OrgsModel[] getOrgsList(OrgFilter filtr)
+        public override OrgsModel[] getOrgs(OrgFilter filtr)
         {
             using (var db = new CMSdb(_context))
             {
-                var query = db.content_orgss
-                                .OrderBy(o => o.n_sort)
-                                .AsQueryable();
+                //Получаем сформированный запрос по фильтру
+                var query = QueryByOrgFilter(db, filtr);
 
-                if(!string.IsNullOrEmpty(filtr.Domain))
-                {
-#warning  Дописать потом что должно происходить!!!
-                }
-
-                if (!string.IsNullOrEmpty(filtr.SearchText))
-                {
-                    query = query.Where(w => w.c_title.Contains(filtr.SearchText));
-                }
-
-                if (filtr.MaterialId.HasValue && filtr.MaterialId.Value != Guid.Empty )
-                {
-                    //В таблице content_materials_link ищем связи оранизация - новость
-                    var orgMaterials = db.content_materials_links
-                        .Where(s => s.f_material == filtr.MaterialId.Value)
-                        .Where(s=> s.f_link_type == "org");
-
-                    if (!orgMaterials.Any())
-                        return null;
-
-                    var orgMaterialsId = orgMaterials.Select(o => o.f_link_id);
-                    query = query.Where(o => orgMaterialsId.Contains(o.id));
-                }
                 //data.OrderBy(o => o.n_sort); ХЗ почему эта строка нормально не сортирует
 
                 var data = query.Select(s => new OrgsModel()
@@ -56,6 +122,31 @@ namespace cms.dbase
                     Id = s.id,
                     Title = s.c_title,
                     Sort = s.n_sort,
+                    Types = s.contentorgstypeslinkorgs.Select(t => t.f_type).ToArray()
+                });
+                if (data.Any())
+                    return data.ToArray();
+
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Получаем список организаций по фильтру
+        /// </summary>
+        /// <param name="filtr">Фильтр</param>
+        /// <returns></returns>         
+        public override OrgsShort[] getShortOrgsList(OrgFilter filtr)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                //Получаем сформированный запрос по фильтру
+                var query = QueryByOrgFilter(db, filtr);
+
+                var data = query.Select(s => new OrgsShort()
+                {
+                    Id = s.id,
+                    Title = s.c_title,
                     Types = s.contentorgstypeslinkorgs.Select(t => t.f_type).ToArray()
                 });
                 if (data.Any())

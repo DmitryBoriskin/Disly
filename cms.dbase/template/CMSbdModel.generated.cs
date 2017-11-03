@@ -780,10 +780,10 @@ namespace cms.dbase.models
 		#region Associations
 
 		/// <summary>
-		/// fk_content_events_link_BackReference
+		/// FK_fk_content_events_BackReference
 		/// </summary>
 		[Association(ThisKey="id", OtherKey="f_event", CanBeNull=true, IsBackReference=true)]
-		public IEnumerable<content_events_link> fkcontenteventslinks { get; set; }
+		public IEnumerable<content_events_link> fkcontenteventss { get; set; }
 
 		#endregion
 	}
@@ -791,18 +791,18 @@ namespace cms.dbase.models
 	[Table(Schema="dbo", Name="content_events_link")]
 	public partial class content_events_link
 	{
-		[Column, NotNull    ] public Guid   f_event     { get; set; } // uniqueidentifier
-		[Column, NotNull    ] public Guid   f_link_id   { get; set; } // uniqueidentifier
-		[Column, NotNull    ] public string f_link_type { get; set; } // varchar(16)
-		[Column,    Nullable] public string c_group     { get; set; } // varchar(32)
+		[PrimaryKey, NotNull] public Guid   id          { get; set; } // uniqueidentifier
+		[Column,     NotNull] public Guid   f_event     { get; set; } // uniqueidentifier
+		[Column,     NotNull] public Guid   f_link_id   { get; set; } // uniqueidentifier
+		[Column,     NotNull] public string f_link_type { get; set; } // varchar(16)
 
 		#region Associations
 
 		/// <summary>
-		/// fk_content_events_link
+		/// FK_fk_content_events
 		/// </summary>
-		[Association(ThisKey="f_event", OtherKey="id", CanBeNull=false, KeyName="fk_content_events_link", BackReferenceName="fkcontenteventslinks")]
-		public content_events fkcontenteventslink { get; set; }
+		[Association(ThisKey="f_event", OtherKey="id", CanBeNull=false, KeyName="FK_fk_content_events", BackReferenceName="fkcontenteventss")]
+		public content_events fkcontentevents { get; set; }
 
 		#endregion
 	}
@@ -1525,16 +1525,16 @@ namespace cms.dbase.models
 		#region Associations
 
 		/// <summary>
-		/// FK_import_frmp_orgs_peoples_import_frmp_peoples
-		/// </summary>
-		[Association(ThisKey="f_people", OtherKey="id", CanBeNull=false, KeyName="FK_import_frmp_orgs_peoples_import_frmp_peoples", BackReferenceName="importfrmporgspeoplesimportfrmppeopless")]
-		public import_frmp_peoples importfrmporgspeoplesimportfrmppeoples { get; set; }
-
-		/// <summary>
 		/// FK_import_frmp_orgs_peoples_import_frmp_orgs
 		/// </summary>
 		[Association(ThisKey="f_oid", OtherKey="c_oid", CanBeNull=false, KeyName="FK_import_frmp_orgs_peoples_import_frmp_orgs", BackReferenceName="importfrmporgspeoplesimportfrmporgss")]
 		public import_frmp_orgs importfrmporgspeoplesimportfrmporgs { get; set; }
+
+		/// <summary>
+		/// FK_import_frmp_orgs_peoples_import_frmp_peoples
+		/// </summary>
+		[Association(ThisKey="f_people", OtherKey="id", CanBeNull=false, KeyName="FK_import_frmp_orgs_peoples_import_frmp_peoples", BackReferenceName="importfrmporgspeoplesimportfrmppeopless")]
+		public import_frmp_peoples importfrmporgspeoplesimportfrmppeoples { get; set; }
 
 		#endregion
 	}
@@ -1771,6 +1771,12 @@ namespace cms.dbase.models
 				t.id == id);
 		}
 
+		public static content_events_link Find(this ITable<content_events_link> table, Guid id)
+		{
+			return table.FirstOrDefault(t =>
+				t.id == id);
+		}
+
 		public static content_feedbacks Find(this ITable<content_feedbacks> table, Guid id)
 		{
 			return table.FirstOrDefault(t =>
@@ -1899,4 +1905,3 @@ namespace cms.dbase.models
 		}
 	}
 }
- 

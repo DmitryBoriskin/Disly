@@ -33,6 +33,9 @@ namespace Disly.Areas.Admin.Controllers
         public string ControllerName;
         public string ActionName;
 
+        public int page_size = 40;
+        public int last_items = 10;
+
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             base.OnActionExecuting(filterContext);
@@ -126,6 +129,7 @@ namespace Disly.Areas.Admin.Controllers
             return query;
         }
 
+#warning В будущем переписать используя json объект 
         public FilterParams getFilter(int defaultPageSize = 20)
         {
             string return_url = HttpUtility.UrlDecode(Request.Url.Query);

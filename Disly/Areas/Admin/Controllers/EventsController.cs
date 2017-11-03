@@ -53,10 +53,11 @@
          /// <returns></returns>
          public ActionResult Index(string category, string type)
          {
-             // Наполняем модель данными
-             model.List = _cmsRepository.getEventsList(filter);
+            // Наполняем модель данными
+            var evfilter = FilterParams.Extend<EventFilter>(filter);
+            model.List = _cmsRepository.getEventsList(evfilter);
  
-             return View(model);
+            return View(model);
          }
  
          /// <summary>
@@ -79,6 +80,24 @@
                     model.Item.PreviewImage = getInfoPhoto(photo.Url);
                 }
             }
+
+            //Заполняем для модели связи с другими объектами
+            var eventFilter = FilterParams.Extend<EventFilter>(filter);
+            eventFilter.Size = last_items;
+            eventFilter.EventId = Id;
+            EventsShort[] materialToEvents = _cmsRepository.getShortEventsList(eventFilter);
+
+            var orgfilter = FilterParams.Extend<OrgFilter>(filter);
+            orgfilter.EventId = Id;
+            OrgsShort[] materialsToOrgs = _cmsRepository.getShortOrgsList(orgfilter);
+
+            model.Item.Links = new ObjectLinks()
+            {
+                Events = materialToEvents,
+                Orgs = materialsToOrgs,
+                //Persons = null
+            };
+
             return View("Item", model);
          }
  
@@ -250,5 +269,36 @@
  
              return View("Item", model);
          }
-     }
+
+        //Получение списка организаций по параметрам для отображения в модальном окне
+        [HttpGet]
+        public ActionResult EventListModal(Guid objId, string relObj)
+        {
+            //var filtr = new OrgFilter()
+            //{
+            //    Domain = Domain
+            //};
+
+            //if (relObj == "material")
+            //{
+            //    filtr.MaterialId = objId;
+            //}
+            //else if (relObj == "event")
+            //{
+            //    filtr.EventId = objId;
+            //}
+
+            //var model = new OrgsModalViewModel()
+            //{
+
+            //    OrgsList = _cmsRepository.getOrgs(filtr),
+            //    OrgsAll = _cmsRepository.getOrgs(new OrgFilter() { }),
+            //    OrgsTypes = _cmsRepository.getOrgTypesList(new OrgTypeFilter() { })
+            //};
+
+
+
+            return PartialView("Modal/Events", model);
+        }
+    }
  }

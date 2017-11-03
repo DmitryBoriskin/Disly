@@ -13,6 +13,7 @@ namespace Disly.Areas.Admin.Controllers
     {
         //ovp- это вьюха объединяющая в себе структурное подразделение и департамент(отдел)
         OrgsViewModel model;
+        FilterParams filter;
 
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
@@ -23,6 +24,8 @@ namespace Disly.Areas.Admin.Controllers
 
             ViewBag.HttpKeys = Request.QueryString.AllKeys;
             ViewBag.Query = Request.QueryString;
+
+            filter = getFilter();
 
             model = new OrgsViewModel()
             {
@@ -44,12 +47,10 @@ namespace Disly.Areas.Admin.Controllers
         // GET: Admin/Orgs
         public ActionResult Index()
         {
-            var filter = getFilter();
             var orgfilter = FilterParams.Extend<OrgFilter>(filter);
-            
-            model.OrgList = _cmsRepository.getOrgsList(orgfilter);//+ список организаций
+            model.OrgList = _cmsRepository.getOrgs(orgfilter);//+ список организаций
             return View(model);
-        }   
+        }
              
         /// <summary>
         /// Формируем строку фильтра
@@ -636,21 +637,28 @@ namespace Disly.Areas.Admin.Controllers
 
 
 
-        //Получение списка организаций по параметрам
+        //Получение списка организаций по параметрам для отображения в модальном окне
         [HttpGet]
-        public ActionResult OrgsList(Guid materialId)
+        public ActionResult OrgsListModal(Guid objId, string relObj)
         {
             var filtr = new OrgFilter()
             {
-                MaterialId = materialId,
                 Domain = Domain
             };
 
+            if (relObj == "material")
+            {
+                filtr.MaterialId = objId;
+            }
+            else if(relObj == "event")
+            {
+                filtr.EventId = objId;
+            }
 
             var model = new OrgsModalViewModel()
             {
-                OrgsList = _cmsRepository.getOrgsList(filtr),
-                OrgsAll = _cmsRepository.getOrgsList(new OrgFilter(){ }),
+                OrgsList = _cmsRepository.getOrgs(filtr),
+                OrgsAll = _cmsRepository.getOrgs(new OrgFilter(){ }),
                 OrgsTypes = _cmsRepository.getOrgTypesList(new OrgTypeFilter(){ })
             };
 
@@ -676,11 +684,11 @@ namespace Disly.Areas.Admin.Controllers
 
         [HttpPost]
         [MultiButton(MatchFormKey = "action", MatchFormValue = "save-org-btn")]
-        public ActionResult Orgs(OrgsModalViewModel model)
+        public ActionResult OrgsListModal(OrgsModalViewModel model, string relObjct)
         {
-            MaterialOrgsLink modelInsert = new MaterialOrgsLink
+            MaterialOrgs modelInsert = new MaterialOrgs
             {
-                MaterialOrgs = model.OrgsId,
+                Orgs = model.OrgsId,
                 MaterialId = model.MaterialId,
                 ContentLink = model.ContentLink
             };

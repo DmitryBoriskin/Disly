@@ -90,17 +90,6 @@ namespace cms.dbModel.entity
         public bool Disabled { get; set; }
 
         /// <summary>
-        /// Группа
-        /// </summary>
-        //public SelectListItem[] GroupsId { get; set; }
-        public Guid[] GroupsId { get; set; }
-
-        /// <summary>
-        /// Группа
-        /// </summary>
-        public MaterialsGroup[] Groups { get; set; }
-
-        /// <summary>
         /// ссылка на организацию/событие/персону по умолчанию
         /// </summary>
         public Guid ContentLink { get; set; }
@@ -110,10 +99,21 @@ namespace cms.dbModel.entity
         /// </summary>
         public string ContentLinkType { get; set; }
 
+        //-------------------------------------------------------------
         /// <summary>
-        /// Событие
+        /// Группа
         /// </summary>
-        public Guid? Event { get; set; }
+        //public SelectListItem[] GroupsId { get; set; }
+        public Guid[] GroupsId { get; set; }
+        /// <summary>
+        /// Группы
+        /// </summary>
+        public MaterialsGroup[] Groups { get; set; }
+
+        /// <summary>
+        /// Связь с другими объектами/сущностями
+        /// </summary>
+        public ObjectLinks Links { get; set; }
     }
 
     /// <summary>
@@ -136,42 +136,4 @@ namespace cms.dbModel.entity
         /// </summary>
         public int Sort { get; set; }
     }
-
-    /// <summary>
-    /// Модель, описывающая события для привязки к новостям
-    /// </summary>
-    public class MaterialsEvents
-    {
-        /// <summary>
-        /// Идентификатор
-        /// </summary>
-        public Guid Id { get; set; }
-
-        /// <summary>
-        /// Название
-        /// </summary>
-        public string Title { get; set; }
-    }
-
-    /// <summary>
-    /// Модель, описывающая совокупность новости и привязанных к ней организаций
-    /// </summary>
-    public class MaterialOrgsLink
-    {
-        /// <summary>
-        ///  Id Новости
-        /// </summary>
-        public Guid MaterialId { get; set; }
-
-        /// <summary>
-        /// Сссылка на сущность, кому принадлежит новость изначально (ее нельзя update/delete)
-        /// </summary>
-        public Guid ContentLink { get; set; }
-
-        /// <summary>
-        /// Список привязанных Организаций
-        /// </summary>
-        public Guid[] MaterialOrgs { get; set; }
-    }
-
 }
