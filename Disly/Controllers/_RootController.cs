@@ -2,7 +2,10 @@
 using cms.dbModel.entity;
 using System;
 using System.Configuration;
+using System.Linq;
 using System.Reflection;
+using System.Text.RegularExpressions;
+using System.Web;
 using System.Web.Mvc;
 
 namespace Disly.Controllers
@@ -18,6 +21,7 @@ namespace Disly.Controllers
         public string ControllerName;
         public string ActionName;
         public string ViewName;
+        public string StartUrl;
 
         protected SitesModel siteModel;
         protected SiteMapModel[] siteMapArray;
@@ -70,6 +74,83 @@ namespace Disly.Controllers
                     controllerContext.HttpContext.Request[MatchFormKey] == MatchFormValue;
             }
         }
+
+
+        public FilterParams getFilter(int defaultPageSize = 20)
+        {
+            string return_url = HttpUtility.UrlDecode(Request.Url.Query);
+            // если в URL номер страницы равен значению по умолчанию - удаляем его из URL
+            try
+            {
+                return_url = (Convert.ToInt32(Request.QueryString["page"]) == 1) ? addFiltrParam(return_url, "page", String.Empty) : return_url;
+            }
+            catch
+            {
+                return_url = addFiltrParam(return_url, "page", String.Empty);
+            }
+            try
+            {
+                return_url = (Convert.ToInt32(Request.QueryString["size"]) == defaultPageSize) ? addFiltrParam(return_url, "size", String.Empty) : return_url;
+            }
+            catch
+            {
+                return_url = addFiltrParam(return_url, "size", String.Empty);
+            }
+            return_url = (!Convert.ToBoolean(Request.QueryString["disabled"])) ? addFiltrParam(return_url, "disabled", String.Empty) : return_url;
+            return_url = String.IsNullOrEmpty(Request.QueryString["searchtext"]) ? addFiltrParam(return_url, "searchtext", String.Empty) : return_url;
+            // Если парамметры из адресной строки равны значениям по умолчанию - удаляем их из URL
+            if (return_url.ToLower() != HttpUtility.UrlDecode(Request.Url.Query).ToLower())
+                Response.Redirect(StartUrl + return_url);
+
+            DateTime? DateNull = new DateTime?();
+
+            FilterParams result = new FilterParams()
+            {
+                Domain = Domain,
+                Page = (Convert.ToInt32(Request.QueryString["page"]) > 0) ? Convert.ToInt32(Request.QueryString["page"]) : 1,
+                Size = (Convert.ToInt32(Request.QueryString["size"]) > 0) ? Convert.ToInt32(Request.QueryString["size"]) : defaultPageSize,
+                Type = (String.IsNullOrEmpty(Request.QueryString["type"])) ? String.Empty : Request.QueryString["type"],
+                Categoty = (String.IsNullOrEmpty(Request.QueryString["category"])) ? String.Empty : Request.QueryString["category"],
+                Group = (String.IsNullOrEmpty(Request.QueryString["group"])) ? String.Empty : Request.QueryString["group"],
+                Lang = (String.IsNullOrEmpty(Request.QueryString["lang"])) ? String.Empty : Request.QueryString["lang"],
+                Date = (String.IsNullOrEmpty(Request.QueryString["date"])) ? DateNull : DateTime.Parse(Request.QueryString["date"]),
+                DateEnd = (String.IsNullOrEmpty(Request.QueryString["dateend"])) ? DateNull : DateTime.Parse(Request.QueryString["dateend"]),
+                SearchText = (String.IsNullOrEmpty(Request.QueryString["searchtext"])) ? String.Empty : Request.QueryString["searchtext"],
+                Disabled = (String.IsNullOrEmpty(Request.QueryString["disabled"])) ? false : Convert.ToBoolean(Request.QueryString["disabled"])
+            };
+
+            if (result.Date != DateNull && result.DateEnd == DateNull)
+            {
+                result.DateEnd = ((DateTime)result.Date).AddDays(1);
+            }
+
+            return result;
+        }
+
+        public string addFiltrParam(string query, string name, string val)
+        {
+            //string search_Param = @"\b" + name + @"=[\w]*[\b]*&?";
+            string search_Param = @"\b" + name + @"=(.*?)(&|$)";
+            string normal_Query = @"&$";
+
+            Regex delParam = new Regex(search_Param, RegexOptions.CultureInvariant);
+            Regex normalQuery = new Regex(normal_Query);
+            query = delParam.Replace(query, String.Empty);
+            query = normalQuery.Replace(query, String.Empty);
+
+            if (val != String.Empty)
+            {
+                if (query.IndexOf("?") > -1) query += "&" + name + "=" + val;
+                else query += "?" + name + "=" + val;
+            }
+
+            query = query.Replace("?&", "?").Replace("&&", "&");
+
+            return query;
+        }
+
+
+
     }
 }
 
