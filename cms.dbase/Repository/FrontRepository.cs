@@ -117,6 +117,7 @@ namespace cms.dbase
                 var data = db.content_sv_sitemap_menus
                     .Where(w => w.f_site.Equals(domain))
                     .Where(w => !w.b_disabled)
+                    .OrderBy(o => o.n_sort)
                     .Select(s => new SiteMapModel
                     {
                         Id = s.id,

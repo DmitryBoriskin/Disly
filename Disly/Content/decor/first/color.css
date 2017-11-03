@@ -1,7 +1,57 @@
-﻿.top-slider-wrapper{
+﻿/* slider */
+.top-slider-wrapper{
     background-color:#ccd3e0;
 }
 .slider-text-block{
     background-color:#1f4799;
     color:#fff;
 }
+.slider-controls a{
+    color:#8fa3cc;
+}
+.slider-controls a:hover{
+    color:#fff;
+}
+.slider-message{
+    background-color:#fff;
+    color:#a7a7a7;
+}
+.slider-message.blue.active{
+    background-color:#3973e6;
+    color:#fff;
+}
+.slider-message.orange.active{
+    background-color:#e55639;
+    color:#fff;
+}
+.slider-message.blue .slider-message-title,
+.slider-message.blue .icon-slider-message{
+    color:#3973e6;
+}
+.slider-message.blue.active .slider-message-title,
+.slider-message.blue.active .icon-slider-message,
+.slider-message.orange.active .slider-message-title,
+.slider-message.orange.active .icon-slider-message{
+    color:#fff;
+}
+
+.slider-message.orange .slider-message-title,
+.slider-message.orange .icon-slider-message{
+    color:#e65639;
+}
+/*  */
+
+/* bottom-banners */
+.bottom-banner-item {
+    color: #222222;
+}
+/*  */
+
+/* sitemap plates */
+.sitemap-plates-block a{
+    color:#000;
+}
+.sitemap-plate{
+    background-color:#ebedf2;
+}
+/*  */

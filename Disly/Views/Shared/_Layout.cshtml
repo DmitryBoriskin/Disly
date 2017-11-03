@@ -81,7 +81,7 @@
             }
             <ul class="nav navbar-nav navbar-right">
                 <li><a href="">EN</a></li>
-                <li><a href="" class="search"></a></li>
+                <li><a href="" class="icon-search"></a></li>
             </ul>
         </div>
         <!-- конец главного меню -->
@@ -104,14 +104,16 @@
                             Url = s.Photo.Url,
                             Text = s.Text
                         });
-            
+
             <div class="row bottom-banners">
                 @foreach (var item in bannerBottom)
                 {
                     <div class="col-sm-2">
-                        <div class="bottom-banner-item">
-                            <a href="@item.Url">@item.Title</a>
-                        </div>
+                        <a href="@item.Url">
+                            <div class="bottom-banner-item">
+                                <div class="bottom-banner-inner">@item.Title</div>
+                            </div>
+                        </a>
                     </div>
                 }
             </div>
@@ -138,7 +140,7 @@
                 <div class="col-md-4">
                     <form>
                         <input class="search-form" type="text" placeholder="Поиск по сайту" value="" />
-                        <a href="" class="search bottom-search"></a>
+                        <a href="" class="icon-search bottom-search"></a>
                     </form>
                     <ul class="nav navbar-nav bottom_menu navbar-right">
                         <li><a href="">Карта сайта</a></li>
@@ -166,19 +168,19 @@
                         }
                         @if (!string.IsNullOrEmpty(Model.SitesInfo.Vk))
                         {
-                            <a href="@Model.SitesInfo.Vk" class="vk"></a>
+                            <a href="@Model.SitesInfo.Vk" class="icon-vk"></a>
                         }
                         @if (!string.IsNullOrEmpty(Model.SitesInfo.Instagramm))
                         {
-                            <a href="@Model.SitesInfo.Instagramm" class="instagramm"></a>
+                            <a href="@Model.SitesInfo.Instagramm" class="icon-instagramm"></a>
                         }
                         @if (!string.IsNullOrEmpty(Model.SitesInfo.Odnoklassniki))
                         {
-                            <a href="@Model.SitesInfo.Odnoklassniki" class="od"></a>
+                            <a href="@Model.SitesInfo.Odnoklassniki" class="icon-odnoklassniki"></a>
                         }
                         @if (!string.IsNullOrEmpty(Model.SitesInfo.Twitter))
                         {
-                            <a href="@Model.SitesInfo.Twitter" class="twitter"></a>
+                            <a href="@Model.SitesInfo.Twitter" class="icon-twitter"></a>
                         }
                     </div>
                 </div>
