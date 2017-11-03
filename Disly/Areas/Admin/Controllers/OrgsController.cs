@@ -46,6 +46,7 @@ namespace Disly.Areas.Admin.Controllers
         {
             var filter = getFilter();
             var orgfilter = FilterParams.Extend<OrgFilter>(filter);
+            
             model.OrgList = _cmsRepository.getOrgsList(orgfilter);//+ список организаций
             return View(model);
         }   
