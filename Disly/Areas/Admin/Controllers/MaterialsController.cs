@@ -11,8 +11,6 @@ namespace Disly.Areas.Admin.Controllers
     public class MaterialsController : CoreController
     {
         MaterialsViewModel model;
-        FilterParams filter;
-
         int page_size = 40;
 
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
@@ -36,6 +34,10 @@ namespace Disly.Areas.Admin.Controllers
                 Events = _cmsRepository.getMaterialsEvents()
             };
 
+            //Категории
+            MaterialGroup[] GroupsValues = _cmsRepository.getAllMaterialGroups();//.Select(g => new {Id = g.Id, Title = g.Title}).ToArray();
+            ViewBag.AllGroups = GroupsValues;
+
             #region Метатеги
             ViewBag.Title = UserResolutionInfo.Title;
             ViewBag.Description = "";
@@ -47,7 +49,7 @@ namespace Disly.Areas.Admin.Controllers
         public ActionResult Index(string category, string type)
         {
             // Наполняем фильтр значениями
-            filter = getFilter(page_size);
+            var filter = (MaterialFilter) getFilter(page_size);
             // Наполняем модель данными
             model.List = _cmsRepository.getMaterialsList(filter);
 
@@ -75,7 +77,10 @@ namespace Disly.Areas.Admin.Controllers
                     model.Item.PreviewImage = getInfoPhoto(photo.Url);
                 }
             }
-           
+
+#warning Решить вопрос с ошибкой, если модель заполнена, значения из ViewBag не подставляются для
+            //ViewBag.GroupsValues = new MultiSelectList(GroupsValues, "Id", "Title", model.Item != null ? model.Item.GroupsId : null);
+            //model.Item.GroupsId = null;
             return View("Item", model);
         }
 
@@ -252,7 +257,7 @@ namespace Disly.Areas.Admin.Controllers
             return RedirectToAction("Index");
         }
 
-        // admin/materials/orgs/{id}
+        //Получение списка организаций по параметрам
         [HttpGet]
         public ActionResult Orgs(Guid id)
         {

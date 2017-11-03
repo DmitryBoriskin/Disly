@@ -221,7 +221,7 @@ public class Mailer
             catch (System.Net.WebException)
             {
                 throw new Exception("Ошибка при отправке");
-                results = "Ошибка при отправке";
+                //results = "Ошибка при отправке";
             }
 
             return results;

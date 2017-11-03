@@ -24,8 +24,8 @@ namespace cms.dbModel.entity
     /// </summary>
     public class MaterialGroup
     {
-        public Guid Id;
-        public string Name;
+        public Guid Id { get; set; }
+        public string Title { get; set; }
     }
 
     /// <summary>
@@ -36,12 +36,12 @@ namespace cms.dbModel.entity
         /// <summary>
         /// Список новостей
         /// </summary>
-        public MaterialsModel[] Data;
+        public MaterialsModel[] Data { get; set; }
 
         /// <summary>
         /// Пейджер
         /// </summary>
-        public Pager Pager;
+        public Pager Pager { get; set; }
     }
 
     /// <summary>
@@ -113,6 +113,12 @@ namespace cms.dbModel.entity
         /// </summary>
         [Required]
         public bool Disabled { get; set; }
+
+        /// <summary>
+        /// Группа
+        /// </summary>
+        //public SelectListItem[] GroupsId { get; set; }
+        public Guid[] GroupsId { get; set; }
 
         /// <summary>
         /// Группа

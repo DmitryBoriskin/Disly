@@ -22,10 +22,12 @@ namespace cms.dbase
         public cmsRepository()
         {
             _context = "defaultConnection";
+            LinqToDB.Common.Configuration.Linq.AllowMultipleQuery = true;
         }
         public cmsRepository(string ConnectionString)
         {
             _context = ConnectionString;
+            LinqToDB.Common.Configuration.Linq.AllowMultipleQuery = true;
         }
 
         /// <summary>

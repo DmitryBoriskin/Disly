@@ -244,8 +244,6 @@ namespace cms.dbase
         {
             using (var db = new CMSdb(_context))
             {
-                DateTime? ErrorDate = null;
-
                 var data = db.cms_userss.Where(w => w.id == id)
                     .Set(u => u.с_change_pass_code, Code)
                     .Update();

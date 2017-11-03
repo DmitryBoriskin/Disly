@@ -70,7 +70,12 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="entity\cms\MaterialsModel.cs" />
-    <Compile Include="entity\FilterParams.cs" />
+    <Compile Include="entity\Filter\OrgTypeFilter.cs" />
+    <Compile Include="entity\Filter\VacancyFilter.cs" />
+    <Compile Include="entity\Filter\EventFilter.cs" />
+    <Compile Include="entity\Filter\MaterialFilter.cs" />
+    <Compile Include="entity\Filter\OrgFilter.cs" />
+    <Compile Include="entity\Filter\FilterParams.cs" />
     <Compile Include="entity\Photo.cs" />
     <Compile Include="entity\SettingsModel.cs">
       <SubType>Code</SubType>

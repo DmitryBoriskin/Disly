@@ -120,7 +120,7 @@ namespace Disly.Areas.Admin.Controllers
                         new SelectListItem { Text = "Событие", Value = "event" }
                     }, "Value", "Text", OrgType
                 );
-            model.OrgsList = new SelectList(_cmsRepository.getOrgs(filter), "Id", "Title", ContentId);
+            model.OrgsList = new SelectList(_cmsRepository.getOrgsList((OrgFilter)filter), "Id", "Title", ContentId);
             model.PeopleList = new SelectList(_cmsRepository.getPersonList(filter).Data, "Id", "FIO", ContentId);
             model.EventsList = new SelectList(_cmsRepository.getEventsList(filter).Data, "Id", "Title", ContentId);
             #endregion
@@ -269,7 +269,7 @@ namespace Disly.Areas.Admin.Controllers
                         new SelectListItem { Text = "Событие", Value = "event" }
                     }, "Value", "Text", OrgType
                 );
-            model.OrgsList = new SelectList(_cmsRepository.getOrgs(filter), "Id", "Title", ContentId);
+            model.OrgsList = new SelectList(_cmsRepository.getOrgsList((OrgFilter)filter), "Id", "Title", ContentId);
             model.PeopleList = new SelectList(_cmsRepository.getPersonList(filter).Data, "Id", "FIO", ContentId);
             model.EventsList = new SelectList(_cmsRepository.getEventsList(filter).Data, "Id", "Title", ContentId);
             #endregion
