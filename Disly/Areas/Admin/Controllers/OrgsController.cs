@@ -652,36 +652,40 @@ namespace Disly.Areas.Admin.Controllers
                 OrgsTypes = _cmsRepository.getOrgTypesList(new OrgTypeFilter(){ })
             };
 
-            //model.OrgsByType = _cmsRepository.getOrgByType(id);
 
-            // прочие организации, непривязанные к типам
-            /*OrgType anotherOrgs = new OrgType
+            if (model.OrgsTypes != null)
             {
-                Id = Guid.Parse("4D30E508-5C56-43A0-9F25-EEFF026F95EF"),
-                Title = "Прочие организации",
-                Sort = model.OrgsByType.Select(s => s.Sort).Max() + 1,
-                Orgs = _cmsRepository.getOrgAttachedToTypes(id)
-            };
+                foreach (var orgtype in model.OrgsTypes)
+                {
+                    if (orgtype.Sort == 1000)
+                    {
+                        var list1 = model.OrgsAll.Where(t => t.Types == null).ToArray();
+                    }
 
-            if (anotherOrgs.Orgs != null)
-                model.OrgsByType.Add(anotherOrgs);*/
+                    else
+                    {
+                        var list2 = model.OrgsAll.Where(t => t.Types != null && t.Types.Contains(orgtype.Id)).ToArray();
+                    }
+                }
+            }
 
-            return PartialView("Orgs", model);
+            return PartialView("Modal/Orgs", model);
         }
 
-        // [HttpPost]
-        // [MultiButton(MatchFormKey = "action", MatchFormValue = "save-org-btn")]
-        // public ActionResult Orgs(MaterialsViewModel model)
-        // {
-        //     MaterialOrgType modelInsert = new MaterialOrgType
-        //     {
-        //         OrgTypes = model.OrgsByType,
-        //         Material = model.Item
-        //     };
+        [HttpPost]
+        [MultiButton(MatchFormKey = "action", MatchFormValue = "save-org-btn")]
+        public ActionResult Orgs(OrgsModalViewModel model)
+        {
+            MaterialOrgsLink modelInsert = new MaterialOrgsLink
+            {
+                MaterialOrgs = model.OrgsId,
+                MaterialId = model.MaterialId,
+                ContentLink = model.ContentLink
+            };
 
-        //     _cmsRepository.insertMaterialsLinksToOrgs(modelInsert);
+            _cmsRepository.insertMaterialsOrgsLink(modelInsert);
 
-        //     return PartialView("OrgsSaved");
-        // }
+            return PartialView("OrgsSaved");
+        }
     }
 }

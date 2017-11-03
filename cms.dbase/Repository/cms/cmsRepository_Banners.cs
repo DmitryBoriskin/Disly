@@ -4,7 +4,6 @@ using cms.dbModel;
 using cms.dbModel.entity;
 using cms.dbase.models;
 using LinqToDB;
-using cms.dbModel.entity.cms;
 
 namespace cms.dbase
 {

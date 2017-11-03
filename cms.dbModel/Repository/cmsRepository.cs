@@ -1,5 +1,4 @@
 ﻿using cms.dbModel.entity;
-using cms.dbModel.entity.cms;
 using System;
 using System.Collections.Generic;
 
@@ -61,8 +60,8 @@ namespace cms.dbModel
         public abstract ResolutionsModel[] getGroupResolutions(string alias);
 
         // Материалы
-        public abstract MaterialGroup[] getAllMaterialGroups();
-        public abstract MaterialGroup[] getMaterialGroups(Guid materialId);
+        public abstract MaterialsGroup[] getAllMaterialGroups();
+        public abstract MaterialsGroup[] getMaterialGroups(Guid materialId);
 
         public abstract MaterialsList getMaterialsList(MaterialFilter filtr);
         public abstract MaterialsModel getMaterial(Guid id, string domain);
@@ -71,10 +70,14 @@ namespace cms.dbModel
         public abstract bool updateCmsMaterial(MaterialsModel material);
         public abstract bool deleteCmsMaterial(Guid id);
         public abstract MaterialsGroup[] getMaterialsGroups();
+
+        public abstract bool insertMaterialsOrgsLink(MaterialOrgsLink model);
         public abstract bool insertMaterialsLinksToOrgs(MaterialOrgType model);
-        public abstract MaterialsEvents[] getMaterialsEvents();
+
 
         // Events
+        public abstract MaterialsEvents[] getMaterialsEvents();
+
         public abstract EventsList getEventsList(FilterParams filtr);
         public abstract EventModel getEvent(Guid id);
 

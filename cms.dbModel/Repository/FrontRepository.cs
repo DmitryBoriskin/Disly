@@ -1,5 +1,4 @@
 ﻿using cms.dbModel.entity;
-using cms.dbModel.entity.cms;
 using System;
 
 namespace cms.dbModel

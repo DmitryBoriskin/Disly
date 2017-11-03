@@ -6,7 +6,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using cms.dbModel.entity.cms;
 
 namespace cms.dbase
 {

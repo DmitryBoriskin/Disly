@@ -4,31 +4,6 @@ using System.ComponentModel.DataAnnotations;
 namespace cms.dbModel.entity
 {
     /// <summary>
-    ///  сайт организации, события или персоны
-    /// </summary>
-    public class SiteContentType
-    {
-        /// <summary>
-        /// 
-        /// </summary>
-        public Guid? Id;
-
-        /// <summary>
-        /// тип
-        /// </summary>
-        public string CType;
-    }
-
-    /// <summary>
-    /// Группа новости
-    /// </summary>
-    public class MaterialGroup
-    {
-        public Guid Id { get; set; }
-        public string Title { get; set; }
-    }
-
-    /// <summary>
     /// Модель, описывающая список новостей
     /// </summary>
     public class MaterialsList
@@ -123,7 +98,7 @@ namespace cms.dbModel.entity
         /// <summary>
         /// Группа
         /// </summary>
-        public MaterialGroup[] Groups { get; set; }
+        public MaterialsGroup[] Groups { get; set; }
 
         /// <summary>
         /// ссылка на организацию/событие/персону по умолчанию
@@ -177,4 +152,26 @@ namespace cms.dbModel.entity
         /// </summary>
         public string Title { get; set; }
     }
+
+    /// <summary>
+    /// Модель, описывающая совокупность новости и привязанных к ней организаций
+    /// </summary>
+    public class MaterialOrgsLink
+    {
+        /// <summary>
+        ///  Id Новости
+        /// </summary>
+        public Guid MaterialId { get; set; }
+
+        /// <summary>
+        /// Сссылка на сущность, кому принадлежит новость изначально (ее нельзя update/delete)
+        /// </summary>
+        public Guid ContentLink { get; set; }
+
+        /// <summary>
+        /// Список привязанных Организаций
+        /// </summary>
+        public Guid[] MaterialOrgs { get; set; }
+    }
+
 }

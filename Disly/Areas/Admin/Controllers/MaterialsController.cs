@@ -35,7 +35,7 @@ namespace Disly.Areas.Admin.Controllers
             };
 
             //Категории
-            MaterialGroup[] GroupsValues = _cmsRepository.getAllMaterialGroups();//.Select(g => new {Id = g.Id, Title = g.Title}).ToArray();
+            MaterialsGroup[] GroupsValues = _cmsRepository.getAllMaterialGroups();//.Select(g => new {Id = g.Id, Title = g.Title}).ToArray();
             ViewBag.AllGroups = GroupsValues;
 
             #region Метатеги

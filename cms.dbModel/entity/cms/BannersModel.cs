@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace cms.dbModel.entity.cms
+namespace cms.dbModel.entity
 {
     /// <summary>
     /// Модель, описывающая баннеры

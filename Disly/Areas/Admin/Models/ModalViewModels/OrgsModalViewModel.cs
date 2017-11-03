@@ -9,6 +9,18 @@
      public class OrgsModalViewModel : CoreViewModel
      {
         /// <summary>
+        /// Новость
+        /// </summary>
+        public Guid MaterialId { get; set; }
+        /// <summary>
+        /// Ссылка на хозяина новости
+        /// </summary>
+        public Guid ContentLink { get; set; }
+        /// <summary>
+        /// Выбранные организации, к которым привязываем новость
+        /// </summary>
+        public Guid[] OrgsId { get; set; }
+        /// <summary>
         /// Список организаций по параметрам
         /// </summary>
         public OrgsModel[] OrgsList { get; set; }

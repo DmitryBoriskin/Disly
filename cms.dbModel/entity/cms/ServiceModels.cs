@@ -1,5 +1,39 @@
-﻿namespace cms.dbModel.entity
+﻿using System;
+
+namespace cms.dbModel.entity
 {
+    /// <summary>
+    ///  сайт организации, события или персоны
+    /// </summary>
+    public class SiteContentType
+    {
+        /// <summary>
+        /// 
+        /// </summary>
+        public Guid? Id;
+
+        /// <summary>
+        /// тип
+        /// </summary>
+        public string CType;
+    }
+
+    /// <summary>
+    /// Хлебные крошки
+    /// </summary>
+    public class BreadCrumb
+    {
+        /// <summary>
+        /// Ссылка
+        /// </summary>
+        public string Url { get; set; }
+
+        /// <summary>
+        /// Название
+        /// </summary>
+        public string Title { get; set; }
+    }
+
     /// <summary>
     /// Модель справочника
     /// Используется для построения фильтров, категорий 

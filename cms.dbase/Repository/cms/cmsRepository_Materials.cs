@@ -39,7 +39,7 @@ namespace cms.dbase
         }
 
         // Получение групп к которым относится новость
-        private MaterialGroup[] db_getMaterialGroups(CMSdb db, Guid materialId)
+        private MaterialsGroup[] db_getMaterialGroups(CMSdb db, Guid materialId)
         {
             var query = db.content_materials_groups_links.AsQueryable();
 
@@ -49,7 +49,7 @@ namespace cms.dbase
             }
 
             var data = query
-                 .Select(s => new MaterialGroup
+                 .Select(s => new MaterialsGroup
                  {
                      Id = s.f_group,
                      Title = s.fkcontentmaterialsgroups.c_title
@@ -96,7 +96,7 @@ namespace cms.dbase
         /// <param name="materialId"></param>
         /// <param name="contentId"></param>
         /// <returns></returns>
-        public override MaterialGroup[] getMaterialGroups(Guid materialId)
+        public override MaterialsGroup[] getMaterialGroups(Guid materialId)
         {
             using (var db = new CMSdb(_context))
             {
@@ -104,12 +104,12 @@ namespace cms.dbase
             }
         }
 
-        public override MaterialGroup[] getAllMaterialGroups()
+        public override MaterialsGroup[] getAllMaterialGroups()
         {
             using (var db = new CMSdb(_context))
             {
                 var data = db.content_materials_groupss
-                 .Select(s => new MaterialGroup
+                 .Select(s => new MaterialsGroup
                  {
                      Id = s.id,
                      Title = s.c_title
@@ -288,7 +288,7 @@ namespace cms.dbase
                         //            }).ToArray(),
 
                         Groups = s.fkcontentmaterialsgroupslinkmaterials
-                                    .Select(g => new MaterialGroup()
+                                    .Select(g => new MaterialsGroup()
                                     {
                                         Id = g.f_group,
                                         Title = g.fkcontentmaterialsgroups.c_title
@@ -509,6 +509,43 @@ namespace cms.dbase
 
                 if (!data.Any()) return null;
                 else return data.ToArray();
+            }
+        }
+
+
+        /// Добавляем связи новостей и организаций
+        public override bool insertMaterialsOrgsLink(MaterialOrgsLink data)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                using (var tran = db.BeginTransaction())
+                {
+
+                    //Удаляем существующие связи, кроме той организации, которой новость принадлежит.
+                    db.content_materials_links
+                                               .Where(w => w.f_material.Equals(data.MaterialId))
+                                               .Where(w => !w.f_link_id.Equals(data.ContentLink))
+                                               .Delete();
+
+                    if (data.MaterialOrgs != null && data.MaterialOrgs.Count()>0)
+                    {
+                        foreach (var org in data.MaterialOrgs)
+                        {
+                            if (org != data.ContentLink)
+                            {
+                                db.content_materials_links
+                                               .Value(v => v.f_material, data.MaterialId)
+                                               .Value(v => v.f_link_id, org)
+                                               .Value(v => v.f_link_type, "org")
+                                               .Insert();
+                            }
+
+                        }
+
+                    }
+                    tran.Commit();
+                }
+                return true;
             }
         }
 

@@ -55,7 +55,8 @@ namespace cms.dbase
                 {
                     Id = s.id,
                     Title = s.c_title,
-                    Sort = s.n_sort
+                    Sort = s.n_sort,
+                    Types = s.contentorgstypeslinkorgs.Select(t => t.f_type).ToArray()
                 });
                 if (data.Any())
                     return data.ToArray();

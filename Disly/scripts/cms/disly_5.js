@@ -18,7 +18,11 @@ $(document).ready(function () {
         width: "100%",
         allowClear: false
     });
-
+    $(".iCheck").iCheck({
+        checkboxClass: 'icheckbox_square-blue',
+        radioClass: 'icheckbox_square-blue'
+        //increaseArea: '%' //optional
+    });
 
     // Полоса прокрутки главного меню
     $(".menu-block").mCustomScrollbar();

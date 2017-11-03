@@ -46,7 +46,7 @@
                     Новость не привязана ни к одной организации
                 </div>
                 <div class="col-lg-2">
-                    @Html.ActionLink("Привязать", "OrgsList", "Orgs", new { @id = Model.Item.Id }, new { @id = "LogLists", @class = "button pop-up_frame icon-location-5", @data_class = "LogList", @title = "Организации для размещения" })
+                    @Html.ActionLink("Привязать", "orgsList", "orgs", new { @materialId = Model.Item.Id }, new { @id = "LogLists", @class = "button pop-up_frame icon-location-5", @data_class = "LogList", @title = "Организации для размещения" })
                 </div>
             </div>
         </div>

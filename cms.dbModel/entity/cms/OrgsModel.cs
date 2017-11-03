@@ -286,22 +286,6 @@ namespace cms.dbModel.entity
     }
     
     /// <summary>
-    /// Хлебные крошки
-    /// </summary>
-    public class BreadCrumb
-    {
-        /// <summary>
-        /// Ссылка
-        /// </summary>
-        public string Url { get; set; }
-
-        /// <summary>
-        /// Название
-        /// </summary>
-        public string Title { get; set; }
-    }
-
-    /// <summary>
     /// Модель, описывающая координаты
     /// </summary>
     public class CoordModel
@@ -389,5 +373,7 @@ namespace cms.dbModel.entity
         /// </summary>
         public MaterialsModel Material { get; set; }
     }
+
+
 }
 

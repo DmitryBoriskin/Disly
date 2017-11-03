@@ -29,13 +29,19 @@ namespace Disly
                 "~/Content/plugins/jquery/jquery.js",
                 "~/Content/plugins/jquery/jquery.ui.js"));
 
-            //Select2 plugin
-            bundles.Add(new ScriptBundle("~/bundles/select2/js").Include(
-               "~/scripts/plugins/select2/select2.min.js",
-               "~/scripts/plugins/select2/i18n/ru.js"));
-            bundles.Add(new StyleBundle("~/bundles/select2/css").Include(
-              "~/scripts/plugins/select2/css/select2.css",
-              "~/scripts/plugins/select2/css/select2_custom.css"));
+            //js plugins: select2, icheck
+            bundles.Add(new ScriptBundle("~/bundles/jq_plugins/js").Include(
+               "~/Content/plugins/select2/select2.min.js",
+               "~/Content/plugins/select2/i18n/ru.js",
+               "~/Content/plugins/icheck/icheck.min.js"
+               ));
+            bundles.Add(new StyleBundle("~/bundles/jq_plugins/css").Include(
+              "~/Content/plugins/select2/css/select2.css",
+              "~/Content/plugins/select2/css/select2_custom.css",
+              "~/Content/plugins/icheck/skins/all.css"
+              ));
+
+           
 
 
             // --------- Стили ---------
