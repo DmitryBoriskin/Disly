@@ -485,12 +485,14 @@
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\PressController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ServiceController.cs" />
     <Compile Include="Controllers\_RootController.cs" />
     <Compile Include="Controllers\PageController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Areas\Admin\Models\CoreViewModel.cs" />
+    <Compile Include="Models\NewsViewModel.cs" />
     <Compile Include="Models\HomePageViewModel.cs" />
     <Compile Include="Models\PageViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -676,6 +678,7 @@
     <Content Include="Content\fonts\themify\themify.eot" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Shared\services\Pager.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -687,6 +690,7 @@
     <Folder Include="App_Data\" />
     <Folder Include="Content\plugins\tinymce\plugins\colorpicker\" />
     <Folder Include="Views\Core\" />
+    <Folder Include="Views\Service\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\cms.dbase\cms.dbase.csproj">

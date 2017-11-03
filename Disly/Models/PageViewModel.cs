@@ -58,4 +58,15 @@ namespace Disly.Models
         /// </summary>
         public String BackUrl { get; set; }
     }
+
+
+    /// <summary>
+    /// /Модель для пейджера
+    /// </summary>
+    public class PagerFront
+    {
+        public string text { get; set; }
+        public string url { get; set; }
+        public bool isChecked { get; set; }
+    }
 }
