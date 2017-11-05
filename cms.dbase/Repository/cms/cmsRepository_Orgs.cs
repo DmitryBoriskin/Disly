@@ -36,40 +36,49 @@ namespace cms.dbase
                 query = query.Where(w => w.c_title.Contains(filtr.SearchText));
             }
 
-            if (filtr.MaterialId.HasValue && filtr.MaterialId.Value != Guid.Empty)
+            if (filtr.RelId.HasValue && filtr.RelId.Value != Guid.Empty)
             {
-                //В таблице content_materials_link ищем связи оранизация - новость
-                var orgMaterials = db.content_materials_links
-                    .Where(s => s.f_material == filtr.MaterialId.Value)
-                    .Where(s => s.f_link_type == "org");
+                //В таблице ищем связи оранизация - контент (новость/событие)
+                var objctLinks = db.content_content_links
+                    .Where(s => s.f_content == filtr.RelId.Value)
+                    .Where(s => s.f_link_type == "org")
+                    .Where(s => s.f_content_type == filtr.RelType.ToString().ToLower());
 
-                if (!orgMaterials.Any())
+                if (!objctLinks.Any())
                     query = query.Where(o => o.id == Guid.Empty); //Делаем заранее ложный запрос
                 else
                 {
-                    var orgMaterialsId = orgMaterials.Select(o => o.f_link_id);
-                    query = query.Where(o => orgMaterialsId.Contains(o.id));
-                }
-            }
-            if (filtr.EventId.HasValue && filtr.EventId.Value != Guid.Empty)
-            {
-                //В таблице content_materials_link ищем связи оранизация - новость
-                var orgMaterials = db.content_events_links
-                    .Where(s => s.f_event == filtr.EventId.Value)
-                    .Where(s => s.f_link_type == "org");
-
-                if (!orgMaterials.Any())
-                    query = query.Where(o => o.id == Guid.Empty); //Делаем заранее ложный запрос
-                else
-                {
-                    var orgMaterialsId = orgMaterials.Select(o => o.f_link_id);
-                    query = query.Where(o => orgMaterialsId.Contains(o.id));
+                    var objctsId = objctLinks.Select(o => o.f_link);
+                    query = query.Where(o => objctsId.Contains(o.id));
                 }
             }
 
             return query;
         }
 
+        private bool ContentLinkExists(Guid contentId, ContentType contentType, Guid linkId, ContentLinkType linkType)
+        {
+
+            using (var db = new CMSdb(_context))
+            {
+                var links = db.content_content_links
+                    .Where(s => s.f_content == contentId)
+                    .Where(s => s.f_content_type == contentType.ToString().ToLower())
+                    .Where(s => s.f_link == linkId)
+                    .Where(s => s.f_link_type == linkType.ToString().ToLower())
+                    .Select(s => s.f_link);
+                if (links.Any())
+                    return true;
+
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Постраничный список организаций
+        /// </summary>
+        /// <param name="filtr"></param>
+        /// <returns></returns>
         public override OrgsList getOrgsList(OrgFilter filtr)
         {
             using (var db = new CMSdb(_context))
@@ -132,25 +141,37 @@ namespace cms.dbase
         }
 
         /// <summary>
-        /// Получаем список организаций по фильтру
+        /// Получаем полный список доступных организаций с отмеченными значениями(для кот есть связи для объекта)
         /// </summary>
         /// <param name="filtr">Фильтр</param>
         /// <returns></returns>         
-        public override OrgsShort[] getShortOrgsList(OrgFilter filtr)
+        public override OrgsShortModel[] getOrgsListWhithChekedFor(OrgFilter filtr)
         {
             using (var db = new CMSdb(_context))
             {
                 //Получаем сформированный запрос по фильтру
-                var query = QueryByOrgFilter(db, filtr);
+                var query = db.content_orgss.AsQueryable();
 
-                var data = query.Select(s => new OrgsShort()
+                if(!string.IsNullOrEmpty(filtr.Domain))
                 {
-                    Id = s.id,
-                    Title = s.c_title,
-                    Types = s.contentorgstypeslinkorgs.Select(t => t.f_type).ToArray()
-                });
-                if (data.Any())
-                    return data.ToArray();
+                    //query = query;
+                }
+                if(filtr.RelId.HasValue && filtr.RelId.Value != Guid.Empty)
+                {
+                    var data = query
+                        .Select(s => new OrgsShortModel()
+                    {
+                        Id = s.id,
+                        Title = s.c_title,
+                        Types = (s.contentorgstypeslinkorgs.Select(t => t.f_type).Any())?
+                                s.contentorgstypeslinkorgs.Select(t => t.f_type).ToArray(): null,
+                        Checked = ContentLinkExists(filtr.RelId.Value, filtr.RelType, s.id, ContentLinkType.ORG)
+                    });
+
+                    if (data.Any())
+                        return data.ToArray();
+
+                }
 
                 return null;
             }
@@ -1107,12 +1128,7 @@ namespace cms.dbase
                                            }).ToArray();
                         return PeopleList.Any() ? PeopleList : null;
                     }
-
                 }
-
-
-
-
             }
             return null;
         }
@@ -1252,6 +1268,7 @@ namespace cms.dbase
             }
         }
 
+#warning удалить дублирование
         /// <summary>
         /// Отметим выбранные организации
         /// <param name="id">Идентификатор</param>
@@ -1260,9 +1277,9 @@ namespace cms.dbase
         {
             using (var db = new CMSdb(_context))
             {
-                var data = db.content_materials_links
-                    .Where(w => w.f_material.Equals(material))
-                    .Where(w => w.f_link_id.Equals(id));
+                var data = db.content_content_links
+                    .Where(w => w.f_content.Equals(material))
+                    .Where(w => w.f_link.Equals(id));
 
                 return data.Any();
             }

@@ -1,4 +1,4 @@
-﻿@model OrgsModalViewModel
+﻿@model EventsModalViewModel
 @{
     Layout = "~/Areas/Admin/Views/Shared/_popUp.cshtml";
 }
@@ -9,15 +9,33 @@
         <div class="buttons">
             <button type="submit" name="action" value="save-org-btn" class="btn btn-primary icon-create">СОХРАНИТЬ</button>
         </div>
-        <input type="hidden" name="MaterialId" value="@Model.MaterialId" />
-        <input type="hidden" name="ContentLink" value="@Model.ContentLink" />
+        @Html.HiddenFor(m => m.ObjctId)
+        @Html.HiddenFor(m => m.ObjctType)
 
-        
+        if(Model.EventsList != null && Model.EventsList.Count() > 0)
+        {
+            <div class="row">
+                @foreach (var item in Model.EventsList)
+                {
+                    <div class="col-sm-1 text-right">
+                        <input type="checkbox" name="EventsId[]" class="org-item-chkbx iCheck" value="@item.Id" data-init="false" @(item.Checked ? "checked" : null) />
+                    </div>
+                    <div class="col-sm-11">
+                        <strong>@item.DateBegin.ToShortDateString()</strong> 
+                            @item.Title
+                        
+                    </div>
+                    <div class="col-sm-offset-1 col-sm-11">
+                        @Html.Raw(item.Text.Substring(0, Math.Min(item.Text.Length, 150)))
+                    </div>
+                }
+            </div>
+        }
     }
     else
     {
         <div id="log-list_title">
-            <div class="alert alert-danger" role="alert">Список организаций для этой записи пуст.</div>
+            <div class="alert alert-danger" role="alert">Список событий для этой записи пуст.</div>
         </div>
     }
 </div>

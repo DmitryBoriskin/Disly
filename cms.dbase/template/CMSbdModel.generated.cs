@@ -47,15 +47,14 @@ namespace cms.dbase.models
 		public ITable<cms_users_group>                  cms_users_groups                  { get { return this.GetTable<cms_users_group>(); } }
 		public ITable<content_banner_sections>          content_banner_sectionss          { get { return this.GetTable<content_banner_sections>(); } }
 		public ITable<content_banners>                  content_bannerss                  { get { return this.GetTable<content_banners>(); } }
+		public ITable<content_content_link>             content_content_links             { get { return this.GetTable<content_content_link>(); } }
 		public ITable<content_departments>              content_departmentss              { get { return this.GetTable<content_departments>(); } }
 		public ITable<content_departments_phone>        content_departments_phones        { get { return this.GetTable<content_departments_phone>(); } }
 		public ITable<content_events>                   content_eventss                   { get { return this.GetTable<content_events>(); } }
-		public ITable<content_events_link>              content_events_links              { get { return this.GetTable<content_events_link>(); } }
 		public ITable<content_feedbacks>                content_feedbackss                { get { return this.GetTable<content_feedbacks>(); } }
 		public ITable<content_materials>                content_materialss                { get { return this.GetTable<content_materials>(); } }
 		public ITable<content_materials_groups>         content_materials_groupss         { get { return this.GetTable<content_materials_groups>(); } }
 		public ITable<content_materials_groups_link>    content_materials_groups_links    { get { return this.GetTable<content_materials_groups_link>(); } }
-		public ITable<content_materials_link>           content_materials_links           { get { return this.GetTable<content_materials_link>(); } }
 		public ITable<content_org_services>             content_org_servicess             { get { return this.GetTable<content_org_services>(); } }
 		public ITable<content_org_structure>            content_org_structures            { get { return this.GetTable<content_org_structure>(); } }
 		public ITable<content_orgs>                     content_orgss                     { get { return this.GetTable<content_orgs>(); } }
@@ -701,6 +700,16 @@ namespace cms.dbase.models
 		#endregion
 	}
 
+	[Table(Schema="dbo", Name="content_content_link")]
+	public partial class content_content_link
+	{
+		[PrimaryKey, NotNull] public Guid   id             { get; set; } // uniqueidentifier
+		[Column,     NotNull] public Guid   f_content      { get; set; } // uniqueidentifier
+		[Column,     NotNull] public string f_content_type { get; set; } // nvarchar(16)
+		[Column,     NotNull] public Guid   f_link         { get; set; } // uniqueidentifier
+		[Column,     NotNull] public string f_link_type    { get; set; } // nvarchar(16)
+	}
+
 	[Table(Schema="dbo", Name="content_departments")]
 	public partial class content_departments
 	{
@@ -776,35 +785,6 @@ namespace cms.dbase.models
 		[Column,     NotNull    ] public int      n_date_end_day    { get; set; } // int
 		[Column,        Nullable] public int?     n_date_begin_year { get; set; } // int
 		[Column,        Nullable] public int?     n_date_end_year   { get; set; } // int
-
-		#region Associations
-
-		/// <summary>
-		/// FK_fk_content_events_BackReference
-		/// </summary>
-		[Association(ThisKey="id", OtherKey="f_event", CanBeNull=true, IsBackReference=true)]
-		public IEnumerable<content_events_link> fkcontenteventss { get; set; }
-
-		#endregion
-	}
-
-	[Table(Schema="dbo", Name="content_events_link")]
-	public partial class content_events_link
-	{
-		[PrimaryKey, NotNull] public Guid   id          { get; set; } // uniqueidentifier
-		[Column,     NotNull] public Guid   f_event     { get; set; } // uniqueidentifier
-		[Column,     NotNull] public Guid   f_link_id   { get; set; } // uniqueidentifier
-		[Column,     NotNull] public string f_link_type { get; set; } // varchar(16)
-
-		#region Associations
-
-		/// <summary>
-		/// FK_fk_content_events
-		/// </summary>
-		[Association(ThisKey="f_event", OtherKey="id", CanBeNull=false, KeyName="FK_fk_content_events", BackReferenceName="fkcontenteventss")]
-		public content_events fkcontentevents { get; set; }
-
-		#endregion
 	}
 
 	[Table(Schema="dbo", Name="content_feedbacks")]
@@ -840,16 +820,10 @@ namespace cms.dbase.models
 		[Column,     NotNull    ] public string   c_alias               { get; set; } // varchar(512)
 		[Column,     NotNull    ] public bool     b_disabled            { get; set; } // bit
 		[Column,     NotNull    ] public bool     b_important           { get; set; } // bit
-		[Column,        Nullable] public Guid?    f_content_origin      { get; set; } // uniqueidentifier
-		[Column,        Nullable] public string   c_content_type_origin { get; set; } // varchar(64)
+		[Column,     NotNull    ] public Guid     f_content_origin      { get; set; } // uniqueidentifier
+		[Column,     NotNull    ] public string   c_content_type_origin { get; set; } // varchar(64)
 
 		#region Associations
-
-		/// <summary>
-		/// FK_fk_content_materials_BackReference
-		/// </summary>
-		[Association(ThisKey="id", OtherKey="f_material", CanBeNull=true, IsBackReference=true)]
-		public IEnumerable<content_materials_link> fkcontentmaterialss { get; set; }
 
 		/// <summary>
 		/// fk_content_materials_groups_link_material_BackReference
@@ -898,25 +872,6 @@ namespace cms.dbase.models
 		/// </summary>
 		[Association(ThisKey="f_material", OtherKey="id", CanBeNull=false, KeyName="fk_content_materials_groups_link_material", BackReferenceName="fkcontentmaterialsgroupslinkmaterials")]
 		public content_materials fkcontentmaterialsgroupslinkmaterial { get; set; }
-
-		#endregion
-	}
-
-	[Table(Schema="dbo", Name="content_materials_link")]
-	public partial class content_materials_link
-	{
-		[Column,     NotNull] public Guid   f_material  { get; set; } // uniqueidentifier
-		[Column,     NotNull] public Guid   f_link_id   { get; set; } // uniqueidentifier
-		[Column,     NotNull] public string f_link_type { get; set; } // varchar(16)
-		[PrimaryKey, NotNull] public Guid   id          { get; set; } // uniqueidentifier
-
-		#region Associations
-
-		/// <summary>
-		/// FK_fk_content_materials
-		/// </summary>
-		[Association(ThisKey="f_material", OtherKey="id", CanBeNull=false, KeyName="FK_fk_content_materials", BackReferenceName="fkcontentmaterialss")]
-		public content_materials fkcontentmaterials { get; set; }
 
 		#endregion
 	}
@@ -1525,16 +1480,16 @@ namespace cms.dbase.models
 		#region Associations
 
 		/// <summary>
-		/// FK_import_frmp_orgs_peoples_import_frmp_orgs
-		/// </summary>
-		[Association(ThisKey="f_oid", OtherKey="c_oid", CanBeNull=false, KeyName="FK_import_frmp_orgs_peoples_import_frmp_orgs", BackReferenceName="importfrmporgspeoplesimportfrmporgss")]
-		public import_frmp_orgs importfrmporgspeoplesimportfrmporgs { get; set; }
-
-		/// <summary>
 		/// FK_import_frmp_orgs_peoples_import_frmp_peoples
 		/// </summary>
 		[Association(ThisKey="f_people", OtherKey="id", CanBeNull=false, KeyName="FK_import_frmp_orgs_peoples_import_frmp_peoples", BackReferenceName="importfrmporgspeoplesimportfrmppeopless")]
 		public import_frmp_peoples importfrmporgspeoplesimportfrmppeoples { get; set; }
+
+		/// <summary>
+		/// FK_import_frmp_orgs_peoples_import_frmp_orgs
+		/// </summary>
+		[Association(ThisKey="f_oid", OtherKey="c_oid", CanBeNull=false, KeyName="FK_import_frmp_orgs_peoples_import_frmp_orgs", BackReferenceName="importfrmporgspeoplesimportfrmporgss")]
+		public import_frmp_orgs importfrmporgspeoplesimportfrmporgs { get; set; }
 
 		#endregion
 	}
@@ -1753,6 +1708,12 @@ namespace cms.dbase.models
 				t.id == id);
 		}
 
+		public static content_content_link Find(this ITable<content_content_link> table, Guid id)
+		{
+			return table.FirstOrDefault(t =>
+				t.id == id);
+		}
+
 		public static content_departments Find(this ITable<content_departments> table, Guid id)
 		{
 			return table.FirstOrDefault(t =>
@@ -1766,12 +1727,6 @@ namespace cms.dbase.models
 		}
 
 		public static content_events Find(this ITable<content_events> table, Guid id)
-		{
-			return table.FirstOrDefault(t =>
-				t.id == id);
-		}
-
-		public static content_events_link Find(this ITable<content_events_link> table, Guid id)
 		{
 			return table.FirstOrDefault(t =>
 				t.id == id);
@@ -1796,12 +1751,6 @@ namespace cms.dbase.models
 		}
 
 		public static content_materials_groups_link Find(this ITable<content_materials_groups_link> table, Guid id)
-		{
-			return table.FirstOrDefault(t =>
-				t.id == id);
-		}
-
-		public static content_materials_link Find(this ITable<content_materials_link> table, Guid id)
 		{
 			return table.FirstOrDefault(t =>
 				t.id == id);

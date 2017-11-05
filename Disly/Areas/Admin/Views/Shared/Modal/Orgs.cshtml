@@ -9,8 +9,8 @@
         <div class="buttons">
             <button type="submit" name="action" value="save-org-btn" class="btn btn-primary icon-create">СОХРАНИТЬ</button>
         </div>
-        <input type="hidden" name="MaterialId" value="@Model.MaterialId" />
-        <input type="hidden" name="ContentLink" value="@Model.ContentLink" />
+        @Html.HiddenFor(m => m.ObjctId)
+        @Html.HiddenFor(m => m.ObjctType)
 
         if (Model.OrgsTypes != null)
         {
@@ -23,36 +23,39 @@
                                 <input type="checkbox" class="org-type-chkbx iCheck" data-init="false" />
                                 @orgtype.Title
 
-                                @if (orgtype.Sort == 1000)
+                                @if (Model.OrgsList != null)
                                 {
-                                    var list = Model.OrgsAll.Where(t => t.Types == null).ToArray();
-                                    if (list.Any())
+                                    if (orgtype.Sort == 1000)
                                     {
-                                        <ul>
-                                            @foreach (var item in list)
-                                            {
-                                                <li>
-                                                    <input type="checkbox" name="OrgsId[]" class="org-item-chkbx iCheck" value="@item.Id" data-init="false" />
-                                                    @item.Title
-                                                </li>
-                                            }
-                                        </ul>
+                                        var list = Model.OrgsList.Where(t => t.Types == null);
+                                        if (list.Any())
+                                        {
+                                            <ul>
+                                                @foreach (var item in list)
+                                                {
+                                                    <li>
+                                                        <input type="checkbox" name="OrgsId[]" class="org-item-chkbx iCheck" value="@item.Id" data-init="false" @(item.Checked ? "checked" : null) />
+                                                        @item.Title
+                                                    </li>
+                                                }
+                                            </ul>
+                                        }
                                     }
-                                }
-                                else
-                                {
-                                    var list = Model.OrgsAll.Where(t => t.Types != null && t.Types.Contains(orgtype.Id)).ToArray();
-                                    if (list.Any())
+                                    else
                                     {
-                                        <ul>
-                                            @foreach (var item in list)
-                                            {
-                                                <li>
-                                                    <input type="checkbox" name="OrgsId[]" class="org-item-chkbx iCheck" value="@item.Id" data-init="false" />
-                                                    @item.Title
-                                                </li>
-                                            }
-                                        </ul>
+                                        var list = Model.OrgsList.Where(t => t.Types != null && t.Types.Contains(orgtype.Id));
+                                        if (list.Any())
+                                        {
+                                            <ul>
+                                                @foreach (var item in list)
+                                                {
+                                                    <li>
+                                                        <input type="checkbox" name="OrgsId[]" class="org-item-chkbx iCheck" value="@item.Id" data-init="false" @(item.Checked ? "checked" : null) />
+                                                        @item.Title
+                                                    </li>
+                                                }
+                                            </ul>
+                                        }
                                     }
                                 }
                             </li>

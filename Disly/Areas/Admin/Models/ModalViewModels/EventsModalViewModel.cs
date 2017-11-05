@@ -9,28 +9,21 @@
      public class EventsModalViewModel : CoreViewModel
      {
         /// <summary>
-        /// Новость
+        /// Id Новости или События
         /// </summary>
-        public Guid MaterialId { get; set; }
+        public Guid ObjctId { get; set; }
         /// <summary>
-        /// Ссылка на хозяина новости
+        /// Тип Новость или Событие
         /// </summary>
-        public Guid ContentLink { get; set; }
+        public string ObjctType { get; set; }
+
         /// <summary>
-        /// Выбранные организации, к которым привязываем новость
+        /// Выбранные события, к которым привязываем новость
         /// </summary>
-        public Guid[] OrgsId { get; set; }
+        public Guid[] EventsId { get; set; }
         /// <summary>
-        /// Список организаций по параметрам
+        /// справочник последних N событий, с выбранными событиями
         /// </summary>
-        public OrgsModel[] OrgsList { get; set; }
-        // <summary>
-        /// справочник всех организаций
-        /// </summary>
-        public OrgsModel[] OrgsAll { get; set; }
-        /// <summary>
-        /// Справочник всех типов организаций
-        /// </summary>
-        public OrgType[] OrgsTypes { get; set; }
+        public EventsShortModel[] EventsList { get; set; }
     }
  }

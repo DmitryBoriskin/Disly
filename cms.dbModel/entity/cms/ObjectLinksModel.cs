@@ -12,7 +12,7 @@ namespace cms.dbModel.entity
         /// <summary>
         /// События
         /// </summary>
-        public EventsShort[] Events { get; set; }
+        public EventsModel[] Events { get; set; }
 
         /// <summary>
         /// События
@@ -21,7 +21,7 @@ namespace cms.dbModel.entity
         /// <summary>
         /// События
         /// </summary>
-        public OrgsShort[] Orgs { get; set; }
+        public OrgsModel[] Orgs { get; set; }
 
         /// <summary>
         /// События

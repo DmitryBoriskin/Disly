@@ -1007,49 +1007,34 @@ namespace cms.dbase
                 query = query.Where(w => w.c_title.Contains(filtr.SearchText));
             }
 
-            if (filtr.MaterialId.HasValue && filtr.MaterialId.Value != Guid.Empty)
+            if (filtr.RelId.HasValue && filtr.RelId.Value != Guid.Empty)
             {
-                //В таблице content_materials_link ищем связи оранизация - новость
-                var eventMaterials = db.content_materials_links
-                    .Where(s => s.f_material == filtr.MaterialId.Value)
-                    .Where(s => s.f_link_type == "event");
+                //В таблице ищем связи оранизация - контент (новость/событие)
+                var objctLinks = db.content_content_links
+                    .Where(s => s.f_content == filtr.RelId.Value)
+                    .Where(s => s.f_content_type == filtr.RelType.ToString().ToLower())
+                    .Where(s => s.f_link_type == ContentLinkType.EVENT.ToString().ToLower());
 
-                if (!eventMaterials.Any())
+                if (!objctLinks.Any())
                     query = query.Where(o => o.id == Guid.Empty); //Делаем заранее ложный запрос
                 else
                 {
-                    var eventMaterialsId = eventMaterials.Select(o => o.f_link_id);
-                    query = query.Where(o => eventMaterialsId.Contains(o.id));
+                    var objctsId = objctLinks.Select(o => o.f_link);
+                    query = query.Where(o => objctsId.Contains(o.id));
                 }
-                
             }
-            if (filtr.EventId.HasValue && filtr.EventId.Value != Guid.Empty)
-            {
-                //В таблице content_materials_link ищем связи оранизация - новость
-                var eventMaterials = db.content_events_links
-                    .Where(s => s.f_event == filtr.EventId.Value)
-                    .Where(s => s.f_link_type == "event");
 
-                if (!eventMaterials.Any())
-                    query = query.Where(o => o.id == Guid.Empty); //Делаем заранее ложный запрос
-                else
-                {
-                    var eventMaterialsId = eventMaterials.Select(o => o.f_link_id);
-                    query = query.Where(o => eventMaterialsId.Contains(o.id));
-                }
-
-            }
 
             return query;
         }
 
-        public override EventModel getEvent(Guid id)
+        public override EventsModel getEvent(Guid id)
         {
             using (var db = new CMSdb(_context))
             {
                 var data = db.content_eventss.
                     Where(w => w.id == id).
-                    Select(s => new EventModel
+                    Select(s => new EventsModel
                     {
                         Id = s.id,
                         Num = s.num,
@@ -1080,8 +1065,6 @@ namespace cms.dbase
         {
             using (var db = new CMSdb(_context))
             {
-                //var query = db.content_eventss.AsQueryable();
-
                 var query = QueryByEventFilter(db, filtr);
 
                 int itemCount = query.Count();
@@ -1090,7 +1073,7 @@ namespace cms.dbase
                     .OrderByDescending(s => s.d_date)
                     .Skip(filtr.Size * (filtr.Page - 1))
                     .Take(filtr.Size)
-                    .Select(s => new EventModel
+                    .Select(s => new EventsModel
                     {
                         Id = s.id,
                         Num = s.num,
@@ -1129,32 +1112,43 @@ namespace cms.dbase
                 };
             }
         }
-        public override EventsShort[] getShortEventsList(EventFilter filtr)
+
+        public override EventsShortModel[] getLastEventsListWithCheckedFor(EventFilter filtr)
         {
             using (var db = new CMSdb(_context))
             {
-                var query = QueryByEventFilter(db, filtr);
-                query = query
-                            .OrderByDescending(s => s.d_date);
+                var query = db.content_eventss.AsQueryable()
+                                .OrderByDescending(s => s.d_date);
 
-                var List = query
+
+                if (!string.IsNullOrEmpty(filtr.Domain))
+                {
+
+                }
+
+                if (filtr.RelId.HasValue && filtr.RelId.Value != Guid.Empty)
+                {
+                    var List = query
                     .Take(filtr.Size)
-                    .Select(s => new EventsShort()
+                    .Select(s => new EventsShortModel()
                     {
                         Id = s.id,
                         Title = s.c_title,
                         DateBegin = s.d_date,
+                        Text = s.c_text,
+                        Checked = ContentLinkExists(filtr.RelId.Value, filtr.RelType, s.id, ContentLinkType.EVENT)
                     });
 
-                if (!List.Any())
-                    return null;
+                    if (List.Any())
+                        return List.ToArray();
+                }
 
-                return List.ToArray();
+                return null;
 
             }
         }
 
-        public override bool insertCmsEvent(EventModel eventData)
+        public override bool insertCmsEvent(EventsModel eventData)
         {
             try
             {
@@ -1210,7 +1204,7 @@ namespace cms.dbase
                 return false;
             }
         }
-        public override bool updateCmsEvent(EventModel eventData)
+        public override bool updateCmsEvent(EventsModel eventData)
         {
             try
             {

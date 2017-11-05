@@ -6,9 +6,9 @@ public class OrgFilter: FilterParams
     /// <summary>
     /// Должен передаваться либо MaterialId либо EventId
     /// </summary>
-    public Guid? MaterialId { get; set; }
+    public Guid? RelId { get; set; }
     /// <summary>
-    /// Должен передаваться либо MaterialId либо EventId
+    /// определяет в какой таблице связей искать связь с организацией
     /// </summary>
-    public Guid? EventId { get; set; }
+    public ContentType RelType { get; set; }
 }

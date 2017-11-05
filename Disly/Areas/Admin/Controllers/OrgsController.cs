@@ -637,47 +637,54 @@ namespace Disly.Areas.Admin.Controllers
 
 
 
-        //Получение списка организаций по параметрам для отображения в модальном окне
+        
+        /// <summary>
+        /// Для конкретного объекта получаем список организаций
+        /// </summary>
+        /// <param name="objId"></param>
+        /// <param name="objType"></param>
+        /// <returns></returns>
         [HttpGet]
-        public ActionResult OrgsListModal(Guid objId, string relObj)
+        public ActionResult OrgsListModal(Guid objId, ContentType objType)
         {
             var filtr = new OrgFilter()
             {
-                Domain = Domain
+                Domain = Domain,
+                RelId = objId,
+                RelType = objType
             };
-
-            if (relObj == "material")
-            {
-                filtr.MaterialId = objId;
-            }
-            else if(relObj == "event")
-            {
-                filtr.EventId = objId;
-            }
 
             var model = new OrgsModalViewModel()
             {
-                OrgsList = _cmsRepository.getOrgs(filtr),
-                OrgsAll = _cmsRepository.getOrgs(new OrgFilter(){ }),
+                ObjctId = objId,
+                ObjctType = objType.ToString().ToLower(),
+                OrgsList = _cmsRepository.getOrgsListWhithChekedFor(filtr),
                 OrgsTypes = _cmsRepository.getOrgTypesList(new OrgTypeFilter(){ })
             };
 
-
+            #region for test
             if (model.OrgsTypes != null)
             {
                 foreach (var orgtype in model.OrgsTypes)
                 {
                     if (orgtype.Sort == 1000)
                     {
-                        var list1 = model.OrgsAll.Where(t => t.Types == null).ToArray();
+                        if (model.OrgsList != null)
+                        {
+                            var list1 = model.OrgsList.Where(t => t.Types == null);
+                        }
                     }
 
                     else
                     {
-                        var list2 = model.OrgsAll.Where(t => t.Types != null && t.Types.Contains(orgtype.Id)).ToArray();
+                        if (model.OrgsList != null)
+                        {
+                            var list2 = model.OrgsList.Where(t => t.Types != null && t.Types.Contains(orgtype.Id));
+                        }
                     }
                 }
             }
+            #endregion
 
             return PartialView("Modal/Orgs", model);
         }
@@ -689,11 +696,10 @@ namespace Disly.Areas.Admin.Controllers
             MaterialOrgs modelInsert = new MaterialOrgs
             {
                 Orgs = model.OrgsId,
-                MaterialId = model.MaterialId,
-                ContentLink = model.ContentLink
+                MaterialId = model.ObjctId,
             };
 
-            _cmsRepository.insertMaterialsOrgsLink(modelInsert);
+            _cmsRepository.updateMaterialsOrgsLink(modelInsert);
 
             return PartialView("OrgsSaved");
         }

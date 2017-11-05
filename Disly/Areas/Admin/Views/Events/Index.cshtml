@@ -8,12 +8,12 @@
     <div class="content">
         <h1>@ViewBag.Title</h1>
 
-        @if (Model.List != null)
+        @if (Model.List != null && Model.List.Data != null)
         {
-            foreach (EventModel Item in Model.List.Data)
+            foreach (var item in Model.List.Data)
             {
 
-                string ImgUrl = (Item.PreviewImage != null) ? Item.PreviewImage.Url : null;
+                string ImgUrl = (item.PreviewImage != null) ? item.PreviewImage.Url : null;
                 if (ImgUrl == string.Empty || ImgUrl == null)
                 {
                     ImgUrl = "/Content/img/nophoto.jpg";
@@ -26,21 +26,21 @@
                     }
                 }
 
-                string disabled = (Item.Disabled) ? "disabled" : "";
+                string disabled = (item.Disabled) ? "disabled" : "";
 
                 <div class="list-item event-list @disabled">
-                    <a href="/admin/events/item/@Item.Id/@ViewBag.urlQuery">
+                    <a href="/admin/events/item/@item.Id/@ViewBag.urlQuery">
                         <img src="@ImgUrl" alt="" class="li-image">
                     </a>
                     <div class="li-desc">
-                        <a title="@Item.Title" class="li-caption" href="/admin/events/item/@Item.Id/@ViewBag.urlQuery">@Item.Title</a><br />
-                        <span>Дата проведения:</span> @Convert.ToDateTime(Item.DateBegin).ToString("dd MMMM yyyy")
-                        @if (Item.DateEnd.HasValue)
+                        <a title="@item.Title" class="li-caption" href="/admin/events/item/@item.Id/@ViewBag.urlQuery">@item.Title</a><br />
+                        <span>Дата проведения:</span> @Convert.ToDateTime(item.DateBegin).ToString("dd MMMM yyyy")
+                        @if (item.DateEnd.HasValue)
                         {
                             <span> - </span>
-                                @Convert.ToDateTime(Item.DateEnd).ToString("dd MMMM yyyy")
+                                @Convert.ToDateTime(item.DateEnd).ToString("dd MMMM yyyy")
                         }<br />
-                        <span>Место проведения:</span> @Item.Place<br />
+                        <span>Место проведения:</span> @item.Place<br />
                     </div>
 
                 </div>

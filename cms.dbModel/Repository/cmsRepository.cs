@@ -71,17 +71,17 @@ namespace cms.dbModel
         public abstract bool deleteCmsMaterial(Guid id);
         public abstract MaterialsGroup[] getMaterialsGroups();
 
-        public abstract bool insertMaterialsOrgsLink(MaterialOrgs model);
+        public abstract bool updateMaterialsOrgsLink(MaterialOrgs model);
         public abstract bool insertMaterialsLinksToOrgs(MaterialOrgType model);
 
 
         // Events
         public abstract EventsList getEventsList(EventFilter filtr);
-        public abstract EventsShort[] getShortEventsList(EventFilter filtr);
-        public abstract EventModel getEvent(Guid id);
+        public abstract EventsShortModel[] getLastEventsListWithCheckedFor(EventFilter filtr);
+        public abstract EventsModel getEvent(Guid id);
 
-        public abstract bool updateCmsEvent(EventModel eventData);
-        public abstract bool insertCmsEvent(EventModel eventData);
+        public abstract bool updateCmsEvent(EventsModel eventData);
+        public abstract bool insertCmsEvent(EventsModel eventData);
         public abstract bool deleteCmsEvent(Guid id);
 
 
@@ -100,8 +100,9 @@ namespace cms.dbModel
         //Orgs
         public abstract OrgsList getOrgsList(OrgFilter filtr);
         public abstract OrgsModel[] getOrgs(OrgFilter filtr);
-        public abstract OrgsShort[] getShortOrgsList(OrgFilter filtr);
         public abstract OrgsModel getOrgItem(Guid id);
+
+        public abstract OrgsShortModel[] getOrgsListWhithChekedFor(OrgFilter filtr);
 
         public abstract bool insOrgs(Guid id, OrgsModel model, Guid UserId, String IP);
         public abstract bool setOrgs(Guid id, OrgsModel model, Guid UserId, String IP);

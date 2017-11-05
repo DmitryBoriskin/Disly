@@ -79,18 +79,19 @@ namespace Disly.Areas.Admin.Controllers
 
             //Заполняем для модели связи с другими объектами
             var eventFilter = FilterParams.Extend<EventFilter>(filter);
-            eventFilter.Size = last_items;
-            eventFilter.MaterialId = Id;
-            EventsShort[] materialToEvents = _cmsRepository.getShortEventsList(eventFilter);
+            eventFilter.RelId = Id;
+            eventFilter.RelType = ContentType.MATERIAL;
+            var eventsList = _cmsRepository.getEventsList(eventFilter);
 
             var orgfilter = FilterParams.Extend<OrgFilter>(filter);
-            orgfilter.MaterialId = Id;
-            OrgsShort[] materialsToOrgs = _cmsRepository.getShortOrgsList(orgfilter);
+            orgfilter.RelId = Id;
+            orgfilter.RelType = ContentType.MATERIAL;
+            var orgs = _cmsRepository.getOrgs(orgfilter);
 
             model.Item.Links = new ObjectLinks()
             {
-                Events = materialToEvents,
-                Orgs = materialsToOrgs,
+                Events = (eventsList != null)? eventsList.Data: null,
+                Orgs = orgs,
                 //Persons = null
             };
 
