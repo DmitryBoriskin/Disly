@@ -9,6 +9,15 @@
             Text = s.Text,
             Link = Url
         });
+
+    var sitemapPlates = Model.SiteMapArray
+        .Where(w => w.MenuAlias.Equals("plate"))
+        .Select(s => new
+        {
+            Title = s.Title,
+            Url = !string.IsNullOrEmpty(s.Url) ? s.Url 
+            : s.Path.Equals("/") ? s.Path + s.Alias : s.Path + "/" + s.Alias
+        });
     int i = 0;
 }
 
@@ -18,7 +27,7 @@
         <div class="container">
             @if (slider != null && slider.Count() > 0)
             {
-                <div id="myCarousel" class="carousel slide" data-ride="carousel">
+                <div id="myCarousel" class="carousel slide slider" data-ride="carousel">
 
                     <!-- Wrapper for slides -->
                     <div class="carousel-inner">
@@ -40,29 +49,76 @@
                                         <div class="slider-text">
                                             @Html.Raw(text)
                                         </div>
+
+                                        <!-- Left and right controls -->
+                                        @if (slider.Count() > 1)
+                                        {
+                                            <div class="slider-controls">
+                                                <a class="left" href="#myCarousel" data-slide="prev">
+                                                    <span class="ti-arrow-circle-left"></span>
+                                                    <span class="sr-only">Previous</span>
+                                                </a>
+                                                <a class="right" href="#myCarousel" data-slide="next">
+                                                    <span class="ti-arrow-circle-right"></span>
+                                                    <span class="sr-only">Next</span>
+                                                </a>
+                                            </div>
+                                        }
+
                                     </div>
                                 </div>
                             </div>
                         }
                     </div>
 
-                    <!-- Left and right controls -->
-                    @if (slider.Count() > 1)
-                    {
-                        <div class="slider-controls">
-                            <a class="left" href="#myCarousel" data-slide="prev">
-                                <span class="ti-arrow-circle-left"></span>
-                                <span class="sr-only">Previous</span>
-                            </a>
-                            <a class="right" href="#myCarousel" data-slide="next">
-                                <span class="ti-arrow-circle-right"></span>
-                                <span class="sr-only">Next</span>
-                            </a>
-                        </div>
-                    }
                 </div>
             }
+
+            <div class="slider-message-block">
+                <a href="#">
+                    <div class="slider-message blue">
+                        <div class="icon-slider-message">
+                            <span class="ti-support"></span>
+                        </div>
+                        <div class="slider-message-full">
+                            <div class="slider-message-title">электронная&nbsp;регистратура</div>
+                            <div class="slider-message-text">Запишитесь на приём к врачу online</div>
+                        </div>
+                    </div>
+                </a>
+                <a href="#">
+                    <div class="slider-message orange">
+                        <div class="icon-slider-message">
+                            <span class="ti-check-box"></span>
+                        </div>
+                        <div class="slider-message-full">
+                            <div class="slider-message-title">нам&nbsp;важно&nbsp;ваше&nbsp;мнение!</div>
+                            <div class="slider-message-text">Пройдите опросы на нашем портале</div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
         </div>
     </div>
 </div>
 <!-- конец слайдера -->
+<!-- карта сайта плиткой -->
+<div class="container">
+    @if (sitemapPlates != null && sitemapPlates.Count() > 0)
+    {
+        <div class="sitemap-plates-block">
+            <div class="row">
+                @foreach (var item in sitemapPlates)
+                {
+                    <div class="col-sm-3">
+                        <a href="@item.Url">
+                            <div class="sitemap-plate">@item.Title</div>
+                        </a>
+                    </div>
+                }
+            </div>
+        </div>
+    }
+</div>
+<!-- конец карты сайта плиткой -->

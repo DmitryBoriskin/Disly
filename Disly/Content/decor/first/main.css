@@ -2,6 +2,7 @@
 @import url('/Content/fonts/PtSerif/ptserif.css');
 @import url('/Content/fonts/themify/themify-icons.css');
 @import url('/Content/fonts/fontello/fontello.css');
+@import url('/Content/fonts/OpenSans/opensans.css');
 
 body {
     font-family: PtSans;
@@ -12,6 +13,7 @@ body {
 
 .container {
     width: 1110px !important;
+    padding: 0;
 }
 
 .container-fluid {
@@ -74,14 +76,12 @@ body {
         padding-left: 0 !important;
     }
 
-.search {
+.icon-search {
     text-decoration: none !important;
 }
 
-    .search:before {
+    .icon-search:before {
         font-size: 16px;
-        font-family: 'fontello';
-        content: '\e825';
         font-weight: 100;
     }
 /*  */
@@ -97,6 +97,22 @@ body {
 
 .bottom-banner-item {
     border-top: 1px dotted;
+    width: 160px;
+}
+
+    .bottom-banner-item:active,
+    .bottom-banner-item:focus {
+        border-top: 2px solid;
+        font-weight: bold;
+    }
+
+.bottom-banner-inner:active,
+.bottom-banner-inner:focus {
+    padding-top: 14px;
+}
+
+.bottom-banner-inner {
+    padding-top: 15px;
 }
 /*  */
 
@@ -142,30 +158,8 @@ body {
 }
 
 .social_network_list a {
-    font-family: fontello;
     font-size: 18px;
     text-decoration: none !important;
-    padding-left: 15px;
-}
-
-/*.facebook:before {
-    content: '\edfc';
-}*/
-
-.vk:before {
-    content: '\ee73';
-}
-
-.instagramm:before {
-    content: '\e9ca';
-}
-
-.od:before {
-    content: '\eec0';
-}
-
-.twitter:before {
-    content: '\e9f1';
 }
 
 .metrica-block {
@@ -193,10 +187,19 @@ body {
 /* слайдер */
 .carousel-inner {
     height: 220px;
+    -webkit-box-shadow: 0px 20px 26px -10px rgba(0,0,0,0.47);
+    -moz-box-shadow: 0px 20px 26px -10px rgba(0,0,0,0.47);
+    box-shadow: 0px 20px 26px -10px rgba(0,0,0,0.47);
 }
+
+.slider {
+    width: 825px;
+}
+
 .slider-item {
-    display:table;
+    display: table;
 }
+
 .top-slider-wrapper {
     height: 290px;
     padding-top: 30px;
@@ -210,12 +213,73 @@ body {
 .slider-text-block {
     padding: 30px 25px;
     display: table-cell;
-    width:285px;
+    width: 285px;
 }
-.slider-text{
+
+.slider-text {
+    font-family: OpenSans;
+    font-size: 18px;
+    line-height: 1.7;
     position: relative;
-    height:150px;
-    overflow:hidden;
+    height: 150px;
+    overflow: hidden;
     bottom: 70px;
+}
+
+.slider-controls {
+    position: relative;
+    font-size: 15px;
+    bottom: 70px;
+}
+
+    .slider-controls a {
+        margin-right: 5px;
+        text-decoration: none !important;
+    }
+
+.slider-message-block {
+    float: right;
+    position: relative;
+    bottom: 220px;
+}
+
+    .slider-message-block a {
+        text-decoration: none !important;
+    }
+
+.slider-message {
+    width: 255px;
+    height: 100px;
+    padding: 15px 30px;
+    margin-bottom: 20px;
+    font-size: 14px;
+}
+
+.slider-message-title {
+    text-transform: uppercase;
+}
+
+.slider-message-full {
+    display: table-cell;
+}
+
+.icon-slider-message {
+    display: table-cell;
+    font-size: 17px;
+    position: relative;
+    right: 8px;
+    top: 2px;
+}
+/*  */
+
+/* карта сайта плиткой */
+.sitemap-plates-block a {
+    text-decoration:none;
+}
+.sitemap-plate{
+    padding:15px;
+    height:70px;
+    width:265px;
+    margin-bottom:15px;
 }
 /*  */
