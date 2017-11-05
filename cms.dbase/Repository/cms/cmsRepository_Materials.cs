@@ -133,21 +133,35 @@ namespace cms.dbase
             {
                 if (!string.IsNullOrEmpty(filtr.Domain))
                 {
-                    var content = db_getDomainContentTypeId(db, filtr.Domain);
+                    var contentType = ContentType.MATERIAL.ToString().ToLower();
 
-                    if (content != null && content.Id.HasValue)
-                    {
-                        var materials = db.content_content_links
-                                    .Where(w => w.f_link == content.Id)
-                                    .Where(w => w.f_content_type == ContentType.MATERIAL.ToString().ToLower());
+                    //Атавизм
+                    //var content = db_getDomainContentTypeId(db, filtr.Domain);
 
-                        if (!materials.Any())
-                            return null;
+                    //if (content != null && content.Id.HasValue)
+                    //{
+                    //    var materials = db.content_content_links
+                    //                .Where(w => w.f_link == content.Id)
+                    //                .Where(w => w.f_content_type == contentType);
+                    //if (!materials.Any())
+                    //    return null;
+                    //var materialsId = materials.Select(m => m.f_content);
 
-                        var materialsId = materials.Select(m => m.f_content);
+
+                    //Select t.*, s.* from[dbo].[content_content_link] t left join[dbo].[cms_sites] s
+                    //on t.f_link = s.f_content Where s.c_alias = 'main'
+                    var materials = db.content_content_links.Where(e => e.f_content_type == contentType)
+                        .Join(db.cms_sitess.Where(o => o.c_alias == filtr.Domain),
+                                e => e.f_link,
+                                o => o.f_content,
+                                (e, o) => e.f_content
+                                );
+
+                    if (!materials.Any())
+                        return null;
 
                         var query = db.content_materialss
-                                .Where(w => materialsId.Contains(w.id))
+                                .Where(w => materials.Contains(w.id))
                                 .OrderByDescending(w => w.d_date);
 
                         int itemCount = query.Count();
@@ -186,7 +200,6 @@ namespace cms.dbase
                                     page_count = (itemCount % filtr.Size > 0) ? (itemCount / filtr.Size) + 1 : itemCount / filtr.Size
                                 }
                             };
-                    }
                 }
                 return null;
             }

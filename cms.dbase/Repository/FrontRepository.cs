@@ -45,7 +45,7 @@ namespace cms.dbase
                 return SiteId;
             }
         }
-        
+
         /// <summary>
         /// Получение вьюхи
         /// </summary>
@@ -178,7 +178,7 @@ namespace cms.dbase
                     {
                         Id = s.id,
                         Title = s.c_title,
-                        Photo = new Photo { Url = s.c_photo},
+                        Photo = new Photo { Url = s.c_photo },
                         Url = s.c_url,
                         Text = s.c_text,
                         Date = s.d_date,
@@ -228,65 +228,64 @@ namespace cms.dbase
             {
                 if (!string.IsNullOrEmpty(filtr.Domain))
                 {
-                    var content = db_getDomainContentTypeId(db, filtr.Domain);
+                    var contentType = ContentType.MATERIAL.ToString().ToLower();
 
-                    if (content != null && content.Id.HasValue)
-                    {
-                        var materials = db.content_content_links
-                                    .Where(w => w.f_link == content.Id)
-                                    .Where(w => w.f_content_type == ContentType.MATERIAL.ToString().ToLower());
+                    //Запрос типа:
+                    //Select t.*, s.* from[dbo].[content_content_link] t left join[dbo].[cms_sites] s
+                    //on t.f_link = s.f_content Where s.c_alias = 'main'
+                    var materials = db.content_content_links.Where(e => e.f_content_type == contentType)
+                        .Join(db.cms_sitess.Where(o => o.c_alias == filtr.Domain),
+                                e => e.f_link,
+                                o => o.f_content,
+                                (e, o) => e.f_content
+                                );
 
-                        if (!materials.Any())
-                            return null;
+                    if (!materials.Any())
+                        return null;
 
-                        var materialsId = materials.Select(m => m.f_content);
-
-                        var query = db.content_materialss
-                                .Where(w => materialsId.Contains(w.id))
+                    var query = db.content_materialss
+                                .Where(w => materials.Contains(w.id))
                                 .OrderByDescending(w => w.d_date);
 
-                        int itemCount = query.Count();
+                    int itemCount = query.Count();
 
-                        var materialsList = query
-                                .Skip(filtr.Size * (filtr.Page - 1))
-                                .Take(filtr.Size)
-                                .Select(s => new MaterialsModel
-                                {
-                                    Id = s.id,
-                                    Title = s.c_title,
-                                    Alias = s.c_alias,
-                                    PreviewImage = new Photo()
-                                    {
-                                        Url = s.c_preview
-                                    },
-                                    Text = s.c_text,
-                                    Url = s.c_url,
-                                    UrlName = s.c_url_name,
-                                    Date = s.d_date,
-                                    Keyw = s.c_keyw,
-                                    Desc = s.c_desc,
-                                    Disabled = s.b_disabled,
-                                    Important = s.b_important
-                                });
-
-                        if (materialsList.Any())
-                            return new MaterialsList
+                    var materialsList = query
+                            .Skip(filtr.Size * (filtr.Page - 1))
+                            .Take(filtr.Size)
+                            .Select(s => new MaterialsModel
                             {
-                                Data = materialsList.ToArray(),
-                                Pager = new Pager
+                                Id = s.id,
+                                Title = s.c_title,
+                                Alias = s.c_alias,
+                                PreviewImage = new Photo()
                                 {
-                                    page = filtr.Page,
-                                    size = filtr.Size,
-                                    items_count = itemCount,
-                                    page_count = (itemCount % filtr.Size > 0) ? (itemCount / filtr.Size) + 1 : itemCount / filtr.Size
-                                }
-                            };
-                    }
+                                    Url = s.c_preview
+                                },
+                                Text = s.c_text,
+                                Url = s.c_url,
+                                UrlName = s.c_url_name,
+                                Date = s.d_date,
+                                Keyw = s.c_keyw,
+                                Desc = s.c_desc,
+                                Disabled = s.b_disabled,
+                                Important = s.b_important
+                            });
+
+                    if (materialsList.Any())
+                        return new MaterialsList
+                        {
+                            Data = materialsList.ToArray(),
+                            Pager = new Pager
+                            {
+                                page = filtr.Page,
+                                size = filtr.Size,
+                                items_count = itemCount,
+                                page_count = (itemCount % filtr.Size > 0) ? (itemCount / filtr.Size) + 1 : itemCount / filtr.Size
+                            }
+                        };
                 }
                 return null;
             }
         }
-
-
     }
 }
