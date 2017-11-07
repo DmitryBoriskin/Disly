@@ -204,6 +204,10 @@
     <Content Include="Content\plugins\bootstrap\js\bootstrap-toggle.min.js" />
     <Content Include="Content\plugins\bootstrap\js\bootstrap.js" />
     <Content Include="Content\plugins\bootstrap\js\bootstrap.min.js" />
+    <Content Include="Content\plugins\datatables\datatables.css" />
+    <Content Include="Content\plugins\datatables\datatables.js" />
+    <Content Include="Content\plugins\datatables\datatables.min.css" />
+    <Content Include="Content\plugins\datatables\datatables.min.js" />
     <Content Include="Content\plugins\Disly\DislyControls.js" />
     <Content Include="Content\plugins\Disly\DislyControls.css" />
     <Content Include="Content\plugins\icheck\icheck.js" />
@@ -736,7 +740,7 @@
     <Content Include="Content\fonts\themify\themify.woff" />
     <Content Include="Content\fonts\themify\themify.eot" />
     <Content Include="Areas\Admin\Views\Shared\Modal\Orgs.cshtml" />
-    <Content Include="Areas\Admin\Views\Shared\Modal\OrgsSaved.cshtml" />
+    <Content Include="Areas\Admin\Views\Shared\Modal\Success.cshtml" />
     <Content Include="Areas\Admin\Views\Shared\Modal\Events.cshtml" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <Content Include="Views\_ViewStart.cshtml" />

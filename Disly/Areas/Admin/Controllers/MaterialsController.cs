@@ -98,6 +98,7 @@ namespace Disly.Areas.Admin.Controllers
 #warning Решить вопрос с ошибкой, если модель заполнена, значения из ViewBag не подставляются для
             //ViewBag.GroupsValues = new MultiSelectList(GroupsValues, "Id", "Title", model.Item != null ? model.Item.GroupsId : null);
             //model.Item.GroupsId = null;
+
             return View("Item", model);
         }
 

@@ -162,7 +162,8 @@ namespace cms.dbase
                                     Keyw = s.c_keyw,
                                     Desc = s.c_desc,
                                     Disabled = s.b_disabled,
-                                    Important = s.b_important
+                                    Important = s.b_important,
+                                    Locked = s.b_locked
                                 });
 
                         if (materialsList.Any())
@@ -211,6 +212,7 @@ namespace cms.dbase
                         Desc = s.c_desc,
                         Disabled = s.b_disabled,
                         Important = s.b_important,
+                        Locked = s.b_locked,
                         ContentLink = (Guid)s.f_content_origin,
                         ContentLinkType = s.c_content_type_origin,
 
@@ -281,6 +283,7 @@ namespace cms.dbase
                             f_content_type = ContentType.MATERIAL.ToString().ToLower(),
                             f_link = material.ContentLink,
                             f_link_type = material.ContentLinkType,
+                            b_origin = true
                         };
 
                         db.Insert(cdMaterial);

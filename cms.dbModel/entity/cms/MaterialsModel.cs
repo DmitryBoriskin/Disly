@@ -84,7 +84,7 @@ namespace cms.dbModel.entity
         public bool Important { get; set; }
 
         /// <summary>
-        /// Флаг запрещённости
+        /// Флаг запрещённости отображения во внешней части
         /// </summary>
         [Required]
         public bool Disabled { get; set; }

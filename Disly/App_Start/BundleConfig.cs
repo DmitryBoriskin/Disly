@@ -33,12 +33,14 @@ namespace Disly
             bundles.Add(new ScriptBundle("~/bundles/jq_plugins/js").Include(
                "~/Content/plugins/select2/select2.min.js",
                "~/Content/plugins/select2/i18n/ru.js",
-               "~/Content/plugins/icheck/icheck.min.js"
+               "~/Content/plugins/icheck/icheck.min.js",
+               "~/Content/plugins/datatables/datatables.min.js"
                ));
             bundles.Add(new StyleBundle("~/bundles/jq_plugins/css").Include(
               "~/Content/plugins/select2/css/select2.css",
               "~/Content/plugins/select2/css/select2_custom.css",
-              "~/Content/plugins/icheck/skins/all.css"
+              "~/Content/plugins/icheck/skins/all.css",
+              "~/Content/plugins/datatables/datatables.min.css"
               ));
 
            
