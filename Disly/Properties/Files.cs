@@ -48,8 +48,24 @@ public class Files
         myEncoderParameters.Param[0] = new EncoderParameter(Encoder.Quality, 100L);
 
         Bitmap _File = (Bitmap)Bitmap.FromStream(hpf.InputStream);
-        if (!(FinWidth == 0 && FinHeight == 0))
+
+        string orientation = string.Empty;
+
+
+        if (FinWidth != 0 && FinHeight != 0)
+        {
             _File = Imaging.Resize(_File, FinWidth, FinHeight, "top", "left");
+        }
+        else if (FinWidth != 0 && FinHeight == 0)
+        {
+            orientation = "width";
+            _File = Imaging.Resize(_File, FinWidth, orientation);
+        }
+        else if (FinWidth == 0 && FinHeight != 0)
+        {
+            orientation = "height";
+            _File = Imaging.Resize(_File, FinHeight, orientation);
+        }
         
         if (!Directory.Exists(Path)) { Directory.CreateDirectory(HttpContext.Current.Server.MapPath(Path)); }
         

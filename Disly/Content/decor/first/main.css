@@ -21,6 +21,10 @@ body {
     padding-right: 0 !important;
 }
 
+.module-main-page {
+    margin-bottom: 30px;
+}
+
 /* шапка */
 .head {
     padding: 15px 0;
@@ -84,6 +88,16 @@ body {
         font-size: 16px;
         font-weight: 100;
     }
+
+.top-icon {
+    font-size: 10px;
+    margin-right: 4px;
+}
+
+.spec-info {
+    font-weight: bold;
+    margin-right: 4px;
+}
 /*  */
 
 /* нижние баннеры */
@@ -139,21 +153,21 @@ body {
     right: 15px;
 }
 
-.footer .bottom_menu.navbar-right {
-    margin-right: -15px;
+.footer .bottom_menu.navbar-left {
+    /*margin-right: -15px;*/
 }
 
-.footer .navbar-right li > a {
+.footer .navbar-left li > a {
     font-size: 14px;
     background-color: transparent !important;
-    padding-right: 0 !important;
+    padding-left: 0 !important;
 }
 
-.footer .bottom_menu.navbar-right li > a {
+.footer .bottom_menu.navbar-left li > a {
     padding-bottom: 10px !important;
 }
 
-.footer .versions.navbar-right li > a {
+.footer .versions.navbar-left li > a {
     padding-top: 0px !important;
 }
 
@@ -185,11 +199,20 @@ body {
 /*  */
 
 /* слайдер */
-.carousel-inner {
+.top-slider {
     height: 220px;
+}
+
+.top-slider-shadow {
     -webkit-box-shadow: 0px 20px 26px -10px rgba(0,0,0,0.47);
     -moz-box-shadow: 0px 20px 26px -10px rgba(0,0,0,0.47);
     box-shadow: 0px 20px 26px -10px rgba(0,0,0,0.47);
+}
+
+.slider-message:hover {
+    -webkit-box-shadow: 0px 20px 20px -15px rgba(0,0,0,0.47);
+    -moz-box-shadow: 0px 20px 20px -15px rgba(0,0,0,0.47);
+    box-shadow: 0px 20px 20px -15px rgba(0,0,0,0.47);
 }
 
 .slider {
@@ -249,9 +272,8 @@ body {
 
 .slider-message {
     width: 255px;
-    height: 100px;
-    padding: 15px 30px;
-    margin-bottom: 20px;
+    padding: 13px 30px;
+    margin-bottom: 15px;
     font-size: 14px;
 }
 
@@ -273,13 +295,68 @@ body {
 /*  */
 
 /* карта сайта плиткой */
-.sitemap-plates-block a {
-    text-decoration:none;
+.sitemap-plate {
+    padding: 15px;
+    height: 70px;
+    width: 265px;
+    margin-bottom: 15px;
 }
-.sitemap-plate{
-    padding:15px;
-    height:70px;
-    width:265px;
-    margin-bottom:15px;
+
+    .sitemap-plate:hover:after {
+        content: "";
+        width: 0px;
+        height: 0px;
+        position: absolute;
+        top: 0px;
+        right: 10px;
+        border-bottom-left-radius: 2px;
+        display: block;
+        border-right: 10px solid rgb(255, 255, 255);
+    }
+/*  */
+
+/* баннеры полезные ресурсы */
+.imglink-benefit-block {
+    height: 290px;
+    padding-top: 25px;
 }
+
+.module-title {
+    font-family: 'Open Sans';
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.imglink-item {
+    height: 190px;
+    width: 255px;
+    padding: 20px 15px;
+    font-size: 18px;
+}
+
+.imglink-pic {
+    margin-bottom: 15px;
+}
+
+.imglink-title {
+    line-height: 1.1;
+}
+
+.imglink-controlls > a {
+    font-size: 26px;
+    position: relative;
+    bottom: 105px;
+    text-decoration: none;
+}
+
+.ti-angle-left.prev {
+    float: left;
+    right: 42px;
+}
+
+.ti-angle-right.next {
+    float: right;
+    left: 42px;
+}
+
 /*  */

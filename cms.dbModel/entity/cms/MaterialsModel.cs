@@ -34,11 +34,14 @@ namespace cms.dbModel.entity
         /// </summary>
         [Required(ErrorMessage = "Поле «Заголовок» не должно быть пустым.")]
         public string Title { get; set; }
-
+        
         /// <summary>
         /// Алиас
         /// </summary>
         public string Alias { get; set; }
+        public int Year { get; set; }
+        public int Month { get; set; }
+        public int Day { get; set; }
 
         /// <summary>
         /// Изображнение
@@ -139,5 +142,9 @@ namespace cms.dbModel.entity
         /// Сортировка
         /// </summary>
         public int Sort { get; set; }
+        /// <summary>
+        /// Алиас
+        /// </summary>
+        public string Alias { get; set; }
     }
 }

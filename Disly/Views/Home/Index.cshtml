@@ -7,7 +7,7 @@
             Title = s.Title,
             Url = s.Photo.Url,
             Text = s.Text,
-            Link = Url
+            Link = s.Url
         });
 
     var sitemapPlates = Model.SiteMapArray
@@ -15,9 +15,20 @@
         .Select(s => new
         {
             Title = s.Title,
-            Url = !string.IsNullOrEmpty(s.Url) ? s.Url 
+            Url = !string.IsNullOrEmpty(s.Url) ? s.Url
             : s.Path.Equals("/") ? s.Path + s.Alias : s.Path + "/" + s.Alias
         });
+
+    var benefitBanners = Model.BannerArray
+        .Where(w => w.SectionAlias.Equals("benefits"))
+        .Select(s => new
+        {
+            Title = s.Title,
+            Url = s.Photo.Url,
+            Text = s.Text,
+            Link = s.Url
+        });
+
     int i = 0;
 }
 
@@ -30,7 +41,7 @@
                 <div id="myCarousel" class="carousel slide slider" data-ride="carousel">
 
                     <!-- Wrapper for slides -->
-                    <div class="carousel-inner">
+                    <div class="carousel-inner top-slider top-slider-shadow">
 
                         @foreach (var item in slider)
                         {
@@ -87,13 +98,22 @@
                     </div>
                 </a>
                 <a href="#">
+                    <div class="slider-message black">
+                        <div class="icon-slider-message">
+                            <span class="ti-headphone"></span>
+                        </div>
+                        <div class="slider-message-full">
+                            <div class="slider-message-title">номера&nbsp;наших&nbsp;телефонов</div>
+                        </div>
+                    </div>
+                </a>
+                <a href="#">
                     <div class="slider-message orange">
                         <div class="icon-slider-message">
                             <span class="ti-check-box"></span>
                         </div>
                         <div class="slider-message-full">
                             <div class="slider-message-title">нам&nbsp;важно&nbsp;ваше&nbsp;мнение!</div>
-                            <div class="slider-message-text">Пройдите опросы на нашем портале</div>
                         </div>
                     </div>
                 </a>
@@ -103,6 +123,54 @@
     </div>
 </div>
 <!-- конец слайдера -->
+<!-- модуль полезные ресурсы -->
+<div class="container-fluid">
+    @if (benefitBanners != null)
+    {
+        <div class="imglink-benefit-block module-main-page">
+            <div class="container">
+                <p class="module-title">Полезные ресурсы</p>
+                @*<div class="row">*@
+                    <div class="ling_img_on carousel slide">
+                        <div class="carousel-inner" data-count="4">
+                            @foreach (var item in benefitBanners)
+                            {
+                                string title = item.Title;
+                                if (title.Length > 70)
+                                {
+                                    title = title.Substring(0, 70);
+                                }
+
+                                <div class="linkimg_item col-md-3">
+                                    <a href="@item.Link">
+                                        <div class="imglink-item">
+                                            @if (!string.IsNullOrEmpty(item.Url))
+                                            {
+                                                <img class="imglink-pic" src="@item.Url" />
+                                            }
+                                            <div class="imglink-title">
+                                                @Html.Raw(title)
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                            }
+                        </div>
+                        @if (benefitBanners.Count() > 4)
+                        {
+                            <div class="imglink-controlls">
+                                <a data-slide="prev" class="ti-angle-left prev"></a>
+                                <a data-slide="next" class="ti-angle-right next"></a>
+                            </div>
+                        }
+                    </div>
+                @*</div>*@
+            </div>
+        </div>
+    }
+
+</div>
+<!-- конец модуля полезные ресурсы -->
 <!-- карта сайта плиткой -->
 <div class="container">
     @if (sitemapPlates != null && sitemapPlates.Count() > 0)

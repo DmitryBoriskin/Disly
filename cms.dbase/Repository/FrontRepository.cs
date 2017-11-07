@@ -174,6 +174,7 @@ namespace cms.dbase
                 var data = db.content_sv_banners_sections
                     .Where(w => w.f_site.Equals(domain))
                     .Where(w => !w.b_disabled)
+                    .OrderBy(o => o.n_sort)
                     .Select(s => new BannersModel
                     {
                         Id = s.id,
@@ -244,8 +245,24 @@ namespace cms.dbase
                         return null;
 
                     var query = db.content_materialss
-                                .Where(w => materials.Contains(w.id))
-                                .OrderByDescending(w => w.d_date);
+                                .Where(w => materials.Contains(w.id));
+
+                    if (filtr.Disabled != null)
+                    {
+                        query = query.Where(w => w.b_disabled == filtr.Disabled);
+                    }
+                    if (!String.IsNullOrEmpty(filtr.Category))
+                    {
+                        var category = db.content_materials_groupss.Where(w => w.c_alias == filtr.Category).First().id;
+                        query =query
+                                    .Join(
+                                            db.content_materials_groups_links
+                                            .Where(o => o.f_group == category), 
+                                            e => e.id, o => o.f_material, (o, e) => o
+                                         );
+                    }
+
+                    query=query.OrderByDescending(w => w.d_date);
 
                     int itemCount = query.Count();
 
@@ -257,6 +274,9 @@ namespace cms.dbase
                                 Id = s.id,
                                 Title = s.c_title,
                                 Alias = s.c_alias,
+                                Year=s.n_year,
+                                Month=s.n_month,
+                                Day=s.n_day,
                                 PreviewImage = new Photo()
                                 {
                                     Url = s.c_preview
@@ -287,5 +307,48 @@ namespace cms.dbase
                 return null;
             }
         }
+        public override MaterialsModel getMaterialsItem(string year, string month, string day, string alias)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                int _year = Convert.ToInt32(year);
+                int _month = Convert.ToInt32(month);
+                int _day = Convert.ToInt32(day);
+
+                var data = db.content_materialss
+                             .Where(w => (w.n_year == _year) && (w.n_month == _month) && (w.n_day == _day) && (w.c_alias.ToLower()==alias.ToLower()));
+                if (data.Any())
+                {
+                    return data.Select(s => new MaterialsModel {
+                        Title=s.c_title,
+                        Text=s.c_text
+                            }).First();
+                }
+                return null;
+
+            }
+        }
+
+        /// <summary>
+        /// Выдает группы преесс-центра
+        /// </summary>
+        /// <returns></returns>
+        public override MaterialsGroup[] getMaterialsGroup() {
+            using (var db = new CMSdb(_context))
+            {
+                var data = db.content_materials_groupss;
+                if (data.Any())
+                {
+                    return data.OrderBy(o => o.n_sort)
+                               .Select(s => new MaterialsGroup
+                               {
+                                     Alias=s.c_alias,
+                                     Title=s.c_title                                 
+                               }).ToArray();
+                }
+                return null;
+            }
+        }
+
     }
 }

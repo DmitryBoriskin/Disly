@@ -171,12 +171,16 @@
     <Content Include="Content\fonts\Ubuntu\ubuntu_italic.svg" />
     <Content Include="Content\fonts\Ubuntu\ubuntu_regular.svg" />
     <Content Include="Content\img\asoft_logo.png" />
+    <Content Include="Content\img\calendar-logo.png" />
     <Content Include="Content\img\foot_logo.png" />
+    <Content Include="Content\img\gosuslugi.png" />
     <Content Include="Content\img\logo.png" />
     <Content Include="Content\img\MapRF.svg" />
     <Content Include="Content\img\metrica1.png" />
     <Content Include="Content\img\metrica2.png" />
+    <Content Include="Content\img\minzdrav-logo.png" />
     <Content Include="Content\img\nophoto.jpg" />
+    <Content Include="Content\img\obr-project.png" />
     <Content Include="Content\img\preloader_planet.svg" />
     <Content Include="Content\img\preloader.svg" />
     <Content Include="Content\js\script.js" />
@@ -745,6 +749,7 @@
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\services\Pager.cshtml" />
+    <Content Include="Views\Materials\Item.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
