@@ -296,19 +296,19 @@ namespace Disly.Areas.Admin.Controllers
             return PartialView("Orgs", model);
         }
 
-        [HttpPost]
-        [MultiButton(MatchFormKey = "action", MatchFormValue = "save-org-btn")]
-        public ActionResult Orgs(MaterialsViewModel model)
-        {
-            MaterialOrgType modelInsert = new MaterialOrgType
-            {
-                OrgTypes = model.OrgsByType,
-                Material = model.Item
-            };
+        //[HttpPost]
+        //[MultiButton(MatchFormKey = "action", MatchFormValue = "save-org-btn")]
+        //public ActionResult Orgs(MaterialsViewModel model)
+        //{
+        //    MaterialOrgType modelInsert = new MaterialOrgType
+        //    {
+        //        OrgTypes = model.OrgsByType,
+        //        Material = model.Item
+        //    };
 
-            _cmsRepository.insertMaterialsLinksToOrgs(modelInsert);
+        //    _cmsRepository.insertMaterialsLinksToOrgs(modelInsert);
 
-            return PartialView("OrgsSaved");
-        }
+        //    return PartialView("OrgsSaved");
+        //}
     }
 }

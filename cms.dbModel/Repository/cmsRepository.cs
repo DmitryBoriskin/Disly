@@ -72,8 +72,6 @@ namespace cms.dbModel
         public abstract MaterialsGroup[] getMaterialsGroups();
 
         public abstract bool updateContentLinks(ContentLinkModel model);
-        public abstract bool insertMaterialsLinksToOrgs(MaterialOrgType model);
-
 
         // Events
         public abstract EventsList getEventsList(EventFilter filtr);
