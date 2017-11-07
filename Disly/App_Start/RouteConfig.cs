@@ -40,9 +40,17 @@ namespace Disly
             // Материалы
             routes.MapRoute(
                name: "PressCentrItem",
-               url: "Press/{date}/{day}/{alias}",
-               defaults: new { controller = "Press", action = "Item", alias = UrlParameter.Optional },
-               constraints: new { date = @"\d{6}", day = @"\d{2}" }
+               url: "Press/{year}/{month}/{day}/{alias}",
+               defaults: new { controller = "Press", action = "Item", alias = UrlParameter.Optional }
+               //,
+               //constraints: new { year = @"\d{4}", month = @"\d{2}", day = @"\d{2}" }
+            );
+            routes.MapRoute(
+               name: "PressCentrCategory",
+               url: "Press/{category}",
+               defaults: new { controller = "Press", action = "Category", alias = UrlParameter.Optional }
+               //,
+               //constraints: new { year = @"\d{4}", month = @"\d{2}", day = @"\d{2}" }
             );
             routes.MapRoute(
                name: "PressCentr",

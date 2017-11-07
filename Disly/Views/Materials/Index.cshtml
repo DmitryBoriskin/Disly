@@ -3,43 +3,48 @@
 <div class="container">
     <h1>Новости</h1>
     @if (!String.IsNullOrEmpty(ViewBag.Alias))
-    {
-        <div>запись @ViewBag.Alias.ToString()</div>
+    {        
+        <h2>@Model.Item.Title</h2>
+        @Html.Raw(Model.Item.Text)
+
     }
     else
     {
-        <div>Список</div>
-        <div>
-            @if (!String.IsNullOrEmpty(ViewBag.Category))
+        <ul class="nav nav-pills">
+            <li><a href="/press">Все</a></li>
+            @foreach (var item in Model.Group)
             {
-                <span>Категория</span>
-                @ViewBag.Category.ToString()
+                string _class = (item.Alias == ViewBag.CurrentCategory) ? "class=active" : "";
+                <li @_class><a href="/press/@item.Alias">@item.Title</a></li>
             }
-        </div>
-    }
-    @if (Model.List != null)
-    {
-        if (Model.List.Data != null)
+        </ul>
+
+        if (Model.List != null)
         {
-            foreach (var item in Model.List.Data)
+            if (Model.List.Data != null)
             {
-                <div class="col-md-4">
-                    <div class="card">
-                        <img class="card-img-top" src="http://via.placeholder.com/300x150" />
-                        <div class="card-block">
-                            <div class="card-title">@item.Title</div>
-                            <span class="card-text">@item.Date.ToString("dd.MM.yyyy")</span>
-                            <div>
-                                <a class="btn btn-primary" href="/press/@item.">Подробнее</a>
+                foreach (var item in Model.List.Data)
+                {
+                    <div class="col-md-4">
+                        <div class="card">
+                            <img class="card-img-top" src="http://via.placeholder.com/300x150" />
+                            <div class="card-block">
+                                <div class="card-title">@item.Title</div>
+                                <span class="card-text">@item.Date.ToString("dd.MM.yyyy")</span>
+                                <div>
+                                    <a class="btn btn-primary" href="/press/@item.Year/@item.Month/@item.Day/@item.Alias">Подробнее</a>
+                                </div>
                             </div>
+
                         </div>
-
                     </div>
-                </div>
-            }
+                }
 
+            }
+            Html.RenderAction("Pager", "Service", new { @Model = Model.List.Pager });
         }
-        Html.RenderAction("Pager", "Service", new { @Model = Model.List.Pager });
+
     }
+    
     
 </div>

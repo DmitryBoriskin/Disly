@@ -13,5 +13,7 @@ namespace cms.dbModel
         public abstract BannersModel[] getBanners(string domain);
 
         public abstract MaterialsList getMaterialsList(FilterParams filtr);
+        public abstract MaterialsModel getMaterialsItem(string year, string month, string day, string alias);
+        public abstract MaterialsGroup[] getMaterialsGroup();
     }
 }
