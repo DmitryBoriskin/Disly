@@ -15,29 +15,6 @@ namespace cms.dbase
     {
         #region private methods of class
 
-        // Определяем - это сайт организации, события или персоны
-        private SiteContentType db_getDomainContentTypeId(CMSdb db, string domain)
-        {
-            try
-            {
-                var linkIdData = db.cms_sitess.Where(d => d.c_alias.Equals(domain)).SingleOrDefault();
-                if (linkIdData != null)
-                {
-                    return new SiteContentType()
-                    {
-                        Id = linkIdData.f_content,
-                        CType = linkIdData.c_content_type
-                    };
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("cms_sites: Обнаружено более одной записи у поля, которое в принципе не может быть не уникальным!!!" + ex);
-            }
-
-            return null;
-        }
-
         // Получение групп к которым относится новость
         private MaterialsGroup[] db_getMaterialGroups(CMSdb db, Guid materialId)
         {
@@ -454,97 +431,6 @@ namespace cms.dbase
 
                 if (!data.Any()) return null;
                 else return data.ToArray();
-            }
-        }
-
-
-        /// Добавляем связи новостей и организаций
-        public override bool updateMaterialsOrgsLink(MaterialOrgs data)
-        {
-            using (var db = new CMSdb(_context))
-            {
-                using (var tran = db.BeginTransaction())
-                {
-                    //Получаем ссылку на того кому принадлежит новость
-                    var contentLink = db.content_materialss
-                                            .Where(s => s.id == data.MaterialId)
-                                            .Select(s => s.f_content_origin)
-                                            .SingleOrDefault();
-
-                    //Удаляем существующие связи, кроме того объекта, которому новость принадлежит.
-                    db.content_content_links
-                                               .Where(w => w.f_content.Equals(data.MaterialId))
-                                               .Where(w => !w.f_link.Equals(contentLink))
-                                               .Delete();
-
-                    if (data.Orgs != null && data.Orgs.Count()>0)
-                    {
-                        foreach (var org in data.Orgs)
-                        {
-                            if (org != contentLink)
-                            {
-                                //Добавляем дополнительные связи
-                                db.content_content_links
-                                               .Value(v => v.f_content, data.MaterialId)
-                                               .Value(v => v.f_link, org)
-                                               .Value(v => v.f_link_type, "org")
-                                               .Insert();
-                            }
-                        }
-                    }
-                    tran.Commit();
-                }
-                return true;
-            }
-        }
-
-        /// <summary>
-        /// Добавляем связи новостей и организаций
-        /// </summary>
-        /// <param name="material">Запись новости</param>
-        /// <param name="orgTypes">Типы организаций</param>
-        /// <returns></returns>
-        public override bool insertMaterialsLinksToOrgs(MaterialOrgType model)
-        {
-            using (var db = new CMSdb(_context))
-            {
-                if (model.OrgTypes != null && model.OrgTypes.Count() > 0)
-                {
-                    db.content_content_links
-                        .Where(w => w.f_content.Equals(model.Material.Id))
-                        .Where(w => !w.f_link.Equals(model.Material.ContentLink))
-                        .Delete();
-
-                    foreach (var t in model.OrgTypes)
-                    {
-                        if (t.Orgs != null)
-                        {
-                            foreach (var o in t.Orgs)
-                            {
-                                if (o.Check)
-                                {
-                                    bool isExist = db.content_content_links
-                                        .Where(w => w.f_content.Equals(model.Material.Id))
-                                        .Where(w => w.f_link.Equals(o.Id))
-                                        .Any();
-
-                                    if (!isExist)
-                                    {
-                                        db.content_content_links
-                                            .Value(v => v.f_content, model.Material.Id)
-                                            .Value(v=> v.f_content_type, "material")
-                                            .Value(v => v.f_link, o.Id)
-                                            .Value(v => v.f_link_type, "org")
-                                            //.Value(v => v.f_group, model.Material.Groups)
-                                            .Insert();
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-
-                return true;
             }
         }
 

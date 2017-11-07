@@ -657,7 +657,7 @@ namespace Disly.Areas.Admin.Controllers
             var model = new OrgsModalViewModel()
             {
                 ObjctId = objId,
-                ObjctType = objType.ToString().ToLower(),
+                ObjctType = objType,
                 OrgsList = _cmsRepository.getOrgsListWhithChekedFor(filtr),
                 OrgsTypes = _cmsRepository.getOrgTypesList(new OrgTypeFilter(){ })
             };
@@ -691,17 +691,19 @@ namespace Disly.Areas.Admin.Controllers
 
         [HttpPost]
         [MultiButton(MatchFormKey = "action", MatchFormValue = "save-org-btn")]
-        public ActionResult OrgsListModal(OrgsModalViewModel model, string relObjct)
+        public ActionResult OrgsListModal(OrgsModalViewModel model)
         {
-            MaterialOrgs modelInsert = new MaterialOrgs
+            ContentLinkModel modelInsert = new ContentLinkModel
             {
-                Orgs = model.OrgsId,
-                MaterialId = model.ObjctId,
+               ObjctId = model.ObjctId,
+               ObjctType = model.ObjctType,
+               LinksId= model.OrgsId,
+               LinkType = ContentLinkType.ORG
             };
 
-            _cmsRepository.updateMaterialsOrgsLink(modelInsert);
+            var res = _cmsRepository.updateContentLinks(modelInsert);
 
-            return PartialView("OrgsSaved");
+            return PartialView("Partial/OrgsSaved");
         }
     }
 }

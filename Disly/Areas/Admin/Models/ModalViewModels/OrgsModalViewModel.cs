@@ -15,7 +15,7 @@
         /// <summary>
         /// Тип Новость или Событие
         /// </summary>
-        public string ObjctType { get; set; }
+        public ContentType ObjctType { get; set; }
 
         /// <summary>
         /// Выбранные организации, к которым привязываем новость, чтобы биндить данные

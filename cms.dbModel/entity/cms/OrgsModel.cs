@@ -137,22 +137,6 @@ namespace cms.dbModel.entity
     }
 
     /// <summary>
-    /// Модель, описывающая организацию для привязки к новостям/событиям/организации/персоне и т.д
-    /// </summary>
-    public class MaterialOrgs
-    {
-        /// <summary>
-        ///  Id Новости
-        /// </summary>
-        public Guid MaterialId { get; set; }
-
-        /// <summary>
-        /// Список привязанных Организаций
-        /// </summary>
-        public Guid[] Orgs { get; set; }
-    }
-
-    /// <summary>
     /// Модель, описывающая типы организаций
     /// </summary>
     public class OrgType

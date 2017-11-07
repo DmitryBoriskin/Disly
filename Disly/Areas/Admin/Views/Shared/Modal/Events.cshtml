@@ -12,25 +12,27 @@
         @Html.HiddenFor(m => m.ObjctId)
         @Html.HiddenFor(m => m.ObjctType)
 
-        if(Model.EventsList != null && Model.EventsList.Count() > 0)
-        {
-            <div class="row">
-                @foreach (var item in Model.EventsList)
-                {
-                    <div class="col-sm-1 text-right">
-                        <input type="checkbox" name="EventsId[]" class="org-item-chkbx iCheck" value="@item.Id" data-init="false" @(item.Checked ? "checked" : null) />
-                    </div>
-                    <div class="col-sm-11">
-                        <strong>@item.DateBegin.ToShortDateString()</strong> 
+        <div class="scrollbar log-list">
+            @if (Model.EventsList != null && Model.EventsList.Count() > 0)
+            {
+                <div class="row">
+                    @foreach (var item in Model.EventsList)
+                    {
+                        <div class="col-sm-1 text-right">
+                            <input type="checkbox" name="EventsId[]" class="org-item-chkbx iCheck" value="@item.Id" data-init="false" @(item.Checked ? "checked" : null) />
+                        </div>
+                        <div class="col-sm-11">
+                            <strong>@item.DateBegin.ToShortDateString()</strong>
                             @item.Title
-                        
-                    </div>
-                    <div class="col-sm-offset-1 col-sm-11">
-                        @Html.Raw(item.Text.Substring(0, Math.Min(item.Text.Length, 150)))
-                    </div>
-                }
-            </div>
-        }
+
+                        </div>
+                        <div class="col-sm-offset-1 col-sm-11">
+                            @Html.Raw(item.Text.Substring(0, Math.Min(item.Text.Length, 150)))
+                        </div>
+                    }
+                </div>
+            }
+        </div>
     }
     else
     {

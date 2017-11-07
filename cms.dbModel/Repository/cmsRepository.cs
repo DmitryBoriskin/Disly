@@ -71,7 +71,7 @@ namespace cms.dbModel
         public abstract bool deleteCmsMaterial(Guid id);
         public abstract MaterialsGroup[] getMaterialsGroups();
 
-        public abstract bool updateMaterialsOrgsLink(MaterialOrgs model);
+        public abstract bool updateContentLinks(ContentLinkModel model);
         public abstract bool insertMaterialsLinksToOrgs(MaterialOrgType model);
 
 

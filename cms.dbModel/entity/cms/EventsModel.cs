@@ -82,6 +82,20 @@ namespace cms.dbModel.entity
         /// </summary>
         public Photo PreviewImage { get; set; }
 
+        /// <summary>
+        /// ссылка на организацию/событие/персону по умолчанию
+        /// </summary>
+        public Guid ContentLink { get; set; }
+
+        /// <summary>
+        /// Тип (организация/событие/персона) по умолчанию
+        /// </summary>
+        public string ContentLinkType { get; set; }
+
+        /// <summary>
+        /// Отключено для редактирования администратором портала, даже тем кто создал
+        /// </summary>
+        public bool Locked { get; set; }
 
         /// <summary>
         /// Связь с другими объектами/сущностями

@@ -212,9 +212,13 @@
 
                 //Определяем Insert или Update
                 if (getEvent != null)
-                     res = _cmsRepository.updateCmsEvent(bindData.Item);
-                 else
-                     res = _cmsRepository.insertCmsEvent(bindData.Item);
+                    res = _cmsRepository.updateCmsEvent(bindData.Item);
+                else
+                {
+                    bindData.Item.ContentLink = SiteInfo.ContentId;
+                    bindData.Item.ContentLinkType = SiteInfo.Type;
+                    res = _cmsRepository.insertCmsEvent(bindData.Item);
+                }
                  //Сообщение пользователю
                  if (res)
                      userMessage.info = "Запись обновлена";
