@@ -45,7 +45,7 @@ namespace cms.dbase
                 return SiteId;
             }
         }
-        
+
         /// <summary>
         /// Получение вьюхи
         /// </summary>
@@ -179,7 +179,7 @@ namespace cms.dbase
                     {
                         Id = s.id,
                         Title = s.c_title,
-                        Photo = new Photo { Url = s.c_photo},
+                        Photo = new Photo { Url = s.c_photo },
                         Url = s.c_url,
                         Text = s.c_text,
                         Date = s.d_date,
@@ -227,61 +227,66 @@ namespace cms.dbase
         {
             using (var db = new CMSdb(_context))
             {
-                var query = db.content_materials_links
-                    .AsQueryable();
-
                 if (!string.IsNullOrEmpty(filtr.Domain))
                 {
-                    var content = db_getDomainContentTypeId(db, filtr.Domain);
-                    if (content != null && content.Id.HasValue)
-                        query = query.Where(w => w.f_link_id == content.Id);
-                }
+                    var contentType = ContentType.MATERIAL.ToString().ToLower();
 
-                query = query.OrderByDescending(w => w.fkcontentmaterials.d_date);
+                    //Запрос типа:
+                    //Select t.*, s.* from[dbo].[content_content_link] t left join[dbo].[cms_sites] s
+                    //on t.f_link = s.f_content Where s.c_alias = 'main'
+                    var materials = db.content_content_links.Where(e => e.f_content_type == contentType)
+                        .Join(db.cms_sitess.Where(o => o.c_alias == filtr.Domain),
+                                e => e.f_link,
+                                o => o.f_content,
+                                (e, o) => e.f_content
+                                );
 
-                if (query.Any())
-                {
-                    int ItemCount = query.Count();
+                    if (!materials.Any())
+                        return null;
+
+                    var query = db.content_materialss
+                                .Where(w => materials.Contains(w.id))
+                                .OrderByDescending(w => w.d_date);
+
+                    int itemCount = query.Count();
 
                     var materialsList = query
-                        .Select(s => new MaterialsModel
-                        {
-                            Id = s.fkcontentmaterials.id,
-                            Title = s.fkcontentmaterials.c_title,
-                            Alias = s.fkcontentmaterials.c_alias,                            
-                            PreviewImage = new Photo()
+                            .Skip(filtr.Size * (filtr.Page - 1))
+                            .Take(filtr.Size)
+                            .Select(s => new MaterialsModel
                             {
-                                Url = s.fkcontentmaterials.c_preview
-                            },
-                            Text = s.fkcontentmaterials.c_text,
-                            Url = s.fkcontentmaterials.c_url,
-                            UrlName = s.fkcontentmaterials.c_url_name,
-                            Date = s.fkcontentmaterials.d_date,
-                            Keyw = s.fkcontentmaterials.c_keyw,
-                            Desc = s.fkcontentmaterials.c_desc,
-                            Disabled = s.fkcontentmaterials.b_disabled,
-                            Important = s.fkcontentmaterials.b_important
-                        })
-                        .Skip(filtr.Size * (filtr.Page - 1))
-                        .Take(filtr.Size)
-                        .ToArray();
+                                Id = s.id,
+                                Title = s.c_title,
+                                Alias = s.c_alias,
+                                PreviewImage = new Photo()
+                                {
+                                    Url = s.c_preview
+                                },
+                                Text = s.c_text,
+                                Url = s.c_url,
+                                UrlName = s.c_url_name,
+                                Date = s.d_date,
+                                Keyw = s.c_keyw,
+                                Desc = s.c_desc,
+                                Disabled = s.b_disabled,
+                                Important = s.b_important
+                            });
 
-                    return new MaterialsList
-                    {
-                        Data = materialsList,
-                        Pager = new Pager
+                    if (materialsList.Any())
+                        return new MaterialsList
                         {
-                            page = filtr.Page,
-                            size = filtr.Size,
-                            items_count = ItemCount,
-                            page_count = (ItemCount % filtr.Size > 0) ? (ItemCount / filtr.Size) + 1 : ItemCount / filtr.Size
-                        }
-                    };
+                            Data = materialsList.ToArray(),
+                            Pager = new Pager
+                            {
+                                page = filtr.Page,
+                                size = filtr.Size,
+                                items_count = itemCount,
+                                page_count = (itemCount % filtr.Size > 0) ? (itemCount / filtr.Size) + 1 : itemCount / filtr.Size
+                            }
+                        };
                 }
                 return null;
             }
         }
-
-
     }
 }

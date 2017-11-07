@@ -68,7 +68,7 @@
          {
              model.Item = _cmsRepository.getEvent(Id);
             if (model.Item == null)
-                model.Item = new EventModel()
+                model.Item = new EventsModel()
                 {
                     DateBegin = DateTime.Now
                 };
@@ -83,18 +83,19 @@
 
             //Заполняем для модели связи с другими объектами
             var eventFilter = FilterParams.Extend<EventFilter>(filter);
-            eventFilter.Size = last_items;
-            eventFilter.EventId = Id;
-            EventsShort[] materialToEvents = _cmsRepository.getShortEventsList(eventFilter);
+            eventFilter.RelId = Id;
+            eventFilter.RelType = ContentType.EVENT;
+            var eventsList = _cmsRepository.getEventsList(eventFilter);
 
             var orgfilter = FilterParams.Extend<OrgFilter>(filter);
-            orgfilter.EventId = Id;
-            OrgsShort[] materialsToOrgs = _cmsRepository.getShortOrgsList(orgfilter);
+            orgfilter.RelId = Id;
+            orgfilter.RelType = ContentType.EVENT;
+            var orgs = _cmsRepository.getOrgs(orgfilter);
 
             model.Item.Links = new ObjectLinks()
             {
-                Events = materialToEvents,
-                Orgs = materialsToOrgs,
+                Events = (eventsList != null)? eventsList.Data : null,
+                Orgs = orgs,
                 //Persons = null
             };
 
@@ -211,9 +212,13 @@
 
                 //Определяем Insert или Update
                 if (getEvent != null)
-                     res = _cmsRepository.updateCmsEvent(bindData.Item);
-                 else
-                     res = _cmsRepository.insertCmsEvent(bindData.Item);
+                    res = _cmsRepository.updateCmsEvent(bindData.Item);
+                else
+                {
+                    bindData.Item.ContentLink = SiteInfo.ContentId;
+                    bindData.Item.ContentLinkType = SiteInfo.Type;
+                    res = _cmsRepository.insertCmsEvent(bindData.Item);
+                }
                  //Сообщение пользователю
                  if (res)
                      userMessage.info = "Запись обновлена";
@@ -272,21 +277,22 @@
 
         //Получение списка организаций по параметрам для отображения в модальном окне
         [HttpGet]
-        public ActionResult EventListModal(Guid objId, string relObj)
+        public ActionResult EventsListModal(Guid objId, ContentType objType)
         {
-            //var filtr = new OrgFilter()
-            //{
-            //    Domain = Domain
-            //};
+            var filtr = new EventFilter()
+            {
+                Domain = Domain,
+                RelId = objId,
+                RelType = objType,
+                Size = last_items
+            };
 
-            //if (relObj == "material")
-            //{
-            //    filtr.MaterialId = objId;
-            //}
-            //else if (relObj == "event")
-            //{
-            //    filtr.EventId = objId;
-            //}
+            var model = new EventsModalViewModel()
+            {
+                ObjctId = objId,
+                ObjctType = objType.ToString().ToLower(),
+                EventsList = _cmsRepository.getLastEventsListWithCheckedFor(filtr),
+            };
 
             //var model = new OrgsModalViewModel()
             //{

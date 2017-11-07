@@ -15,29 +15,6 @@ namespace cms.dbase
     {
         #region private methods of class
 
-        // Определяем - это сайт организации, события или персоны
-        private SiteContentType db_getDomainContentTypeId(CMSdb db, string domain)
-        {
-            try
-            {
-                var linkIdData = db.cms_sitess.Where(d => d.c_alias.Equals(domain)).SingleOrDefault();
-                if (linkIdData != null)
-                {
-                    return new SiteContentType()
-                    {
-                        Id = linkIdData.f_content,
-                        CType = linkIdData.c_content_type
-                    };
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("cms_sites: Обнаружено более одной записи у поля, которое в принципе не может быть не уникальным!!!" + ex);
-            }
-
-            return null;
-        }
-
         // Получение групп к которым относится новость
         private MaterialsGroup[] db_getMaterialGroups(CMSdb db, Guid materialId)
         {
@@ -131,103 +108,77 @@ namespace cms.dbase
         {
             using (var db = new CMSdb(_context))
             {
-#warning content_sv_materials_sitess - можно грохнуть эту вьюху в базе
-                #region old by view
-                //var query = db.content_sv_materials_sitess
-                //    .Where(w => w.id != null);
-                //if(!string.IsNullOrEmpty(filtr.Domain))
-                //    query = query.Where(w => w.domain.Equals(filtr.Domain));
-
-                //query = query.OrderByDescending(o => o.d_date);
-                //if (query.Any())
-                //{
-                //    int ItemCount = query.Count();
-                //    var List = query
-                //        .Select(s => new MaterialsModel
-                //        {
-                //            Id = s.id,
-                //            Title = s.c_title,
-                //            Alias = s.c_alias,
-                //            PreviewImage = new Photo()
-                //            {
-                //                Url = s.c_preview
-                //            },
-                //            Text = s.c_text,
-                //            Url = s.c_url,
-                //            UrlName = s.c_url_name,
-                //            Date = s.d_date,
-                //            Keyw = s.c_keyw,
-                //            Desc = s.c_desc,
-                //            Disabled = s.b_disabled,
-                //            Important = s.b_important
-                //        }).
-                //        Skip(filtr.Size * (filtr.Page - 1)).
-                //        Take(filtr.Size);
-                //    MaterialsModel[] materialsInfo = List.ToArray();
-                //    return new MaterialsList
-                //    {
-                //        Data = materialsInfo,
-                //        Pager = new Pager
-                //        {
-                //            page = filtr.Page,
-                //            size = filtr.Size,
-                //            items_count = ItemCount,
-                //            page_count = (ItemCount % filtr.Size > 0) ? (ItemCount / filtr.Size) + 1 : ItemCount / filtr.Size
-                //        }
-                //    };
-                //}
-                #endregion
-
-                var query = db.content_materials_links
-                    .AsQueryable();
-
                 if (!string.IsNullOrEmpty(filtr.Domain))
                 {
-                    var content = db_getDomainContentTypeId(db, filtr.Domain);
-                    if (content != null && content.Id.HasValue)
-                        query = query.Where(w => w.f_link_id == content.Id);
+                    var contentType = ContentType.MATERIAL.ToString().ToLower();
+
+                    //Атавизм
+                    //var content = db_getDomainContentTypeId(db, filtr.Domain);
+
+                    //if (content != null && content.Id.HasValue)
+                    //{
+                    //    var materials = db.content_content_links
+                    //                .Where(w => w.f_link == content.Id)
+                    //                .Where(w => w.f_content_type == contentType);
+                    //if (!materials.Any())
+                    //    return null;
+                    //var materialsId = materials.Select(m => m.f_content);
+
+
+                    //Select t.*, s.* from[dbo].[content_content_link] t left join[dbo].[cms_sites] s
+                    //on t.f_link = s.f_content Where s.c_alias = 'main'
+                    var materials = db.content_content_links.Where(e => e.f_content_type == contentType)
+                        .Join(db.cms_sitess.Where(o => o.c_alias == filtr.Domain),
+                                e => e.f_link,
+                                o => o.f_content,
+                                (e, o) => e.f_content
+                                );
+
+                    if (!materials.Any())
+                        return null;
+
+                        var query = db.content_materialss
+                                .Where(w => materials.Contains(w.id))
+                                .OrderByDescending(w => w.d_date);
+
+                        int itemCount = query.Count();
+
+                        var materialsList = query
+                                .Skip(filtr.Size * (filtr.Page - 1))
+                                .Take(filtr.Size)
+                                .Select(s => new MaterialsModel
+                                {
+                                    Id = s.id,
+                                    Title = s.c_title,
+                                    Alias = s.c_alias,
+                                    PreviewImage = new Photo()
+                                    {
+                                        Url = s.c_preview
+                                    },
+                                    Text = s.c_text,
+                                    Url = s.c_url,
+                                    UrlName = s.c_url_name,
+                                    Date = s.d_date,
+                                    Keyw = s.c_keyw,
+                                    Desc = s.c_desc,
+                                    Disabled = s.b_disabled,
+                                    Important = s.b_important
+                                });
+
+                        if (materialsList.Any())
+                            return new MaterialsList
+                            {
+                                Data = materialsList.ToArray(),
+                                Pager = new Pager
+                                {
+                                    page = filtr.Page,
+                                    size = filtr.Size,
+                                    items_count = itemCount,
+                                    page_count = (itemCount % filtr.Size > 0) ? (itemCount / filtr.Size) + 1 : itemCount / filtr.Size
+                                }
+                            };
                 }
-
-                query = query.OrderByDescending(w => w.fkcontentmaterials.d_date);
-
-               int itemCount = query.Count();
-
-                var materialsList = query
-                        .Skip(filtr.Size * (filtr.Page - 1))
-                        .Take(filtr.Size)
-                        .Select(s => new MaterialsModel
-                         {
-                             Id = s.fkcontentmaterials.id,
-                             Title = s.fkcontentmaterials.c_title,
-                             Alias = s.fkcontentmaterials.c_alias,
-                             PreviewImage = new Photo()
-                             {
-                                 Url = s.fkcontentmaterials.c_preview
-                             },
-                             Text = s.fkcontentmaterials.c_text,
-                             Url = s.fkcontentmaterials.c_url,
-                             UrlName = s.fkcontentmaterials.c_url_name,
-                             Date = s.fkcontentmaterials.d_date,
-                             Keyw = s.fkcontentmaterials.c_keyw,
-                             Desc = s.fkcontentmaterials.c_desc,
-                             Disabled = s.fkcontentmaterials.b_disabled,
-                             Important = s.fkcontentmaterials.b_important
-                         });
-
-                if (!materialsList.Any())
-                    return null;
-
-                return new MaterialsList
-                {
-                    Data = materialsList.ToArray(),
-                    Pager = new Pager
-                    {
-                        page = filtr.Page,
-                        size = filtr.Size,
-                        items_count = itemCount,
-                        page_count = (itemCount % filtr.Size > 0) ? (itemCount / filtr.Size) + 1 : itemCount / filtr.Size
-                    }
-                };
+                return null;
             }
         }
 
@@ -323,11 +274,12 @@ namespace cms.dbase
                         };
 
                         // добавляем принадлежность к сущности(ссылку на организацию/событие/персону)
-                        var cdMaterialLink = new content_materials_link
+                        var cdMaterialLink = new content_content_link
                         {
                             id = Guid.NewGuid(),
-                            f_material = material.Id,
-                            f_link_id = material.ContentLink,
+                            f_content = material.Id,
+                            f_content_type = ContentType.MATERIAL.ToString().ToLower(),
+                            f_link = material.ContentLink,
                             f_link_type = material.ContentLinkType,
                         };
 
@@ -479,92 +431,6 @@ namespace cms.dbase
 
                 if (!data.Any()) return null;
                 else return data.ToArray();
-            }
-        }
-
-
-        /// Добавляем связи новостей и организаций
-        public override bool insertMaterialsOrgsLink(MaterialOrgs data)
-        {
-            using (var db = new CMSdb(_context))
-            {
-                using (var tran = db.BeginTransaction())
-                {
-
-                    //Удаляем существующие связи, кроме той организации, которой новость принадлежит.
-                    db.content_materials_links
-                                               .Where(w => w.f_material.Equals(data.MaterialId))
-                                               .Where(w => !w.f_link_id.Equals(data.ContentLink))
-                                               .Delete();
-
-                    if (data.Orgs != null && data.Orgs.Count()>0)
-                    {
-                        foreach (var org in data.Orgs)
-                        {
-                            if (org != data.ContentLink)
-                            {
-                                db.content_materials_links
-                                               .Value(v => v.f_material, data.MaterialId)
-                                               .Value(v => v.f_link_id, org)
-                                               .Value(v => v.f_link_type, "org")
-                                               .Insert();
-                            }
-
-                        }
-
-                    }
-                    tran.Commit();
-                }
-                return true;
-            }
-        }
-
-        /// <summary>
-        /// Добавляем связи новостей и организаций
-        /// </summary>
-        /// <param name="material">Запись новости</param>
-        /// <param name="orgTypes">Типы организаций</param>
-        /// <returns></returns>
-        public override bool insertMaterialsLinksToOrgs(MaterialOrgType model)
-        {
-            using (var db = new CMSdb(_context))
-            {
-                if (model.OrgTypes != null && model.OrgTypes.Count() > 0)
-                {
-                    db.content_materials_links
-                        .Where(w => w.f_material.Equals(model.Material.Id))
-                        .Where(w => !w.f_link_id.Equals(model.Material.ContentLink))
-                        .Delete();
-
-                    foreach (var t in model.OrgTypes)
-                    {
-                        if (t.Orgs != null)
-                        {
-                            foreach (var o in t.Orgs)
-                            {
-                                if (o.Check)
-                                {
-                                    bool isExist = db.content_materials_links
-                                        .Where(w => w.f_material.Equals(model.Material.Id))
-                                        .Where(w => w.f_link_id.Equals(o.Id))
-                                        .Any();
-
-                                    if (!isExist)
-                                    {
-                                        db.content_materials_links
-                                            .Value(v => v.f_material, model.Material.Id)
-                                            .Value(v => v.f_link_id, o.Id)
-                                            .Value(v => v.f_link_type, "org")
-                                            //.Value(v => v.f_group, model.Material.Groups)
-                                            .Insert();
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-
-                return true;
             }
         }
 

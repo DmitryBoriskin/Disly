@@ -9,6 +9,6 @@
      public class EventsViewModel : CoreViewModel
      {
          public EventsList List { get; set; }
-         public EventModel Item { get; set; }
+         public EventsModel Item { get; set; }
      }
  }

@@ -14,7 +14,6 @@ namespace Disly.Areas.Admin.Controllers
         string filter = String.Empty;
         bool enabeld = true;
         int page = 1;
-        int page_size = 40;
 
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {

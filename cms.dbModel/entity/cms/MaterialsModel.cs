@@ -99,6 +99,10 @@ namespace cms.dbModel.entity
         /// </summary>
         public string ContentLinkType { get; set; }
 
+        /// <summary>
+        /// Отключено для редактирования администратором портала, даже тем кто создал
+        /// </summary>
+        public bool Locked { get; set; }
         //-------------------------------------------------------------
         /// <summary>
         /// Группа

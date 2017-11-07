@@ -113,43 +113,27 @@ namespace cms.dbModel.entity
         public Guid[] Types { get; set; }
     }
 
-    public class OrgsShort
+    /// <summary>
+    /// Модель для построения списка, в котором отмечены выбранные элементы
+    /// </summary>
+    public class OrgsShortModel
     {
         /// <summary>
         ///  Id 
         /// </summary>
         public Guid Id { get; set; }
-
         /// <summary>
         /// название
         /// </summary>
         public string Title { get; set; }
-
         /// <summary>
         /// Список привязанных типов Организаций
         /// </summary>
         public Guid[] Types { get; set; }
-    }
-
-    /// <summary>
-    /// Модель, описывающая организацию для привязки к новостям/событиям/организации/персоне и т.д
-    /// </summary>
-    public class MaterialOrgs
-    {
         /// <summary>
-        ///  Id Новости
+        /// 
         /// </summary>
-        public Guid MaterialId { get; set; }
-
-        /// <summary>
-        /// Сссылка на сущность, кому принадлежит новость изначально (ее нельзя update/delete)
-        /// </summary>
-        public Guid ContentLink { get; set; }
-
-        /// <summary>
-        /// Список привязанных Организаций
-        /// </summary>
-        public Guid[] Orgs { get; set; }
+        public bool Checked { get; set; }
     }
 
     /// <summary>

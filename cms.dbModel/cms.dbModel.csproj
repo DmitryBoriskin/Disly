@@ -39,7 +39,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="linq2db">
-      <HintPath>..\Disly\Bin\linq2db.dll</HintPath>
+      <HintPath>..\packages\linq2db.1.0.7.3\lib\net40\linq2db.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -55,6 +55,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="entity\cms\BannersModel.cs" />
+    <Compile Include="entity\cms\ContentLinkModel.cs" />
     <Compile Include="entity\cms\ObjectLinksModel.cs" />
     <Compile Include="entity\cms\VacanciesModel.cs" />
     <Compile Include="entity\cms\FeedbacksModel.cs" />
@@ -71,6 +72,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="entity\cms\MaterialsModel.cs" />
+    <Compile Include="entity\Filter\Enum.cs" />
     <Compile Include="entity\Filter\OrgTypeFilter.cs" />
     <Compile Include="entity\Filter\VacancyFilter.cs" />
     <Compile Include="entity\Filter\EventFilter.cs" />

@@ -5,11 +5,11 @@ namespace cms.dbModel.entity
 {
     public class EventsList
     {
-        public EventModel[] Data;
+        public EventsModel[] Data;
         public Pager Pager;
     }
 
-    public class EventModel
+    public class EventsModel
     {
         public Guid Id { get; set; }
         /// <summary>
@@ -82,6 +82,20 @@ namespace cms.dbModel.entity
         /// </summary>
         public Photo PreviewImage { get; set; }
 
+        /// <summary>
+        /// ссылка на организацию/событие/персону по умолчанию
+        /// </summary>
+        public Guid ContentLink { get; set; }
+
+        /// <summary>
+        /// Тип (организация/событие/персона) по умолчанию
+        /// </summary>
+        public string ContentLinkType { get; set; }
+
+        /// <summary>
+        /// Отключено для редактирования администратором портала, даже тем кто создал
+        /// </summary>
+        public bool Locked { get; set; }
 
         /// <summary>
         /// Связь с другими объектами/сущностями
@@ -92,21 +106,29 @@ namespace cms.dbModel.entity
     /// <summary>
     /// Модель, описывающая события для привязки к новостям/событиям/организации/персоне и т.д
     /// </summary>
-    public class EventsShort
+    public class EventsShortModel
     {
         /// <summary>
         /// Идентификатор
         /// </summary>
         public Guid Id { get; set; }
-
+        /// <summary>
+        /// Дата начала события
+        /// </summary>
+        public DateTime DateBegin { get; set; }
         /// <summary>
         /// Название
         /// </summary>
         public string Title { get; set; }
 
         /// <summary>
-        /// Дата начала события
+        /// Название
         /// </summary>
-        public DateTime DateBegin { get; set; }
+        public string Text { get; set; }
+
+        /// <summary>
+        /// Наличие связей с объектом
+        /// </summary>
+        public bool Checked { get; set; }
     }
 }

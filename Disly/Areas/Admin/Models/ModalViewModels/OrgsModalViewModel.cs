@@ -9,25 +9,23 @@
      public class OrgsModalViewModel : CoreViewModel
      {
         /// <summary>
-        /// Новость
+        /// Id Новости или События
         /// </summary>
-        public Guid MaterialId { get; set; }
+        public Guid ObjctId { get; set; }
         /// <summary>
-        /// Ссылка на хозяина новости
+        /// Тип Новость или Событие
         /// </summary>
-        public Guid ContentLink { get; set; }
+        public ContentType ObjctType { get; set; }
+
         /// <summary>
-        /// Выбранные организации, к которым привязываем новость
+        /// Выбранные организации, к которым привязываем новость, чтобы биндить данные
         /// </summary>
         public Guid[] OrgsId { get; set; }
+
         /// <summary>
-        /// Список организаций по параметрам
+        /// Список организаций
         /// </summary>
-        public OrgsModel[] OrgsList { get; set; }
-        // <summary>
-        /// справочник всех организаций
-        /// </summary>
-        public OrgsModel[] OrgsAll { get; set; }
+        public OrgsShortModel[] OrgsList { get; set; }
         /// <summary>
         /// Справочник всех типов организаций
         /// </summary>

@@ -10,8 +10,6 @@ namespace Disly.Areas.Admin.Controllers
         PortalUsersViewModel model;
         FilterParams filter;
 
-        int page_size = 40;
-
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             base.OnActionExecuting(filterContext);
