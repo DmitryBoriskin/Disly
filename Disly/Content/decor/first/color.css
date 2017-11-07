@@ -1,4 +1,41 @@
-﻿/* slider */
+﻿/* main-menu */
+.main-menu a{
+    color:#000;
+}
+.main-menu a:hover,
+.main-menu a:active,
+.main-menu a:focus{
+    color:#3973e6;
+}
+.navbar-right a,
+.navbar-left a,
+.spec-version-link a{
+    color:#000;
+}
+.navbar-right a:hover,
+.navbar-right a:focus,
+.navbar-right a:active,
+.navbar-left a:hover,
+.navbar-left a:focus,
+.navbar-left a:active,
+.spec-version-link a:hover,
+.spec-version-link a:focus,
+.spec-version-link a:active{
+    color:#3973e6;
+    text-decoration:none;
+}
+.icon-search:before{
+    color:#3973e6;
+}
+.icon-search:hover:before{
+    color:#295fcc;
+}
+.spec-info{
+    color:#000;
+}
+/*  */
+
+/* slider */
 .top-slider-wrapper{
     background-color:#ccd3e0;
 }
@@ -16,14 +53,6 @@
     background-color:#fff;
     color:#a7a7a7;
 }
-.slider-message.blue.active{
-    background-color:#3973e6;
-    color:#fff;
-}
-.slider-message.orange.active{
-    background-color:#e55639;
-    color:#fff;
-}
 .slider-message.blue .slider-message-title,
 .slider-message.blue .icon-slider-message{
     color:#3973e6;
@@ -39,6 +68,10 @@
 .slider-message.orange .icon-slider-message{
     color:#e65639;
 }
+.slider-message.black .slider-message-title,
+.slider-message.black .icon-slider-message{
+    color:#000;
+}
 /*  */
 
 /* bottom-banners */
@@ -53,5 +86,45 @@
 }
 .sitemap-plate{
     background-color:#ebedf2;
+}
+.sitemap-plate:hover{
+    background-color:#3973e6;
+    color:#fff;
+    text-decoration:underline;
+    text-decoration-color: #fff;
+}
+.sitemap-plate:hover:after{
+    border-bottom: 10px solid rgb(31, 71, 153);
+}
+/*  */
+
+/* баннеры полезная инфа */
+.imglink-benefit-block{
+    background-color:#ebedf2;
+}
+.imglink-item {
+    background-color: #fff;
+}
+.imglink-controlls > a{
+    color:#999999;
+}
+.imglink-controlls > a:hover{
+    color:#3973e6;
+    cursor:pointer;
+}
+.imglink-title{
+    color:#222222;
+}
+.imglink-title:hover,
+.imglink-title:focus,
+.imglink-title:active{
+    color:#3973e6;
+    text-decoration:underline;
+    text-decoration-color:#3973e6;
+}
+/*  */
+/* social_network_list */
+.social_network_list a{
+    color:#bfbfbf;
 }
 /*  */

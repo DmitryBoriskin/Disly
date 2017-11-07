@@ -174,6 +174,7 @@ namespace cms.dbase
                 var data = db.content_sv_banners_sections
                     .Where(w => w.f_site.Equals(domain))
                     .Where(w => !w.b_disabled)
+                    .OrderBy(o => o.n_sort)
                     .Select(s => new BannersModel
                     {
                         Id = s.id,

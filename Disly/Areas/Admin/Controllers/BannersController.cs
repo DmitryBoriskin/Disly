@@ -137,7 +137,7 @@ namespace Disly.Areas.Admin.Controllers
 
                         return View("Item", model);
                     }
-
+                    
                     Photo photoNew = new Photo()
                     {
                         Name = id.ToString() + fileExtension,
