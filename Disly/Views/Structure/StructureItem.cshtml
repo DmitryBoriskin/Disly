@@ -1,0 +1,45 @@
+﻿@model StructureViewModel
+<h1>@Model.StructureItem.Title</h1>
+@Html.Partial("services/breadcrumbs")
+<div class="structur">
+    <div class="row">        
+        <div class="col-sm-9">
+            <dl class="dl-horizontal">
+                @if (Model.StructureItem.Adress != null)
+                {
+                    <dt>Адрес</dt>
+                    <dd>@Model.StructureItem.Adress</dd>
+                }
+                @if (Model.StructureItem.Phone != null)
+                {
+                    <dt>Телефон приемной</dt>
+                    <dd>@Model.StructureItem.Phone</dd>
+                }
+                @if (Model.StructureItem.PhoneReception != null)
+                {
+                    <dt>Телефон регистраутры</dt>
+                    <dd>@Model.StructureItem.PhoneReception</dd>
+                }
+                @if (Model.StructureItem.Fax != null)
+                {
+                    <dt>Факс</dt>
+                    <dd>@Model.StructureItem.Fax</dd>
+                }
+                @if (Model.StructureItem.Email != null)
+                {
+                    <dt>E-mail приемной</dt>
+                    <dd><a href="mailto:@Model.StructureItem.Email">@Model.StructureItem.Email</a></dd>
+                }
+            </dl>
+            <div id="coords" data-x="@Model.SitesItemInfo.CoordX.ToString().Replace(",", ".")" data-y="@Model.SitesItemInfo.CoordY.ToString().Replace(",", ".")" data-title="@Model.SitesItemInfo.C_Name"></div>
+            <div class="map_wr">
+                <div id="map" style="width: 100%; height: 350px;"></div>
+            </div>
+
+        </div>
+        <div class="col-sm-3">
+
+        </div>
+    </div>
+</div>
+

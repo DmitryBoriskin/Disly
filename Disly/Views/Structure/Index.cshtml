@@ -1,22 +1,21 @@
 ﻿@model StructureViewModel
 <div class="container">
     @if (Model.StructureItem != null)
-    {
-        <h1>@Model.StructureItem.Title</h1>
-        @Html.Partial("services/breadcrumbs")
+    {        
+        @Html.Partial("StructureItem")
     }
     else
     {
         <h1>Струкутура</h1>
         @Html.Partial("services/breadcrumbs")
         if (Model.Structures != null)
-        {
-            <ul>
+        {            
+            <div class="child">
                 @foreach (var item in Model.Structures)
                 {
-                    <li><a href="/structure/@item.Num">@item.Title</a></li>
+                    <div class="child_link"><span>—</span><a href="/structure/@item.Num">@item.Title</a></div>
                 }
-            </ul>
+            </div>
         }
     }
     

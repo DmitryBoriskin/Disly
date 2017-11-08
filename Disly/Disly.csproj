@@ -755,6 +755,7 @@
     <Content Include="Views\Shared\services\Pager.cshtml" />
     <Content Include="Views\Shared\services\breadcrumbs.cshtml" />
     <Content Include="Views\Structure\Index.cshtml" />
+    <Content Include="Views\Structure\StructureItem.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

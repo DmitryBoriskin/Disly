@@ -2,11 +2,11 @@
 
 <div class="container">
     <h1>Новости</h1>
+    @Html.Partial("services/breadcrumbs")
     @if (!String.IsNullOrEmpty(ViewBag.Alias))
     {
         <h2>@Model.Item.Title</h2>
         @Html.Raw(Model.Item.Text)
-
     }
     else
     {
@@ -22,32 +22,24 @@
             }
         </ul>
 
-        if (Model.List != null)
-        {
-            if (Model.List.Data != null)
+        <br /><br />
+        <div class="news_list">
+            @if (Model.List != null)
             {
-                foreach (var item in Model.List.Data)
+                if (Model.List.Data != null)
                 {
-                    <div class="col-md-4">
-                        <div class="card">
-                            <img class="card-img-top" src="http://via.placeholder.com/300x150" />
-                            <div class="card-block">
-                                <div class="card-title">@item.Title</div>
-                                <span class="card-text">@item.Date.ToString("dd.MM.yyyy")</span>
-                                <div>
-                                    <a class="btn btn-primary" href="/press/@item.Year/@item.Month/@item.Day/@item.Alias">Подробнее</a>
-                                </div>
+                    foreach (var item in Model.List.Data)
+                    {
+                        <div class="col-md-12">
+                            <div class="item_news">
+                                <div class="news-list_date"><span>@item.Date.ToString("HH:mm | dd.MM.yyyy")</span></div>
+                                <a class="news-list_title" href="/press/@item.Year/@item.Month/@item.Day/@item.Alias">@item.Title</a>
                             </div>
-
                         </div>
-                    </div>
+                    }
                 }
-
+                Html.RenderAction("Pager", "Service", new { @Model = Model.List.Pager });
             }
-            Html.RenderAction("Pager", "Service", new { @Model = Model.List.Pager });
-        }
-
+        </div>
     }
-    
-    
 </div>
