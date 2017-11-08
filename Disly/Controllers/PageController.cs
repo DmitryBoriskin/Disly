@@ -9,7 +9,21 @@ namespace Disly.Controllers
     {
         public const String Name = "Error";
         public const String ActionName_Custom = "Custom";
-        
+        private TypePageViewModel model;
+
+
+        protected override void OnActionExecuting(ActionExecutingContext filterContext)
+        {
+            base.OnActionExecuting(filterContext);
+
+            model = new TypePageViewModel
+            {
+                SitesInfo = siteModel,
+                SiteMapArray = siteMapArray,
+                BannerArray = bannerArray
+            };
+        }
+
         /// <summary>
         /// Сраница по умолчанию
         /// </summary>
@@ -23,15 +37,16 @@ namespace Disly.Controllers
             string _path = UrlPath.Substring(0, UrlPath.LastIndexOf("/") + 1);
             string _alias = UrlPath.Substring(UrlPath.LastIndexOf("/") + 1);
             #endregion
+
+            model.Item = _repository.getSiteMap(_path,_alias,Domain);            
+
             #region Создаем переменные (значения по умолчанию)
             PageViewModel Model = new PageViewModel();
             string _ViewName = (ViewName != String.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";
-
             string PageTitle = "страница сайта";
             string PageDesc = "описание страницы";
             string PageKeyw = "ключевые слова";
-            #endregion
-            
+            #endregion            
             //cms.dbModel.entity.pagePathModel[] _PagePath = _repository.getPagePath(_path + _alias, _domain);
 
             //Model = new PageViewModel() {
@@ -43,7 +58,6 @@ namespace Disly.Controllers
             //    PlaceCardList = _repository.getPlaceCards(_domain),
             //    NewsItem = _repository.getMaterialsItem(_path + _alias, _domain),
             //    //Banners = _repository.getBanners(BANNER_SECTIONS, _domain)
-
             //    //SitesInfo=_repository.getAllSitesInfo()
             //};
 
@@ -53,7 +67,7 @@ namespace Disly.Controllers
             ViewBag.KeyWords = PageKeyw;
             #endregion
 
-            return View(_ViewName);
+            return View(_ViewName,model);
 
             //if (Model.PageInfo != null)
             //{

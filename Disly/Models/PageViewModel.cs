@@ -30,6 +30,7 @@ namespace Disly.Models
         /// Баннеры
         /// </summary>
         public BannersModel[] BannerArray { get; set; }
+
     }
 
     /// <summary>

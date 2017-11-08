@@ -52,7 +52,7 @@ namespace Disly.Controllers
         {
             ViewBag.Day = day.ToString();
             ViewBag.Alias = (RouteData.Values["alias"] != null) ? RouteData.Values["alias"] : String.Empty;
-            model.Item = _repository.getMaterialsItem(year, month, day, alias);
+            model.Item = _repository.getMaterialsItem(year, month, day, alias,Domain);
 
             #region Создаем переменные (значения по умолчанию)            
             string _ViewName = (ViewName != String.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";

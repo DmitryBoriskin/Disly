@@ -218,6 +218,39 @@ namespace cms.dbase
 
             return null;
         }
+
+
+        public override SiteMapModel getSiteMap(string path,string alias,string domain)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var query = db.content_sitemaps.Where(w => w.c_path == path && w.c_alias == alias && w.f_site == domain);
+                if (query.Any())
+                {
+                    var data= query.Select(s => new SiteMapModel {
+                        Title=s.c_title,
+                        Text=s.c_text,
+                        Alias=s.c_alias,
+                        Path=s.c_path
+                        }).First();
+
+                    data.Child = db.content_sitemaps
+                                 .Where(w => w.c_path == data.Path && w.c_alias==data.Alias && w.f_site==domain)
+                                 .OrderBy(o=>o.n_sort)
+                                 .Select(c => new SiteMapModel
+                                 {
+                                     Title = c.c_title,
+                                     Alias=c.c_alias,
+                                     Path=c.c_path
+                                 }).ToArray();
+                    return data;
+                }
+                return null;
+            }
+            
+        }
+
+
         /// <summary>
         /// Получим список новостей для определенной сущности
         /// </summary>
@@ -307,7 +340,7 @@ namespace cms.dbase
                 return null;
             }
         }
-        public override MaterialsModel getMaterialsItem(string year, string month, string day, string alias)
+        public override MaterialsModel getMaterialsItem(string year, string month, string day, string alias, string domain)
         {
             using (var db = new CMSdb(_context))
             {
@@ -315,11 +348,29 @@ namespace cms.dbase
                 int _month = Convert.ToInt32(month);
                 int _day = Convert.ToInt32(day);
 
-                var data = db.content_materialss
-                             .Where(w => (w.n_year == _year) && (w.n_month == _month) && (w.n_day == _day) && (w.c_alias.ToLower()==alias.ToLower()));
-                if (data.Any())
+
+                var contentType = ContentType.MATERIAL.ToString().ToLower();
+
+
+                var materials = db.content_content_links.Where(e => e.f_content_type == contentType)
+                                                        .Join(db.cms_sitess.Where(o => o.c_alias == domain),
+                                                                   e => e.f_link,
+                                                                   o => o.f_content,
+                                                                   (e, o) => e.f_content
+                                                               );
+
+                if (!materials.Any())
+                    return null;
+
+                var query = db.content_materialss
+                            .Where(w => materials.Contains(w.id));
+
+
+
+                query=query.Where(w => (w.n_year == _year) && (w.n_month == _month) && (w.n_day == _day) && (w.c_alias.ToLower()==alias.ToLower()));
+                if (query.Any())
                 {
-                    return data.Select(s => new MaterialsModel {
+                    return query.Select(s => new MaterialsModel {
                         Title=s.c_title,
                         Text=s.c_text
                             }).First();

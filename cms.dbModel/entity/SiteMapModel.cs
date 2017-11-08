@@ -106,6 +106,7 @@ namespace cms.dbModel.entity
         /// Сортировка внутри меню
         /// </summary>
         public int MenuSort { get; set; }
+        public SiteMapModel[] Child { get; set; }
     }
 
     /// <summary>
