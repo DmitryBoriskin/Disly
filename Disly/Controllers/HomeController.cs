@@ -17,7 +17,7 @@ namespace Disly.Controllers
             {
                 SitesInfo = siteModel,
                 SiteMapArray = siteMapArray,
-                BannerArray = bannerArray
+                BannerArray = bannerArray,
             };
         }
 
@@ -40,6 +40,8 @@ namespace Disly.Controllers
             ViewBag.Description = PageDesc;
             ViewBag.KeyWords = PageKeyw;
             #endregion
+
+            model.Materials = _repository.getMaterialsModule(Domain);
 
             return View(_ViewName, model);
         }

@@ -32,7 +32,10 @@
                 <div class="col-md-8">
                     <a href="/" class="media">
                         <div class="media-left">
-                            <img src="~/Content/img/logo.png" />
+                            @if (Model.SitesInfo.Logo != null)
+                            {
+                                <img src="@Model.SitesInfo.Logo.Url" />
+                            }
                         </div>
                         <div class="media-body">
                             <h4 class="media-heading">
@@ -143,7 +146,10 @@
                 <div class="col-md-8">
                     <div class="media">
                         <div class="media-left">
-                            <img src="~/Content/img/foot_logo.png" />
+                            @if (Model.SitesInfo.Logo != null)
+                            {
+                                <img class="logo-small" src="@Model.SitesInfo.Logo.Url" />
+                            }
                         </div>
                         <div class="media-body">
                             @Model.SitesInfo.LongTitle

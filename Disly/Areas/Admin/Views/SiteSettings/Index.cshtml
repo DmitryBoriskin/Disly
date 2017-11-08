@@ -1,5 +1,11 @@
 ﻿@model SitesViewModel
 
+@{ 
+    string fileName = (Model.Item != null && Model.Item.Logo != null) ? Model.Item.Logo.Name : string.Empty;
+    string fileSize = (Model.Item != null && Model.Item.Logo != null) ? Model.Item.Logo.Size : string.Empty;
+    string fileUrl = (Model.Item != null && Model.Item.Logo != null) ? Model.Item.Logo.Url : string.Empty;
+}
+
 <div class="content">
     <h1>@ViewBag.Title</h1>
     @Html.TextBoxFor(m => m.Item.Title, new { @title = "Название", @required = "" })
@@ -13,6 +19,8 @@
 <div class="dop_info-block">
     @Html.TextBoxFor(m => m.Item.Alias, new { @title = "Домен" })
     @Html.TextBoxFor(m => m.Item.Site, new { @title = "Ссылка" })
+    @Html.TextBox("upload", null, new { type = "file", title = "Изображение", data_name = fileName, data_size = fileSize, data_url = fileUrl, accept = ".jpg,.jpeg,.png,.gif" })
+    @Html.TextBoxFor(m => m.Item.Logo.Url, new { type = "hidden", value = fileUrl })
     <div class="group-block" title="Социальные сети">
         @Html.TextBoxFor(m => m.Item.Facebook, new { @title = "Facebook" })
         @Html.TextBoxFor(m => m.Item.Vk, new { @title = "Вконтакте" })
@@ -31,5 +39,4 @@
     {
         <button type="submit" name="action" value="save-btn" data-primary="true" class="button icon-create">Сохранить</button>
     }
-    <button type="submit" name="action" value="cancel-btn" data-action="cancel" class="button icon-cancel">Назад</button>
 </div>

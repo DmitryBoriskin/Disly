@@ -1,5 +1,6 @@
 ﻿using cms.dbModel.entity;
 using System;
+using System.Collections.Generic;
 
 namespace cms.dbModel
 {
@@ -13,5 +14,7 @@ namespace cms.dbModel
         public abstract BannersModel[] getBanners(string domain);
 
         public abstract MaterialsList getMaterialsList(FilterParams filtr);
+
+        public abstract List<MaterialFrontModule> getMaterialsModule(string domain);
     }
 }

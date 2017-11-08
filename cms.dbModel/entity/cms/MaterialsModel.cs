@@ -118,6 +118,11 @@ namespace cms.dbModel.entity
         /// Связь с другими объектами/сущностями
         /// </summary>
         public ObjectLinks Links { get; set; }
+
+        /// <summary>
+        /// Название группы (для модуля внешней части)
+        /// </summary>
+        public string GroupName { get; set; }
     }
 
     /// <summary>
@@ -139,5 +144,41 @@ namespace cms.dbModel.entity
         /// Сортировка
         /// </summary>
         public int Sort { get; set; }
+    }
+
+    /// <summary>
+    /// Модель, описывающая новость для модуля главной страницы
+    /// </summary>
+    public class MaterialFrontModule
+    {
+        /// <summary>
+        /// Название
+        /// </summary>
+        public string Title { get; set; }
+
+        /// <summary>
+        /// Алиас
+        /// </summary>
+        public string Alias { get; set; }
+
+        /// <summary>
+        /// Дата
+        /// </summary>
+        public DateTime Date { get; set; }
+
+        /// <summary>
+        /// Название группы
+        /// </summary>
+        public string GroupName { get; set; }
+
+        /// <summary>
+        /// Алиас группы
+        /// </summary>
+        public string GroupAlias { get; set; }
+
+        /// <summary>
+        /// Картинка к новости
+        /// </summary>
+        public string Photo { get; set; }
     }
 }

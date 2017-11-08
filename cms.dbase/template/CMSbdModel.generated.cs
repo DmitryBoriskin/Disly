@@ -69,6 +69,7 @@ namespace cms.dbase.models
 		public ITable<content_sitemap_menutypes>        content_sitemap_menutypess        { get { return this.GetTable<content_sitemap_menutypes>(); } }
 		public ITable<content_sv_banner_sections_sites> content_sv_banner_sections_sitess { get { return this.GetTable<content_sv_banner_sections_sites>(); } }
 		public ITable<content_sv_banners_section>       content_sv_banners_sections       { get { return this.GetTable<content_sv_banners_section>(); } }
+		public ITable<content_sv_materials_groups>      content_sv_materials_groupss      { get { return this.GetTable<content_sv_materials_groups>(); } }
 		public ITable<content_sv_materials_sites>       content_sv_materials_sitess       { get { return this.GetTable<content_sv_materials_sites>(); } }
 		public ITable<content_sv_orgs_by_type>          content_sv_orgs_by_types          { get { return this.GetTable<content_sv_orgs_by_type>(); } }
 		public ITable<content_sv_orgs_not_attached>     content_sv_orgs_not_attacheds     { get { return this.GetTable<content_sv_orgs_not_attached>(); } }
@@ -841,9 +842,10 @@ namespace cms.dbase.models
 	[Table(Schema="dbo", Name="content_materials_groups")]
 	public partial class content_materials_groups
 	{
-		[PrimaryKey, NotNull] public Guid   id      { get; set; } // uniqueidentifier
-		[Column,     NotNull] public string c_title { get; set; } // nvarchar(256)
-		[Column,     NotNull] public int    n_sort  { get; set; } // int
+		[PrimaryKey, NotNull    ] public Guid   id      { get; set; } // uniqueidentifier
+		[Column,     NotNull    ] public string c_title { get; set; } // nvarchar(256)
+		[Column,     NotNull    ] public int    n_sort  { get; set; } // int
+		[Column,        Nullable] public string c_alias { get; set; } // nvarchar(256)
 
 		#region Associations
 
@@ -1224,6 +1226,30 @@ namespace cms.dbase.models
 		[Column, NotNull    ] public Guid     f_section  { get; set; } // uniqueidentifier
 		[Column, NotNull    ] public Guid     Expr2      { get; set; } // uniqueidentifier
 		[Column,    Nullable] public string   c_alias    { get; set; } // nvarchar(512)
+	}
+
+	// View
+	[Table(Schema="dbo", Name="content_sv_materials_groups")]
+	public partial class content_sv_materials_groups
+	{
+		[Column, NotNull    ] public Guid     id          { get; set; } // uniqueidentifier
+		[Column, NotNull    ] public DateTime d_date      { get; set; } // datetime
+		[Column, NotNull    ] public string   c_title     { get; set; } // varchar(512)
+		[Column,    Nullable] public string   c_preview   { get; set; } // varchar(512)
+		[Column,    Nullable] public string   c_text      { get; set; } // varchar(max)
+		[Column,    Nullable] public string   c_url       { get; set; } // varchar(1024)
+		[Column,    Nullable] public string   c_url_name  { get; set; } // varchar(512)
+		[Column,    Nullable] public string   c_desc      { get; set; } // varchar(1024)
+		[Column,    Nullable] public string   c_keyw      { get; set; } // varchar(512)
+		[Column, NotNull    ] public int      n_year      { get; set; } // int
+		[Column, NotNull    ] public int      n_month     { get; set; } // int
+		[Column, NotNull    ] public int      n_day       { get; set; } // int
+		[Column, NotNull    ] public string   c_alias     { get; set; } // varchar(512)
+		[Column, NotNull    ] public bool     b_disabled  { get; set; } // bit
+		[Column, NotNull    ] public bool     b_important { get; set; } // bit
+		[Column, NotNull    ] public Guid     group_id    { get; set; } // uniqueidentifier
+		[Column, NotNull    ] public string   group_title { get; set; } // nvarchar(256)
+		[Column,    Nullable] public string   group_alias { get; set; } // nvarchar(256)
 	}
 
 	// View
@@ -1858,3 +1884,4 @@ namespace cms.dbase.models
 		}
 	}
 }
+ 

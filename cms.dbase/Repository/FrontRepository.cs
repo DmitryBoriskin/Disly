@@ -3,6 +3,7 @@ using cms.dbModel;
 using cms.dbModel.entity;
 using LinqToDB;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace cms.dbase
@@ -89,7 +90,11 @@ namespace cms.dbase
                         Email = s.c_email,
                         Site = s.c_url,
                         Worktime = s.c_worktime,
-                        Logo = s.c_logo,
+                        //Logo = s.c_logo,
+                        Logo = new Photo
+                        {
+                            Url = s.c_logo
+                        },
                         ContentId = (Guid)s.f_content,
                         Type = s.c_content_type,
                         Facebook = s.c_facebook,
@@ -286,6 +291,58 @@ namespace cms.dbase
                         };
                 }
                 return null;
+            }
+        }
+
+        /// <summary>
+        /// Получаем новости для модуля на главной странице
+        /// </summary>
+        /// <returns></returns>
+        public override List<MaterialFrontModule> getMaterialsModule(string domain)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var contentType = ContentType.MATERIAL.ToString().ToLower();
+                
+                // список id-новостей для данного сайта
+                var materialIds = db.content_content_links.Where(e => e.f_content_type == contentType)
+                    .Join(db.cms_sitess.Where(o => o.c_alias == domain),
+                            e => e.f_link,
+                            o => o.f_content,
+                            (e, o) => e.f_content
+                            );
+
+                if (!materialIds.Any())
+                    return null;
+
+                // список групп
+                var groups = db.content_materials_groupss
+                    .Select(s => s.id).ToArray();
+
+                List<MaterialFrontModule> list = new List<MaterialFrontModule>();
+
+                foreach (var g in groups)
+                {
+                    var query = db.content_sv_materials_groupss
+                        .Where(w => materialIds.Contains(w.id))
+                        .Where(w => w.group_id.Equals(g))
+                        .OrderByDescending(o => o.d_date)
+                        .Select(s => new MaterialFrontModule
+                        {
+                            Title = s.c_title,
+                            Alias = s.c_alias,
+                            Date = s.d_date,
+                            GroupName = s.group_title,
+                            GroupAlias = s.group_alias,
+                            Photo = s.c_preview
+                        });
+
+                    // берём последние 3 новости данной группы
+                    if (query.Any()) list.AddRange(query.Take(3));
+                }
+
+                if (list.Count() > 0) return list;
+                else return null;
             }
         }
     }

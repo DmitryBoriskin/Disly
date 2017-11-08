@@ -29,6 +29,9 @@
             Link = s.Url
         });
 
+    var announcements = Model.Materials.Where(w => w.GroupAlias.Equals("announcement"));
+    var news = Model.Materials.Where(w => w.GroupAlias.Equals("news"));
+    var events = Model.Materials.Where(w => w.GroupAlias.Equals("events"));
     int i = 0;
 }
 
@@ -36,135 +39,249 @@
 <div class="container-fluid">
     <div class="top-slider-wrapper">
         <div class="container">
-            @if (slider != null && slider.Count() > 0)
-            {
-                <div id="myCarousel" class="carousel slide slider" data-ride="carousel">
+            <div class="row">
+                @if (slider != null && slider.Count() > 0)
+                {
+                    <div class="col-md-10">
+                        <div id="myCarousel" class="carousel slide slider" data-ride="carousel">
+                            <!-- Wrapper for slides -->
+                            <div class="carousel-inner top-slider top-slider-shadow">
 
-                    <!-- Wrapper for slides -->
-                    <div class="carousel-inner top-slider top-slider-shadow">
+                                @foreach (var item in slider)
+                                {
+                                    string active = i == 0 ? "active" : string.Empty;
+                                    string text = !string.IsNullOrEmpty(item.Text) ? item.Text : "&nbsp;";
+                                    i++;
 
-                        @foreach (var item in slider)
-                        {
-                            string active = i == 0 ? "active" : string.Empty;
-                            string text = !string.IsNullOrEmpty(item.Text) ? item.Text : "&nbsp;";
-                            i++;
-
-                            <div class="item @active">
-                                <div class="slider-item">
-                                    <div class="slider-img">
-                                        <a href="@item.Link">
-                                            <img src="@item.Url" alt="@item.Title">
-                                        </a>
-                                    </div>
-                                    <div class="slider-text-block">
-                                        <div class="slider-text">
-                                            @Html.Raw(text)
-                                        </div>
-
-                                        <!-- Left and right controls -->
-                                        @if (slider.Count() > 1)
-                                        {
-                                            <div class="slider-controls">
-                                                <a class="left" href="#myCarousel" data-slide="prev">
-                                                    <span class="ti-arrow-circle-left"></span>
-                                                    <span class="sr-only">Previous</span>
-                                                </a>
-                                                <a class="right" href="#myCarousel" data-slide="next">
-                                                    <span class="ti-arrow-circle-right"></span>
-                                                    <span class="sr-only">Next</span>
+                                    <div class="item @active">
+                                        <div class="slider-item">
+                                            <div class="slider-img">
+                                                <a href="@item.Link">
+                                                    <img src="@item.Url" alt="@item.Title">
                                                 </a>
                                             </div>
-                                        }
+                                            <div class="slider-text-block">
+                                                <div class="slider-text">
+                                                    @Html.Raw(text)
+                                                </div>
 
+                                                <!-- Left and right controls -->
+                                                @if (slider.Count() > 1)
+                                                {
+                                                    <div class="slider-controls">
+                                                        <a class="left" href="#myCarousel" data-slide="prev">
+                                                            <span class="ti-arrow-circle-left"></span>
+                                                            <span class="sr-only">Previous</span>
+                                                        </a>
+                                                        <a class="right" href="#myCarousel" data-slide="next">
+                                                            <span class="ti-arrow-circle-right"></span>
+                                                            <span class="sr-only">Next</span>
+                                                        </a>
+                                                    </div>
+                                                }
+                                            </div>
+                                        </div>
                                     </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                }
+                <div class="col-md-2">
+                    <div class="slider-message-block">
+                        <a href="#">
+                            <div class="slider-message blue">
+                                <div class="icon-slider-message">
+                                    <span class="ti-support"></span>
+                                </div>
+                                <div class="slider-message-full">
+                                    <div class="slider-message-title">электронная&nbsp;регистратура</div>
+                                    <div class="slider-message-text">Запишитесь на приём к врачу online</div>
                                 </div>
                             </div>
-                        }
+                        </a>
+                        <a href="#">
+                            <div class="slider-message black">
+                                <div class="icon-slider-message">
+                                    <span class="ti-mobile"></span>
+                                </div>
+                                <div class="slider-message-full">
+                                    <div class="slider-message-title">номера&nbsp;наших&nbsp;телефонов</div>
+                                </div>
+                            </div>
+                        </a>
+                        <a href="#">
+                            <div class="slider-message orange">
+                                <div class="icon-slider-message">
+                                    <span class="ti-check-box"></span>
+                                </div>
+                                <div class="slider-message-full">
+                                    <div class="slider-message-title">нам&nbsp;важно&nbsp;ваше&nbsp;мнение!</div>
+                                </div>
+                            </div>
+                        </a>
                     </div>
-
                 </div>
-            }
-
-            <div class="slider-message-block">
-                <a href="#">
-                    <div class="slider-message blue">
-                        <div class="icon-slider-message">
-                            <span class="ti-support"></span>
-                        </div>
-                        <div class="slider-message-full">
-                            <div class="slider-message-title">электронная&nbsp;регистратура</div>
-                            <div class="slider-message-text">Запишитесь на приём к врачу online</div>
-                        </div>
-                    </div>
-                </a>
-                <a href="#">
-                    <div class="slider-message black">
-                        <div class="icon-slider-message">
-                            <span class="ti-headphone"></span>
-                        </div>
-                        <div class="slider-message-full">
-                            <div class="slider-message-title">номера&nbsp;наших&nbsp;телефонов</div>
-                        </div>
-                    </div>
-                </a>
-                <a href="#">
-                    <div class="slider-message orange">
-                        <div class="icon-slider-message">
-                            <span class="ti-check-box"></span>
-                        </div>
-                        <div class="slider-message-full">
-                            <div class="slider-message-title">нам&nbsp;важно&nbsp;ваше&nbsp;мнение!</div>
-                        </div>
-                    </div>
-                </a>
             </div>
-
         </div>
     </div>
 </div>
 <!-- конец слайдера -->
+<!-- модуль новостей -->
+<div class="container">
+    @if (Model.Materials != null)
+    {
+        <div class="news-module">
+            <p class="module-title">Пресс-центр<span class="ti-folder"></span><a class="link-to-archive" href="#">Архив</a></p>
+            <div class="row">
+                <div class="col-md-3">
+                    @if (announcements != null && announcements.Count() > 0)
+                    {
+                        var ann = announcements.ToList();
+
+                        for (int j = 0; j < 2; j++)
+                        {
+                            string link = "/press/" + ann[j].Date.Year + "/" + ann[j].Date.Month + "/" + ann[j].Date.Day + "/" + ann[j].Alias;
+
+                            <div class="module-material-item">
+                                <div class="module-material-item-date">
+                                    <div class="module-material-item-day">
+                                        @ann[j].Date.Day.ToString()
+                                    </div>
+                                    <div class="module-material-item-otherdate">
+                                        <div>
+                                            @ann[j].Date.ToString("MMMM")
+                                        </div>
+                                        <div>
+                                            @ann[j].Date.ToString("yyyy")
+                                        </div>
+                                    </div>
+                                </div>
+                                <a href="/press/@ann[j].GroupAlias">
+                                    <div class="module-material-item-group-link">@ann[j].GroupName</div>
+                                </a>
+                                <a href="@link">
+                                    <div class="module-material-title">@ann[j].Title</div>
+                                </a>
+                            </div>
+                        }
+                    }
+                </div>
+                <div class="col-md-3">
+                    @if (news != null && news.Count() > 0)
+                    {
+                        var n = news.ToList();
+
+                        for (int j = 0; j < 2; j++)
+                        {
+                            string link = "/press/" + n[j].Date.Year + "/" + n[j].Date.Month + "/" + n[j].Date.Day + "/" + n[j].Alias;
+
+                            <div class="module-material-item">
+                                <div class="module-material-item-date">
+                                    <div class="module-material-item-day">
+                                        @n[j].Date.Day.ToString()
+                                    </div>
+                                    <div class="module-material-item-otherdate">
+                                        <div>
+                                            @n[j].Date.ToString("MMMM")
+                                        </div>
+                                        <div>
+                                            @n[j].Date.ToString("yyyy")
+                                        </div>
+                                    </div>
+                                </div>
+                                <a href="/press/@n[j].GroupAlias">
+                                    <div class="module-material-item-group-link">@n[j].GroupName</div>
+                                </a>
+                                <a href="@link">
+                                    <div class="module-material-title">@n[j].Title</div>
+                                </a>
+                            </div>
+                        }
+                    }
+                </div>
+                <div class="col-md-6">
+                    @if (events != null && events.FirstOrDefault() != null)
+                    {
+                        var ev = events.FirstOrDefault();
+
+                        string link = "/press/" + ev.Date.Year + "/" + ev.Date.Month + "/" + ev.Date.Day + "/" + ev.Alias;
+                        string photo = !string.IsNullOrEmpty(ev.Photo) ? ev.Photo : "~/Content/img/temporal.jpg";
+
+                        <div class="event-item-module">
+                            <div class="event-item-module-opacity top-op">
+                                <div class="module-material-item-date">
+                                    <div class="module-material-item-day">
+                                        @ev.Date.Day.ToString()
+                                    </div>
+                                    <div class="module-material-item-otherdate">
+                                        <div>
+                                            @ev.Date.ToString("MMMM")
+                                        </div>
+                                        <div>
+                                            @ev.Date.ToString("yyyy")
+                                        </div>
+                                    </div>
+                                </div>
+                                <a href="/press/@ev.GroupAlias">
+                                    <div class="module-material-item-group-link">@ev.GroupName</div>
+                                </a>
+                            </div>
+                            <a href="@link">
+                                <img src="@photo" alt="@ev.Title" />
+                            </a>
+                            <div class="event-item-module-opacity bottom-op">
+                                <a href="@link">@ev.Title</a>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+
+        </div>
+    }
+</div>
+<!-- конец модуля новостей -->
 <!-- модуль полезные ресурсы -->
 <div class="container-fluid">
     @if (benefitBanners != null)
     {
         <div class="imglink-benefit-block module-main-page">
             <div class="container">
-                <p class="module-title">Полезные ресурсы</p>
-                @*<div class="row">*@
-                    <div class="ling_img_on carousel slide">
-                        <div class="carousel-inner" data-count="4">
-                            @foreach (var item in benefitBanners)
-                            {
-                                string title = item.Title;
-                                if (title.Length > 70)
-                                {
-                                    title = title.Substring(0, 70);
-                                }
-
-                                <div class="linkimg_item col-md-3">
-                                    <a href="@item.Link">
-                                        <div class="imglink-item">
-                                            @if (!string.IsNullOrEmpty(item.Url))
-                                            {
-                                                <img class="imglink-pic" src="@item.Url" />
-                                            }
-                                            <div class="imglink-title">
-                                                @Html.Raw(title)
-                                            </div>
-                                        </div>
-                                    </a>
-                                </div>
-                            }
-                        </div>
-                        @if (benefitBanners.Count() > 4)
+                <p class="module-title">Полезные ресурсы<span class="ti-folder"></span><a class="link-to-archive" href="#">Архив</a></p>
+                <div class="ling_img_on carousel slide">
+                    <div class="carousel-inner" data-count="4">
+                        @foreach (var item in benefitBanners)
                         {
-                            <div class="imglink-controlls">
-                                <a data-slide="prev" class="ti-angle-left prev"></a>
-                                <a data-slide="next" class="ti-angle-right next"></a>
+                            string title = item.Title;
+                            if (title.Length > 70)
+                            {
+                                title = title.Substring(0, 70);
+                            }
+
+                            <div class="linkimg_item col-md-3">
+                                <a href="@item.Link">
+                                    <div class="imglink-item">
+                                        @if (!string.IsNullOrEmpty(item.Url))
+                                        {
+                                            <img class="imglink-pic" src="@item.Url" />
+                                        }
+                                        <div class="imglink-title">
+                                            @Html.Raw(title)
+                                        </div>
+                                    </div>
+                                </a>
                             </div>
                         }
                     </div>
-                @*</div>*@
+                    @if (benefitBanners.Count() > 4)
+                    {
+                        <div class="imglink-controlls">
+                            <a data-slide="prev" class="ti-angle-left prev"></a>
+                            <a data-slide="next" class="ti-angle-right next"></a>
+                        </div>
+                    }
+                </div>
             </div>
         </div>
     }

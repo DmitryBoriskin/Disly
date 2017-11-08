@@ -36,8 +36,11 @@
 /*  */
 
 /* slider */
-.top-slider-wrapper{
-    background-color:#ccd3e0;
+.top-slider-wrapper {
+    background-color: #ccd3e0;
+    background-image: url('/Content/img/doctor.png');
+    background-position: -240px -20px;
+    background-repeat: no-repeat;
 }
 .slider-text-block{
     background-color:#1f4799;
@@ -126,5 +129,21 @@
 /* social_network_list */
 .social_network_list a{
     color:#bfbfbf;
+}
+/*  */
+
+/*  module-main-page  */
+.module-material-item{
+    background-color:#ebedf2;
+}
+.module-material-item:hover{
+    background-color:#3973e6;
+    color:#fff;
+}
+
+.module-material-item:hover a{color:#fff;text-decoration:underline;}
+.module-material-item:hover div{color:#fff;}
+.module-material-item:hover:after{
+    border-bottom: 10px solid rgb(31, 71, 153);
 }
 /*  */
