@@ -27,18 +27,20 @@
                 }
 
                 string disabled = (item.Disabled) ? "disabled" : "";
-
-                <div class="list-item event-list @disabled">
+                string locked = (item.Locked) ? "locked" : "";
+                <div class="list-item event-list @disabled @locked">
                     <a href="/admin/events/item/@item.Id/@ViewBag.urlQuery">
                         <img src="@ImgUrl" alt="" class="li-image">
                     </a>
-                    <div class="li-desc">
+                    <div class="li-desc ">
+                        @if (item.Locked)
+                        {<a class="icon-lock" title="Заблокировано администратором портала"></a>}
                         <a title="@item.Title" class="li-caption" href="/admin/events/item/@item.Id/@ViewBag.urlQuery">@item.Title</a><br />
                         <span>Дата проведения:</span> @Convert.ToDateTime(item.DateBegin).ToString("dd MMMM yyyy")
                         @if (item.DateEnd.HasValue)
                         {
                             <span> - </span>
-                                @Convert.ToDateTime(item.DateEnd).ToString("dd MMMM yyyy")
+                            @Convert.ToDateTime(item.DateEnd).ToString("dd MMMM yyyy")
                         }<br />
                         <span>Место проведения:</span> @item.Place<br />
                     </div>
@@ -52,7 +54,6 @@
             <div class="alert alert-info">Не найдено ни одной записи.</div>
         }
     </div>
-
 
     <div class="dop_info-block">
         <div class="dop-caption">Фильтр</div>
@@ -68,13 +69,13 @@
         </div>
     </div>
 
-    <div class="buttons">
-        @if (Model.UserResolution.Write)
-        {
-            <button type="submit" name="action" value="insert-btn" class="button icon-create">Создать</button>
-            <button type="submit" name="action" value="rssimport-btn" class="button icon-create green">Импорт с других сайтов</button>
-        }
-    </div>
+                <div class="buttons">
+                    @if (Model.UserResolution.Write)
+                    {
+                        <button type="submit" name="action" value="insert-btn" class="button icon-create">Создать</button>
+                        <button type="submit" name="action" value="rssimport-btn" class="button icon-create green">Импорт с других сайтов</button>
+                    }
+                </div>
 }
 else
 {

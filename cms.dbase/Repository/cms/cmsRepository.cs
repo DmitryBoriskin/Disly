@@ -1030,7 +1030,7 @@ namespace cms.dbase
         }
         #endregion
 
-       
+
 
         #region Content links to objects
 
@@ -1041,53 +1041,41 @@ namespace cms.dbase
             {
                 using (var tran = db.BeginTransaction())
                 {
-                    //Получаем ссылку на того кому принадлежит content(кто создал новость/событие)
-                    Guid contentLink = Guid.Empty;
-                    if(data.ObjctType == ContentType.MATERIAL)
-                    {
-                        contentLink = db.content_materialss
-                                                .Where(s => s.id == data.ObjctId)
-                                                .Select(s => s.f_content_origin)
-                                                .SingleOrDefault();
-                    }
-                    if (data.ObjctType == ContentType.EVENT)
-                    {
-                        contentLink = db.content_eventss
-                                                .Where(s => s.id == data.ObjctId)
-                                                .Select(s => s.f_content_origin)
-                                                .SingleOrDefault();
-                    }
-
                     //Удаляем существующие связи, кроме того объекта, которому новость/событие принадлежит.
                     db.content_content_links
-                                            .Where(w => w.f_content.Equals(data.ObjctId))
-                                            .Where(w => !w.f_link.Equals(contentLink))
+                                            .Where(w => w.f_content == data.ObjctId)
+                                            .Where(w => w.f_link_type == data.LinkType.ToString().ToLower())
+                                            .Where(w => w.b_origin != true)
                                             .Delete();
 
                     if (data.LinksId != null && data.LinksId.Count() > 0)
                     {
                         foreach (var link in data.LinksId)
                         {
-                            if (link != contentLink)
+                            var isExist = db.content_content_links
+                                            .Where(t => t.f_content == data.ObjctId)
+                                            .Where(t => t.f_link == link).Any();
+                            if (!isExist)
                             {
                                 //Добавляем дополнительные связи
                                 db.content_content_links
-                                               .Value(v => v.f_content, data.ObjctId)
-                                               .Value(v => v.f_link, link)
-                                               .Value(v => v.f_link_type, ContentLinkType.ORG.ToString().ToLower())
-                                               .Insert();
+                                                .Value(v => v.f_content, data.ObjctId)
+                                                .Value(v => v.f_content_type, data.ObjctType.ToString().ToLower())
+                                                .Value(v => v.f_link, link)
+                                                .Value(v => v.f_link_type, data.LinkType.ToString().ToLower())
+                                                .Insert();
                             }
                         }
+                      }
+                        tran.Commit();
                     }
-                    tran.Commit();
+                    return true;
                 }
-                return true;
             }
-        }
         #endregion
 
 
-        #region Person
+            #region Person
         public override UsersList getPersonList(FilterParams filtr)
         {
             using (var db = new CMSdb(_context))

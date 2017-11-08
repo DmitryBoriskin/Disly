@@ -709,6 +709,7 @@ namespace cms.dbase.models
 		[Column,     NotNull] public string f_content_type { get; set; } // nvarchar(16)
 		[Column,     NotNull] public Guid   f_link         { get; set; } // uniqueidentifier
 		[Column,     NotNull] public string f_link_type    { get; set; } // nvarchar(16)
+		[Column,     NotNull] public bool   b_origin       { get; set; } // bit
 	}
 
 	[Table(Schema="dbo", Name="content_departments")]

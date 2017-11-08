@@ -8,10 +8,11 @@ using System.Threading.Tasks;
 namespace Disly.Models
 {
     /// <summary>
-    /// Модель для главной страницы
+    /// Модель для типовой страницы 
     /// </summary>
-    public class HomePageViewModel : PageViewModel
-    {
-        public List<MaterialFrontModule> Materials { get; set; }
+    public class TypePageViewModel : PageViewModel
+    {         
+        public SiteMapModel Item { get; set; }
+        public SiteMapModel[] Child{ get; set; }
     }
 }

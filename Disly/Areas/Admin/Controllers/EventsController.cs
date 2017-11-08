@@ -290,7 +290,7 @@
             var model = new EventsModalViewModel()
             {
                 ObjctId = objId,
-                ObjctType = objType.ToString().ToLower(),
+                ObjctType = objType,
                 EventsList = _cmsRepository.getLastEventsListWithCheckedFor(filtr),
             };
 
@@ -305,6 +305,23 @@
 
 
             return PartialView("Modal/Events", model);
+        }
+
+        [HttpPost]
+        [MultiButton(MatchFormKey = "action", MatchFormValue = "save-org-btn")]
+        public ActionResult EventsListModal(EventsModalViewModel model)
+        {
+            ContentLinkModel modelInsert = new ContentLinkModel
+            {
+                ObjctId = model.ObjctId,
+                ObjctType = model.ObjctType,
+                LinksId = (model.EventsId != null) ? model.EventsId.Distinct().ToArray() : null,
+                LinkType = ContentLinkType.EVENT
+            };
+
+            var res = _cmsRepository.updateContentLinks(modelInsert);
+
+            return PartialView("Modal/Success");
         }
     }
  }

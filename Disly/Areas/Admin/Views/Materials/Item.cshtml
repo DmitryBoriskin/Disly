@@ -4,8 +4,10 @@
     string fileSize = (Model.Item != null && Model.Item.PreviewImage != null) ? Model.Item.PreviewImage.Size : null;
     string fileUrl = (Model.Item != null && Model.Item.PreviewImage != null) ? Model.Item.PreviewImage.Url : null;
 }
+@* Должна быть Проверка на Guid.Empty!!!*@
 
-@if (Model.UserResolution.Write)
+@if (Model.UserResolution.Write && Model.Item != null && !Model.Item.Locked)
+//||(Model.Account.Group.ToLower().Equals("developer") || Model.Account.Group.ToLower().Equals("administrator")
 {
     <div class="content">
         <h1>@ViewBag.Title</h1>
@@ -142,7 +144,12 @@
 }
 else
 {
-    <div class="content"><p>У вас недостаточно прав.</p></div>
+    <div class="content">
+        <div class="alert alert-danger">
+            <strong>У вас недостаточно прав!</strong>
+            <p>Возможно запись была заблокирована администратором портала.</p>
+        </div>
+    </div>
 }
 
 <div class="buttons">

@@ -1,1 +1,18 @@
-﻿<h1>Это типовая страница</h1>
+﻿@model TypePageViewModel
+<div class="container">
+    <h1>@Model.Item.Title</h1>
+    @Html.Partial("services/breadcrumbs")
+    @if (Model.Child != null)
+    {
+        if (Model.Child.Length > 0)
+        {
+            <ul>
+                @foreach (var item in Model.Child)
+                {
+                    <li><a href="@item.Path@item.Alias">@item.Title</a></li>
+                }                
+            </ul>
+        }
+    }
+    @Html.Raw(Model.Item.Text)
+</div>

@@ -17,7 +17,8 @@ namespace Disly.Controllers
             {
                 SitesInfo = siteModel,
                 SiteMapArray = siteMapArray,
-                BannerArray = bannerArray
+                BannerArray = bannerArray,
+                Group=_repository.getMaterialsGroup()
             };
         }
 
@@ -28,9 +29,8 @@ namespace Disly.Controllers
         public ActionResult Index()
         {
             ViewBag.Category = (RouteData.Values["category"] != null) ? RouteData.Values["category"] : String.Empty;
-
-
-            FilterParams filter = getFilter(3);
+            var filter = getFilter();
+            filter.Disabled = false;
             model.List = _repository.getMaterialsList(filter);
 
             #region Создаем переменные (значения по умолчанию)            
@@ -48,15 +48,13 @@ namespace Disly.Controllers
             return View(_ViewName, model);
         }
 
-        public ActionResult Item(int date, int? day)
+        public ActionResult Item(string year, string month, string day, string alias)
         {
-
-            ViewBag.Date = date.ToString();
             ViewBag.Day = day.ToString();
             ViewBag.Alias = (RouteData.Values["alias"] != null) ? RouteData.Values["alias"] : String.Empty;
+            model.Item = _repository.getMaterialsItem(year, month, day, alias,Domain);
 
-            #region Создаем переменные (значения по умолчанию)
-            PageViewModel Model = new PageViewModel();
+            #region Создаем переменные (значения по умолчанию)            
             string _ViewName = (ViewName != String.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";
 
             string PageTitle = "новости";
@@ -71,8 +69,33 @@ namespace Disly.Controllers
             ViewBag.KeyWords = PageKeyw;
             #endregion
 
-            return View(_ViewName, Model);
+            return View(_ViewName, model);
         }
+
+
+        public ActionResult Category(string category)
+        {
+            ViewBag.CurrentCategory = category;         
+            var filter = getFilter();
+            filter.Disabled = false;
+            filter.Category = category;
+            model.List = _repository.getMaterialsList(filter);
+
+            #region Создаем переменные (значения по умолчанию)            
+            string _ViewName = (ViewName != String.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";
+
+            string PageTitle = "новости";
+            string PageDesc = "описание страницы";
+            string PageKeyw = "ключевые слова";
+            #endregion            
+            #region Метатеги
+            ViewBag.Title = PageTitle;
+            ViewBag.Description = PageDesc;
+            ViewBag.KeyWords = PageKeyw;
+            #endregion
+            return View(_ViewName, model);
+        }
+
     }
 }
 

@@ -35,7 +35,7 @@ namespace Disly.Areas.Admin.Models
         /// <summary>
         /// Хлебные крошки
         /// </summary>
-        public BreadCrumb[] BreadCrumbOrg { get; set; }
+        public Breadcrumbs[] BreadCrumbOrg { get; set; }
 
         /// <summary>
         /// Список сотрудников

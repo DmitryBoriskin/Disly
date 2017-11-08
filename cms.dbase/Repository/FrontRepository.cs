@@ -223,6 +223,97 @@ namespace cms.dbase
 
             return null;
         }
+
+
+        public override SiteMapModel getSiteMap(string path,string alias,string domain)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var query = db.content_sitemaps.Where(w => w.c_path == path && w.c_alias == alias && w.f_site == domain);
+                if (query.Any())
+                {
+                    var data= query.Select(s => new SiteMapModel {
+                        Title=s.c_title,
+                        Text=s.c_text,
+                        Alias=s.c_alias,
+                        Path=s.c_path,
+                        Id=s.id
+                        }).First();
+
+                    
+                    return data;
+                }
+                return null;
+            }
+            
+        }
+        public override SiteMapModel[] getSiteMapChild(Guid ParentId)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var data = db.content_sitemaps
+                                 .Where(w => w.uui_parent.Equals(ParentId))
+                                 .OrderBy(o => o.n_sort)
+                                 .Select(c => new SiteMapModel
+                                 {
+                                     Title = c.c_title,
+                                     Alias = c.c_alias,
+                                     Path = c.c_path
+                                 }).ToArray();
+                if (data.Any())
+                {
+                    return data;
+                }
+                return null;
+            }
+        }
+        /// <summary>
+        /// Получаем хленые крошки
+        /// </summary>
+        /// <param name="Url">относительная ссылка на страницу</param>
+        /// <param name="domain"></param>
+        /// <returns></returns>
+        public override Breadcrumbs[] getBreadCrumb(string Url, string domain)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                int _len = Url.Count();
+                int _lastIndex = Url.LastIndexOf("/");
+                var data = new List<Breadcrumbs>();
+                while (_lastIndex > -1)
+                {
+                    string _path = Url.Substring(0, _lastIndex + 1).ToString();
+                    string _alias = Url.Substring(_lastIndex + 1).ToString();
+                    if (_alias == String.Empty) _alias = " ";
+
+                    var item_data = db.content_sitemaps
+                                    .Where(w => w.f_site == domain && w.c_path == _path && w.c_alias == _alias).Take(1)
+                                    .Select(s=>new Breadcrumbs {
+                                        Title=s.c_title,
+                                        Url=s.c_path+s.c_alias
+                                    }).SingleOrDefault();
+                    if (item_data == null)
+                    {
+                    }
+                    else data.Add(item_data);
+
+                    Url = Url.Substring(0, _lastIndex);
+                    _len = Url.Count();
+                    _lastIndex = Url.LastIndexOf("/");
+
+                }
+                if (data.Any())
+                {
+                    data.Reverse();
+                    return data.ToArray();
+                }
+                else
+                {
+            return null;
+        }
+            }
+        }
+
         /// <summary>
         /// Получим список новостей для определенной сущности
         /// </summary>
@@ -250,8 +341,24 @@ namespace cms.dbase
                         return null;
 
                     var query = db.content_materialss
-                                .Where(w => materials.Contains(w.id))
-                                .OrderByDescending(w => w.d_date);
+                                .Where(w => materials.Contains(w.id));
+
+                    if (filtr.Disabled != null)
+                    {
+                        query = query.Where(w => w.b_disabled == filtr.Disabled);
+                    }
+                    if (!String.IsNullOrEmpty(filtr.Category))
+                    {
+                        var category = db.content_materials_groupss.Where(w => w.c_alias == filtr.Category).First().id;
+                        query =query
+                                    .Join(
+                                            db.content_materials_groups_links
+                                            .Where(o => o.f_group == category), 
+                                            e => e.id, o => o.f_material, (o, e) => o
+                                         );
+                    }
+
+                    query=query.OrderByDescending(w => w.d_date);
 
                     int itemCount = query.Count();
 
@@ -263,6 +370,9 @@ namespace cms.dbase
                                 Id = s.id,
                                 Title = s.c_title,
                                 Alias = s.c_alias,
+                                Year=s.n_year,
+                                Month=s.n_month,
+                                Day=s.n_day,
                                 PreviewImage = new Photo()
                                 {
                                     Url = s.c_preview
@@ -345,5 +455,66 @@ namespace cms.dbase
                 else return null;
             }
         }
+        public override MaterialsModel getMaterialsItem(string year, string month, string day, string alias, string domain)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                int _year = Convert.ToInt32(year);
+                int _month = Convert.ToInt32(month);
+                int _day = Convert.ToInt32(day);
+
+
+                var contentType = ContentType.MATERIAL.ToString().ToLower();
+
+
+                var materials = db.content_content_links.Where(e => e.f_content_type == contentType)
+                                                        .Join(db.cms_sitess.Where(o => o.c_alias == domain),
+                                                                   e => e.f_link,
+                                                                   o => o.f_content,
+                                                                   (e, o) => e.f_content
+                                                               );
+
+                if (!materials.Any())
+                    return null;
+
+                var query = db.content_materialss
+                            .Where(w => materials.Contains(w.id));
+
+
+
+                query=query.Where(w => (w.n_year == _year) && (w.n_month == _month) && (w.n_day == _day) && (w.c_alias.ToLower()==alias.ToLower()));
+                if (query.Any())
+                {
+                    return query.Select(s => new MaterialsModel {
+                        Title=s.c_title,
+                        Text=s.c_text
+                            }).First();
+                }
+                return null;
+
+            }
+        }
+
+        /// <summary>
+        /// Выдает группы преесс-центра
+        /// </summary>
+        /// <returns></returns>
+        public override MaterialsGroup[] getMaterialsGroup() {
+            using (var db = new CMSdb(_context))
+            {
+                var data = db.content_materials_groupss;
+                if (data.Any())
+                {
+                    return data.OrderBy(o => o.n_sort)
+                               .Select(s => new MaterialsGroup
+                               {
+                                     Alias=s.c_alias,
+                                     Title=s.c_title                                 
+                               }).ToArray();
+                }
+                return null;
+            }
+        }
+
     }
 }

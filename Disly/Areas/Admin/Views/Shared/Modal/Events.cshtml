@@ -12,25 +12,26 @@
         @Html.HiddenFor(m => m.ObjctId)
         @Html.HiddenFor(m => m.ObjctType)
 
-        <div class="scrollbar log-list">
+        <div class="scrollbar modal-event-list">
             @if (Model.EventsList != null && Model.EventsList.Count() > 0)
             {
-                <div class="row">
+                <table class="table-striped" id="modal-event-table">
                     @foreach (var item in Model.EventsList)
                     {
-                        <div class="col-sm-1 text-right">
-                            <input type="checkbox" name="EventsId[]" class="org-item-chkbx iCheck" value="@item.Id" data-init="false" @(item.Checked ? "checked" : null) />
-                        </div>
-                        <div class="col-sm-11">
-                            <strong>@item.DateBegin.ToShortDateString()</strong>
-                            @item.Title
-
-                        </div>
-                        <div class="col-sm-offset-1 col-sm-11">
-                            @Html.Raw(item.Text.Substring(0, Math.Min(item.Text.Length, 150)))
-                        </div>
+                        <tr>
+                            <td class="date">
+                                <strong>@item.DateBegin.ToShortDateString()</strong>
+                            </td>
+                            <td>
+                                <a href="/admin/events/item/@item.Id"> @item.Title</a><br />
+                                @Html.Raw(item.Text.Substring(0, Math.Min(item.Text.Length, 150)))
+                            </td>
+                            <td>
+                                <input type="checkbox" name="EventsId" class="org-item-chkbx iCheck" value="@item.Id" data-init="false" @(item.Checked ? "checked" : null) />
+                            </td>
+                        </tr>
                     }
-                </div>
+                </table>
             }
         </div>
     }
@@ -42,9 +43,12 @@
     }
 </div>
 <script>
-    $(".iCheck").iCheck({
-        checkboxClass: 'icheckbox_square-blue',
-        radioClass: 'icheckbox_square-blue'
-        //increaseArea: '%' //optional
+    $(document).ready(function () {
+        $("#modal-event-table .iCheck").iCheck({
+            checkboxClass: 'icheckbox_square-blue',
+            radioClass: 'icheckbox_square-blue'
+            //increaseArea: '%' //optional
+        });
+        $('#modal-event-table').DataTable();
     });
 </script>

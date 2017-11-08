@@ -120,7 +120,7 @@ namespace cms.dbModel
         public abstract Departments[] getDepartmentsList(Guid id);
         public abstract Departments getDepartamentItem(Guid id);
         public abstract DepartmentsPhone[] getDepartmentsPhone(Guid id);
-        public abstract BreadCrumb[] getBreadCrumbOrgs(Guid id, string type);
+        public abstract Breadcrumbs[] getBreadCrumbOrgs(Guid id, string type);
         public abstract bool insDepartmentsPhone(Guid idDepart, string Label, string Value, Guid UserId, String IP);
         public abstract bool delDepartmentsPhone(int id);
         public abstract bool sortDepartament(Guid id, int new_num);
