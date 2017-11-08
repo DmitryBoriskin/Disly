@@ -58,11 +58,10 @@ namespace cms.dbase
             using (var db = new CMSdb(_context))
             {
                 string ViewPath = "~/Error/404/";
-
                 var data = db.front_sv_page_veiws.Where(w => w.f_site == siteId && w.f_pege_type == siteSection).FirstOrDefault();
-
-                ViewPath = data.c_url;
-
+                if (data != null) {
+                    ViewPath = data.c_url;
+                }
                 return ViewPath;
             }
         }
@@ -263,19 +262,21 @@ namespace cms.dbase
                 return null;
             }
         }
+      
+
         /// <summary>
         /// Получаем хленые крошки
         /// </summary>
         /// <param name="Url">относительная ссылка на страницу</param>
         /// <param name="domain"></param>
         /// <returns></returns>
-        public override Breadcrumbs[] getBreadCrumb(string Url, string domain)
+        public override List<Breadcrumbs> getBreadCrumbCollection(string Url, string domain)
         {
             using (var db = new CMSdb(_context))
             {
                 int _len = Url.Count();
                 int _lastIndex = Url.LastIndexOf("/");
-                var data = new List<Breadcrumbs>();
+                List<Breadcrumbs> data=new List<Breadcrumbs>();
                 while (_lastIndex > -1)
                 {
                     string _path = Url.Substring(0, _lastIndex + 1).ToString();
@@ -284,14 +285,17 @@ namespace cms.dbase
 
                     var item_data = db.content_sitemaps
                                     .Where(w => w.f_site == domain && w.c_path == _path && w.c_alias == _alias).Take(1)
-                                    .Select(s=>new Breadcrumbs {
-                                        Title=s.c_title,
-                                        Url=s.c_path+s.c_alias
+                                    .Select(s => new Breadcrumbs
+                                    {
+                                        Title = s.c_title,
+                                        Url = s.c_path + s.c_alias
                                     }).SingleOrDefault();
-                    if (item_data == null)
+
+                    if (item_data != null)
                     {
-                    }
-                    else data.Add(item_data);
+                        data.Add(item_data);
+                            //.ToList().Add(item_data);
+                    } 
 
                     Url = Url.Substring(0, _lastIndex);
                     _len = Url.Count();
@@ -301,7 +305,7 @@ namespace cms.dbase
                 if (data.Any())
                 {
                     data.Reverse();
-                    return data.ToArray();
+                    return data;
                 }
                 else
                 {
@@ -460,5 +464,48 @@ namespace cms.dbase
             }
         }
 
+
+        public override StructureModel[] getStructures(string domain)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var query = db.content_org_structures
+                            .Join(db.cms_sitess.Where(o => o.c_alias == domain), o => o.f_ord, e => e.f_content, (e, o) => e)
+                            .OrderBy(o=>o.n_sort)
+                            .Select(s => new StructureModel(){
+                                Title=s.c_title,
+                                Num=s.num                     
+                            }).ToArray();
+                return query;
+            }
+        }
+        public override StructureModel getStructureItem(string domain, int num)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var data = db.content_org_structures.Where(w => w.num == num)
+                           .Join(db.cms_sitess.Where(o => o.c_alias == domain), o => o.f_ord, e => e.f_content, (e, o) => e)
+                           .Select(s => new StructureModel()
+                           {
+                               Title = s.c_title,
+                               Adress = s.c_adress,
+                               GeopointX = s.n_geopoint_x,
+                               GeopointY = s.n_geopoint_y,
+                               Phone = s.c_phone,
+                               PhoneReception = s.c_phone_reception,
+                               Fax = s.c_fax,
+                               Email = s.c_email,
+                               Routes = s.c_routes,
+                               Schedule = s.c_schedule,
+                               DirecorPost = s.c_director_post,
+                               Ovp = s.b_ovp
+                           });
+                if (data.Any())
+                {
+                    return data.First();
+                }
+                return null;
+            }
+        }
     }
 }

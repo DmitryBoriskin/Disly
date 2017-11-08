@@ -173,6 +173,10 @@ namespace cms.dbModel.entity
     public class StructureModel
     {
         /// <summary>
+        /// Идентифкатор для внешней части
+        /// </summary>
+        public int Num { get; set; }
+        /// <summary>
         /// Идентификатор
         /// </summary>
         [Required]

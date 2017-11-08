@@ -1,0 +1,24 @@
+﻿@model StructureViewModel
+<div class="container">
+    @if (Model.StructureItem != null)
+    {
+        <h1>@Model.StructureItem.Title</h1>
+        @Html.Partial("services/breadcrumbs")
+    }
+    else
+    {
+        <h1>Струкутура</h1>
+        @Html.Partial("services/breadcrumbs")
+        if (Model.Structures != null)
+        {
+            <ul>
+                @foreach (var item in Model.Structures)
+                {
+                    <li><a href="/structure/@item.Num">@item.Title</a></li>
+                }
+            </ul>
+        }
+    }
+    
+    
+</div>

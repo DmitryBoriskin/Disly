@@ -920,6 +920,7 @@ namespace cms.dbase.models
 		[Column,        Nullable] public Guid?   f_director        { get; set; } // uniqueidentifier
 		[Column,     NotNull    ] public bool    b_ovp             { get; set; } // bit
 		[Column,     NotNull    ] public int     n_sort            { get; set; } // int
+		[Identity               ] public int     num               { get; set; } // int
 
 		#region Associations
 

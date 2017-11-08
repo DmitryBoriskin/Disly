@@ -17,6 +17,7 @@ namespace Disly.Controllers
             {
                 SitesInfo = siteModel,
                 SiteMapArray = siteMapArray,
+                Breadcrumbs = breadcrumb,
                 BannerArray = bannerArray,
                 Group=_repository.getMaterialsGroup()
             };
