@@ -23,7 +23,7 @@ namespace Disly.Models
         /// <summary>
         /// Хлебные крошки
         /// </summary>
-        public Breadcrumbs[] Breadcrumbs { get; set; }
+        public List<Breadcrumbs> Breadcrumbs { get; set; }
         /// <summary>
         /// Группы меню
         /// </summary>

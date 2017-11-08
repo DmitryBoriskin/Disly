@@ -15,11 +15,14 @@ namespace cms.dbModel
 
         public abstract SiteMapModel getSiteMap(string path, string alias, string domain);
         public abstract SiteMapModel[] getSiteMapChild(Guid ParentId);
-        public abstract Breadcrumbs[] getBreadCrumb(string Url, string domain);
+        public abstract List<Breadcrumbs> getBreadCrumbCollection(string Url, string domain);
 
         public abstract MaterialsList getMaterialsList(FilterParams filtr);
         public abstract MaterialsModel getMaterialsItem(string year, string month, string day, string alias, string domain);
         public abstract MaterialsGroup[] getMaterialsGroup();
+
+        public abstract StructureModel[] getStructures(string domain);
+        public abstract StructureModel getStructureItem(string domain, int num);
 
         public abstract List<MaterialFrontModule> getMaterialsModule(string domain);
     }

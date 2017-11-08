@@ -129,6 +129,7 @@
     </Content>
     <Content Include="Areas\Admin\Views\Feedbacks\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Feedbacks\Item.cshtml" />
+    <Content Include="Content\css\core\style.css" />
     <Content Include="Content\css\styles_popUp.css" />
     <Content Include="Content\css\styles.css" />
     <Content Include="Content\css\styles_login.css" />
@@ -554,6 +555,7 @@
     <Compile Include="Areas\Admin\Service\SpotCoord.cs" />
     <Compile Include="Areas\Admin\Service\Transliteration.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
+    <Compile Include="Controllers\StructureController.cs" />
     <Compile Include="Controllers\PressController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ServiceController.cs" />
@@ -563,6 +565,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Areas\Admin\Models\CoreViewModel.cs" />
+    <Compile Include="Models\StructureViewModel.cs" />
     <Compile Include="Models\TypePageViewModel.cs" />
     <Compile Include="Models\NewsViewModel.cs" />
     <Compile Include="Models\HomePageViewModel.cs" />
@@ -753,6 +756,8 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\services\Pager.cshtml" />
     <Content Include="Views\Shared\services\breadcrumbs.cshtml" />
+    <Content Include="Views\Structure\Index.cshtml" />
+    <Content Include="Views\Structure\StructureItem.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

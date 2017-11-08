@@ -6,12 +6,12 @@
     {
         if (Model.Child.Length > 0)
         {
-            <ul>
+            <div class="child">
                 @foreach (var item in Model.Child)
                 {
-                    <li><a href="@item.Path@item.Alias">@item.Title</a></li>
+                    <div class="child_link"><span>—</span><a href="@item.Path@item.Alias">@item.Title</a></div>
                 }                
-            </ul>
+            </div>
         }
     }
     @Html.Raw(Model.Item.Text)
