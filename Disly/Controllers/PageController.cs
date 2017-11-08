@@ -20,6 +20,7 @@ namespace Disly.Controllers
             {
                 SitesInfo = siteModel,
                 SiteMapArray = siteMapArray,
+                Breadcrumbs=breadcrumbArray,
                 BannerArray = bannerArray
             };
         }
@@ -38,7 +39,8 @@ namespace Disly.Controllers
             string _alias = UrlPath.Substring(UrlPath.LastIndexOf("/") + 1);
             #endregion
 
-            model.Item = _repository.getSiteMap(_path,_alias,Domain);            
+            model.Item = _repository.getSiteMap(_path,_alias,Domain);
+            model.Child = _repository.getSiteMapChild(model.Item.Id);
 
             #region Создаем переменные (значения по умолчанию)
             PageViewModel Model = new PageViewModel();

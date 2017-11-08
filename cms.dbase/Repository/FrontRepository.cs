@@ -3,6 +3,7 @@ using cms.dbModel;
 using cms.dbModel.entity;
 using LinqToDB;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace cms.dbase
@@ -231,25 +232,83 @@ namespace cms.dbase
                         Title=s.c_title,
                         Text=s.c_text,
                         Alias=s.c_alias,
-                        Path=s.c_path
+                        Path=s.c_path,
+                        Id=s.id
                         }).First();
 
-                    data.Child = db.content_sitemaps
-                                 .Where(w => w.c_path == data.Path && w.c_alias==data.Alias && w.f_site==domain)
-                                 .OrderBy(o=>o.n_sort)
-                                 .Select(c => new SiteMapModel
-                                 {
-                                     Title = c.c_title,
-                                     Alias=c.c_alias,
-                                     Path=c.c_path
-                                 }).ToArray();
+                    
                     return data;
                 }
                 return null;
             }
             
         }
+        public override SiteMapModel[] getSiteMapChild(Guid ParentId)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var data = db.content_sitemaps
+                                 .Where(w => w.uui_parent.Equals(ParentId))
+                                 .OrderBy(o => o.n_sort)
+                                 .Select(c => new SiteMapModel
+                                 {
+                                     Title = c.c_title,
+                                     Alias = c.c_alias,
+                                     Path = c.c_path
+                                 }).ToArray();
+                if (data.Any())
+                {
+                    return data;
+                }
+                return null;
+            }
+        }
+        /// <summary>
+        /// Получаем хленые крошки
+        /// </summary>
+        /// <param name="Url">относительная ссылка на страницу</param>
+        /// <param name="domain"></param>
+        /// <returns></returns>
+        public override Breadcrumbs[] getBreadCrumb(string Url, string domain)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                int _len = Url.Count();
+                int _lastIndex = Url.LastIndexOf("/");
+                var data = new List<Breadcrumbs>();
+                while (_lastIndex > -1)
+                {
+                    string _path = Url.Substring(0, _lastIndex + 1).ToString();
+                    string _alias = Url.Substring(_lastIndex + 1).ToString();
+                    if (_alias == String.Empty) _alias = " ";
 
+                    var item_data = db.content_sitemaps
+                                    .Where(w => w.f_site == domain && w.c_path == _path && w.c_alias == _alias).Take(1)
+                                    .Select(s=>new Breadcrumbs {
+                                        Title=s.c_title,
+                                        Url=s.c_path+s.c_alias
+                                    }).SingleOrDefault();
+                    if (item_data == null)
+                    {
+                    }
+                    else data.Add(item_data);
+
+                    Url = Url.Substring(0, _lastIndex);
+                    _len = Url.Count();
+                    _lastIndex = Url.LastIndexOf("/");
+
+                }
+                if (data.Any())
+                {
+                    data.Reverse();
+                    return data.ToArray();
+                }
+                else
+                {
+                    return null;
+                }
+            }
+        }
 
         /// <summary>
         /// Получим список новостей для определенной сущности

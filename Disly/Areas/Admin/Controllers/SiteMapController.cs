@@ -127,8 +127,11 @@ namespace Disly.Areas.Admin.Controllers
 
             var p = back_model.Item.ParentId != null ? _cmsRepository.getSiteMapItem((Guid)back_model.Item.ParentId) : null;
 
-            back_model.Item.Path = p == null ? "/" :
-                p.Path.Equals("/") ? p.Path + p.Alias : p.Path + "/" + p.Alias;
+            //back_model.Item.Path = p == null ? "/" :
+            //    p.Path.Equals("/") ? p.Path + p.Alias : p.Path + "/" + p.Alias;
+
+            back_model.Item.Path = p == null ? "/" :p.Path + p.Alias + "/";
+
 
             back_model.Item.Site = Domain;
 

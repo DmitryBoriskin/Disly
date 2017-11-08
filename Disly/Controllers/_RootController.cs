@@ -26,6 +26,8 @@ namespace Disly.Controllers
         protected SitesModel siteModel;
         protected SiteMapModel[] siteMapArray;
         protected BannersModel[] bannerArray;
+        protected Breadcrumbs[] breadcrumbArray;
+
 
         protected string MedCap;
         protected string Quote;
@@ -49,6 +51,7 @@ namespace Disly.Controllers
 
             siteModel = _repository.getSiteInfo(Domain);
             siteMapArray = _repository.getSiteMapList(Domain);
+            breadcrumbArray = _repository.getBreadCrumb(((System.Web.HttpRequestWrapper)Request).RawUrl, Domain);
             bannerArray = _repository.getBanners(Domain);
 
             ViewBag.MedCap = MedCap = Settings.MedCap;

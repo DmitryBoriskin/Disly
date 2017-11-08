@@ -21,7 +21,7 @@ namespace cms.dbModel.entity
     /// <summary>
     /// Хлебные крошки
     /// </summary>
-    public class BreadCrumb
+    public class Breadcrumbs
     {
         /// <summary>
         /// Ссылка

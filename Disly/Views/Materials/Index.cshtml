@@ -3,7 +3,7 @@
 <div class="container">
     <h1>Новости</h1>
     @if (!String.IsNullOrEmpty(ViewBag.Alias))
-    {        
+    {
         <h2>@Model.Item.Title</h2>
         @Html.Raw(Model.Item.Text)
 
@@ -11,7 +11,10 @@
     else
     {
         <ul class="nav nav-pills">
-            <li><a href="/press">Все</a></li>
+            @{
+                string _allactiv = (String.IsNullOrEmpty(ViewBag.CurrentCategory)) ? "class=active" : "";
+            }                
+            <li @_allactiv><a href="/press">Все</a></li>
             @foreach (var item in Model.Group)
             {
                 string _class = (item.Alias == ViewBag.CurrentCategory) ? "class=active" : "";

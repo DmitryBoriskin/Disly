@@ -805,12 +805,12 @@ namespace cms.dbase
         /// <param name="id">идентификатор элемента относительно которого нужно построить хлебные крошки</param>
         /// <param name="type">тип раздела orgs- в качество него скорее всего будем брать action name</param>
         /// <returns></returns>
-        public override BreadCrumb[] getBreadCrumbOrgs(Guid id, string type)
+        public override Breadcrumbs[] getBreadCrumbOrgs(Guid id, string type)
         {
             using (var db = new CMSdb(_context))
             {
-                var MyBread = new Stack<BreadCrumb>();
-                MyBread.Push(new BreadCrumb
+                var MyBread = new Stack<Breadcrumbs>();
+                MyBread.Push(new Breadcrumbs
                 {
                     Title = "Организации",
                     Url = "/admin/orgs/"
@@ -819,7 +819,7 @@ namespace cms.dbase
                 if (type == "item")
                 {
                     var data = db.content_departmentss.Where(w => w.id == id).FirstOrDefault();
-                    MyBread.Push(new BreadCrumb
+                    MyBread.Push(new Breadcrumbs
                     {
                         Title = data.c_title,
                         Url = "/admin/orgs/item/" + data.id
@@ -832,12 +832,12 @@ namespace cms.dbase
                     var data = db.content_org_structures.Where(w => w.id == id).FirstOrDefault();
                     var ParentStructure = db.content_orgss.Where(w => w.id == data.f_ord).FirstOrDefault();
 
-                    MyBread.Push(new BreadCrumb
+                    MyBread.Push(new Breadcrumbs
                     {
                         Title = ParentStructure.c_title,
                         Url = "/admin/orgs/item/" + ParentStructure.id
                     });
-                    MyBread.Push(new BreadCrumb
+                    MyBread.Push(new Breadcrumbs
                     {
                         Title = data.c_title,
                         Url = "/admin/orgs/structure/" + data.id
@@ -850,12 +850,12 @@ namespace cms.dbase
                     var data = db.content_org_structures.Where(w => w.id == id).FirstOrDefault();
                     var ParentStructure = db.content_orgss.Where(w => w.id == data.f_ord).FirstOrDefault();
 
-                    MyBread.Push(new BreadCrumb
+                    MyBread.Push(new Breadcrumbs
                     {
                         Title = ParentStructure.c_title,
                         Url = "/admin/orgs/item/" + ParentStructure.id
                     });
-                    MyBread.Push(new BreadCrumb
+                    MyBread.Push(new Breadcrumbs
                     {
                         Title = data.c_title,
                         Url = "/admin/orgs/ovp/" + data.id
@@ -869,17 +869,17 @@ namespace cms.dbase
                     var ParentStructure = db.content_org_structures.Where(w => w.id == data.f_structure).FirstOrDefault();
                     var ParentOrg = db.content_orgss.Where(w => w.id == ParentStructure.f_ord).FirstOrDefault();
 
-                    MyBread.Push(new BreadCrumb
+                    MyBread.Push(new Breadcrumbs
                     {
                         Title = ParentOrg.c_title,
                         Url = "/admin/orgs/item/" + ParentOrg.id
                     });
-                    MyBread.Push(new BreadCrumb
+                    MyBread.Push(new Breadcrumbs
                     {
                         Title = ParentStructure.c_title,
                         Url = "/admin/orgs/structure/" + ParentStructure.id
                     });
-                    MyBread.Push(new BreadCrumb
+                    MyBread.Push(new Breadcrumbs
                     {
                         Title = data.c_title,
                         Url = "/admin/orgs/department/" + data.id
