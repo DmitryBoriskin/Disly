@@ -12,55 +12,58 @@
         @Html.HiddenFor(m => m.ObjctId)
         @Html.HiddenFor(m => m.ObjctType)
 
-        <div class="scrollbar log-list">
+        <div class="scrollbar modal-org-list">
             @if (Model.OrgsTypes != null)
             {
                 <div class="row">
                     <div class="col-lg-12">
                         <ul class="org-byType-tree">
-                        @foreach (var orgtype in Model.OrgsTypes)
-                        {
-                        <li>
-                            <input type="checkbox" class="org-type-chkbx iCheck" data-init="false" />
-                            <a href="#">@orgtype.Title</a>
+                            @foreach (var orgtype in Model.OrgsTypes)
+                            {
+                                <li>
+                                    <input type="checkbox" class="org-type-chkbx iCheck" data-init="false" />
+                                    <a href="#">@orgtype.Title</a>
 
-                            @if (Model.OrgsList != null)
-                                {
-                                    if (orgtype.Sort == 1000)
+                                    @if (Model.OrgsList != null)
                                     {
-                                        var list = Model.OrgsList.Where(t => t.Types == null);
-                                        if (list.Any())
+                                        if (orgtype.Sort == 1000)
                                         {
-                                <ul>
-                                    @foreach (var item in list)
-                                                {
-                                                <li>
-                                                    <input type="checkbox" name="OrgsId[]" class="org-item-chkbx iCheck" value="@item.Id" data-init="false" @(item.Checked ? "checked" : null) />
-                                                    @item.Title
-                                                </li>
-                                                }
-                                </ul>
+                                            var list = Model.OrgsList.Where(t => t.Types == null);
+                                            if (list.Any())
+                                            {
+                                                <ul>
+                                                    @foreach (var item in list)
+                                                    {
+                                                        <li>
+                                                            <div>
+                                                                @*@Html.CheckBoxFor(m => Model.OrgsId[j].Check, new { type = "checkbox", @data_init = "false" })*@
+                                                                <input type="checkbox" name="OrgsId" class="org-item-chkbx iCheck" value="@item.Id" data-init="false" @(item.Checked ? "checked" : null) />
+                                                            </div>
+                                                            <div class="modal-label-org-item">@item.Title</div>
+                                                        </li>
+                                                    }
+                                                </ul>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            var list = Model.OrgsList.Where(t => t.Types != null && t.Types.Contains(orgtype.Id));
+                                            if (list.Any())
+                                            {
+                                                <ul>
+                                                    @foreach (var item in list)
+                                                    {
+                                                        <li>
+                                                            <div><input type="checkbox" name="OrgsId" class="org-item-chkbx iCheck" value="@item.Id" data-init="false" @(item.Checked ? "checked" : null) /></div>
+                                                            <div class="modal-label-org-item">@item.Title</div>
+                                                        </li>
+                                                    }
+                                                </ul>
+                                            }
                                         }
                                     }
-                                    else
-                                    {
-                                        var list = Model.OrgsList.Where(t => t.Types != null && t.Types.Contains(orgtype.Id));
-                                        if (list.Any())
-                                        {
-                                <ul>
-                                    @foreach (var item in list)
-                                                {
-                                                <li>
-                                                    <input type="checkbox" name="OrgsId[]" class="org-item-chkbx iCheck" value="@item.Id" data-init="false" @(item.Checked ? "checked" : null) />
-                                                    @item.Title
-                                                </li>
-                                                }
-                                </ul>
-                                        }
-                                    }
-                                }
-                        </li>
-                        }
+                                </li>
+                            }
                         </ul>
                     </div>
                 </div>
@@ -75,31 +78,34 @@
     }
 </div>
 <script>
-    $(".iCheck").iCheck({
-        checkboxClass: 'icheckbox_square-blue',
-        radioClass: 'icheckbox_square-blue'
-        //increaseArea: '%' //optional
-    });
-    $(".org-byType-tree ul").addClass("hidden");
-    $(".org-byType-tree li").each(function () {
-        if($(this).find("ul").length > 0)
-        {
-            $(this).addClass("icon-sitemap");
-            
-        }
-        else {
-            $(this).find("[type='checkbox']").attr("disabled", true);
-        }
-    });
+    $(document).ready(function () {
+        $('#myTable').DataTable();
 
-    $(".org-byType-tree a").on("click", function (e) {
-        e.preventDefault();
-        $(this).parent().find("ul").toggleClass("hidden");
+        $(".iCheck").iCheck({
+            checkboxClass: 'icheckbox_square-blue',
+            radioClass: 'icheckbox_square-blue'
+            //increaseArea: '%' //optional
+        });
+        $(".org-byType-tree ul").addClass("hidden");
+        $(".org-byType-tree li").each(function () {
+            if ($(this).find("ul").length > 0) {
+                $(this).addClass("icon-sitemap");
+
+            }
+            else {
+                //$(this).find("[type='checkbox']").attr("disabled", true);
+            }
+        });
+
+        $(".org-byType-tree a").on("click", function (e) {
+            e.preventDefault();
+            $(this).parent().find("ul").toggleClass("hidden");
+        });
     });
 </script>
 <style>
-.icon-sitemap:before{
-    content: '\e972';
-    margin-left:-26px;
-}
+    .icon-sitemap:before {
+        content: '\e972';
+        margin-left: -26px;
+    }
 </style>

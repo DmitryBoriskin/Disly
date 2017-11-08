@@ -77,7 +77,8 @@ namespace cms.dbase
                         KeyW = s.c_keyw,
                         Desc = s.c_desc,
                         Disabled = s.b_disabled,
-                        SiteId = getIdSite(s.id)
+                        SiteId = getIdSite(s.id),
+                        Locked = s.b_locked
                     });
                 if (!data.Any()) { return null; }
                 else { return data.First(); }
@@ -131,7 +132,8 @@ namespace cms.dbase
                         Annually = s.b_annually,
                         KeyW = s.c_keyw,
                         Desc = s.c_desc,
-                        Disabled = s.b_disabled
+                        Disabled = s.b_disabled,
+                        Locked = s.b_locked
                     });
 
                 if (!List.Any())
@@ -155,7 +157,8 @@ namespace cms.dbase
         {
             using (var db = new CMSdb(_context))
             {
-                var query = db.content_eventss.AsQueryable()
+                var query = db.content_eventss
+                                .Where(s => s.id != filtr.RelId) // Само на себя событие не может ссылаться - это зацикливание
                                 .OrderByDescending(s => s.d_date);
 
 
@@ -239,7 +242,8 @@ namespace cms.dbase
                             f_content = eventData.Id,
                             f_content_type = ContentType.EVENT.ToString().ToLower(),
                             f_link = eventData.ContentLink,
-                            f_link_type = eventData.ContentLinkType
+                            f_link_type = eventData.ContentLinkType,
+                            b_origin = true
                         };
 
                         db.Insert(cdEvent);

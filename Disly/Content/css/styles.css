@@ -432,7 +432,7 @@ a.link-close:before {
 .disabled .li-caption {
 
 }
-
+.icon-lock:before {content:'\e855'; color:#85afcc;}
 /* -------- Log  ------ */
 .log-list {
     height:400px;

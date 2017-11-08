@@ -295,7 +295,31 @@ a.button  {
 }
 
 /*Orgs*/
+.modal-org-list, .modal-event-list
+{
+    height:400px;
+    overflow:hidden;
+    margin:20px 0 0 0;
+    font-size: 0.9em;
+}
+.modal-org-list a, .modal-event-list a{
+    font-size: 1.1em;
+}
+
 .org-byType-tree li{
     list-style:none;
     margin:5px 0;
+}
+.org-byType-tree ul{
+    padding-left:25px;
+    padding-top:7px;
+}
+.modal-label-org-item{
+    display:block;
+    float:left;
+    margin:-23px 0  10px 27px;
+
+}
+.modal-event-list .date{
+    vertical-align:top;
 }

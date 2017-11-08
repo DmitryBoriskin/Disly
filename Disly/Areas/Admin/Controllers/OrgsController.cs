@@ -697,13 +697,13 @@ namespace Disly.Areas.Admin.Controllers
             {
                ObjctId = model.ObjctId,
                ObjctType = model.ObjctType,
-               LinksId= model.OrgsId,
+               LinksId= (model.OrgsId != null)? model.OrgsId.Distinct().ToArray(): null,
                LinkType = ContentLinkType.ORG
             };
 
             var res = _cmsRepository.updateContentLinks(modelInsert);
 
-            return PartialView("Partial/OrgsSaved");
+            return PartialView("Modal/Success");
         }
     }
 }

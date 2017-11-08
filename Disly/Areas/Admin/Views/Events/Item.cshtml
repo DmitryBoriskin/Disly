@@ -4,7 +4,10 @@
     string fileSize = (Model.Item != null && Model.Item.PreviewImage != null) ? Model.Item.PreviewImage.Size : null;
     string fileUrl = (Model.Item != null && Model.Item.PreviewImage != null) ? Model.Item.PreviewImage.Url : null;
 }
-@if (Model.UserResolution.Write)
+@* Должна быть Проверка на Guid.Empty!!!*@
+
+@if (Model.UserResolution.Write && Model.Item!= null && !Model.Item.Locked)
+            //||(Model.Account.Group.ToLower().Equals("developer") || Model.Account.Group.ToLower().Equals("administrator")
 {
     <div class="content">
         <h1>@ViewBag.Title</h1>
@@ -44,9 +47,9 @@
             <div class="group-block open topIndent-20" title="Привязка к организациям">
                 <div class="row">
                     @if (Model.Item.Links != null && Model.Item.Links.Orgs != null)
-                    {
-                        foreach (var org in Model.Item.Links.Orgs)
-                        {
+{
+    foreach (var org in Model.Item.Links.Orgs)
+    {
                             <div class="col-lg-12">
                                 <a href="/Admin/orgs/item/@org.Id/" class="icon-location-5"> @org.Title</a>
                             </div>
@@ -143,7 +146,12 @@
 }
 else
 {
-    <div class="content"><p>У вас недостаточно прав.</p></div>
+    <div class="content">
+        <div class="alert alert-danger">
+            <strong>У вас недостаточно прав!</strong>
+            <p>Возможно запись была заблокирована администратором портала.</p>
+        </div>
+    </div>
 }
 
 <div class="buttons">
