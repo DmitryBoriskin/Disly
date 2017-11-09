@@ -34,6 +34,11 @@ namespace Disly
                url: "Structure/{num}",
                defaults: new { controller = "Structure", action = "Item" }
             );
+            routes.MapRoute(
+               name: "StructureDepartItem",
+               url: "Structure/{num}/{id}",
+               defaults: new { controller = "Structure", action = "Department" }
+            );
 
             // Контакты
             routes.MapRoute(

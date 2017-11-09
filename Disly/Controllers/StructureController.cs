@@ -65,10 +65,42 @@ namespace Disly.Controllers
         public ActionResult Item(int num)
         {
             model.StructureItem = _repository.getStructureItem(Domain, num);
-            model.Breadcrumbs.Add(new Breadcrumbs(){
-                Title= model.StructureItem.Title                
-            });
+            if (model.StructureItem != null)
+            {
+                model.Breadcrumbs.Add(new Breadcrumbs()
+                {
+                    Title = model.StructureItem.Title
+                });
+                model.DepartmentList = _repository.getDepartmentsList(model.StructureItem.Id);
+            }
             
+            
+            #region Создаем переменные (значения по умолчанию)
+            PageViewModel Model = new PageViewModel();
+            string _ViewName = (ViewName != String.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";
+            string PageTitle = "страница сайта";
+            string PageDesc = "описание страницы";
+            string PageKeyw = "ключевые слова";
+            #endregion                        
+            #region Метатеги
+            ViewBag.Title = PageTitle;
+            ViewBag.Description = PageDesc;
+            ViewBag.KeyWords = PageKeyw;
+            #endregion
+            return View(_ViewName, model);
+        }
+        public ActionResult Depart(Guid id)
+        {            
+            if (model.StructureItem != null)
+            {
+                model.Breadcrumbs.Add(new Breadcrumbs()
+                {
+                    Title = model.StructureItem.Title
+                });
+                model.DepartmentList = _repository.getDepartmentsList(model.StructureItem.Id);
+            }
+
+
             #region Создаем переменные (значения по умолчанию)
             PageViewModel Model = new PageViewModel();
             string _ViewName = (ViewName != String.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";

@@ -14,5 +14,8 @@ namespace Disly.Models
     {
         public StructureModel[] Structures{get;set;}
         public StructureModel StructureItem { get; set; }
+
+        public Departments[] DepartmentList { get; set; }
+        public Departments DepartmentItem { get; set; }
     }
 }

@@ -1,4 +1,7 @@
 ﻿@model StructureViewModel
+@*@section Scripts {
+    @Scripts.Render("https://api-maps.yandex.ru/2.1/?lang=ru_RU")    
+}*@
 <h1>@Model.StructureItem.Title</h1>
 @Html.Partial("services/breadcrumbs")
 <div class="structur">
@@ -31,10 +34,22 @@
                     <dd><a href="mailto:@Model.StructureItem.Email">@Model.StructureItem.Email</a></dd>
                 }
             </dl>
-            <div id="coords" data-x="@Model.SitesItemInfo.CoordX.ToString().Replace(",", ".")" data-y="@Model.SitesItemInfo.CoordY.ToString().Replace(",", ".")" data-title="@Model.SitesItemInfo.C_Name"></div>
+            <div id="coords" class="buildmap" data-zoom="11" data-height="300" data-x="@Model.StructureItem.GeopointX.ToString().Replace(",", ".")" data-y="@Model.StructureItem.GeopointY.ToString().Replace(",", ".")" data-title="@Model.StructureItem.Title"></div>
             <div class="map_wr">
                 <div id="map" style="width: 100%; height: 350px;"></div>
             </div>
+
+            <h2>Отделелния</h2>
+            @if (Model.DepartmentList != null)
+            {
+                <div class="child">
+                    @foreach (var item in Model.DepartmentList)
+                    {
+                        <div class="child_link"><span>—</span><a href="/structure/@Model.StructureItem.Num/@item.Id">@item.Title</a></div>
+                    }
+                </div>
+            }
+            
 
         </div>
         <div class="col-sm-3">

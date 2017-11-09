@@ -543,6 +543,8 @@ namespace cms.dbase
                            .Join(db.cms_sitess.Where(o => o.c_alias == domain), o => o.f_ord, e => e.f_content, (e, o) => e)
                            .Select(s => new StructureModel()
                            {
+                               Id=s.id,
+                               Num=s.num,
                                Title = s.c_title,
                                Adress = s.c_adress,
                                GeopointX = s.n_geopoint_x,
@@ -562,6 +564,57 @@ namespace cms.dbase
                 }
                 return null;
             }
+        }
+
+        public override Departments[] getDepartmentsList(Guid StructureId)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var query = db.content_departmentss
+                            .Where(w => w.f_structure == StructureId)
+                            .OrderBy(o=>o.n_sort)
+                            .Select(s => new Departments() {
+                                Id=s.id,
+                                Title=s.c_title
+                            });
+                if (query.Any())
+                {
+                    return query.ToArray();
+                }
+                return null;
+            }
+
+        }
+        public override Departments getDepartmentsItem(Guid Id)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var query = db.content_departmentss
+                            .Where(w => w.id == Id)
+                            .Select(s => new Departments()
+                            {
+                                Id = s.id,
+                                Title = s.c_title                                
+                            });
+                if (query.Any())
+                {
+                    var data = query.First();
+                    var Phones = db.content_departments_phones
+                                  .Where(w => w.f_department == data.Id)
+                                  .OrderBy(o => o.n_sort)
+                                  .Select(s=>new DepartmentsPhone() {
+                                      Label=s.c_key,
+                                      Value=s.c_val
+                                  });
+                    if (Phones.Any())
+                    {
+                        data.Phones = Phones.ToArray();
+                    }                                  
+                    return query.First();
+                }
+                return null;
+            }
+
         }
     }
 }
