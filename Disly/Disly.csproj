@@ -520,6 +520,7 @@
     <Compile Include="Areas\Admin\Controllers\AccountController.cs" />
     <Compile Include="Areas\Admin\Controllers\BannersController.cs" />
     <Compile Include="Areas\Admin\Controllers\cmsMenuController.cs" />
+    <Compile Include="Areas\Admin\Controllers\UsersController.cs" />
     <Compile Include="Areas\Admin\Controllers\SiteSettingsController.cs" />
     <Compile Include="Areas\Admin\Controllers\VacancyController.cs" />
     <Compile Include="Areas\Admin\Controllers\FeedbacksController.cs" />
@@ -542,6 +543,7 @@
     <Compile Include="Areas\Admin\Models\cmsMenuViewModel.cs" />
     <Compile Include="Areas\Admin\Models\ModalViewModels\EventsModalViewModel.cs" />
     <Compile Include="Areas\Admin\Models\ModalViewModels\OrgsModalViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\UsersViewModel.cs" />
     <Compile Include="Areas\Admin\Models\VacancyViewModel.cs" />
     <Compile Include="Areas\Admin\Models\FeadbacksViewModel.cs" />
     <Compile Include="Areas\Admin\Models\EventsViewModel.cs" />
@@ -755,6 +757,8 @@
     <Content Include="Areas\Admin\Views\Shared\Modal\Success.cshtml" />
     <Content Include="Areas\Admin\Views\Shared\Modal\Events.cshtml" />
     <Content Include="Areas\Admin\Views\Services\UserSites.cshtml" />
+    <Content Include="Areas\Admin\Views\Users\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\Users\Item.cshtml" />
     <None Include="Content\plugins\datatables\i18n\ru.json" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <Content Include="Views\_ViewStart.cshtml" />

@@ -797,15 +797,90 @@ namespace cms.dbase
             }
         }
 
+        //public override UsersList getUsersList(FilterParams filtr)
+        //{
+        //    using (var db = new CMSdb(_context))
+        //    { 
+        //        //string[] filtr, string group, bool disabeld, int page, int size
+        //        var query = db.cms_sv_userss.Where(w => w.id != null);
+
+        //        if(!string.IsNullOrEmpty(filtr.Domain))
+        //        {
+                    
+        //            //
+        //        }
+
+        //        if (filtr.Disabled.HasValue)
+        //        {
+        //            query = query.Where(w => w.b_disabled == filtr.Disabled.Value);
+        //        }
+        //        if (filtr.Group != String.Empty)
+        //        {
+        //            query = query.Where(w => w.f_group == filtr.Group);
+        //        }
+        //        foreach (string param in filtr.SearchText.Split(' '))
+        //        {
+        //            if (param != String.Empty)
+        //            {
+        //                query = query.Where(w => w.c_surname.Contains(param) || w.c_name.Contains(param) || w.c_patronymic.Contains(param) || w.c_email.Contains(param));
+        //            }
+        //        }
+
+        //        query = query.OrderBy(o => new { o.c_surname, o.c_name });
+
+        //        if (query.Any())
+        //        {
+        //            int ItemCount = query.Count();
+
+        //            var List = query.
+        //                Select(s => new UsersModel
+        //                {
+        //                    Id = s.id,
+        //                    Surname = s.c_surname,
+        //                    Name = s.c_name,
+        //                    EMail = s.c_email,
+        //                    Group = s.f_group,
+        //                    GroupName = s.f_group_name,
+        //                    Disabled = s.b_disabled
+
+        //                }).
+        //                Skip(filtr.Size * (filtr.Page - 1)).
+        //                Take(filtr.Size);
+
+        //            UsersModel[] usersInfo = List.ToArray();
+
+        //            return new UsersList
+        //            {
+        //                Data = usersInfo,
+        //                Pager = new Pager
+        //                {
+        //                    page = filtr.Page,
+        //                    size = filtr.Size,
+        //                    items_count = ItemCount,
+        //                    page_count = (ItemCount % filtr.Size > 0) ? (ItemCount / filtr.Size) + 1 : ItemCount / filtr.Size
+        //                }
+        //            };
+        //        }
+        //        return null;
+        //    }
+        //}
+
         public override UsersList getUsersList(FilterParams filtr)
         {
             using (var db = new CMSdb(_context))
             {
                 //string[] filtr, string group, bool disabeld, int page, int size
-                var query = db.cms_sv_userss.Where(w => w.id != null);
-                if ((bool)filtr.Disabled)
+                var query = db.cms_userss.AsQueryable();
+
+                if (!string.IsNullOrEmpty(filtr.Domain))
                 {
-                    query = query.Where(w => w.b_disabled == filtr.Disabled);
+
+                    query = query.Where(s => s.fklinkusertosites.Any(t => t.f_site == filtr.Domain));
+                }
+
+                if (filtr.Disabled.HasValue)
+                {
+                    query = query.Where(w => w.b_disabled == filtr.Disabled.Value);
                 }
                 if (filtr.Group != String.Empty)
                 {
@@ -825,20 +900,20 @@ namespace cms.dbase
                 {
                     int ItemCount = query.Count();
 
-                    var List = query.
-                        Select(s => new UsersModel
+                    var List = query
+                        .Skip(filtr.Size * (filtr.Page - 1))
+                        .Take(filtr.Size)
+                        .Select(s => new UsersModel
                         {
                             Id = s.id,
                             Surname = s.c_surname,
                             Name = s.c_name,
                             EMail = s.c_email,
                             Group = s.f_group,
-                            GroupName = s.f_group_name,
+                            GroupName = s.fkusersgroup.c_title,
                             Disabled = s.b_disabled
 
-                        }).
-                        Skip(filtr.Size * (filtr.Page - 1)).
-                        Take(filtr.Size);
+                        });
 
                     UsersModel[] usersInfo = List.ToArray();
 
@@ -857,6 +932,8 @@ namespace cms.dbase
                 return null;
             }
         }
+
+
         public override UsersModel getUser(Guid id)
         {
             using (var db = new CMSdb(_context))
