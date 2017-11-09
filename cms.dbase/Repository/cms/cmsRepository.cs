@@ -802,11 +802,12 @@ namespace cms.dbase
         //    using (var db = new CMSdb(_context))
         //    { 
         //        //string[] filtr, string group, bool disabeld, int page, int size
+#warning Удалить эту вьюху cms_sv_userss
         //        var query = db.cms_sv_userss.Where(w => w.id != null);
 
         //        if(!string.IsNullOrEmpty(filtr.Domain))
         //        {
-                    
+
         //            //
         //        }
 
