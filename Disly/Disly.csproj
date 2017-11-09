@@ -208,6 +208,8 @@
     <Content Include="Content\plugins\bootstrap\js\bootstrap-toggle.min.js" />
     <Content Include="Content\plugins\bootstrap\js\bootstrap.js" />
     <Content Include="Content\plugins\bootstrap\js\bootstrap.min.js" />
+    <Content Include="Content\plugins\datatables\dataTables.bootstrap.min.css" />
+    <Content Include="Content\plugins\datatables\dataTables.bootstrap.min.js" />
     <Content Include="Content\plugins\datatables\datatables.css" />
     <Content Include="Content\plugins\datatables\datatables.js" />
     <Content Include="Content\plugins\datatables\datatables.min.css" />
@@ -746,6 +748,8 @@
     <Content Include="Areas\Admin\Views\Shared\Modal\Orgs.cshtml" />
     <Content Include="Areas\Admin\Views\Shared\Modal\Success.cshtml" />
     <Content Include="Areas\Admin\Views\Shared\Modal\Events.cshtml" />
+    <Content Include="Areas\Admin\Views\Services\UserSites.cshtml" />
+    <None Include="Content\plugins\datatables\i18n\ru.json" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\services\Pager.cshtml" />

@@ -121,10 +121,11 @@ namespace cms.dbModel.entity
     //    public bool Change { get; set; }
     //    public bool Delete { get; set; }
     //}
-    
-    //public class UserSiteLink
-    //{
-    //    public string SiteId { get; set; }
-    //    public Guid UserId { get; set; }
-    //}
+
+    public class UserSiteLinkModel
+    {
+        public Guid UserId { get; set; }
+        public Guid[] SitesId { get; set; }
+        public SitesShortModel[] Sites { get; set; }
+    }
 }

@@ -98,7 +98,7 @@ namespace cms.dbase
                         Site = s.c_url,
                         Worktime = s.c_worktime,
                         Logo = s.c_logo,
-                        DomainList = getSiteDomains(s.c_alias),
+                        DomainList = getSiteDomains(db, s.c_alias),
                         ContentId = (Guid)s.f_content,
                         Type = s.c_content_type,
                         SiteOff = s.b_site_off
@@ -482,7 +482,7 @@ namespace cms.dbase
         #endregion
 
         #region Site
-        public override SitesList getSiteList(FilterParams filtr, int page, int size)
+        public override SitesList getSiteList(FilterParams filtr)
         {
             using (var db = new CMSdb(_context))
             {
@@ -513,22 +513,54 @@ namespace cms.dbase
                             Id = s.id,
                             Title = s.c_name,
                             Alias = s.c_alias,
-                            SiteOff = s.b_site_off
+                            SiteOff = s.b_site_off,
+                            Type = s.c_content_type,
+                            DomainList = getSiteDomains(s.c_alias)
                         }).
-                        Skip(size * (page - 1)).
-                        Take(size);
+                        Skip(filtr.Size * (filtr.Page - 1)).
+                        Take(filtr.Size);
 
                     SitesModel[] sitesInfo = List.ToArray();
 
                     return new SitesList
                     {
                         Data = sitesInfo,
-                        Pager = new Pager { page = page, size = size, items_count = ItemCount, page_count = ItemCount / size }
+                        Pager = new Pager { page = filtr.Page, size = filtr.Size, items_count = ItemCount, page_count = ItemCount / filtr.Size }
                     };
                 }
                 return null;
             }
         }
+
+        public override SitesShortModel[] getSiteListWithCheckedForUser(SiteFilter filtr)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var query = db.cms_sitess
+                    .Where(w => w.c_alias != String.Empty)
+                    .OrderBy(o => new { o.c_name });
+
+                var data = query
+                    .Skip(filtr.Size * (filtr.Page - 1))
+                    .Take(filtr.Size)
+                    .Select(s => new SitesShortModel
+                    {
+                        Id = s.id,
+                        Title = s.c_name,
+                        Alias = s.c_alias,
+                        SiteOff = s.b_site_off,
+                        Type = s.c_content_type,
+                        DomainList = getSiteDomains(s.c_alias),
+                        Checked = (filtr.UserId.HasValue)? s.fklinksitetousers.Any(u => u.f_user == filtr.UserId) ? true: false :false
+                        });
+
+                if (data.Any())
+                    return data.ToArray();
+
+                return null;
+            }
+        }
+
         public override bool check_Site(Guid id)
         {
             using (var db = new CMSdb(_context))
@@ -605,19 +637,32 @@ namespace cms.dbase
                 return false;
             }
         }
+
+        private Domain[] getSiteDomains(CMSdb db, string SiteId)
+        {
+            var data = db.cms_sites_domainss.Where(w => w.f_site == SiteId);
+            if (data.Any())
+                return data.Select(s => new Domain()
+                {
+                    DomainName = s.c_domain,
+                    id = s.id
+                }).ToArray();
+            return null;
+        }
         //список доменных имен по алиасу сайта
         public override Domain[] getSiteDomains(string SiteId)
         {
             using (var db = new CMSdb(_context))
             {
-                var data = db.cms_sites_domainss.Where(w => w.f_site == SiteId);
-                if (data.Any())
-                    return data.Select(s => new Domain()
-                    {
-                        DomainName = s.c_domain,
-                        id = s.id
-                    }).ToArray();
-                return null;
+                //var data = db.cms_sites_domainss.Where(w => w.f_site == SiteId);
+                //if (data.Any())
+                //    return data.Select(s => new Domain()
+                //    {
+                //        DomainName = s.c_domain,
+                //        id = s.id
+                //    }).ToArray();
+                //return null;
+                return getSiteDomains(db, SiteId);
             }
         }
 
@@ -1016,6 +1061,39 @@ namespace cms.dbase
 
                 if (!data.Any()) { return null; }
                 else { return data.ToArray(); }
+            }
+        }
+
+        public override bool updateUserSiteLinks(UserSiteLinkModel link)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                using (var tran = db.BeginTransaction())
+                {
+                    //Удаляем все записи привязанные к этому пользователю
+                    var res = db.cms_user_site_links
+                        .Where(s => s.f_user == link.UserId)
+                        .Delete();
+
+                    if(link.SitesId != null && link.SitesId.Count() > 0)
+                    {
+                        foreach (var site in link.SitesId)
+                        {
+                            var alias = db.cms_sitess.Where(s => s.id == site).SingleOrDefault().c_alias;
+
+                            var cdUserSiteLink = new cms_user_site_link()
+                            {
+                                id = Guid.NewGuid(),
+                                f_user = link.UserId,
+                                f_site = alias
+                            };
+                            db.Insert(cdUserSiteLink);
+                        }
+                    }
+
+                    tran.Commit();
+                    return true;
+                }
             }
         }
         #endregion

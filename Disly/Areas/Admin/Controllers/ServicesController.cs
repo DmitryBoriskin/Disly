@@ -128,6 +128,39 @@ namespace Disly.Areas.Admin.Controllers
         //}
         #endregion
 
+        #region Список доступных сайтов
+        public ActionResult SiteLinks(Guid id)
+        {
+            PortalUsersViewModel userInfo = new PortalUsersViewModel()
+            {
+                UserResolution = UserResolutionInfo,
+                Item = _cmsRepository.getUser(id)
+            };
+
+            var filtr = getFilter();
+            var sfilter = FilterParams.Extend<SiteFilter>(filtr);
+            sfilter.UserId = id;
+            var sitesList = _cmsRepository.getSiteListWithCheckedForUser(sfilter);
+            
+            var model = new UserSiteLinkModel()
+            {
+                UserId = id,
+                Sites = sitesList,
+            };
+
+            return PartialView("UserSites", model);
+        }
+        [HttpPost]
+        [MultiButton(MatchFormKey = "action", MatchFormValue = "save-org-btn")]
+        public ActionResult SiteLinks(UserSiteLinkModel model)
+        {
+            
+            var res = _cmsRepository.updateUserSiteLinks(model);
+
+            return PartialView("Modal/Success");
+        }
+        #endregion
+
         #region Группы пользователей
         public ActionResult UsersGroup(string id)
         {

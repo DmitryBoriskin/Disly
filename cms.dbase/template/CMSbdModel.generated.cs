@@ -404,16 +404,16 @@ namespace cms.dbase.models
 		public IEnumerable<cms_sites_domains> fksitesdomainss { get; set; }
 
 		/// <summary>
-		/// fk_content_sitemap_from_sites_BackReference
-		/// </summary>
-		[Association(ThisKey="c_alias", OtherKey="f_site", CanBeNull=true, IsBackReference=true)]
-		public IEnumerable<content_sitemap> fkcontentsitemapfromsitess { get; set; }
-
-		/// <summary>
 		/// fk_link_site_to_user_BackReference
 		/// </summary>
 		[Association(ThisKey="c_alias", OtherKey="f_site", CanBeNull=true, IsBackReference=true)]
 		public IEnumerable<cms_user_site_link> fklinksitetousers { get; set; }
+
+		/// <summary>
+		/// fk_content_sitemap_from_sites_BackReference
+		/// </summary>
+		[Association(ThisKey="c_alias", OtherKey="f_site", CanBeNull=true, IsBackReference=true)]
+		public IEnumerable<content_sitemap> fkcontentsitemapfromsitess { get; set; }
 
 		/// <summary>
 		/// FK_content_banners_cms_sites_BackReference
@@ -557,8 +557,9 @@ namespace cms.dbase.models
 	[Table(Schema="dbo", Name="cms_user_site_link")]
 	public partial class cms_user_site_link
 	{
-		[Column, NotNull] public Guid   f_user { get; set; } // uniqueidentifier
-		[Column, NotNull] public string f_site { get; set; } // varchar(64)
+		[PrimaryKey, NotNull] public Guid   id     { get; set; } // uniqueidentifier
+		[Column,     NotNull] public Guid   f_user { get; set; } // uniqueidentifier
+		[Column,     NotNull] public string f_site { get; set; } // varchar(64)
 
 		#region Associations
 
@@ -610,16 +611,16 @@ namespace cms.dbase.models
 		public cms_users_group fkusersgroup { get; set; }
 
 		/// <summary>
-		/// fk_user_resolutions_BackReference
-		/// </summary>
-		[Association(ThisKey="id", OtherKey="c_user_id", CanBeNull=true, IsBackReference=true)]
-		public IEnumerable<cms_resolutions> fkuserresolutionss { get; set; }
-
-		/// <summary>
 		/// fk_link_user_to_site_BackReference
 		/// </summary>
 		[Association(ThisKey="id", OtherKey="f_user", CanBeNull=true, IsBackReference=true)]
 		public IEnumerable<cms_user_site_link> fklinkusertosites { get; set; }
+
+		/// <summary>
+		/// fk_user_resolutions_BackReference
+		/// </summary>
+		[Association(ThisKey="id", OtherKey="c_user_id", CanBeNull=true, IsBackReference=true)]
+		public IEnumerable<cms_resolutions> fkuserresolutionss { get; set; }
 
 		#endregion
 	}
@@ -920,6 +921,7 @@ namespace cms.dbase.models
 		[Column,        Nullable] public Guid?   f_director        { get; set; } // uniqueidentifier
 		[Column,     NotNull    ] public bool    b_ovp             { get; set; } // bit
 		[Column,     NotNull    ] public int     n_sort            { get; set; } // int
+		[Identity               ] public int     num               { get; set; } // int
 
 		#region Associations
 
@@ -1014,16 +1016,16 @@ namespace cms.dbase.models
 		#region Associations
 
 		/// <summary>
-		/// FK_content_orgs_types_link_org_types
-		/// </summary>
-		[Association(ThisKey="f_type", OtherKey="id", CanBeNull=false, KeyName="FK_content_orgs_types_link_org_types", BackReferenceName="contentorgstypeslinkorgtypess")]
-		public content_orgs_types contentorgstypeslinkorgtypes { get; set; }
-
-		/// <summary>
 		/// FK_content_orgs_types_link_org
 		/// </summary>
 		[Association(ThisKey="f_org", OtherKey="id", CanBeNull=false, KeyName="FK_content_orgs_types_link_org", BackReferenceName="contentorgstypeslinkorgs")]
 		public content_orgs contentorgstypeslinkorg { get; set; }
+
+		/// <summary>
+		/// FK_content_orgs_types_link_org_types
+		/// </summary>
+		[Association(ThisKey="f_type", OtherKey="id", CanBeNull=false, KeyName="FK_content_orgs_types_link_org_types", BackReferenceName="contentorgstypeslinkorgtypess")]
+		public content_orgs_types contentorgstypeslinkorgtypes { get; set; }
 
 		#endregion
 	}
@@ -1061,16 +1063,16 @@ namespace cms.dbase.models
 		#region Associations
 
 		/// <summary>
-		/// fk_content_people_org_department_link
-		/// </summary>
-		[Association(ThisKey="f_people", OtherKey="id", CanBeNull=false, KeyName="fk_content_people_org_department_link", BackReferenceName="fkcontentpeopleorgdepartmentlinks")]
-		public content_people_org_link fkcontentpeopleorgdepartmentlink { get; set; }
-
-		/// <summary>
 		/// fk_content_department_people_link
 		/// </summary>
 		[Association(ThisKey="f_department", OtherKey="id", CanBeNull=false, KeyName="fk_content_department_people_link", BackReferenceName="fkcontentdepartmentpeoplelinks")]
 		public content_departments fkcontentdepartmentpeoplelink { get; set; }
+
+		/// <summary>
+		/// fk_content_people_org_department_link
+		/// </summary>
+		[Association(ThisKey="f_people", OtherKey="id", CanBeNull=false, KeyName="fk_content_people_org_department_link", BackReferenceName="fkcontentpeopleorgdepartmentlinks")]
+		public content_people_org_link fkcontentpeopleorgdepartmentlink { get; set; }
 
 		#endregion
 	}
@@ -1713,6 +1715,12 @@ namespace cms.dbase.models
 		{
 			return table.FirstOrDefault(t =>
 				t.c_domain == c_domain);
+		}
+
+		public static cms_user_site_link Find(this ITable<cms_user_site_link> table, Guid id)
+		{
+			return table.FirstOrDefault(t =>
+				t.id == id);
 		}
 
 		public static cms_users Find(this ITable<cms_users> table, Guid id)

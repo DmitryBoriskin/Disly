@@ -388,10 +388,28 @@ function Confirm(Title, Body, Object) {
 function PopUpFrame(Object) {
     clear_modal();
 
-    $frale = $('<iframe/>', { 'class': 'modal_frame', 'frameborder': '0', 'width': '100%', 'height': '20', 'src': Object.attr("href") });
+    $frale = $('<iframe/>', { 'class': 'modal_frame', 'frameborder': '0', 'height': '20', 'src': Object.attr("href"), 'sandbox':'allow-same-origin allow-scripts allow-forms', 'scrolling':'no', 'style': 'overflow: hidden; width:100%;' });
 
     $modal.find('.modal-dialog').addClass(' modal-lg'),
     $modalTitle.append(Object.attr("title"));
+
+
+    ////////////////////////////////////////////////
+    //var modalBody = $(".modal .modal-body");
+    //var loader = "<div style='background-color: rgba(46,80,102,.5);' class='text-center'><img src='/Content/img/preloader.svg'></div>";
+    //modalBody.html(loader);
+    //var res = $.ajax({
+    //    url: Object.attr("href"),
+    //    cache: false
+    //    })
+    //  .done(function (response) {
+    //      modalBody.html(response);
+    //  })
+    //  .fail(function (jqXHR, textStatus) {
+    //      alert("Request failed: " + textStatus);
+    //  });
+
+    ///////////////////////////////////////////////
     $modalBody.append($frale);
 
     $modal.modal('toggle');

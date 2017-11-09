@@ -73,6 +73,7 @@
     </Compile>
     <Compile Include="entity\cms\MaterialsModel.cs" />
     <Compile Include="entity\Filter\Enum.cs" />
+    <Compile Include="entity\Filter\SiteFilter.cs" />
     <Compile Include="entity\Filter\OrgTypeFilter.cs" />
     <Compile Include="entity\Filter\VacancyFilter.cs" />
     <Compile Include="entity\Filter\EventFilter.cs" />
