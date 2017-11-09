@@ -11,6 +11,7 @@ public class Settings
     public static string BaseURL = ConfigurationManager.AppSettings["BaseURL"];
     public static string UserFiles = ConfigurationManager.AppSettings["UserFiles"];
     public static string BannersDir = ConfigurationManager.AppSettings["BannersDir"];
+    public static string LogoDir = ConfigurationManager.AppSettings["LogoDir"];
 
     public static string EventsDir = ReadAppSetting("EventsDir");  // ConfigurationManager.AppSettings["EventsDir"];
     public static string MaterialsDir = ReadAppSetting("MaterialsDir"); // ConfigurationManager.AppSettings["MaterialsDir"];

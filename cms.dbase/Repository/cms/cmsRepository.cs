@@ -97,8 +97,12 @@ namespace cms.dbase
                         Email = s.c_email,
                         Site = s.c_url,
                         Worktime = s.c_worktime,
-                        Logo = s.c_logo,
-                        DomainList = getSiteDomains(db, s.c_alias),
+                        //Logo = s.c_logo,
+                        Logo = new Photo
+                        {
+                            Url = s.c_logo
+                        },
+                        DomainList = getSiteDomains(s.c_alias),
                         ContentId = (Guid)s.f_content,
                         Type = s.c_content_type,
                         SiteOff = s.b_site_off
@@ -126,7 +130,11 @@ namespace cms.dbase
                         Email = s.c_email,
                         Site = s.c_url,
                         Worktime = s.c_worktime,
-                        Logo = s.c_logo,
+                        //Logo = s.c_logo,
+                        Logo = new Photo
+                        {
+                            Url = s.c_logo
+                        },
                         ContentId = (Guid)s.f_content,
                         Type = s.c_content_type,
                         Facebook = s.c_facebook,
@@ -165,6 +173,7 @@ namespace cms.dbase
                         .Set(u => u.c_instagramm, item.Instagramm)
                         .Set(u => u.c_odnoklassniki, item.Odnoklassniki)
                         .Set(u => u.c_twitter, item.Twitter)
+                        .Set(s => s.c_logo, item.Logo.Url)
                         .Update();
 
                     insertLog(user, ip, "update", item.Id, String.Empty, "Sites", item.Title);
@@ -610,7 +619,8 @@ namespace cms.dbase
                         .Set(s => s.c_email, upd.Email)
                         .Set(s => s.c_url, upd.Site)
                         .Set(s => s.c_worktime, upd.Worktime)
-                        .Set(s => s.c_logo, upd.Logo)
+                        //.Set(s => s.c_logo, upd.Logo)
+                        //.Set(s => s.c_logo, upd.Logo.Url)
                         .Set(s => s.c_scripts, upd.Scripts)
                         .Set(s => s.b_site_off, upd.SiteOff)
                         .Update();

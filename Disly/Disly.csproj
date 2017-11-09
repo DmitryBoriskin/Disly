@@ -129,6 +129,7 @@
     </Content>
     <Content Include="Areas\Admin\Views\Feedbacks\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Feedbacks\Item.cshtml" />
+    <Content Include="Content\css\core\style.css" />
     <Content Include="Content\css\styles_popUp.css" />
     <Content Include="Content\css\styles.css" />
     <Content Include="Content\css\styles_login.css" />
@@ -172,6 +173,7 @@
     <Content Include="Content\fonts\Ubuntu\ubuntu_regular.svg" />
     <Content Include="Content\img\asoft_logo.png" />
     <Content Include="Content\img\calendar-logo.png" />
+    <Content Include="Content\img\doctor.png" />
     <Content Include="Content\img\foot_logo.png" />
     <Content Include="Content\img\gosuslugi.png" />
     <Content Include="Content\img\logo.png" />
@@ -183,6 +185,7 @@
     <Content Include="Content\img\obr-project.png" />
     <Content Include="Content\img\preloader_planet.svg" />
     <Content Include="Content\img\preloader.svg" />
+    <Content Include="Content\img\temporal.jpg" />
     <Content Include="Content\js\script.js" />
     <Content Include="Content\plugins\bonsai\css\jquery.bonsai.css" />
     <Content Include="Content\plugins\bonsai\js\jquery.bonsai.js" />
@@ -554,6 +557,7 @@
     <Compile Include="Areas\Admin\Service\SpotCoord.cs" />
     <Compile Include="Areas\Admin\Service\Transliteration.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
+    <Compile Include="Controllers\StructureController.cs" />
     <Compile Include="Controllers\PressController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ServiceController.cs" />
@@ -563,6 +567,8 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Areas\Admin\Models\CoreViewModel.cs" />
+    <Compile Include="Models\StructureViewModel.cs" />
+    <Compile Include="Models\TypePageViewModel.cs" />
     <Compile Include="Models\NewsViewModel.cs" />
     <Compile Include="Models\HomePageViewModel.cs" />
     <Compile Include="Models\PageViewModel.cs" />
@@ -753,7 +759,9 @@
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\services\Pager.cshtml" />
-    <Content Include="Views\Materials\Item.cshtml" />
+    <Content Include="Views\Shared\services\breadcrumbs.cshtml" />
+    <Content Include="Views\Structure\Index.cshtml" />
+    <Content Include="Views\Structure\StructureItem.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

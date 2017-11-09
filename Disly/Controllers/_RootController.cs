@@ -1,6 +1,7 @@
 ﻿using cms.dbase;
 using cms.dbModel.entity;
 using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using System.Reflection;
@@ -25,7 +26,8 @@ namespace Disly.Controllers
 
         protected SitesModel siteModel;
         protected SiteMapModel[] siteMapArray;
-        protected BannersModel[] bannerArray;
+        protected BannersModel[] bannerArray;        
+        protected List<Breadcrumbs> breadcrumb;
 
         protected string MedCap;
         protected string Quote;
@@ -49,6 +51,8 @@ namespace Disly.Controllers
 
             siteModel = _repository.getSiteInfo(Domain);
             siteMapArray = _repository.getSiteMapList(Domain);
+            //breadcrumbArray = _repository.getBreadCrumb(((System.Web.HttpRequestWrapper)Request).RawUrl, Domain);
+            breadcrumb=_repository.getBreadCrumbCollection(((System.Web.HttpRequestWrapper)Request).RawUrl, Domain);
             bannerArray = _repository.getBanners(Domain);
 
             ViewBag.MedCap = MedCap = Settings.MedCap;

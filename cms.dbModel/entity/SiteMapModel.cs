@@ -105,7 +105,7 @@ namespace cms.dbModel.entity
         /// <summary>
         /// Сортировка внутри меню
         /// </summary>
-        public int MenuSort { get; set; }
+        public int MenuSort { get; set; }        
     }
 
     /// <summary>

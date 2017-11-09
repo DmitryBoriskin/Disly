@@ -20,12 +20,14 @@ namespace Disly.Models
         /// Информация по сайту
         /// </summary>
         public SitesModel SitesInfo { get; set; }
-
+        /// <summary>
+        /// Хлебные крошки
+        /// </summary>
+        public List<Breadcrumbs> Breadcrumbs { get; set; }
         /// <summary>
         /// Группы меню
         /// </summary>
         public SiteMapModel[] SiteMapArray { get; set; }
-
         /// <summary>
         /// Баннеры
         /// </summary>
@@ -68,4 +70,11 @@ namespace Disly.Models
         public string url { get; set; }
         public bool isChecked { get; set; }
     }
+
+    //public class BreadcrumbsFront
+    //{
+    //    public string Title { get; set; }
+    //    public string Url { get; set; }
+    //}
+
 }

@@ -95,7 +95,7 @@ namespace cms.dbModel.entity
         /// <summary>
         /// Логотип
         /// </summary>
-        public string Logo { get; set; }
+        public Photo Logo { get; set; }
 
         /// <summary>
         /// Пользовательские скрипты

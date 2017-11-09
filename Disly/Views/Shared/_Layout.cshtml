@@ -17,6 +17,7 @@
     <link href="/Content/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="~/Content/decor/first/main.css" rel="stylesheet" />
     <link href="~/Content/decor/first/color.css" rel="stylesheet" />
+    <link href="~/Content/css/core/style.css" rel="stylesheet" />
 
     <script type="text/javascript" src="/Content/plugins/jquery/jquery.js"></script>
     <script src="~/Content/plugins/bootstrap/js/bootstrap.min.js"></script>
@@ -32,7 +33,10 @@
                 <div class="col-md-8">
                     <a href="/" class="media">
                         <div class="media-left">
-                            <img src="~/Content/img/logo.png" />
+                            @if (Model.SitesInfo.Logo != null)
+                            {
+                                <img src="@Model.SitesInfo.Logo.Url" />
+                            }
                         </div>
                         <div class="media-body">
                                 @if (Model != null && Model.SitesInfo != null)
@@ -146,7 +150,10 @@
                 <div class="col-md-8">
                     <div class="media">
                         <div class="media-left">
-                            <img src="~/Content/img/foot_logo.png" />
+                            @if (Model.SitesInfo.Logo != null)
+                            {
+                                <img class="logo-small" src="@Model.SitesInfo.Logo.Url" />
+                            }
                         </div>
                         @if (Model != null && Model.SitesInfo != null)
                         {
@@ -252,9 +259,8 @@
             </div>
         </div>
         <!-- конец подвала -->
-    </div>
-
+    </div>    
+    <h1>TEST</h1>
+<script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU"></script>
 </body>
-
-
 </html>

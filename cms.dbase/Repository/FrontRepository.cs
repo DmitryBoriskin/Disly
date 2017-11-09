@@ -3,6 +3,7 @@ using cms.dbModel;
 using cms.dbModel.entity;
 using LinqToDB;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace cms.dbase
@@ -57,11 +58,10 @@ namespace cms.dbase
             using (var db = new CMSdb(_context))
             {
                 string ViewPath = "~/Error/404/";
-
                 var data = db.front_sv_page_veiws.Where(w => w.f_site == siteId && w.f_pege_type == siteSection).FirstOrDefault();
-
-                ViewPath = data.c_url;
-
+                if (data != null) {
+                    ViewPath = data.c_url;
+                }
                 return ViewPath;
             }
         }
@@ -89,7 +89,11 @@ namespace cms.dbase
                         Email = s.c_email,
                         Site = s.c_url,
                         Worktime = s.c_worktime,
-                        Logo = s.c_logo,
+                        //Logo = s.c_logo,
+                        Logo = new Photo
+                        {
+                            Url = s.c_logo
+                        },
                         ContentId = (Guid)s.f_content,
                         Type = s.c_content_type,
                         Facebook = s.c_facebook,
@@ -218,6 +222,102 @@ namespace cms.dbase
 
             return null;
         }
+
+
+        public override SiteMapModel getSiteMap(string path,string alias,string domain)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var query = db.content_sitemaps.Where(w => w.c_path == path && w.c_alias == alias && w.f_site == domain);
+                if (query.Any())
+                {
+                    var data= query.Select(s => new SiteMapModel {
+                        Title=s.c_title,
+                        Text=s.c_text,
+                        Alias=s.c_alias,
+                        Path=s.c_path,
+                        Id=s.id
+                        }).First();
+
+                    
+                    return data;
+                }
+                return null;
+            }
+            
+        }
+        public override SiteMapModel[] getSiteMapChild(Guid ParentId)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var data = db.content_sitemaps
+                                 .Where(w => w.uui_parent.Equals(ParentId))
+                                 .OrderBy(o => o.n_sort)
+                                 .Select(c => new SiteMapModel
+                                 {
+                                     Title = c.c_title,
+                                     Alias = c.c_alias,
+                                     Path = c.c_path
+                                 }).ToArray();
+                if (data.Any())
+                {
+                    return data;
+                }
+                return null;
+            }
+        }
+      
+
+        /// <summary>
+        /// Получаем хленые крошки
+        /// </summary>
+        /// <param name="Url">относительная ссылка на страницу</param>
+        /// <param name="domain"></param>
+        /// <returns></returns>
+        public override List<Breadcrumbs> getBreadCrumbCollection(string Url, string domain)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                int _len = Url.Count();
+                int _lastIndex = Url.LastIndexOf("/");
+                List<Breadcrumbs> data=new List<Breadcrumbs>();
+                while (_lastIndex > -1)
+                {
+                    string _path = Url.Substring(0, _lastIndex + 1).ToString();
+                    string _alias = Url.Substring(_lastIndex + 1).ToString();
+                    if (_alias == String.Empty) _alias = " ";
+
+                    var item_data = db.content_sitemaps
+                                    .Where(w => w.f_site == domain && w.c_path == _path && w.c_alias == _alias).Take(1)
+                                    .Select(s => new Breadcrumbs
+                                    {
+                                        Title = s.c_title,
+                                        Url = s.c_path + s.c_alias
+                                    }).SingleOrDefault();
+
+                    if (item_data != null)
+                    {
+                        data.Add(item_data);
+                            //.ToList().Add(item_data);
+                    } 
+
+                    Url = Url.Substring(0, _lastIndex);
+                    _len = Url.Count();
+                    _lastIndex = Url.LastIndexOf("/");
+
+                }
+                if (data.Any())
+                {
+                    data.Reverse();
+                    return data;
+                }
+                else
+                {
+            return null;
+        }
+            }
+        }
+
         /// <summary>
         /// Получим список новостей для определенной сущности
         /// </summary>
@@ -307,7 +407,59 @@ namespace cms.dbase
                 return null;
             }
         }
-        public override MaterialsModel getMaterialsItem(string year, string month, string day, string alias)
+
+        /// <summary>
+        /// Получаем новости для модуля на главной странице
+        /// </summary>
+        /// <returns></returns>
+        public override List<MaterialFrontModule> getMaterialsModule(string domain)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var contentType = ContentType.MATERIAL.ToString().ToLower();
+                
+                // список id-новостей для данного сайта
+                var materialIds = db.content_content_links.Where(e => e.f_content_type == contentType)
+                    .Join(db.cms_sitess.Where(o => o.c_alias == domain),
+                            e => e.f_link,
+                            o => o.f_content,
+                            (e, o) => e.f_content
+                            );
+
+                if (!materialIds.Any())
+                    return null;
+
+                // список групп
+                var groups = db.content_materials_groupss
+                    .Select(s => s.id).ToArray();
+
+                List<MaterialFrontModule> list = new List<MaterialFrontModule>();
+
+                foreach (var g in groups)
+                {
+                    var query = db.content_sv_materials_groupss
+                        .Where(w => materialIds.Contains(w.id))
+                        .Where(w => w.group_id.Equals(g))
+                        .OrderByDescending(o => o.d_date)
+                        .Select(s => new MaterialFrontModule
+                        {
+                            Title = s.c_title,
+                            Alias = s.c_alias,
+                            Date = s.d_date,
+                            GroupName = s.group_title,
+                            GroupAlias = s.group_alias,
+                            Photo = s.c_preview
+                        });
+
+                    // берём последние 3 новости данной группы
+                    if (query.Any()) list.AddRange(query.Take(3));
+                }
+
+                if (list.Count() > 0) return list;
+                else return null;
+            }
+        }
+        public override MaterialsModel getMaterialsItem(string year, string month, string day, string alias, string domain)
         {
             using (var db = new CMSdb(_context))
             {
@@ -315,11 +467,29 @@ namespace cms.dbase
                 int _month = Convert.ToInt32(month);
                 int _day = Convert.ToInt32(day);
 
-                var data = db.content_materialss
-                             .Where(w => (w.n_year == _year) && (w.n_month == _month) && (w.n_day == _day) && (w.c_alias.ToLower()==alias.ToLower()));
-                if (data.Any())
+
+                var contentType = ContentType.MATERIAL.ToString().ToLower();
+
+
+                var materials = db.content_content_links.Where(e => e.f_content_type == contentType)
+                                                        .Join(db.cms_sitess.Where(o => o.c_alias == domain),
+                                                                   e => e.f_link,
+                                                                   o => o.f_content,
+                                                                   (e, o) => e.f_content
+                                                               );
+
+                if (!materials.Any())
+                    return null;
+
+                var query = db.content_materialss
+                            .Where(w => materials.Contains(w.id));
+
+
+
+                query=query.Where(w => (w.n_year == _year) && (w.n_month == _month) && (w.n_day == _day) && (w.c_alias.ToLower()==alias.ToLower()));
+                if (query.Any())
                 {
-                    return data.Select(s => new MaterialsModel {
+                    return query.Select(s => new MaterialsModel {
                         Title=s.c_title,
                         Text=s.c_text
                             }).First();
@@ -350,5 +520,101 @@ namespace cms.dbase
             }
         }
 
+
+        public override StructureModel[] getStructures(string domain)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var query = db.content_org_structures
+                            .Join(db.cms_sitess.Where(o => o.c_alias == domain), o => o.f_ord, e => e.f_content, (e, o) => e)
+                            .OrderBy(o=>o.n_sort)
+                            .Select(s => new StructureModel(){
+                                Title=s.c_title,
+                                Num=s.num                     
+                            }).ToArray();
+                return query;
+            }
+        }
+        public override StructureModel getStructureItem(string domain, int num)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var data = db.content_org_structures.Where(w => w.num == num)
+                           .Join(db.cms_sitess.Where(o => o.c_alias == domain), o => o.f_ord, e => e.f_content, (e, o) => e)
+                           .Select(s => new StructureModel()
+                           {
+                               Id=s.id,
+                               Num=s.num,
+                               Title = s.c_title,
+                               Adress = s.c_adress,
+                               GeopointX = s.n_geopoint_x,
+                               GeopointY = s.n_geopoint_y,
+                               Phone = s.c_phone,
+                               PhoneReception = s.c_phone_reception,
+                               Fax = s.c_fax,
+                               Email = s.c_email,
+                               Routes = s.c_routes,
+                               Schedule = s.c_schedule,
+                               DirecorPost = s.c_director_post,
+                               Ovp = s.b_ovp
+                           });
+                if (data.Any())
+                {
+                    return data.First();
+                }
+                return null;
+            }
+        }
+
+        public override Departments[] getDepartmentsList(Guid StructureId)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var query = db.content_departmentss
+                            .Where(w => w.f_structure == StructureId)
+                            .OrderBy(o=>o.n_sort)
+                            .Select(s => new Departments() {
+                                Id=s.id,
+                                Title=s.c_title
+                            });
+                if (query.Any())
+                {
+                    return query.ToArray();
+                }
+                return null;
+            }
+
+        }
+        public override Departments getDepartmentsItem(Guid Id)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var query = db.content_departmentss
+                            .Where(w => w.id == Id)
+                            .Select(s => new Departments()
+                            {
+                                Id = s.id,
+                                Title = s.c_title                                
+                            });
+                if (query.Any())
+                {
+                    var data = query.First();
+                    var Phones = db.content_departments_phones
+                                  .Where(w => w.f_department == data.Id)
+                                  .OrderBy(o => o.n_sort)
+                                  .Select(s=>new DepartmentsPhone() {
+                                      Label=s.c_key,
+                                      Value=s.c_val
+                                  });
+                    if (Phones.Any())
+                    {
+                        data.Phones = Phones.ToArray();
+                    }                                  
+                    return query.First();
+                }
+                return null;
+            }
+
+        }
     }
 }
