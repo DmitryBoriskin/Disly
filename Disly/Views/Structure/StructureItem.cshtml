@@ -1,7 +1,7 @@
 ﻿@model StructureViewModel
-@*@section Scripts {
-    @Scripts.Render("https://api-maps.yandex.ru/2.1/?lang=ru_RU")    
-}*@
+
+<script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU"></script>
+
 <h1>@Model.StructureItem.Title</h1>
 @Html.Partial("services/breadcrumbs")
 <div class="structur">

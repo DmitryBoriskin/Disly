@@ -565,7 +565,6 @@ namespace cms.dbase
                 return null;
             }
         }
-
         public override Departments[] getDepartmentsList(Guid StructureId)
         {
             using (var db = new CMSdb(_context))
@@ -593,8 +592,12 @@ namespace cms.dbase
                             .Where(w => w.id == Id)
                             .Select(s => new Departments()
                             {
-                                Id = s.id,
-                                Title = s.c_title                                
+                                Id = s.id,                                
+                                Title = s.c_title,
+                                Text=s.c_adress,
+                                DirecorPost=s.c_director_post,
+                                DirectorF=s.f_director
+                                                             
                             });
                 if (query.Any())
                 {
@@ -609,12 +612,86 @@ namespace cms.dbase
                     if (Phones.Any())
                     {
                         data.Phones = Phones.ToArray();
-                    }                                  
-                    return query.First();
+                    }
+                    var People = db.content_sv_people_departments.Where(w => w.f_department == Id)
+                                    .Select(s => new People() {
+                                        Id=s.id,
+                                        FIO= s.c_surname + " " + s.c_name + " " + s.c_patronymic,
+                                        Post=s.c_post,
+                                        Status=s.c_status
+                                    });
+                    
+                    if(People.Any())
+                    {
+                        data.Peoples = People.ToArray();
+                    }
+                    
+                    var Boss = db.content_peoples.Where(w => w.id == data.DirectorF)
+                                    .Select(s => new People()
+                                    {
+                                        Id = s.id,
+                                        FIO = s.c_surname + " " + s.c_name + " " + s.c_patronymic,
+                                        Post = data.DirecorPost                                        
+                                    });
+                    if (Boss.Any())
+                    {
+                        data.Boss = Boss.First();
+                    }
+                    
+                    return data;
                 }
                 return null;
             }
 
+        }
+
+        public override People[] getPeopleList(FilterParams filter)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var ggf = filter.Domain;
+                var query = db.cms_sitess
+                            .Where(w => w.c_alias == filter.Domain)
+                            .Join(db.content_people_org_links, e => e.f_content, o => o.f_org, (e, o) => o)
+                            .Join(db.content_peoples, m => m.f_people, n => n.id, (m, n) => n);
+
+                var query1 = query.OrderBy(o => o.c_surname);
+                if (query1.Any())
+                {
+                    return query1.Select(s => new People()
+                                    {
+                                        Id = s.id,
+                                        FIO = s.c_surname + " " + s.c_name + " " + s.c_patronymic
+                                    }).ToArray();
+                }
+                return null;
+                                
+            }
+        }
+
+        public override People getPeopleItem(Guid id, string domain)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var query = db.cms_sitess
+                              .Join(db.content_people_org_links, e => e.f_content, o => o.f_org, (e, o) =>new {o,e} )
+                              .Join(db.content_peoples, m => m.o.f_people, n => n.id, (m, n) => new { m,n});
+
+                if (!String.IsNullOrEmpty(domain))
+                {
+                    query = query.Where(w => w.m.e.c_alias == domain);
+                }
+
+                if (query.Any())
+                {
+                    return query.Select(s => new People
+                    {
+                        Id = s.n.id,
+                        FIO = s.n.c_surname + " " + s.n.c_name + " " + s.n.c_patronymic
+                    }).First();                    
+                }
+                return null;
+            }
         }
     }
 }

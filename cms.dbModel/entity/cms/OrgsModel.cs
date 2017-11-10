@@ -293,7 +293,7 @@ namespace cms.dbModel.entity
         /// <summary>
         /// Директор
         /// </summary>
-        public Guid DirectorF { get; set; }
+        public Guid? DirectorF { get; set; }
 
         /// <summary>
         /// Телефоны
@@ -304,6 +304,7 @@ namespace cms.dbModel.entity
         /// Сотрудники
         /// </summary>
         public People[] Peoples { get; set; }
+        public People Boss { get; set; }
     }
 
     /// <summary>
@@ -347,6 +348,11 @@ namespace cms.dbModel.entity
         /// Привязка к организации
         /// </summary>
         public Guid IdLinkOrg { get; set; }
+        /// <summary>
+        /// Должность
+        /// </summary>
+        public string Post { get; set; }
+        public string Status { get; set; }
     }
     
     /// <summary>

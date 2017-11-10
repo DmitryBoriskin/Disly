@@ -59,14 +59,14 @@ namespace Disly.Controllers
             ViewBag.Quote = Quote = Settings.Quote;
             ViewBag.Concept = Concept = Settings.Concept;
             ViewBag.Coordination = Coordination = Settings.Coordination;
+            ViewBag.ControllerName = ControllerName;
         }
 
         public RootController()
         {
             _repository = new FrontRepository("cmsdbConnection");
         }
-
-
+        
         [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = true)]
         public class MultiButtonAttribute : ActionNameSelectorAttribute
         {
@@ -78,8 +78,7 @@ namespace Disly.Controllers
                     controllerContext.HttpContext.Request[MatchFormKey] == MatchFormValue;
             }
         }
-
-
+        
         public FilterParams getFilter(int defaultPageSize = 20)
         {
             string return_url = HttpUtility.UrlDecode(Request.Url.Query);
@@ -151,10 +150,7 @@ namespace Disly.Controllers
             query = query.Replace("?&", "?").Replace("&&", "&");
 
             return query;
-        }
-
-
-
+        }        
     }
 }
 

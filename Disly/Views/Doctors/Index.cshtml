@@ -1,0 +1,23 @@
+﻿@model DoctorsViewModel
+
+<div class="container">
+    @if (Model.DoctorsItem != null)
+    {
+        <h1>@Model.DoctorsItem.FIO</h1>
+    }
+    else
+    {
+        <h1>Врачи</h1>
+        <div class="row">
+            <div class="col-xs-12">
+                @if (Model.DoctorsList != null)
+                {
+                    foreach (var item in Model.DoctorsList)
+                    {
+                        <a href="/@ViewBag.ControllerName/@item.Id">@item.FIO</a>
+                    }
+                }
+            </div>
+        </div>
+    }    
+</div>
