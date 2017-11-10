@@ -767,6 +767,7 @@ namespace cms.dbase
                     {
                         Id = s.id,
                         Title = s.c_title,
+                        Text=s.c_adress,
                         StructureF = s.f_structure,
                         Phones = getDepartmentsPhone(s.id),
                         Peoples = getPeopleDepartment(s.id)
@@ -992,8 +993,12 @@ namespace cms.dbase
                     id = id,
                     f_structure = Structure,
                     c_title = insert.Title,
-                    n_sort = MaxSort
+                    c_adress=insert.Text,
+                    n_sort = MaxSort,
+                    f_director=insert.DirectorF,
+                    c_director_post= insert.DirecorPost
                 };
+
                 using (var tran = db.BeginTransaction())
                 {
                     db.Insert(cdDepart);
@@ -1023,6 +1028,10 @@ namespace cms.dbase
                     throw new Exception("Запись с таким Id не существует");
                 }
                 cdDepart.c_title = insert.Title;
+                cdDepart.c_adress = insert.Text;
+                cdDepart.f_director = insert.DirectorF;
+                cdDepart.c_director_post = insert.DirecorPost;
+
                 using (var tran = db.BeginTransaction())
                 {
                     db.Update(cdDepart);

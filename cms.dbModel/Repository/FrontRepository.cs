@@ -27,5 +27,9 @@ namespace cms.dbModel
         public abstract Departments getDepartmentsItem(Guid Id);
 
         public abstract List<MaterialFrontModule> getMaterialsModule(string domain);
+
+
+        public abstract People[] getPeopleList(FilterParams filter);
+        public abstract People getPeopleItem(Guid id, string domain);
     }
 }

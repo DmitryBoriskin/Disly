@@ -27,7 +27,7 @@ namespace Disly.Controllers
         }
 
         /// <summary>
-        /// Сраница по умолчанию
+        /// Список струкутур
         /// </summary>
         /// <returns></returns>
         public ActionResult Index()
@@ -62,6 +62,11 @@ namespace Disly.Controllers
 
             return View(_ViewName,model);
         }
+        /// <summary>
+        /// отдельная структура+списиок отделений
+        /// </summary>
+        /// <param name="num"></param>
+        /// <returns></returns>
         public ActionResult Item(int num)
         {
             model.StructureItem = _repository.getStructureItem(Domain, num);
@@ -89,15 +94,31 @@ namespace Disly.Controllers
             #endregion
             return View(_ViewName, model);
         }
-        public ActionResult Depart(Guid id)
-        {            
+        /// <summary>
+        /// отдельное отделелние
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public ActionResult Department(int num, Guid id)
+        {
+            model.StructureItem = _repository.getStructureItem(Domain, num);
             if (model.StructureItem != null)
             {
                 model.Breadcrumbs.Add(new Breadcrumbs()
                 {
-                    Title = model.StructureItem.Title
+                    Title = model.StructureItem.Title,
+                    Url = "/"+ControllerName + "/" + num
                 });
-                model.DepartmentList = _repository.getDepartmentsList(model.StructureItem.Id);
+            }
+
+            model.DepartmentItem = _repository.getDepartmentsItem(id);
+            if (model.DepartmentItem != null)
+            {
+                model.Breadcrumbs.Add(new Breadcrumbs()
+                {
+                    Title = model.DepartmentItem.Title
+                });
+
             }
 
 
