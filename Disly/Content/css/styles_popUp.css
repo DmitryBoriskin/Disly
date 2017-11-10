@@ -301,11 +301,11 @@ a.button  {
     background: url('/Content/img/preloader.svg') center center no-repeat;
 }
 .modal-org-list, .modal-event-list,
-.modal-site-list
+.modal-site-list, .modal-userGroupResolutions-list
 {
     height:400px;
     overflow:hidden;
-    margin:20px 0 0 0;
+    margin:30px 0 0 0;
     font-size: 0.9em;
 }
 .modal-org-list a, .modal-event-list a{
@@ -338,6 +338,13 @@ table{
     border-collapse: collapse; /* Способ отображения границы */ 
     width: 100%; /* Ширина таблицы */ 
     border-spacing: 0;
+}
+.buttons {
+    overflow: hidden;
+    line-height: 52px;
+    min-height: 52px;
+    padding: 0 20px;
+    background: #e6edf2;
 }
 
 

@@ -1,0 +1,164 @@
+﻿@{
+    Layout = "~/Areas/Admin/Views/Shared/_popUp.cshtml";
+}
+@model UsersGroupModel
+
+<div class="row">
+    <div class="buttons">
+        <button type="submit" name="action" value="save-group-user" class="button icon-save">Сохранить</button>
+        @if (Model != null)
+            {
+            <button type="submit" name="action" value="delete-btn-group-user" class="button icon-delete">Удалить</button>
+        }
+    </div>
+</div>
+<div class="alert alert-success" role="alert" style="display:none;"></div>
+
+@if (ViewBag.SuccesAlert != null)
+{
+    <div class="alert alert-success" role="alert">@ViewBag.SuccesAlert</div>
+}
+@if (ViewBag.DankerAlert != null)
+{
+    <div class="alert alert-danger">@ViewBag.DankerAlert</div>
+}
+
+@Html.ValidationSummary(false, "", new { @class = "alert alert-danger" })
+
+<div class="row">
+    <div class="col-xs-3">
+        @if (Model == null)
+            {
+            @Html.TextBoxFor(m => m.Alias, new { @class = "uc_input", @title = "Название группы (на английском)" })
+        }
+        else
+        {
+            @Html.TextBoxFor(m => m.Alias, new { @class = "uc_input", @title = "Название группы (на английском)", @readonly = "readonly" })
+        }
+    </div>
+    <div class="col-xs-4">
+        @Html.TextBoxFor(m => m.GroupName, new { @class = "uc_input", @title = "Отображаемое имя" })
+    </div>
+</div>
+<div class="scrollbar modal-userGroupResolutions-list">
+    @if (Model != null && Model.GroupResolutions != null)
+    {
+        <table class="table table-striped" cellspacing="0" width="100%" id="modal-userGroupResolutions-table">
+            <thead>
+                <tr>
+                    <th width="70%"> Раздел CMS</th>
+                    <th>Просмотр</th>
+                    <th>Создание</th>
+                    <th>Изменение</th>
+                    <th>Удаление</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.GroupResolutions)
+                {
+                    <tr>
+                        <td>
+                            @item.Title
+                        </td>
+                        <td class="td-center">
+                            <input type="checkbox" class="iCheck" data-init="false" data-group="@Model.Alias" data-url="@item.MenuId" data-action="read" checked="@item.Read" data-toggle="tooltip" data-placement="top" title="Сохранено">
+                        </td>
+                        <td class="td-center">
+                            <div class="CB_Block">
+                                <input type="checkbox" class="iCheck" data-init="false" data-group="@Model.Alias" data-url="@item.MenuId" data-action="write" checked="@item.Write" data-toggle="tooltip" data-placement="top" title="Сохранено">
+                            </div>
+                        </td>
+                        <td class="td-center">
+                            <div class="CB_Block">
+                                <input type="checkbox" class="iCheck" data-init="false" data-group="@Model.Alias" data-url="@item.MenuId" data-action="change" checked="@item.Change" data-toggle="tooltip" data-placement="top" title="Сохранено">
+                            </div>
+                        </td>
+                        <td class="td-center">
+                            <input type="checkbox" class="iCheck" data-init="false" data-group="@Model.Alias" data-url="@item.MenuId" data-action="delete" checked="@item.Delete" data-toggle="tooltip" data-placement="top" title="Сохранено">
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+            @*<div class="col-xs-12">
+                    <div id="UserGroupresolutions">
+                        <div id="PagesListTitle">
+                            <div class="HeadItem">
+                                <div class="CB_Block HeadBlock">
+                                    Удаление
+                                </div><div class="CB_Block HeadBlock">
+                                    Изменение
+                                </div><div class="CB_Block HeadBlock">
+                                    Создание
+                                </div><div class="CB_Block HeadBlock">
+                                    Просмотр
+                                </div><div class="PageName HeadBlock">
+                                    Раздел CMS
+                                </div>
+                            </div>
+                        </div>
+                        <div id="PagesList" class="Scrollbar">
+                            @foreach (var resolut in Model.GroupResolutions)
+                            {
+                                <div class="TableItem">
+                                    <div class="CB_Block">
+                                        <span data-user="@resolut.UserId" data-url="@resolut.MenuId" data-action="delete">
+                                            <input type="checkbox" data-init="false" class="iCheck" checked="@resolut.Delete" }>
+                                        </span>
+                                    </div>
+                                    <div class="CB_Block">
+                                        <span data-user="@resolut.UserId" data-url="@resolut.MenuId" data-action="change">
+                                            <input type="checkbox" data-init="false" class="iCheck" checked="@resolut.Change" }>
+                                        </span>
+                                    </div>
+                                    <div class="CB_Block">
+                                        <span data-user="@resolut.UserId" data-url="@resolut.MenuId" data-action="write">
+                                            <input type="checkbox" data-init="false" class="iCheck" checked="@resolut.Write" }>
+                                        </span>
+                                    </div>
+                                    <div class="CB_Block">
+                                        <span data-user="@resolut.UserId" data-url="@resolut.MenuId" data-action="read">
+                                            <input type="checkbox" data-init="false" class="iCheck" checked="@resolut.Read" }>
+                                        </span>
+                                    </div>
+                                    <div class="PageName HeadBlock">@resolut.Title</div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>*@
+    }
+</div>
+
+<script>
+    $(document).ready(function () {
+        $("#modal-userGroupResolutions-table .iCheck").iCheck({
+            checkboxClass: 'icheckbox_square-blue',
+            radioClass: 'icheckbox_square-blue'
+            //increaseArea: '%' //optional
+        });
+        $.extend($.fn.dataTable.defaults, {
+            searching: false,
+            ordering: false,
+            scrollY: false,//"200px",
+            //info: false,
+            language: {
+                "url": "/Content/plugins/datatables/i18n/ru.json"
+            }
+        });
+        $('#modal-userGroupResolutions-table').DataTable(
+            {
+                searching: true,
+                ordering: true,
+                columns: [
+                    null,
+                    { "searchable": false, "orderable": false },
+                    { "searchable": false, "orderable": false },
+                    { "searchable": false, "orderable": false },
+                    { "searchable": false, "orderable": false }
+                ]
+                //paging: false
+            });
+    });
+</script>

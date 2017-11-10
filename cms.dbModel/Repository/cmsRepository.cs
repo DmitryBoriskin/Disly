@@ -59,6 +59,7 @@ namespace cms.dbModel
         public abstract UsersGroupModel getUsersGroup(string alias);
 
         public abstract ResolutionsModel[] getGroupResolutions(string alias);
+        public abstract bool updateGroupResolutions(GroupClaims claim);
         public abstract bool updateUserSiteLinks(UserSiteLinkModel link);
         // Материалы
         public abstract MaterialsGroup[] getAllMaterialGroups();
