@@ -1,14 +1,14 @@
 ﻿@{
     Layout = "~/Areas/Admin/Views/Shared/_popUp.cshtml";
 }
-@model UsersGroupModel
+@model GroupModel
 
 <div class="row">
     <div class="buttons">
-        <button type="submit" name="action" value="save-group-user" class="button icon-save">Сохранить</button>
+        <button type="submit" name="action" value="save-group-btn" class="button icon-save">Сохранить</button>
         @if (Model != null)
-            {
-            <button type="submit" name="action" value="delete-btn-group-user" class="button icon-delete">Удалить</button>
+        {
+            <button type="submit" name="action" value="delete-group-btn" class="button icon-delete">Удалить</button>
         }
     </div>
 </div>
@@ -28,7 +28,7 @@
 <div class="row">
     <div class="col-xs-3">
         @if (Model == null)
-            {
+        {
             @Html.TextBoxFor(m => m.Alias, new { @class = "uc_input", @title = "Название группы (на английском)" })
         }
         else

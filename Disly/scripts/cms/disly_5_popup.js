@@ -10,15 +10,13 @@
 
     //Назначение прав группе
     $("#modal-userGroupResolutions-table input[type='checkbox']").on('ifChanged', function () {
-        var targetUrl = "/Admin/Services/SaveGroupClaims";
+        var targetUrl = "/Admin/Services/UpdateGroupClaims";
         var _group = $(this).data("group");
         var _url = $(this).data("url");
         var _action = $(this).data("action");
         var _checked = $(this).is(':checked');
 
         var el = $(this);
-       // var content = $(".alert-success");
-        
 
         try
         {

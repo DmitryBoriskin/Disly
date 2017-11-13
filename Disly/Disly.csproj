@@ -761,6 +761,7 @@
     <Content Include="Areas\Admin\Views\Services\UserSites.cshtml" />
     <Content Include="Areas\Admin\Views\Users\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Users\Item.cshtml" />
+    <Content Include="Areas\Admin\Views\Shared\Modal\Error.cshtml" />
     <None Include="Content\plugins\datatables\i18n\ru.json" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <Content Include="Views\_ViewStart.cshtml" />
