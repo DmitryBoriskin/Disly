@@ -111,3 +111,11 @@
         .ui-datepicker-calendar td.ui-datepicker-other-month a {
             color: #e6e6e6;
         }
+
+
+.filtr_news input,.filtr_news select{border-radius: 0;    border: 1px solid #e6e6e6;    font-size: 14px;    box-shadow: none;}
+.filtr_news label{    font-size: 14px;    color: #808080;    margin-bottom: 2px;    font-weight: normal;}
+
+.reset:before {content: '\ed87';font-family: fontello;font-size: 20px;position: relative;top: 4px;    left: 15px;    color: #abadac;}
+
+.boss img{max-width:100%;}

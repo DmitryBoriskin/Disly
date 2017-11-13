@@ -355,6 +355,14 @@ namespace cms.dbase
                     {
                         query = query.Where(w => w.c_title.ToLower().Contains(filter.SearchText.ToLower()));
                     }
+                    if (filter.Date!=null)
+                    {
+                        query = query.Where(w => w.d_date >= filter.Date);
+                    }
+                    if (filter.DateEnd!= null)
+                    {
+                        query = query.Where(w => w.d_date <= filter.DateEnd);
+                    }
 
                     if (!String.IsNullOrEmpty(filter.Category))
                     {

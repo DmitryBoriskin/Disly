@@ -10,12 +10,38 @@
 
     $('input[data-type=date').datepicker({ onSelect: function (dateText, inst) { $(this).attr('value', dateText); } });
 
+    $('input[data-mask]').each(function () {
+        $(this).mask($(this).attr('data-mask'));
+    });
+
+
+
     // анимация баннеров
     if ($('.ling_img_on').length > 0) {
         $('.ling_img_on').each(function () {
             CaruselSlide($(this));
         });
     }
+
+
+    //Фильтр по новостям
+    $('.filtr_news').submit(function (e) {
+        
+        var start = $('#data_start').val();
+        var end = $('#data_fin').val();
+        var search = $('#search_news').val();        
+
+        var params = {
+            datearea: search,
+            datestart: start,
+            datefin: end
+        };
+
+        var str = jQuery.param(params);
+        location.href = UrlPage() + "?" + str;
+        e.preventDefault();
+    });
+
 
     //coords
     if ($('.buildmap').length > 0) {
