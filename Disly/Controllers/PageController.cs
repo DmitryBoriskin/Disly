@@ -45,56 +45,18 @@ namespace Disly.Controllers
             #region Создаем переменные (значения по умолчанию)
             PageViewModel Model = new PageViewModel();
             string _ViewName = (ViewName != String.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";
-            string PageTitle = "страница сайта";
+            string PageTitle = model.Item.Title;
             string PageDesc = "описание страницы";
             string PageKeyw = "ключевые слова";
             #endregion            
-            //cms.dbModel.entity.pagePathModel[] _PagePath = _repository.getPagePath(_path + _alias, _domain);
-
-            //Model = new PageViewModel() {
-            //    PagePath = _PagePath,
-            //    PageInfo = _repository.getPageInfo(_PagePath[_PagePath.Length-1].Path, _PagePath[_PagePath.Length-1].Alias, _domain),                
-            //    PageMenu = _repository.getPageMenu(_domain),
-            //    NewsList = _repository.getMaterials(_domain),                
-            //    PageMenuChild = _repository.getPageChildElem(_path + _alias, _domain),
-            //    PlaceCardList = _repository.getPlaceCards(_domain),
-            //    NewsItem = _repository.getMaterialsItem(_path + _alias, _domain),
-            //    //Banners = _repository.getBanners(BANNER_SECTIONS, _domain)
-            //    //SitesInfo=_repository.getAllSitesInfo()
-            //};
-
+          
             #region Метатеги
             ViewBag.Title = PageTitle;
             ViewBag.Description = PageDesc;
             ViewBag.KeyWords = PageKeyw;
             #endregion
 
-            return View(_ViewName,model);
-
-            //if (Model.PageInfo != null)
-            //{
-            //    if (Model.PageInfo.View != String.Empty) ViewName = Model.PageInfo.View;
-            //    ViewBag.Alias = Model.PageInfo.Alias;
-
-            //    PageTitle = Model.PageInfo.Title;
-            //    PageDesc = Model.PageInfo.Desc;
-            //    PageKeyw = Model.PageInfo.Keyw;
-
-            
-            
-
-            //    return View(ViewName, Model);
-            //}
-            //// если сайт есть, а главная еще не создана
-            //else if (_path == "/" && _alias == " " && Model.PageInfo == null)
-            //{
-            //    return RedirectToAction("InDevelopment", "ErrorController");
-            //}
-            ////если нет страницы
-            //else
-            //{
-            //    return RedirectToAction("Custom", "ErrorController", new { @httpCode = "404" });                
-            //}   
+            return View(_ViewName,model);            
         }
     }
 }

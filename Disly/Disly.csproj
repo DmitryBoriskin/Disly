@@ -182,6 +182,7 @@
     <Content Include="Content\img\metrica2.png" />
     <Content Include="Content\img\minzdrav-logo.png" />
     <Content Include="Content\img\nophoto.jpg" />
+    <Content Include="Content\img\no_avatar.png" />
     <Content Include="Content\img\obr-project.png" />
     <Content Include="Content\img\preloader_planet.svg" />
     <Content Include="Content\img\preloader.svg" />
@@ -560,6 +561,7 @@
     <Compile Include="Areas\Admin\Service\Transliteration.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\DoctorsController.cs" />
+    <Compile Include="Controllers\ContactsController.cs" />
     <Compile Include="Controllers\StructureController.cs" />
     <Compile Include="Controllers\PressController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -571,6 +573,7 @@
     </Compile>
     <Compile Include="Areas\Admin\Models\CoreViewModel.cs" />
     <Compile Include="Models\DoctorsViewModel.cs" />
+    <Compile Include="Models\ContactsViewModel.cs" />
     <Compile Include="Models\StructureViewModel.cs" />
     <Compile Include="Models\TypePageViewModel.cs" />
     <Compile Include="Models\NewsViewModel.cs" />
@@ -648,7 +651,6 @@
     <Content Include="Areas\Admin\Views\cmsMenu\Item.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Home\Modern.cshtml" />
-    <Content Include="Views\Materials\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Services\ChangePass.cshtml" />
     <Content Include="Areas\Admin\Views\Services\Log.cshtml" />
     <Content Include="Areas\Admin\Views\Services\UserResolutions.cshtml" />
@@ -771,6 +773,9 @@
     <Content Include="Views\Structure\StructureItem.cshtml" />
     <Content Include="Views\Structure\DepartmentItem.cshtml" />
     <Content Include="Views\Doctors\Index.cshtml" />
+    <Content Include="Views\Contacts\Index.cshtml" />
+    <Content Include="Views\Press\Rss.cshtml" />
+    <Content Include="Views\Press\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

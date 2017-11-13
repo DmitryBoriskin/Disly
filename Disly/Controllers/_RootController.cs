@@ -122,10 +122,11 @@ namespace Disly.Controllers
                 Disabled = (String.IsNullOrEmpty(Request.QueryString["disabled"])) ? false : Convert.ToBoolean(Request.QueryString["disabled"])
             };
 
-            if (result.Date != DateNull && result.DateEnd == DateNull)
-            {
-                result.DateEnd = ((DateTime)result.Date).AddDays(1);
-            }
+#warning  Зачем прибавляли 1 день?
+            //if (result.Date != DateNull && result.DateEnd == DateNull)
+            //{
+            //    result.DateEnd = ((DateTime)result.Date).AddDays(1);
+            //}
 
             return result;
         }

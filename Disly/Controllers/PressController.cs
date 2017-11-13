@@ -1,6 +1,7 @@
 ﻿using cms.dbase;
 using Disly.Models;
 using System;
+using System.Web;
 using System.Web.Mvc;
 
 namespace Disly.Controllers
@@ -33,6 +34,11 @@ namespace Disly.Controllers
             var filter = getFilter();
             filter.Disabled = false;
             model.List = _repository.getMaterialsList(filter);
+
+            ViewBag.Filter = filter;
+            ViewBag.NewsSearchArea = filter.SearchText;
+            ViewBag.NewsSearchDateStart=filter.Date;
+            ViewBag.NewsSearchDateFin=filter.DateEnd;
 
             #region Создаем переменные (значения по умолчанию)            
             string _ViewName = (ViewName != String.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";
@@ -73,13 +79,14 @@ namespace Disly.Controllers
             return View(_ViewName, model);
         }
 
-
         public ActionResult Category(string category)
         {
             ViewBag.CurrentCategory = category;         
             var filter = getFilter();
             filter.Disabled = false;
             filter.Category = category;
+            ViewBag.Filter = filter;
+
             model.List = _repository.getMaterialsList(filter);
 
             #region Создаем переменные (значения по умолчанию)            
@@ -95,6 +102,23 @@ namespace Disly.Controllers
             ViewBag.KeyWords = PageKeyw;
             #endregion
             return View(_ViewName, model);
+        }
+
+        public ActionResult Rss()
+        {
+            Response.ContentType = "text/xml";
+
+            var filter = getFilter();
+            filter.Disabled = false;
+            filter.Size = 30;
+            model.List = _repository.getMaterialsList(filter);
+            ViewBag.LastDatePublish = model.List.Data[0].Date;
+
+
+
+
+            string _ViewName = (ViewName != String.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";            
+            return View("rss", model);
         }
 
     }

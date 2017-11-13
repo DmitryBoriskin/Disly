@@ -33,7 +33,8 @@
             <div class="boss">
                 @if (Model.DepartmentItem.Boss != null)
                 {
-                    @Model.DepartmentItem.Boss.FIO
+                    <a href="/doctors/@Model.DepartmentItem.Boss.Id"><img src="~/Content/img/no_avatar.png"/></a>
+                    <a href="/doctors/@Model.DepartmentItem.Boss.Id">@Model.DepartmentItem.Boss.FIO</a>                    
                     <br>
                     @Model.DepartmentItem.Boss.Post
                 }                

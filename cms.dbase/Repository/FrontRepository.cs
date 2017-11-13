@@ -321,13 +321,13 @@ namespace cms.dbase
         /// <summary>
         /// Получим список новостей для определенной сущности
         /// </summary>
-        /// <param name="filtr">Фильтр</param>
+        /// <param name="filter">Фильтр</param>
         /// <returns></returns>
-        public override MaterialsList getMaterialsList(FilterParams filtr)
+        public override MaterialsList getMaterialsList(FilterParams filter)
         {
             using (var db = new CMSdb(_context))
             {
-                if (!string.IsNullOrEmpty(filtr.Domain))
+                if (!string.IsNullOrEmpty(filter.Domain))
                 {
                     var contentType = ContentType.MATERIAL.ToString().ToLower();
 
@@ -335,7 +335,7 @@ namespace cms.dbase
                     //Select t.*, s.* from[dbo].[content_content_link] t left join[dbo].[cms_sites] s
                     //on t.f_link = s.f_content Where s.c_alias = 'main'
                     var materials = db.content_content_links.Where(e => e.f_content_type == contentType)
-                        .Join(db.cms_sitess.Where(o => o.c_alias == filtr.Domain),
+                        .Join(db.cms_sitess.Where(o => o.c_alias == filter.Domain),
                                 e => e.f_link,
                                 o => o.f_content,
                                 (e, o) => e.f_content
@@ -347,13 +347,26 @@ namespace cms.dbase
                     var query = db.content_materialss
                                 .Where(w => materials.Contains(w.id));
 
-                    if (filtr.Disabled != null)
+                    if (filter.Disabled != null)
                     {
-                        query = query.Where(w => w.b_disabled == filtr.Disabled);
+                        query = query.Where(w => w.b_disabled == filter.Disabled);
                     }
-                    if (!String.IsNullOrEmpty(filtr.Category))
+                    if (!String.IsNullOrEmpty(filter.SearchText))
                     {
-                        var category = db.content_materials_groupss.Where(w => w.c_alias == filtr.Category).First().id;
+                        query = query.Where(w => w.c_title.ToLower().Contains(filter.SearchText.ToLower()));
+                    }
+                    if (filter.Date!=null)
+                    {
+                        query = query.Where(w => w.d_date >= filter.Date);
+                    }
+                    if (filter.DateEnd!= null)
+                    {
+                        query = query.Where(w => w.d_date <= filter.DateEnd);
+                    }
+
+                    if (!String.IsNullOrEmpty(filter.Category))
+                    {
+                        var category = db.content_materials_groupss.Where(w => w.c_alias == filter.Category).First().id;
                         query =query
                                     .Join(
                                             db.content_materials_groups_links
@@ -367,8 +380,8 @@ namespace cms.dbase
                     int itemCount = query.Count();
 
                     var materialsList = query
-                            .Skip(filtr.Size * (filtr.Page - 1))
-                            .Take(filtr.Size)
+                            .Skip(filter.Size * (filter.Page - 1))
+                            .Take(filter.Size)
                             .Select(s => new MaterialsModel
                             {
                                 Id = s.id,
@@ -397,10 +410,10 @@ namespace cms.dbase
                             Data = materialsList.ToArray(),
                             Pager = new Pager
                             {
-                                page = filtr.Page,
-                                size = filtr.Size,
+                                page = filter.Page,
+                                size = filter.Size,
                                 items_count = itemCount,
-                                page_count = (itemCount % filtr.Size > 0) ? (itemCount / filtr.Size) + 1 : itemCount / filtr.Size
+                                page_count = (itemCount % filter.Size > 0) ? (itemCount / filter.Size) + 1 : itemCount / filter.Size
                             }
                         };
                 }
@@ -668,7 +681,6 @@ namespace cms.dbase
                                 
             }
         }
-
         public override People getPeopleItem(Guid id, string domain)
         {
             using (var db = new CMSdb(_context))
@@ -689,6 +701,27 @@ namespace cms.dbase
                         Id = s.n.id,
                         FIO = s.n.c_surname + " " + s.n.c_name + " " + s.n.c_patronymic
                     }).First();                    
+                }
+                return null;
+            }
+        }
+
+
+        public override OrgsModel getOrgInfo(string domain) {
+            using (var db = new CMSdb(_context))
+            {
+                var data = db.cms_sitess.Where(w => w.c_alias == domain)
+                             .Join(db.content_orgss, e => e.f_content, o => o.id, (e, o) => o)
+                             .Select(s=>new OrgsModel {
+                                 Address=s.c_adress,
+                                 Phone=s.c_phone,
+                                 Fax=s.c_fax,
+                                 Email=s.c_email,
+                                 GeopointX=s.n_geopoint_x,
+                                 GeopointY=s.n_geopoint_y
+                             });
+                if (data.Any()) {
+                    return data.First();
                 }
                 return null;
             }

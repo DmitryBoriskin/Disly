@@ -49,7 +49,7 @@ namespace Disly.Controllers
             #endregion                   
 
             #region Метатеги
-            ViewBag.Title = PageTitle;
+            ViewBag.Title = "Врачи";
             ViewBag.Description = PageDesc;
             ViewBag.KeyWords = PageKeyw;
             #endregion
@@ -78,7 +78,7 @@ namespace Disly.Controllers
             #region Создаем переменные (значения по умолчанию)
             PageViewModel Model = new PageViewModel();
             string _ViewName = (ViewName != String.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";
-            string PageTitle = "страница сайта";
+            string PageTitle = model.DoctorsItem.FIO;
             string PageDesc = "описание страницы";
             string PageKeyw = "ключевые слова";
             #endregion                   

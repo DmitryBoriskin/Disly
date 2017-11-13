@@ -41,6 +41,7 @@ namespace Disly.Controllers
             #endregion
 
             model.Structures = _repository.getStructures(Domain);
+            //если в списке только одна структура — редиректим на него
             if (model.Structures.Length ==1)
             {
                 return Redirect(ControllerName + "/" + model.Structures[0].Num);
@@ -49,7 +50,7 @@ namespace Disly.Controllers
             #region Создаем переменные (значения по умолчанию)
             PageViewModel Model = new PageViewModel();
             string _ViewName = (ViewName != String.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";
-            string PageTitle = "страница сайта";
+            string PageTitle = "Структура";
             string PageDesc = "описание страницы";
             string PageKeyw = "ключевые слова";
             #endregion                        
@@ -88,7 +89,7 @@ namespace Disly.Controllers
             string PageKeyw = "ключевые слова";
             #endregion                        
             #region Метатеги
-            ViewBag.Title = PageTitle;
+            ViewBag.Title = model.StructureItem.Title;
             ViewBag.Description = PageDesc;
             ViewBag.KeyWords = PageKeyw;
             #endregion
@@ -125,7 +126,7 @@ namespace Disly.Controllers
             #region Создаем переменные (значения по умолчанию)
             PageViewModel Model = new PageViewModel();
             string _ViewName = (ViewName != String.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";
-            string PageTitle = "страница сайта";
+            string PageTitle = (model.DepartmentItem!=null)?model.DepartmentItem.Title:"Отдление";
             string PageDesc = "описание страницы";
             string PageKeyw = "ключевые слова";
             #endregion                        
