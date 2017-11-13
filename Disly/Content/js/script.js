@@ -8,6 +8,8 @@
     //    $(this).toggleClass('active');
     //});
 
+    $('input[data-type=date').datepicker({ onSelect: function (dateText, inst) { $(this).attr('value', dateText); } });
+
     // анимация баннеров
     if ($('.ling_img_on').length > 0) {
         $('.ling_img_on').each(function () {

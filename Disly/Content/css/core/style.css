@@ -13,3 +13,101 @@
 .news-list_date{font-size:14px;color: #808080;}
 .item_news .news-list_date{float:left;margin-right:30px;}
 .news-list_title{display:table;color:#333;}
+
+
+/* Календарь */
+.ui-datepicker {
+    margin: 3px 0 0;
+    padding: 5px;
+    font-size: 14px;
+    border: solid 1px #d9d9d9;
+    background: #ffffff;
+    box-shadow: 3px 3px 5px rgba(0,0,0,.1);
+    -webkit-box-shadow: 0 3px 5px rgba(0,0,0,.1);
+    -moz-box-shadow: 3px 3px 5px rgba(0,0,0,.1);
+    z-index: 999 !important;
+}
+
+.ui-datepicker-header {
+    overflow: hidden;
+    color: #3456af;
+}
+
+    .ui-datepicker-header:hover {
+        text-decoration: none;
+    }
+
+.ui-datepicker-prev,
+.ui-datepicker-next {
+    display: block;
+    width: 24px;
+    padding: 5px 0;
+    text-align: center;
+    cursor: pointer;
+}
+
+    .ui-datepicker-prev:hover,
+    .ui-datepicker-next:hover {
+        text-decoration: none;
+        color: #3456af;
+    }
+
+.ui-datepicker-prev {
+    float: left;
+}
+
+.ui-datepicker-next {
+    float: right;
+}
+
+.ui-datepicker-title {
+    overflow: hidden;
+    padding: 5px 0;
+    text-align: center;
+}
+
+.ui-datepicker-calendar {
+    border-collapse: collapse;
+}
+
+    .ui-datepicker-calendar th {
+        padding: 6px;
+        text-align: center;
+        color: #999999;
+        font-weight: normal;
+    }
+
+    .ui-datepicker-calendar td {
+        text-align: center;
+        width: 24px;
+        padding: 6px;
+        border: none;
+        color: #212121;
+    }
+
+        .ui-datepicker-calendar td a {
+            color: #212121;
+        }
+
+            .ui-datepicker-calendar td a:hover {
+                text-decoration: none;
+            }
+
+        .ui-datepicker-calendar td.ui-datepicker-today {
+            background: #e6e6e6;
+            color: #212121;
+        }
+
+        .ui-datepicker-calendar td.ui-datepicker-current-day {
+            background: #4d6bbc;
+            color: #ffffff;
+        }
+
+            .ui-datepicker-calendar td.ui-datepicker-current-day a {
+                color: #ffffff;
+            }
+
+        .ui-datepicker-calendar td.ui-datepicker-other-month,
+        .ui-datepicker-calendar td.ui-datepicker-other-month a {
+            color: #e6e6e6;
+        }
