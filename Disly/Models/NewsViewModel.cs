@@ -15,6 +15,6 @@ namespace Disly.Models
         public MaterialsList List { get; set; }
         public MaterialsModel Item { get; set; }
 
-        public MaterialsGroup[] Group { get; set; }
+        public MaterialsGroup[] Group { get; set; }        
     }
 }

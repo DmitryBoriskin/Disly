@@ -31,5 +31,7 @@ namespace cms.dbModel
 
         public abstract People[] getPeopleList(FilterParams filter);
         public abstract People getPeopleItem(Guid id, string domain);
+
+        public abstract OrgsModel getOrgInfo(string domain);
     }
 }

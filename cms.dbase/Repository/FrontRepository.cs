@@ -705,5 +705,26 @@ namespace cms.dbase
                 return null;
             }
         }
+
+
+        public override OrgsModel getOrgInfo(string domain) {
+            using (var db = new CMSdb(_context))
+            {
+                var data = db.cms_sitess.Where(w => w.c_alias == domain)
+                             .Join(db.content_orgss, e => e.f_content, o => o.id, (e, o) => o)
+                             .Select(s=>new OrgsModel {
+                                 Address=s.c_adress,
+                                 Phone=s.c_phone,
+                                 Fax=s.c_fax,
+                                 Email=s.c_email,
+                                 GeopointX=s.n_geopoint_x,
+                                 GeopointY=s.n_geopoint_y
+                             });
+                if (data.Any()) {
+                    return data.First();
+                }
+                return null;
+            }
+        }
     }
 }

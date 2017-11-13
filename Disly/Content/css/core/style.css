@@ -119,3 +119,6 @@
 .reset:before {content: '\ed87';font-family: fontello;font-size: 20px;position: relative;top: 4px;    left: 15px;    color: #abadac;}
 
 .boss img{max-width:100%;}
+
+.contact_info h2{margin-top: 0;font-weight: bold;font-size: 24px;color: #262626;}
+.contact_info_it {    font-size: 14px;}

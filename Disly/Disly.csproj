@@ -561,6 +561,7 @@
     <Compile Include="Areas\Admin\Service\Transliteration.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\DoctorsController.cs" />
+    <Compile Include="Controllers\ContactsController.cs" />
     <Compile Include="Controllers\StructureController.cs" />
     <Compile Include="Controllers\PressController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -572,6 +573,7 @@
     </Compile>
     <Compile Include="Areas\Admin\Models\CoreViewModel.cs" />
     <Compile Include="Models\DoctorsViewModel.cs" />
+    <Compile Include="Models\ContactsViewModel.cs" />
     <Compile Include="Models\StructureViewModel.cs" />
     <Compile Include="Models\TypePageViewModel.cs" />
     <Compile Include="Models\NewsViewModel.cs" />
@@ -771,6 +773,9 @@
     <Content Include="Views\Structure\StructureItem.cshtml" />
     <Content Include="Views\Structure\DepartmentItem.cshtml" />
     <Content Include="Views\Doctors\Index.cshtml" />
+    <Content Include="Views\Contacts\Index.cshtml" />
+    <Content Include="Views\Press\Rss.cshtml" />
+    <Content Include="Views\Materials\Rss.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

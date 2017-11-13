@@ -343,9 +343,9 @@ namespace cms.dbase
                         
                         //логирование
                         insertLog(UserId, IP, "update", id, String.Empty, "Orgs", model.Title);
+                        tran.Commit();
                         return true;
-                    }
-                    tran.Commit();
+                    }                    
                 }
                 return false;
             }
