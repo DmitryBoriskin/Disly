@@ -46,7 +46,7 @@
         });
     });
 
-
+    
     //удаление доменных имен при помощи AJAX
     if ($('.delete-domain').length > 0) {
         $('.delete-domain').click(function () {

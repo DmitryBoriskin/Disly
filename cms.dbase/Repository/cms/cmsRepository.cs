@@ -1120,6 +1120,7 @@ namespace cms.dbase
                     Where(w => w.c_alias == alias).
                     Select(s => new UsersGroupModel
                     {
+                        id = s.id,
                         GroupName = s.c_title,
                         Alias = s.c_alias,
                         GroupResolutions = getGroupResolutions(s.c_alias)
@@ -1149,6 +1150,50 @@ namespace cms.dbase
 
                 if (!data.Any()) { return null; }
                 else { return data.ToArray(); }
+            }
+        }
+
+        public override bool updateGroupResolutions(GroupClaims claim)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                using (var tran = db.BeginTransaction())
+                {
+                    cms_resolutions_templates cdGroupResolution = null;
+
+                    var query = db.cms_resolutions_templatess
+                        .Where(t => t.f_menu_id == claim.ContentId);
+
+                    if (!string.IsNullOrEmpty(claim.GroupAlias))
+                    {
+                        query = query.Where( t => t.f_user_group == claim.GroupAlias);
+                    }
+                    
+                    if(query.Any())
+                    {
+                        cdGroupResolution = query.SingleOrDefault();//test
+                        if(claim.Claim.ToLower() == "read")
+                            cdGroupResolution.b_read = claim.Checked;
+                        if (claim.Claim.ToLower() == "write")
+                            cdGroupResolution.b_write = claim.Checked;
+                        if (claim.Claim.ToLower() == "change")
+                            cdGroupResolution.b_change = claim.Checked;
+                        if (claim.Claim.ToLower() == "delete")
+                            cdGroupResolution.b_delete = claim.Checked;
+                        db.Update(cdGroupResolution);
+                    }
+                    else
+                    {
+                        cdGroupResolution = new cms_resolutions_templates()
+                        {
+                            f_user_group = claim.GroupAlias,
+                            f_menu_id = claim.ContentId
+                        };
+                        db.Insert(cdGroupResolution);
+                    }
+                    tran.Commit();
+                    return true;
+                }
             }
         }
 

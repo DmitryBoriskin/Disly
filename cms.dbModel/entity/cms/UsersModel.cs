@@ -93,36 +93,58 @@ namespace cms.dbModel.entity
         public ResolutionsModel[] GroupResolutions { get; set; }
     }
 
-    //public class ResolutionsModel
-    //{
-    //    public Guid Id { get; set; }
-    //    public Guid MenuId { get; set; }
-    //    public string MenuTitle { get; set; }
-    //    public int Permit { get; set; }
-    //    public string Section { get; set; }
-    //    public Guid UserId { get; set; }
-    //    public bool Read { get; set; }
-    //    public bool Write { get; set; }
-    //    public bool Change { get; set; }
-    //    public bool Delete { get; set; }
-    //    public bool Importent { get; set; }
-    //}
+    //Модель описывающая права группы на раздел сайта
+    public class GroupClaims
+    {
+        /// <summary>
+        /// Алиас группы
+        /// </summary>
+        public string GroupAlias { get; set; }
+        /// <summary>
+        /// Тип раздела сайта, к которому настраивается доступ
+        /// </summary>
+        public Guid ContentId { get; set; }
+        /// <summary>
+        /// Тип действия
+        /// </summary>
+        public string Claim { get; set; }
+        /// <summary>
+        /// разрешено
+        /// </summary>
+        public bool Checked { get; set; }
+    }
 
-    //public class ResolutionsTemplatesModel
-    //{
-    //    public Guid Id { get; set; }
-    //    public Guid MenuId { get; set; }
-    //    public string MenuTitle { get; set; }
-    //    public int Permit { get; set; }
-    //    public string Section { get; set; }
-    //    public string UserGroupId { get; set; }
-    //    public bool Read { get; set; }
-    //    public bool Write { get; set; }
-    //    public bool Change { get; set; }
-    //    public bool Delete { get; set; }
-    //}
 
-    public class UserSiteLinkModel
+        //public class ResolutionsModel
+        //{
+        //    public Guid Id { get; set; }
+        //    public Guid MenuId { get; set; }
+        //    public string MenuTitle { get; set; }
+        //    public int Permit { get; set; }
+        //    public string Section { get; set; }
+        //    public Guid UserId { get; set; }
+        //    public bool Read { get; set; }
+        //    public bool Write { get; set; }
+        //    public bool Change { get; set; }
+        //    public bool Delete { get; set; }
+        //    public bool Importent { get; set; }
+        //}
+
+        //public class ResolutionsTemplatesModel
+        //{
+        //    public Guid Id { get; set; }
+        //    public Guid MenuId { get; set; }
+        //    public string MenuTitle { get; set; }
+        //    public int Permit { get; set; }
+        //    public string Section { get; set; }
+        //    public string UserGroupId { get; set; }
+        //    public bool Read { get; set; }
+        //    public bool Write { get; set; }
+        //    public bool Change { get; set; }
+        //    public bool Delete { get; set; }
+        //}
+
+        public class UserSiteLinkModel
     {
         public Guid UserId { get; set; }
         public Guid[] SitesId { get; set; }

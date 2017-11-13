@@ -652,7 +652,7 @@
     <Content Include="Areas\Admin\Views\Services\ChangePass.cshtml" />
     <Content Include="Areas\Admin\Views\Services\Log.cshtml" />
     <Content Include="Areas\Admin\Views\Services\UserResolutions.cshtml" />
-    <Content Include="Areas\Admin\Views\Services\UsersGroup.cshtml" />
+    <Content Include="Areas\Admin\Views\Services\GroupClaims.cshtml" />
     <Content Include="Areas\Admin\Views\Sites\Domains.cshtml" />
     <Content Include="Areas\Admin\Views\Sites\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Sites\Item.cshtml" />

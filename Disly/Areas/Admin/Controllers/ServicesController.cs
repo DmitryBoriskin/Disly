@@ -162,11 +162,33 @@ namespace Disly.Areas.Admin.Controllers
         #endregion
 
         #region Группы пользователей
-        public ActionResult UsersGroup(string id)
+        [HttpGet]
+        public ActionResult GroupClaims(string id)
         {
             UsersGroupModel model = _cmsRepository.getUsersGroup(id);
 
-            return PartialView("UsersGroup", model);
+            return PartialView("GroupClaims", model);
+        }
+
+        [HttpPost]
+        [MultiButton(MatchFormKey = "action", MatchFormValue = "save-event-btn")]
+        public ActionResult GroupClaims(UsersGroupModel data)
+        {
+            //UsersGroupModel model = _cmsRepository.getUsersGroup(id);
+
+            return PartialView("Shared/Success");
+        }
+
+        [HttpPost]
+        public ActionResult SaveGroupClaims(GroupClaims data)
+        {
+            //var model = Newtonsoft.Json.JsonConvert.DeserializeObject<GroupClaims>(data);
+
+           var res = _cmsRepository.updateGroupResolutions(data);
+            if(res)
+                return Json("Success");
+            //return Response.Status = "OK";  //AsJson(new { status = true, reason = "OK", data = "" });
+            return Json("An Error Has occourred"); //Newtonsoft.Json.JsonConvert.SerializeObject(data);
         }
 
         //public ActionResult GroupCreate()
