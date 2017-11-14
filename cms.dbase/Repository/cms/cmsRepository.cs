@@ -37,6 +37,13 @@ namespace cms.dbase
             LinqToDB.Common.Configuration.Linq.AllowMultipleQuery = true;
         }
 
+        //Создаем событие, на которое потом подпишемся
+        public static event EventHandler<DislyEventArgs> DislyEvent;
+        private static void OnDislyEvent(DislyEventArgs eventArgs)
+        {
+            DislyEvent(null, eventArgs);
+        }
+
 
         #region private methods of class
 

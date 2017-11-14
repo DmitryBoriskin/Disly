@@ -232,9 +232,10 @@ namespace cms.dbase
                             b_locked = eventData.Locked
                         };
                         if (!eventData.Annually)
-                        {
+                        { 
                             cdEvent.n_date_begin_year = eventData.DateBegin.Year;
-                            cdEvent.n_date_end_year = eventData.DateEnd.Value.Year;
+                            if (eventData.DateEnd.HasValue)
+                                cdEvent.n_date_end_year = eventData.DateEnd.Value.Year;
                         }
 
                         var cdContentLink = new content_content_link()
@@ -356,13 +357,20 @@ namespace cms.dbase
                 {
                     using (var tran = db.BeginTransaction())
                     {
-                        content_events cdEvent = db.content_eventss
-                                                .Where(p => p.id == id)
-                                                .SingleOrDefault();
-                        if (cdEvent == null)
+                        var data = db.content_eventss
+                                                .Where(p => p.id == id);
+                                                
+                        if (!data.Any())
                         {
                             throw new Exception("Запись с таким Id не найдена");
                         }
+
+                        var cdEvent = data.SingleOrDefault();
+                        
+                        //Delete links to other objects
+                        var q2 = db.content_content_links
+                             .Where(s => s.f_content == id)
+                             .Delete();
 
                         db.Delete(cdEvent);
 
@@ -371,7 +379,7 @@ namespace cms.dbase
                         {
                             Site = _domain,
                             Section = LogSection.Events,
-                            Action = LogAction.update,
+                            Action = LogAction.delete,
                             PageId = cdEvent.id,
                             PageName = cdEvent.c_title,
                             UserId = _currentUserId,

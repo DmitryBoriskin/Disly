@@ -70,12 +70,13 @@
             if (model.Item == null)
                 model.Item = new EventsModel()
                 {
+                    Id = Id,
                     DateBegin = DateTime.Now
                 };
             if (model.Item != null)
             {
                 var photo = model.Item.PreviewImage;
-                if (!string.IsNullOrEmpty(photo.Url))
+                if (photo != null && !string.IsNullOrEmpty(photo.Url))
                 {
                     model.Item.PreviewImage = getInfoPhoto(photo.Url);
                 }
@@ -260,7 +261,7 @@
          [MultiButton(MatchFormKey = "action", MatchFormValue = "delete-btn")]
          public ActionResult Delete(Guid Id)
          {
-             //var res = _cmsRepository.deleteCmsEvent(Id);
+             var res = _cmsRepository.deleteCmsEvent(Id);
  
              // записываем информацию о результатах
              ErrorMassege userMassege = new ErrorMassege();

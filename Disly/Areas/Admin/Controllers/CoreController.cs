@@ -11,6 +11,7 @@ using System.Collections.Specialized;
 using System.Text.RegularExpressions;
 using System.Web;
 using System.IO;
+using Portal.Code;
 
 namespace Disly.Areas.Admin.Controllers
 {
@@ -38,6 +39,9 @@ namespace Disly.Areas.Admin.Controllers
 
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
+            //DBDataModels.YRControlEvent += DBDataModels_YRControlEvent;
+            cmsRepository.DislyEvent += CmsRepository_DislyEvent;
+
             base.OnActionExecuting(filterContext);
             
             ControllerName = filterContext.RouteData.Values["Controller"].ToString().ToLower();
@@ -100,7 +104,26 @@ namespace Disly.Areas.Admin.Controllers
             catch { }
             #endregion
         }
-        
+
+        private void CmsRepository_DislyEvent(object sender, DislyEventArgs e)
+        {
+            switch (e.EventLevel)
+            {
+                case LogLevelEnum.Debug:
+                    AppLogger.Debug(e.Message, e.Exception);
+                    break;
+                case LogLevelEnum.Error:
+                    AppLogger.Error(e.Message, e.Exception);
+                    break;
+                case LogLevelEnum.Warn:
+                    AppLogger.Warn(e.Message, e.Exception);
+                    break;
+                case LogLevelEnum.Info:
+                    AppLogger.Info(e.Message, e.Exception);
+                    break;
+            }
+        }
+
         public CoreController()
         {
             _accountRepository = new AccountRepository("cmsdbConnection");

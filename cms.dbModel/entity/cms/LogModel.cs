@@ -39,8 +39,6 @@ namespace cms.dbModel.entity
         public string PageName { get; set; }
     }
 
-
-
     public enum LogAction
     {
         undefined = 0,
@@ -137,7 +135,6 @@ namespace cms.dbModel.entity
         insert_phone_depart
     }
 
-
     public enum LogSection
     {
         Undefined = 0,
@@ -189,6 +186,53 @@ namespace cms.dbModel.entity
         /// Группа пользователей
         /// </summary>
         UserGroup = 12,
+
+    }
+
+    /// <summary>
+    /// Уровни логирования
+    /// </summary>
+    public enum LogLevelEnum
+    {
+        /// <summary>
+        /// Все
+        /// </summary>
+        All = 0,
+
+        /// <summary>
+        /// Info
+        /// </summary>
+        Info = 1,
+
+        /// <summary>
+        /// Error
+        /// </summary>
+        Error = 2,
+
+        /// <summary>
+        /// Warning
+        /// </summary>
+        Warn = 3,
+
+        /// <summary>
+        /// Debug
+        /// </summary>
+        Debug = 4,
+
+    }
+
+    public class DislyEventArgs
+    {
+        public LogLevelEnum EventLevel { get; private set; }
+        public String Message { get; private set; }
+        public Exception Exception { get; private set; }
+
+        public DislyEventArgs(LogLevelEnum eventLevel, String message, Exception exception = null)
+        {
+            EventLevel = eventLevel;
+            Message = message;
+            Exception = exception;
+        }
 
     }
 }

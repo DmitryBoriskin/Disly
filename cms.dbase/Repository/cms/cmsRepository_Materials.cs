@@ -137,47 +137,47 @@ namespace cms.dbase
                     if (!materials.Any())
                         return null;
 
-                        var query = db.content_materialss
-                                .Where(w => materials.Contains(w.id))
-                                .OrderByDescending(w => w.d_date);
+                    var query = db.content_materialss
+                            .Where(w => materials.Contains(w.id))
+                            .OrderByDescending(w => w.d_date);
 
-                        int itemCount = query.Count();
+                    int itemCount = query.Count();
 
-                        var materialsList = query
-                                .Skip(filtr.Size * (filtr.Page - 1))
-                                .Take(filtr.Size)
-                                .Select(s => new MaterialsModel
-                                {
-                                    Id = s.id,
-                                    Title = s.c_title,
-                                    Alias = s.c_alias,
-                                    PreviewImage = new Photo()
-                                    {
-                                        Url = s.c_preview
-                                    },
-                                    Text = s.c_text,
-                                    Url = s.c_url,
-                                    UrlName = s.c_url_name,
-                                    Date = s.d_date,
-                                    Keyw = s.c_keyw,
-                                    Desc = s.c_desc,
-                                    Disabled = s.b_disabled,
-                                    Important = s.b_important,
-                                    Locked = s.b_locked
-                                });
-
-                        if (materialsList.Any())
-                            return new MaterialsList
+                    var materialsList = query
+                            .Skip(filtr.Size * (filtr.Page - 1))
+                            .Take(filtr.Size)
+                            .Select(s => new MaterialsModel
                             {
-                                Data = materialsList.ToArray(),
-                                Pager = new Pager
+                                Id = s.id,
+                                Title = s.c_title,
+                                Alias = s.c_alias,
+                                PreviewImage = new Photo()
                                 {
-                                    page = filtr.Page,
-                                    size = filtr.Size,
-                                    items_count = itemCount,
-                                    page_count = (itemCount % filtr.Size > 0) ? (itemCount / filtr.Size) + 1 : itemCount / filtr.Size
-                                }
-                            };
+                                    Url = s.c_preview
+                                },
+                                Text = s.c_text,
+                                Url = s.c_url,
+                                UrlName = s.c_url_name,
+                                Date = s.d_date,
+                                Keyw = s.c_keyw,
+                                Desc = s.c_desc,
+                                Disabled = s.b_disabled,
+                                Important = s.b_important,
+                                Locked = s.b_locked
+                            });
+
+                    if (materialsList.Any())
+                        return new MaterialsList
+                        {
+                            Data = materialsList.ToArray(),
+                            Pager = new Pager
+                            {
+                                page = filtr.Page,
+                                size = filtr.Size,
+                                items_count = itemCount,
+                                page_count = (itemCount % filtr.Size > 0) ? (itemCount / filtr.Size) + 1 : itemCount / filtr.Size
+                            }
+                        };
                 }
                 return null;
             }
@@ -274,7 +274,7 @@ namespace cms.dbase
                             f_content_origin = material.ContentLink,
                             c_content_type_origin = material.ContentLinkType,
                             b_locked = material.Locked
-                    };
+                        };
 
                         // добавляем принадлежность к сущности(ссылку на организацию/событие/персону)
                         var cdMaterialLink = new content_content_link
@@ -292,8 +292,19 @@ namespace cms.dbase
 
                         db_updateMaterialGroups(db, material.Id, material.GroupsId);
 
-                        tran.Commit();
+                        var log = new LogModel()
+                        {
+                            Site = _domain,
+                            Section = LogSection.Materials,
+                            Action = LogAction.insert,
+                            PageId = material.Id,
+                            PageName = material.Title,
+                            UserId = _currentUserId,
+                            IP = _ip,
+                        };
+                        insertLog(log);
 
+                        tran.Commit();
                         return true;
                     }
                 }
@@ -369,8 +380,20 @@ namespace cms.dbase
 
                         db.Update(cdMaterial);
                         db_updateMaterialGroups(db, material.Id, material.GroupsId);
-                        tran.Commit();
 
+                        var log = new LogModel()
+                        {
+                            Site = _domain,
+                            Section = LogSection.Materials,
+                            Action = LogAction.update,
+                            PageId = material.Id,
+                            PageName = material.Title,
+                            UserId = _currentUserId,
+                            IP = _ip,
+                        };
+                        insertLog(log);
+
+                        tran.Commit();
                         return true;
                     }
                 }
@@ -393,17 +416,40 @@ namespace cms.dbase
             {
                 using (var db = new CMSdb(_context))
                 {
-                    content_materials cdMaterial = db.content_materialss
-                                                .Where(p => p.id == id)
-                                                .SingleOrDefault();
-                    if (cdMaterial == null)
-                    {
-                        throw new Exception("Запись с таким Id не найдена");
-                    }
-
                     using (var tran = db.BeginTransaction())
                     {
+                        var data = db.content_materialss
+                                               .Where(p => p.id == id);
+                        if (!data.Any())
+                        {
+                            throw new Exception("Запись с таким Id не найдена");
+                        }
+
+                        var cdMaterial = data.SingleOrDefault();
+
+                        //Delete news_group_links
+                        var q1 = db.content_materials_groups_links
+                             .Where(s => s.f_material == id)
+                             .Delete();
+                        //Delete links to other objects
+                        var q2 = db.content_content_links
+                             .Where(s => s.f_content == id)
+                             .Delete();
+
                         db.Delete(cdMaterial);
+
+                        var log = new LogModel()
+                        {
+                            Site = _domain,
+                            Section = LogSection.Materials,
+                            Action = LogAction.delete,
+                            PageId = cdMaterial.id,
+                            PageName = cdMaterial.c_title,
+                            UserId = _currentUserId,
+                            IP = _ip,
+                        };
+                        insertLog(log);
+
                         tran.Commit();
                         return true;
                     }
@@ -412,6 +458,9 @@ namespace cms.dbase
             catch (Exception ex)
             {
                 //write to log ex
+                var message = String.Format("cmsRepository: deleteCmsMaterial; id={0}", id);
+                OnDislyEvent(new DislyEventArgs(LogLevelEnum.Error, message, ex));
+
                 return false;
             }
         }
