@@ -532,8 +532,6 @@ namespace cms.dbase
                 return null;
             }
         }
-
-
         public override StructureModel[] getStructures(string domain)
         {
             using (var db = new CMSdb(_context))
@@ -668,6 +666,11 @@ namespace cms.dbase
                             .Where(w => w.c_alias == filter.Domain)
                             .Join(db.content_people_org_links, e => e.f_content, o => o.f_org, (e, o) => o)
                             .Join(db.content_peoples, m => m.f_people, n => n.id, (m, n) => n);
+                if (filter.SearchText != null)
+                {
+                    query = query.Where(w => (w.c_name.Contains(filter.SearchText) || w.c_surname.Contains(filter.SearchText) || w.c_patronymic.Contains(filter.SearchText)));
+                }
+                
 
                 var query1 = query.OrderBy(o => o.c_surname);
                 if (query1.Any())
@@ -706,7 +709,29 @@ namespace cms.dbase
                 return null;
             }
         }
+        /// <summary>
+        /// сгруппированные по структурам департменты для выпадающего спика
+        /// </summary>
+        /// <param name="domain"></param>
+        /// <returns></returns>
+        public override StructureModel[] getDeparatamentsSelectList(string domain)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var data = db.cms_sitess.Where(w => w.c_alias == domain)
+                           .Join(db.content_orgss, e => e.f_content, o => o.id, (e, o) => o)
+                           .Join(db.content_org_structures, n => n.id, m => m.f_ord, (n, m) => m)
+                           .Select(s => new StructureModel() {
+                               Title = s.c_title,
+                               Departments = getDepartmentsList(s.id)                
+                           });
 
+                
+
+                if (data.Any()) return data.ToArray();
+                return null;
+            }
+        }
 
         public override OrgsModel getOrgInfo(string domain) {
             using (var db = new CMSdb(_context))
