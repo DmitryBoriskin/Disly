@@ -13,5 +13,6 @@ namespace Disly.Models
     public class ContatcsViewModel : PageViewModel
     {        
         public OrgsModel OrgItem { get; set; }
+        public StructureModel[] Structures { get; set; }
     }
 }

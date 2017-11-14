@@ -40,6 +40,7 @@ namespace Disly.Controllers
             #endregion            
 
             model.OrgItem = _repository.getOrgInfo(Domain);
+            model.Structures = _repository.getStructures(Domain);
 
             #region Создаем переменные (значения по умолчанию)
             PageViewModel Model = new PageViewModel();

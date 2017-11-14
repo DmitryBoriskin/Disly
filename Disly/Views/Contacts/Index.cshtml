@@ -34,5 +34,29 @@
                 <div class="col-sm-3"></div>
             </div>
         </div>
+        <div class="contact_info">
+            <div class="col-sm-3">
+                <div class="row"><h2></h2></div>
+            </div>
+            <div class="col-sm-9">
+                <div class="filals-list">
+                    @if (Model.Structures != null)
+                    {
+                        foreach (var item in Model.Structures)
+                        {
+                            <div class="filals-list_it">
+                                <a class="filals-list_it_title" href="/structure/@item.Num">@item.Title</a>
+                                <div class="contact_info_it">
+                                    @if (item.Phone != null)
+                                    {
+                                        <span>Телефон: </span>@item.Phone
+                                    }                                    
+                                </div>
+                            </div>
+                        }
+                    }                    
+                </div>
+            </div>
+        </div>
     </div>
 </div>

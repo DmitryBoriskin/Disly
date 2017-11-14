@@ -543,6 +543,7 @@ namespace cms.dbase
                             .OrderBy(o=>o.n_sort)
                             .Select(s => new StructureModel(){
                                 Title=s.c_title,
+                                Phone=s.c_phone,
                                 Num=s.num                     
                             }).ToArray();
                 return query;
