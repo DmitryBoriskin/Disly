@@ -588,13 +588,27 @@ namespace cms.dbase
                 int count = db.cms_sitess.Where(w => w.c_alias == ins.Alias).Count();
                 if (count < 1)
                 {
-                    db.cms_sitess
-                      .Value(v => v.id, ins.Id)
-                      .Value(v => v.c_alias, ins.Alias)
-                      .Value(v => v.c_name, ins.Title)
-                      .Value(v => v.c_content_type, ins.Type)
-                      .Value(v => v.f_content, ins.ContentId)
-                      .Insert();
+                    using (var tran = db.BeginTransaction())
+                    {
+                        db.cms_sitess
+                         .Value(v => v.id, ins.Id)
+                         .Value(v => v.c_alias, ins.Alias)
+                         .Value(v => v.c_name, ins.Title)
+                         .Value(v => v.c_content_type, ins.Type)
+                         .Value(v => v.f_content, ins.ContentId)
+                         .Insert();
+                        //добавление шаблонов к новому сайту
+                        var default_view = db.front_sections.ToArray();
+                        foreach (var item in default_view)
+                        {
+                            db.front_site_sections
+                                .Value(v=>v.f_site,ins.Alias)
+                                .Value(v => v.f_front_section, item.c_alias)
+                                .Value(v => v.f_page_view, item.c_default_view)
+                                .Insert();
+                        }
+                        tran.Commit();
+                    }                        
                     //Логирование
                     insertLog(UserId, IP, "insert", ins.Id, String.Empty, "Sites", ins.Title);
                     return true;
@@ -635,10 +649,10 @@ namespace cms.dbase
         {
             using (var db = new CMSdb(_context))
             {
-                var data = db.cms_sitess.Where(w => w.id == id);
-                string logTitle = data.Select(s => s.c_name).FirstOrDefault();
+                var data = db.cms_sitess.Where(w => w.id == id);                
                 if (data.Any())
                 {
+                    string logTitle = data.Select(s => s.c_name).Single();
                     data.Delete();
                     //логирование
                     insertLog(UserId, IP, "delete", id, String.Empty, "Sites", logTitle);

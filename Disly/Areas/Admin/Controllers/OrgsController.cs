@@ -398,7 +398,7 @@ namespace Disly.Areas.Admin.Controllers
                 #region создание
                 if (ModelState.IsValid)
                 {
-                    var OrgId = Request.Params["orgid"];
+                    var OrgId = Request.Form["orgid"];
                     if (OrgId != null)
                     {
                         Guid OrgGuid = Guid.Parse(OrgId);
@@ -416,11 +416,17 @@ namespace Disly.Areas.Admin.Controllers
                             {
                                 new ErrorMassegeBtn { url = "#", text = "ок", action = "false" }
                             };
-
-                        }
-                        
+                        }                        
                     }
-                        
+                    else
+                    {
+                        userMessage.info = "Произошла ошибка";
+                        userMessage.buttons = new ErrorMassegeBtn[]
+                        {
+                                new ErrorMassegeBtn { url = "#", text = "ок", action = "false" }
+                        };
+                    }
+
                 }
                 #endregion
             }
