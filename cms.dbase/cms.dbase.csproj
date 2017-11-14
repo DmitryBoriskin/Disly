@@ -61,6 +61,9 @@
   <ItemGroup>
     <Compile Include="Repository\cms\cmsRepository.cs" />
     <Compile Include="Repository\cms\cmsRepository_Banners.cs" />
+    <Compile Include="Repository\cms\cmsRepository_Feedbacks.cs" />
+    <Compile Include="Repository\cms\cmsRepository_Vacancies.cs" />
+    <Compile Include="Repository\cms\cmsRepository_Users.cs" />
     <Compile Include="Repository\cms\cmsRepository_Events.cs" />
     <Compile Include="Repository\cms\cmsRepository_Materials.cs" />
     <Compile Include="Repository\cms\cmsRepository_Orgs.cs" />

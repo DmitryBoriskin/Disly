@@ -70,15 +70,16 @@ namespace cms.dbase
                             }
                         };
                     }
-                    else
-                    {
-                        return null;
-                    }
                 }
                 else
                 {
-                    Guid? menuId = Guid.Parse(filtr.Group);
+                    Guid menuId = Guid.Empty;
+                    var res = Guid.TryParse(filtr.Group, out menuId); // Вообще filtr.Group должен быть типа Guid!!!, если внего передается Guid
 
+                    if (!res)
+                        throw new Exception("getSiteMapList: не удалось Guid.TryParse(filtr.Group, out menuId)");
+
+#warning Для чего здесь опять view? 
                     var query = db.content_sv_sitemap_menus
                         .Where(w => w.f_site.Equals(site))
                         .Where(w => !w.id.Equals(null))
@@ -124,12 +125,8 @@ namespace cms.dbase
                             }
                         };
                     }
-                    else
-                    {
-                        return null;
-                    }
                 }
-
+                return null;
             }
         }
 
@@ -165,8 +162,10 @@ namespace cms.dbase
                         MenuGroups = getSiteMapGroupMenu(id)
                     });
 
-                if (!data.Any()) { return null; }
-                else { return data.FirstOrDefault(); }
+                if (!data.Any())
+                    return null;
+                else 
+                    return data.FirstOrDefault();
             }
         }
 
@@ -183,8 +182,10 @@ namespace cms.dbase
                     .Where(w => w.f_sitemap.Equals(id))
                     .Select(s => s.f_menutype.ToString());
 
-                if (!data.Any()) return null;
-                else { return data.ToArray(); }
+                if (!data.Any())
+                    return null;
+                else
+                    return data.ToArray();
             }
         }
 
@@ -233,63 +234,76 @@ namespace cms.dbase
         {
             using (var db = new CMSdb(_context))
             {
-                var data = db.content_sitemaps.Where(w => w.id.Equals(id));
-                if (!data.Any())
+                using (var tran = db.BeginTransaction())
                 {
-                    var queryMaxSort = db.content_sitemaps
-                        .Where(w => w.f_site == item.Site)
-                        .Where(w => w.c_path.Equals(item.Path))
-                        .Select(s => s.n_sort);
-
-                    int maxSort = queryMaxSort.Any() ? queryMaxSort.Max() + 1 : 1;
-
-                    db.content_sitemaps
-                        .Value(p => p.id, id)
-                        .Value(p => p.f_site, item.Site)
-                        .Value(p => p.f_front_section, item.FrontSection)
-                        .Value(p => p.c_path, item.Path)
-                        .Value(p => p.c_alias, item.Alias)
-                        .Value(p => p.c_title, item.Title)
-                        .Value(p => p.c_preview, item.Preview)
-                        .Value(p => p.c_url, item.Url)
-                        .Value(p => p.c_desc, item.Desc)
-                        .Value(p => p.c_keyw, item.Keyw)
-                        .Value(p => p.b_disabled, item.Disabled)
-                        .Value(p => p.b_disabled_menu, item.DisabledMenu)
-                        .Value(p => p.n_sort, maxSort)
-                        .Value(p => p.uui_parent, item.ParentId)
-                        .Insert();
-
-                    // группы меню
-                    if (item.MenuGroups != null)
+                    var data = db.content_sitemaps.Where(w => w.id.Equals(id));
+                    if (!data.Any())
                     {
-                        foreach (var m in item.MenuGroups)
+                        var queryMaxSort = db.content_sitemaps
+                            .Where(w => w.f_site == item.Site)
+                            .Where(w => w.c_path.Equals(item.Path))
+                            .Select(s => s.n_sort);
+
+                        int maxSort = queryMaxSort.Any() ? queryMaxSort.Max() + 1 : 1;
+
+                        db.content_sitemaps
+                            .Value(p => p.id, id)
+                            .Value(p => p.f_site, item.Site)
+                            .Value(p => p.f_front_section, item.FrontSection)
+                            .Value(p => p.c_path, item.Path)
+                            .Value(p => p.c_alias, item.Alias)
+                            .Value(p => p.c_title, item.Title)
+                            .Value(p => p.c_preview, item.Preview)
+                            .Value(p => p.c_url, item.Url)
+                            .Value(p => p.c_desc, item.Desc)
+                            .Value(p => p.c_keyw, item.Keyw)
+                            .Value(p => p.b_disabled, item.Disabled)
+                            .Value(p => p.b_disabled_menu, item.DisabledMenu)
+                            .Value(p => p.n_sort, maxSort)
+                            .Value(p => p.uui_parent, item.ParentId)
+                            .Insert();
+
+                        // группы меню
+                        if (item.MenuGroups != null)
                         {
-                            Guid menuId = Guid.Parse(m);
+                            foreach (var m in item.MenuGroups)
+                            {
+                                Guid menuId = Guid.Parse(m);
 
-                            var _maxSortMenu = db.content_sitemap_menutypess
-                                .Where(w => w.f_site.Equals(item.Site))
-                                .Where(w => w.f_menutype.Equals(menuId))
-                                .Select(s => s.n_sort);
+                                var _maxSortMenu = db.content_sitemap_menutypess
+                                    .Where(w => w.f_site.Equals(item.Site))
+                                    .Where(w => w.f_menutype.Equals(menuId))
+                                    .Select(s => s.n_sort);
 
-                            int mS = _maxSortMenu.Any() ? _maxSortMenu.Max() : 0;
+                                int mS = _maxSortMenu.Any() ? _maxSortMenu.Max() : 0;
 
-                            var menu = db.content_sitemap_menutypess
-                                .Value(p => p.f_sitemap, id)
-                                .Value(p => p.f_menutype, menuId)
-                                .Value(p => p.f_site, item.Site)
-                                .Value(p => p.n_sort, mS)
-                                .Insert();
+                                var menu = db.content_sitemap_menutypess
+                                    .Value(p => p.f_sitemap, id)
+                                    .Value(p => p.f_menutype, menuId)
+                                    .Value(p => p.f_site, item.Site)
+                                    .Value(p => p.n_sort, mS)
+                                    .Insert();
+                            }
                         }
+
+                        // логирование
+                        //insertLog(userId, IP, "insert", id, String.Empty, "SiteMap", item.Title);
+                        var log = new LogModel()
+                        {
+                            Site = _domain,
+                            Section = LogSection.SiteMap,
+                            Action = LogAction.insert,
+                            PageId = id,
+                            PageName = item.Title,
+                            UserId = _currentUserId,
+                            IP = _ip,
+                        };
+                        insertLog(log);
+
+                        tran.Commit();
+                        return true;
                     }
 
-                    // логирование
-                    insertLog(userId, IP, "insert", id, String.Empty, "SiteMap", item.Title);
-
-                    return true;
-                }
-                else
-                {
                     return false;
                 }
             }
@@ -307,81 +321,95 @@ namespace cms.dbase
         {
             using (var db = new CMSdb(_context))
             {
-                var data = db.content_sitemaps.Where(w => w.id.Equals(id));
-
-                if (data.Any())
+                using (var tran = db.BeginTransaction())
                 {
-                    var oldRecord = data.FirstOrDefault();
+                    var data = db.content_sitemaps.Where(w => w.id.Equals(id));
 
-                    data.Where(w => w.id.Equals(id))
-                        .Set(u => u.f_site, item.Site)
-                        .Set(u => u.f_front_section, item.FrontSection)
-                        .Set(u => u.c_path, item.Path)
-                        .Set(u => u.c_alias, item.Alias)
-                        .Set(u => u.c_title, item.Title)
-                        .Set(u => u.c_text, item.Text)
-                        .Set(u => u.c_preview, item.Preview)
-                        .Set(u => u.c_url, item.Url)
-                        .Set(u => u.c_desc, item.Desc)
-                        .Set(u => u.c_keyw, item.Keyw)
-                        .Set(u => u.b_disabled, item.Disabled)
-                        .Set(u => u.b_disabled_menu, item.DisabledMenu)
-                        .Update();
-
-                    #region обновим алиасы для дочерних эл-тов
-
-                    // заменяемый путь 
-                    string _oldPath = oldRecord.c_path.Equals("/") ?
-                        oldRecord.c_path + oldRecord.c_alias : oldRecord.c_path + "/" + oldRecord.c_alias;
-
-                    // новый путь
-                    string _newPath = item.Path.Equals("/") ?
-                        item.Path + item.Alias : item.Path + "/" + item.Alias;
-
-                    // список дочерних эл-тов для обновления алиаса
-                    var listToUpdate = db.content_sitemaps
-                        .Where(w => w.f_site.Equals(item.Site))
-                        .Where(w => w.c_path.StartsWith(_oldPath));
-
-                    if (listToUpdate.Any())
+                    if (data.Any())
                     {
-                        listToUpdate
-                            .Set(u => u.c_path, u => u.c_path.Replace(_oldPath, _newPath))
+                        var oldRecord = data.FirstOrDefault();
+
+                        data.Where(w => w.id.Equals(id))
+                            .Set(u => u.f_site, item.Site)
+                            .Set(u => u.f_front_section, item.FrontSection)
+                            .Set(u => u.c_path, item.Path)
+                            .Set(u => u.c_alias, item.Alias)
+                            .Set(u => u.c_title, item.Title)
+                            .Set(u => u.c_text, item.Text)
+                            .Set(u => u.c_preview, item.Preview)
+                            .Set(u => u.c_url, item.Url)
+                            .Set(u => u.c_desc, item.Desc)
+                            .Set(u => u.c_keyw, item.Keyw)
+                            .Set(u => u.b_disabled, item.Disabled)
+                            .Set(u => u.b_disabled_menu, item.DisabledMenu)
                             .Update();
-                    }
 
-                    #endregion
-                    // группы меню
-                    var menu = db.content_sitemap_menutypess
-                        .Where(w => w.f_sitemap.Equals(id)).Delete();
+                        #region обновим алиасы для дочерних эл-тов
+                        // заменяемый путь 
+                        string _oldPath = oldRecord.c_path.Equals("/") ?
+                            oldRecord.c_path + oldRecord.c_alias : oldRecord.c_path + "/" + oldRecord.c_alias;
 
-                    if (item.MenuGroups != null)
-                    {
-                        foreach (var m in item.MenuGroups)
+                        // новый путь
+                        string _newPath = item.Path.Equals("/") ?
+                            item.Path + item.Alias : item.Path + "/" + item.Alias;
+
+                        // список дочерних эл-тов для обновления алиаса
+                        var listToUpdate = db.content_sitemaps
+                            .Where(w => w.f_site.Equals(item.Site))
+                            .Where(w => w.c_path.StartsWith(_oldPath));
+
+                        if (listToUpdate.Any())
                         {
-                            Guid menuId = Guid.Parse(m);
-
-                            var _maxSortMenu = db.content_sitemap_menutypess
-                                .Where(w => w.f_site.Equals(item.Site))
-                                .Where(w => w.f_menutype.Equals(menuId));
-
-                            int resmaxSortMenu = _maxSortMenu.Any() ? _maxSortMenu.Select(s => s.n_sort).Max() : 0;
-
-                            var res = db.content_sitemap_menutypess
-                                .Value(p => p.f_sitemap, id)
-                                .Value(p => p.f_menutype, menuId)
-                                .Value(p => p.f_site, item.Site)
-                                .Value(p => p.n_sort, resmaxSortMenu + 1)
-                                .Insert();
+                            listToUpdate
+                                .Set(u => u.c_path, u => u.c_path.Replace(_oldPath, _newPath))
+                                .Update();
                         }
+                        #endregion
+
+
+                        // группы меню
+                        var menu = db.content_sitemap_menutypess
+                            .Where(w => w.f_sitemap.Equals(id)).Delete();
+
+                        if (item.MenuGroups != null)
+                        {
+                            foreach (var m in item.MenuGroups)
+                            {
+                                Guid menuId = Guid.Parse(m);
+
+                                var _maxSortMenu = db.content_sitemap_menutypess
+                                    .Where(w => w.f_site.Equals(item.Site))
+                                    .Where(w => w.f_menutype.Equals(menuId));
+
+                                int resmaxSortMenu = _maxSortMenu.Any() ? _maxSortMenu.Select(s => s.n_sort).Max() : 0;
+
+                                var res = db.content_sitemap_menutypess
+                                    .Value(p => p.f_sitemap, id)
+                                    .Value(p => p.f_menutype, menuId)
+                                    .Value(p => p.f_site, item.Site)
+                                    .Value(p => p.n_sort, resmaxSortMenu + 1)
+                                    .Insert();
+                            }
+                        }
+
+                        // логирование
+                        //insertLog(userId, IP, "update", id, String.Empty, "SiteMap", item.Title);
+                        var log = new LogModel()
+                        {
+                            Site = _domain,
+                            Section = LogSection.SiteMap,
+                            Action = LogAction.update,
+                            PageId = id,
+                            PageName = item.Title,
+                            UserId = _currentUserId,
+                            IP = _ip,
+                        };
+                        insertLog(log);
+
+                        tran.Commit();
+                        return true;
                     }
 
-                    // логирование
-                    insertLog(userId, IP, "update", id, String.Empty, "SiteMap", item.Title);
-                    return true;
-                }
-                else
-                {
                     return false;
                 }
             }
@@ -458,26 +486,42 @@ namespace cms.dbase
         {
             using (var db = new CMSdb(_context))
             {
-                var query = db.content_sitemap_menuss.Where(w => w.id.Equals(item.Id));
-                if (!query.Any())
+                using (var tran = db.BeginTransaction())
                 {
-                    var sortMax = db.content_sitemap_menuss.Select(s => s.n_sort);
+                    var query = db.content_sitemap_menuss.Where(w => w.id.Equals(item.Id));
+                    if (!query.Any())
+                    {
+                        var sortMax = db.content_sitemap_menuss.Select(s => s.n_sort);
 
-                    int max = sortMax.Any() ? sortMax.Max() + 1 : 1;
+                        int max = sortMax.Any() ? sortMax.Max() + 1 : 1;
 
-                    db.content_sitemap_menuss
-                        .Value(v => v.c_title, item.Text)
-                        .Value(v => v.n_sort, max)
-                        .Insert();
+                        db.content_sitemap_menuss
+                            .Value(v => v.c_title, item.Text)
+                            .Value(v => v.n_sort, max)
+                            .Insert();
+                    }
+                    else
+                    {
+                        db.content_sitemap_menuss
+                            .Where(w => w.id.Equals(item.Id))
+                            .Set(u => u.c_title, item.Text)
+                            .Update();
+                    }
 
-                    return true;
-                }
-                else
-                {
-                    db.content_sitemap_menuss
-                        .Where(w => w.id.Equals(item.Id))
-                        .Set(u => u.c_title, item.Text)
-                        .Update();
+
+                    var log = new LogModel()
+                    {
+                        Site = _domain,
+                        Section = LogSection.SiteMap,
+                        Action = LogAction.update,
+                        PageId = item.Id,
+                        PageName = item.Text,
+                        UserId = _currentUserId,
+                        IP = _ip,
+                    };
+                    insertLog(log);
+
+                    tran.Commit();
                     return true;
                 }
             }
@@ -494,46 +538,62 @@ namespace cms.dbase
         {
             using (var db = new CMSdb(_context))
             {
-                var itemToDelete = db.content_sitemaps
-                    .Where(w => w.id.Equals(id))
-                    .Select(s => new SiteMapModel
-                    {
-                        Title = s.c_title,
-                        Path = s.c_path,
-                        Alias = s.c_alias,
-                        Sort = s.n_sort
-                    }).FirstOrDefault();
-
-                // Обновляем поле для сортировки для сестринских эл-тов
-                var listToUpdate = db.content_sitemaps
-                    .Where(w => w.c_path.Equals(itemToDelete.Path))
-                    .Where(w => w.n_sort > itemToDelete.Sort);
-
-                listToUpdate.Set(u => u.n_sort, u => u.n_sort - 1).Update();
-
-                // Удаляем дочерние эл-ты 
-                string pathToDrop = itemToDelete.Path.Equals("/") ?
-                    itemToDelete.Path + itemToDelete.Alias :
-                    itemToDelete.Path + "/" + itemToDelete.Alias;
-
-                var listToDelete = db.content_sitemaps
-                    .Where(w => w.id.Equals(id) || w.c_path.Contains(pathToDrop));
-
-                if (listToDelete.Any())
+                using (var tran = db.BeginTransaction())
                 {
-                    foreach (var item in listToDelete.ToArray())
+                    var itemToDelete = db.content_sitemaps
+                        .Where(w => w.id.Equals(id))
+                        .Select(s => new SiteMapModel
+                        {
+                            Title = s.c_title,
+                            Path = s.c_path,
+                            Alias = s.c_alias,
+                            Sort = s.n_sort
+                        }).FirstOrDefault();
+
+                    // Обновляем поле для сортировки для сестринских эл-тов
+                    var listToUpdate = db.content_sitemaps
+                        .Where(w => w.c_path.Equals(itemToDelete.Path))
+                        .Where(w => w.n_sort > itemToDelete.Sort);
+
+                    listToUpdate.Set(u => u.n_sort, u => u.n_sort - 1).Update();
+
+                    // Удаляем дочерние эл-ты 
+                    string pathToDrop = itemToDelete.Path.Equals("/") ?
+                        itemToDelete.Path + itemToDelete.Alias :
+                        itemToDelete.Path + "/" + itemToDelete.Alias;
+
+                    var listToDelete = db.content_sitemaps
+                        .Where(w => w.id.Equals(id) || w.c_path.Contains(pathToDrop));
+
+                    if (listToDelete.Any())
                     {
-                        // Логирование
-                        insertLog(userId, IP, "delete", item.id, String.Empty, "SiteMap", item.c_title);
+                        foreach (var item in listToDelete.ToArray())
+                        {
+                            var itemD = db.content_sitemaps
+                                .Where(w => w.id == item.id)
+                                .SingleOrDefault();
 
-                        var itemD = db.content_sitemaps
-                            .Where(w => w.id == item.id)
-                            .SingleOrDefault();
+                            db.Delete(itemD);
 
-                        db.Delete(itemD);
+                            // Логирование
+                            //insertLog(userId, IP, "delete", item.id, String.Empty, "SiteMap", item.c_title);
+                            var log = new LogModel()
+                            {
+                                Site = _domain,
+                                Section = LogSection.SiteMap,
+                                Action = LogAction.delete,
+                                PageId = id,
+                                PageName = item.c_title,
+                                UserId = _currentUserId,
+                                IP = _ip,
+                            };
+                            insertLog(log);
+                        }
                     }
+
+                    tran.Commit();
+                    return true;
                 }
-                return true;
             }
         }
 
@@ -560,8 +620,11 @@ namespace cms.dbase
                         Sort = s.n_sort,
                         CountSibling = getCountSiblings(s.id)
                     });
-                if (!data.Any()) { return null; }
-                else { return data.ToArray(); }
+
+                if (!data.Any())
+                    return null;
+                else
+                    return data.ToArray();
             }
         }
 
@@ -612,8 +675,10 @@ namespace cms.dbase
                         ParentId = s.uui_parent
                     });
 
-                if (!data.Any()) { return null; }
-                else { return data.FirstOrDefault(); }
+                if (!data.Any())
+                    return null;
+                else
+                    return data.FirstOrDefault();
             }
         }
 
@@ -629,77 +694,81 @@ namespace cms.dbase
         {
             using (var db = new CMSdb(_context))
             {
-                if (string.IsNullOrEmpty(menuSort))
+                using (var tran = db.BeginTransaction())
                 {
-                    var data = db.content_sitemaps
-                        .Where(w => w.id.Equals(id))
-                        .Select(s => new SiteMapModel
-                        {
-                            Path = s.c_path,
-                            Sort = s.n_sort
-                        }).FirstOrDefault();
-
-                    if (permit > data.Sort)
+                    if (string.IsNullOrEmpty(menuSort))
                     {
+                        var data = db.content_sitemaps
+                            .Where(w => w.id.Equals(id))
+                            .Select(s => new SiteMapModel
+                            {
+                                Path = s.c_path,
+                                Sort = s.n_sort
+                            }).FirstOrDefault();
+
+                        if (permit > data.Sort)
+                        {
+                            db.content_sitemaps
+                                .Where(w => w.f_site.Equals(domain))
+                                .Where(w => w.c_path.Equals(data.Path))
+                                .Where(w => w.n_sort > data.Sort && w.n_sort <= permit)
+                                .Set(u => u.n_sort, u => u.n_sort - 1)
+                                .Update();
+                        }
+                        else
+                        {
+                            db.content_sitemaps
+                                .Where(w => w.f_site.Equals(domain))
+                                .Where(w => w.c_path.Equals(data.Path))
+                                .Where(w => w.n_sort < data.Sort && w.n_sort >= permit)
+                                .Set(u => u.n_sort, u => u.n_sort + 1)
+                                .Update();
+                        }
                         db.content_sitemaps
-                            .Where(w => w.f_site.Equals(domain))
-                            .Where(w => w.c_path.Equals(data.Path))
-                            .Where(w => w.n_sort > data.Sort && w.n_sort <= permit)
-                            .Set(u => u.n_sort, u => u.n_sort - 1)
+                            .Where(w => w.id.Equals(id))
+                            .Set(u => u.n_sort, permit)
                             .Update();
                     }
                     else
                     {
-                        db.content_sitemaps
-                            .Where(w => w.f_site.Equals(domain))
-                            .Where(w => w.c_path.Equals(data.Path))
-                            .Where(w => w.n_sort < data.Sort && w.n_sort >= permit)
-                            .Set(u => u.n_sort, u => u.n_sort + 1)
-                            .Update();
-                    }
-                    db.content_sitemaps
-                        .Where(w => w.id.Equals(id))
-                        .Set(u => u.n_sort, permit)
-                        .Update();
-                }
-                else
-                {
-                    Guid m = Guid.Parse(menuSort);
+                        Guid m = Guid.Parse(menuSort);
 
-                    var data = db.content_sv_sitemap_menus
-                        .Where(w => w.id.Equals(id))
-                        .Select(s => new SiteMapModel
+                        var data = db.content_sv_sitemap_menus
+                            .Where(w => w.id.Equals(id))
+                            .Select(s => new SiteMapModel
+                            {
+                                MenuGr = s.f_menutype,
+                                Sort = s.menu_sort
+                            }).FirstOrDefault();
+
+                        if (permit > data.Sort)
                         {
-                            MenuGr = s.f_menutype,
-                            Sort = s.menu_sort
-                        }).FirstOrDefault();
-
-                    if (permit > data.Sort)
-                    {
+                            db.content_sitemap_menutypess
+                                .Where(w => w.f_site.Equals(domain))
+                                .Where(w => w.f_menutype.Equals(m))
+                                .Where(w => w.n_sort > data.Sort && w.n_sort <= permit)
+                                .Set(u => u.n_sort, u => u.n_sort - 1)
+                                .Update();
+                        }
+                        else
+                        {
+                            db.content_sitemap_menutypess
+                                .Where(w => w.f_site.Equals(domain))
+                                .Where(w => w.f_menutype.Equals(m))
+                                .Where(w => w.n_sort < data.Sort && w.n_sort >= permit)
+                                .Set(u => u.n_sort, u => u.n_sort + 1)
+                                .Update();
+                        }
                         db.content_sitemap_menutypess
-                            .Where(w => w.f_site.Equals(domain))
+                            .Where(w => w.f_sitemap.Equals(id))
                             .Where(w => w.f_menutype.Equals(m))
-                            .Where(w => w.n_sort > data.Sort && w.n_sort <= permit)
-                            .Set(u => u.n_sort, u => u.n_sort - 1)
+                            .Set(u => u.n_sort, permit)
                             .Update();
                     }
-                    else
-                    {
-                        db.content_sitemap_menutypess
-                            .Where(w => w.f_site.Equals(domain))
-                            .Where(w => w.f_menutype.Equals(m))
-                            .Where(w => w.n_sort < data.Sort && w.n_sort >= permit)
-                            .Set(u => u.n_sort, u => u.n_sort + 1)
-                            .Update();
-                    }
-                    db.content_sitemap_menutypess
-                        .Where(w => w.f_sitemap.Equals(id))
-                        .Where(w => w.f_menutype.Equals(m))
-                        .Set(u => u.n_sort, permit)
-                        .Update();
+                    tran.Commit();
+                    return true;
                 }
             }
-            return true;
         }
     }
 }
