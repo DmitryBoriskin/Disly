@@ -8,6 +8,8 @@ using Integration.Frmp.models;
 using AutoMapper;
 using System.Xml.Serialization;
 using Integration.Frmp.library.Models;
+using System.Text;
+using System.Xml;
 
 namespace Integration.Frmp.library
 {
@@ -33,12 +35,13 @@ namespace Integration.Frmp.library
 
                 SrvcLogger.Debug("{PREPARING}", "Файл для импорта данных '" + fileInfo.FullName + "'");
                 SrvcLogger.Debug("{PREPARING}", "Начало чтения XML-данных");
-
+                
                 XmlSerializer serializer = new XmlSerializer(typeof(ArrayOfEmployee));
+
                 using (FileStream fileStream = new FileStream(fileInfo.FullName, FileMode.Open))
                 {
                     SrvcLogger.Debug("{PREPARING}", string.Format("XML-данные успешно прочитаны из файла {0}", fileInfo.Name));
-
+                    
                     var arrayOfEmployees = (ArrayOfEmployee)serializer.Deserialize(fileStream);
 
                     // импорт организаций
@@ -136,13 +139,22 @@ namespace Integration.Frmp.library
         /// <param name="employyes">Список сотрудников</param>
         private static void ImportEmployees(Models.Employee[] employees)
         {
+            XmlSerializer ser = new XmlSerializer(typeof(Models.Employee));
+
             using (var db = new DbModel(connectionString))
             {
                 // очистим таблицу dbo.import_frmp_peoples перед новым импортом
                 db.ImportFrmpPeopless.Delete();
-                
+
                 for (int i = 0; i < employees.Count(); i++)
                 {
+                    string stringXml = null; // xml-узел, относящийся к сотруднику
+                    using (StringWriter textWriter = new StringWriter())
+                    {
+                        ser.Serialize(textWriter, employees[i]);
+                        stringXml = textWriter.ToString();
+                    }
+
                     Guid id = employees[i].ID; // идентификатор
                     string name = employees[i].Name; // имя 
                     string surname = employees[i].Surname;  // фамилия
@@ -176,6 +188,7 @@ namespace Integration.Frmp.library
                                 .Value(v => v.BSex, sex)
                                 .Value(v => v.DBirthdate, birthDate)
                                 .Value(v => v.DModify, modifyDate)
+                                .Value(v => v.XmlInfo, stringXml)
                                 .Insert();
                         }
 

@@ -80,7 +80,7 @@ namespace cms.dbModel.entity
         public bool Importent { get; set; }
     }
 
-    public class UsersGroupModel
+    public class GroupModel
     {
         public Guid id { get; set; }
         [Required]
@@ -144,7 +144,7 @@ namespace cms.dbModel.entity
         //    public bool Delete { get; set; }
         //}
 
-        public class UserSiteLinkModel
+    public class UserSiteLinkModel
     {
         public Guid UserId { get; set; }
         public Guid[] SitesId { get; set; }

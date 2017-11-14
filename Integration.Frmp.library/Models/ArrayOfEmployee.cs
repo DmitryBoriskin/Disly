@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 using System.Xml.Serialization;
 
 namespace Integration.Frmp.library.Models
@@ -68,12 +69,15 @@ namespace Integration.Frmp.library.Models
 
         [XmlElement(ElementName = "UZ", Namespace = "Employee")]
         public Organization Organization { get; set; }
+
+        [XmlAnyElement]
+        public System.Xml.XmlElement[] All { get; set; }
     }
 
     [XmlRoot(ElementName = "ArrayOfEmployee", Namespace = "Employee")]
     public class ArrayOfEmployee
     {
-        [XmlElement(ElementName = "Employee", Namespace = "Employee")]
+        [XmlElement(Namespace = "Employee")]
         public Employee[] Employee { get; set; }
     }
 

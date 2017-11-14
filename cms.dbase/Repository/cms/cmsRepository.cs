@@ -934,7 +934,11 @@ namespace cms.dbase
             }
         }
 
-
+        /// <summary>
+        /// Пользователь по Id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public override UsersModel getUser(Guid id)
         {
             using (var db = new CMSdb(_context))
@@ -965,6 +969,14 @@ namespace cms.dbase
                 else { return data.First(); }
             }
         }
+        /// <summary>
+        /// Создание нового пользователя
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="Item"></param>
+        /// <param name="UserId"></param>
+        /// <param name="IP"></param>
+        /// <returns></returns>
         public override bool createUser(Guid id, UsersModel Item, Guid UserId, string IP)
         {
             using (var db = new CMSdb(_context))
@@ -1027,6 +1039,14 @@ namespace cms.dbase
                 }
             }
         }
+        /// <summary>
+        /// Редактирование пользователя
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="Item"></param>
+        /// <param name="UserId"></param>
+        /// <param name="IP"></param>
+        /// <returns></returns>
         public override bool updateUser(Guid id, UsersModel Item, Guid UserId, string IP)
         {
             using (var db = new CMSdb(_context))
@@ -1063,6 +1083,13 @@ namespace cms.dbase
                 }
             }
         }
+        /// <summary>
+        /// Удаление пользователя
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="UserId"></param>
+        /// <param name="IP"></param>
+        /// <returns></returns>
         public override bool deleteUser(Guid id, Guid UserId, string IP)
         {
             using (var db = new CMSdb(_context))
@@ -1075,7 +1102,14 @@ namespace cms.dbase
                 return true;
             }
         }
-
+        /// <summary>
+        /// Изменение пароля
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="Salt"></param>
+        /// <param name="Hash"></param>
+        /// <param name="UserId"></param>
+        /// <param name="IP"></param>
         public override void changePassword(Guid id, string Salt, string Hash, Guid UserId, string IP)
         {
             using (var db = new CMSdb(_context))
@@ -1095,8 +1129,48 @@ namespace cms.dbase
                 }
             }
         }
+        /// <summary>
+        /// Прикрепление пользователям доступных сайтов
+        /// </summary>
+        /// <param name="link"></param>
+        /// <returns></returns>
+        public override bool updateUserSiteLinks(UserSiteLinkModel link)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                using (var tran = db.BeginTransaction())
+                {
+                    //Удаляем все записи привязанные к этому пользователю
+                    var res = db.cms_user_site_links
+                        .Where(s => s.f_user == link.UserId)
+                        .Delete();
 
+                    if (link.SitesId != null && link.SitesId.Count() > 0)
+                    {
+                        foreach (var site in link.SitesId)
+                        {
+                            var alias = db.cms_sitess.Where(s => s.id == site).SingleOrDefault().c_alias;
 
+                            var cdUserSiteLink = new cms_user_site_link()
+                            {
+                                id = Guid.NewGuid(),
+                                f_user = link.UserId,
+                                f_site = alias
+                            };
+                            db.Insert(cdUserSiteLink);
+                        }
+                    }
+
+                    tran.Commit();
+                    return true;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Каталог, список всех доступных на портале групп
+        /// </summary>
+        /// <returns></returns>
         public override Catalog_list[] getUsersGroupList()
         {
             using (var db = new CMSdb(_context))
@@ -1112,13 +1186,18 @@ namespace cms.dbase
                 else { return data.ToArray(); }
             }
         }
-        public override UsersGroupModel getUsersGroup(string alias)
+        /// <summary>
+        /// Группа
+        /// </summary>
+        /// <param name="alias"></param>
+        /// <returns></returns>
+        public override GroupModel getGroup(string alias)
         {
             using (var db = new CMSdb(_context))
             {
-                var data = db.cms_users_groups.
-                    Where(w => w.c_alias == alias).
-                    Select(s => new UsersGroupModel
+                var data = db.cms_users_groups
+                    .Where(w => w.c_alias == alias)
+                    .Select(s => new GroupModel
                     {
                         id = s.id,
                         GroupName = s.c_title,
@@ -1126,11 +1205,17 @@ namespace cms.dbase
                         GroupResolutions = getGroupResolutions(s.c_alias)
                     });
 
-                if (!data.Any()) { return null; }
-                else { return data.First(); }
+                if (!data.Any())
+                    return null;
+                else 
+                    return data.FirstOrDefault();
             }
         }
-
+        /// <summary>
+        /// Получение прав для группы
+        /// </summary>
+        /// <param name="alias"></param>
+        /// <returns></returns>
         public override ResolutionsModel[] getGroupResolutions(string alias)
         {
             using (var db = new CMSdb(_context))
@@ -1148,12 +1233,74 @@ namespace cms.dbase
                         Delete = s.b_delete
                     });
 
-                if (!data.Any()) { return null; }
-                else { return data.ToArray(); }
+                if (!data.Any())
+                    return null; 
+                else
+                    return data.ToArray();
             }
         }
+        /// <summary>
+        /// Изменение группы, только название группе меняем
+        /// </summary>
+        /// <param name="claim"></param>
+        /// <returns></returns>
+        public override bool updateGroup(GroupModel group)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                using (var tran = db.BeginTransaction())
+                {
+                    var getGroup = db.cms_users_groups.
+                        Where(g => g.id == group.id || g.c_alias.ToLower() == group.Alias.ToLower());
 
-        public override bool updateGroupResolutions(GroupClaims claim)
+                    if (getGroup.Any())
+                    {
+                        var cdGroup = getGroup.SingleOrDefault();
+
+                        cdGroup.c_title = group.GroupName;
+                        db.Update(cdGroup);
+                    }
+                    else
+                    {
+                        var cdGroup = new cms_users_group()
+                        {
+                            id = Guid.NewGuid(),
+                            c_alias = group.Alias,
+                            c_title = group.GroupName
+                        };
+                        db.Insert(cdGroup);
+
+                        //insert claims
+                        var templates = db.cms_menus.Select(p => p.id);
+                        if (templates != null)
+                        {
+                            foreach (var template in templates.ToArray())
+                            {
+                                var claims = new cms_resolutions_templates()
+                                {
+                                    f_menu_id = template,
+                                    f_user_group = group.Alias,
+                                    b_read = false,
+                                    b_write = false,
+                                    b_change = false,
+                                    b_delete = false,
+                                };
+                                db.Insert(claims);
+                            }
+                        }
+                    }
+
+                    tran.Commit();
+                    return true;
+                }
+            }
+        }
+        /// <summary>
+        /// Изменение прав для группы
+        /// </summary>
+        /// <param name="claim"></param>
+        /// <returns></returns>
+        public override bool updateGroupClaims(GroupClaims claim)
         {
             using (var db = new CMSdb(_context))
             {
@@ -1166,13 +1313,13 @@ namespace cms.dbase
 
                     if (!string.IsNullOrEmpty(claim.GroupAlias))
                     {
-                        query = query.Where( t => t.f_user_group == claim.GroupAlias);
+                        query = query.Where(t => t.f_user_group == claim.GroupAlias);
                     }
-                    
-                    if(query.Any())
+
+                    if (query.Any())
                     {
                         cdGroupResolution = query.SingleOrDefault();//test
-                        if(claim.Claim.ToLower() == "read")
+                        if (claim.Claim.ToLower() == "read")
                             cdGroupResolution.b_read = claim.Checked;
                         if (claim.Claim.ToLower() == "write")
                             cdGroupResolution.b_write = claim.Checked;
@@ -1196,39 +1343,40 @@ namespace cms.dbase
                 }
             }
         }
-
-        public override bool updateUserSiteLinks(UserSiteLinkModel link)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="alias"></param>
+        /// <returns></returns>
+        public override bool deleteGroup(string alias)
         {
             using (var db = new CMSdb(_context))
             {
                 using (var tran = db.BeginTransaction())
                 {
-                    //Удаляем все записи привязанные к этому пользователю
-                    var res = db.cms_user_site_links
-                        .Where(s => s.f_user == link.UserId)
+                    var getGroup = db.cms_users_groups.
+                        Where(g =>g.c_alias.ToLower() == alias.ToLower());
+
+                    if (!getGroup.Any())
+                        return false;
+
+                    var cdGroup = getGroup.SingleOrDefault();
+                    db.cms_resolutions_templatess
+                        .Where(g => g.f_user_group == alias)
                         .Delete();
-
-                    if(link.SitesId != null && link.SitesId.Count() > 0)
-                    {
-                        foreach (var site in link.SitesId)
-                        {
-                            var alias = db.cms_sitess.Where(s => s.id == site).SingleOrDefault().c_alias;
-
-                            var cdUserSiteLink = new cms_user_site_link()
-                            {
-                                id = Guid.NewGuid(),
-                                f_user = link.UserId,
-                                f_site = alias
-                            };
-                            db.Insert(cdUserSiteLink);
-                        }
-                    }
+                    getGroup.Delete();
 
                     tran.Commit();
                     return true;
                 }
             }
         }
+       
+        
+
+       
+
+
         #endregion
 
 

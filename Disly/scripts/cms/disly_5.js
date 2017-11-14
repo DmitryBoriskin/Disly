@@ -5,7 +5,7 @@ $(document).ready(function () {
     $modal = $('.modal');
     $modalTitle = $('.modal .modal-title');
     $modalBody = $('.modal .modal-body');
-    $modalFooter = $('.modal .modal-footer');
+    $modalFooter = $('.modal .modal-footer-buttons');
 
     // Если система администрирования загружена в frame открываем её в родительском окне
     if (top !== self) {
