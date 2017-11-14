@@ -690,6 +690,19 @@ namespace cms.dbase
                           .Value(v => v.c_content_type, ins.Type)
                           .Value(v => v.f_content, ins.ContentId)
                           .Insert();
+                        //добавление шаблонов к новому сайту
+                        var default_view = db.front_sections;
+                        if (default_view.Any())
+                        {
+                            foreach (var item in default_view.ToArray())
+                            {
+                                db.front_site_sections
+                                    .Value(v => v.f_site, ins.Alias)
+                                    .Value(v => v.f_front_section, item.c_alias)
+                                    .Value(v => v.f_page_view, item.c_default_view)
+                                    .Insert();
+                            }
+                        }
 
                         // insertLog(UserId, IP, "insert", ins.Id, String.Empty, "Sites", ins.Title);
                         // логирование

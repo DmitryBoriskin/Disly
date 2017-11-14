@@ -1,9 +1,5 @@
 ﻿using cms.dbModel.entity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Web.Mvc;
 
 namespace Disly.Models
 {
@@ -14,5 +10,7 @@ namespace Disly.Models
     {
         public People[] DoctorsList { get; set; }
         public People DoctorsItem { get; set; }
+
+        public StructureModel[] DepartmentsSelectList { get; set; }
     }
 }
