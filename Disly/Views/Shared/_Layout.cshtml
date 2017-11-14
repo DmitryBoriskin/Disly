@@ -12,7 +12,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="keywords" content="@ViewBag.keywords">
     <meta name="description" content="@ViewBag.description">
-    <title> @ViewBag.Title </title>
+    <title> @ViewBag.Title - @Model.SitesInfo.Title</title>
     <link href="/Content/decor/chuvashia/favicon.ico" rel="shortcut icon">
     <link href="/Content/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="~/Content/decor/first/main.css" rel="stylesheet" />
@@ -20,7 +20,10 @@
     <link href="~/Content/css/core/style.css" rel="stylesheet" />
 
     <script type="text/javascript" src="/Content/plugins/jquery/jquery.js"></script>
+    <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU"></script>
     <script src="~/Content/plugins/bootstrap/js/bootstrap.min.js"></script>
+    <script src="~/Content/plugins/jquery/jquery.ui.js"></script>
+    <script src="~/Content/plugins/jquery/jquery.mask.min.js"></script>
     <script src="~/Content/js/script.js"></script>
 </head>
 
@@ -39,9 +42,12 @@
                             }
                         </div>
                         <div class="media-body">
-                            <h4 class="media-heading">
-                                @Model.SitesInfo.LongTitle
-                            </h4>
+                                @if (Model != null && Model.SitesInfo != null)
+                                {
+                                    <h4 class="media-heading">
+                                        @Model.SitesInfo.LongTitle
+                                </h4>
+                                }
                         </div>
                     </a>
                 </div>
@@ -79,7 +85,7 @@
         <!-- конец названия сайта -->
         <!-- главное меню -->
         <div class="main-menu">
-            @if (Model.SiteMapArray != null && Model.SiteMapArray.Count() > 0)
+            @if (Model != null && Model.SiteMapArray != null && Model.SiteMapArray.Count() > 0)
             {
                 var mainMenu = Model.SiteMapArray
                     .Where(w => w.MenuAlias.Equals("main"))
@@ -115,7 +121,7 @@
 
     <div class="container">
         <!-- нижние баннеры -->
-        @if (Model.BannerArray != null && Model.BannerArray.Count() > 0)
+        @if (Model != null && Model.BannerArray != null && Model.BannerArray.Count() > 0)
         {
             var bannerBottom = Model.BannerArray
                         .Where(w => w.SectionAlias.Equals("text"))
@@ -152,14 +158,17 @@
                                 <img class="logo-small" src="@Model.SitesInfo.Logo.Url" />
                             }
                         </div>
-                        <div class="media-body">
-                            @Model.SitesInfo.LongTitle
-                            <div class="small_address">
-                                <div>@Model.SitesInfo.Adress</div>
-                                <div>@Model.SitesInfo.Phone</div>
-                                <div><a href="@Model.SitesInfo.Site">@Model.SitesInfo.Site</a></div>
+                        @if (Model != null && Model.SitesInfo != null)
+                        {
+                            <div class="media-body">
+                                @Model.SitesInfo.LongTitle
+                                <div class="small_address">
+                                    <div>@Model.SitesInfo.Adress</div>
+                                    <div>@Model.SitesInfo.Phone</div>
+                                    <div><a href="@Model.SitesInfo.Site">@Model.SitesInfo.Site</a></div>
+                                </div>
                             </div>
-                        </div>
+                        }
                     </div>
                 </div>
                 <div class="col-md-4">
@@ -207,26 +216,29 @@
                         </div>
                     </div>
                     <div class="float-right social_network_list">
-                        @if (!string.IsNullOrEmpty(Model.SitesInfo.Facebook))
-                        {
-                            <a href="@Model.SitesInfo.Facebook" class="icon-facebook-4"></a>
-                        }
-                        @if (!string.IsNullOrEmpty(Model.SitesInfo.Vk))
-                        {
-                            <a href="@Model.SitesInfo.Vk" class="icon-vk"></a>
-                        }
-                        @if (!string.IsNullOrEmpty(Model.SitesInfo.Instagramm))
-                        {
-                            <a href="@Model.SitesInfo.Instagramm" class="icon-instagramm"></a>
-                        }
-                        @if (!string.IsNullOrEmpty(Model.SitesInfo.Odnoklassniki))
-                        {
-                            <a href="@Model.SitesInfo.Odnoklassniki" class="icon-odnoklassniki"></a>
-                        }
-                        @if (!string.IsNullOrEmpty(Model.SitesInfo.Twitter))
-                        {
-                            <a href="@Model.SitesInfo.Twitter" class="icon-twitter"></a>
-                        }
+                       @if (Model != null && Model.SitesInfo != null)
+                       {
+                            if (!string.IsNullOrEmpty(Model.SitesInfo.Facebook))
+                            {
+                                <a href="@Model.SitesInfo.Facebook" class="icon-facebook-4"></a>
+                            }
+                            if (!string.IsNullOrEmpty(Model.SitesInfo.Vk))
+                            {
+                                <a href="@Model.SitesInfo.Vk" class="icon-vk"></a>
+                            }
+                            if (!string.IsNullOrEmpty(Model.SitesInfo.Instagramm))
+                            {
+                                <a href="@Model.SitesInfo.Instagramm" class="icon-instagramm"></a>
+                            }
+                            if (!string.IsNullOrEmpty(Model.SitesInfo.Odnoklassniki))
+                            {
+                                <a href="@Model.SitesInfo.Odnoklassniki" class="icon-odnoklassniki"></a>
+                            }
+                            if (!string.IsNullOrEmpty(Model.SitesInfo.Twitter))
+                            {
+                                <a href="@Model.SitesInfo.Twitter" class="icon-twitter"></a>
+                            }
+                       }
                     </div>
                 </div>
             </div>
@@ -250,9 +262,8 @@
             </div>
         </div>
         <!-- конец подвала -->
-    </div>
+    </div>    
+
 
 </body>
-
-
 </html>

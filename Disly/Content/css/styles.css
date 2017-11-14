@@ -433,6 +433,7 @@ a.link-close:before {
 
 }
 .icon-lock:before {content:'\e855'; color:#85afcc;}
+
 /* -------- Log  ------ */
 .log-list {
     height:400px;

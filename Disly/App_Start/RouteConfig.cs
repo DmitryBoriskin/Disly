@@ -34,6 +34,24 @@ namespace Disly
                url: "Structure/{num}",
                defaults: new { controller = "Structure", action = "Item" }
             );
+            routes.MapRoute(
+               name: "StructureDepartItem",
+               url: "Structure/{num}/{id}",
+               defaults: new { controller = "Structure", action = "Department" }
+            );
+            
+            //Врачи
+            routes.MapRoute(
+               name: "Doctors",
+               url: "Doctors/",
+               defaults: new { controller = "Doctors", action = "Index" }
+            );
+
+            routes.MapRoute(
+               name:"DoctorsItem",
+               url: "Doctors/{id}",
+               defaults: new { controller = "Doctors", action = "Item" }
+            );
 
             // Контакты
             routes.MapRoute(
@@ -46,16 +64,17 @@ namespace Disly
             routes.MapRoute(
                name: "PressCentrItem",
                url: "Press/{year}/{month}/{day}/{alias}",
-               defaults: new { controller = "Press", action = "Item", alias = UrlParameter.Optional }
-               //,
-               //constraints: new { year = @"\d{4}", month = @"\d{2}", day = @"\d{2}" }
+               defaults: new { controller = "Press", action = "Item", alias = UrlParameter.Optional }               
+            );
+            routes.MapRoute(
+               name: "PressCentrRss",
+               url: "Press/Rss",
+               defaults: new { controller = "Press", action = "Rss", alias = UrlParameter.Optional }
             );
             routes.MapRoute(
                name: "PressCentrCategory",
                url: "Press/{category}",
                defaults: new { controller = "Press", action = "Category", alias = UrlParameter.Optional }
-               //,
-               //constraints: new { year = @"\d{4}", month = @"\d{2}", day = @"\d{2}" }
             );
             routes.MapRoute(
                name: "PressCentr",

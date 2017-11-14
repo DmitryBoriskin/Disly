@@ -138,6 +138,41 @@ namespace cms.dbModel.entity
         public string Twitter { get; set; }
     }
 
+    public class SitesShortModel
+    {
+        /// <summary>
+        /// Идентификатор
+        /// </summary>
+        public Guid Id { get; set; }
+
+        /// <summary>
+        /// Название
+        /// </summary>
+        public string Title { get; set; }
+
+        /// <summary>
+        /// Алиас
+        /// </summary>
+        public string Alias { get; set; }
+
+        /// <summary>
+        /// Тип
+        /// </summary>
+        public string Type { get; set; }
+        /// <summary>
+        /// Флаг отключенного сайта
+        /// </summary>
+        public bool SiteOff { get; set; }
+        /// <summary>
+        /// Список доменов
+        /// </summary>
+        public Domain[] DomainList { get; set; }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool Checked { get; set; }
+    }
     /// <summary>
     /// Модель, описывающая домен
     /// </summary>

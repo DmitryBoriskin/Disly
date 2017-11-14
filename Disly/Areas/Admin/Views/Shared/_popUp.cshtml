@@ -3,18 +3,23 @@
 
 <html>
 <head>
+   
     <title>CMS Disly | @ViewBag.Title</title>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Language" content="ru" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <link href="/Content/favicon.ico" rel="shortcut icon">
+    @Styles.Render("~/bundles/jq_plugins/css")
     @Styles.Render("~/bundles/popUp_css")
+
     @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jq_plugins/js")
     @Scripts.Render("~/bundles/popUp_js")
 
-    @Styles.Render("~/bundles/jq_plugins/css")
-    @Scripts.Render("~/bundles/jq_plugins/js")
+    <script src="~/scripts/cms/disly_5_popup.js" type="text/javascript"></script>
+
 </head>
+
 <body>
     @using (Html.BeginForm())
     {

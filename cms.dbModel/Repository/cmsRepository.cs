@@ -31,7 +31,8 @@ namespace cms.dbModel
         public abstract bool permit_cmsMenu(Guid id, int num, Guid UserId, string IP);
 
         // Все сайты портала
-        public abstract SitesList getSiteList(FilterParams filtr, int page, int size);
+        public abstract SitesList getSiteList(FilterParams filtr);
+        public abstract SitesShortModel[] getSiteListWithCheckedForUser(SiteFilter filtr);
         public abstract bool check_Site(Guid id);
         public abstract bool insSite(SitesModel ins, Guid UserId, String IP);
         public abstract bool updSite(Guid id, SitesModel ins, Guid UserId, String IP);
@@ -42,22 +43,30 @@ namespace cms.dbModel
         public abstract string getIdSite(Guid ContentId);
 
         // Все пользователи портала
-        public abstract bool check_user(Guid id);
-        public abstract bool check_user(string email);
-        public abstract void check_usergroup(Guid id, string group, Guid UserId, string IP);
-        
         public abstract UsersList getUsersList(FilterParams filtr);
         public abstract UsersModel getUser(Guid id);
         public abstract bool createUser(Guid id, UsersModel Item, Guid UserId, string IP);
         public abstract bool updateUser(Guid id, UsersModel Item, Guid UserId, string IP);
         public abstract bool deleteUser(Guid id, Guid UserId, string IP);
 
+        // для работы с пользователями
+        public abstract bool check_user(Guid id);
+        public abstract bool check_user(string email);
+        public abstract void check_usergroup(Guid id, string group, Guid UserId, string IP);
         public abstract void changePassword(Guid id, string Salt, string Hash, Guid UserId, string IP);
-
+        public abstract bool updateUserSiteLinks(UserSiteLinkModel link);
+        //Все доступные группы на портале - справочник
         public abstract Catalog_list[] getUsersGroupList();
-        public abstract UsersGroupModel getUsersGroup(string alias);
+
+
+        //Группа пользователей
+        public abstract GroupModel getGroup(string alias);
+        public abstract bool updateGroup(GroupModel group);
+        public abstract bool deleteGroup(string alias);
 
         public abstract ResolutionsModel[] getGroupResolutions(string alias);
+        public abstract bool updateGroupClaims(GroupClaims GroupClaim);
+
 
         // Материалы
         public abstract MaterialsGroup[] getAllMaterialGroups();

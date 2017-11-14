@@ -22,8 +22,9 @@ namespace Disly
                 "~/Content/plugins/bootstrap/js/bootstrap.min.js",
                 "~/Content/plugins/bootstrap/js/bootstrap-toggle.js",
                 "~/Content/plugins/mCustomScrollbar/jquery.mCustomScrollbar.js",
-                "~/Content/plugins/Disly/DislyControls.js",
-                "~/Scripts/cms/disly_5_popup.js"));
+                "~/Content/plugins/Disly/DislyControls.js"
+                //"~/Scripts/cms/disly_5_popup.js"
+                ));
 
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
                 "~/Content/plugins/jquery/jquery.js",
@@ -34,13 +35,15 @@ namespace Disly
                "~/Content/plugins/select2/select2.min.js",
                "~/Content/plugins/select2/i18n/ru.js",
                "~/Content/plugins/icheck/icheck.min.js",
-               "~/Content/plugins/datatables/datatables.min.js"
+               "~/Content/plugins/datatables/datatables.min.js",
+                "~/Content/plugins/datatables/dataTables.bootstrap.min.js"
                ));
             bundles.Add(new StyleBundle("~/bundles/jq_plugins/css").Include(
               "~/Content/plugins/select2/css/select2.css",
               "~/Content/plugins/select2/css/select2_custom.css",
               "~/Content/plugins/icheck/skins/all.css",
-              "~/Content/plugins/datatables/datatables.min.css"
+              "~/Content/plugins/datatables/datatables.min.css",
+              "~/Content/plugins/datatables/dataTables.bootstrap.min.css"
               ));
 
            

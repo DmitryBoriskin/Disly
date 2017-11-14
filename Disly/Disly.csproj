@@ -182,6 +182,7 @@
     <Content Include="Content\img\metrica2.png" />
     <Content Include="Content\img\minzdrav-logo.png" />
     <Content Include="Content\img\nophoto.jpg" />
+    <Content Include="Content\img\no_avatar.png" />
     <Content Include="Content\img\obr-project.png" />
     <Content Include="Content\img\preloader_planet.svg" />
     <Content Include="Content\img\preloader.svg" />
@@ -211,6 +212,8 @@
     <Content Include="Content\plugins\bootstrap\js\bootstrap-toggle.min.js" />
     <Content Include="Content\plugins\bootstrap\js\bootstrap.js" />
     <Content Include="Content\plugins\bootstrap\js\bootstrap.min.js" />
+    <Content Include="Content\plugins\datatables\dataTables.bootstrap.min.css" />
+    <Content Include="Content\plugins\datatables\dataTables.bootstrap.min.js" />
     <Content Include="Content\plugins\datatables\datatables.css" />
     <Content Include="Content\plugins\datatables\datatables.js" />
     <Content Include="Content\plugins\datatables\datatables.min.css" />
@@ -520,6 +523,7 @@
     <Compile Include="Areas\Admin\Controllers\AccountController.cs" />
     <Compile Include="Areas\Admin\Controllers\BannersController.cs" />
     <Compile Include="Areas\Admin\Controllers\cmsMenuController.cs" />
+    <Compile Include="Areas\Admin\Controllers\UsersController.cs" />
     <Compile Include="Areas\Admin\Controllers\SiteSettingsController.cs" />
     <Compile Include="Areas\Admin\Controllers\VacancyController.cs" />
     <Compile Include="Areas\Admin\Controllers\FeedbacksController.cs" />
@@ -542,6 +546,7 @@
     <Compile Include="Areas\Admin\Models\cmsMenuViewModel.cs" />
     <Compile Include="Areas\Admin\Models\ModalViewModels\EventsModalViewModel.cs" />
     <Compile Include="Areas\Admin\Models\ModalViewModels\OrgsModalViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\UsersViewModel.cs" />
     <Compile Include="Areas\Admin\Models\VacancyViewModel.cs" />
     <Compile Include="Areas\Admin\Models\FeadbacksViewModel.cs" />
     <Compile Include="Areas\Admin\Models\EventsViewModel.cs" />
@@ -557,6 +562,8 @@
     <Compile Include="Areas\Admin\Service\SpotCoord.cs" />
     <Compile Include="Areas\Admin\Service\Transliteration.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
+    <Compile Include="Controllers\DoctorsController.cs" />
+    <Compile Include="Controllers\ContactsController.cs" />
     <Compile Include="Controllers\StructureController.cs" />
     <Compile Include="Controllers\PressController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -567,6 +574,8 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Areas\Admin\Models\CoreViewModel.cs" />
+    <Compile Include="Models\DoctorsViewModel.cs" />
+    <Compile Include="Models\ContactsViewModel.cs" />
     <Compile Include="Models\StructureViewModel.cs" />
     <Compile Include="Models\TypePageViewModel.cs" />
     <Compile Include="Models\NewsViewModel.cs" />
@@ -644,11 +653,10 @@
     <Content Include="Areas\Admin\Views\cmsMenu\Item.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Home\Modern.cshtml" />
-    <Content Include="Views\Materials\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Services\ChangePass.cshtml" />
     <Content Include="Areas\Admin\Views\Services\Log.cshtml" />
     <Content Include="Areas\Admin\Views\Services\UserResolutions.cshtml" />
-    <Content Include="Areas\Admin\Views\Services\UsersGroup.cshtml" />
+    <Content Include="Areas\Admin\Views\Services\GroupClaims.cshtml" />
     <Content Include="Areas\Admin\Views\Sites\Domains.cshtml" />
     <Content Include="Areas\Admin\Views\Sites\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Sites\Item.cshtml" />
@@ -754,12 +762,22 @@
     <Content Include="Areas\Admin\Views\Shared\Modal\Orgs.cshtml" />
     <Content Include="Areas\Admin\Views\Shared\Modal\Success.cshtml" />
     <Content Include="Areas\Admin\Views\Shared\Modal\Events.cshtml" />
+    <Content Include="Areas\Admin\Views\Services\UserSites.cshtml" />
+    <Content Include="Areas\Admin\Views\Users\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\Users\Item.cshtml" />
+    <Content Include="Areas\Admin\Views\Shared\Modal\Error.cshtml" />
+    <None Include="Content\plugins\datatables\i18n\ru.json" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\services\Pager.cshtml" />
     <Content Include="Views\Shared\services\breadcrumbs.cshtml" />
     <Content Include="Views\Structure\Index.cshtml" />
     <Content Include="Views\Structure\StructureItem.cshtml" />
+    <Content Include="Views\Structure\DepartmentItem.cshtml" />
+    <Content Include="Views\Doctors\Index.cshtml" />
+    <Content Include="Views\Contacts\Index.cshtml" />
+    <Content Include="Views\Press\Rss.cshtml" />
+    <Content Include="Views\Press\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

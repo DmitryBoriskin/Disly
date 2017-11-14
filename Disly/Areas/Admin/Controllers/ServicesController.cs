@@ -128,13 +128,110 @@ namespace Disly.Areas.Admin.Controllers
         //}
         #endregion
 
-        #region Группы пользователей
-        public ActionResult UsersGroup(string id)
+        #region Список доступных сайтов
+        public ActionResult SiteLinks(Guid id)
         {
-            UsersGroupModel model = _cmsRepository.getUsersGroup(id);
+            PortalUsersViewModel userInfo = new PortalUsersViewModel()
+            {
+                UserResolution = UserResolutionInfo,
+                Item = _cmsRepository.getUser(id)
+            };
 
-            return PartialView("UsersGroup", model);
+            var filtr = getFilter();
+            var sfilter = FilterParams.Extend<SiteFilter>(filtr);
+            sfilter.UserId = id;
+            var sitesList = _cmsRepository.getSiteListWithCheckedForUser(sfilter);
+            
+            var model = new UserSiteLinkModel()
+            {
+                UserId = id,
+                Sites = sitesList,
+            };
+
+            return PartialView("UserSites", model);
         }
+        [HttpPost]
+        [MultiButton(MatchFormKey = "action", MatchFormValue = "save-org-btn")]
+        public ActionResult SiteLinks(UserSiteLinkModel linkData)
+        {
+            if(linkData != null)
+            {
+                if (ModelState.IsValid)
+                {
+                    var res = _cmsRepository.updateUserSiteLinks(linkData);
+                    if (res)
+                        return PartialView("Modal/Success");
+                }
+            }
+            
+            return PartialView("Modal/Error");
+        }
+        #endregion
+
+        #region Группы пользователей
+        [HttpGet]
+        public ActionResult GroupClaims(string id)
+        {
+            GroupModel model = _cmsRepository.getGroup(id);
+
+            return PartialView("GroupClaims", model);
+        }
+
+        [HttpPost]
+        [MultiButton(MatchFormKey = "action", MatchFormValue = "create-group-btn")]
+        public ActionResult GroupClaims(GroupModel bindData)
+        {
+            if (bindData != null)
+            {
+                if (ModelState.IsValid)
+                {
+                    var res = _cmsRepository.updateGroup(bindData);
+                    if (res)
+                        return PartialView("Modal/Success");
+                }
+            }
+
+            return PartialView("Modal/Error");
+        }
+
+        [HttpPost]
+        [MultiButton(MatchFormKey = "action", MatchFormValue = "save-group-btn")]
+        public ActionResult SaveGroup(GroupModel bindData)
+        {
+            if (bindData != null)
+            {
+                var res = _cmsRepository.updateGroup(bindData);
+                if (res)
+                    return PartialView("Modal/Success");
+            }
+
+            return PartialView("Modal/Error");
+        }
+
+        [HttpPost]
+        public ActionResult UpdateGroupClaims(GroupClaims data)
+        {
+            //var model = Newtonsoft.Json.JsonConvert.DeserializeObject<GroupClaims>(data);
+
+            var res = _cmsRepository.updateGroupClaims(data);
+            if (res)
+                return Json("Success");
+            //return Response.Status = "OK";  //AsJson(new { status = true, reason = "OK", data = "" });
+            return Json("An Error Has occourred"); //Newtonsoft.Json.JsonConvert.SerializeObject(data);
+        }
+
+        [HttpPost]
+        [MultiButton(MatchFormKey = "action", MatchFormValue = "delete-group-btn")]
+        public ActionResult DeleteGroup(string id)
+        {
+            var res = _cmsRepository.deleteGroup(id);
+            if (res)
+                return PartialView("Modal/Success");
+
+            return PartialView("Modal/Error");
+        }
+
+       
 
         //public ActionResult GroupCreate()
         //{

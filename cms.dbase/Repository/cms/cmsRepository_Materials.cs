@@ -272,8 +272,9 @@ namespace cms.dbase
                             n_month = material.Date.Month,
                             n_year = material.Date.Year,
                             f_content_origin = material.ContentLink,
-                            c_content_type_origin = material.ContentLinkType
-                        };
+                            c_content_type_origin = material.ContentLinkType,
+                            b_locked = material.Locked
+                    };
 
                         // добавляем принадлежность к сущности(ссылку на организацию/событие/персону)
                         var cdMaterialLink = new content_content_link
@@ -337,7 +338,7 @@ namespace cms.dbase
                         cdMaterial.n_day = material.Date.Day;
                         cdMaterial.n_month = material.Date.Month;
                         cdMaterial.n_year = material.Date.Year;
-
+                        cdMaterial.b_locked = material.Locked;
 
                         // обновляем событие
                         /* if (material.Event != null)

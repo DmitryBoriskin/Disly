@@ -308,7 +308,7 @@
         }
 
         [HttpPost]
-        [MultiButton(MatchFormKey = "action", MatchFormValue = "save-org-btn")]
+        [MultiButton(MatchFormKey = "action", MatchFormValue = "save-event-btn")]
         public ActionResult EventsListModal(EventsModalViewModel model)
         {
             ContentLinkModel modelInsert = new ContentLinkModel

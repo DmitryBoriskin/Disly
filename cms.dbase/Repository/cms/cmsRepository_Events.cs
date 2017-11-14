@@ -227,8 +227,9 @@ namespace cms.dbase
                             n_date_end_day = int.Parse(EndDate.ToString("MMdd")),
 
                             f_content_origin = eventData.ContentLink,
-                            c_content_type_origin = eventData.ContentLinkType
-                        };
+                            c_content_type_origin = eventData.ContentLinkType,
+                            b_locked = eventData.Locked
+                    };
                         if (!eventData.Annually)
                         {
                             cdEvent.n_date_begin_year = eventData.DateBegin.Year;
@@ -293,6 +294,7 @@ namespace cms.dbase
                     cdEvent.c_url_name = eventData.UrlName;
                     cdEvent.n_date_begin_day = int.Parse(eventData.DateBegin.ToString("MMdd"));
                     cdEvent.n_date_end_day = int.Parse(EndDate.ToString("MMdd"));
+                    cdEvent.b_locked = eventData.Locked;
 
                     if (!eventData.Annually)
                     {

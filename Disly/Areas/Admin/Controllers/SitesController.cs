@@ -45,7 +45,7 @@ namespace Disly.Areas.Admin.Controllers
             string return_url = ViewBag.urlQuery = HttpUtility.UrlDecode(Request.Url.Query);
 
             FilterParams filter = getFilter();            
-            model.List = _cmsRepository.getSiteList(filter, page, page_size);
+            model.List = _cmsRepository.getSiteList(filter);
 
             return View(model);
         }

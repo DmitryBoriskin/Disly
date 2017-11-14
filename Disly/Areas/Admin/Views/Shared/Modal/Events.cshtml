@@ -2,35 +2,43 @@
 @{
     Layout = "~/Areas/Admin/Views/Shared/_popUp.cshtml";
 }
-<link rel="stylesheet" href="/Content/css/styles_popUp.css" />
+<div class="buttons">
+    <button type="submit" name="action" value="save-event-btn" class="btn btn-primary icon-create">СОХРАНИТЬ</button>
+</div>
 <div>
     @if (Model != null)
     {
-        <div class="buttons">
-            <button type="submit" name="action" value="save-org-btn" class="btn btn-primary icon-create">СОХРАНИТЬ</button>
-        </div>
         @Html.HiddenFor(m => m.ObjctId)
         @Html.HiddenFor(m => m.ObjctType)
 
         <div class="scrollbar modal-event-list">
             @if (Model.EventsList != null && Model.EventsList.Count() > 0)
             {
-                <table class="table-striped" id="modal-event-table">
-                    @foreach (var item in Model.EventsList)
-                    {
+                <table class="table table-striped" cellspacing="0" width="100%" id="modal-event-table">
+                    <thead>
                         <tr>
-                            <td class="date">
-                                <strong>@item.DateBegin.ToShortDateString()</strong>
-                            </td>
-                            <td>
-                                <a href="/admin/events/item/@item.Id"> @item.Title</a><br />
-                                @Html.Raw(item.Text.Substring(0, Math.Min(item.Text.Length, 150)))
-                            </td>
-                            <td>
-                                <input type="checkbox" name="EventsId" class="org-item-chkbx iCheck" value="@item.Id" data-init="false" @(item.Checked ? "checked" : null) />
-                            </td>
+                            <th class="text-nowrap">Дата начала</th>
+                            <th width="70%">Название события</th>
+                            <th>Отметить</th>
                         </tr>
-                    }
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.EventsList)
+                        {
+                            <tr>
+                                <td class="date">
+                                    @item.DateBegin.ToShortDateString()
+                                </td>
+                                <td>
+                                    <a href="/admin/events/item/@item.Id"> @item.Title</a><br />
+                                    @Html.Raw(item.Text.Substring(0, Math.Min(item.Text.Length, 150)))
+                                </td>
+                                <td class="td-center">
+                                    <input type="checkbox" name="EventsId" class="org-item-chkbx iCheck" value="@item.Id" data-init="false" @(item.Checked ? "checked" : null) />
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
                 </table>
             }
         </div>
@@ -49,6 +57,26 @@
             radioClass: 'icheckbox_square-blue'
             //increaseArea: '%' //optional
         });
-        $('#modal-event-table').DataTable();
+        $.extend($.fn.dataTable.defaults, {
+            searching: false,
+            ordering: false,
+            scrollY: false,//"200px",
+            //info: false,
+            language: {
+                "url": "/Content/plugins/datatables/i18n/ru.json"
+            }
+        });
+        $('#modal-event-table').DataTable(
+            {
+                searching: true,
+                ordering: true,
+                columns: [
+                    null,
+                    null,
+                    { "searchable": false, "orderable": false }
+
+                ]
+                //paging: false
+            });
     });
 </script>

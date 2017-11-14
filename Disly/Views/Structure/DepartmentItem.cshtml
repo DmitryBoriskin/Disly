@@ -1,0 +1,46 @@
+﻿@model StructureViewModel
+<h1>@Model.DepartmentItem.Title</h1>
+@Html.Partial("services/breadcrumbs")
+<div class="structur">
+    <div class="row">        
+        <div class="col-sm-9">
+            @if (Model.DepartmentItem.Phones != null)
+            {
+                <dl class="dl-horizontal">
+                    @foreach (var item in Model.DepartmentItem.Phones)
+                    {
+                        <dt>@item.Label</dt>
+                        <dd>@item.Value</dd>
+                    }                    
+                </dl>
+            }
+            @if (Model.DepartmentItem.Peoples != null)
+            {
+                <table class="table">
+                    @foreach (var item in Model.DepartmentItem.Peoples)
+                    {
+                        <tr>
+                            <td><a href="/doctors/@item.Id">@item.FIO</a></td>
+                            <td>@item.Status</td>
+                            <td>@item.Post</td>
+                        </tr>
+                    }
+                </table>
+            }            
+            <div>@Html.Raw(Model.DepartmentItem.Text)</div>
+        </div>
+        <div class="col-sm-3">
+            <div class="boss">
+                @if (Model.DepartmentItem.Boss != null)
+                {
+                    <a href="/doctors/@Model.DepartmentItem.Boss.Id"><img src="~/Content/img/no_avatar.png"/></a>
+                    <a href="/doctors/@Model.DepartmentItem.Boss.Id">@Model.DepartmentItem.Boss.FIO</a>                    
+                    <br>
+                    @Model.DepartmentItem.Boss.Post
+                }                
+            </div>
+
+        </div>
+    </div>
+</div>
+

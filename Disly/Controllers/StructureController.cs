@@ -27,7 +27,7 @@ namespace Disly.Controllers
         }
 
         /// <summary>
-        /// Сраница по умолчанию
+        /// Список струкутур
         /// </summary>
         /// <returns></returns>
         public ActionResult Index()
@@ -41,6 +41,7 @@ namespace Disly.Controllers
             #endregion
 
             model.Structures = _repository.getStructures(Domain);
+            //если в списке только одна структура — редиректим на него
             if (model.Structures.Length ==1)
             {
                 return Redirect(ControllerName + "/" + model.Structures[0].Num);
@@ -49,7 +50,7 @@ namespace Disly.Controllers
             #region Создаем переменные (значения по умолчанию)
             PageViewModel Model = new PageViewModel();
             string _ViewName = (ViewName != String.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";
-            string PageTitle = "страница сайта";
+            string PageTitle = "Структура";
             string PageDesc = "описание страницы";
             string PageKeyw = "ключевые слова";
             #endregion                        
@@ -62,17 +63,70 @@ namespace Disly.Controllers
 
             return View(_ViewName,model);
         }
+        /// <summary>
+        /// отдельная структура+списиок отделений
+        /// </summary>
+        /// <param name="num"></param>
+        /// <returns></returns>
         public ActionResult Item(int num)
         {
             model.StructureItem = _repository.getStructureItem(Domain, num);
-            model.Breadcrumbs.Add(new Breadcrumbs(){
-                Title= model.StructureItem.Title                
-            });
+            if (model.StructureItem != null)
+            {
+                model.Breadcrumbs.Add(new Breadcrumbs()
+                {
+                    Title = model.StructureItem.Title
+                });
+                model.DepartmentList = _repository.getDepartmentsList(model.StructureItem.Id);
+            }
+            
             
             #region Создаем переменные (значения по умолчанию)
             PageViewModel Model = new PageViewModel();
             string _ViewName = (ViewName != String.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";
             string PageTitle = "страница сайта";
+            string PageDesc = "описание страницы";
+            string PageKeyw = "ключевые слова";
+            #endregion                        
+            #region Метатеги
+            ViewBag.Title = model.StructureItem.Title;
+            ViewBag.Description = PageDesc;
+            ViewBag.KeyWords = PageKeyw;
+            #endregion
+            return View(_ViewName, model);
+        }
+        /// <summary>
+        /// отдельное отделелние
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public ActionResult Department(int num, Guid id)
+        {
+            model.StructureItem = _repository.getStructureItem(Domain, num);
+            if (model.StructureItem != null)
+            {
+                model.Breadcrumbs.Add(new Breadcrumbs()
+                {
+                    Title = model.StructureItem.Title,
+                    Url = "/"+ControllerName + "/" + num
+                });
+            }
+
+            model.DepartmentItem = _repository.getDepartmentsItem(id);
+            if (model.DepartmentItem != null)
+            {
+                model.Breadcrumbs.Add(new Breadcrumbs()
+                {
+                    Title = model.DepartmentItem.Title
+                });
+
+            }
+
+
+            #region Создаем переменные (значения по умолчанию)
+            PageViewModel Model = new PageViewModel();
+            string _ViewName = (ViewName != String.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";
+            string PageTitle = (model.DepartmentItem!=null)?model.DepartmentItem.Title:"Отдление";
             string PageDesc = "описание страницы";
             string PageKeyw = "ключевые слова";
             #endregion                        

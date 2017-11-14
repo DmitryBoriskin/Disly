@@ -40,6 +40,7 @@ namespace Disly.Areas.Admin.Controllers
         {
             // Наполняем фильтр значениями
             filter = getFilter(page_size);
+            filter.Domain = null;
             // Наполняем модель данными
             model.List = _cmsRepository.getUsersList(filter);
 
