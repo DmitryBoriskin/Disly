@@ -703,6 +703,18 @@ namespace cms.dbase
                                     .Insert();
                             }
                         }
+                        //назначение пользователям(разработчикам и администраторам портала) прав  к созданному сайту
+                        var UserList = db.cms_users_groups.Where(w => (w.c_alias == "Developer" || w.c_alias == "administrator"))
+                                         .Join(db.cms_userss,e=>e.c_alias,o=>o.f_group,(e,o)=>o).Select(s=>s.id).ToArray();
+
+
+                        foreach (var item in UserList)
+                        {
+                            db.cms_user_site_links
+                              .Value(v => v.f_user, item)
+                              .Value(v => v.f_site, ins.Alias)
+                              .Insert();
+                        }
 
                         // insertLog(UserId, IP, "insert", ins.Id, String.Empty, "Sites", ins.Title);
                         // логирование

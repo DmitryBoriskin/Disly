@@ -54,10 +54,12 @@ namespace Disly.Areas.Admin.Controllers
                 if (Request.Url.Host.ToLower().Replace("www.", "") != ConfigurationManager.AppSettings["BaseURL"]) filterContext.Result = Redirect("/Error/");
                 else Domain = String.Empty;
             }
+            ViewBag.Domain = Domain;
 
             StartUrl = "/Admin/" + (String)RouteData.Values["controller"] + "/";
 
-            #region Настройки сайта
+            #region Настройки сайта            
+                
             //SettingsInfo = _cmsRepository.getCmsSettings();
             // Сайт, на котором находимся
             //if (Domain != String.Empty) SettingsInfo.ThisSite = _cmsRepository.getSite(Domain);
@@ -67,8 +69,10 @@ namespace Disly.Areas.Admin.Controllers
             try { _userId = new Guid(System.Web.HttpContext.Current.User.Identity.Name); }
             catch { FormsAuthentication.SignOut(); }
             AccountInfo = _accountRepository.getCmsAccount(_userId);
+
             // Список доменов, доступных пользователю
             AccountInfo.Domains = _accountRepository.getUserDomains(_userId);
+
             #endregion
             #region Права пользователя
             UserResolutionInfo = _accountRepository.getCmsUserResolutioInfo(_userId, ControllerName);
@@ -87,6 +91,7 @@ namespace Disly.Areas.Admin.Controllers
                 {
                     if (domain.SiteId == Domain) { IsRedirect++; }
                 }
+
                 //перенаправляем на первый из своих доменов
                 if(IsRedirect==0)
                 {
