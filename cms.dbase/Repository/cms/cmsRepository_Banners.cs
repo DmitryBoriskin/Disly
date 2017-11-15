@@ -192,7 +192,7 @@ namespace cms.dbase
         /// <param name="userId">Id-пользователя</param>
         /// <param name="IP">ip-адрес</param>
         /// <returns></returns>
-        public override bool createBanner(Guid id, BannersModel item, Guid userId, string IP)
+        public override bool createBanner(Guid id, BannersModel item)
         {
             using (var db = new CMSdb(_context))
             {
@@ -248,7 +248,7 @@ namespace cms.dbase
         /// <param name="userId">Id-пользователя</param>
         /// <param name="IP">ip-адрес</param>
         /// <returns></returns>
-        public override bool updateBanner(Guid id, BannersModel item, Guid userId, string IP)
+        public override bool updateBanner(Guid id, BannersModel item)
         {
             using (var db = new CMSdb(_context))
             {
@@ -297,7 +297,7 @@ namespace cms.dbase
         /// <param name="userId">Id-пользователя</param>
         /// <param name="IP">ip-адрес</param>
         /// <returns></returns>
-        public override bool deleteBanner(Guid id, Guid userId, string IP)
+        public override bool deleteBanner(Guid id)
         {
             using (var db = new CMSdb(_context))
             {

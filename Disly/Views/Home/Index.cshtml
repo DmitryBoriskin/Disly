@@ -143,31 +143,33 @@
                 <div class="col-md-3">
                     @if (announcements != null && announcements.Count() > 0)
                     {
-                        var ann = announcements.ToList();
+                        //var ann = announcements.ToList();
 
-                        for (int j = 0; j < 2; j++)
+                        foreach (var ann in announcements.ToList()) //for (int j = 0; j < 2; j++)
                         {
-                            string link = "/press/" + ann[j].Date.Year + "/" + ann[j].Date.Month + "/" + ann[j].Date.Day + "/" + ann[j].Alias;
+
+                            //string link = "/press/" + ann[j].Date.Year + "/" + ann[j].Date.Month + "/" + ann[j].Date.Day + "/" + ann[j].Alias;
+                            string link = "/press/" + ann.Date.Year + "/" + ann.Date.Month + "/" + ann.Date.Day + "/" + ann.Alias;
 
                             <div class="module-material-item">
                                 <div class="module-material-item-date">
                                     <div class="module-material-item-day">
-                                        @ann[j].Date.Day.ToString()
+                                        @ann.Date.Day.ToString()
                                     </div>
                                     <div class="module-material-item-otherdate">
                                         <div>
-                                            @ann[j].Date.ToString("MMMM")
+                                            @ann.Date.ToString("MMMM")
                                         </div>
                                         <div>
-                                            @ann[j].Date.ToString("yyyy")
+                                            @ann.Date.ToString("yyyy")
                                         </div>
                                     </div>
                                 </div>
-                                <a href="/press/@ann[j].GroupAlias">
-                                    <div class="module-material-item-group-link">@ann[j].GroupName</div>
+                                <a href="/press/@ann.GroupAlias">
+                                    <div class="module-material-item-group-link">@ann.GroupName</div>
                                 </a>
                                 <a href="@link">
-                                    <div class="module-material-title">@ann[j].Title</div>
+                                    <div class="module-material-title">@ann.Title</div>
                                 </a>
                             </div>
                         }
@@ -176,31 +178,31 @@
                 <div class="col-md-3">
                     @if (news != null && news.Count() > 0)
                     {
-                        var n = news.ToList();
+                        //var n = news.ToList();
 
-                        for (int j = 0; j < 2; j++)
+                        foreach (var item in news.ToList()) //for (int j = 0; j < 2; j++)
                         {
-                            string link = "/press/" + n[j].Date.Year + "/" + n[j].Date.Month + "/" + n[j].Date.Day + "/" + n[j].Alias;
+                            string link = "/press/" + item.Date.Year + "/" + item.Date.Month + "/" + item.Date.Day + "/" + item.Alias;
 
                             <div class="module-material-item">
                                 <div class="module-material-item-date">
                                     <div class="module-material-item-day">
-                                        @n[j].Date.Day.ToString()
+                                        @item.Date.Day.ToString()
                                     </div>
                                     <div class="module-material-item-otherdate">
                                         <div>
-                                            @n[j].Date.ToString("MMMM")
+                                            @item.Date.ToString("MMMM")
                                         </div>
                                         <div>
-                                            @n[j].Date.ToString("yyyy")
+                                            @item.Date.ToString("yyyy")
                                         </div>
                                     </div>
                                 </div>
-                                <a href="/press/@n[j].GroupAlias">
-                                    <div class="module-material-item-group-link">@n[j].GroupName</div>
+                                <a href="/press/@item.GroupAlias">
+                                    <div class="module-material-item-group-link">@item.GroupName</div>
                                 </a>
                                 <a href="@link">
-                                    <div class="module-material-title">@n[j].Title</div>
+                                    <div class="module-material-title">@item.Title</div>
                                 </a>
                             </div>
                         }

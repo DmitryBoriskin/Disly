@@ -169,7 +169,7 @@ namespace cms.dbase
         /// </summary>
         /// <param name="item">модель сайта</param>
         /// <returns></returns>
-        public override bool updateSiteInfo(SitesModel item, Guid user, string ip)
+        public override bool updateSiteInfo(SitesModel item)
         {
             using (var db = new CMSdb(_context))
             {
@@ -386,7 +386,7 @@ namespace cms.dbase
             }
         }
 
-        public override bool createCmsMenu(Guid id, cmsMenuItem Item, Guid UserId, string IP)
+        public override bool createCmsMenu(Guid id, cmsMenuItem Item)
         {
             using (var db = new CMSdb(_context))
             {
@@ -495,8 +495,7 @@ namespace cms.dbase
                 }
             }
         }
-
-        public override bool updateCmsMenu(Guid id, cmsMenuItem Item, Guid UserId, string IP)
+        public override bool updateCmsMenu(Guid id, cmsMenuItem Item)
         {
             using (var db = new CMSdb(_context))
             {
@@ -535,8 +534,7 @@ namespace cms.dbase
                 }
             }
         }
-
-        public override bool deleteCmsMenu(Guid id, Guid UserId, string IP)
+        public override bool deleteCmsMenu(Guid id)
         {
             using (var db = new CMSdb(_context))
             {
@@ -572,8 +570,7 @@ namespace cms.dbase
                 }
             }
         }
-
-        public override bool permit_cmsMenu(Guid id, int num, Guid UserId, string IP)
+        public override bool permit_cmsMenu(Guid id, int num)
         {
             using (var db = new CMSdb(_context))
             {
@@ -674,7 +671,7 @@ namespace cms.dbase
             }
         }
 
-        public override bool insertSite(SitesModel ins, Guid UserId, String IP)
+        public override bool insertSite(SitesModel ins)
         {
             using (var db = new CMSdb(_context))
             {
@@ -726,7 +723,7 @@ namespace cms.dbase
             }
         }
 
-        public override bool updateSite(Guid id, SitesModel upd, Guid UserId, String IP)
+        public override bool updateSite(Guid id, SitesModel upd)
         {
             using (var db = new CMSdb(_context))
             {
@@ -769,7 +766,7 @@ namespace cms.dbase
             }
         }
 
-        public override bool deleteSite(Guid id, Guid UserId, String IP)
+        public override bool deleteSite(Guid id)
         {
             using (var db = new CMSdb(_context))
             {
@@ -830,7 +827,7 @@ namespace cms.dbase
             }
         }
 
-        public override bool insertDomain(String SiteId, string NewDomain, Guid UserId, String IP)
+        public override bool insertDomain(String SiteId, string NewDomain)
         {
             using (var db = new CMSdb(_context))
             {
@@ -867,7 +864,7 @@ namespace cms.dbase
             }
         }
 
-        public override bool deleteDomain(Guid id, Guid UserId, String IP)
+        public override bool deleteDomain(Guid id)
         {
             using (var db = new CMSdb(_context))
             {
