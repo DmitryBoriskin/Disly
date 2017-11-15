@@ -64,6 +64,7 @@ namespace Disly
             catch (Exception exception)
             {
                 //SiteLogger.Fatal("Global.ExecuteError", exception, Context.Request.RequestContext.HttpContext);
+                AppLogger.Fatal("Не предвиденная ошибка", exception);
             }
         }
     }

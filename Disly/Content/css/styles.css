@@ -883,6 +883,7 @@ a.button.icon-cancel{
 .icon-contacts:before { content:'\eb7c'; }          /* Контакты */
 .icon-universal-access:before { content:'\efc8'; }  /* Вакансии */
 .icon-info-circled:before { content:'\e84d'; }      /* F.A.Q. */
+.icon-info:before { content: '\e84e'; }
 .icon-basket-2:before { content:'\eb9a'; }          /* Каталог продукции */
 .icon-comment-1:before { content:'\ea3d'; }         /* Обратная связь */
 .icon-mail:before {

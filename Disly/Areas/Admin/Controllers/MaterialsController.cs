@@ -61,13 +61,17 @@ namespace Disly.Areas.Admin.Controllers
         /// <returns></returns>
         public ActionResult Item(Guid Id)
         {
+            EventsModel[] events = null;
+            OrgsModel[] orgs = null;
             model.Item = _cmsRepository.getMaterial(Id, Domain);
             if (model.Item == null)
+            {
                 model.Item = new MaterialsModel()
                 {
                     Id = Id,
                     Date = DateTime.Now
                 };
+            }
 
             if (model.Item.PreviewImage != null)
             {
@@ -83,22 +87,19 @@ namespace Disly.Areas.Admin.Controllers
             eventFilter.RelId = Id;
             eventFilter.RelType = ContentType.MATERIAL;
             var eventsList = _cmsRepository.getEventsList(eventFilter);
+            events = (eventsList != null) ? eventsList.Data : null;
 
             var orgfilter = FilterParams.Extend<OrgFilter>(filter);
             orgfilter.RelId = Id;
             orgfilter.RelType = ContentType.MATERIAL;
-            var orgs = _cmsRepository.getOrgs(orgfilter);
+            orgs = _cmsRepository.getOrgs(orgfilter);
 
             model.Item.Links = new ObjectLinks()
             {
-                Events = (eventsList != null)? eventsList.Data: null,
+                Events = events,
                 Orgs = orgs,
                 //Persons = null
             };
-
-#warning Решить вопрос с ошибкой, если модель заполнена, значения из ViewBag не подставляются для
-            //ViewBag.GroupsValues = new MultiSelectList(GroupsValues, "Id", "Title", model.Item != null ? model.Item.GroupsId : null);
-            //model.Item.GroupsId = null;
 
             return View("Item", model);
         }

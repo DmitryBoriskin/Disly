@@ -40,12 +40,13 @@ namespace Disly.Controllers
             #endregion
 
             model.Item = _repository.getSiteMap(_path,_alias,Domain);
-            model.Child = _repository.getSiteMapChild(model.Item.Id);
+            if (model.Item != null)
+                model.Child = _repository.getSiteMapChild(model.Item.Id);
 
             #region Создаем переменные (значения по умолчанию)
             PageViewModel Model = new PageViewModel();
             string _ViewName = (ViewName != String.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";
-            string PageTitle = model.Item.Title;
+            string PageTitle = (model.Item != null)? model.Item.Title: null;
             string PageDesc = "описание страницы";
             string PageKeyw = "ключевые слова";
             #endregion            
