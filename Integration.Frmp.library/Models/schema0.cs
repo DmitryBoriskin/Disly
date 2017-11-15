@@ -20,7 +20,7 @@ using System.Xml.Serialization;
 [System.SerializableAttribute()]
 [System.Diagnostics.DebuggerStepThroughAttribute()]
 [System.ComponentModel.DesignerCategoryAttribute("code")]
-[System.Xml.Serialization.XmlRootAttribute(Namespace="", IsNullable=true)]
+//[System.Xml.Serialization.XmlRootAttribute(Namespace="", IsNullable=true)]
 public partial class Employee {
     
     private System.Guid idField;

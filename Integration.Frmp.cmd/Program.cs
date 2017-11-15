@@ -8,11 +8,11 @@ namespace Integration.Frmp.cmd
         static void Main(string[] args)
         {
             Console.WriteLine("Manual Integration");
-            Console.ReadKey();
 
             Export.DoExport();
 
             Console.WriteLine("Manual Integration complete. Press any key to exit...");
+            Console.ReadKey();
         }
     }
 }

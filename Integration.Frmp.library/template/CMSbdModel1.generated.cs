@@ -30,6 +30,7 @@ namespace Integration.Frmp.models
 		public ITable<ImportFrmpOrgs>        ImportFrmpOrgss        { get { return this.GetTable<ImportFrmpOrgs>(); } }
 		public ITable<ImportFrmpOrgsPeoples> ImportFrmpOrgsPeopless { get { return this.GetTable<ImportFrmpOrgsPeoples>(); } }
 		public ITable<ImportFrmpPeoples>     ImportFrmpPeopless     { get { return this.GetTable<ImportFrmpPeoples>(); } }
+		public ITable<ImportFrmpPosts>       ImportFrmpPostss       { get { return this.GetTable<ImportFrmpPosts>(); } }
 
 		public DbModel()
 			: base("DbModel")
@@ -115,6 +116,14 @@ namespace Integration.Frmp.models
 		[Column(@"xml_info"),        Nullable         ] public string    XmlInfo     { get; set; } // nvarchar(max)
 	}
 
+	[Table(Schema="dbo", Name="import_frmp_posts")]
+	public partial class ImportFrmpPosts
+	{
+		[Column(@"id"),     PrimaryKey,  NotNull] public int    Id     { get; set; } // int
+		[Column(@"parent"),    Nullable         ] public int?   Parent { get; set; } // int
+		[Column(@"name"),                NotNull] public string Name   { get; set; } // nvarchar(512)
+	}
+
 	public static partial class DbModelStoredProcedures
 	{
 		#region ImportFrmpEmployees
@@ -136,6 +145,12 @@ namespace Integration.Frmp.models
 		}
 
 		public static ImportFrmpPeoples Find(this ITable<ImportFrmpPeoples> table, Guid Id)
+		{
+			return table.FirstOrDefault(t =>
+				t.Id == Id);
+		}
+
+		public static ImportFrmpPosts Find(this ITable<ImportFrmpPosts> table, int Id)
 		{
 			return table.FirstOrDefault(t =>
 				t.Id == Id);
