@@ -224,7 +224,7 @@ namespace cms.dbase
         /// <param name="UserId">Пользователь</param>
         /// <param name="IP">ip-адрес</param>
         /// <returns></returns>
-        public override bool insertOrg(Guid id, OrgsModel model, Guid UserId, String IP)
+        public override bool insertOrg(Guid id, OrgsModel model)
         {
             using (var db = new CMSdb(_context))
             {
@@ -309,7 +309,7 @@ namespace cms.dbase
         /// <param name="UserId">Пользователь</param>
         /// <param name="IP">ip-адрес</param>
         /// <returns></returns>
-        public override bool updateOrg(Guid id, OrgsModel model, Guid UserId, String IP)
+        public override bool updateOrg(Guid id, OrgsModel model)
         {
             using (var db = new CMSdb(_context))
             {
@@ -385,7 +385,7 @@ namespace cms.dbase
         /// <param name="UserId">Пользователь</param>
         /// <param name="IP">ip-адрес</param>
         /// <returns></returns>
-        public override bool deleteOrg(Guid id, Guid UserId, String IP)
+        public override bool deleteOrg(Guid id)
         {
             using (var db = new CMSdb(_context))
             {
@@ -531,7 +531,7 @@ namespace cms.dbase
         /// <param name="UserId">Пользователь</param>
         /// <param name="IP">ip-адрес</param>
         /// <returns></returns>
-        public override bool insertStructure(Guid id, Guid OrgId, StructureModel insert, Guid UserId, String IP)
+        public override bool insertStructure(Guid id, Guid OrgId, StructureModel insert)
         {
             using (var db = new CMSdb(_context))
             {
@@ -588,7 +588,7 @@ namespace cms.dbase
         /// <param name="UserId">Пользователь</param>
         /// <param name="IP">ip-адрес</param>
         /// <returns></returns>
-        public override bool updateStructure(Guid id, StructureModel insert, Guid UserId, String IP)
+        public override bool updateStructure(Guid id, StructureModel insert)
         {
             using (var db = new CMSdb(_context))
             {
@@ -641,7 +641,7 @@ namespace cms.dbase
         /// <param name="UserId">Пользователь</param>
         /// <param name="IP">ip-адрес</param>
         /// <returns></returns>
-        public override bool deleteStructure(Guid id, Guid UserId, String IP)
+        public override bool deleteStructure(Guid id)
         {
             using (var db = new CMSdb(_context))
             {
@@ -724,7 +724,7 @@ namespace cms.dbase
         /// Добавляем ОВП
         /// </summary>        
         /// <returns></returns>
-        public override bool insOvp(Guid IdStructure, Guid OrgId, StructureModel insertStructure, Guid UserId, String IP)
+        public override bool insOvp(Guid IdStructure, Guid OrgId, StructureModel insertStructure)
         {
             using (var db = new CMSdb(_context))
             {
@@ -802,7 +802,7 @@ namespace cms.dbase
         /// <param name="UserId">Пользователь</param>
         /// <param name="IP">ip-адрес</param>
         /// <returns></returns>
-        public override bool setOvp(Guid IdStructure, StructureModel updStructure, Guid UserId, String IP)
+        public override bool setOvp(Guid IdStructure, StructureModel updStructure)
         {
             using (var db = new CMSdb(_context))
             {
@@ -1022,7 +1022,7 @@ namespace cms.dbase
         /// <param name="Label"></param>
         /// <param name="Value"></param>
         /// <returns></returns>
-        public override bool insDepartmentsPhone(Guid idDepart, string Label, string Value, Guid UserId, String IP)
+        public override bool insDepartmentsPhone(Guid idDepart, string Label, string Value)
         {
             using (var db = new CMSdb(_context))
             {
@@ -1107,7 +1107,7 @@ namespace cms.dbase
         /// <param name="UserId">Пользователь</param>
         /// <param name="IP">ip-адрес</param>
         /// <returns></returns>
-        public override bool insDepartament(Guid id, Guid Structure, Departments insert, Guid UserId, String IP)
+        public override bool insDepartament(Guid id, Guid Structure, Departments insert)
         {
             using (var db = new CMSdb(_context))
             {
@@ -1168,7 +1168,7 @@ namespace cms.dbase
         /// <param name="UserId">Пользователь</param>
         /// <param name="IP">ip-адрес</param>
         /// <returns></returns>
-        public override bool updDepartament(Guid id, Departments insert, Guid UserId, String IP)
+        public override bool updDepartament(Guid id, Departments insert)
         {
             using (var db = new CMSdb(_context))
             {
@@ -1200,7 +1200,7 @@ namespace cms.dbase
         /// <param name="UserId">Пользователь</param>
         /// <param name="IP">ip-адрес</param>
         /// <returns></returns>
-        public override bool delDepartament(Guid id, Guid UserId, String IP)
+        public override bool delDepartament(Guid id)
         {
             using (var db = new CMSdb(_context))
             {

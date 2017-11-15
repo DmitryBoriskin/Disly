@@ -73,12 +73,12 @@ namespace Disly.Areas.Admin.Controllers
             {
                 if (_cmsRepository.check_cmsMenu(Id))
                 {
-                    _cmsRepository.updateCmsMenu(Id, back_model.Item, AccountInfo.id, RequestUserInfo.IP);
+                    _cmsRepository.updateCmsMenu(Id, back_model.Item); //AccountInfo.id, RequestUserInfo.IP
                     userMassege.info = "Запись обновлена";
                 }
                 else if (!_cmsRepository.check_cmsMenu(back_model.Item.Alias))
                 {
-                    _cmsRepository.createCmsMenu(Id, back_model.Item, AccountInfo.id, RequestUserInfo.IP);
+                    _cmsRepository.createCmsMenu(Id, back_model.Item); //, AccountInfo.id, RequestUserInfo.IP
                     userMassege.info = "Запись добавлена";
                 }
                 else
@@ -117,7 +117,7 @@ namespace Disly.Areas.Admin.Controllers
         [MultiButton(MatchFormKey = "action", MatchFormValue = "delete-btn")]
         public ActionResult Delete(Guid Id)
         {
-            _cmsRepository.deleteCmsMenu(Id, AccountInfo.id, RequestUserInfo.IP);
+            _cmsRepository.deleteCmsMenu(Id);
 
             // записываем информацию о результатах
             ErrorMassege userMassege = new ErrorMassege();

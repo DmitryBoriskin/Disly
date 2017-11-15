@@ -38,7 +38,7 @@ namespace cms.dbase
                 return result;
             }
         }
-        public override void check_usergroup(Guid id, string group, Guid UserId, string IP)
+        public override void check_usergroup(Guid id, string group)
         {
             using (var db = new CMSdb(_context))
             {
@@ -272,7 +272,7 @@ namespace cms.dbase
         /// <param name="UserId"></param>
         /// <param name="IP"></param>
         /// <returns></returns>
-        public override bool createUser(Guid id, UsersModel Item, Guid UserId, string IP)
+        public override bool createUser(Guid id, UsersModel Item)
         {
             using (var db = new CMSdb(_context))
             {
@@ -366,13 +366,13 @@ namespace cms.dbase
         /// <param name="UserId"></param>
         /// <param name="IP"></param>
         /// <returns></returns>
-        public override bool updateUser(Guid id, UsersModel Item, Guid UserId, string IP)
+        public override bool updateUser(Guid id, UsersModel Item)
         {
             using (var db = new CMSdb(_context))
             {
                 using (var tran = db.BeginTransaction())
                 {
-                    check_usergroup(id, Item.Group, UserId, IP);
+                    check_usergroup(id, Item.Group);
 
                     var data = db.cms_userss.Where(w => w.id == id);
 
@@ -422,7 +422,7 @@ namespace cms.dbase
         /// <param name="UserId"></param>
         /// <param name="IP"></param>
         /// <returns></returns>
-        public override bool deleteUser(Guid id, Guid UserId, string IP)
+        public override bool deleteUser(Guid id)
         {
             using (var db = new CMSdb(_context))
             {
@@ -465,7 +465,7 @@ namespace cms.dbase
         /// <param name="Hash"></param>
         /// <param name="UserId"></param>
         /// <param name="IP"></param>
-        public override void changePassword(Guid id, string Salt, string Hash, Guid UserId, string IP)
+        public override void changePassword(Guid id, string Salt, string Hash)
         {
             using (var db = new CMSdb(_context))
             {

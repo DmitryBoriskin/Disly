@@ -155,12 +155,12 @@ namespace Disly.Areas.Admin.Controllers
             {
                 if (_cmsRepository.checkSiteMap(id))
                 {
-                    _cmsRepository.updateSiteMapItem(id, back_model.Item, AccountInfo.id, RequestUserInfo.IP);
+                    _cmsRepository.updateSiteMapItem(id, back_model.Item); //, AccountInfo.id, RequestUserInfo.IP
                     userMessage.info = "Запись обновлена";
                 }
                 else
                 {
-                    _cmsRepository.createSiteMapItem(id, back_model.Item, AccountInfo.id, RequestUserInfo.IP);
+                    _cmsRepository.createSiteMapItem(id, back_model.Item); //, AccountInfo.id, RequestUserInfo.IP
                     userMessage.info = "Запись добавлена";
                 }
 
@@ -224,7 +224,7 @@ namespace Disly.Areas.Admin.Controllers
         {
             model.Item = _cmsRepository.getSiteMapItem(id);
 
-            _cmsRepository.deleteSiteMapItem(id, AccountInfo.id, RequestUserInfo.IP);
+            _cmsRepository.deleteSiteMapItem(id); //, AccountInfo.id, RequestUserInfo.IP
 
             // записываем информацию о результатах
             ErrorMassege userMassege = new ErrorMassege();

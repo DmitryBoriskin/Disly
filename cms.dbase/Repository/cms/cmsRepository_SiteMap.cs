@@ -230,7 +230,7 @@ namespace cms.dbase
         /// <param name="userId">Идентификатор пользователя</param>
         /// <param name="IP">Ip-адрес</param>
         /// <returns></returns>
-        public override bool createSiteMapItem(Guid id, SiteMapModel item, Guid userId, string IP)
+        public override bool createSiteMapItem(Guid id, SiteMapModel item)
         {
             using (var db = new CMSdb(_context))
             {
@@ -317,7 +317,7 @@ namespace cms.dbase
         /// <param name="userId">Идентификатор пользователя</param>
         /// <param name="IP">Ip-адрес</param>
         /// <returns></returns>
-        public override bool updateSiteMapItem(Guid id, SiteMapModel item, Guid userId, string IP)
+        public override bool updateSiteMapItem(Guid id, SiteMapModel item)
         {
             using (var db = new CMSdb(_context))
             {
@@ -534,7 +534,7 @@ namespace cms.dbase
         /// <param name="userId">Идентификатор пользователя</param>
         /// <param name="IP">Ip-адрес</param>
         /// <returns></returns>
-        public override bool deleteSiteMapItem(Guid id, Guid userId, string IP)
+        public override bool deleteSiteMapItem(Guid id)
         {
             using (var db = new CMSdb(_context))
             {
