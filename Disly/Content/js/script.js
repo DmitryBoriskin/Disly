@@ -48,14 +48,14 @@
     //coords
     if ($('.buildmap').length > 0) {
         $('.buildmap').each(function () {
+            var id = $(this).attr('id');
             var x = $(this).attr('data-x');
             var y = $(this).attr('data-y');
             var title = $(this).attr('data-title');
             var desc = $(this).attr('data-desc');
             var zoom = $(this).attr('data-zoom');
             var height = $(this).attr('data-height');
-            Coords(x, y, title, desc, zoom, height);
-
+            Coords(x, y, title, desc, zoom, height,id);
         });
     }
 });
@@ -129,6 +129,33 @@ function Coords(x, y, title, desc, zoom, height) {
             //iconImageSize: [26, 39],
             //iconImageOffset: [-13, -39],
             hasBalloon: false
+        });
+
+        ContactMap.geoObjects.add(myPlacemark);
+        $('ymaps.ymaps-map').css({ 'height': height + 'px', "width": "inherit" });
+    });
+}
+
+
+function Coords(x, y, title, desc, zoom, height,id) {
+    ymaps.ready(function () {
+        if (title == '') { title = "Название организации"; }
+        if (desc == '') { desc = "Описание организации"; }
+
+        var ContactMap = new ymaps.Map(id, {
+            center: [x, y],
+            zoom: zoom,
+            controls: ['zoomControl']
+            //controls: ['zoomControl', 'searchControl', 'typeSelector', 'fullscreenControl', 'routeButtonControl']
+        });
+        ContactMap.controls.add('zoomControl', { top: 5 });
+
+        myPlacemark = new ymaps.Placemark([x, y], {
+            balloonContentHeader: title,
+            balloonContentBody: desc,
+            hintContent: title
+        }, {                
+                hasBalloon: false
         });
 
         ContactMap.geoObjects.add(myPlacemark);

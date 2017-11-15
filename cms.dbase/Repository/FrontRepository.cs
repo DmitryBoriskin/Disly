@@ -243,7 +243,8 @@ namespace cms.dbase
                         Text=s.c_text,
                         Alias=s.c_alias,
                         Path=s.c_path,
-                        Id=s.id
+                        Id=s.id,
+                        FrontSection=s.f_front_section
                         }).First();
 
                     
@@ -547,9 +548,12 @@ namespace cms.dbase
                             .Join(db.cms_sitess.Where(o => o.c_alias == domain), o => o.f_ord, e => e.f_content, (e, o) => e)
                             .OrderBy(o=>o.n_sort)
                             .Select(s => new StructureModel(){
+                                Id=s.id,
                                 Title=s.c_title,
                                 Phone=s.c_phone,
-                                Num=s.num                     
+                                Num=s.num,
+                                GeopointX=s.n_geopoint_x,
+                                GeopointY=s.n_geopoint_y
                             }).ToArray();
                 return query;
             }
@@ -673,20 +677,30 @@ namespace cms.dbase
                             .Where(w => w.c_alias == filter.Domain)
                             .Join(db.content_people_org_links, e => e.f_content, o => o.f_org, (e, o) => o)
                             .Join(db.content_peoples, m => m.f_people, n => n.id, (m, n) => n);
+                            
                 if (filter.SearchText != null)
                 {
                     query = query.Where(w => (w.c_name.Contains(filter.SearchText) || w.c_surname.Contains(filter.SearchText) || w.c_patronymic.Contains(filter.SearchText)));
                 }
-                
+                if (!String.IsNullOrEmpty(filter.Group))
+                {
+                    #warning фильтрация врачей по отделнием не работает
+                    query = query
+                            .Join(
+                                db.content_people_department_links, e => e.id, o => o.f_people, (e, o) => new{ e,o}
+                                )
+                                .Where(w=>w.o.f_department==Guid.Parse(filter.Group))
+                                .Select(s=>s.e);
+                }
 
                 var query1 = query.OrderBy(o => o.c_surname);
                 if (query1.Any())
                 {
                     return query1.Select(s => new People()
-                                    {
-                                        Id = s.id,
-                                        FIO = s.c_surname + " " + s.c_name + " " + s.c_patronymic
-                                    }).ToArray();
+                                        {
+                                            Id = s.id,
+                                            FIO = s.c_surname + " " + s.c_name + " " + s.c_patronymic
+                                        }).ToArray();
                 }
                 return null;
                                 

@@ -14,10 +14,23 @@
                     <div class="col-xs-12">
                         @if (Model.DoctorsList != null)
                         {
-                            foreach (var item in Model.DoctorsList)
-                            {
-                                <a href="/@ViewBag.ControllerName/@item.Id">@item.FIO</a>
-                            }
+                            <table class="table">
+                                <tr>
+                                    <th>ФИО</th>
+                                    <th>Специальность</th>
+                                    <th>Контакты</th>
+                                    <th>Распиание</th>
+                                </tr>                                
+                                @foreach (var item in Model.DoctorsList)
+                                {
+                                    <tr>
+                                        <td><a href="/@ViewBag.ControllerName/@item.Id">@item.FIO</a></td>
+                                        <td>@item.Post</td>
+                                        <td>@item.Status</td>
+                                        <td></td>
+                                    </tr>
+                                }
+                            </table>
                         }
                     </div>
                 </div>
@@ -28,7 +41,7 @@
                         <div class="col-sm-12">
                             <div class="form-group search_news">
                                 <label class="label_filtr" for="search_news">Ключевые слова</label>
-                                <input type="text" class="filtr_data form-control" name="searchtext" id="search_news" value="" />
+                                <input type="text" class="filtr_data form-control" name="searchtext" id="search_news" value="@ViewBag.SearchText" />
                             </div>
                         </div>
                         @if (Model.DepartmentsSelectList != null)
@@ -45,7 +58,8 @@
                                                 {
                                                     foreach (var department in item.Departments)
                                                     {
-                                                        <option value="@department.Id">@department.Title</option>
+                                                        string selected=(department.Id.ToString()== ViewBag.DepartGroup)?"selected":"";               
+                                                        <option value="@department.Id" @selected>@department.Title</option>
                                                     }
 
                                                     <option value="test">test</option>

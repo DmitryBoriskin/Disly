@@ -783,6 +783,7 @@
     <Content Include="Views\Contacts\Index.cshtml" />
     <Content Include="Views\Press\Rss.cshtml" />
     <Content Include="Views\Press\Index.cshtml" />
+    <Content Include="Views\FindUs\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

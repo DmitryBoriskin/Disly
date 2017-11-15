@@ -118,7 +118,6 @@ namespace Disly.Controllers
                     });
                 }                
             }
-
             model.DepartmentItem = _repository.getDepartmentsItem(id);
             if (model.Breadcrumbs != null)
             {
@@ -128,7 +127,6 @@ namespace Disly.Controllers
                 });
 
             }
-
 
             #region Создаем переменные (значения по умолчанию)
             PageViewModel Model = new PageViewModel();

@@ -34,10 +34,8 @@
                     <dd><a href="mailto:@Model.StructureItem.Email">@Model.StructureItem.Email</a></dd>
                 }
             </dl>
-            <div id="coords" class="buildmap" data-zoom="11" data-height="300" data-x="@Model.StructureItem.GeopointX.ToString().Replace(",", ".")" data-y="@Model.StructureItem.GeopointY.ToString().Replace(",", ".")" data-title="@Model.StructureItem.Title"></div>
-            <div class="map_wr">
-                <div id="map" style="width: 100%; height: 350px;"></div>
-            </div>
+            <div id="coords" class="buildmap" style="width: 100%; height: 350px;" data-zoom="11" data-height="300" data-x="@Model.StructureItem.GeopointX.ToString().Replace(",", ".")" data-y="@Model.StructureItem.GeopointY.ToString().Replace(",", ".")" data-title="@Model.StructureItem.Title"></div>
+          
 
             <h2>Отделелния</h2>
             @if (Model.DepartmentList != null)
