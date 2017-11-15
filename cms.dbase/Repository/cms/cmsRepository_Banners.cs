@@ -221,7 +221,18 @@ namespace cms.dbase
                         .Insert();
 
                     // логирование
-                    insertLog(userId, IP, "insert", id, String.Empty, "Banners", item.Title);
+                    //insertLog(userId, IP, "insert", id, String.Empty, "Banners", item.Title);
+                    var log = new LogModel()
+                    {
+                        Site = _domain,
+                        Section = LogSection.Banners,
+                        Action = LogAction.insert,
+                        PageId = id,
+                        PageName = item.Title,
+                        UserId = _currentUserId,
+                        IP = _ip,
+                    };
+                    insertLog(log);
 
                     return true;
                 }
@@ -259,7 +270,18 @@ namespace cms.dbase
                         .Update();
 
                     // логирование
-                    insertLog(userId, IP, "update", id, string.Empty, "Banners", item.Title);
+                    //insertLog(userId, IP, "update", id, string.Empty, "Banners", item.Title);
+                    var log = new LogModel()
+                    {
+                        Site =_domain,
+                        Section = LogSection.Banners,
+                        Action = LogAction.update,
+                        PageId = id,
+                        PageName = item.Title,
+                        UserId = _currentUserId,
+                        IP = _ip,
+                    };
+                    insertLog(log);
 
                     return true;
                 }
@@ -288,7 +310,18 @@ namespace cms.dbase
                     db.content_bannerss.Where(w => w.id.Equals(id)).Delete();
 
                     // логирование
-                    insertLog(userId, IP, "delete", id, string.Empty, "Banners", title);
+                    //insertLog(userId, IP, "delete", id, string.Empty, "Banners", title);
+                    var log = new LogModel()
+                    {
+                        Site = _domain,
+                        Section = LogSection.Banners,
+                        Action = LogAction.delete,
+                        PageId = id,
+                        PageName = title,
+                        UserId = _currentUserId,
+                        IP = _ip,
+                    };
+                    insertLog(log);
 
                     return true;
                 }

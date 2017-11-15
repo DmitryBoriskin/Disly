@@ -54,6 +54,7 @@ namespace cms.dbase
         {
             using (var db = new CMSdb(_context))
             {
+
                 var data = db.content_eventss.
                     Where(w => w.id == id).
                     Select(s => new EventsModel
@@ -77,7 +78,7 @@ namespace cms.dbase
                         KeyW = s.c_keyw,
                         Desc = s.c_desc,
                         Disabled = s.b_disabled,
-                        SiteId = getIdSite(s.id),
+                        SiteId = getSiteId(s.id),
                         Locked = s.b_locked
                     });
                 if (!data.Any()) { return null; }
@@ -229,13 +230,13 @@ namespace cms.dbase
                             f_content_origin = eventData.ContentLink,
                             c_content_type_origin = eventData.ContentLinkType,
                             b_locked = eventData.Locked
-                    };
+                        };
                         if (!eventData.Annually)
-                        {
+                        { 
                             cdEvent.n_date_begin_year = eventData.DateBegin.Year;
-                            cdEvent.n_date_end_year = eventData.DateEnd.Value.Year;
+                            if (eventData.DateEnd.HasValue)
+                                cdEvent.n_date_end_year = eventData.DateEnd.Value.Year;
                         }
-
 
                         var cdContentLink = new content_content_link()
                         {
@@ -250,7 +251,19 @@ namespace cms.dbase
                         db.Insert(cdEvent);
                         db.Insert(cdContentLink);
 
-                        //insertLog(UserId, IP, "change_resolutions", id, String.Empty, "Users", logTitle);
+                        //логирование
+                        var log = new LogModel()
+                        {
+                            Site = _domain,
+                            Section = LogSection.Events,
+                            Action = LogAction.insert,
+                            PageId = eventData.Id,
+                            PageName = eventData.Title,
+                            UserId = _currentUserId,
+                            IP = _ip,
+                        };
+                        insertLog(log);
+
                         tran.Commit();
                         return true;
                     }
@@ -268,48 +281,63 @@ namespace cms.dbase
             {
                 using (var db = new CMSdb(_context))
                 {
-                    content_events cdEvent = db.content_eventss
-                                                .Where(p => p.id == eventData.Id)
-                                                .SingleOrDefault();
-                    if (cdEvent == null)
-                    {
-                        throw new Exception("Запись с таким Id не найдена");
-                    }
-
-                    var EndDate = (eventData.DateEnd.HasValue) ? eventData.DateEnd.Value : eventData.DateBegin;
-
-                    cdEvent.c_alias = eventData.Alias;
-                    cdEvent.c_title = eventData.Title;
-                    cdEvent.c_text = eventData.Text;
-                    cdEvent.c_place = eventData.Place;
-                    cdEvent.c_organizer = eventData.EventMaker;
-                    cdEvent.c_preview = (eventData.PreviewImage != null) ? eventData.PreviewImage.Url : null;
-                    cdEvent.c_desc = eventData.Desc;
-                    cdEvent.c_keyw = eventData.KeyW;
-                    cdEvent.b_annually = eventData.Annually;
-                    cdEvent.b_disabled = eventData.Disabled;
-                    cdEvent.d_date = eventData.DateBegin;
-                    cdEvent.d_date_end = EndDate;
-                    cdEvent.c_url = eventData.Url;
-                    cdEvent.c_url_name = eventData.UrlName;
-                    cdEvent.n_date_begin_day = int.Parse(eventData.DateBegin.ToString("MMdd"));
-                    cdEvent.n_date_end_day = int.Parse(EndDate.ToString("MMdd"));
-                    cdEvent.b_locked = eventData.Locked;
-
-                    if (!eventData.Annually)
-                    {
-                        cdEvent.n_date_begin_year = eventData.DateBegin.Year;
-                        cdEvent.n_date_end_year = eventData.DateEnd.Value.Year;
-                    }
-                    else
-                    {
-                        cdEvent.n_date_begin_year = null;
-                        cdEvent.n_date_end_year = null;
-                    }
-
                     using (var tran = db.BeginTransaction())
                     {
+                        content_events cdEvent = db.content_eventss
+                                                .Where(p => p.id == eventData.Id)
+                                                .SingleOrDefault();
+                        if (cdEvent == null)
+                        {
+                            throw new Exception("Запись с таким Id не найдена");
+                        }
+
+                        var EndDate = (eventData.DateEnd.HasValue) ? eventData.DateEnd.Value : eventData.DateBegin;
+
+                        cdEvent.c_alias = eventData.Alias;
+                        cdEvent.c_title = eventData.Title;
+                        cdEvent.c_text = eventData.Text;
+                        cdEvent.c_place = eventData.Place;
+                        cdEvent.c_organizer = eventData.EventMaker;
+                        cdEvent.c_preview = (eventData.PreviewImage != null) ? eventData.PreviewImage.Url : null;
+                        cdEvent.c_desc = eventData.Desc;
+                        cdEvent.c_keyw = eventData.KeyW;
+                        cdEvent.b_annually = eventData.Annually;
+                        cdEvent.b_disabled = eventData.Disabled;
+                        cdEvent.d_date = eventData.DateBegin;
+                        cdEvent.d_date_end = EndDate;
+                        cdEvent.c_url = eventData.Url;
+                        cdEvent.c_url_name = eventData.UrlName;
+                        cdEvent.n_date_begin_day = int.Parse(eventData.DateBegin.ToString("MMdd"));
+                        cdEvent.n_date_end_day = int.Parse(EndDate.ToString("MMdd"));
+                        cdEvent.b_locked = eventData.Locked;
+
+                        if (!eventData.Annually)
+                        {
+                            cdEvent.n_date_begin_year = eventData.DateBegin.Year;
+                            cdEvent.n_date_end_year = eventData.DateEnd.Value.Year;
+                        }
+                        else
+                        {
+                            cdEvent.n_date_begin_year = null;
+                            cdEvent.n_date_end_year = null;
+                        }
+
                         db.Update(cdEvent);
+
+                        //логирование
+                        var log = new LogModel()
+                        {
+                            Site = _domain,
+                            Section = LogSection.Events,
+                            Action = LogAction.update,
+                            PageId = eventData.Id,
+                            PageName = eventData.Title,
+                            UserId = _currentUserId,
+                            IP = _ip,
+                        };
+                        insertLog(log);
+
+
                         tran.Commit();
                         return true;
                     }
@@ -327,17 +355,38 @@ namespace cms.dbase
             {
                 using (var db = new CMSdb(_context))
                 {
-                    content_events cdEvent = db.content_eventss
-                                                .Where(p => p.id == id)
-                                                .SingleOrDefault();
-                    if (cdEvent == null)
-                    {
-                        throw new Exception("Запись с таким Id не найдена");
-                    }
-
                     using (var tran = db.BeginTransaction())
                     {
+                        var data = db.content_eventss
+                                                .Where(p => p.id == id);
+                                                
+                        if (!data.Any())
+                        {
+                            throw new Exception("Запись с таким Id не найдена");
+                        }
+
+                        var cdEvent = data.SingleOrDefault();
+                        
+                        //Delete links to other objects
+                        var q2 = db.content_content_links
+                             .Where(s => s.f_content == id)
+                             .Delete();
+
                         db.Delete(cdEvent);
+
+                        //логирование
+                        var log = new LogModel()
+                        {
+                            Site = _domain,
+                            Section = LogSection.Events,
+                            Action = LogAction.delete,
+                            PageId = cdEvent.id,
+                            PageName = cdEvent.c_title,
+                            UserId = _currentUserId,
+                            IP = _ip,
+                        };
+                        insertLog(log);
+
                         tran.Commit();
                         return true;
                     }

@@ -19,22 +19,19 @@
             </div>
             <div class="modal-body">@Html.Raw(@_info)</div>
             <div class="modal-footer">
-                <div class="modal-footer-buttons pull-left">
-                    @if (Model.ErrorInfo != null)
+                @if (Model.ErrorInfo != null)
+                {
+                    if (Model.ErrorInfo.buttons != null)
                     {
-                        if (Model.ErrorInfo.buttons != null)
+                        foreach (ErrorMassegeBtn btn in Model.ErrorInfo.buttons)
                         {
-                            foreach (ErrorMassegeBtn btn in Model.ErrorInfo.buttons)
-                            {
-                                var btn_style = (@btn.style == null) ? "default" : btn.style;
-                                var btn_action = (@btn.action == null) ? "default" : @btn.action;
+                            var btn_style = (@btn.style == null) ? "default" : btn.style;
+                            var btn_action = (@btn.action == null) ? "default" : @btn.action;
 
-                                <a href="@btn.url" class="btn btn-@btn_style" data-action="@btn_action">@btn.text</a>
-                            }
+                            <a href="@btn.url" class="btn btn-@btn_style" data-action="@btn_action">@btn.text</a>
                         }
                     }
-                </div>
-                <button type="button" class="button icon-cancel pull-right" data-dismiss="modal" data-action="noPreloader-accept">Закрыть</button>
+                }
             </div>
         </div>
     </div>

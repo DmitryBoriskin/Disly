@@ -444,7 +444,7 @@ input.form-control.page_size {
 
 .fileupload .preview_del {
     cursor: pointer;
-    z-index: 999;
+    z-index: 9;
     width:160px;
 }
 

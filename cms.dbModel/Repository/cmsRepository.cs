@@ -15,7 +15,7 @@ namespace cms.dbModel
         // Работа с логами
         public abstract cmsLogModel[] getCmsUserLog(Guid UserId);
         public abstract cmsLogModel[] getCmsPageLog(Guid PageId);
-        public abstract void insertLog(Guid UserId, string IP, string Action, Guid PageId, string PageName, string Section, string Site);
+        public abstract void insertLog(LogModel log); //старое Guid UserId, string IP, string Action, Guid PageId, string PageName, string Section, string Site);
 
         // CmsMenu
         public abstract bool check_cmsMenu(Guid id);
@@ -34,13 +34,13 @@ namespace cms.dbModel
         public abstract SitesList getSiteList(FilterParams filtr);
         public abstract SitesShortModel[] getSiteListWithCheckedForUser(SiteFilter filtr);
         public abstract bool check_Site(Guid id);
-        public abstract bool insSite(SitesModel ins, Guid UserId, String IP);
-        public abstract bool updSite(Guid id, SitesModel ins, Guid UserId, String IP);
-        public abstract bool delSite(Guid id, Guid UserId, String IP);
+        public abstract bool insertSite(SitesModel ins, Guid UserId, String IP);
+        public abstract bool updateSite(Guid id, SitesModel ins, Guid UserId, String IP);
+        public abstract bool deleteSite(Guid id, Guid UserId, String IP);
         public abstract Domain[] getSiteDomains(string SiteId);
-        public abstract bool insDomain(String SiteId, string NewDomain, Guid UserId, String IP);
-        public abstract bool delDomain(Guid id, Guid UserId, String IP);
-        public abstract string getIdSite(Guid ContentId);
+        public abstract bool insertDomain(String SiteId, string NewDomain, Guid UserId, String IP);
+        public abstract bool deleteDomain(Guid id, Guid UserId, String IP);
+        public abstract string getSiteId(Guid ContentId);
 
         // Все пользователи портала
         public abstract UsersList getUsersList(FilterParams filtr);
@@ -111,16 +111,16 @@ namespace cms.dbModel
 
         public abstract OrgsShortModel[] getOrgsListWhithChekedFor(OrgFilter filtr);
 
-        public abstract bool insOrgs(Guid id, OrgsModel model, Guid UserId, String IP);
-        public abstract bool setOrgs(Guid id, OrgsModel model, Guid UserId, String IP);
-        public abstract bool delOrgs(Guid id, Guid UserId, String IP);
+        public abstract bool insertOrg(Guid id, OrgsModel model, Guid UserId, String IP);
+        public abstract bool updateOrg(Guid id, OrgsModel model, Guid UserId, String IP);
+        public abstract bool deleteOrg(Guid id, Guid UserId, String IP);
         public abstract bool sortOrgs(Guid id, int new_num);
 
         public abstract StructureModel[] getStructureList(Guid id);
         public abstract StructureModel getStructure(Guid id);
-        public abstract bool insStructure(Guid id, Guid OrgId, StructureModel insert, Guid UserId, String IP);
-        public abstract bool setStructure(Guid id, StructureModel insert, Guid UserId, String IP);
-        public abstract bool delStructure(Guid id, Guid UserId, String IP);
+        public abstract bool insertStructure(Guid id, Guid OrgId, StructureModel insert, Guid UserId, String IP);
+        public abstract bool updateStructure(Guid id, StructureModel insert, Guid UserId, String IP);
+        public abstract bool deleteStructure(Guid id, Guid UserId, String IP);
         public abstract bool sortStructure(Guid id, int new_num);
 
         public abstract bool insOvp(Guid IdStructure, Guid OrgId, StructureModel insertStructure, Guid UserId, String IP);
