@@ -50,8 +50,7 @@ namespace Disly.Controllers
             ViewName = _repository.getView(Domain, ControllerName);
 
             siteModel = _repository.getSiteInfo(Domain);
-            siteMapArray = _repository.getSiteMapList(Domain);
-            //breadcrumbArray = _repository.getBreadCrumb(((System.Web.HttpRequestWrapper)Request).RawUrl, Domain);
+            siteMapArray = _repository.getSiteMapList(Domain);            
             breadcrumb=_repository.getBreadCrumbCollection(((System.Web.HttpRequestWrapper)Request).RawUrl, Domain);
             bannerArray = _repository.getBanners(Domain);
 
