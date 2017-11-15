@@ -68,11 +68,13 @@
             <div class="cms-site_list">
                 <div class="cms-title">Панель администратора сайта</div>
                 <select id="DomainSelect" class="uc_input form-control">
+                    
                     @foreach (DomainList domain in Model.Account.Domains)
                     {
                         string value_url = "http://" + domain.SiteId + "." + @Settings.BaseURL + "/Admin/";
-                        <option value="@value_url@ViewBag.CtrlName">@domain.DomainName</option>
-                    }
+                        string sel = (domain.SiteId == ViewBag.Domain) ? "selected" : "";
+                        <option value="@value_url@ViewBag.CtrlName" @sel>@domain.DomainName</option>
+                    }                    
                 </select>
             </div>
         </div>

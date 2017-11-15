@@ -523,6 +523,7 @@
     <Compile Include="Areas\Admin\Controllers\AccountController.cs" />
     <Compile Include="Areas\Admin\Controllers\BannersController.cs" />
     <Compile Include="Areas\Admin\Controllers\cmsMenuController.cs" />
+    <Compile Include="Areas\Admin\Controllers\SiteSectionController.cs" />
     <Compile Include="Areas\Admin\Controllers\UsersController.cs" />
     <Compile Include="Areas\Admin\Controllers\SiteSettingsController.cs" />
     <Compile Include="Areas\Admin\Controllers\VacancyController.cs" />
@@ -544,6 +545,7 @@
     <Compile Include="Areas\Admin\Controllers\CoreController.cs" />
     <Compile Include="Areas\Admin\Models\BannersViewModel.cs" />
     <Compile Include="Areas\Admin\Models\cmsMenuViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\SiteSectionViewModel.cs" />
     <Compile Include="Areas\Admin\Models\ModalViewModels\EventsModalViewModel.cs" />
     <Compile Include="Areas\Admin\Models\ModalViewModels\OrgsModalViewModel.cs" />
     <Compile Include="Areas\Admin\Models\UsersViewModel.cs" />
@@ -561,6 +563,7 @@
     <Compile Include="Areas\Admin\Models\SitesViewModel.cs" />
     <Compile Include="Areas\Admin\Service\SpotCoord.cs" />
     <Compile Include="Areas\Admin\Service\Transliteration.cs" />
+    <Compile Include="Controllers\FindUsController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\DoctorsController.cs" />
     <Compile Include="Controllers\ContactsController.cs" />
@@ -766,6 +769,8 @@
     <Content Include="Areas\Admin\Views\Users\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Users\Item.cshtml" />
     <Content Include="Areas\Admin\Views\Shared\Modal\Error.cshtml" />
+    <Content Include="Areas\Admin\Views\SiteSection\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\SiteSection\Item.cshtml" />
     <None Include="Content\plugins\datatables\i18n\ru.json" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <Content Include="Views\_ViewStart.cshtml" />

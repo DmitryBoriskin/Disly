@@ -35,23 +35,23 @@ namespace Integration.Frmp.library
 
                 SrvcLogger.Debug("{PREPARING}", "Файл для импорта данных '" + fileInfo.FullName + "'");
                 SrvcLogger.Debug("{PREPARING}", "Начало чтения XML-данных");
-                
-                XmlSerializer serializer = new XmlSerializer(typeof(ArrayOfEmployee));
 
+                XmlSerializer serializer = new XmlSerializer(typeof(ArrayOfEmployee));
+                
                 using (FileStream fileStream = new FileStream(fileInfo.FullName, FileMode.Open))
                 {
                     SrvcLogger.Debug("{PREPARING}", string.Format("XML-данные успешно прочитаны из файла {0}", fileInfo.Name));
                     
                     var arrayOfEmployees = (ArrayOfEmployee)serializer.Deserialize(fileStream);
-
+                    
                     // импорт организаций
-                    var orgs = arrayOfEmployees.Employee.Select(s => new Organization
+                    var orgs = arrayOfEmployees.Employees.Select(s => new LPU
                     {
-                        ID = s.Organization.ID,
-                        Name = s.Organization.Name,
-                        OID = s.Organization.OID,
-                        KPP = s.Organization.KPP,
-                        OGRN = s.Organization.OGRN
+                        ID = s.UZ.ID,
+                        Name = s.UZ.Name,
+                        //OID = s.UZ.OID,
+                        KPP = s.UZ.KPP,
+                        //OGRN = s.UZ.OGRN
                     });
                     try
                     {
@@ -62,8 +62,23 @@ namespace Integration.Frmp.library
                         SrvcLogger.Fatal("{WORK}", "Ошибка при добавлении данных об организациях в таблицу dbo.import_frmp_orgs" + Environment.NewLine + " " + e.ToString());
                     }
 
+                    // импорт должностей
+                    var posts = arrayOfEmployees.Employees
+                        .SelectMany(p => p.EmployeeRecords)
+                        .Select(p => p.RecordPost)
+                        .Distinct()
+                        .ToArray();
+                    try
+                    {
+                        ImportPosts(posts);
+                    }
+                    catch (Exception e)
+                    {
+                        SrvcLogger.Fatal("{WORK}", "Ошибка при добавлении данных о должностях в таблицу dbo.import_frmp_posts" + Environment.NewLine + " " + e.ToString());
+                    }
+
                     // импорт сотрудников
-                    var employees = arrayOfEmployees.Employee
+                    var employees = arrayOfEmployees.Employees
                         .OrderBy(o => o.SNILS)
                         .ThenByDescending(t => t.ChangeTime)
                         .ToArray();
@@ -87,10 +102,10 @@ namespace Integration.Frmp.library
         /// Запись данных по организациям в таблицу dbo.import_frmp_orgs
         /// </summary>
         /// <param name="orgs">Организации</param>
-        private static void ImportOrganization(IEnumerable<Organization> orgs)
+        private static void ImportOrganization(IEnumerable<LPU> orgs)
         {
             var distinctOrgs = (from e in orgs
-                                select e).GroupBy(x => x.OID).Select(x => x.First()).ToList();
+                                select e).GroupBy(x => x.ID).Select(x => x.First()).ToList();
 
             using (var db = new DbModel(connectionString))
             {
@@ -100,19 +115,20 @@ namespace Integration.Frmp.library
                     {
                         Guid id = org.ID; // идентификатор
                         string name = org.Name; // название
-                        string oid = org.OID; // OID
+                        //string oid = org.OID; // OID
                         string kpp = org.KPP; // кпп
-                        string orgn = org.OGRN; // OGRN
+                        //string orgn = org.OGRN; // OGRN
 
                         // проверим существует ли запись с таким идентификатором в базе
-                        var query = db.ImportFrmpOrgss.Where(w => w.COid.Equals(oid));
+                        //var query = db.ImportFrmpOrgss.Where(w => w.COid.Equals(oid));
+                        var query = db.ImportFrmpOrgss.Where(w => w.COid.Equals(id.ToString()));
 
                         bool isExist = query.Any();
                         if (!isExist)
                         {
                             db.ImportFrmpOrgss
                                 .Value(v => v.Guid, id)
-                                .Value(v => v.COid, oid)
+                                .Value(v => v.COid, id.ToString())
                                 .Value(v => v.CName, name)
                                 .Value(v => v.DModify, DateTime.Now)
                                 .Insert();
@@ -120,7 +136,9 @@ namespace Integration.Frmp.library
                         else
                         {
                             db.ImportFrmpOrgss
-                                .Where(w => w.COid.Equals(org.OID))
+                                //.Where(w => w.COid.Equals(org.OID))
+                                .Where(w => w.Guid.Equals(org.ID))
+                                .Where(w => w.COid.ToLower().Equals(org.ID.ToString().ToLower()))
                                 .Set(u => u.CName, name)
                                 .Set(u => u.DModify, DateTime.Now)
                                 .Update();
@@ -134,12 +152,55 @@ namespace Integration.Frmp.library
         }
 
         /// <summary>
+        /// Запись данных по должностям в таблицу dbo.content_employee_posts
+        /// </summary>
+        /// <param name="posts"></param>
+        private static void ImportPosts(IEnumerable<Post> posts)
+        {
+            var distinctPosts = (from e in posts
+                                select e).GroupBy(x => x.ID).Select(x => x.First())
+                                .OrderBy(o => o.ID).ToList();
+
+            using (var db = new DbModel(connectionString))
+            {
+                foreach (var post in distinctPosts)
+                {
+                    int id = post.ID; // идентификатор
+                    int? parent = post.Parent; // родитель
+                    string name = post.Name; // название
+
+                    var query = db.ImportFrmpPostss
+                        .Where(w => w.Id.Equals(id));
+
+                    if (!query.Any())
+                    {
+                        db.ImportFrmpPostss
+                            .Value(v => v.Id, id)
+                            .Value(v => v.Parent, parent)
+                            .Value(v => v.Name, name)
+                            .Insert();
+                    }
+                    else
+                    {
+                        db.ImportFrmpPostss
+                            .Where(w => w.Id.Equals(id))
+                            .Set(u => u.Parent, parent)
+                            .Set(u => u.Name, name)
+                            .Update();
+                    }
+                }
+
+                SrvcLogger.Debug("{WORK}", "Данные по должностям успешно добавлены в таблицу dbo.import_frmp_posts");
+            }
+        }
+
+        /// <summary>
         /// Запись данных по сотрудникам в таблицу dbo.import_frmp_peoples
         /// </summary>
         /// <param name="employyes">Список сотрудников</param>
-        private static void ImportEmployees(Models.Employee[] employees)
+        private static void ImportEmployees(Employee[] employees)
         {
-            XmlSerializer ser = new XmlSerializer(typeof(Models.Employee));
+            XmlSerializer serializer = new XmlSerializer(typeof(Employee));
 
             using (var db = new DbModel(connectionString))
             {
@@ -151,7 +212,7 @@ namespace Integration.Frmp.library
                     string stringXml = null; // xml-узел, относящийся к сотруднику
                     using (StringWriter textWriter = new StringWriter())
                     {
-                        ser.Serialize(textWriter, employees[i]);
+                        serializer.Serialize(textWriter, employees[i]);
                         stringXml = textWriter.ToString();
                     }
 
@@ -159,11 +220,12 @@ namespace Integration.Frmp.library
                     string name = employees[i].Name; // имя 
                     string surname = employees[i].Surname;  // фамилия
                     string patroname = employees[i].Patroname; // отчество
-                    bool sex = employees[i].Sex == Models.SexEnum.Male; // пол
+                    bool sex = employees[i].Sex == SexEnum.Male; // пол
                     DateTime? birthDate = employees[i].Birthdate; // дата рождения
                     DateTime? modifyDate = employees[i].ChangeTime; // дата изменения записи
                     string snilsToCheck = employees[i].SNILS; // СНИЛС для проверки
-                    string orgOid = employees[i].Organization.OID; // идентификатор организации
+                    //string orgOid = employees[i].UZ.OID; // идентификатор организации
+                    string orgOid = employees[i].UZ.ID.ToString(); // идентификатор организации
 
                     // проверка валидности СНИЛС
                     string snils = string.Empty;
