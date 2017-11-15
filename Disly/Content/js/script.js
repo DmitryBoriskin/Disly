@@ -8,6 +8,8 @@
     //    $(this).toggleClass('active');
     //});
 
+    $('.select2').select2();
+
     $('input[data-type=date').datepicker({ onSelect: function (dateText, inst) { $(this).attr('value', dateText); } });
 
     $('input[data-mask]').each(function () {
@@ -25,22 +27,22 @@
 
 
     //Фильтр по новостям
-    $('.filtr_news').submit(function (e) {
+    //$('.filtr_news').submit(function (e) {
         
-        var start = $('#data_start').val();
-        var end = $('#data_fin').val();
-        var search = $('#search_news').val();        
+    //    var start = $('#data_start').val();
+    //    var end = $('#data_fin').val();
+    //    var search = $('#search_news').val();        
 
-        var params = {
-            datearea: search,
-            datestart: start,
-            datefin: end
-        };
+    //    var params = {
+    //        datearea: search,
+    //        datestart: start,
+    //        datefin: end
+    //    };
 
-        var str = jQuery.param(params);
-        location.href = UrlPage() + "?" + str;
-        e.preventDefault();
-    });
+    //    var str = jQuery.param(params);
+    //    location.href = UrlPage() + "?" + str;
+    //    e.preventDefault();
+    //});
 
 
     //coords

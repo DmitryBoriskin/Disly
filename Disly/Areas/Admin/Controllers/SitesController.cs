@@ -209,13 +209,13 @@ namespace Disly.Areas.Admin.Controllers
 
                 if (_cmsRepository.check_Site(Id))
                 {                    
-                    _cmsRepository.updSite(Id, back_model.Item, AccountInfo.id, RequestUserInfo.IP);
+                    _cmsRepository.updateSite(Id, back_model.Item); //, AccountInfo.id, RequestUserInfo.IP
                     userMassege.info = "Запись обновлена";
                 }
                 else if (!_cmsRepository.check_Site(Id))
                 {
                     back_model.Item.Id = Id;
-                    _cmsRepository.insSite(back_model.Item, AccountInfo.id, RequestUserInfo.IP);
+                    _cmsRepository.insertSite(back_model.Item); //, AccountInfo.id, RequestUserInfo.IP
                     userMassege.info = "Запись добавлена";
                 }
                 else
@@ -293,13 +293,13 @@ namespace Disly.Areas.Admin.Controllers
             Guid id=Guid.Parse(Request["Item.Id"]);
             var SiteId = _cmsRepository.getSite(id).Alias;
             string Domain=Request["new_domain"];
-            _cmsRepository.insDomain(SiteId, Domain, AccountInfo.id, RequestUserInfo.IP);
+            _cmsRepository.insertDomain(SiteId, Domain); //, AccountInfo.id, RequestUserInfo.IP
             return Redirect(((System.Web.HttpRequestWrapper)Request).RawUrl);
         }
         [HttpPost]
         public ActionResult DelDomain(Guid id)
         {
-            _cmsRepository.delDomain(id, AccountInfo.id, RequestUserInfo.IP);
+            _cmsRepository.deleteDomain(id); //, AccountInfo.id, RequestUserInfo.IP
             return null;
         }
         [HttpPost]
@@ -315,7 +315,7 @@ namespace Disly.Areas.Admin.Controllers
         {            
             ErrorMassege userMassege = new ErrorMassege();
             userMassege.title = "Информация";
-            if(_cmsRepository.delSite(Id, AccountInfo.id, RequestUserInfo.IP))////——————УДАЛЕНИЕ DELETE
+            if(_cmsRepository.deleteSite(Id)) ////——————УДАЛЕНИЕ DELETE , AccountInfo.id, RequestUserInfo.IP
             {
                 userMassege.info = "Запись Удалена";
                 userMassege.buttons = new ErrorMassegeBtn[]{

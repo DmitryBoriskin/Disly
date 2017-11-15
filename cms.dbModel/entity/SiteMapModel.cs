@@ -153,7 +153,7 @@ namespace cms.dbModel.entity
         /// <summary>
         /// Идентификатор
         /// </summary>
-        public Guid? Id { get; set; }
+        public Guid Id { get; set; }
 
         /// <summary>
         /// Текст

@@ -88,7 +88,8 @@ namespace Disly.Areas.Admin.Controllers
                 }
                 #endregion
 
-                _cmsRepository.updateSiteInfo(backModel.Item, AccountInfo.id, RequestUserInfo.IP);
+                _cmsRepository.updateSiteInfo(backModel.Item);
+                //_cmsRepository.updateSiteInfo(backModel.Item, AccountInfo.id, RequestUserInfo.IP);
                 userMessage.info = "Запись обновлена";
             }
             else

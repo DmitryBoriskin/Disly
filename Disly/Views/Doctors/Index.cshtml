@@ -9,15 +9,65 @@
     {
         <h1>Врачи</h1>
         <div class="row">
-            <div class="col-xs-12">
-                @if (Model.DoctorsList != null)
-                {
-                    foreach (var item in Model.DoctorsList)
-                    {
-                        <a href="/@ViewBag.ControllerName/@item.Id">@item.FIO</a>
-                    }
-                }
+            <div class="col-md-8">
+                <div class="row">
+                    <div class="col-xs-12">
+                        @if (Model.DoctorsList != null)
+                        {
+                            foreach (var item in Model.DoctorsList)
+                            {
+                                <a href="/@ViewBag.ControllerName/@item.Id">@item.FIO</a>
+                            }
+                        }
+                    </div>
+                </div>
             </div>
+            <div class="col-md-4">
+                <form role="form" class="filtr_news" action="/@ViewBag.ControllerName/">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group search_news">
+                                <label class="label_filtr" for="search_news">Ключевые слова</label>
+                                <input type="text" class="filtr_data form-control" name="searchtext" id="search_news" value="" />
+                            </div>
+                        </div>
+                        @if (Model.DepartmentsSelectList != null)
+                        {
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label class="label_filtr">Отделения</label>
+                                    <select class="form-control select2" name="group">
+                                        <option value="no-select">не выбрано</option>
+                                        @foreach (var item in Model.DepartmentsSelectList)
+                                        {
+                                            <optgroup label="@item.Title">
+                                                @if (item.Departments != null)
+                                                {
+                                                    foreach (var department in item.Departments)
+                                                    {
+                                                        <option value="@department.Id">@department.Title</option>
+                                                    }
+
+                                                    <option value="test">test</option>
+                                                }                                                
+                                            </optgroup>
+                                        }
+                                    </select>
+
+
+                                </div>
+                            </div>
+                        }
+                       
+                        <div class="col-sm-12 control-filter">
+                            <a class="btn btn-default pull-right" href="/@ViewBag.ControllerName">Очистить</a>
+                            <button class="btn sub" type="submit">ПРИМЕНИТЬ</button>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+            
         </div>
     }    
 </div>

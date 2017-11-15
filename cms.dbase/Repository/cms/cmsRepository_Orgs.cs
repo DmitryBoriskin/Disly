@@ -58,7 +58,6 @@ namespace cms.dbase
 
         private bool ContentLinkExists(Guid contentId, ContentType contentType, Guid linkId, ContentLinkType linkType)
         {
-
             using (var db = new CMSdb(_context))
             {
                 var links = db.content_content_links
@@ -225,64 +224,80 @@ namespace cms.dbase
         /// <param name="UserId">Пользователь</param>
         /// <param name="IP">ip-адрес</param>
         /// <returns></returns>
-        public override bool insOrgs(Guid id, OrgsModel model, Guid UserId, String IP)
+        public override bool insertOrg(Guid id, OrgsModel model)
         {
             using (var db = new CMSdb(_context))
             {
-                var data = db.content_orgss.Where(w => w.id == id);
-                if (!data.Any())
+                using (var tran = db.BeginTransaction())
                 {
-                    int MaxSort = 0;
-                    try
+                    var data = db.content_orgss.Where(w => w.id == id);
+                    if (!data.Any())
                     {
-                        MaxSort = db.content_orgss.Max(m => m.n_sort);
-                    }
-                    catch { }
-                    MaxSort++;
-                    db.content_orgss
-                        .Value(s => s.id, id)
-                        .Value(s => s.n_sort, MaxSort)
-                        .Value(s => s.c_title, model.Title)
-                        .Value(s => s.c_title_short, model.ShortTitle)
-                        .Value(s => s.c_phone, model.Phone)
-                        .Value(s => s.c_phone_reception, model.PhoneReception)
-                        .Value(s => s.c_fax, model.Fax)
-                        .Value(s => s.c_email, model.Email)
-                        .Value(s => s.c_director_post, model.DirecorPost)
-                        .Value(s => s.f_director, model.DirectorF)
-                        .Value(s => s.c_contacts, model.Contacts)
-                        .Value(s => s.c_adress, model.Address)
-                        .Value(s => s.n_geopoint_x, model.GeopointX)
-                        .Value(s => s.n_geopoint_y, model.GeopointY)
-                        .Value(s => s.f_frmp, model.Frmp)
-                        .Insert();
-
-                    // обновляем типы мед. учреждений
-                    if (model.Types != null)
-                    {
-                        // удаляем старые типы
-                        db.content_orgs_types_links.Where(w => w.f_org.Equals(id)).Delete();
-
-                        foreach (var t in model.Types)
+                        int MaxSort = 0;
+                        try
                         {
-                            var maxSortQuery = db.content_orgs_types_links
-                                .Where(w => w.f_org.Equals(id)).Select(s => s.n_sort);
-
-                            int maxSort = maxSortQuery.Any() ? maxSortQuery.Max() : 0;
-
-                            db.content_orgs_types_links
-                                .Value(v => v.f_org, id)
-                                .Value(v => v.f_type, t)
-                                .Value(v => v.n_sort, maxSort + 1)
-                                .Insert();
+                            MaxSort = db.content_orgss.Max(m => m.n_sort);
                         }
-                    }
+                        catch { }
+                        MaxSort++;
+                        db.content_orgss
+                            .Value(s => s.id, id)
+                            .Value(s => s.n_sort, MaxSort)
+                            .Value(s => s.c_title, model.Title)
+                            .Value(s => s.c_title_short, model.ShortTitle)
+                            .Value(s => s.c_phone, model.Phone)
+                            .Value(s => s.c_phone_reception, model.PhoneReception)
+                            .Value(s => s.c_fax, model.Fax)
+                            .Value(s => s.c_email, model.Email)
+                            .Value(s => s.c_director_post, model.DirecorPost)
+                            .Value(s => s.f_director, model.DirectorF)
+                            .Value(s => s.c_contacts, model.Contacts)
+                            .Value(s => s.c_adress, model.Address)
+                            .Value(s => s.n_geopoint_x, model.GeopointX)
+                            .Value(s => s.n_geopoint_y, model.GeopointY)
+                            .Value(s => s.f_frmp, model.Frmp)
+                            .Insert();
 
-                    //логирование
-                    insertLog(UserId, IP, "insert", id, String.Empty, "Orgs", model.Title);
-                    return true;
+                        // обновляем типы мед. учреждений
+                        if (model.Types != null)
+                        {
+                            // удаляем старые типы
+                            db.content_orgs_types_links.Where(w => w.f_org.Equals(id)).Delete();
+
+                            foreach (var t in model.Types)
+                            {
+                                var maxSortQuery = db.content_orgs_types_links
+                                    .Where(w => w.f_org.Equals(id)).Select(s => s.n_sort);
+
+                                int maxSort = maxSortQuery.Any() ? maxSortQuery.Max() : 0;
+
+                                db.content_orgs_types_links
+                                    .Value(v => v.f_org, id)
+                                    .Value(v => v.f_type, t)
+                                    .Value(v => v.n_sort, maxSort + 1)
+                                    .Insert();
+                            }
+                        }
+
+                        //логирование
+                        // insertLog(UserId, IP, "insert", id, String.Empty, "Orgs", model.Title);
+                        var log = new LogModel()
+                        {
+                            Site = _domain,
+                            Section = LogSection.Orgs,
+                            Action = LogAction.insert,
+                            PageId = id,
+                            PageName = model.Title,
+                            UserId = _currentUserId,
+                            IP = _ip,
+                        };
+                        insertLog(log);
+
+                        tran.Commit();
+                        return true;
+                    }
+                    return false;
                 }
-                return false;
             }
         }
 
@@ -294,11 +309,10 @@ namespace cms.dbase
         /// <param name="UserId">Пользователь</param>
         /// <param name="IP">ip-адрес</param>
         /// <returns></returns>
-        public override bool setOrgs(Guid id, OrgsModel model, Guid UserId, String IP)
+        public override bool updateOrg(Guid id, OrgsModel model)
         {
             using (var db = new CMSdb(_context))
             {
-
                 using (var tran = db.BeginTransaction())
                 {
                     var data = db.content_orgss.Where(w => w.id == id);
@@ -342,12 +356,25 @@ namespace cms.dbase
                         }
                         
                         //логирование
-                        insertLog(UserId, IP, "update", id, String.Empty, "Orgs", model.Title);
+                        //insertLog(UserId, IP, "update", id, String.Empty, "Orgs", model.Title);
+                        var log = new LogModel()
+                        {
+                            Site = _domain,
+                            Section = LogSection.Orgs,
+                            Action = LogAction.update,
+                            PageId = id,
+                            PageName = model.Title,
+                            UserId = _currentUserId,
+                            IP = _ip,
+                        };
+                        insertLog(log);
+
                         tran.Commit();
                         return true;
-                    }                    
+                    }
+                    return false;
                 }
-                return false;
+                
             }
         }
 
@@ -358,22 +385,39 @@ namespace cms.dbase
         /// <param name="UserId">Пользователь</param>
         /// <param name="IP">ip-адрес</param>
         /// <returns></returns>
-        public override bool delOrgs(Guid id, Guid UserId, String IP)
+        public override bool deleteOrg(Guid id)
         {
             using (var db = new CMSdb(_context))
             {
-                var data = db.content_orgss.Where(w => w.id == id);
-                if (data.Any())
+                using (var tran = db.BeginTransaction())
                 {
-                    string logTitle = data.FirstOrDefault().c_title;
-                    int ThisSort = data.FirstOrDefault().n_sort;
-                    db.content_orgss.Where(w => w.n_sort > ThisSort).Set(p => p.n_sort, p => p.n_sort - 1).Update();//смещение n_sort
-                    data.Delete();
-                    //логирование
-                    insertLog(UserId, IP, "delete", id, String.Empty, "Orgs", logTitle);
-                    return true;
+                    var data = db.content_orgss.Where(w => w.id == id);
+                    if (data.Any())
+                    {
+                        string logTitle = data.FirstOrDefault().c_title;
+                        int ThisSort = data.FirstOrDefault().n_sort;
+                        db.content_orgss.Where(w => w.n_sort > ThisSort).Set(p => p.n_sort, p => p.n_sort - 1).Update();//смещение n_sort
+                        data.Delete();
+
+                        //логирование
+                        //insertLog(UserId, IP, "delete", id, String.Empty, "Orgs", logTitle);
+                        var log = new LogModel()
+                        {
+                            Site = _domain,
+                            Section = LogSection.Orgs,
+                            Action = LogAction.delete,
+                            PageId = id,
+                            PageName = logTitle,
+                            UserId = _currentUserId,
+                            IP = _ip,
+                        };
+                        insertLog(log);
+
+                        tran.Commit();
+                        return true;
+                    }
+                    return false;
                 }
-                return false;
             }
         }
 
@@ -387,27 +431,32 @@ namespace cms.dbase
         {
             using (var db = new CMSdb(_context))
             {
-                var actual_num = db.content_orgss.Where(w => w.id == id).FirstOrDefault().n_sort;
-                if (new_num > actual_num)
+                using (var tran = db.BeginTransaction())
                 {
+                    var actual_num = db.content_orgss.Where(w => w.id == id).FirstOrDefault().n_sort;
+                    if (new_num > actual_num)
+                    {
+                        db.content_orgss
+                            .Where(w => (w.n_sort > actual_num && w.n_sort <= new_num))
+                            .Set(p => p.n_sort, p => p.n_sort - 1)
+                            .Update();
+                    }
+                    else
+                    {
+                        db.content_orgss
+                            .Where(w => w.n_sort < actual_num && w.n_sort >= new_num)
+                            .Set(p => p.n_sort, p => p.n_sort + 1)
+                            .Update();
+                    }
                     db.content_orgss
-                        .Where(w => (w.n_sort > actual_num && w.n_sort <= new_num))
-                        .Set(p => p.n_sort, p => p.n_sort - 1)
+                        .Where(w => w.id == id)
+                        .Set(s => s.n_sort, new_num)
                         .Update();
-                }
-                else
-                {
-                    db.content_orgss
-                        .Where(w => w.n_sort < actual_num && w.n_sort >= new_num)
-                        .Set(p => p.n_sort, p => p.n_sort + 1)
-                        .Update();
-                }
-                db.content_orgss
-                    .Where(w => w.id == id)
-                    .Set(s => s.n_sort, new_num)
-                    .Update();
 
-                return true;
+                    tran.Commit();
+
+                    return true;
+                }
             }
         }
 
@@ -482,38 +531,52 @@ namespace cms.dbase
         /// <param name="UserId">Пользователь</param>
         /// <param name="IP">ip-адрес</param>
         /// <returns></returns>
-        public override bool insStructure(Guid id, Guid OrgId, StructureModel insert, Guid UserId, String IP)
+        public override bool insertStructure(Guid id, Guid OrgId, StructureModel insert)
         {
             using (var db = new CMSdb(_context))
             {
-                int MaxSort = 0;
-                try
+                using (var tran = db.BeginTransaction())
                 {
-                    MaxSort = db.content_org_structures.Where(w => w.f_ord == OrgId).Max(m => m.n_sort);
-                }
-                catch { }
-                MaxSort++;
+                    int MaxSort = db.content_org_structures
+                    .Where(w => w.f_ord == OrgId)
+                    .Any() ? db.content_org_structures.Where(w => w.f_ord == OrgId).Max(m => m.n_sort) : 0;
+                    MaxSort++;
 
-                db.content_org_structures
-                  .Value(v => v.id, id)
-                  .Value(v => v.n_sort, MaxSort)
-                  .Value(v => v.f_ord, OrgId)
-                  .Value(v => v.c_title, insert.Title)
-                  .Value(v => v.c_adress, insert.Adress)
-                  .Value(v => v.n_geopoint_x, insert.GeopointX)
-                  .Value(v => v.n_geopoint_y, insert.GeopointY)
-                  .Value(v => v.c_phone, insert.Phone)
-                  .Value(v => v.c_phone_reception, insert.PhoneReception)
-                  .Value(v => v.c_fax, insert.Fax)
-                  .Value(v => v.c_email, insert.Email)
-                  .Value(v => v.c_routes, insert.Routes)
-                  .Value(v => v.c_schedule, insert.Schedule)
-                  .Value(v => v.c_director_post, insert.DirecorPost)
-                  .Value(v => v.f_director, insert.DirectorF)
-                  .Insert();
-                //логирование
-                insertLog(UserId, IP, "insert", id, String.Empty, "Orgs", insert.Title);
-                return true;
+                    db.content_org_structures
+                      .Value(v => v.id, id)
+                      .Value(v => v.n_sort, MaxSort)
+                      .Value(v => v.f_ord, OrgId)
+                      .Value(v => v.c_title, insert.Title)
+                      .Value(v => v.c_adress, insert.Adress)
+                      .Value(v => v.n_geopoint_x, insert.GeopointX)
+                      .Value(v => v.n_geopoint_y, insert.GeopointY)
+                      .Value(v => v.c_phone, insert.Phone)
+                      .Value(v => v.c_phone_reception, insert.PhoneReception)
+                      .Value(v => v.c_fax, insert.Fax)
+                      .Value(v => v.c_email, insert.Email)
+                      .Value(v => v.c_routes, insert.Routes)
+                      .Value(v => v.c_schedule, insert.Schedule)
+                      .Value(v => v.c_director_post, insert.DirecorPost)
+                      .Value(v => v.f_director, insert.DirectorF)
+                      .Insert();
+
+                    //логирование
+                    //insertLog(UserId, IP, "insert", id, String.Empty, "Orgs", insert.Title);
+                    var log = new LogModel()
+                    {
+                        Site = _domain,
+                        Section = LogSection.Orgs,
+                        Action = LogAction.insert,
+                        PageId = id,
+                        PageName = insert.Title,
+                        UserId = _currentUserId,
+                        IP = _ip,
+                    };
+                    insertLog(log);
+
+                    tran.Commit();
+                    return true;
+                }
             }
         }
 
@@ -525,33 +588,47 @@ namespace cms.dbase
         /// <param name="UserId">Пользователь</param>
         /// <param name="IP">ip-адрес</param>
         /// <returns></returns>
-        public override bool setStructure(Guid id, StructureModel insert, Guid UserId, String IP)
+        public override bool updateStructure(Guid id, StructureModel insert)
         {
             using (var db = new CMSdb(_context))
             {
-                var data = db.content_org_structures.Where(w => w.id == id);
-                if (data.Any())
+                using (var tran = db.BeginTransaction())
                 {
-                    data
-                    .Set(v => v.c_title, insert.Title)
-                    .Set(v => v.c_adress, insert.Adress)
-                    .Set(v => v.n_geopoint_x, insert.GeopointX)
-                    .Set(v => v.n_geopoint_y, insert.GeopointY)
-                    .Set(v => v.c_phone, insert.Phone)
-                    .Set(v => v.c_phone_reception, insert.PhoneReception)
-                    .Set(v => v.c_fax, insert.Fax)
-                    .Set(v => v.c_email, insert.Email)
-                    .Set(v => v.c_routes, insert.Routes)
-                    .Set(v => v.c_schedule, insert.Schedule)
-                    .Set(v => v.c_director_post, insert.DirecorPost)
-                    .Set(v => v.f_director, insert.DirectorF)
-                    .Update();
-                    //логирование
-                    insertLog(UserId, IP, "update", id, String.Empty, "Orgs", insert.Title);
-                    return true;
-                }
-                else
-                {
+                    var data = db.content_org_structures.Where(w => w.id == id);
+                    if (data.Any())
+                    {
+                        data
+                        .Set(v => v.c_title, insert.Title)
+                        .Set(v => v.c_adress, insert.Adress)
+                        .Set(v => v.n_geopoint_x, insert.GeopointX)
+                        .Set(v => v.n_geopoint_y, insert.GeopointY)
+                        .Set(v => v.c_phone, insert.Phone)
+                        .Set(v => v.c_phone_reception, insert.PhoneReception)
+                        .Set(v => v.c_fax, insert.Fax)
+                        .Set(v => v.c_email, insert.Email)
+                        .Set(v => v.c_routes, insert.Routes)
+                        .Set(v => v.c_schedule, insert.Schedule)
+                        .Set(v => v.c_director_post, insert.DirecorPost)
+                        .Set(v => v.f_director, insert.DirectorF)
+                        .Update();
+
+                        //логирование
+                        //insertLog(UserId, IP, "update", id, String.Empty, "Orgs", insert.Title);
+                        var log = new LogModel()
+                        {
+                            Site = _domain,
+                            Section = LogSection.Orgs,
+                            Action = LogAction.update,
+                            PageId = id,
+                            PageName = insert.Title,
+                            UserId = _currentUserId,
+                            IP = _ip,
+                        };
+                        insertLog(log);
+
+                        tran.Commit();
+                        return true;
+                    }
                     return false;
                 }
             }
@@ -564,24 +641,42 @@ namespace cms.dbase
         /// <param name="UserId">Пользователь</param>
         /// <param name="IP">ip-адрес</param>
         /// <returns></returns>
-        public override bool delStructure(Guid id, Guid UserId, String IP)
+        public override bool deleteStructure(Guid id)
         {
             using (var db = new CMSdb(_context))
             {
-                var data = db.content_org_structures.Where(w => w.id == id);
-                Guid IdOrg = data.FirstOrDefault().f_ord;
-                int ThisSort = data.FirstOrDefault().n_sort;
-                string logTitle = data.FirstOrDefault().c_title;
-                if (data.Any())
+                using (var tran = db.BeginTransaction())
                 {
+                    var data = db.content_org_structures.Where(w => w.id == id);
+                    Guid IdOrg = data.FirstOrDefault().f_ord;
+                    int ThisSort = data.FirstOrDefault().n_sort;
+                    string logTitle = data.FirstOrDefault().c_title;
+                    if (data.Any())
+                    {
+                        data.Delete();
+                        db.content_org_structures.Where(w => w.f_ord == IdOrg && w.n_sort > ThisSort)
+                            .Set(p => p.n_sort, p => p.n_sort - 1)
+                            .Update();//смещение n_sort
 
-                    data.Delete();
-                    db.content_org_structures.Where(w => w.f_ord == IdOrg && w.n_sort > ThisSort).Set(p => p.n_sort, p => p.n_sort - 1).Update();//смещение n_sort
-                    //логирование
-                    insertLog(UserId, IP, "delete", id, String.Empty, "Orgs", logTitle);
-                    return true;
+                        //логирование
+                        //insertLog(UserId, IP, "delete", id, String.Empty, "Orgs", logTitle);
+                        var log = new LogModel()
+                        {
+                            Site = _domain,
+                            Section = LogSection.Orgs,
+                            Action = LogAction.delete,
+                            PageId = id,
+                            PageName = logTitle,
+                            UserId = _currentUserId,
+                            IP = _ip,
+                        };
+                        insertLog(log);
+
+                        tran.Commit();
+                        return true;
+                    }
+                    return false;
                 }
-                return false;
             }
         }
 
@@ -595,29 +690,33 @@ namespace cms.dbase
         {
             using (var db = new CMSdb(_context))
             {
-                var thisdata = db.content_org_structures.Where(w => w.id == id).FirstOrDefault();
-                int actual_num = thisdata.n_sort;
-                Guid OrgId = thisdata.f_ord;
-                if (new_num > actual_num)
+                using (var tran = db.BeginTransaction())
                 {
+                    var thisdata = db.content_org_structures.Where(w => w.id == id).FirstOrDefault();
+                    int actual_num = thisdata.n_sort;
+                    Guid OrgId = thisdata.f_ord;
+                    if (new_num > actual_num)
+                    {
+                        db.content_org_structures
+                            .Where(w => w.f_ord == OrgId && w.n_sort > actual_num && w.n_sort <= new_num)
+                            .Set(p => p.n_sort, p => p.n_sort - 1)
+                            .Update();
+                    }
+                    else
+                    {
+                        db.content_org_structures
+                            .Where(w => w.f_ord == OrgId && w.n_sort < actual_num && w.n_sort >= new_num)
+                            .Set(p => p.n_sort, p => p.n_sort + 1)
+                            .Update();
+                    }
                     db.content_org_structures
-                        .Where(w => w.f_ord == OrgId && w.n_sort > actual_num && w.n_sort <= new_num)
-                        .Set(p => p.n_sort, p => p.n_sort - 1)
+                        .Where(w => w.f_ord == OrgId && w.id == id)
+                        .Set(s => s.n_sort, new_num)
                         .Update();
-                }
-                else
-                {
-                    db.content_org_structures
-                        .Where(w => w.f_ord == OrgId && w.n_sort < actual_num && w.n_sort >= new_num)
-                        .Set(p => p.n_sort, p => p.n_sort + 1)
-                        .Update();
-                }
-                db.content_org_structures
-                    .Where(w => w.f_ord == OrgId && w.id == id)
-                    .Set(s => s.n_sort, new_num)
-                    .Update();
 
-                return true;
+                    tran.Commit();
+                    return true;
+                }
             }
         }
 
@@ -625,7 +724,7 @@ namespace cms.dbase
         /// Добавляем ОВП
         /// </summary>        
         /// <returns></returns>
-        public override bool insOvp(Guid IdStructure, Guid OrgId, StructureModel insertStructure, Guid UserId, String IP)
+        public override bool insOvp(Guid IdStructure, Guid OrgId, StructureModel insertStructure)
         {
             using (var db = new CMSdb(_context))
             {
@@ -675,8 +774,21 @@ namespace cms.dbase
                     db.Insert(cdStructur);
                     db.Insert(cdDepart);
                     tran.Commit();
+                    
                     //логирование
-                    insertLog(UserId, IP, "insert", IdStructure, String.Empty, "Orgs", logTitle);
+                    //insertLog(UserId, IP, "insert", IdStructure, String.Empty, "Orgs", logTitle);
+                    var log = new LogModel()
+                    {
+                        Site = _domain,
+                        Section = LogSection.Orgs,
+                        Action = LogAction.insert,
+                        PageId = IdStructure,
+                        PageName = logTitle,
+                        UserId = _currentUserId,
+                        IP = _ip,
+                    };
+                    insertLog(log);
+
                     return true;
                 }
             }
@@ -690,7 +802,7 @@ namespace cms.dbase
         /// <param name="UserId">Пользователь</param>
         /// <param name="IP">ip-адрес</param>
         /// <returns></returns>
-        public override bool setOvp(Guid IdStructure, StructureModel updStructure, Guid UserId, String IP)
+        public override bool setOvp(Guid IdStructure, StructureModel updStructure)
         {
             using (var db = new CMSdb(_context))
             {
@@ -723,7 +835,19 @@ namespace cms.dbase
                     db.Update(cdDepart);
                     tran.Commit();
                     //логирование
-                    insertLog(UserId, IP, "update", IdStructure, String.Empty, "Orgs", updStructure.Title);
+                    //insertLog(UserId, IP, "update", IdStructure, String.Empty, "Orgs", updStructure.Title);
+                    var log = new LogModel()
+                    {
+                        Site = _domain,
+                        Section = LogSection.Orgs,
+                        Action = LogAction.update,
+                        PageId = IdStructure,
+                        PageName = updStructure.Title,
+                        UserId = _currentUserId,
+                        IP = _ip,
+                    };
+                    insertLog(log);
+
                     return true;
                 }
             }
@@ -898,7 +1022,7 @@ namespace cms.dbase
         /// <param name="Label"></param>
         /// <param name="Value"></param>
         /// <returns></returns>
-        public override bool insDepartmentsPhone(Guid idDepart, string Label, string Value, Guid UserId, String IP)
+        public override bool insDepartmentsPhone(Guid idDepart, string Label, string Value)
         {
             using (var db = new CMSdb(_context))
             {
@@ -911,8 +1035,22 @@ namespace cms.dbase
                    .Value(v => v.c_val, Value)
                    .Value(v => v.n_sort, Sort)
                    .Insert();
+                
                 //логирование
-                insertLog(UserId, IP, "insert_phone_depart", idDepart, String.Empty, "Orgs", Label);
+                //insertLog(UserId, IP, "insert_phone_depart", idDepart, String.Empty, "Orgs", Label);
+                var log = new LogModel()
+                {
+                    Site = _domain,
+                    Section = LogSection.Orgs,
+                    Action = LogAction.insert,
+                    PageId = idDepart,
+                    PageName = Label,
+                    UserId = _currentUserId,
+                    IP = _ip,
+                };
+                insertLog(log);
+
+
                 return true;
             }
         }
@@ -969,7 +1107,7 @@ namespace cms.dbase
         /// <param name="UserId">Пользователь</param>
         /// <param name="IP">ip-адрес</param>
         /// <returns></returns>
-        public override bool insDepartament(Guid id, Guid Structure, Departments insert, Guid UserId, String IP)
+        public override bool insDepartament(Guid id, Guid Structure, Departments insert)
         {
             using (var db = new CMSdb(_context))
             {
@@ -1003,6 +1141,20 @@ namespace cms.dbase
                 {
                     db.Insert(cdDepart);
                     tran.Commit();
+
+                    //логирование
+                    // insertLog(UserId, IP, "insert", id, String.Empty, "Site", insert.Title);
+                    var log = new LogModel()
+                    {
+                        Site = _domain,
+                        Section = LogSection.Sites,
+                        Action = LogAction.insert,
+                        PageId = id,
+                        PageName = insert.Title,
+                        UserId = _currentUserId,
+                        IP = _ip,
+                    };
+                    insertLog(log);
                 }
                 return true;
             }
@@ -1016,7 +1168,7 @@ namespace cms.dbase
         /// <param name="UserId">Пользователь</param>
         /// <param name="IP">ip-адрес</param>
         /// <returns></returns>
-        public override bool updDepartament(Guid id, Departments insert, Guid UserId, String IP)
+        public override bool updDepartament(Guid id, Departments insert)
         {
             using (var db = new CMSdb(_context))
             {
@@ -1048,7 +1200,7 @@ namespace cms.dbase
         /// <param name="UserId">Пользователь</param>
         /// <param name="IP">ip-адрес</param>
         /// <returns></returns>
-        public override bool delDepartament(Guid id, Guid UserId, String IP)
+        public override bool delDepartament(Guid id)
         {
             using (var db = new CMSdb(_context))
             {

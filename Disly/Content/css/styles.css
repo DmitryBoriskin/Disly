@@ -757,6 +757,7 @@ a.tree-btn.new:before {
     min-height:52px;
     padding:0 20px;
     background: #e6edf2;
+    z-index:999;
 }
 .button {
     overflow:hidden;

@@ -11,6 +11,7 @@ using System.Collections.Specialized;
 using System.Text.RegularExpressions;
 using System.Web;
 using System.IO;
+using Portal.Code;
 
 namespace Disly.Areas.Admin.Controllers
 {
@@ -38,6 +39,9 @@ namespace Disly.Areas.Admin.Controllers
 
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
+            //DBDataModels.YRControlEvent += DBDataModels_YRControlEvent;
+            cmsRepository.DislyEvent += CmsRepository_DislyEvent;
+
             base.OnActionExecuting(filterContext);
             
             ControllerName = filterContext.RouteData.Values["Controller"].ToString().ToLower();
@@ -50,10 +54,12 @@ namespace Disly.Areas.Admin.Controllers
                 if (Request.Url.Host.ToLower().Replace("www.", "") != ConfigurationManager.AppSettings["BaseURL"]) filterContext.Result = Redirect("/Error/");
                 else Domain = String.Empty;
             }
+            ViewBag.Domain = Domain;
 
             StartUrl = "/Admin/" + (String)RouteData.Values["controller"] + "/";
 
-            #region Настройки сайта
+            #region Настройки сайта            
+                
             //SettingsInfo = _cmsRepository.getCmsSettings();
             // Сайт, на котором находимся
             //if (Domain != String.Empty) SettingsInfo.ThisSite = _cmsRepository.getSite(Domain);
@@ -63,8 +69,10 @@ namespace Disly.Areas.Admin.Controllers
             try { _userId = new Guid(System.Web.HttpContext.Current.User.Identity.Name); }
             catch { FormsAuthentication.SignOut(); }
             AccountInfo = _accountRepository.getCmsAccount(_userId);
+
             // Список доменов, доступных пользователю
             AccountInfo.Domains = _accountRepository.getUserDomains(_userId);
+
             #endregion
             #region Права пользователя
             UserResolutionInfo = _accountRepository.getCmsUserResolutioInfo(_userId, ControllerName);
@@ -83,6 +91,7 @@ namespace Disly.Areas.Admin.Controllers
                 {
                     if (domain.SiteId == Domain) { IsRedirect++; }
                 }
+
                 //перенаправляем на первый из своих доменов
                 if(IsRedirect==0)
                 {
@@ -100,11 +109,55 @@ namespace Disly.Areas.Admin.Controllers
             catch { }
             #endregion
         }
-        
+
+        private void CmsRepository_DislyEvent(object sender, DislyEventArgs e)
+        {
+            switch (e.EventLevel)
+            {
+                case LogLevelEnum.Debug:
+                    AppLogger.Debug(e.Message, e.Exception);
+                    break;
+                case LogLevelEnum.Error:
+                    AppLogger.Error(e.Message, e.Exception);
+                    break;
+                case LogLevelEnum.Warn:
+                    AppLogger.Warn(e.Message, e.Exception);
+                    break;
+                case LogLevelEnum.Info:
+                    AppLogger.Info(e.Message, e.Exception);
+                    break;
+            }
+        }
+
         public CoreController()
         {
             _accountRepository = new AccountRepository("cmsdbConnection");
-            _cmsRepository = new cmsRepository("cmsdbConnection");
+
+            Guid userId = Guid.Empty;
+            var domainUrl = "";
+
+            if(System.Web.HttpContext.Current != null)
+            {
+                var context = System.Web.HttpContext.Current;
+
+                if (context.Request != null && context.Request.Url != null && !string.IsNullOrEmpty(context.Request.Url.Host))
+                    domainUrl = context.Request.Url.Host.ToLower().Replace("www.", "");
+
+                if (context.User != null && context.User.Identity != null && !string.IsNullOrEmpty(context.User.Identity.Name))
+                {
+                    try
+                    {
+                        userId = Guid.Parse(System.Web.HttpContext.Current.User.Identity.Name);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new Exception("Не удалось определить идентификатор пользователя" + ex);
+                    }
+                }
+            }
+
+            _cmsRepository = new cmsRepository("cmsdbConnection", userId, RequestUserInfo.IP, domainUrl);
+
         }
         
         public string addFiltrParam(string query, string name, string val)

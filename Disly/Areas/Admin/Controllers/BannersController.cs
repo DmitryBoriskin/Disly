@@ -151,12 +151,12 @@ namespace Disly.Areas.Admin.Controllers
 
                 if (!_cmsRepository.checkBannerExist(id))
                 {
-                    _cmsRepository.createBanner(id, back_model.Item, AccountInfo.id, RequestUserInfo.IP);
+                    _cmsRepository.createBanner(id, back_model.Item); //AccountInfo.id, RequestUserInfo.IP
                     userMessage.info = "Запись добавлена";
                 }
                 else
                 {
-                    _cmsRepository.updateBanner(id, back_model.Item, AccountInfo.id, RequestUserInfo.IP);
+                    _cmsRepository.updateBanner(id, back_model.Item); //AccountInfo.id, RequestUserInfo.IP
                     userMessage.info = "Запись обновлена";
                 }
 
@@ -218,7 +218,7 @@ namespace Disly.Areas.Admin.Controllers
         {
             model.Item = _cmsRepository.getBanner(id);
 
-            _cmsRepository.deleteBanner(id, AccountInfo.id, RequestUserInfo.IP);
+            _cmsRepository.deleteBanner(id); //, AccountInfo.id, RequestUserInfo.IP
 
             // удаляем файл изображения
             if (System.IO.File.Exists(Server.MapPath(model.Item.Photo.Url)))

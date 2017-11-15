@@ -61,7 +61,7 @@ namespace Disly.Areas.Admin.Controllers
                 Cripto pass = new Cripto(NewPass.ToCharArray());
                 string NewSalt = pass.Salt;
                 string NewHash = pass.Hash;
-                _cmsRepository.changePassword(id, NewSalt, NewHash, AccountInfo.id, RequestUserInfo.IP);
+                _cmsRepository.changePassword(id, NewSalt, NewHash); //, AccountInfo.id, RequestUserInfo.IP
                 ViewBag.SuccesAlert = "Пароль изменен";
                 #region оповещение на e-mail
                 //string ErrorText = "";
@@ -361,7 +361,7 @@ namespace Disly.Areas.Admin.Controllers
             switch (group.ToLower())
             {
                 case "cmsmenu":
-                    Result = _cmsRepository.permit_cmsMenu(id, permit, AccountInfo.id, RequestUserInfo.IP);
+                    Result = _cmsRepository.permit_cmsMenu(id, permit);
                     break;
                 case "sitemap":
                     Result = _cmsRepository.permit_SiteMap(id, permit, Domain, menuSort);

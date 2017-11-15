@@ -140,7 +140,7 @@ namespace Disly.Areas.Admin.Controllers
                 #region обновление
                 if (ModelState.IsValid)
                 {
-                    _cmsRepository.setOrgs(id, back_model.Item, AccountInfo.id, RequestUserInfo.IP);
+                    _cmsRepository.updateOrg(id, back_model.Item); //, AccountInfo.id, RequestUserInfo.IP
                     userMessege.info = "Запись сохранена";
                     userMessege.buttons = new ErrorMassegeBtn[]{
                     new ErrorMassegeBtn { url = StartUrl + Request.Url.Query, text = "вернуться в список" },
@@ -161,7 +161,7 @@ namespace Disly.Areas.Admin.Controllers
                 #region создание
                 if (ModelState.IsValid)
                 {
-                    if (_cmsRepository.insOrgs(id, back_model.Item, AccountInfo.id, RequestUserInfo.IP))
+                    if (_cmsRepository.insertOrg(id, back_model.Item)) //, AccountInfo.id, RequestUserInfo.IP
                     {
                         userMessege.info = "Запись создана";
                         userMessege.buttons = new ErrorMassegeBtn[]{
@@ -198,7 +198,7 @@ namespace Disly.Areas.Admin.Controllers
         {
             ErrorMassege userMassage = new ErrorMassege();
             userMassage.title = "Информация";
-            if (_cmsRepository.delOrgs(id, AccountInfo.id, RequestUserInfo.IP))
+            if (_cmsRepository.deleteOrg(id)) //, AccountInfo.id, RequestUserInfo.IP
             {
                 userMassage.info = "Запись Удалена";
                 userMassage.buttons = new ErrorMassegeBtn[]{
@@ -278,7 +278,7 @@ namespace Disly.Areas.Admin.Controllers
                     {
                         ViewBag.OrgId = OrgId;
                         Guid OrgGuid = Guid.Parse(OrgId);
-                        if (_cmsRepository.insStructure(id, OrgGuid, back_model.StructureItem, AccountInfo.id, RequestUserInfo.IP))
+                        if (_cmsRepository.insertStructure(id, OrgGuid, back_model.StructureItem)) //, AccountInfo.id, RequestUserInfo.IP
                         {
                             userMessage.info = "Запись создана";
                             userMessage.buttons = new ErrorMassegeBtn[]{
@@ -293,7 +293,7 @@ namespace Disly.Areas.Admin.Controllers
                 else
                 {
                     #region обновление                    
-                    if (_cmsRepository.setStructure(id, back_model.StructureItem, AccountInfo.id, RequestUserInfo.IP))
+                    if (_cmsRepository.updateStructure(id, back_model.StructureItem)) //, AccountInfo.id, RequestUserInfo.IP
                     {
                         userMessage.info = "Запись обновлена";
                         userMessage.buttons = new ErrorMassegeBtn[]{
@@ -316,7 +316,8 @@ namespace Disly.Areas.Admin.Controllers
             ErrorMassege userMassage = new ErrorMassege();
             userMassage.title = "Информация";
             Guid ParentOrgId= _cmsRepository.getStructure(id).OrgId;            
-            if (_cmsRepository.delStructure(id, AccountInfo.id, RequestUserInfo.IP)) {
+            if (_cmsRepository.deleteStructure(id))
+            {
                 userMassage.info = "Запись Удалена";
                 userMassage.buttons = new ErrorMassegeBtn[]{
                     new ErrorMassegeBtn { url = "#", text = "ок", action = "false" },
@@ -398,11 +399,11 @@ namespace Disly.Areas.Admin.Controllers
                 #region создание
                 if (ModelState.IsValid)
                 {
-                    var OrgId = Request.Params["orgid"];
+                    var OrgId = Request.Form["orgid"];
                     if (OrgId != null)
                     {
                         Guid OrgGuid = Guid.Parse(OrgId);
-                        if(_cmsRepository.insOvp(id, OrgGuid, back_model.StructureItem, AccountInfo.id, RequestUserInfo.IP))
+                        if(_cmsRepository.insOvp(id, OrgGuid, back_model.StructureItem)) //, AccountInfo.id, RequestUserInfo.IP
                         {
                             userMessage.info = "Запись создана";
                             userMessage.buttons = new ErrorMassegeBtn[]{
@@ -416,11 +417,17 @@ namespace Disly.Areas.Admin.Controllers
                             {
                                 new ErrorMassegeBtn { url = "#", text = "ок", action = "false" }
                             };
-
-                        }
-                        
+                        }                        
                     }
-                        
+                    else
+                    {
+                        userMessage.info = "Произошла ошибка";
+                        userMessage.buttons = new ErrorMassegeBtn[]
+                        {
+                                new ErrorMassegeBtn { url = "#", text = "ок", action = "false" }
+                        };
+                    }
+
                 }
                 #endregion
             }
@@ -432,7 +439,7 @@ namespace Disly.Areas.Admin.Controllers
                 }
                 #region обновление
                 if (ModelState.IsValid) {
-                    if (_cmsRepository.setOvp(id, back_model.StructureItem, AccountInfo.id, RequestUserInfo.IP))
+                    if (_cmsRepository.setOvp(id, back_model.StructureItem)) //, AccountInfo.id, RequestUserInfo.IP
                     {
                         userMessage.info = "Запись обновлена";
                         userMessage.buttons = new ErrorMassegeBtn[]{
@@ -540,7 +547,7 @@ namespace Disly.Areas.Admin.Controllers
                     if (StrucId != null)
                     {
                         Guid StrucGuid = Guid.Parse(StrucId);
-                        if (_cmsRepository.insDepartament(id, StrucGuid, back_model.DepartmentItem, AccountInfo.id, RequestUserInfo.IP))
+                        if (_cmsRepository.insDepartament(id, StrucGuid, back_model.DepartmentItem)) //, AccountInfo.id, RequestUserInfo.IP
                         {
                             userMessage.info = "Запись создана";
                             userMessage.buttons = new ErrorMassegeBtn[]{
@@ -555,7 +562,7 @@ namespace Disly.Areas.Admin.Controllers
                 else
                 {
                     #region обновление
-                    if(_cmsRepository.updDepartament(id, back_model.DepartmentItem, AccountInfo.id, RequestUserInfo.IP))
+                    if(_cmsRepository.updDepartament(id, back_model.DepartmentItem)) //, AccountInfo.id, RequestUserInfo.IP
                     {
                         userMessage.info = "Запись обновлена";
                         userMessage.buttons = new ErrorMassegeBtn[]{
@@ -578,7 +585,7 @@ namespace Disly.Areas.Admin.Controllers
             ErrorMassege userMassage = new ErrorMassege();
             userMassage.title = "Информация";
             Guid IdParentStruct = _cmsRepository.getDepartamentItem(id).StructureF;
-            if (_cmsRepository.delDepartament(id, AccountInfo.id, RequestUserInfo.IP))
+            if (_cmsRepository.delDepartament(id)) //, AccountInfo.id, RequestUserInfo.IP
             {
                 userMassage.info = "Запись Удалена";
                 userMassage.buttons = new ErrorMassegeBtn[]{
@@ -607,7 +614,7 @@ namespace Disly.Areas.Admin.Controllers
             string IdDepartment = Request["DepartmentItem.Id"];
             string PhoneLabel = Request["new_phone_label"];
             string PhoneValue = Request["new_phone_value"];
-            _cmsRepository.insDepartmentsPhone(Guid.Parse(IdDepartment), PhoneLabel, PhoneValue, AccountInfo.id, RequestUserInfo.IP);
+            _cmsRepository.insDepartmentsPhone(Guid.Parse(IdDepartment), PhoneLabel, PhoneValue); //, AccountInfo.id, RequestUserInfo.IP
             return Redirect(((System.Web.HttpRequestWrapper)Request).RawUrl);
         }
         public ActionResult DelPhoneDepart(int id)

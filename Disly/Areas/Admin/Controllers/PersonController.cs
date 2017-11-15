@@ -110,7 +110,7 @@ namespace Disly.Areas.Admin.Controllers
             {
                 if (_cmsRepository.check_user(Id))
                 {
-                    _cmsRepository.updateUser(Id, back_model.Item, AccountInfo.id, RequestUserInfo.IP);
+                    _cmsRepository.updateUser(Id, back_model.Item); //, AccountInfo.id, RequestUserInfo.IP
                     userMassege.info = "Запись обновлена";
                 }
                 else if (!_cmsRepository.check_user(back_model.Item.EMail))
@@ -123,7 +123,7 @@ namespace Disly.Areas.Admin.Controllers
                     back_model.Item.Salt = NewSalt;
                     back_model.Item.Hash = NewHash;
 
-                    _cmsRepository.createUser(Id, back_model.Item, AccountInfo.id, RequestUserInfo.IP);
+                    _cmsRepository.createUser(Id, back_model.Item); //, AccountInfo.id, RequestUserInfo.IP
 
                     userMassege.info = "Запись добавлена";
                 }
@@ -163,7 +163,7 @@ namespace Disly.Areas.Admin.Controllers
         [MultiButton(MatchFormKey = "action", MatchFormValue = "delete-btn")]
         public ActionResult Delete(Guid Id)
         {
-            _cmsRepository.deleteUser(Id, AccountInfo.id, RequestUserInfo.IP);
+            _cmsRepository.deleteUser(Id); //, AccountInfo.id, RequestUserInfo.IP
 
             // записываем информацию о результатах
             ErrorMassege userMassege = new ErrorMassege();

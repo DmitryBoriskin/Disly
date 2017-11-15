@@ -39,6 +39,7 @@ namespace Disly.Controllers
 
             var filter = getFilter();
             model.DoctorsList = _repository.getPeopleList(filter);
+            model.DepartmentsSelectList = _repository.getDeparatamentsSelectList(Domain);
 
             #region Создаем переменные (значения по умолчанию)
             PageViewModel Model = new PageViewModel();

@@ -65,6 +65,7 @@ namespace Disly.Areas.Admin.Controllers
             if (model.Item == null)
                 model.Item = new MaterialsModel()
                 {
+                    Id = Id,
                     Date = DateTime.Now
                 };
 
