@@ -11,15 +11,20 @@ body {
     font-size: 16px;
 }
 
-.container {
-    width: 1110px !important;
-    padding: 0;
+
+@media (min-width: 1200px){
+    .container {
+        width: 1110px !important;
+        /*padding: 0;*/
+    }
 }
 
-.container-fluid {
+
+
+/*.container-fluid {
     padding-left: 0 !important;
     padding-right: 0 !important;
-}
+}*/
 
 .module-main-page {
     margin-bottom: 30px;

@@ -73,10 +73,14 @@ namespace Disly.Controllers
             model.StructureItem = _repository.getStructureItem(Domain, num);
             if (model.StructureItem != null)
             {
-                model.Breadcrumbs.Add(new Breadcrumbs()
+                if (model.Breadcrumbs != null)
                 {
-                    Title = model.StructureItem.Title
-                });
+                    model.Breadcrumbs.Add(new Breadcrumbs()
+                    {
+                        Title = model.StructureItem.Title
+                    });
+                }
+                
                 model.DepartmentList = _repository.getDepartmentsList(model.StructureItem.Id);
             }
             
@@ -105,15 +109,18 @@ namespace Disly.Controllers
             model.StructureItem = _repository.getStructureItem(Domain, num);
             if (model.StructureItem != null)
             {
-                model.Breadcrumbs.Add(new Breadcrumbs()
+                if (model.Breadcrumbs != null)
                 {
-                    Title = model.StructureItem.Title,
-                    Url = "/"+ControllerName + "/" + num
-                });
+                    model.Breadcrumbs.Add(new Breadcrumbs()
+                    {
+                        Title = model.StructureItem.Title,
+                        Url = "/" + ControllerName + "/" + num
+                    });
+                }                
             }
 
             model.DepartmentItem = _repository.getDepartmentsItem(id);
-            if (model.DepartmentItem != null)
+            if (model.Breadcrumbs != null)
             {
                 model.Breadcrumbs.Add(new Breadcrumbs()
                 {
