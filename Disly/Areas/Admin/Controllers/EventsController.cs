@@ -1,15 +1,16 @@
 ﻿using cms.dbModel.entity;
- using Disly.Areas.Admin.Models;
- using System;
- using System.Collections.Generic;
- using System.Configuration;
- using System.IO;
- using System.Linq;
- using System.Net;
- using System.Web;
- using System.Web.Mvc;
- 
- namespace Disly.Areas.Admin.Controllers
+using Disly.Areas.Admin.Models;
+using Disly.Areas.Admin.Service;
+using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.IO;
+using System.Linq;
+using System.Net;
+using System.Web;
+using System.Web.Mvc;
+
+namespace Disly.Areas.Admin.Controllers
  {
      public class EventsController : CoreController
      {
@@ -210,6 +211,15 @@
                     };
                 }
                 #endregion
+
+                if (String.IsNullOrEmpty(bindData.Item.Alias))
+                {
+                    bindData.Item.Alias = Transliteration.Translit(bindData.Item.Title);
+                }
+                else
+                {
+                    bindData.Item.Alias = Transliteration.Translit(bindData.Item.Alias);
+                }
 
                 //Определяем Insert или Update
                 if (getEvent != null)

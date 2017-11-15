@@ -1,4 +1,3 @@
-using cms.dbModel.entity;
 using Disly.Areas.Admin.Service;
 using System;
 using System.Drawing;
@@ -16,6 +15,7 @@ public class Files
     /// <param name="maxWidth">Максимальная ширина</param>
     /// <param name="maxHeight">Максимальная высота</param>
     /// http://hellomvc.blogspot.ru/2011/03/uploading-with-resize.html
+    /// 
     public static string SaveImageResize(HttpPostedFileBase hpf, string Path ,int FinWidth, int FinHeight)
     {
         ImageCodecInfo myImageCodecInfo = GetEncoderInfo("image/jpeg");
@@ -159,9 +159,12 @@ public class Files
         /// <returns></returns>
         public static string Size(string url)
         {
-            string Resalt = String.Empty;
+            string Result = String.Empty;
 
             FileInfo _File = new FileInfo(HttpContext.Current.Request.MapPath(url));
+
+            if (!File.Exists(HttpContext.Current.Request.MapPath(url)))
+                return Result = "0 byte";
 
             int FileSize = Convert.ToInt32(_File.Length.ToString());
             string FileSizeName = "byte";
@@ -182,9 +185,9 @@ public class Files
 
                 FileSizeName = "mb";
             }
-            Resalt = FileSize.ToString() + " " + FileSizeName;
+            Result = FileSize.ToString() + " " + FileSizeName;
 
-            return Resalt;
+            return Result;
         }
 
         /// <summary>
