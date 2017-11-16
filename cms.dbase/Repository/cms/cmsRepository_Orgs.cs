@@ -1281,7 +1281,7 @@ namespace cms.dbase
                         Guid OrgId = data_str.First().f_ord;
                         var PeopleList = db.content_people_org_links
                                            .Where(w => w.f_org == OrgId)
-                                           .Where(w => (w.fkcontentpeopleorgdepartmentlinks == null || w.fkcontentpeopleorgdepartmentlinks.FirstOrDefault().f_department != idDepar))
+                                           //.Where(w => (w.fkcontentpeopleorgdepartmentlinks == null || w.fkcontentpeopleorgdepartmentlinks.FirstOrDefault().f_department != idDepar))
                                            .Select(s => new People
                                            {
                                                FIO = s.fkcontentpeopleorglink.c_surname + " " + s.fkcontentpeopleorglink.c_name + " " + s.fkcontentpeopleorglink.c_patronymic,

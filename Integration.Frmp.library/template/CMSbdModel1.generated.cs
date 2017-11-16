@@ -27,10 +27,11 @@ namespace Integration.Frmp.models
 	/// </summary>
 	public partial class DbModel : LinqToDB.Data.DataConnection
 	{
-		public ITable<ImportFrmpOrgs>        ImportFrmpOrgss        { get { return this.GetTable<ImportFrmpOrgs>(); } }
-		public ITable<ImportFrmpOrgsPeoples> ImportFrmpOrgsPeopless { get { return this.GetTable<ImportFrmpOrgsPeoples>(); } }
-		public ITable<ImportFrmpPeoples>     ImportFrmpPeopless     { get { return this.GetTable<ImportFrmpPeoples>(); } }
-		public ITable<ImportFrmpPosts>       ImportFrmpPostss       { get { return this.GetTable<ImportFrmpPosts>(); } }
+		public ITable<ImportFrmpOrgs>            ImportFrmpOrgss            { get { return this.GetTable<ImportFrmpOrgs>(); } }
+		public ITable<ImportFrmpOrgsPeoples>     ImportFrmpOrgsPeopless     { get { return this.GetTable<ImportFrmpOrgsPeoples>(); } }
+		public ITable<ImportFrmpPeoplePostsLink> ImportFrmpPeoplePostsLinks { get { return this.GetTable<ImportFrmpPeoplePostsLink>(); } }
+		public ITable<ImportFrmpPeoples>         ImportFrmpPeopless         { get { return this.GetTable<ImportFrmpPeoples>(); } }
+		public ITable<ImportFrmpPosts>           ImportFrmpPostss           { get { return this.GetTable<ImportFrmpPosts>(); } }
 
 		public DbModel()
 			: base("DbModel")
@@ -100,6 +101,13 @@ namespace Integration.Frmp.models
 	{
 		[Column(@"f_oid"),    NotNull] public string FOid    { get; set; } // varchar(64)
 		[Column(@"f_people"), NotNull] public Guid   FPeople { get; set; } // uniqueidentifier
+	}
+
+	[Table(Schema="dbo", Name="import_frmp_people_posts_link")]
+	public partial class ImportFrmpPeoplePostsLink
+	{
+		[Column(@"f_people"),        NotNull] public Guid FPeople       { get; set; } // uniqueidentifier
+		[Column(@"f_employee_post"), NotNull] public int  FEmployeePost { get; set; } // int
 	}
 
 	[Table(Schema="dbo", Name="import_frmp_peoples")]

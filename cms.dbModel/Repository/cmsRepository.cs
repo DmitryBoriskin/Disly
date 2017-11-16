@@ -1,4 +1,5 @@
 ﻿using cms.dbModel.entity;
+using cms.dbModel.entity.cms;
 using System;
 using System.Collections.Generic;
 
@@ -189,5 +190,15 @@ namespace cms.dbModel
         public abstract bool updateBanner(Guid id, BannersModel item);
         public abstract bool deleteBanner(Guid id);
         public abstract bool permit_Banners(Guid id, int permit, string domain);
+
+        // Главные специалисты
+        public abstract EmployeePostModel[] getEmployeePosts();
+        public abstract EmployeePostModel getEmployeePost(int id);
+        public abstract MainSpecialistList getMainSpecialistList(FilterParams filter);
+        public abstract MainSpecialistModel getMainSpecialistItem(Guid id);
+        public abstract EmployeeModel[] getEmployeeList(int[] specialisations);
+        public abstract bool createMainSpecialist(MainSpecialistModel item);
+        public abstract bool updateMainSpecialist(MainSpecialistModel item);
+        public abstract bool deleteMainSpecialist(Guid id);
     }
 }
