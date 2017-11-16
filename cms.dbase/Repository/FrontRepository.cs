@@ -684,13 +684,9 @@ namespace cms.dbase
                 }
                 if (!String.IsNullOrEmpty(filter.Group))
                 {
-                    #warning фильтрация врачей по отделнием не работает
                     query = query
-                            .Join(
-                                db.content_people_department_links, e => e.id, o => o.f_people, (e, o) => new{ e,o}
-                                )
-                                .Where(w=>w.o.f_department==Guid.Parse(filter.Group))
-                                .Select(s=>s.e);
+                            .Join(db.content_people_org_links, e => e.id, o => o.f_people, (o, e) => new { e, o })
+                            .Join(db.content_people_department_links, m => m.e.id, n => n.f_people, (m, n) => m.o);                    
                 }
 
                 var query1 = query.OrderBy(o => o.c_surname);
