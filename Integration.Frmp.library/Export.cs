@@ -68,6 +68,8 @@ namespace Integration.Frmp.library
                         .Select(p => p.RecordPost)
                         .Distinct()
                         .ToArray();
+                    
+
                     try
                     {
                         ImportPosts(posts);
@@ -80,7 +82,7 @@ namespace Integration.Frmp.library
                     // импорт сотрудников
                     var employees = arrayOfEmployees.Employees
                         .OrderBy(o => o.SNILS)
-                        .ThenByDescending(t => t.ChangeTime)
+                        .ThenByDescending(tt => tt.ChangeTime)
                         .ToArray();
                     try
                     {
@@ -89,6 +91,24 @@ namespace Integration.Frmp.library
                     catch (Exception e)
                     {
                         SrvcLogger.Fatal("{WORK}", "Ошибка при добавлении данных об сотрудниках в таблицу dbo.import_frmp_peoples" + Environment.NewLine + " " + e.ToString());
+                    }
+
+                    var postsEmployee = arrayOfEmployees.Employees
+                        .Select(s => new EmplPost
+                        {
+                            Id = s.ID,
+                            Posts = s.EmployeeRecords
+                                .Select(p => p.RecordPost)
+                                .ToArray()
+                        })
+                        .ToArray();
+                    try
+                    {
+                        ImportEmployeePostsLinks(postsEmployee);
+                    }
+                    catch (Exception e)
+                    {
+                        SrvcLogger.Fatal("{WORK}", "Ошибка при добавлении данных об сотрудниках в таблицу dbo.import_frmp_people_posts_link" + Environment.NewLine + " " + e.ToString());
                     }
                 }
             }
@@ -193,7 +213,7 @@ namespace Integration.Frmp.library
                 SrvcLogger.Debug("{WORK}", "Данные по должностям успешно добавлены в таблицу dbo.import_frmp_posts");
             }
         }
-
+        
         /// <summary>
         /// Запись данных по сотрудникам в таблицу dbo.import_frmp_peoples
         /// </summary>
@@ -268,7 +288,7 @@ namespace Integration.Frmp.library
                                 .Value(v => v.FPeople, id)
                                 .Insert();
                         }
-
+                        
                         if (i > 0 && i % 1000 == 0)
                             SrvcLogger.Debug("{WORK}", string.Format("Импортированно {0} сотрудников из {1}", i, employees.Count()));
                     }
@@ -281,7 +301,7 @@ namespace Integration.Frmp.library
                 SrvcLogger.Debug("{WORK}", "Данные по сотрудникам успешно добавлены в таблицу dbo.import_frmp_peoples");
                 SrvcLogger.Debug("{WORK}", "Данные связей сотрудников и организаций успешно добавлены в таблицу dbo.import_frmp_orgs_peoples");
 
-                // обновляем данные в таблицах dbo.content_people, dbo.content_people_org_link
+                // запуск хранимки для обновления боевых таблиц
                 try
                 {
                     db.ImportFrmpEmployees();
@@ -292,6 +312,44 @@ namespace Integration.Frmp.library
                 {
                     SrvcLogger.Fatal("{WORK}", "Ошибка при обновлении таблицы dbo.content_people" + Environment.NewLine + " " + e.ToString());
                 }
+            }
+        }
+
+        /// <summary>
+        /// Записываем данные в таблицу связей сотрудников и должностей dbo.import_frmp_people_posts_link
+        /// </summary>
+        /// <param name="emplPosts"></param>
+        private static void ImportEmployeePostsLinks(IEnumerable<EmplPost> emplPosts)
+        {
+            using (var db = new DbModel(connectionString))
+            {
+                //if (i > 0 && i % 1000 == 0)
+                //    SrvcLogger.Debug("{WORK}", string.Format("Импортированно {0} сотрудников из {1}", i, employees.Count()));
+                int count = 0;
+                int postsCount = emplPosts.Count();
+
+                foreach (var item in emplPosts)
+                {
+                    count++;
+                    foreach (var p in item.Posts)
+                    {
+                        var isExists = db.ImportFrmpPeoplePostsLinks
+                            .Where(w => w.FPeople.Equals(item.Id))
+                            .Where(w => w.FEmployeePost.Equals(p.ID));
+
+                        if (!isExists.Any())
+                        {
+                            db.ImportFrmpPeoplePostsLinks
+                                .Value(v => v.FPeople, item.Id)
+                                .Value(v => v.FEmployeePost, p.ID)
+                                .Insert();
+
+                            if (count % 1000 == 0)
+                                SrvcLogger.Debug("{WORK}", string.Format("Обработанно {0} сотрудников", count));
+                        }
+                    }
+                }
+                SrvcLogger.Debug("{WORK}", "Данные по сотрудникам успешно добавлены в таблицу dbo.import_frmp_people_posts_link");
             }
         }
 

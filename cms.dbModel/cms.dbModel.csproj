@@ -57,6 +57,9 @@
     <Compile Include="entity\cms\BannersModel.cs" />
     <Compile Include="entity\cms\ContentLinkModel.cs" />
     <Compile Include="entity\cms\SiteSectionModel.cs" />
+    <Compile Include="entity\cms\EmployeeModel.cs" />
+    <Compile Include="entity\cms\EmployeePostModel.cs" />
+    <Compile Include="entity\cms\MainSpecialistModel.cs" />
     <Compile Include="entity\cms\ObjectLinksModel.cs" />
     <Compile Include="entity\cms\LogModel.cs" />
     <Compile Include="entity\cms\VacanciesModel.cs" />

@@ -909,6 +909,7 @@ a.button.icon-cancel{
 .icon-clipboard:before { content:'\ead3'; }         /* Опросы */
 .icon-th-list-3:before { content:'\ed84'; }         /* Голосования */
 .icon-calc:before { content:'\e99d'; }              /* Опросы */
+.icon-graduation-cap:before {content:'\e98c'}              /* Главный специалист */
 
 .icon-menu:before {
     content:'\ed81';

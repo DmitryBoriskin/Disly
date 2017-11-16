@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Xml;
 using System.Xml.Serialization;
 
@@ -11,7 +12,7 @@ namespace Integration.Frmp.library.Models
         [XmlElement(ElementName = "Employee")]
         public Employee[] Employees { get; set; }
     }
-
+    
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "2.0.50727.3038")]
     [System.SerializableAttribute()]
@@ -19,5 +20,21 @@ namespace Integration.Frmp.library.Models
     {
         Male,
         Female,
+    }
+
+    /// <summary>
+    /// Должности сотрудника
+    /// </summary>
+    public class EmplPost
+    {
+        /// <summary>
+        /// Идентификатор
+        /// </summary>
+        public Guid Id { get; set; }
+
+        /// <summary>
+        /// Должности
+        /// </summary>
+        public IEnumerable<Post> Posts { get; set; }
     }
 }
