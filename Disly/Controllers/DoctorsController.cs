@@ -41,6 +41,9 @@ namespace Disly.Controllers
             model.DoctorsList = _repository.getPeopleList(filter);
             model.DepartmentsSelectList = _repository.getDeparatamentsSelectList(Domain);
 
+            ViewBag.SearchText = filter.SearchText;
+            ViewBag.DepartGroup = filter.Group;
+
             #region Создаем переменные (значения по умолчанию)
             PageViewModel Model = new PageViewModel();
             string _ViewName = (ViewName != String.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";

@@ -191,6 +191,13 @@ namespace cms.dbModel
         public abstract bool deleteBanner(Guid id);
         public abstract bool permit_Banners(Guid id, int permit, string domain);
 
+        //Разделы сайта
+        public abstract SiteSectionList getSiteSectionList(FilterParams filtr);
+        public abstract SiteSectionModel getSiteSectionItem(Guid id);
+        public abstract bool deleteSiteSection(Guid id);
+        public abstract bool updateSiteSection(SiteSectionModel upd);
+        public abstract bool insertSiteSection(SiteSectionModel sitesection);
+
         // Главные специалисты
         public abstract EmployeePostModel[] getEmployeePosts();
         public abstract EmployeePostModel getEmployeePost(int id);

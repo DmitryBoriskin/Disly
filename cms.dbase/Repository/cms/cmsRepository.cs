@@ -780,35 +780,43 @@ namespace cms.dbase
 
         public override bool deleteSite(Guid id)
         {
-            using (var db = new CMSdb(_context))
-            {
-                using (var tran = db.BeginTransaction())
+            try {
+                using (var db = new CMSdb(_context))
                 {
-                    var data = db.cms_sitess.Where(w => w.id == id);
-                    if (data.Any())
+                    using (var tran = db.BeginTransaction())
                     {
-                        string logTitle = data.Select(s => s.c_name).FirstOrDefault();
-                        data.Delete();
-                        //логирование
-                        //insertLog(UserId, IP, "delete", id, String.Empty, "Sites", logTitle);
-                        var log = new LogModel()
+                        var data = db.cms_sitess.Where(w => w.id == id);
+                        if (data.Any())
                         {
-                            Site = _domain,
-                            Section = LogSection.Sites,
-                            Action = LogAction.delete,
-                            PageId = id,
-                            PageName = logTitle,
-                            UserId = _currentUserId,
-                            IP = _ip,
-                        };
-                        insertLog(log);
+                            string logTitle = data.Select(s => s.c_name).FirstOrDefault();
+                            data.Delete();
+                            //логирование
+                            //insertLog(UserId, IP, "delete", id, String.Empty, "Sites", logTitle);
+                            var log = new LogModel()
+                            {
+                                Site = _domain,
+                                Section = LogSection.Sites,
+                                Action = LogAction.delete,
+                                PageId = id,
+                                PageName = logTitle,
+                                UserId = _currentUserId,
+                                IP = _ip,
+                            };
+                            insertLog(log);
 
-                        tran.Commit();
-                        return true;
+                            tran.Commit();
+                            return true;
+                        }
+                        return false;
                     }
-                    return false;
                 }
             }
+            catch (Exception ex)
+            {
+                OnDislyEvent(new DislyEventArgs(LogLevelEnum.Debug, "cmsRepository: deleteSite id = " + id, ex));
+                return false;
+            }
+           
         }
 
         private Domain[] getSiteDomains(CMSdb db, string SiteId)

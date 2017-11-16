@@ -1,13 +1,11 @@
 ﻿using cms.dbase;
 using cms.dbModel.entity;
-using Disly.Areas.Admin.Models;
 using System;
 using System.Configuration;
 using System.Reflection;
 using System.Web.Mvc;
 using System.Web.Security;
 using System.Linq;
-using System.Collections.Specialized;
 using System.Text.RegularExpressions;
 using System.Web;
 using System.IO;
@@ -39,7 +37,6 @@ namespace Disly.Areas.Admin.Controllers
 
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            //DBDataModels.YRControlEvent += DBDataModels_YRControlEvent;
             cmsRepository.DislyEvent += CmsRepository_DislyEvent;
 
             base.OnActionExecuting(filterContext);
@@ -48,11 +45,16 @@ namespace Disly.Areas.Admin.Controllers
             ActionName = filterContext.RouteData.Values["Action"].ToString().ToLower();
             Guid _PageId;
 
-            try { Domain = _cmsRepository.getSiteId(Request.Url.Host.ToLower().Replace("www.", "")); }
-            catch
+            try {
+                Domain = _cmsRepository.getSiteId(Request.Url.Host.ToLower().Replace("www.", ""));
+            }
+            catch(Exception ex)
             {
-                if (Request.Url.Host.ToLower().Replace("www.", "") != ConfigurationManager.AppSettings["BaseURL"]) filterContext.Result = Redirect("/Error/");
+                if (Request.Url.Host.ToLower().Replace("www.", "") != ConfigurationManager.AppSettings["BaseURL"])
+                    filterContext.Result = Redirect("/Error/");
                 else Domain = String.Empty;
+
+                AppLogger.Debug("CoreController: Не получилось определить Domain", ex);
             }
             ViewBag.Domain = Domain;
 
@@ -131,32 +133,31 @@ namespace Disly.Areas.Admin.Controllers
 
         public CoreController()
         {
-            _accountRepository = new AccountRepository("cmsdbConnection");
+                _accountRepository = new AccountRepository("cmsdbConnection");
 
-            Guid userId = Guid.Empty;
-            var domainUrl = "";
+                Guid userId = Guid.Empty;
+                var domainUrl = "";
 
-            if(System.Web.HttpContext.Current != null)
-            {
-                var context = System.Web.HttpContext.Current;
-
-                if (context.Request != null && context.Request.Url != null && !string.IsNullOrEmpty(context.Request.Url.Host))
-                    domainUrl = context.Request.Url.Host.ToLower().Replace("www.", "");
-
-                if (context.User != null && context.User.Identity != null && !string.IsNullOrEmpty(context.User.Identity.Name))
+                if (System.Web.HttpContext.Current != null)
                 {
-                    try
+                    var context = System.Web.HttpContext.Current;
+
+                    if (context.Request != null && context.Request.Url != null && !string.IsNullOrEmpty(context.Request.Url.Host))
+                        domainUrl = context.Request.Url.Host.ToLower().Replace("www.", "");
+
+                    if (context.User != null && context.User.Identity != null && !string.IsNullOrEmpty(context.User.Identity.Name))
                     {
-                        userId = Guid.Parse(System.Web.HttpContext.Current.User.Identity.Name);
-                    }
-                    catch (Exception ex)
-                    {
-                        throw new Exception("Не удалось определить идентификатор пользователя" + ex);
+                        try
+                        {
+                            userId = Guid.Parse(System.Web.HttpContext.Current.User.Identity.Name);
+                        }
+                        catch (Exception ex)
+                        {
+                            throw new Exception("Не удалось определить идентификатор пользователя" + ex);
+                        }
                     }
                 }
-            }
-
-            _cmsRepository = new cmsRepository("cmsdbConnection", userId, RequestUserInfo.IP, domainUrl);
+                _cmsRepository = new cmsRepository("cmsdbConnection", userId, RequestUserInfo.IP, domainUrl);
 
         }
         
@@ -231,21 +232,6 @@ namespace Disly.Areas.Admin.Controllers
             return result;
         }
 
-        /// <summary>
-        /// Получаем параметры изображения
-        /// </summary>
-        /// <param name="url">Ссылка на файл</param>
-        /// <returns></returns>
-        protected Photo getInfoPhoto(string url)
-        {
-            return new Photo
-            {
-                Name = Path.GetFileName(Server.MapPath(url)),
-                Size = Files.FileAnliz.Size(url),
-                Url = url
-            };
-        }
-
         [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = true)]
         public class MultiButtonAttribute : ActionNameSelectorAttribute
         {
@@ -257,5 +243,52 @@ namespace Disly.Areas.Admin.Controllers
                     controllerContext.HttpContext.Request[MatchFormKey] == MatchFormValue;
             }
         }
+
+        /// <summary>
+        /// Получаем параметры изображения
+        /// </summary>
+        /// <param name="url">Ссылка на файл</param>
+        /// <returns></returns>
+        public Photo getInfoPhoto(string url)
+        {
+            try
+            {
+                var serverPath = Server.MapPath(url);
+                if (System.IO.File.Exists(serverPath))
+                    return new Photo
+                    {
+                        Name = Path.GetFileName(Server.MapPath(url)),
+                        Size = Files.FileAnliz.Size(url),
+                        Url = url
+                    };
+            }
+            catch(Exception ex)
+            {
+                AppLogger.Warn("Несуществующий файл: " + url, ex);
+            }
+
+            return new Photo
+            {
+                Name = null,
+                Size = null,
+                Url = null
+            };
+        }
+
+        public void deletePhoto(string url)
+        {
+            try
+            {
+                var serverPath = Server.MapPath(url);
+                if (System.IO.File.Exists(serverPath))
+                    System.IO.File.Delete(serverPath);
+            }
+            catch (Exception ex)
+            {
+                AppLogger.Warn("Попытка удалить несуществующий файл: " + url, ex);
+            }
+        }
+
+
     }
 }

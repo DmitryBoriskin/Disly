@@ -1,7 +1,11 @@
 ﻿@model TypePageViewModel
-<div class="container">    
+<div class="container">
     @Html.Partial("services/breadcrumbs")
+    @if(Model.Item != null)
+    {
     <h1>@Model.Item.Title</h1>
+    }
+
     @if (Model.Child != null)
     {
         if (Model.Child.Length > 0)
@@ -10,9 +14,12 @@
                 @foreach (var item in Model.Child)
                 {
                     <div class="child_link"><span>—</span><a href="@item.Path@item.Alias">@item.Title</a></div>
-                }                
+                }
             </div>
         }
     }
-    @Html.Raw(Model.Item.Text)
+    @if (Model.Item != null)
+    {
+        @Html.Raw(Model.Item.Text)
+    }
 </div>

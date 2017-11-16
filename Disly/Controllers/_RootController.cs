@@ -28,6 +28,7 @@ namespace Disly.Controllers
         protected SiteMapModel[] siteMapArray;
         protected BannersModel[] bannerArray;        
         protected List<Breadcrumbs> breadcrumb;
+        protected SiteMapModel currentPage;
 
         protected string MedCap;
         protected string Quote;
@@ -44,6 +45,17 @@ namespace Disly.Controllers
                 if (Request.Url.Host.ToLower().Replace("www.", "") != ConfigurationManager.AppSettings["BaseURL"]) filterContext.Result = Redirect("/Error/");
                 else Domain = String.Empty;
             }
+
+            #region Получаем данные из адресной строки
+            string UrlPath = "/" + (String)RouteData.Values["path"];
+            if (UrlPath.LastIndexOf("/") > 0 && UrlPath.LastIndexOf("/") == UrlPath.Length - 1) UrlPath = UrlPath.Substring(0, UrlPath.Length - 1);
+
+            string _path = UrlPath.Substring(0, UrlPath.LastIndexOf("/") + 1);
+            string _alias = UrlPath.Substring(UrlPath.LastIndexOf("/") + 1);
+            #endregion
+            currentPage = _repository.getSiteMap(_path, _alias, Domain);
+
+
 
             ControllerName = filterContext.RouteData.Values["Controller"].ToString().ToLower();
             ActionName = filterContext.RouteData.Values["Action"].ToString().ToLower();

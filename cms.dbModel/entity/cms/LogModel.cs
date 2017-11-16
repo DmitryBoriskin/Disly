@@ -186,6 +186,10 @@ namespace cms.dbModel.entity
         /// Группа пользователей
         /// </summary>
         UserGroup = 12,
+        /// <summary>
+        /// Разделы сайта
+        /// </summary>
+        SiteSection = 13,
 
     }
 
