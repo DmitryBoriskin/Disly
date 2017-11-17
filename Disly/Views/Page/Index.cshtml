@@ -13,14 +13,15 @@
                 @foreach (var item in Model.Child)
                 {
                     string fullPath = "/";
-                    if (item.FrontSection.ToLower().Equals("page"))
+
+                    if (!string.IsNullOrEmpty(item.Url))
+                    {
+                        fullPath = item.Url;
+                    }
+                    else if (item.FrontSection.ToLower().Equals("page"))
                     {
                         fullPath = item.Path.Equals("/") ? item.Path + item.Alias
                                 : item.Path + "/" + item.Alias;
-                    }
-                    else if (!string.IsNullOrEmpty(item.Url))
-                    {
-                        fullPath = item.Url;
                     }
                     else
                     {
