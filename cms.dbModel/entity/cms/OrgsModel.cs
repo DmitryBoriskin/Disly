@@ -110,7 +110,16 @@ namespace cms.dbModel.entity
         /// </summary>
         public string Frmp { get; set; }
 
+        /// <summary>
+        /// Типы
+        /// </summary>
         public Guid[] Types { get; set; }
+
+        /// <summary>
+        /// Текст для вывода во внешнюю часть
+        /// берётся из карты сайта для контактов
+        /// </summary>
+        public string Text { get; set; }
     }
 
     /// <summary>

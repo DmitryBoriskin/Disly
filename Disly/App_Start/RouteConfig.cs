@@ -55,8 +55,8 @@ namespace Disly
 
             // Контакты
             routes.MapRoute(
-               name: "Contacts",
-               url: "Contacts/",
+               name: "contacts",
+               url: "contacts/",
                defaults: new { controller = "Contacts", action = "Index" }
             );
             
