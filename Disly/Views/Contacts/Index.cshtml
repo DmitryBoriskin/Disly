@@ -11,96 +11,99 @@
                     </div>
                 </div>
                 <div class="col-sm-6">
-                    <div class="row">
-                        @if (!string.IsNullOrEmpty(Model.OrgItem.Address))
-                        {
-                            <div class="contact_info_it">
-                                <span>Адрес: </span>
-                                @Model.OrgItem.Address
-                            </div>
-                        }
-                        @if (!string.IsNullOrEmpty(Model.OrgItem.Phone))
-                        {
-                            <div class="contact_info_it">
-                                <span>Телефон: </span>
-                                @Model.OrgItem.Phone
-                            </div>
-                        }
-                        @if (!string.IsNullOrEmpty(Model.OrgItem.PhoneReception))
-                        {
-                            <div class="contact_info_it">
-                                <span>Телефон регистратуры:</span>
-                                @Model.OrgItem.PhoneReception
-                            </div>
-
-                        }
-                        @if (!string.IsNullOrEmpty(Model.OrgItem.Fax))
-                        {
-                            <div class="contact_info_it">
-                                <span>Факс: </span>
-                                @Model.OrgItem.Fax
-                            </div>
-                        }
-                        @if (!string.IsNullOrEmpty(Model.OrgItem.Email))
-                        {
-                            <div class="contact_info_it">
-                                <span>E-mail приёмной:</span>
-                                <a href="mailto:@Model.OrgItem.Email">@Model.OrgItem.Email</a>
-                            </div>
-                        }
+                    @if (!string.IsNullOrEmpty(Model.OrgItem.Address))
+                    {
                         <div class="contact_info_it">
-                            <div id="coords" style="width: 100%; height: 350px;" class="buildmap" data-zoom="11" data-height="300" data-x="@Model.OrgItem.GeopointX.ToString().Replace(",", ".")" data-y="@Model.OrgItem.GeopointY.ToString().Replace(",", ".")" data-title="@Model.OrgItem.Title"></div>                              
+                            <span>Адрес: </span>
+                            @Model.OrgItem.Address
                         </div>
-                    </div>
+                    }
+                    @if (!string.IsNullOrEmpty(Model.OrgItem.Phone))
+                    {
+                        <div class="contact_info_it">
+                            <span>Телефон: </span>
+                            @Model.OrgItem.Phone
+                        </div>
+                    }
+                    @if (!string.IsNullOrEmpty(Model.OrgItem.PhoneReception))
+                    {
+                        <div class="contact_info_it">
+                            <span>Телефон регистратуры:</span>
+                            @Model.OrgItem.PhoneReception
+                        </div>
+
+                    }
+                    @if (!string.IsNullOrEmpty(Model.OrgItem.Fax))
+                    {
+                        <div class="contact_info_it">
+                            <span>Факс: </span>
+                            @Model.OrgItem.Fax
+                        </div>
+                    }
+                    @if (!string.IsNullOrEmpty(Model.OrgItem.Email))
+                    {
+                        <div class="contact_info_it">
+                            <span>E-mail приёмной:</span>
+                            <a href="mailto:@Model.OrgItem.Email">@Model.OrgItem.Email</a>
+                        </div>
+                    }
+                    @*<div class="contact_info_it">
+                            <div id="coords" class="buildmap" data-zoom="11" data-height="300" data-x="@Model.OrgItem.GeopointX.ToString().Replace(",", ".")" data-y="@Model.OrgItem.GeopointY.ToString().Replace(",", ".")" data-title="@Model.OrgItem.Title"></div>                            <div class="map_wr">
+                                <div id="map" style="width: 100%; height: 350px;"></div>
+                            </div>
+                        </div>*@
                 </div>
                 <div class="col-sm-3"></div>
             </div>
         </div>
-        <div class="contact_info">
-            <div class="col-sm-3">
-                <div class="row"><h2></h2></div>
-            </div>
-            <div class="col-sm-9">
-                <div class="filals-list">
-                    @if (Model.Structures != null)
-                    {
-                        foreach (var item in Model.Structures)
+        <div class="row">
+            <div class="contact_info">
+                <div class="col-sm-3">
+                    <div class="row"><h2></h2></div>
+                </div>
+                <div class="col-sm-9">
+                    <div class="filals-list">
+                        @if (Model.Structures != null)
                         {
-                            <div class="filals-list_it">
-                                <a class="filals-list_it_title" href="/structure/@item.Num">@item.Title</a>
-                                <div class="contact_info_it">
-                                    @*@if (item.Phone != null)
+                            foreach (var item in Model.Structures)
+                            {
+                                <div class="filals-list_it">
+                                    <a class="filals-list_it_title" href="/structure/@item.Num">@item.Title</a>
+                                    <div class="contact_info_it">
+                                        @if (item.Departments != null && item.Departments.Count() > 0)
                                         {
-                                            <span>Телефон: </span>@item.Phone
-                                        }*@
-
-                                    @if (item.Departments != null && item.Departments.Count() > 0)
-                                    {
-                                        foreach (var dep in item.Departments)
-                                        {
+                                            foreach (var dep in item.Departments)
+                                            {
                                             <!-- не выводим название департамента, если он ОВП -->
-                                            if (!item.Ovp)
-                                            {
-                                                <p><strong>@dep.Title</strong></p>
-                                            }
-                                            if (dep.Phones != null && dep.Phones.Count() > 0)
-                                            {
-                                                foreach (var phone in dep.Phones)
+                                                if (!item.Ovp)
                                                 {
-                                                    <div><span>@phone.Label </span>@phone.Value</div>
+                                                    <p class="department_name"><strong>@dep.Title</strong></p>
+                                                }
+                                                if (dep.Phones != null && dep.Phones.Count() > 0)
+                                                {
+                                                    foreach (var phone in dep.Phones)
+                                                    {
+                                                        <div><span><strong>@phone.Label:</strong> </span>@phone.Value</div>
+                                                    }
                                                 }
                                             }
                                         }
-                                    }
+                                    </div>
                                 </div>
-                            </div>
+                            }
                         }
-                    }
 
-                    <!-- текст из карты сайта -->
-                    @Html.Raw(Model.OrgItem.Text)
-                    <!-- конец текста из карты сайта -->
+                        <!-- текст из карты сайта -->
+                        @if (!string.IsNullOrEmpty(Model.OrgItem.Text))
+                        {
+                            <div class="filals-list_it_title">
+                                <strong>Дополнительная контактная информация</strong>
+                            </div>
+                            @Html.Raw(Model.OrgItem.Text)
+                        }
+                        <!-- конец текста из карты сайта -->
 
+                    </div>
                 </div>
             </div>
         </div>
