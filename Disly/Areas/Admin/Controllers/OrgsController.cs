@@ -459,11 +459,11 @@ namespace Disly.Areas.Admin.Controllers
                 }
                 #region обновление
                 if (ModelState.IsValid) {
-                    if (_cmsRepository.setOvp(id, back_model.StructureItem)) //, AccountInfo.id, RequestUserInfo.IP
+                    if (_cmsRepository.setOvp(id, back_model.StructureItem,back_model.DepartmentItem)) //, AccountInfo.id, RequestUserInfo.IP
                     {
                         userMessage.info = "Запись обновлена";
                         userMessage.buttons = new ErrorMassegeBtn[]{
-                                 new ErrorMassegeBtn { url = "/admin/orgs/set/"+id, text = "ок"}
+                                 new ErrorMassegeBtn { url = "/admin/orgs/ovp/"+id, text = "ок"}
                              };
                     }
                     else { userMessage.info = "Произошла ошибка"; }

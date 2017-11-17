@@ -802,7 +802,7 @@ namespace cms.dbase
         /// <param name="UserId">Пользователь</param>
         /// <param name="IP">ip-адрес</param>
         /// <returns></returns>
-        public override bool setOvp(Guid IdStructure, StructureModel updStructure)
+        public override bool setOvp(Guid IdStructure, StructureModel updStructure, Departments updDepart)
         {
             using (var db = new CMSdb(_context))
             {
@@ -829,6 +829,8 @@ namespace cms.dbase
                     throw new Exception("У данного ОВП в базе не существует отдела");
                 }
                 cdDepart.c_title = updStructure.Title;
+                cdDepart.f_director = updDepart.DirectorF;
+                cdDepart.c_director_post = updDepart.DirecorPost;
                 using (var tran = db.BeginTransaction())
                 {
                     db.Update(cdStructur);

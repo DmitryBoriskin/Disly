@@ -663,6 +663,72 @@ namespace cms.dbase
             }
 
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="Id">идентификатор струкутуры(родителя)</param>
+        /// <returns></returns>
+        public override Departments getOvpDepartaments(Guid Id)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var query = db.content_departmentss
+                            .Where(w => w.f_structure == Id)
+                            .Select(s => new Departments()
+                            {
+                                Id = s.id,
+                                Title = s.c_title,
+                                Text = s.c_adress,
+                                DirecorPost = s.c_director_post,
+                                DirectorF = s.f_director
+
+                            });
+                if (query.Any())
+                {
+                    var data = query.First();
+                    var Phones = db.content_departments_phones
+                                  .Where(w => w.f_department == data.Id)
+                                  .OrderBy(o => o.n_sort)
+                                  .Select(s => new DepartmentsPhone()
+                                  {
+                                      Label = s.c_key,
+                                      Value = s.c_val
+                                  });
+                    if (Phones.Any())
+                    {
+                        data.Phones = Phones.ToArray();
+                    }
+                    var People = db.content_sv_people_departments.Where(w => w.f_department == Id)
+                                    .Select(s => new People()
+                                    {
+                                        Id = s.id,
+                                        FIO = s.c_surname + " " + s.c_name + " " + s.c_patronymic,
+                                        Post = s.c_post,
+                                        Status = s.c_status
+                                    });
+
+                    if (People.Any())
+                    {
+                        data.Peoples = People.ToArray();
+                    }
+
+                    var Boss = db.content_peoples.Where(w => w.id == data.DirectorF)
+                                    .Select(s => new People()
+                                    {
+                                        Id = s.id,
+                                        FIO = s.c_surname + " " + s.c_name + " " + s.c_patronymic,
+                                        Post = data.DirecorPost
+                                    });
+                    if (Boss.Any())
+                    {
+                        data.Boss = Boss.Single();
+                    }
+
+                    return data;
+                }
+                return null;
+            }
+        }
 
         public override People[] getPeopleList(FilterParams filter)
         {

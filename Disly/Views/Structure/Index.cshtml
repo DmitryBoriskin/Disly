@@ -1,17 +1,34 @@
 ﻿@model StructureViewModel
 <div class="container">
+    
+
     @if (Model.DepartmentItem != null)
     {
-        @Html.Partial("DepartmentItem")
+        if(Model.StructureItem != null)
+        {
+            if (Model.StructureItem.Ovp)
+            {
+                //ОВП/ФАП
+                @Html.Partial("Ovp")
+            }
+            else
+            {
+                //отделение
+                @Html.Partial("DepartmentItem")
+            }
+        }
+
     }
     else
     {
         if (Model.StructureItem != null)
         {
+            //струкутура
             @Html.Partial("StructureItem")
         }
         else
         {
+            //список
             @Html.Partial("services/breadcrumbs")
             <h1>Струкутура</h1>            
             if (Model.Structures != null)
