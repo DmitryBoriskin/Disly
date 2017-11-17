@@ -77,7 +77,11 @@
                                             <!-- не выводим название департамента, если он ОВП -->
                                                 if (!item.Ovp)
                                                 {
-                                                    <p class="department_name"><strong>@dep.Title</strong></p>
+                                                    <div class="department_name">
+                                                        <a href="/structure/@item.Num/@dep.Id">
+                                                            @dep.Title
+                                                        </a>
+                                                    </div>
                                                 }
                                                 if (dep.Phones != null && dep.Phones.Count() > 0)
                                                 {
@@ -93,19 +97,26 @@
                             }
                         }
 
-                        <!-- текст из карты сайта -->
-                        @if (!string.IsNullOrEmpty(Model.OrgItem.Text))
-                        {
-                            <div class="filals-list_it_title">
-                                <strong>Дополнительная контактная информация</strong>
-                            </div>
-                            @Html.Raw(Model.OrgItem.Text)
-                        }
-                        <!-- конец текста из карты сайта -->
 
                     </div>
                 </div>
             </div>
         </div>
+        <!-- текст из карты сайта -->
+        @if (!string.IsNullOrEmpty(Model.OrgItem.Text))
+        {
+            <div class="row">
+                <div class="contact_info">
+                    <div class="col-md-3">
+                        <h2>Дополнительная информация</h2>
+                    </div>
+                    <div class="col-md-9">
+                        @Html.Raw(Model.OrgItem.Text)
+                    </div>
+                </div>
+            </div>
+        }
+        <!-- конец текста из карты сайта -->
+
     </div>
 </div>

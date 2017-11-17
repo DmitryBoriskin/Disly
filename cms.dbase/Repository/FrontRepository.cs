@@ -631,12 +631,16 @@ namespace cms.dbase
                         Id = s.Key.id,
                         Title = s.First().str.c_title,
                         Phone = s.First().str.c_phone,
+                        PhoneReception = s.First().str.c_phone_reception,
+                        Email = s.First().str.c_email,
                         Num = s.First().str.num,
                         GeopointX = s.First().str.n_geopoint_x,
                         GeopointY = s.First().str.n_geopoint_y,
                         Ovp = s.First().str.b_ovp,
+                        Adress = s.First().str.c_adress,
                         Departments = s.Select(d => new Departments
                         {
+                            Id = d.dep.id,
                             Title = d.dep.c_title,
                             Phones = (from p in db.content_departments_phones
                                      join dep in db.content_departmentss on p.f_department equals dep.id
