@@ -58,17 +58,10 @@ namespace cms.dbase
             using (var db = new CMSdb(_context))
             {
                 string ViewPath = "~/Error/404/";
-
-                var query = db.front_site_sections.Where(w => w.f_site == siteId && w.f_front_section == siteSection)
-                               .Join(db.front_page_viewss,e=>e.f_page_view,o=>o.id,(e,o)=>o);
+                var query = db.front_sv_page_veiws.Where(w => (w.f_site == siteId && w.f_pege_type == siteSection));
                 if (query.Any()) {
                     ViewPath = query.Single().c_url;
-                }
-
-                //var data = db.front_sv_page_veiws.Where(w => w.f_site == siteId && w.f_pege_type == siteSection).FirstOrDefault();
-                //if (data != null) {
-                //    ViewPath = data.c_url;
-                //}
+                }                
                 return ViewPath;
             }
         }
@@ -550,6 +543,7 @@ namespace cms.dbase
                             .Select(s => new StructureModel(){
                                 Id=s.id,
                                 Title=s.c_title,
+                                Adress=s.c_adress,
                                 Phone=s.c_phone,
                                 Num=s.num,
                                 GeopointX=s.n_geopoint_x,

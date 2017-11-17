@@ -208,7 +208,7 @@ $(document).ready(function () {
     });
 
     //отцепление врача от отделения
-    $('del_people_for_dep').click(function (e) {
+    $('.del_people_for_dep').click(function (e) {
         e.preventDefault();
         var idDep = $(this).attr("data-dep");
         var idPeople = $(this).attr("data-people");
@@ -217,7 +217,7 @@ $(document).ready(function () {
             type: "POST",
             async: false,
             url: "/admin/orgs/delPeople",
-            data: { id: idDomain },
+            data: { iddep: idDep, idpeople: idPeople},
             error: function () { alert("error"); },
             success: function (data) {
                 $Container.remove();

@@ -350,10 +350,30 @@ namespace Disly.Areas.Admin.Controllers
                 }
                 else
                 {
-                    if (model.StructureItem.Departments.First() != null)
+                    if (model.StructureItem.Departments.Single() != null)
                     {
-                        model.DepartmentItem = _cmsRepository.getDepartamentItem(model.StructureItem.Departments.First().Id);
+                        model.DepartmentItem = _cmsRepository.getDepartamentItem(model.StructureItem.Departments.Single().Id);
                         model.BreadCrumbOrg = _cmsRepository.getBreadCrumbOrgs(id, ViewBag.ActionName);
+
+
+
+                        var _peopList = _cmsRepository.getPersonsThisDepartment(model.StructureItem.Departments.Single().Id);
+
+                        if (_peopList != null)
+                        {
+                            model.PeopleList = new SelectList(_peopList, "Id", "FIO");
+                        }
+
+
+                        model.PeopleLStatus = new SelectList(
+                           new List<SelectListItem>
+                           {
+                            new SelectListItem { Text = "Не выбрано", Value =""},
+                            new SelectListItem { Text = "Начальник отделения", Value ="boss"},
+                            new SelectListItem { Text = "Старшая медсестра", Value = "sister" },
+                           }, "Value", "Text"
+                       );
+
                     }                    
                 }
             }

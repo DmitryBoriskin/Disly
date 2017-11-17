@@ -1448,6 +1448,7 @@ namespace cms.dbase.models
 		[Column, NotNull    ] public bool      b_deleted    { get; set; } // bit
 		[Column,    Nullable] public string    c_status     { get; set; } // varchar(128)
 		[Column,    Nullable] public string    c_post       { get; set; } // varchar(128)
+		[Column, NotNull    ] public Guid      idOrgLink    { get; set; } // uniqueidentifier
 	}
 
 	// View
@@ -1622,11 +1623,12 @@ namespace cms.dbase.models
 	[Table(Schema="dbo", Name="front_sv_page_veiw")]
 	public partial class front_sv_page_veiw
 	{
-		[Column,    Nullable] public string f_site      { get; set; } // varchar(64)
+		[Column, NotNull    ] public string Expr1       { get; set; } // varchar(64)
 		[Column, NotNull    ] public string c_title     { get; set; } // nvarchar(256)
 		[Column,    Nullable] public string f_pege_type { get; set; } // varchar(16)
 		[Column, NotNull    ] public string c_name      { get; set; } // varchar(128)
 		[Column, NotNull    ] public string c_url       { get; set; } // varchar(1024)
+		[Column, NotNull    ] public string f_site      { get; set; } // varchar(64)
 	}
 
 	[Table(Schema="dbo", Name="import_frmp_orgs")]
@@ -2087,4 +2089,3 @@ namespace cms.dbase.models
 		}
 	}
 }
- 

@@ -894,7 +894,10 @@ namespace cms.dbase
                         Text=s.c_adress,
                         StructureF = s.f_structure,
                         Phones = getDepartmentsPhone(s.id),
-                        Peoples = getPeopleDepartment(s.id)
+                        Peoples = getPeopleDepartment(s.id),
+                        DirecorPost=s.c_director_post,
+                        DirectorF=s.f_director
+                        
                     }).First();
                 }
                 return null;
@@ -1085,13 +1088,11 @@ namespace cms.dbase
             using (var db = new CMSdb(_context))
             {
                 var data = db.content_sv_people_departments
-                           .Where(w => w.f_department == idDepart)
                            .Select(s => new People()
                            {
                                Id = s.id,
-                               FIO = s.c_surname + " " + s.c_name + " " + s.c_patronymic
-                               //,
-                               //IdLinkOrg=s.
+                               FIO = s.c_surname + " " + s.c_name + " " + s.c_patronymic,                               
+                               IdLinkOrg=s.idOrgLink
                            });
                 if (data.Any()) return data.ToArray();
                 return null;
@@ -1285,7 +1286,8 @@ namespace cms.dbase
                                            .Select(s => new People
                                            {
                                                FIO = s.fkcontentpeopleorglink.c_surname + " " + s.fkcontentpeopleorglink.c_name + " " + s.fkcontentpeopleorglink.c_patronymic,
-                                               Id = s.id
+                                               Id = s.id,
+                                               IdLinkOrg=s.f_people
                                            }).ToArray();
                         return PeopleList.Any() ? PeopleList : null;
                     }
