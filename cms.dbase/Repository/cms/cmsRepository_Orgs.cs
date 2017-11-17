@@ -1088,12 +1088,13 @@ namespace cms.dbase
             using (var db = new CMSdb(_context))
             {
                 var data = db.content_sv_people_departments
-                           .Select(s => new People()
-                           {
-                               Id = s.id,
-                               FIO = s.c_surname + " " + s.c_name + " " + s.c_patronymic,                               
-                               IdLinkOrg=s.idOrgLink
-                           });
+                             .Where(w=>w.f_department==idDepart)
+                             .Select(s => new People()
+                             {
+                                 Id = s.id,
+                                 FIO = s.c_surname + " " + s.c_name + " " + s.c_patronymic,                               
+                                 IdLinkOrg=s.idOrgLink
+                             });
                 if (data.Any()) return data.ToArray();
                 return null;
             }

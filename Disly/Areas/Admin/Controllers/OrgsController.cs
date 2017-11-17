@@ -470,6 +470,7 @@ namespace Disly.Areas.Admin.Controllers
                 }
                 #endregion
             }
+            model.ErrorInfo = userMessage;
             return View("Ovp", model);
         }
         #endregion
