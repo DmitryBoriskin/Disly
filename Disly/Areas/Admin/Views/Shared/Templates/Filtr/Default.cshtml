@@ -25,5 +25,8 @@
             }
         </div>
     </div>
-    <a class="button pop-up_frame" href="@Model.Url" title="@Model.BtnName">@Model.BtnName</a>
+    @if (Model.AccountGroup.ToLower().Equals("developer"))
+    {
+        <a class="button pop-up_frame" href="@Model.Url" title="@Model.BtnName">@Model.BtnName</a>
+    }
 </div>

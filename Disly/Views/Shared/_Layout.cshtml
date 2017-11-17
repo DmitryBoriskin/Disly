@@ -98,13 +98,28 @@
                     {
                         Path = s.Path,
                         Alias = s.Alias,
-                        Title = s.Title
+                        Title = s.Title,
+                        FrontSection = s.FrontSection,
+                        Url = s.Url
                     });
                 <ul class="nav navbar-nav navbar-left">
                     @foreach (var item in mainMenu)
                     {
-                        string fullPath = item.Path.Equals("/") ? item.Path + item.Alias
-                            : item.Path + "/" + item.Alias;
+                        string fullPath = "/";
+                        if (item.FrontSection.ToLower().Equals("page"))
+                        {
+                            fullPath = item.Path.Equals("/") ? item.Path + item.Alias
+                                : item.Path + "/" + item.Alias;
+                        }
+                        else if (!string.IsNullOrEmpty(item.Url))
+                        {
+                            fullPath = item.Url;
+                        }
+                        else
+                        {
+                            fullPath = "/" + item.FrontSection;
+                        }
+
                         <li>
                             <a href="@fullPath">@item.Title</a>
                         </li>
