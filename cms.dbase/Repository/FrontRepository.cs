@@ -258,7 +258,9 @@ namespace cms.dbase
                                  {
                                      Title = c.c_title,
                                      Alias = c.c_alias,
-                                     Path = c.c_path
+                                     Path = c.c_path,
+                                     FrontSection = c.f_front_section,
+                                     Url = c.c_url
                                  }).ToArray();
                 if (data.Any())
                 {

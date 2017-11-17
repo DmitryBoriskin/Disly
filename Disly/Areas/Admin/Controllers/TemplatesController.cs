@@ -37,7 +37,8 @@ namespace Disly.Areas.Admin.Controllers
                 BtnName = BtnName,
                 Link = Link,
                 Url = Url.ToLower(),
-                Items = Items
+                Items = Items,
+                AccountGroup = AccountInfo.Group
             };
 
             return View(viewName, Model);
