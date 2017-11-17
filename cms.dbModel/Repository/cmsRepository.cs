@@ -129,7 +129,7 @@ namespace cms.dbModel
         public abstract bool sortStructure(Guid id, int new_num);
 
         public abstract bool insOvp(Guid IdStructure, Guid OrgId, StructureModel insertStructure);
-        public abstract bool setOvp(Guid IdStructure, StructureModel updStructure);
+        public abstract bool setOvp(Guid IdStructure, StructureModel updStructure, Departments updDepart);
 
         public abstract Departments[] getDepartmentsList(Guid id);
         public abstract Departments getDepartamentItem(Guid id);

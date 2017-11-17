@@ -255,14 +255,14 @@ namespace cms.dbase
                         Path = s.c_path,
                         Id = s.id,
                         FrontSection = s.f_front_section
-                    }).First();
+                        }).First();
 
-
+                    
                     return data;
                 }
                 return null;
             }
-
+            
         }
 
         /// <summary>
@@ -307,7 +307,7 @@ namespace cms.dbase
                 return null;
             }
         }
-
+      
 
         /// <summary>
         /// Получаем хленые крошки
@@ -339,8 +339,8 @@ namespace cms.dbase
                     if (item_data != null)
                     {
                         data.Add(item_data);
-                        //.ToList().Add(item_data);
-                    }
+                            //.ToList().Add(item_data);
+                    } 
 
                     Url = Url.Substring(0, _lastIndex);
                     _len = Url.Count();
@@ -354,8 +354,8 @@ namespace cms.dbase
                 }
                 else
                 {
-                    return null;
-                }
+            return null;
+        }
             }
         }
 
@@ -411,7 +411,7 @@ namespace cms.dbase
                         query = query
                                     .Join(
                                             db.content_materials_groups_links
-                                            .Where(o => o.f_group == category),
+                                            .Where(o => o.f_group == category), 
                                             e => e.id, o => o.f_material, (o, e) => o
                                          );
                     }
@@ -471,7 +471,7 @@ namespace cms.dbase
             using (var db = new CMSdb(_context))
             {
                 var contentType = ContentType.MATERIAL.ToString().ToLower();
-
+                
                 // список id-новостей для данного сайта
                 var materialIds = db.content_content_links.Where(e => e.f_content_type == contentType)
                     .Join(db.cms_sitess.Where(o => o.c_alias == domain),
@@ -547,7 +547,7 @@ namespace cms.dbase
                     {
                         Title = s.c_title,
                         Text = s.c_text
-                    }).First();
+                            }).First();
                 }
                 return null;
 
@@ -719,6 +719,73 @@ namespace cms.dbase
                             .Where(w => w.id == Id)
                             .Select(s => new Departments()
                             {
+                                Id = s.id,                                
+                                Title = s.c_title,
+                                Text = s.c_adress,
+                                DirecorPost = s.c_director_post,
+                                DirectorF = s.f_director
+                                                             
+                            });
+                if (query.Any())
+                {
+                    var data = query.First();
+                    var Phones = db.content_departments_phones
+                                  .Where(w => w.f_department == data.Id)
+                                  .OrderBy(o => o.n_sort)
+                                  .Select(s => new DepartmentsPhone()
+                                  {
+                                      Label = s.c_key,
+                                      Value = s.c_val
+                                  });
+                    if (Phones.Any())
+                    {
+                        data.Phones = Phones.ToArray();
+                    }
+                    var People = db.content_sv_people_departments.Where(w => w.f_department == Id)
+                                    .Select(s => new People()
+                                    {
+                                        Id = s.id,
+                                        FIO = s.c_surname + " " + s.c_name + " " + s.c_patronymic,
+                                        Post = s.c_post,
+                                        Status = s.c_status
+                                    });
+                    
+                    if (People.Any())
+                    {
+                        data.Peoples = People.ToArray();
+                    }
+                    
+                    var Boss = db.content_peoples.Where(w => w.id == data.DirectorF)
+                                    .Select(s => new People()
+                                    {
+                                        Id = s.id,
+                                        FIO = s.c_surname + " " + s.c_name + " " + s.c_patronymic,
+                                        Post = data.DirecorPost                                        
+                                    });
+                    if (Boss.Any())
+                    {
+                        data.Boss = Boss.First();
+                    }
+                    
+                    return data;
+                }
+                return null;
+            }
+
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="Id">идентификатор струкутуры(родителя)</param>
+        /// <returns></returns>
+        public override Departments getOvpDepartaments(Guid Id)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var query = db.content_departmentss
+                            .Where(w => w.f_structure == Id)
+                            .Select(s => new Departments()
+                            {
                                 Id = s.id,
                                 Title = s.c_title,
                                 Text = s.c_adress,
@@ -764,14 +831,13 @@ namespace cms.dbase
                                     });
                     if (Boss.Any())
                     {
-                        data.Boss = Boss.First();
+                        data.Boss = Boss.Single();
                     }
 
                     return data;
                 }
                 return null;
             }
-
         }
 
         public override People[] getPeopleList(FilterParams filter)
@@ -783,7 +849,7 @@ namespace cms.dbase
                             .Where(w => w.c_alias == filter.Domain)
                             .Join(db.content_people_org_links, e => e.f_content, o => o.f_org, (e, o) => o)
                             .Join(db.content_peoples, m => m.f_people, n => n.id, (m, n) => n);
-
+                            
                 if (filter.SearchText != null)
                 {
                     query = query.Where(w => (w.c_name.Contains(filter.SearchText) || w.c_surname.Contains(filter.SearchText) || w.c_patronymic.Contains(filter.SearchText)));
@@ -792,20 +858,20 @@ namespace cms.dbase
                 {
                     query = query
                             .Join(db.content_people_org_links, e => e.id, o => o.f_people, (o, e) => new { e, o })
-                            .Join(db.content_people_department_links, m => m.e.id, n => n.f_people, (m, n) => m.o);
+                            .Join(db.content_people_department_links, m => m.e.id, n => n.f_people, (m, n) => m.o);                    
                 }
 
                 var query1 = query.OrderBy(o => o.c_surname);
                 if (query1.Any())
                 {
                     return query1.Select(s => new People()
-                    {
-                        Id = s.id,
-                        FIO = s.c_surname + " " + s.c_name + " " + s.c_patronymic
-                    }).ToArray();
+                                        {
+                                            Id = s.id,
+                                            FIO = s.c_surname + " " + s.c_name + " " + s.c_patronymic
+                                        }).ToArray();
                 }
                 return null;
-
+                                
             }
         }
         public override People getPeopleItem(Guid id, string domain)
@@ -827,7 +893,7 @@ namespace cms.dbase
                     {
                         Id = s.n.id,
                         FIO = s.n.c_surname + " " + s.n.c_name + " " + s.n.c_patronymic
-                    }).First();
+                    }).First();                    
                 }
                 return null;
             }
@@ -847,10 +913,10 @@ namespace cms.dbase
                            .Select(s => new StructureModel()
                            {
                                Title = s.c_title,
-                               Departments = getDepartmentsList(s.id)
+                               Departments = getDepartmentsList(s.id)                
                            });
 
-
+                
 
                 if (data.Any()) return data.ToArray();
                 return null;

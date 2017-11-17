@@ -26,6 +26,7 @@ namespace cms.dbModel
         public abstract StructureModel getStructureItem(string domain, int num);
         public abstract Departments[] getDepartmentsList(Guid StructureId);
         public abstract Departments getDepartmentsItem(Guid Id);
+        public abstract Departments getOvpDepartaments(Guid Id);
 
         public abstract List<MaterialFrontModule> getMaterialsModule(string domain);
 
