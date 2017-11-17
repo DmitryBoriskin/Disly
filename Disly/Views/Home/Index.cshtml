@@ -1,6 +1,6 @@
 ﻿@model HomePageViewModel
 @{
-    var slider = (Model.BannerArray!=null)?
+    var slider = (Model.BannerArray != null) ?
         Model.BannerArray
         .Where(w => w.SectionAlias.Equals("slider"))
         .Select(s => new
@@ -10,18 +10,24 @@
             Text = s.Text,
             Link = s.Url
         })
-        :null;
+        : null;
 
-    var sitemapPlates = (Model.SiteMapArray!=null)?
+    var sitemapPlates = (Model.SiteMapArray != null) ?
         Model.SiteMapArray
         .Where(w => w.MenuAlias.Equals("plate"))
         .Select(s => new
         {
+                    //Title = s.Title,
+                    //Url = !string.IsNullOrEmpty(s.Url) ? s.Url
+                    //: s.Path.Equals("/") ? s.Path + s.Alias : s.Path + "/" + s.Alias
+
+                    Path = s.Path,
+            Alias = s.Alias,
             Title = s.Title,
-            Url = !string.IsNullOrEmpty(s.Url) ? s.Url
-            : s.Path.Equals("/") ? s.Path + s.Alias : s.Path + "/" + s.Alias
+            FrontSection = s.FrontSection,
+            Url = s.Url
         })
-        :null;
+        : null;
 
     var benefitBanners = (Model.BannerArray != null) ?
         Model.BannerArray
@@ -33,14 +39,13 @@
             Text = s.Text,
             Link = s.Url
         })
-        :null ;
+        : null;
 
-    var announcements = (Model.Materials!=null)?Model.Materials.Where(w => w.GroupAlias.Equals("announcement")):null;
+    var announcements = (Model.Materials != null) ? Model.Materials.Where(w => w.GroupAlias.Equals("announcement")) : null;
     var news = (Model.Materials != null) ? Model.Materials.Where(w => w.GroupAlias.Equals("news")) : null;
     var events = (Model.Materials != null) ? Model.Materials.Where(w => w.GroupAlias.Equals("events")) : null;
     int i = 0;
 }
-
 <!-- слайдер -->
 <div class="container-fluid">
     <div class="top-slider-wrapper">
@@ -304,8 +309,23 @@
             <div class="row">
                 @foreach (var item in sitemapPlates)
                 {
+                    string fullPath = "/";
+
+                    if (!string.IsNullOrEmpty(item.Url))
+                    {
+                        fullPath = item.Url;
+                    }
+                    else if (item.FrontSection.ToLower().Equals("page"))
+                    {
+                        fullPath = item.Path + item.Alias;
+                    }
+                    else
+                    {
+                        fullPath = "/" + item.FrontSection;
+                    }
+
                     <div class="col-sm-3">
-                        <a href="@item.Url">
+                        <a href="@fullPath">
                             <div class="sitemap-plate">@item.Title</div>
                         </a>
                     </div>

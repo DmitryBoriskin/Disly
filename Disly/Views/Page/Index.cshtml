@@ -20,8 +20,7 @@
                     }
                     else if (item.FrontSection.ToLower().Equals("page"))
                     {
-                        fullPath = item.Path.Equals("/") ? item.Path + item.Alias
-                                : item.Path + "/" + item.Alias;
+                        fullPath = item.Path + item.Alias;
                     }
                     else
                     {
