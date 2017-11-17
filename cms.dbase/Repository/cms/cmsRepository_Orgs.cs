@@ -1052,8 +1052,6 @@ namespace cms.dbase
                     IP = _ip,
                 };
                 insertLog(log);
-
-
                 return true;
             }
         }
@@ -1068,7 +1066,6 @@ namespace cms.dbase
             using (var db = new CMSdb(_context))
             {
                 var data = db.content_departments_phones.Where(w => w.id == id);
-
                 if (data.Any())
                 {
                     string logtitle = data.FirstOrDefault().c_val;
