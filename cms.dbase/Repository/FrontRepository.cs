@@ -879,28 +879,49 @@ namespace cms.dbase
                                 
             }
         }
+
+        /// <summary>
+        /// Получает отдельного сотрудника
+        /// </summary>
+        /// <param name="id">Идентификатор</param>
+        /// <param name="domain">Домен</param>
+        /// <returns></returns>
         public override People getPeopleItem(Guid id, string domain)
         {
             using (var db = new CMSdb(_context))
             {
-                var query = db.cms_sitess
-                              .Join(db.content_people_org_links, e => e.f_content, o => o.f_org, (e, o) => new { o, e })
-                              .Join(db.content_peoples, m => m.o.f_people, n => n.id, (m, n) => new { m, n });
+                #region comments
+                //var query = db.cms_sitess
+                //              .Join(db.content_people_org_links, e => e.f_content, o => o.f_org, (e, o) => new { o, e })
+                //              .Join(db.content_peoples, m => m.o.f_people, n => n.id, (m, n) => new { m, n });
 
-                if (!String.IsNullOrEmpty(domain))
-                {
-                    query = query.Where(w => w.m.e.c_alias == domain);
-                }
+                //if (!String.IsNullOrEmpty(domain))
+                //{
+                //    query = query.Where(w => w.m.e.c_alias == domain);
+                //}
 
-                if (query.Any())
-                {
-                    return query.Select(s => new People
+                //if (query.Any())
+                //{
+                //    return query.Select(s => new People
+                //    {
+                //        Id = s.n.id,
+                //        FIO = s.n.c_surname + " " + s.n.c_name + " " + s.n.c_patronymic
+                //    }).First();                    
+                //}
+                //return null;
+                #endregion
+
+                var query = db.content_peoples
+                    .Where(w => w.id.Equals(id))
+                    .Select(s => new People
                     {
-                        Id = s.n.id,
-                        FIO = s.n.c_surname + " " + s.n.c_name + " " + s.n.c_patronymic
-                    }).First();                    
-                }
-                return null;
+                        Id = s.id,
+                        FIO = s.c_surname + " " + s.c_name + " " + s.c_patronymic,
+                        XmlInfo = s.xml_info
+                    });
+
+                if (!query.Any()) return null;
+                return query.SingleOrDefault();
             }
         }
         /// <summary>
