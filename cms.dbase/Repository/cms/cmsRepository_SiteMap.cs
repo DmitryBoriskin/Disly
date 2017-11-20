@@ -558,9 +558,7 @@ namespace cms.dbase
                     listToUpdate.Set(u => u.n_sort, u => u.n_sort - 1).Update();
 
                     // Удаляем дочерние эл-ты 
-                    string pathToDrop = itemToDelete.Path.Equals("/") ?
-                        itemToDelete.Path + itemToDelete.Alias :
-                        itemToDelete.Path + "/" + itemToDelete.Alias;
+                    string pathToDrop = itemToDelete.Path + itemToDelete.Alias;
 
                     var listToDelete = db.content_sitemaps
                         .Where(w => w.id.Equals(id) || w.c_path.Contains(pathToDrop));
