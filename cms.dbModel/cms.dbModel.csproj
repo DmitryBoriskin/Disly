@@ -77,6 +77,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="entity\cms\MaterialsModel.cs" />
+    <Compile Include="entity\Employee.cs" />
     <Compile Include="entity\Filter\Enum.cs" />
     <Compile Include="entity\Filter\SiteFilter.cs" />
     <Compile Include="entity\Filter\OrgTypeFilter.cs" />

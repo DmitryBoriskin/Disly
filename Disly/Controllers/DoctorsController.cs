@@ -1,7 +1,9 @@
-﻿using cms.dbase;
+﻿using cms.dbModel.entity;
 using Disly.Models;
 using System;
+using System.IO;
 using System.Web.Mvc;
+using System.Xml.Serialization;
 
 namespace Disly.Controllers
 {
@@ -18,7 +20,7 @@ namespace Disly.Controllers
             {
                 SitesInfo = siteModel,
                 SiteMapArray = siteMapArray,
-                Breadcrumbs= breadcrumb,
+                Breadcrumbs = breadcrumb,
                 BannerArray = bannerArray
             };
         }
@@ -58,10 +60,9 @@ namespace Disly.Controllers
             ViewBag.KeyWords = PageKeyw;
             #endregion
 
-            return View(_ViewName,model);            
+            return View(_ViewName, model);
         }
-
-
+        
         /// <summary>
         /// Сраница по умолчанию
         /// </summary>
@@ -79,6 +80,15 @@ namespace Disly.Controllers
             var filter = getFilter();
             model.DoctorsItem = _repository.getPeopleItem(id, Domain);
 
+            // десериализация xml
+            XmlSerializer serializer = new XmlSerializer(typeof(Employee));
+
+            using (TextReader reader = new StringReader(model.DoctorsItem.XmlInfo))
+            {
+                var result = (Employee)serializer.Deserialize(reader);
+                model.DoctorsItem.EmployeeInfo = result;
+            }
+
             #region Создаем переменные (значения по умолчанию)
             PageViewModel Model = new PageViewModel();
             string _ViewName = (ViewName != String.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";
@@ -95,8 +105,6 @@ namespace Disly.Controllers
 
             return View(_ViewName, model);
         }
-
-
     }
 }
 
