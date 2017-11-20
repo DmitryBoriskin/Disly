@@ -30,7 +30,10 @@
         </div>
         <div class="row">
             <div class="col-xs-6">
-                @Html.TextAreaFor(m => Model.Item.Title, new { @class = "uc_input", @title = "Список дополнительных доменных имен", @MaxLength = "512", @rows = "6", @data_help = "доменные имена должны разделяться запятой" })
+                <div class="alert alert-info">
+                    <strong>Дополнительные доменные имена должны быть разделены символом";"</strong>
+                </div>
+                @Html.TextAreaFor(m => Model.Item.DomainListString, new { @class = "uc_input", @title = "Список дополнительных доменных имен", @MaxLength = "512", @rows = "6", @data_help = "доменные имена должны разделяться запятой" })
             </div>
             <div class="col-xs-6"></div>
         </div>

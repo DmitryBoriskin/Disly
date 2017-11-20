@@ -744,6 +744,19 @@ namespace cms.dbase
                         }
                         #endregion
 
+                        #region Доменные имена
+                        if (ins.DomainListArray != null && ins.DomainListArray.Count() > 0)
+                        {
+                            foreach (var d in ins.DomainListArray)
+                            {
+                                db.cms_sites_domainss
+                                    .Value(v => v.f_site, ins.Alias)
+                                    .Value(v => v.c_domain, d)
+                                    .Insert();
+                            }
+                        }
+                        #endregion
+
                         // insertLog(UserId, IP, "insert", ins.Id, String.Empty, "Sites", ins.Title);
                         // логирование
                         var log = new LogModel()

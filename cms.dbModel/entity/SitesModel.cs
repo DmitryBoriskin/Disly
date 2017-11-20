@@ -136,6 +136,16 @@ namespace cms.dbModel.entity
         /// twitter link
         /// </summary>
         public string Twitter { get; set; }
+
+        /// <summary>
+        /// Список дополнительных доменов в виде строки
+        /// </summary>
+        public string DomainListString { get; set; }
+
+        /// <summary>
+        /// Список дополнительных доменов
+        /// </summary>
+        public IEnumerable<string> DomainListArray { get; set; }
     }
 
     public class SitesShortModel
