@@ -89,9 +89,9 @@ namespace Disly.Areas.Admin.Controllers
                 // хлебные крошки
                 model.BreadCrumbs = _cmsRepository.getSiteMapBreadCrumbs(_parent);
             }
-            else
+            else if (model.Item != null)
             {
-                model.BreadCrumbs = _cmsRepository.getSiteMapBreadCrumbs(null);
+                model.BreadCrumbs = _cmsRepository.getSiteMapBreadCrumbs(model.Item.Id);
             }
 
             // список дочерних элементов
