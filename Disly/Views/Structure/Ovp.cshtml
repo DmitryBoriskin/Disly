@@ -3,7 +3,7 @@
 @Html.Partial("services/breadcrumbs")
 <div class="structur">
     <div class="row">        
-        <div class="col-sm-9">
+        <div class="col-sm-8">
             @if (Model.DepartmentItem.Phones != null)
             {
                 <dl class="dl-horizontal">
@@ -38,7 +38,7 @@
                         <dd>@item.Value</dd>
                     }                    
                 </dl>
-                <div id="coords" class="buildmap" style="width: 100%; height: 350px;" data-zoom="11" data-height="300" data-x="@Model.StructureItem.GeopointX.ToString().Replace(",", ".")" data-y="@Model.StructureItem.GeopointY.ToString().Replace(",", ".")" data-title="@Model.StructureItem.Title"></div>
+                
             }
             @if (Model.DepartmentItem.Peoples != null)
             {
@@ -55,7 +55,7 @@
             }            
             <div>@Html.Raw(Model.DepartmentItem.Text)</div>
         </div>
-        <div class="col-sm-3">
+        <div class="col-sm-4">
             <div class="boss">
                 @if (Model.DepartmentItem.Boss != null)
                 {
@@ -66,17 +66,10 @@
                 }                
             </div>
 
-        </div>
-    </div>
-</div>
-
-<div class="structur">
-    <div class="row">
-        <div class="col-sm-9">
-
-        </div>
-        <div class="col-sm-3">
+            <div id="coords" class="buildmap" style="width: 100%; height: 250px;" data-zoom="11" data-height="300" data-x="@Model.StructureItem.GeopointX.ToString().Replace(",", ".")" data-y="@Model.StructureItem.GeopointY.ToString().Replace(",", ".")" data-title="@Model.StructureItem.Title"></div>
 
         </div>
     </div>
 </div>
+
+
