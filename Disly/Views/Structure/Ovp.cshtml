@@ -52,8 +52,11 @@
                         </tr>
                     }
                 </table>
+            }
+            @if (Model.DepartmentItem.Text != null)
+            {
+                <div>@Html.Raw(Model.DepartmentItem.Text)</div>
             }            
-            <div>@Html.Raw(Model.DepartmentItem.Text)</div>
         </div>
         <div class="col-sm-4">
             <div class="boss">
