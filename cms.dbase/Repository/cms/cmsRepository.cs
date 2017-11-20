@@ -689,6 +689,7 @@ namespace cms.dbase
                           .Value(v => v.c_content_type, ins.Type)
                           .Value(v => v.f_content, ins.ContentId)
                           .Insert();
+
                         //добавление шаблонов к новому сайту
                         var default_view = db.front_sections;
                         if (default_view.Any())
@@ -717,6 +718,7 @@ namespace cms.dbase
 
 
                         #region Значение по умолчанию
+                        //карта сайта и меню
                         var sitemap_val = db.content_sitemaps.Where(w => w.f_site == "main").ToArray();
                         foreach (var sm_item in sitemap_val)
                         {
@@ -741,6 +743,21 @@ namespace cms.dbase
                                     .Value(v => v.f_site, ins.Alias)
                                     .Insert();
                             }
+                        }
+                        //баннеры
+                        var banners = db.content_bannerss.Where(w => w.f_site == "main").ToArray();
+                        foreach (var item in banners)
+                        {
+                            db.content_bannerss
+                                .Value(v => v.f_site, ins.Alias)
+                                .Value(v => v.c_title, item.c_title)
+                                .Value(v => v.c_photo, item.c_photo)
+                                .Value(v => v.c_url, item.c_url)
+                                .Value(v => v.c_text, item.c_text)
+                                .Value(v => v.d_date, DateTime.Now)
+                                .Value(v => v.n_sort, item.n_sort)
+                                .Value(v => v.f_section, item.f_section)
+                                .Insert();
                         }
                         #endregion
 
