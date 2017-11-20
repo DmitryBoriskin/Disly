@@ -357,11 +357,26 @@ namespace cms.dbModel.entity
         /// Привязка к организации
         /// </summary>
         public Guid IdLinkOrg { get; set; }
+        
         /// <summary>
         /// Должность
         /// </summary>
         public string Post { get; set; }
+
+        /// <summary>
+        /// Статус
+        /// </summary>
         public string Status { get; set; }
+
+        /// <summary>
+        /// Инфа в формате xml
+        /// </summary>
+        public string XmlInfo { get; set; }
+
+        /// <summary>
+        /// Десериализованная инфа по сотруднику
+        /// </summary>
+        public Employee EmployeeInfo { get; set; }
     }
     
     /// <summary>
