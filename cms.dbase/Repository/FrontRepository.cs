@@ -638,6 +638,7 @@ namespace cms.dbase
                         GeopointY = s.First().str.n_geopoint_y,
                         Ovp = s.First().str.b_ovp,
                         Adress = s.First().str.c_adress,
+                        Routes = s.First().str.c_routes,
                         Departments = s.Select(d => new Departments
                         {
                             Id = d.dep.id,
