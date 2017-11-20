@@ -83,8 +83,10 @@ namespace cms.dbase
                 string SiteId = String.Empty;
 
                 var data = db.cms_sites_domainss.Where(w => w.c_domain == Domain).FirstOrDefault();
-
-                SiteId = data.f_site;
+                if (data != null)
+                {
+                    SiteId = data.f_site;
+                }                
 
                 return SiteId;
             }
@@ -713,6 +715,35 @@ namespace cms.dbase
                               .Insert();
                         }
 
+
+                        #region Значение по умолчанию
+                        var sitemap_val = db.content_sitemaps.Where(w => w.f_site == "main").ToArray();
+                        foreach (var sm_item in sitemap_val)
+                        {
+                            Guid SitemapItemGuid = Guid.NewGuid();
+                            db.content_sitemaps
+                                .Value(v => v.id, SitemapItemGuid)
+                                .Value(v => v.f_site, ins.Alias)
+                                .Value(v => v.f_front_section, sm_item.f_front_section)
+                                .Value(v => v.c_path, sm_item.c_path)
+                                .Value(v => v.c_alias, sm_item.c_alias)
+                                .Value(v => v.c_title, sm_item.c_title)
+                                .Value(v => v.b_disabled, false)
+                                .Value(v => v.b_disabled_menu, false)
+                                .Insert();
+
+                            var MenuGroup = db.content_sitemap_menutypess.Where(w => w.f_sitemap == sm_item.id).ToArray();
+                            foreach (var menugroup_item in MenuGroup)
+                            {
+                                db.content_sitemap_menutypess
+                                    .Value(v => v.f_sitemap, SitemapItemGuid)
+                                    .Value(v => v.f_menutype, menugroup_item.f_menutype)
+                                    .Value(v => v.f_site, ins.Alias)
+                                    .Insert();
+                            }
+                        }
+                        #endregion
+
                         // insertLog(UserId, IP, "insert", ins.Id, String.Empty, "Sites", ins.Title);
                         // логирование
                         var log = new LogModel()
@@ -734,6 +765,10 @@ namespace cms.dbase
                 }
             }
         }
+
+
+
+
 
         public override bool updateSite(Guid id, SitesModel upd)
         {

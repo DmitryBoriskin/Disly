@@ -9,11 +9,9 @@ namespace Disly.Areas.Admin.Controllers
 {
     public class SitesController : CoreController
     {
-        SitesViewModel model;
-        // 
+        SitesViewModel model;        
         string filter = String.Empty;
-        bool enabeld = true;
-        int page = 1;
+        bool enabeld = true;        
 
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
