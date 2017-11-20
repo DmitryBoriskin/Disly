@@ -44,7 +44,7 @@ namespace Disly.Controllers
             {
                 if (model.Item.FrontSection.ToLower() != "page")
                 {
-                    return Redirect("/"+ model.Item.FrontSection);
+                    return Redirect("/" + model.Item.FrontSection);
                 }
                 model.Child = _repository.getSiteMapChild(model.Item.Id);
             }
