@@ -829,6 +829,7 @@ namespace cms.dbase
                     throw new Exception("У данного ОВП в базе не существует отдела");
                 }
                 cdDepart.c_title = updStructure.Title;
+                cdDepart.c_adress = updDepart.Text;
                 cdDepart.f_director = updDepart.DirectorF;
                 cdDepart.c_director_post = updDepart.DirecorPost;
                 using (var tran = db.BeginTransaction())

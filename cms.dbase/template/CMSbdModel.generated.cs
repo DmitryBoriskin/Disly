@@ -1156,6 +1156,7 @@ namespace cms.dbase.models
 		[Column,        Nullable] public DateTime? d_birthdate  { get; set; } // datetime2(7)
 		[Column,     NotNull    ] public string    c_snils      { get; set; } // char(11)
 		[Column,     NotNull    ] public bool      b_deleted    { get; set; } // bit
+		[Column,        Nullable] public string    xml_info     { get; set; } // nvarchar(max)
 
 		#region Associations
 
