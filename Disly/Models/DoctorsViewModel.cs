@@ -1,5 +1,5 @@
 ﻿using cms.dbModel.entity;
-using System.Web.Mvc;
+using cms.dbModel.entity.cms;
 
 namespace Disly.Models
 {

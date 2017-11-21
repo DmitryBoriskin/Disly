@@ -207,5 +207,9 @@ namespace cms.dbModel
         public abstract bool createMainSpecialist(MainSpecialistModel item);
         public abstract bool updateMainSpecialist(MainSpecialistModel item);
         public abstract bool deleteMainSpecialist(Guid id);
+
+        // Врачи
+        public abstract EmployeeModel getEmployee(Guid id);
+        public abstract bool updateEmployee(EmployeeModel item);
     }
 }

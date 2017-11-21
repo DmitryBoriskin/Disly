@@ -1,14 +1,44 @@
-﻿@model PortalUsersViewModel
+﻿@model PersonViewModel
+@{
+    string fileName = (Model.Item != null && Model.Item.Photo != null) ? Model.Item.Photo.Name : string.Empty;
+    string fileSize = (Model.Item != null && Model.Item.Photo != null) ? Model.Item.Photo.Size : string.Empty;
+    string fileUrl = (Model.Item != null && Model.Item.Photo != null) ? Model.Item.Photo.Url : string.Empty;
+}
 
 @if (Model.UserResolution.Write)
 {
     <div class="content">
         <h1>@Model.UserResolution.Title</h1>
-        
+        <div class="row">
+            <div class="col-xs-4">
+                @Html.TextBoxFor(m => Model.Item.Surname, new { @required = "", @title = "Фамилия", @placeholder = "Фамилия" })
+            </div>
+            <div class="col-xs-4">
+                @Html.TextBoxFor(m => Model.Item.Name, new { @required = "", @title = "Имя", @placeholder = "Имя" })
+            </div>
+            <div class="col-xs-4">
+                @Html.TextBoxFor(m => Model.Item.Patronymic, new { @title = "Отчество", @placeholder = "Отчество" })
+            </div>
+            @Html.HiddenFor(m => Model.Item.Snils)
+        </div>
     </div>
-    
+
     <div class="dop_info-block">
         <div class="dop-caption">Настройки</div>
+        @if (Model.Item != null && Model.Item.Posts != null)
+        {
+            <div class="form-group">
+                <label for="itemGroups-select">Должности:</label>
+                <select name="Item.ItemMainSpecs" id="itemGroups-select" class="form-control select2" multiple required>
+                    @foreach (var post in Model.Item.Posts)
+                    {
+                        <option value="@post.Id" @(Model.Item != null && Model.Item.Posts != null && Model.EmployeePosts.Any(s => s.Id == post.Id) ? "selected" : null)>@post.Name</option>
+                    }
+                </select>
+            </div>
+        }
+        @Html.TextBox("upload", null, new { type = "file", title = "Изображение:", data_name = fileName, data_size = fileSize, data_url = fileUrl, accept = ".jpg,.jpeg,.png,.gif" })
+        @Html.TextBoxFor(m => m.Item.Photo.Url, new { type = "hidden", value = fileUrl })
     </div>
 }
 else
@@ -20,10 +50,6 @@ else
     @if ((Model.Item != null && Model.UserResolution.Change) || (Model.Item == null && Model.UserResolution.Write))
     {
         <button type="submit" name="action" value="save-btn" data-primary="true" class="button icon-create">Сохранить</button>
-    }
-    @if (Model.Item != null && Model.UserResolution.Delete)
-    {
-        <button type="submit" name="action" value="delete-btn" class="button icon-delete">Удалить</button>
     }
     <button type="submit" name="action" value="cancel-btn" class="button icon-cancel">Закрыть</button>
 </div>

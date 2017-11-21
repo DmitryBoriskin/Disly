@@ -93,17 +93,31 @@
                             <table class="table">
                                 <tr>
                                     <th>ФИО</th>
-                                    <th>Специальность</th>
-                                    <th>Контакты</th>
-                                    <th>Распиcание</th>
+                                    <th>Должность</th>
+                                    <th>Изображение</th>
+                                    @*<th>Контакты</th>
+                                    <th>Распиcание</th>*@
                                 </tr>
                                 @foreach (var item in Model.DoctorsList)
                                 {
                                     <tr>
                                         <td><a href="/@ViewBag.ControllerName/@item.Id">@item.FIO</a></td>
-                                        <td>@item.Post</td>
-                                        <td>@item.Status</td>
-                                        <td></td>
+                                        <td>
+                                            @if (item.Posts != null)
+                                            {
+                                                string posts = string.Empty;
+
+                                                foreach(var p in item.Posts)
+                                                {
+                                                    posts += p.Name;
+                                                }
+
+                                                <p>@posts</p>
+                                            }
+                                        </td>
+                                        <td><img src="@item.Photo" class="img-circle img-person-list" alt="@item.FIO" /></td>
+                                        @*<td>@item.Status</td>
+                                        <td></td>*@
                                     </tr>
                                 }
                             </table>

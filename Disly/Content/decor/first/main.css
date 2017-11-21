@@ -463,4 +463,8 @@ body {
 .event-item-module-opacity a {
     color: #fff;
 }
+
+.img-person-list{
+    max-width:135px;
+}
 /*  */

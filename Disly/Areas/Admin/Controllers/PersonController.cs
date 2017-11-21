@@ -1,5 +1,7 @@
-﻿using Disly.Areas.Admin.Models;
+﻿using cms.dbModel.entity;
+using Disly.Areas.Admin.Models;
 using System;
+using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
@@ -7,21 +9,21 @@ namespace Disly.Areas.Admin.Controllers
 {
     public class PersonController : CoreController
     {
-        PortalUsersViewModel model;
+        PersonViewModel model;
         FilterParams filter;
 
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             base.OnActionExecuting(filterContext);
             
-            model = new PortalUsersViewModel()
+            model = new PersonViewModel()
             {
                 Account = AccountInfo,
                 Settings = SettingsInfo,
                 UserResolution = UserResolutionInfo,
                 ControllerName = ControllerName,
                 ActionName = ActionName,
-                GroupList = _cmsRepository.getUsersGroupList()
+                EmployeePosts = _cmsRepository.getEmployeePosts()
             };
             
             #region Метатеги
@@ -49,9 +51,9 @@ namespace Disly.Areas.Admin.Controllers
         /// Форма редактирования записи
         /// </summary>
         /// <returns></returns>
-        public ActionResult Item(Guid Id)
+        public ActionResult Item(Guid id)
         {
-            model.Item = _cmsRepository.getPerson(Id);            
+            model.Item = _cmsRepository.getEmployee(id);
 
             return View("Item", model);
         }
@@ -101,38 +103,59 @@ namespace Disly.Areas.Admin.Controllers
         [HttpPost]
         [ValidateInput(false)]
         [MultiButton(MatchFormKey = "action", MatchFormValue = "save-btn")]
-        public ActionResult Save(Guid Id, PortalUsersViewModel back_model)
+        public ActionResult Save(Guid id, PersonViewModel back_model, HttpPostedFileBase upload)
         {
             ErrorMassege userMassege = new ErrorMassege();
             userMassege.title = "Информация";
 
             if (ModelState.IsValid)
             {
-                if (_cmsRepository.check_user(Id))
+                #region Изображение
+                string savePath = Settings.UserFiles + "persons/" + back_model.Item.Snils + "/";
+
+                int width = 225; // ширина 
+                int height = 225; // высота
+
+                if (upload != null && upload.ContentLength > 0)
                 {
-                    _cmsRepository.updateUser(Id, back_model.Item); //, AccountInfo.id, RequestUserInfo.IP
+                    string fileExtension = upload.FileName.Substring(upload.FileName.IndexOf(".")).ToLower();
+
+                    var validExtension = (!string.IsNullOrEmpty(Settings.PicTypes)) ? Settings.PicTypes.Split(',') : "jpg,jpeg,png,gif".Split(',');
+                    if (!validExtension.Contains(fileExtension.Replace(".", "")))
+                    {
+                        model.ErrorInfo = new ErrorMassege()
+                        {
+                            title = "Ошибка",
+                            info = "Вы не можете загружать файлы данного формата",
+                            buttons = new ErrorMassegeBtn[]
+                            {
+                                new ErrorMassegeBtn { url = "#", text = "ок", action = "false", style="primary" }
+                            }
+                        };
+
+                        return View("Item", model);
+                    }
+
+                    Photo photo = new Photo
+                    {
+                        Name = back_model.Item.Snils + fileExtension,
+                        Size = Files.FileAnliz.SizeFromUpload(upload),
+                        Url = Files.SaveImageResizeRename(upload, savePath, back_model.Item.Snils, width, height)
+                    };
+
+                    back_model.Item.Photo = photo;
+                }
+                #endregion
+
+                if (_cmsRepository.getEmployee(id) != null)
+                {
+                    back_model.Item.Id = id;
+                    _cmsRepository.updateEmployee(back_model.Item); //, AccountInfo.id, RequestUserInfo.IP
                     userMassege.info = "Запись обновлена";
                 }
-                else if (!_cmsRepository.check_user(back_model.Item.EMail))
+
+                userMassege.buttons = new ErrorMassegeBtn[]
                 {
-                    char[] _pass = back_model.Password.Password.ToCharArray();
-                    Cripto password = new Cripto(_pass);
-                    string NewSalt = password.Salt;
-                    string NewHash = password.Hash;
-
-                    back_model.Item.Salt = NewSalt;
-                    back_model.Item.Hash = NewHash;
-
-                    _cmsRepository.createUser(Id, back_model.Item); //, AccountInfo.id, RequestUserInfo.IP
-
-                    userMassege.info = "Запись добавлена";
-                }
-                else
-                {
-                    userMassege.info = "Пользователь с таким EMail адресом уже существует.";
-                }
-
-                userMassege.buttons = new ErrorMassegeBtn[]{
                     new ErrorMassegeBtn { url = StartUrl + Request.Url.Query, text = "вернуться в список" },
                     new ErrorMassegeBtn { url = "#", text = "ок", action = "false" }
                 };
@@ -141,12 +164,13 @@ namespace Disly.Areas.Admin.Controllers
             {
                 userMassege.info = "Ошибка в заполнении формы. Поля в которых допушены ошибки - помечены цветом.";
 
-                userMassege.buttons = new ErrorMassegeBtn[]{
+                userMassege.buttons = new ErrorMassegeBtn[]
+                {
                     new ErrorMassegeBtn { url = "#", text = "ок", action = "false" }
                 };
             }
-
-            model.Item = _cmsRepository.getUser(Id);
+            
+            model.Item = _cmsRepository.getEmployee(id);
             model.ErrorInfo = userMassege;
 
             return View("Item", model);
@@ -157,26 +181,6 @@ namespace Disly.Areas.Admin.Controllers
         public ActionResult Cancel()
         {
             return Redirect(StartUrl + Request.Url.Query);
-        }
-
-        [HttpPost]
-        [MultiButton(MatchFormKey = "action", MatchFormValue = "delete-btn")]
-        public ActionResult Delete(Guid Id)
-        {
-            _cmsRepository.deleteUser(Id); //, AccountInfo.id, RequestUserInfo.IP
-
-            // записываем информацию о результатах
-            ErrorMassege userMassege = new ErrorMassege();
-            userMassege.title = "Информация";
-            userMassege.info = "Запись Удалена";
-            userMassege.buttons = new ErrorMassegeBtn[]{
-                new ErrorMassegeBtn { url = "#", text = "ок", action = "false" }
-            };
-
-            model.Item = _cmsRepository.getUser(Id);
-            model.ErrorInfo = userMassege;
-
-            return View("Item", model);
         }
     }
 }
