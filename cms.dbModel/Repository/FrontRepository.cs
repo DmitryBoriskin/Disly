@@ -36,5 +36,9 @@ namespace cms.dbModel
         public abstract StructureModel[] getDeparatamentsSelectList(string domain);
 
         public abstract OrgsModel getOrgInfo(string domain);
+
+        public abstract IEnumerable<VoteModel> getVote(string domain);
+        public abstract VoteAnswer[] getVoteAnswer(Guid VoteId);
+        public abstract VoteStat getVoteStat(Guid AnswerId, string Ip);
     }
 }

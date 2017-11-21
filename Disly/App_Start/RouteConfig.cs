@@ -23,6 +23,14 @@ namespace Disly
                defaults: new { controller = "Home", action = "Index" }
             );
 
+            //голосование
+            routes.MapRoute(
+               name: "vote",
+               url: "vote/",
+               defaults: new { controller = "vote", action = "Index" },
+               namespaces: new string[] { "Disly.Controllers" }
+            );
+
             // Структура
             routes.MapRoute(
                name: "Structure",

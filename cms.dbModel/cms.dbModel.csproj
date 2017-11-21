@@ -56,6 +56,7 @@
   <ItemGroup>
     <Compile Include="entity\cms\BannersModel.cs" />
     <Compile Include="entity\cms\ContentLinkModel.cs" />
+    <Compile Include="entity\cms\VoteModel.cs" />
     <Compile Include="entity\cms\SiteSectionModel.cs" />
     <Compile Include="entity\cms\EmployeeModel.cs" />
     <Compile Include="entity\cms\EmployeePostModel.cs" />

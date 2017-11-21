@@ -83,6 +83,9 @@ namespace cms.dbase.models
 		public ITable<content_sv_people_org>                        content_sv_people_orgs                        { get { return this.GetTable<content_sv_people_org>(); } }
 		public ITable<content_sv_sitemap_menu>                      content_sv_sitemap_menus                      { get { return this.GetTable<content_sv_sitemap_menu>(); } }
 		public ITable<content_vacancies>                            content_vacanciess                            { get { return this.GetTable<content_vacancies>(); } }
+		public ITable<content_vote>                                 content_votes                                 { get { return this.GetTable<content_vote>(); } }
+		public ITable<content_vote_answers>                         content_vote_answerss                         { get { return this.GetTable<content_vote_answers>(); } }
+		public ITable<content_vote_users>                           content_vote_userss                           { get { return this.GetTable<content_vote_users>(); } }
 		public ITable<front_modules>                                front_moduless                                { get { return this.GetTable<front_modules>(); } }
 		public ITable<front_page_views>                             front_page_viewss                             { get { return this.GetTable<front_page_views>(); } }
 		public ITable<front_section>                                front_sections                                { get { return this.GetTable<front_section>(); } }
@@ -342,16 +345,16 @@ namespace cms.dbase.models
 		#region Associations
 
 		/// <summary>
-		/// fk_user_resolutions
-		/// </summary>
-		[Association(ThisKey="c_user_id", OtherKey="id", CanBeNull=false, KeyName="fk_user_resolutions", BackReferenceName="fkuserresolutionss")]
-		public cms_users fkuserresolutions { get; set; }
-
-		/// <summary>
 		/// fk_menu_resolutions
 		/// </summary>
 		[Association(ThisKey="c_menu_id", OtherKey="id", CanBeNull=false, KeyName="fk_menu_resolutions", BackReferenceName="fkmenuresolutionss")]
 		public cms_menu fkmenuresolutions { get; set; }
+
+		/// <summary>
+		/// fk_user_resolutions
+		/// </summary>
+		[Association(ThisKey="c_user_id", OtherKey="id", CanBeNull=false, KeyName="fk_user_resolutions", BackReferenceName="fkuserresolutionss")]
+		public cms_users fkuserresolutions { get; set; }
 
 		#endregion
 	}
@@ -415,6 +418,12 @@ namespace cms.dbase.models
 		/// </summary>
 		[Association(ThisKey="c_alias", OtherKey="f_site", CanBeNull=true, IsBackReference=true)]
 		public IEnumerable<front_page_views> fksitespageviewss { get; set; }
+
+		/// <summary>
+		/// FK_content_vote_cms_site_BackReference
+		/// </summary>
+		[Association(ThisKey="c_alias", OtherKey="f_site", CanBeNull=true, IsBackReference=true)]
+		public IEnumerable<content_vote> contentvotecmssites { get; set; }
 
 		/// <summary>
 		/// fk_sites_domains_BackReference
@@ -1504,6 +1513,64 @@ namespace cms.dbase.models
 		[Column,     NotNull    ] public bool     b_disabled    { get; set; } // bit
 	}
 
+	[Table(Schema="dbo", Name="content_vote")]
+	public partial class content_vote
+	{
+		[PrimaryKey, NotNull    ] public Guid      id           { get; set; } // uniqueidentifier
+		[Column,     NotNull    ] public string    f_site       { get; set; } // varchar(64)
+		[Column,     NotNull    ] public bool      b_type       { get; set; } // bit
+		[Column,     NotNull    ] public string    c_header     { get; set; } // varchar(512)
+		[Column,        Nullable] public string    c_text       { get; set; } // varchar(max)
+		[Column,     NotNull    ] public bool      b_disabled   { get; set; } // bit
+		[Column,     NotNull    ] public bool      b_his_answer { get; set; } // bit
+		[Column,     NotNull    ] public DateTime  d_date_start { get; set; } // datetime
+		[Column,        Nullable] public DateTime? d_date_end   { get; set; } // datetime
+
+		#region Associations
+
+		/// <summary>
+		/// FK_content_vote_cms_site
+		/// </summary>
+		[Association(ThisKey="f_site", OtherKey="c_alias", CanBeNull=false, KeyName="FK_content_vote_cms_site", BackReferenceName="contentvotecmssites")]
+		public cms_sites contentvotecmssite { get; set; }
+
+		/// <summary>
+		/// FK_content_vote_answers_content_vote_BackReference
+		/// </summary>
+		[Association(ThisKey="id", OtherKey="f_vote", CanBeNull=true, IsBackReference=true)]
+		public IEnumerable<content_vote_answers> contentvoteanswerscontentvotes { get; set; }
+
+		#endregion
+	}
+
+	[Table(Schema="dbo", Name="content_vote_answers")]
+	public partial class content_vote_answers
+	{
+		[PrimaryKey, NotNull] public Guid   id        { get; set; } // uniqueidentifier
+		[Column,     NotNull] public Guid   f_vote    { get; set; } // uniqueidentifier
+		[Column,     NotNull] public string c_variant { get; set; } // varchar(512)
+		[Column,     NotNull] public int    n_sort    { get; set; } // int
+
+		#region Associations
+
+		/// <summary>
+		/// FK_content_vote_answers_content_vote
+		/// </summary>
+		[Association(ThisKey="f_vote", OtherKey="id", CanBeNull=false, KeyName="FK_content_vote_answers_content_vote", BackReferenceName="contentvoteanswerscontentvotes")]
+		public content_vote contentvoteanswerscontentvote { get; set; }
+
+		#endregion
+	}
+
+	[Table(Schema="dbo", Name="content_vote_users")]
+	public partial class content_vote_users
+	{
+		[Column, NotNull] public string   c_ip     { get; set; } // varchar(32)
+		[Column, NotNull] public Guid     f_vote   { get; set; } // uniqueidentifier
+		[Column, NotNull] public Guid     f_answer { get; set; } // uniqueidentifier
+		[Column, NotNull] public DateTime d_date   { get; set; } // datetime
+	}
+
 	[Table(Schema="dbo", Name="front_modules")]
 	public partial class front_modules
 	{
@@ -1606,16 +1673,16 @@ namespace cms.dbase.models
 		public front_page_views sitefrontsectionpageviews { get; set; }
 
 		/// <summary>
-		/// FK_front_section_site
-		/// </summary>
-		[Association(ThisKey="f_front_section", OtherKey="c_alias", CanBeNull=false, KeyName="FK_front_section_site", BackReferenceName="frontsectionsites")]
-		public front_section frontsectionsite { get; set; }
-
-		/// <summary>
 		/// FK_site_front_section
 		/// </summary>
 		[Association(ThisKey="f_site", OtherKey="c_alias", CanBeNull=false, KeyName="FK_site_front_section", BackReferenceName="sitefrontsections")]
 		public cms_sites sitefrontsection { get; set; }
+
+		/// <summary>
+		/// FK_front_section_site
+		/// </summary>
+		[Association(ThisKey="f_front_section", OtherKey="c_alias", CanBeNull=false, KeyName="FK_front_section_site", BackReferenceName="frontsectionsites")]
+		public front_section frontsectionsite { get; set; }
 
 		#endregion
 	}
@@ -2053,6 +2120,18 @@ namespace cms.dbase.models
 				t.id == id);
 		}
 
+		public static content_vote Find(this ITable<content_vote> table, Guid id)
+		{
+			return table.FirstOrDefault(t =>
+				t.id == id);
+		}
+
+		public static content_vote_answers Find(this ITable<content_vote_answers> table, Guid id)
+		{
+			return table.FirstOrDefault(t =>
+				t.id == id);
+		}
+
 		public static front_modules Find(this ITable<front_modules> table, Guid id)
 		{
 			return table.FirstOrDefault(t =>
@@ -2090,4 +2169,3 @@ namespace cms.dbase.models
 		}
 	}
 }
- 
