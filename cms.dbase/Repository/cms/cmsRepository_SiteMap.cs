@@ -571,7 +571,7 @@ namespace cms.dbase
                             var menuTypesBigger = db.content_sitemap_menutypess
                                 .Where(w => w.f_site.Equals(item.f_site))
                                 .Where(w => w.f_sitemap.Equals(item.id))
-                                .Select(s => s.f_menutype);
+                                .Select(s => new { s.f_menutype, s.n_sort });
 
                             if (menuTypesBigger.Any())
                             {
@@ -579,8 +579,8 @@ namespace cms.dbase
                                 {
                                     db.content_sitemap_menutypess
                                         .Where(w => w.f_site.Equals(item.f_site))
-                                        .Where(w => w.f_menutype.Equals(mt))
-                                        .Where(w => w.n_sort > item.n_sort)
+                                        .Where(w => w.f_menutype.Equals(mt.f_menutype))
+                                        .Where(w => w.n_sort > mt.n_sort)
                                         .Set(s => s.n_sort, s => s.n_sort - 1)
                                         .Update();
                                 }
