@@ -930,7 +930,8 @@ namespace cms.dbase
                     {
                         Id = s.id,
                         FIO = s.c_surname + " " + s.c_name + " " + s.c_patronymic,
-                        XmlInfo = s.xml_info
+                        XmlInfo = s.xml_info,
+                        Photo = s.c_photo
                     });
 
                 if (!query.Any()) return null;
