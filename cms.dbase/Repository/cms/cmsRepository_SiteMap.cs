@@ -281,7 +281,7 @@ namespace cms.dbase
                                     .Value(p => p.f_sitemap, id)
                                     .Value(p => p.f_menutype, menuId)
                                     .Value(p => p.f_site, item.Site)
-                                    .Value(p => p.n_sort, mS)
+                                    .Value(p => p.n_sort, mS + 1)
                                     .Insert();
                             }
                         }
@@ -567,6 +567,25 @@ namespace cms.dbase
                     {
                         foreach (var item in listToDelete.ToArray())
                         {
+                            // удаляем связи с группой меню
+                            var menuTypesBigger = db.content_sitemap_menutypess
+                                .Where(w => w.f_site.Equals(item.f_site))
+                                .Where(w => w.f_sitemap.Equals(item.id))
+                                .Select(s => s.f_menutype);
+
+                            if (menuTypesBigger.Any())
+                            {
+                                foreach (var mt in menuTypesBigger.ToArray())
+                                {
+                                    db.content_sitemap_menutypess
+                                        .Where(w => w.f_site.Equals(item.f_site))
+                                        .Where(w => w.f_menutype.Equals(mt))
+                                        .Where(w => w.n_sort > item.n_sort)
+                                        .Set(s => s.n_sort, s => s.n_sort - 1)
+                                        .Update();
+                                }
+                            }
+
                             var itemD = db.content_sitemaps
                                 .Where(w => w.id == item.id)
                                 .SingleOrDefault();
@@ -574,7 +593,6 @@ namespace cms.dbase
                             db.Delete(itemD);
 
                             // Логирование
-                            //insertLog(userId, IP, "delete", item.id, String.Empty, "SiteMap", item.c_title);
                             var log = new LogModel()
                             {
                                 Site = _domain,

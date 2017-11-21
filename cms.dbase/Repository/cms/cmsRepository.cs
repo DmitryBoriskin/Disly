@@ -735,13 +735,24 @@ namespace cms.dbase
                                 .Insert();
 
                             var MenuGroup = db.content_sitemap_menutypess.Where(w => w.f_sitemap == sm_item.id).ToArray();
+                            
                             foreach (var menugroup_item in MenuGroup)
                             {
+                                // сортировка
+                                var maxSort = db.content_sitemap_menutypess
+                                    .Where(w => w.f_site.Equals(ins.Alias))
+                                    .Where(w => w.f_menutype.Equals(menugroup_item.f_menutype))
+                                    .Select(s => s.n_sort);
+
+                                int mS = maxSort.Any() ? maxSort.Max() : 0;
+
                                 db.content_sitemap_menutypess
                                     .Value(v => v.f_sitemap, SitemapItemGuid)
                                     .Value(v => v.f_menutype, menugroup_item.f_menutype)
                                     .Value(v => v.f_site, ins.Alias)
+                                    .Value(v => v.n_sort, mS + 1)
                                     .Insert();
+
                             }
                         }
                         //баннеры
