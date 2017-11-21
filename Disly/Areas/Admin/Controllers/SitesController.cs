@@ -205,6 +205,23 @@ namespace Disly.Areas.Admin.Controllers
                 //    _repository.createUserSiteLink(usersitelink); 
                 #endregion
 
+                // дополнительные домены
+                List<string> domains = new List<string>();
+                domains.Add(back_model.Item.Alias + ".localhost");
+
+                if (!string.IsNullOrEmpty(back_model.Item.DomainListString))
+                {
+                    string[] dopDomains = back_model.Item.DomainListString.Split(';');
+                    foreach (var d in dopDomains)
+                    {
+                        if (!string.IsNullOrEmpty(d))
+                        {
+                            domains.Add(d);
+                        }
+                    }
+                    back_model.Item.DomainListArray = domains;
+                }
+
                 if (_cmsRepository.check_Site(Id))
                 {                    
                     _cmsRepository.updateSite(Id, back_model.Item); //, AccountInfo.id, RequestUserInfo.IP

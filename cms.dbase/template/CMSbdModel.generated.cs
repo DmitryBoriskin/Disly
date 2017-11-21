@@ -80,6 +80,7 @@ namespace cms.dbase.models
 		public ITable<content_sv_orgs_by_type>                      content_sv_orgs_by_types                      { get { return this.GetTable<content_sv_orgs_by_type>(); } }
 		public ITable<content_sv_orgs_not_attached>                 content_sv_orgs_not_attacheds                 { get { return this.GetTable<content_sv_orgs_not_attached>(); } }
 		public ITable<content_sv_people_department>                 content_sv_people_departments                 { get { return this.GetTable<content_sv_people_department>(); } }
+		public ITable<content_sv_people_front>                      content_sv_people_fronts                      { get { return this.GetTable<content_sv_people_front>(); } }
 		public ITable<content_sv_people_org>                        content_sv_people_orgs                        { get { return this.GetTable<content_sv_people_org>(); } }
 		public ITable<content_sv_sitemap_menu>                      content_sv_sitemap_menus                      { get { return this.GetTable<content_sv_sitemap_menu>(); } }
 		public ITable<content_vacancies>                            content_vacanciess                            { get { return this.GetTable<content_vacancies>(); } }
@@ -1166,6 +1167,7 @@ namespace cms.dbase.models
 		[Column,     NotNull    ] public string    c_snils      { get; set; } // char(11)
 		[Column,     NotNull    ] public bool      b_deleted    { get; set; } // bit
 		[Column,        Nullable] public string    xml_info     { get; set; } // nvarchar(max)
+		[Column,        Nullable] public string    c_photo      { get; set; } // nvarchar(1024)
 
 		#region Associations
 
@@ -1459,6 +1461,18 @@ namespace cms.dbase.models
 		[Column,    Nullable] public string    c_status     { get; set; } // varchar(128)
 		[Column,    Nullable] public string    c_post       { get; set; } // varchar(128)
 		[Column, NotNull    ] public Guid      idOrgLink    { get; set; } // uniqueidentifier
+	}
+
+	// View
+	[Table(Schema="dbo", Name="content_sv_people_front")]
+	public partial class content_sv_people_front
+	{
+		[Column, NotNull    ] public Guid   id           { get; set; } // uniqueidentifier
+		[Column,    Nullable] public string c_surname    { get; set; } // varchar(64)
+		[Column,    Nullable] public string c_name       { get; set; } // varchar(64)
+		[Column,    Nullable] public string c_patronymic { get; set; } // varchar(64)
+		[Column,    Nullable] public string c_photo      { get; set; } // nvarchar(1024)
+		[Column, NotNull    ] public string domain       { get; set; } // varchar(64)
 	}
 
 	// View

@@ -32,6 +32,11 @@ namespace cms.dbModel.entity.cms
         public string Patronymic { get; set; }
 
         /// <summary>
+        /// Снилс
+        /// </summary>
+        public string Snils { get; set; }
+
+        /// <summary>
         /// Полное имя
         /// </summary>
         public string Fullname
@@ -41,5 +46,36 @@ namespace cms.dbModel.entity.cms
                 return string.Format("{0} {1} {2}", Surname, Name, Patronymic);
             }
         }
+
+        /// <summary>
+        /// Список занимаемых должностей
+        /// </summary>
+        public IEnumerable<EmployeePostModel> Posts { get; set; }
+
+        /// <summary>
+        /// Фотография
+        /// </summary>
+        public Photo Photo { get; set; }
+    }
+
+    /// <summary>
+    /// Модель, описывающая должности 
+    /// </summary>
+    public class EmployeePostModel
+    {
+        /// <summary>
+        /// Идентификатор
+        /// </summary>
+        public int Id { get; set; }
+
+        /// <summary>
+        /// Родитель
+        /// </summary>
+        public int? Parent { get; set; }
+
+        /// <summary>
+        /// Название
+        /// </summary>
+        public string Name { get; set; }
     }
 }

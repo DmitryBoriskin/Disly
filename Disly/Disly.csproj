@@ -548,6 +548,7 @@
     <Compile Include="Areas\Admin\Models\BannersViewModel.cs" />
     <Compile Include="Areas\Admin\Models\cmsMenuViewModel.cs" />
     <Compile Include="Areas\Admin\Models\VoteViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\PersonViewModel.cs" />
     <Compile Include="Areas\Admin\Models\SiteSectionViewModel.cs" />
     <Compile Include="Areas\Admin\Models\MainSpecialistViewModel.cs" />
     <Compile Include="Areas\Admin\Models\ModalViewModels\EventsModalViewModel.cs" />

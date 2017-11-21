@@ -377,6 +377,37 @@ namespace cms.dbModel.entity
         /// Десериализованная инфа по сотруднику
         /// </summary>
         public Employee EmployeeInfo { get; set; }
+
+        /// <summary>
+        /// Фотография
+        /// </summary>
+        public string Photo { get; set; }
+
+        /// <summary>
+        /// Список должностей сотрудников
+        /// </summary>
+        public IEnumerable<PeoplePost> Posts { get; set; }
+    }
+
+    /// <summary>
+    /// Должность сотрудника
+    /// </summary>
+    public class PeoplePost
+    {
+        /// <summary>
+        /// Идентификатор
+        /// </summary>
+        public int Id { get; set; }
+
+        /// <summary>
+        /// Родительский ключ
+        /// </summary>
+        public int? Parent { get; set; }
+
+        /// <summary>
+        /// Название
+        /// </summary>
+        public string Name { get; set; }
     }
     
     /// <summary>

@@ -4,7 +4,7 @@
 <div class="structur">
     <div class="row">        
         <div class="col-sm-9">
-            @if (Model.DepartmentItem.Phones != null)
+            @*@if (Model.DepartmentItem.Phones != null)
             {
                 <dl class="dl-horizontal">
                     @foreach (var item in Model.DepartmentItem.Phones)
@@ -26,7 +26,7 @@
                         </tr>
                     }
                 </table>
-            }            
+            }*@            
             <div>@Html.Raw(Model.DepartmentItem.Text)</div>
         </div>
         <div class="col-sm-3">
@@ -39,6 +39,8 @@
                     @Model.DepartmentItem.Boss.Post
                 }                
             </div>
+
+            <a class="btn btn-default" href="/doctors/?group=@Model.DepartmentItem.Id">Сотрудники</a>
 
         </div>
     </div>

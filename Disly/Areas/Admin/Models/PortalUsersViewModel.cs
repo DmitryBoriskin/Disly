@@ -1,4 +1,6 @@
 ﻿using cms.dbModel.entity;
+using cms.dbModel.entity.cms;
+using System.Collections.Generic;
 
 namespace Disly.Areas.Admin.Models
 {
@@ -6,7 +8,6 @@ namespace Disly.Areas.Admin.Models
     {
         public UsersList List { get; set; }
         public UsersModel Item { get; set; }
-
         public Catalog_list[] GroupList { get; set; }
         public PasswordModel Password { get; set; }
     }
