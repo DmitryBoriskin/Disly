@@ -1,4 +1,6 @@
+using cms.dbModel.entity;
 using Disly.Areas.Admin.Service;
+using Portal.Code;
 using System;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -245,5 +247,50 @@ public class Files
             if (enc.MimeType.ToLower() == mimeType.ToLower())
                 return enc;
         return null;
+    }
+
+    /// <summary>
+    /// Получаем параметры изображения
+    /// </summary>
+    /// <param name="url">Ссылка на файл</param>
+    /// <returns></returns>
+    public static Photo getInfoImage(string url)
+    {
+        try
+        {
+            var serverPath = HttpContext.Current.Server.MapPath(url);
+            if (System.IO.File.Exists(serverPath))
+                return new Photo
+                {
+                    Name = Path.GetFileName(HttpContext.Current.Server.MapPath(url)),
+                    Size = Files.FileAnliz.Size(url),
+                    Url = url
+                };
+        }
+        catch (Exception ex)
+        {
+            AppLogger.Warn("Несуществующий файл: " + url, ex);
+        }
+
+        return new Photo
+        {
+            Name = null,
+            Size = null,
+            Url = null
+        };
+    }
+
+    public static void deleteImage(string url)
+    {
+        try
+        {
+            var serverPath = HttpContext.Current.Server.MapPath(url);
+            if (System.IO.File.Exists(serverPath))
+                System.IO.File.Delete(serverPath);
+        }
+        catch (Exception ex)
+        {
+            AppLogger.Warn("Попытка удалить несуществующий файл: " + url, ex);
+        }
     }
 }

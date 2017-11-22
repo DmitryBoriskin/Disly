@@ -79,7 +79,7 @@ namespace Disly.Areas.Admin.Controllers
                 var photo = model.Item.PreviewImage;
                 if (photo != null && !string.IsNullOrEmpty(photo.Url))
                 {
-                    model.Item.PreviewImage = getInfoPhoto(photo.Url);
+                    model.Item.PreviewImage = Files.getInfoImage(photo.Url);
                 }
             }
 
@@ -253,7 +253,7 @@ namespace Disly.Areas.Admin.Controllers
             model.Item = _cmsRepository.getEvent(Id);
             if (model.Item != null && model.Item.PreviewImage != null && !string.IsNullOrEmpty(model.Item.PreviewImage.Url))
             {
-                model.Item.PreviewImage = getInfoPhoto(model.Item.PreviewImage.Url);
+                model.Item.PreviewImage = Files.getInfoImage(model.Item.PreviewImage.Url);
             }
             model.ErrorInfo = userMessage;
  
@@ -271,7 +271,14 @@ namespace Disly.Areas.Admin.Controllers
          [MultiButton(MatchFormKey = "action", MatchFormValue = "delete-btn")]
          public ActionResult Delete(Guid Id)
          {
-             var res = _cmsRepository.deleteCmsEvent(Id);
+            var data = _cmsRepository.getEvent(Id);
+            if (data != null)
+            {
+                var image = (data.PreviewImage != null) ? data.PreviewImage.Url : null;
+                var res = _cmsRepository.deleteCmsEvent(Id);
+                if (res && !string.IsNullOrEmpty(image))
+                    Files.deleteImage(image);
+            }
  
              // записываем информацию о результатах
              ErrorMassege userMassege = new ErrorMassege();
@@ -319,20 +326,17 @@ namespace Disly.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        [MultiButton(MatchFormKey = "action", MatchFormValue = "save-event-btn")]
-        public ActionResult EventsListModal(EventsModalViewModel model)
+        public ActionResult UpdateLinkToEvent(ContentLinkModel data)
         {
-            ContentLinkModel modelInsert = new ContentLinkModel
+            if (data != null)
             {
-                ObjctId = model.ObjctId,
-                ObjctType = model.ObjctType,
-                LinksId = (model.EventsId != null) ? model.EventsId.Distinct().ToArray() : null,
-                LinkType = ContentLinkType.EVENT
-            };
+                var res = _cmsRepository.updateContentLink(data);
+                if (res)
+                    return Json("Success");
+            }
 
-            var res = _cmsRepository.updateContentLinks(modelInsert);
-
-            return PartialView("Modal/Success");
+            //return Response.Status = "OK";
+            return Json("An Error Has occourred"); //Ne
         }
     }
  }

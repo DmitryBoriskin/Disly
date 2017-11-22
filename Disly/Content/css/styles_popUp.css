@@ -317,9 +317,12 @@ a.button  {
     margin:5px 0;
 }
 .org-byType-tree ul{
-    padding-left:25px;
-    padding-top:7px;
+    padding-left:0;
 }
+ .org-byType-tree .icon-down-dir:before { 
+        content: '\e8c2';
+        margin-left: -22px;
+    }
 .modal-label-org-item{
     display:block;
     float:left;

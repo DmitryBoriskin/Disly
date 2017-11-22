@@ -73,6 +73,23 @@ namespace cms.dbase
             }
         }
 
+        private bool ContentLinkorigin(Guid contentId, ContentType contentType, Guid linkId, ContentLinkType linkType)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var links = db.content_content_links
+                    .Where(s => s.f_content == contentId)
+                    .Where(s => s.f_content_type == contentType.ToString().ToLower())
+                    .Where(s => s.f_link == linkId)
+                    .Where(s => s.f_link_type == linkType.ToString().ToLower())
+                    .Where(s => s.b_origin == true)
+                    .Select(s => s.f_link);
+                if (links.Any())
+                    return true;
+
+                return false;
+            }
+        }
         /// <summary>
         /// Постраничный список организаций
         /// </summary>
@@ -164,8 +181,9 @@ namespace cms.dbase
                         Title = s.c_title,
                         Types = (s.contentorgstypeslinkorgs.Select(t => t.f_type).Any())?
                                 s.contentorgstypeslinkorgs.Select(t => t.f_type).ToArray(): null,
-                        Checked = ContentLinkExists(filtr.RelId.Value, filtr.RelType, s.id, ContentLinkType.ORG)
-                    });
+                        Checked = ContentLinkExists(filtr.RelId.Value, filtr.RelType, s.id, ContentLinkType.ORG),
+                        Origin = ContentLinkorigin(filtr.RelId.Value, filtr.RelType, s.id, ContentLinkType.ORG)
+                        });
 
                     if (data.Any())
                         return data.ToArray();
@@ -1281,7 +1299,7 @@ namespace cms.dbase
                         Guid OrgId = data_str.First().f_ord;
                         var PeopleList = db.content_people_org_links
                                            .Where(w => w.f_org == OrgId)
-                                           .Where(w => (w.fkcontentpeopleorgdepartmentlinks == null || w.fkcontentpeopleorgdepartmentlinks.FirstOrDefault().f_department != idDepar))
+                                           .Where(w => (w. fkcontentpeopleorgdepartmentlinks == null || w.fkcontentpeopleorgdepartmentlinks.FirstOrDefault().f_department != idDepar))
                                            .Select(s => new People
                                            {
                                                FIO = s.fkcontentpeopleorglink.c_surname + " " + s.fkcontentpeopleorglink.c_name + " " + s.fkcontentpeopleorglink.c_patronymic,

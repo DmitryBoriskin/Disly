@@ -243,52 +243,5 @@ namespace Disly.Areas.Admin.Controllers
                     controllerContext.HttpContext.Request[MatchFormKey] == MatchFormValue;
             }
         }
-
-        /// <summary>
-        /// Получаем параметры изображения
-        /// </summary>
-        /// <param name="url">Ссылка на файл</param>
-        /// <returns></returns>
-        public Photo getInfoPhoto(string url)
-        {
-            try
-            {
-                var serverPath = Server.MapPath(url);
-                if (System.IO.File.Exists(serverPath))
-                    return new Photo
-                    {
-                        Name = Path.GetFileName(Server.MapPath(url)),
-                        Size = Files.FileAnliz.Size(url),
-                        Url = url
-                    };
-            }
-            catch(Exception ex)
-            {
-                AppLogger.Warn("Несуществующий файл: " + url, ex);
-            }
-
-            return new Photo
-            {
-                Name = null,
-                Size = null,
-                Url = null
-            };
-        }
-
-        public void deletePhoto(string url)
-        {
-            try
-            {
-                var serverPath = Server.MapPath(url);
-                if (System.IO.File.Exists(serverPath))
-                    System.IO.File.Delete(serverPath);
-            }
-            catch (Exception ex)
-            {
-                AppLogger.Warn("Попытка удалить несуществующий файл: " + url, ex);
-            }
-        }
-
-
     }
 }
