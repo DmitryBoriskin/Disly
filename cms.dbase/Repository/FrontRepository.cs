@@ -1024,7 +1024,9 @@ namespace cms.dbase
                             .OrderBy(o=>o.n_sort)
                             .Select(s=>new VoteAnswer() {
                                 Variant=s.c_variant,
-                                id=s.id
+                                id=s.id,
+                                Statistic= getVoteStat(s.id, VoteId,"0.0.0")
+
                             });
                 if (query.Any())
                 {
@@ -1033,11 +1035,10 @@ namespace cms.dbase
                 return null;
             }
         }
-        public override VoteStat getVoteStat(Guid AnswerId, string Ip)
+        public override VoteStat getVoteStat(Guid AnswerId, Guid VoteId, string Ip)
         {
             using (var db = new CMSdb(_context))
-            {
-                Guid VoteId = db.content_vote_answerss.Where(w => w.id == AnswerId).Single().f_vote;
+            {                
                 //проверяем даны ли ранее ответы этим пользователем
                 var spot = db.content_vote_userss.Where(w =>(w.f_vote == VoteId && w.c_ip==Ip)).FirstOrDefault();
                 if (spot == null) return null;

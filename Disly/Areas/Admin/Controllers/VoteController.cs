@@ -178,8 +178,9 @@ namespace Disly.Areas.Admin.Controllers
         public ActionResult Delete(Guid Id)
         {
             // записываем информацию о результатах
-            ErrorMassege userMassege = new ErrorMassege();
-            userMassege.title = "Информация";
+            ErrorMassege userMassege = new ErrorMassege {
+                title = "Информация"
+            };            
             if (_cmsRepository.delVote(Id))
                 userMassege.info = "Запись Удалена";
             else

@@ -39,6 +39,6 @@ namespace cms.dbModel
 
         public abstract IEnumerable<VoteModel> getVote(string domain);
         public abstract VoteAnswer[] getVoteAnswer(Guid VoteId);
-        public abstract VoteStat getVoteStat(Guid AnswerId, string Ip);
+        public abstract VoteStat getVoteStat(Guid AnswerId, Guid VoteId, string Ip);
     }
 }
