@@ -344,6 +344,7 @@
     <Content Include="Content\plugins\jquery\jquery.ui.js" />
     <Content Include="Content\plugins\mCustomScrollbar\jquery.mCustomScrollbar.css" />
     <Content Include="Content\plugins\mCustomScrollbar\jquery.mCustomScrollbar.js" />
+    <Content Include="Content\plugins\tinymce\jquery.tinymce.min.js" />
     <Content Include="Content\plugins\tinymce\langs\ru.js" />
     <Content Include="Content\plugins\tinymce\license.txt" />
     <Content Include="Content\plugins\tinymce\plugins\advlist\plugin.min.js" />
@@ -353,7 +354,10 @@
     <Content Include="Content\plugins\tinymce\plugins\autosave\plugin.min.js" />
     <Content Include="Content\plugins\tinymce\plugins\bbcode\plugin.min.js" />
     <Content Include="Content\plugins\tinymce\plugins\charmap\plugin.min.js" />
+    <Content Include="Content\plugins\tinymce\plugins\codesample\css\prism.css" />
+    <Content Include="Content\plugins\tinymce\plugins\codesample\plugin.min.js" />
     <Content Include="Content\plugins\tinymce\plugins\code\plugin.min.js" />
+    <Content Include="Content\plugins\tinymce\plugins\colorpicker\plugin.min.js" />
     <Content Include="Content\plugins\tinymce\plugins\contextmenu\plugin.min.js" />
     <Content Include="Content\plugins\tinymce\plugins\directionality\plugin.min.js" />
     <Content Include="Content\plugins\tinymce\plugins\emoticons\img\smiley-cool.gif" />
@@ -373,20 +377,18 @@
     <Content Include="Content\plugins\tinymce\plugins\emoticons\img\smiley-wink.gif" />
     <Content Include="Content\plugins\tinymce\plugins\emoticons\img\smiley-yell.gif" />
     <Content Include="Content\plugins\tinymce\plugins\emoticons\plugin.min.js" />
-    <Content Include="Content\plugins\tinymce\plugins\example\plugin.min.js" />
-    <Content Include="Content\plugins\tinymce\plugins\example_dependency\plugin.min.js" />
     <Content Include="Content\plugins\tinymce\plugins\fullpage\plugin.min.js" />
     <Content Include="Content\plugins\tinymce\plugins\fullscreen\plugin.min.js" />
+    <Content Include="Content\plugins\tinymce\plugins\help\img\logo.png" />
+    <Content Include="Content\plugins\tinymce\plugins\help\plugin.min.js" />
     <Content Include="Content\plugins\tinymce\plugins\hr\plugin.min.js" />
+    <Content Include="Content\plugins\tinymce\plugins\imagetools\plugin.min.js" />
     <Content Include="Content\plugins\tinymce\plugins\image\plugin.min.js" />
     <Content Include="Content\plugins\tinymce\plugins\importcss\plugin.min.js" />
     <Content Include="Content\plugins\tinymce\plugins\insertdatetime\plugin.min.js" />
-    <Content Include="Content\plugins\tinymce\plugins\layer\plugin.min.js" />
     <Content Include="Content\plugins\tinymce\plugins\legacyoutput\plugin.min.js" />
     <Content Include="Content\plugins\tinymce\plugins\link\plugin.min.js" />
     <Content Include="Content\plugins\tinymce\plugins\lists\plugin.min.js" />
-    <Content Include="Content\plugins\tinymce\plugins\disly_media\plugin.min.js" />
-    <Content Include="Content\plugins\tinymce\plugins\media\moxieplayer.swf" />
     <Content Include="Content\plugins\tinymce\plugins\media\plugin.min.js" />
     <Content Include="Content\plugins\tinymce\plugins\nonbreaking\plugin.min.js" />
     <Content Include="Content\plugins\tinymce\plugins\noneditable\plugin.min.js" />
@@ -401,6 +403,8 @@
     <Content Include="Content\plugins\tinymce\plugins\table\plugin.min.js" />
     <Content Include="Content\plugins\tinymce\plugins\template\plugin.min.js" />
     <Content Include="Content\plugins\tinymce\plugins\textcolor\plugin.min.js" />
+    <Content Include="Content\plugins\tinymce\plugins\textpattern\plugin.min.js" />
+    <Content Include="Content\plugins\tinymce\plugins\toc\plugin.min.js" />
     <Content Include="Content\plugins\tinymce\plugins\visualblocks\css\visualblocks.css" />
     <Content Include="Content\plugins\tinymce\plugins\visualblocks\plugin.min.js" />
     <Content Include="Content\plugins\tinymce\plugins\visualchars\plugin.min.js" />
@@ -413,22 +417,13 @@
     <Content Include="Content\plugins\tinymce\skins\lightgray\img\loader.gif" />
     <Content Include="Content\plugins\tinymce\skins\lightgray\img\object.gif" />
     <Content Include="Content\plugins\tinymce\skins\lightgray\img\trans.gif" />
-    <Content Include="Content\plugins\tinymce\skins\lightgray\img\wline.gif" />
-    <Content Include="Content\plugins\tinymce\skins\lightgray\skin.ie7.min.css" />
     <Content Include="Content\plugins\tinymce\skins\lightgray\skin.min.css" />
+    <Content Include="Content\plugins\tinymce\themes\inlite\theme.min.js" />
     <Content Include="Content\plugins\tinymce\themes\modern\theme.min.js" />
     <Content Include="Content\plugins\tinymce\tinymce.min.js" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
-    <Content Include="Content\plugins\tinymce\langs\readme.md" />
-    <Content Include="Content\plugins\tinymce\skins\lightgray\fonts\readme.md" />
-    <Content Include="Content\plugins\tinymce\skins\lightgray\fonts\tinymce-small.eot" />
-    <Content Include="Content\plugins\tinymce\skins\lightgray\fonts\tinymce-small.ttf" />
-    <Content Include="Content\plugins\tinymce\skins\lightgray\fonts\tinymce-small.woff" />
-    <Content Include="Content\plugins\tinymce\skins\lightgray\fonts\tinymce.eot" />
-    <Content Include="Content\plugins\tinymce\skins\lightgray\fonts\tinymce.ttf" />
-    <Content Include="Content\plugins\tinymce\skins\lightgray\fonts\tinymce.woff" />
     <Content Include="Areas\Admin\Views\web.config" />
     <Content Include="Areas\Admin\Web.config" />
     <Content Include="Areas\Admin\Views\Account\LogIn.cshtml" />
@@ -783,6 +778,13 @@
     <Content Include="Areas\Admin\Views\Vote\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Vote\Item.cshtml" />
     <None Include="Content\plugins\datatables\i18n\ru.json" />
+    <Content Include="Content\plugins\tinymce\langs\readme.md" />
+    <Content Include="Content\plugins\tinymce\skins\lightgray\fonts\tinymce-small.eot" />
+    <Content Include="Content\plugins\tinymce\skins\lightgray\fonts\tinymce-small.ttf" />
+    <Content Include="Content\plugins\tinymce\skins\lightgray\fonts\tinymce-small.woff" />
+    <Content Include="Content\plugins\tinymce\skins\lightgray\fonts\tinymce.eot" />
+    <Content Include="Content\plugins\tinymce\skins\lightgray\fonts\tinymce.ttf" />
+    <Content Include="Content\plugins\tinymce\skins\lightgray\fonts\tinymce.woff" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\services\Pager.cshtml" />
@@ -806,7 +808,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Content\plugins\tinymce\plugins\colorpicker\" />
     <Folder Include="Views\Core\" />
     <Folder Include="Views\Service\" />
   </ItemGroup>
