@@ -30,6 +30,19 @@ namespace Disly
                defaults: new { controller = "vote", action = "Index" },
                namespaces: new string[] { "Disly.Controllers" }
             );
+            routes.MapRoute(
+               name: "voteitem",
+               url: "vote/{id}",
+               defaults: new { controller = "vote", action = "Item" },
+               namespaces: new string[] { "Disly.Controllers" }
+            );
+            routes.MapRoute(
+               name: "givevote",
+               url: "vote/givevote/{id}",
+               defaults: new { controller = "vote", action = "givevote" },
+               namespaces: new string[] { "Disly.Controllers" }
+            );
+            
 
             // Структура
             routes.MapRoute(

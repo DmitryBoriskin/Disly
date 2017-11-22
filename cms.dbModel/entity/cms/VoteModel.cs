@@ -51,6 +51,10 @@ namespace cms.dbModel.entity
         /// </summary>
         public DateTime? DateEnd { get; set; }
         public VoteAnswer[] Answer { get; set; }
+        /// <summary>
+        /// true  показываем статистику опроса
+        /// </summary>
+        public bool ShowStatistic { get; set; } 
         
     }
     /// <summary>

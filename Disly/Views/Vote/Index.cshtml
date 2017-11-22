@@ -3,14 +3,14 @@
     <div class="row">
         <div class="col-md-12">
             <h1>Голосование</h1>
-            @if (Model.List != null)
+            @Html.Partial("services/breadcrumbs")
+            @if (Model.Item == null)
             {
-                foreach (var item in Model.List)
-                {
-                    <form action="/vote/@item.Id" class="vote_item">
-
-                    </form>
-                }
+                @Html.Partial("List")
+            }
+            else
+            {
+                @Html.Partial("Item")
             }
         </div>
    </div>

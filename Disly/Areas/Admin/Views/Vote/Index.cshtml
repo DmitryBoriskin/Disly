@@ -17,6 +17,7 @@
                     }                    
                 </div>
             }
+            Html.RenderAction("Pager", "Templates", new { @Model = Model.List.Pager });
         }
     </div>
     <div class="dop_info-block">
