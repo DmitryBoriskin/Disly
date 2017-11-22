@@ -27,7 +27,7 @@
         <div class="dop-caption">Настройки</div>
         @if (Model.Item != null && Model.Item.Posts != null)
         {
-            <div class="form-group">
+            @*<div class="form-group">
                 <label for="itemGroups-select">Должности:</label>
                 <select name="Item.ItemMainSpecs" id="itemGroups-select" class="form-control select2" multiple required>
                     @foreach (var post in Model.Item.Posts)
@@ -35,7 +35,7 @@
                         <option value="@post.Id" @(Model.Item != null && Model.Item.Posts != null && Model.EmployeePosts.Any(s => s.Id == post.Id) ? "selected" : null)>@post.Name</option>
                     }
                 </select>
-            </div>
+            </div>*@
         }
         @Html.TextBox("upload", null, new { type = "file", title = "Изображение:", data_name = fileName, data_size = fileSize, data_url = fileUrl, accept = ".jpg,.jpeg,.png,.gif" })
         @Html.TextBoxFor(m => m.Item.Photo.Url, new { type = "hidden", value = fileUrl })
