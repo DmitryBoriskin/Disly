@@ -105,8 +105,10 @@ namespace Disly.Areas.Admin.Controllers
         [MultiButton(MatchFormKey = "action", MatchFormValue = "save-btn")]
         public ActionResult Save(Guid id, PersonViewModel back_model, HttpPostedFileBase upload)
         {
-            ErrorMassege userMassege = new ErrorMassege();
-            userMassege.title = "Информация";
+            ErrorMassege userMassege = new ErrorMassege
+            {
+                title = "Информация"
+            };
 
             if (ModelState.IsValid)
             {

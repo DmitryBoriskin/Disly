@@ -748,6 +748,7 @@ namespace cms.dbase
 
                                 db.content_sitemap_menutypess
                                     .Value(v => v.f_sitemap, SitemapItemGuid)
+                                    .Value(v => v.n_sort, menugroup_item.n_sort)
                                     .Value(v => v.f_menutype, menugroup_item.f_menutype)
                                     .Value(v => v.f_site, ins.Alias)
                                     .Value(v => v.n_sort, mS + 1)

@@ -987,5 +987,70 @@ namespace cms.dbase
                 return null;
             }
         }
+
+
+        public override IEnumerable<VoteModel> getVote(string domain)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var query = db.content_votes
+                            .Where(w => w.f_site == domain && w.b_disabled == false)
+                            .Select(s => new VoteModel() {
+                                Header=s.c_header,
+                                Text=s.c_text,
+                                DateStart=s.d_date_start,
+                                DateEnd=s.d_date_end,
+                                Answer= getVoteAnswer(s.id)
+                                //Answer=s.contentvoteanswerscontentvotes.Select(a=>new VoteAnswer() {
+                                //                                                    id=s.id,
+                                //                                                    Variant=a.c_variant
+                                //                                                }).ToArray()  ,                                                              
+                            });
+
+                if (query.Any())
+                {
+                    return query.ToArray();
+                }
+                return null;
+            }
+        }
+
+        public override VoteAnswer[] getVoteAnswer(Guid VoteId)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var query = db.content_vote_answerss
+                            .Where(w => w.f_vote == VoteId)
+                            .OrderBy(o=>o.n_sort)
+                            .Select(s=>new VoteAnswer() {
+                                Variant=s.c_variant,
+                                id=s.id,
+                                Statistic= getVoteStat(s.id, VoteId,"0.0.0")
+
+                            });
+                if (query.Any())
+                {
+                    return query.ToArray();
+                }
+                return null;
+            }
+        }
+        public override VoteStat getVoteStat(Guid AnswerId, Guid VoteId, string Ip)
+        {
+            using (var db = new CMSdb(_context))
+            {                
+                //проверяем даны ли ранее ответы этим пользователем
+                var spot = db.content_vote_userss.Where(w =>(w.f_vote == VoteId && w.c_ip==Ip)).FirstOrDefault();
+                if (spot == null) return null;
+
+
+                VoteStat data = new VoteStat{
+                    AllVoteCount = db.content_vote_userss.Where(w => w.f_vote == VoteId).Count(),
+                    ThisVoteCount=db.content_vote_userss.Where(w=>w.f_answer==AnswerId).Count()
+                };
+                return data;
+                
+            }
+        }
     }
 }

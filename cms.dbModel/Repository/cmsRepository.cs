@@ -211,5 +211,15 @@ namespace cms.dbModel
         // Врачи
         public abstract EmployeeModel getEmployee(Guid id);
         public abstract bool updateEmployee(EmployeeModel item);
+
+        //Опросы
+        public abstract VoteList getVoteList(FilterParams filtr);
+        public abstract VoteModel getVoteItem(Guid id, string domain);
+        public abstract bool insVote(Guid id, VoteModel ins, string domain);
+        public abstract bool updVote(Guid id, VoteModel ins);
+        public abstract bool delVote(Guid id);
+        public abstract bool insAnswer(Guid idVote, string Variant);
+        public abstract bool permit_VoteAnswer(Guid id, Guid VoteId, int num);
+        public abstract bool delVoteAnswer(Guid id);
     }
 }

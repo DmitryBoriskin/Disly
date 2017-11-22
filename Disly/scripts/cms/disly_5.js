@@ -207,6 +207,23 @@ $(document).ready(function () {
         });
     });
 
+    //удаление варианта ответа
+    $('.answer_delete').click(function (e) {
+        e.preventDefault();
+        var idAnswer = $(this).attr("data-id");
+        var $Container = $(this).parent().parent();
+        $.ajax({
+            type: "POST",
+            async: false,
+            url: "/admin/vote/delanswer",
+            data: { id: idAnswer },
+            error: function () { alert("error"); },
+            success: function (data) {
+                $Container.remove();
+            }
+        });
+    });
+
     //отцепление врача от отделения
     $('.del_people_for_dep').click(function (e) {
         e.preventDefault();
@@ -224,9 +241,7 @@ $(document).ready(function () {
             }
         });
     });
-
-
-
+    
     // валидация обязательных полей для заполнения 
     requiredTest();
 

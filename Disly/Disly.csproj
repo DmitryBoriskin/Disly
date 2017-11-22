@@ -523,6 +523,7 @@
     <Compile Include="Areas\Admin\Controllers\AccountController.cs" />
     <Compile Include="Areas\Admin\Controllers\BannersController.cs" />
     <Compile Include="Areas\Admin\Controllers\cmsMenuController.cs" />
+    <Compile Include="Areas\Admin\Controllers\VoteController.cs" />
     <Compile Include="Areas\Admin\Controllers\SiteSectionController.cs" />
     <Compile Include="Areas\Admin\Controllers\MainSpecialistController.cs" />
     <Compile Include="Areas\Admin\Controllers\UsersController.cs" />
@@ -564,12 +565,14 @@
     <Compile Include="Areas\Admin\Models\PortalUsersViewModel.cs" />
     <Compile Include="Areas\Admin\Models\SiteMapViewModel.cs" />
     <Compile Include="Areas\Admin\Models\SitesViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\VoteViewModel.cs" />
     <Compile Include="Areas\Admin\Service\SpotCoord.cs" />
     <Compile Include="Areas\Admin\Service\Transliteration.cs" />
     <Compile Include="Controllers\FindUsController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\DoctorsController.cs" />
     <Compile Include="Controllers\ContactsController.cs" />
+    <Compile Include="Controllers\VoteController.cs" />
     <Compile Include="Controllers\StructureController.cs" />
     <Compile Include="Controllers\PressController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -583,6 +586,7 @@
     <Compile Include="Models\DoctorsViewModel.cs" />
     <Compile Include="Models\ContactsViewModel.cs" />
     <Compile Include="Models\StructureViewModel.cs" />
+    <Compile Include="Models\VoteViewModel.cs" />
     <Compile Include="Models\TypePageViewModel.cs" />
     <Compile Include="Models\NewsViewModel.cs" />
     <Compile Include="Models\HomePageViewModel.cs" />
@@ -776,6 +780,8 @@
     <Content Include="Areas\Admin\Views\SiteSection\Item.cshtml" />
     <Content Include="Areas\Admin\Views\MainSpecialist\Index.cshtml" />
     <Content Include="Areas\Admin\Views\MainSpecialist\Item.cshtml" />
+    <Content Include="Areas\Admin\Views\Vote\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\Vote\Item.cshtml" />
     <None Include="Content\plugins\datatables\i18n\ru.json" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <Content Include="Views\_ViewStart.cshtml" />
@@ -790,6 +796,7 @@
     <Content Include="Views\Press\Index.cshtml" />
     <Content Include="Views\FindUs\Index.cshtml" />
     <Content Include="Views\Structure\Ovp.cshtml" />
+    <Content Include="Views\Vote\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

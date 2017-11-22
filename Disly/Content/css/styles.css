@@ -1050,3 +1050,5 @@ a.button.icon-cancel{
 .topIndent-20{
     margin-top:20px;
 }
+
+.answer_delete:before {    content: '\ec5b';    font-family: fontello;    color: red;}

@@ -85,7 +85,6 @@ namespace Disly.Areas.Admin.Controllers
             {
                 Guid? _parent = (string.IsNullOrEmpty(Request.QueryString["parent"]) && model.Item != null) ? model.Item.ParentId 
                         : Guid.Parse(Request.QueryString["parent"]);
-
                 // хлебные крошки
                 model.BreadCrumbs = _cmsRepository.getSiteMapBreadCrumbs(_parent);
             }
