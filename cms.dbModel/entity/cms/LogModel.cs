@@ -190,6 +190,10 @@ namespace cms.dbModel.entity
         /// Разделы сайта
         /// </summary>
         SiteSection = 13,
+        /// <summary>
+        /// Голосование
+        /// </summary>
+        Vote = 14
 
     }
 

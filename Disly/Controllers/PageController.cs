@@ -41,7 +41,13 @@ namespace Disly.Controllers
 
             model.Item = _repository.getSiteMap(_path,_alias,Domain);
             if (model.Item != null)
+            {
+                if (model.Item.FrontSection.ToLower() != "page")
+                {
+                    return Redirect("/" + model.Item.FrontSection);
+                }
                 model.Child = _repository.getSiteMapChild(model.Item.Id);
+            }
 
             #region Создаем переменные (значения по умолчанию)
             PageViewModel Model = new PageViewModel();

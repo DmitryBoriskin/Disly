@@ -1,4 +1,5 @@
 ﻿using cms.dbModel.entity;
+using cms.dbModel.entity.cms;
 using System;
 using System.Collections.Generic;
 
@@ -128,7 +129,7 @@ namespace cms.dbModel
         public abstract bool sortStructure(Guid id, int new_num);
 
         public abstract bool insOvp(Guid IdStructure, Guid OrgId, StructureModel insertStructure);
-        public abstract bool setOvp(Guid IdStructure, StructureModel updStructure);
+        public abstract bool setOvp(Guid IdStructure, StructureModel updStructure, Departments updDepart);
 
         public abstract Departments[] getDepartmentsList(Guid id);
         public abstract Departments getDepartamentItem(Guid id);
@@ -196,5 +197,29 @@ namespace cms.dbModel
         public abstract bool deleteSiteSection(Guid id);
         public abstract bool updateSiteSection(SiteSectionModel upd);
         public abstract bool insertSiteSection(SiteSectionModel sitesection);
+
+        // Главные специалисты
+        public abstract EmployeePostModel[] getEmployeePosts();
+        public abstract EmployeePostModel getEmployeePost(int id);
+        public abstract MainSpecialistList getMainSpecialistList(FilterParams filter);
+        public abstract MainSpecialistModel getMainSpecialistItem(Guid id);
+        public abstract EmployeeModel[] getEmployeeList(int[] specialisations);
+        public abstract bool createMainSpecialist(MainSpecialistModel item);
+        public abstract bool updateMainSpecialist(MainSpecialistModel item);
+        public abstract bool deleteMainSpecialist(Guid id);
+
+        // Врачи
+        public abstract EmployeeModel getEmployee(Guid id);
+        public abstract bool updateEmployee(EmployeeModel item);
+
+        //Опросы
+        public abstract VoteList getVoteList(FilterParams filtr);
+        public abstract VoteModel getVoteItem(Guid id, string domain);
+        public abstract bool insVote(Guid id, VoteModel ins, string domain);
+        public abstract bool updVote(Guid id, VoteModel ins);
+        public abstract bool delVote(Guid id);
+        public abstract bool insAnswer(Guid idVote, string Variant);
+        public abstract bool permit_VoteAnswer(Guid id, Guid VoteId, int num);
+        public abstract bool delVoteAnswer(Guid id);
     }
 }

@@ -11,5 +11,6 @@ namespace Disly.Areas.Admin.Models
         public string Link { get; set; }
         public string Url { get; set; }
         public Catalog_list[] Items { get; set; }
+        public string AccountGroup { get; set; }
     }
 }

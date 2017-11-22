@@ -2,6 +2,17 @@
 @{    
    string orgid = Request.Params["orgid"];    
 }
+@{
+    SelectList PeopleList = null;
+    if (Model.DepartmentItem != null)
+    {
+        if (Model.DepartmentItem.Peoples != null)
+        {
+            PeopleList = new SelectList(Model.DepartmentItem.Peoples, "id", "FIO", 0);
+        }
+    }
+
+}
 
 @if (Model.UserResolution.Write)
 {
@@ -10,16 +21,7 @@
         @Html.Partial("part/bread")
         @Html.Hidden("orgid", orgid)
         @Html.TextBoxFor(m => m.StructureItem.Title, new { required = "", type = "text", maxlength = "256", title = "Название подразделения" })
-        <div class="group-block open" title="Телефон и e-mail">
-            <div class="row">
-                <div class="col-md-4">@Html.TextBoxFor(m => m.StructureItem.Phone, new { type = "text", maxlength = "256", title = "Телефон приемной" })</div>
-                <div class="col-md-4">@Html.TextBoxFor(m => m.StructureItem.PhoneReception, new { type = "text", maxlength = "256", title = "Телефон регистраутры" })</div>
-                <div class="col-md-4">@Html.TextBoxFor(m => m.StructureItem.Fax, new { type = "text", maxlength = "256", title = "Факс" })</div>
-            </div>
-            <div class="row">
-                <div class="col-md-4">@Html.TextBoxFor(m => m.StructureItem.Email, new { type = "text", maxlength = "256", title = "E-mail приемной" })</div>
-            </div>
-        </div>
+   
         <div class="group-block open" title="Адрес">
             @Html.TextBoxFor(m => m.StructureItem.Adress, new { type = "text", maxlength = "512", title = "Адрес организации:" })
             <div class="row">
@@ -40,14 +42,7 @@
                 </div>
             </div>
         </div>
-        <div class="group-block " title="Как добраться">
-            @Html.TextAreaFor(m => m.StructureItem.Routes, new { type = "editor", title = "Текст", height = "100" })
-        </div>
-        <div class="group-block " title="График работы">
-            @Html.TextAreaFor(m => m.StructureItem.Schedule, new { type = "editor", title = "Текст", height = "100" })
-        </div>
-
-        <div class="group-block open" title="Адрес">
+        <div class="group-block open" title="Телефоны">
             @if (Model.DepartmentItem != null)
             {
                 if (Model.DepartmentItem.Phones != null)
@@ -84,22 +79,96 @@
             else
             {<p>Дополнительные телефоны можно доавить после создания раздела.</p>}
         </div>
+        <div class="group-block " title="Как добраться">
+            @Html.TextAreaFor(m => m.StructureItem.Routes, new { type = "editor", title = "Текст", height = "100" })
+        </div>
+        <div class="group-block " title="График работы">
+            @Html.TextAreaFor(m => m.StructureItem.Schedule, new { type = "editor", title = "Текст", height = "100" })
+        </div>
+        <div class="group-block open" title="Описание">
+            @Html.TextAreaFor(m => m.DepartmentItem.Text, new { type = "editor", title = "Текст", height = "250" })
+        </div>
+        
 
+
+        @if (Model.DepartmentItem != null)
+        {
+            <div class="child-list">
+                <div class="child-list_head">
+                    <div class="row">
+                        <div class="col-lg-12"><h1>Врачи отделения</h1></div>
+                        @*<div class="col-lg-4 text-right"><a class="button icon-create green pull-right" href="#">Добавить</a></div>*@
+                    </div>
+                    @if (Model.PeopleList != null)
+                    {
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <h5>Добавить врача в отделение</h5>
+                            </div>
+                            <div class="col-md-4">
+                                @Html.DropDownList("s_people", Model.PeopleList, new { @title = "Выберите врача", @class = "selectpicker", @data_live_search = "true" })
+                            </div>
+                            <div class="col-md-3">
+                                @Html.DropDownList("s_people_status", Model.PeopleLStatus, new { @title = "Статус", @class = "selectpicker" })
+                            </div>
+                            <div class="col-md-3">
+                                <input type="text" title="Должность" name="s_people_post" />
+                            </div>
+                            <div class="col-md-2 ">
+                                <button style="margin-top: 27px; margin-right:0; padding:7px 20px 7px 9px;" class="button icon-create green pull-right" type="submit" name="action" value="add-new-people-depart">Добавить</button>
+                            </div>
+
+                        </div>
+                    }
+                    else
+                    {
+                        <p>Не существует персон, которых можно добавить к данной организации.</p>
+                    }
+
+                </div>
+            </div>
+            <div class="sort_list">
+                <table class="table table-striped">
+                    <tr>
+                        <th>&nbsp;</th>
+                        <th>Название</th>
+                    </tr>
+                    @if (Model.DepartmentItem.Peoples != null)
+                    {
+                        foreach (var item in Model.DepartmentItem.Peoples)
+                        {
+                            <tr>
+                                <td class="map_site_icon"></td>
+                                <td>
+                                    <a href="@item.Id">@item.FIO</a>
+                                </td>
+                                <td class="text-right">
+                                    <a class="del_icon del_people_for_dep" data-dep="@Model.DepartmentItem.Id" data-people="@item.IdLinkOrg"></a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </table>
+            </div>
+        }
+        else
+        {
+            <p>Сотрудников можно добавить только послед создания отдела.</p>
+        }
 
     </div>
     <div class="dop_info-block">
         <div class="dop-caption">Дополнительно</div>
         <div class="group-block open" title="Руководитель отделения">
             @Html.TextBoxFor(m => m.DepartmentItem.DirecorPost, new { type = "text", title = "Должность" })
-            @*@if (Model.DepartmentItem != null)
+            @if (Model.DepartmentItem != null)
+            {
+                if (PeopleList != null)
                 {
-                    if (PeopleList != null)
-                    {
-                        @Html.DropDownListFor(m => m.DepartmentItem.DirectorF, PeopleList, new { @class = "selectpicker", @title = "Выберите врача из списка" })
-                    }
-                }*@
+                    @Html.DropDownListFor(m => m.DepartmentItem.DirectorF, PeopleList, new { @class = "selectpicker", @title = "Выберите врача из списка" })
+                }
+            }
         </div>
-
     </div>
 }
 else

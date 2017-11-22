@@ -1,34 +1,147 @@
 ﻿@model DoctorsViewModel
-
 <div class="container">
     @if (Model.DoctorsItem != null)
     {
         <h1>@Model.DoctorsItem.FIO</h1>
+
+        if (Model.DoctorsItem.EmployeeInfo != null)
+        {
+            <div class="row">
+                <div class="col-md-9">
+                    <div>
+                        <strong>Место работы: </strong>
+                        @Model.DoctorsItem.EmployeeInfo.UZ.Name
+                    </div>
+
+                    <div>
+                        <strong>Занимаемая должность: </strong>
+                        <ol>
+                            @foreach (var p in Model.DoctorsItem.EmployeeInfo.EmployeeRecords)
+                            {
+                                <li>@p.RecordPost.Name</li>
+                            }
+                        </ol>
+                    </div>
+
+                    <div>
+                        <strong>Специальность по основной должности: </strong>
+                        <ol>
+                            @foreach (var p in Model.DoctorsItem.EmployeeInfo.EmployeeRecords)
+                            {
+                                <li>@p.RecrodPosition.Name</li>
+                            }
+                        </ol>
+                    </div>
+
+                    <div>
+                        <strong>Дата рождения: </strong>
+                        @if (Model.DoctorsItem.EmployeeInfo.Birthdate != null)
+                        {
+                            string birthDate = Convert.ToDateTime(Model.DoctorsItem.EmployeeInfo.Birthdate).ToString("dd MMMM yyyy") + " г.";
+                            @birthDate
+                        }
+                    </div>
+
+                    <div>
+                        <strong>Образовательные учреждения: </strong>
+                        <ol>
+                            @foreach (var e in Model.DoctorsItem.EmployeeInfo.EmployeeSertificateEducation.OrderBy(o => o.IssueDate))
+                            {
+                                <li>
+                                    <strong>Название: </strong>@e.IssueOrg.Name<br />
+                                    <strong>Год выпуска: </strong>@(e.IssueDate != null ? Convert.ToDateTime(e.IssueDate).Year.ToString() + " г." : null)<br />
+                                    <strong>Специальность: </strong>@e.EducationSpeciality.Name
+                                </li>
+                            }
+                        </ol>
+                    </div>
+
+                    <div>
+                        <strong>Стаж работы в отрасли: </strong>
+                        <ol>
+                            @foreach (var s in Model.DoctorsItem.EmployeeInfo.EmployeeRecords.OrderBy(o => o.DateBegin))
+                            {
+                                string dateBegin = s.DateBegin != null ? Convert.ToDateTime(s.DateBegin).ToString("dd.MM.yyyy") + " г. " : null;
+                                string dateEnd = s.DateEnd != null ? "—" + Convert.ToDateTime(s.DateEnd).ToString("dd.MM.yyyy") + " г. " : null;
+                                string experience = dateBegin + dateEnd + s.RecordPost.Name + " " + s.Organisation;
+
+                                <li>@experience</li>
+                            }
+                        </ol>
+                    </div>
+
+                    <div>
+                        @if (Model.DoctorsItem.EmployeeInfo.EmployeeAwards != null)
+                        {
+                            <strong>Награды: </strong>
+                            <ol>
+                                @foreach (var a in Model.DoctorsItem.EmployeeInfo.EmployeeAwards.OrderBy(o => o.Issued))
+                                {
+                                    string dateAward = a.Issued != null ? Convert.ToDateTime(a.Issued).ToString("dd.MM.yyyy") + " г. " : null;
+                                    <li>
+                                        @dateAward + @a.Name
+                                    </li>
+                                }
+                            </ol>
+                        }
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    @if (!string.IsNullOrEmpty(Model.DoctorsItem.Photo))
+                    {
+                        <img src="@Model.DoctorsItem.Photo" alt="@Model.DoctorsItem.FIO" />
+                    }
+                </div>
+            </div>
+        }
     }
     else
     {
         <h1>Врачи</h1>
         <div class="row">
-            <div class="col-md-8">
+            <div class="col-md-9">
                 <div class="row">
                     <div class="col-xs-12">
                         @if (Model.DoctorsList != null)
                         {
-                            foreach (var item in Model.DoctorsList)
-                            {
-                                <a href="/@ViewBag.ControllerName/@item.Id">@item.FIO</a>
-                            }
+                            <table class="table">
+                                <tr>
+                                    <th>Изображение</th>
+                                    <th>ФИО</th>
+                                    <th>Должность</th>
+                                    <th>Запись</th>
+                                </tr>
+                                @foreach (var item in Model.DoctorsList)
+                                {
+                                    <tr>
+                                        <td><img src="@item.Photo" class="img-circle img-person-list" alt="@item.FIO" /></td>
+                                        <td><a href="/@ViewBag.ControllerName/@item.Id">@item.FIO</a></td>
+                                        <td>
+                                            @if (item.Posts != null)
+                                            {
+                                                string posts = string.Empty;
+
+                                                foreach (var p in item.Posts)
+                                                {
+                                                    <p>@p.Name</p>
+                                                }
+                                            }
+                                        </td>
+                                        <td>&nbsp;</td>
+                                    </tr>
+                                }
+                            </table>
                         }
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <form role="form" class="filtr_news" action="/@ViewBag.ControllerName/">
                     <div class="row">
                         <div class="col-sm-12">
                             <div class="form-group search_news">
                                 <label class="label_filtr" for="search_news">Ключевые слова</label>
-                                <input type="text" class="filtr_data form-control" name="searchtext" id="search_news" value="" />
+                                <input type="text" class="filtr_data form-control" name="searchtext" id="search_news" value="@ViewBag.SearchText" />
                             </div>
                         </div>
                         @if (Model.DepartmentsSelectList != null)
@@ -37,7 +150,7 @@
                                 <div class="form-group">
                                     <label class="label_filtr">Отделения</label>
                                     <select class="form-control select2" name="group">
-                                        <option value="no-select">не выбрано</option>
+                                        <option value="">не выбрано</option>
                                         @foreach (var item in Model.DepartmentsSelectList)
                                         {
                                             <optgroup label="@item.Title">
@@ -45,29 +158,46 @@
                                                 {
                                                     foreach (var department in item.Departments)
                                                     {
-                                                        <option value="@department.Id">@department.Title</option>
+                                                        string selected = (department.Id.ToString() == ViewBag.DepartGroup) ? "selected" : "";
+                                                        <option value="@department.Id" @selected>@department.Title</option>
                                                     }
 
                                                     <option value="test">test</option>
-                                                }                                                
+                                                }
                                             </optgroup>
                                         }
                                     </select>
 
+                                </div>
+                            </div>
+                        }
+
+                        @if (Model.PeoplePosts != null)
+                        {
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label class="label_filtr">Специализации</label>
+                                    <select class="form-control select2" name="type">
+                                        <option value="">не выбрано</option>
+                                        @foreach (var item in Model.PeoplePosts)
+                                        {
+                                            string selected = (item.Id.ToString() == ViewBag.Position) ? "selected" : string.Empty;
+                                            <option value="@item.Id" @selected>@item.Name</option>
+                                        }
+                                    </select>
 
                                 </div>
                             </div>
                         }
-                       
+
                         <div class="col-sm-12 control-filter">
                             <a class="btn btn-default pull-right" href="/@ViewBag.ControllerName">Очистить</a>
                             <button class="btn sub" type="submit">ПРИМЕНИТЬ</button>
                         </div>
                     </div>
                 </form>
-
             </div>
-            
+
         </div>
-    }    
+    }
 </div>

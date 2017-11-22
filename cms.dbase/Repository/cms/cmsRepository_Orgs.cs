@@ -820,7 +820,7 @@ namespace cms.dbase
         /// <param name="UserId">Пользователь</param>
         /// <param name="IP">ip-адрес</param>
         /// <returns></returns>
-        public override bool setOvp(Guid IdStructure, StructureModel updStructure)
+        public override bool setOvp(Guid IdStructure, StructureModel updStructure, Departments updDepart)
         {
             using (var db = new CMSdb(_context))
             {
@@ -847,6 +847,9 @@ namespace cms.dbase
                     throw new Exception("У данного ОВП в базе не существует отдела");
                 }
                 cdDepart.c_title = updStructure.Title;
+                cdDepart.c_adress = updDepart.Text;
+                cdDepart.f_director = updDepart.DirectorF;
+                cdDepart.c_director_post = updDepart.DirecorPost;
                 using (var tran = db.BeginTransaction())
                 {
                     db.Update(cdStructur);
@@ -912,7 +915,10 @@ namespace cms.dbase
                         Text=s.c_adress,
                         StructureF = s.f_structure,
                         Phones = getDepartmentsPhone(s.id),
-                        Peoples = getPeopleDepartment(s.id)
+                        Peoples = getPeopleDepartment(s.id),
+                        DirecorPost=s.c_director_post,
+                        DirectorF=s.f_director
+                        
                     }).First();
                 }
                 return null;
@@ -1067,8 +1073,6 @@ namespace cms.dbase
                     IP = _ip,
                 };
                 insertLog(log);
-
-
                 return true;
             }
         }
@@ -1083,7 +1087,6 @@ namespace cms.dbase
             using (var db = new CMSdb(_context))
             {
                 var data = db.content_departments_phones.Where(w => w.id == id);
-
                 if (data.Any())
                 {
                     string logtitle = data.FirstOrDefault().c_val;
@@ -1103,14 +1106,13 @@ namespace cms.dbase
             using (var db = new CMSdb(_context))
             {
                 var data = db.content_sv_people_departments
-                           .Where(w => w.f_department == idDepart)
-                           .Select(s => new People()
-                           {
-                               Id = s.id,
-                               FIO = s.c_surname + " " + s.c_name + " " + s.c_patronymic
-                               //,
-                               //IdLinkOrg=s.
-                           });
+                             .Where(w=>w.f_department==idDepart)
+                             .Select(s => new People()
+                             {
+                                 Id = s.id,
+                                 FIO = s.c_surname + " " + s.c_name + " " + s.c_patronymic,                               
+                                 IdLinkOrg=s.idOrgLink
+                             });
                 if (data.Any()) return data.ToArray();
                 return null;
             }
@@ -1299,11 +1301,12 @@ namespace cms.dbase
                         Guid OrgId = data_str.First().f_ord;
                         var PeopleList = db.content_people_org_links
                                            .Where(w => w.f_org == OrgId)
-                                           .Where(w => (w. fkcontentpeopleorgdepartmentlinks == null || w.fkcontentpeopleorgdepartmentlinks.FirstOrDefault().f_department != idDepar))
+                                           //.Where(w => (w.fkcontentpeopleorgdepartmentlinks == null || w.fkcontentpeopleorgdepartmentlinks.FirstOrDefault().f_department != idDepar))
                                            .Select(s => new People
                                            {
                                                FIO = s.fkcontentpeopleorglink.c_surname + " " + s.fkcontentpeopleorglink.c_name + " " + s.fkcontentpeopleorglink.c_patronymic,
-                                               Id = s.id
+                                               Id = s.id,
+                                               IdLinkOrg=s.f_people
                                            }).ToArray();
                         return PeopleList.Any() ? PeopleList : null;
                     }

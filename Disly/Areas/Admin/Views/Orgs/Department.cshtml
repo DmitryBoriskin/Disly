@@ -22,7 +22,7 @@
         @Html.Partial("part/bread")
         @Html.Hidden("strucid", strucid)
         @Html.TextBoxFor(m => m.DepartmentItem.Title, new { required = "", type = "text", maxlength = "256", title = "Название отделения" })                       
-        <div class="group-block open" title="Адрес">
+        <div class="group-block open" title="Телефоны">
             @if (Model.DepartmentItem != null)
             {
                 if (Model.DepartmentItem.Phones != null)
@@ -39,7 +39,6 @@
                         }
                     </div>
                 }
-
                 <div class="row">
                     <div class="col-xs-12">
                         <h5>Добавить телефон</h5>
@@ -60,7 +59,7 @@
             {<p>Телефоны можно доавить после создания отдела.</p>}
         </div>
         <div class="group-block open" title="Описание">
-            @Html.TextAreaFor(m => m.DepartmentItem.Text, new { type = "editor", title = "Текст", height = "100" })        
+            @Html.TextAreaFor(m => m.DepartmentItem.Text, new { type = "editor", title = "Текст", height = "250" })        
         </div>
         @if (Model.DepartmentItem != null)
         {

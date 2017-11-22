@@ -375,6 +375,9 @@ namespace Disly.Areas.Admin.Controllers
                 case "banners":
                     Result = _cmsRepository.permit_Banners(id, permit, Domain);
                     break;
+                case "vote_answer":
+                    Result = _cmsRepository.permit_VoteAnswer(id,Guid.Parse(menuSort),permit);
+                    break;
             }
             return Content(Result.ToString());
         }

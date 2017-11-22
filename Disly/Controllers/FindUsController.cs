@@ -14,7 +14,6 @@ namespace Disly.Controllers
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             base.OnActionExecuting(filterContext);
-
             model = new ContatcsViewModel
             {
                 SitesInfo = siteModel,

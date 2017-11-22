@@ -80,8 +80,16 @@ namespace Disly.Controllers
                         Title = model.StructureItem.Title
                     });
                 }
+                if (model.StructureItem.Ovp)
+                {
+                    model.DepartmentItem = _repository.getOvpDepartaments(model.StructureItem.Id);
+                }
+                else
+                {
+                    model.DepartmentList = _repository.getDepartmentsList(model.StructureItem.Id);
+                }
                 
-                model.DepartmentList = _repository.getDepartmentsList(model.StructureItem.Id);
+                
             }
             
             
@@ -118,7 +126,6 @@ namespace Disly.Controllers
                     });
                 }                
             }
-
             model.DepartmentItem = _repository.getDepartmentsItem(id);
             if (model.Breadcrumbs != null)
             {
@@ -128,7 +135,6 @@ namespace Disly.Controllers
                 });
 
             }
-
 
             #region Создаем переменные (значения по умолчанию)
             PageViewModel Model = new PageViewModel();

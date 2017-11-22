@@ -23,6 +23,27 @@ namespace Disly
                defaults: new { controller = "Home", action = "Index" }
             );
 
+            //голосование
+            routes.MapRoute(
+               name: "vote",
+               url: "vote/",
+               defaults: new { controller = "vote", action = "Index" },
+               namespaces: new string[] { "Disly.Controllers" }
+            );
+            routes.MapRoute(
+               name: "voteitem",
+               url: "vote/{id}",
+               defaults: new { controller = "vote", action = "Item" },
+               namespaces: new string[] { "Disly.Controllers" }
+            );
+            routes.MapRoute(
+               name: "givevote",
+               url: "vote/givevote/{id}",
+               defaults: new { controller = "vote", action = "givevote" },
+               namespaces: new string[] { "Disly.Controllers" }
+            );
+            
+
             // Структура
             routes.MapRoute(
                name: "Structure",
@@ -55,9 +76,16 @@ namespace Disly
 
             // Контакты
             routes.MapRoute(
-               name: "Contacts",
-               url: "Contacts/",
+               name: "contacts",
+               url: "contacts/",
                defaults: new { controller = "Contacts", action = "Index" }
+            );
+            
+            // как нас найти findus
+            routes.MapRoute(
+               name: "findus",
+               url: "findus/",
+               defaults: new { controller = "findus", action = "Index" }
             );
 
             // Материалы

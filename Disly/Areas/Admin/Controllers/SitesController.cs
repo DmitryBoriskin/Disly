@@ -9,11 +9,9 @@ namespace Disly.Areas.Admin.Controllers
 {
     public class SitesController : CoreController
     {
-        SitesViewModel model;
-        // 
+        SitesViewModel model;        
         string filter = String.Empty;
-        bool enabeld = true;
-        int page = 1;
+        bool enabeld = true;        
 
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
@@ -206,6 +204,23 @@ namespace Disly.Areas.Admin.Controllers
                 //    };
                 //    _repository.createUserSiteLink(usersitelink); 
                 #endregion
+
+                // дополнительные домены
+                List<string> domains = new List<string>();
+                domains.Add(back_model.Item.Alias + ".localhost");
+
+                if (!string.IsNullOrEmpty(back_model.Item.DomainListString))
+                {
+                    string[] dopDomains = back_model.Item.DomainListString.Split(';');
+                    foreach (var d in dopDomains)
+                    {
+                        if (!string.IsNullOrEmpty(d))
+                        {
+                            domains.Add(d);
+                        }
+                    }
+                    back_model.Item.DomainListArray = domains;
+                }
 
                 if (_cmsRepository.check_Site(Id))
                 {                    

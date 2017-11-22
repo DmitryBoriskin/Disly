@@ -1,0 +1,76 @@
+﻿@model StructureViewModel
+<h1>@Model.DepartmentItem.Title</h1>
+@Html.Partial("services/breadcrumbs")
+<div class="structur">
+    <div class="row">        
+        <div class="col-sm-8">
+            @if (Model.DepartmentItem.Phones != null)
+            {
+                <dl class="dl-horizontal">
+                    @if (Model.StructureItem.Adress != null)
+                    {
+                        <dt>Адрес</dt>
+                        <dd>@Model.StructureItem.Adress</dd>
+                    }
+                    @if (Model.StructureItem.Phone != null)
+                    {
+                        <dt>Телефон приемной</dt>
+                        <dd>@Model.StructureItem.Phone</dd>
+                    }
+                    @if (Model.StructureItem.PhoneReception != null)
+                    {
+                        <dt>Телефон регистраутры</dt>
+                        <dd>@Model.StructureItem.PhoneReception</dd>
+                    }
+                    @if (Model.StructureItem.Fax != null)
+                    {
+                        <dt>Факс</dt>
+                        <dd>@Model.StructureItem.Fax</dd>
+                    }
+                    @if (Model.StructureItem.Email != null)
+                    {
+                        <dt>E-mail приемной</dt>
+                        <dd><a href="mailto:@Model.StructureItem.Email">@Model.StructureItem.Email</a></dd>
+                    }
+                    @foreach (var item in Model.DepartmentItem.Phones)
+                    {
+                        <dt>@item.Label</dt>
+                        <dd>@item.Value</dd>
+                    }                    
+                </dl>
+                
+            }
+            @if (Model.DepartmentItem.Peoples != null)
+            {
+                <table class="table">
+                    @foreach (var item in Model.DepartmentItem.Peoples)
+                    {
+                        <tr>
+                            <td><a href="/doctors/@item.Id">@item.FIO</a></td>
+                            <td>@item.Status</td>
+                            <td>@item.Post</td>
+                        </tr>
+                    }
+                </table>
+            }
+            @if (Model.DepartmentItem.Text != null)
+            {
+                <div>@Html.Raw(Model.DepartmentItem.Text)</div>
+            }            
+        </div>
+        <div class="col-sm-4">
+            <div class="boss">
+                @if (Model.DepartmentItem.Boss != null)
+                {
+                    <a href="/doctors/@Model.DepartmentItem.Boss.Id"><img src="~/Content/img/no_avatar.png"/></a>
+                    <a href="/doctors/@Model.DepartmentItem.Boss.Id">@Model.DepartmentItem.Boss.FIO</a>                    
+                    <br>
+                    @Model.DepartmentItem.Boss.Post
+                }                
+            </div>
+
+            <div id="coords" class="buildmap" style="width: 100%; height: 250px;" data-zoom="11" data-height="300" data-x="@Model.StructureItem.GeopointX.ToString().Replace(",", ".")" data-y="@Model.StructureItem.GeopointY.ToString().Replace(",", ".")" data-title="@Model.StructureItem.Title"></div>
+
+        </div>
+    </div>
+</div>

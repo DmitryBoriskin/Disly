@@ -350,10 +350,30 @@ namespace Disly.Areas.Admin.Controllers
                 }
                 else
                 {
-                    if (model.StructureItem.Departments.First() != null)
+                    if (model.StructureItem.Departments.Single() != null)
                     {
-                        model.DepartmentItem = _cmsRepository.getDepartamentItem(model.StructureItem.Departments.First().Id);
+                        model.DepartmentItem = _cmsRepository.getDepartamentItem(model.StructureItem.Departments.Single().Id);
                         model.BreadCrumbOrg = _cmsRepository.getBreadCrumbOrgs(id, ViewBag.ActionName);
+
+
+
+                        var _peopList = _cmsRepository.getPersonsThisDepartment(model.StructureItem.Departments.Single().Id);
+
+                        if (_peopList != null)
+                        {
+                            model.PeopleList = new SelectList(_peopList, "Id", "FIO");
+                        }
+
+
+                        model.PeopleLStatus = new SelectList(
+                           new List<SelectListItem>
+                           {
+                            new SelectListItem { Text = "Не выбрано", Value =""},
+                            new SelectListItem { Text = "Начальник отделения", Value ="boss"},
+                            new SelectListItem { Text = "Старшая медсестра", Value = "sister" },
+                           }, "Value", "Text"
+                       );
+
                     }                    
                 }
             }
@@ -439,17 +459,18 @@ namespace Disly.Areas.Admin.Controllers
                 }
                 #region обновление
                 if (ModelState.IsValid) {
-                    if (_cmsRepository.setOvp(id, back_model.StructureItem)) //, AccountInfo.id, RequestUserInfo.IP
+                    if (_cmsRepository.setOvp(id, back_model.StructureItem,back_model.DepartmentItem)) //, AccountInfo.id, RequestUserInfo.IP
                     {
                         userMessage.info = "Запись обновлена";
                         userMessage.buttons = new ErrorMassegeBtn[]{
-                                 new ErrorMassegeBtn { url = "/admin/orgs/set/"+id, text = "ок"}
+                                 new ErrorMassegeBtn { url = "/admin/orgs/ovp/"+id, text = "ок"}
                              };
                     }
                     else { userMessage.info = "Произошла ошибка"; }
                 }
                 #endregion
             }
+            model.ErrorInfo = userMessage;
             return View("Ovp", model);
         }
         #endregion

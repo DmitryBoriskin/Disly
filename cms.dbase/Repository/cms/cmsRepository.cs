@@ -83,8 +83,10 @@ namespace cms.dbase
                 string SiteId = String.Empty;
 
                 var data = db.cms_sites_domainss.Where(w => w.c_domain == Domain).FirstOrDefault();
-
-                SiteId = data.f_site;
+                if (data != null)
+                {
+                    SiteId = data.f_site;
+                }                
 
                 return SiteId;
             }
@@ -687,6 +689,7 @@ namespace cms.dbase
                           .Value(v => v.c_content_type, ins.Type)
                           .Value(v => v.f_content, ins.ContentId)
                           .Insert();
+
                         //добавление шаблонов к новому сайту
                         var default_view = db.front_sections;
                         if (default_view.Any())
@@ -713,6 +716,76 @@ namespace cms.dbase
                               .Insert();
                         }
 
+
+                        #region Значение по умолчанию
+                        //карта сайта и меню
+                        var sitemap_val = db.content_sitemaps.Where(w => w.f_site == "main").ToArray();
+                        foreach (var sm_item in sitemap_val)
+                        {
+                            Guid SitemapItemGuid = Guid.NewGuid();
+                            db.content_sitemaps
+                                .Value(v => v.id, SitemapItemGuid)
+                                .Value(v => v.f_site, ins.Alias)
+                                .Value(v => v.f_front_section, sm_item.f_front_section)
+                                .Value(v => v.c_path, sm_item.c_path)
+                                .Value(v => v.c_alias, sm_item.c_alias)
+                                .Value(v => v.c_title, sm_item.c_title)
+                                .Value(v => v.b_disabled, false)
+                                .Value(v => v.b_disabled_menu, false)
+                                .Insert();
+
+                            var MenuGroup = db.content_sitemap_menutypess.Where(w => w.f_sitemap == sm_item.id).ToArray();
+                            
+                            foreach (var menugroup_item in MenuGroup)
+                            {
+                                // сортировка
+                                var maxSort = db.content_sitemap_menutypess
+                                    .Where(w => w.f_site.Equals(ins.Alias))
+                                    .Where(w => w.f_menutype.Equals(menugroup_item.f_menutype))
+                                    .Select(s => s.n_sort);
+
+                                int mS = maxSort.Any() ? maxSort.Max() : 0;
+
+                                db.content_sitemap_menutypess
+                                    .Value(v => v.f_sitemap, SitemapItemGuid)
+                                    .Value(v => v.n_sort, menugroup_item.n_sort)
+                                    .Value(v => v.f_menutype, menugroup_item.f_menutype)
+                                    .Value(v => v.f_site, ins.Alias)
+                                    .Value(v => v.n_sort, mS + 1)
+                                    .Insert();
+
+                            }
+                        }
+                        //баннеры
+                        var banners = db.content_bannerss.Where(w => w.f_site == "main").ToArray();
+                        foreach (var item in banners)
+                        {
+                            db.content_bannerss
+                                .Value(v => v.f_site, ins.Alias)
+                                .Value(v => v.c_title, item.c_title)
+                                .Value(v => v.c_photo, item.c_photo)
+                                .Value(v => v.c_url, item.c_url)
+                                .Value(v => v.c_text, item.c_text)
+                                .Value(v => v.d_date, DateTime.Now)
+                                .Value(v => v.n_sort, item.n_sort)
+                                .Value(v => v.f_section, item.f_section)
+                                .Insert();
+                        }
+                        #endregion
+
+                        #region Доменные имена
+                        if (ins.DomainListArray != null && ins.DomainListArray.Count() > 0)
+                        {
+                            foreach (var d in ins.DomainListArray)
+                            {
+                                db.cms_sites_domainss
+                                    .Value(v => v.f_site, ins.Alias)
+                                    .Value(v => v.c_domain, d)
+                                    .Insert();
+                            }
+                        }
+                        #endregion
+
                         // insertLog(UserId, IP, "insert", ins.Id, String.Empty, "Sites", ins.Title);
                         // логирование
                         var log = new LogModel()
@@ -734,6 +807,10 @@ namespace cms.dbase
                 }
             }
         }
+
+
+
+
 
         public override bool updateSite(Guid id, SitesModel upd)
         {

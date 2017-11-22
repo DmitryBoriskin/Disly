@@ -1,0 +1,115 @@
+﻿@model VoteViewModel
+
+    @if (Model.UserResolution.Write)
+    {
+        <div class="content">
+            <h1>@ViewBag.Title</h1>
+            @Html.TextBoxFor(m => m.Item.Header, new { required = "", type = "text", maxlength = "128", title = "Заголовок" })
+
+            <div class="row">
+                <div class="col-lg-12">
+                    @Html.TextAreaFor(m => m.Item.Text, new { type = "editor", title = "Текст", height = "200" })
+                </div>
+            </div>
+
+           
+            
+            <div class="row">
+                <div class="col-sm-5"></div>
+                <div class="col-sm-7">
+                    <div class="bubble_but">
+                        @if (Model.Item.Answer != null && Model.Item.Answer.Count() > 1)
+                        {
+                            <a class="button icon-sort" data-action="noPreloader-accept" id="sorting_element" title="Добавляет возможность сортировки элементов списка">Сортировать</a>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <div class="sort_list">
+                <table id="sm_list" class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th class="map_site_title">Варианты ответа</th>          
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody data-service="/Admin/Services/ChangePermit?group=vote_answer&menuSort=@Model.Item.Id">
+                        @if (Model.Item.Answer != null)
+                        {
+                            foreach (var item in Model.Item.Answer)
+                            {
+                                <tr class="ui-sortable-handle" data-id="@item.id">
+                                    <td>@item.Variant</td>
+                                    <td class="text-center">
+                                        <a class="answer_delete" data-id="@item.id"></a>
+                                    </td>
+                                </tr>
+                            }
+                        }                        
+                    </tbody>
+                </table>
+            </div>
+            @Html.HiddenFor(m => m.Item.Id)
+            @if (Model.Item != null)
+            {
+                <div class="row">
+                    <div class="col-xs-12">
+                        <h5>Добавить вариант ответа</h5>
+                    </div>
+                    <div class="col-md-8">
+                        <input type="text" title="Вариант ответа" name="s_answer" />
+                    </div>
+                    <div class="col-md-1"></div>
+                    <div class="col-md-3">
+                        <button style="margin-top: 27px; margin-right:0; padding:7px 20px 7px 9px;" class="button icon-create green pull-right" type="submit" name="action" value="add-new-answer">Добавить</button>
+                    </div>
+
+                </div>
+            }
+            else
+            {
+                <p>Не существует персон, которых можно добавить к данной организации.</p>
+            }
+
+
+
+
+
+            </div>
+
+            <div class="dop_info-block">
+                <div class="dop-caption">Настройки</div>
+                @Html.TextBoxFor(m => m.Item.DateStart, new { required = "", data_type = "datetime", title = "Дата публикации", value = ViewBag.DateStart })
+                @Html.TextBoxFor(m => m.Item.DateEnd, new { data_type = "datetime", title = "Дата завершение", value = ViewBag.DateEnd })
+                @Html.CheckBoxFor(m => m.Item.Disabled, new { type = "checkbox", title = "Запретить просмотр", data_toggle = "toggle", data_on = "запретить просмотр", data_onstyle = "danger", data_off = "показывать на сайте", data_offstyle = "success", data_width = "248" })
+                @Html.CheckBoxFor(m => m.Item.Type, new { type = "checkbox", title = "Вариант голосования", data_toggle = "toggle", data_on = "Множестыенный", data_off = "Одиночный", data_onstyle = "primary", data_offstyle = "primary", data_width = "248" })
+
+                @Html.ActionLink("Журнал изменений", "log", "services", new { @id = Model.Item.Id }, new { @id = "LogLists", @class = "button pop-up_frame icon-archive", @data_class = "LogList", @title = "Журнал изменений" })
+
+
+            </div>
+            }
+            else
+            {
+            <div class="content">
+                <div class="alert alert-danger">
+                    <strong>У вас недостаточно прав!</strong>
+                    <p>Возможно запись была заблокирована администратором портала.</p>
+                </div>
+            </div>
+            }
+
+
+
+            <div class="buttons">
+                @if ((Model.Item != null && Model.UserResolution.Change) || (Model.Item == null && Model.UserResolution.Write))
+                {
+                    <button type="submit" name="action" value="save-btn" data-primary="true" class="button icon-create">Сохранить</button>
+                }
+                @if (Model.Item != null && Model.UserResolution.Delete)
+                {
+                    <button type="submit" name="action" data-action="delete" value="delete-btn" class="button icon-delete">Удалить</button>
+                }
+                <button type="submit" name="action" data-action="cancel" value="cancel-btn" class="button icon-cancel">Закрыть</button>
+            </div>

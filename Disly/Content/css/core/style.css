@@ -85,9 +85,16 @@
 .boss img{max-width:100%;}
 
 .contact_info h2{margin-top: 0;font-weight: bold;font-size: 24px;color: #262626;}
-.contact_info_it {    font-size: 14px;}
+.contact_info_it {font-size: 14px;margin-left:10px;}
 
 .filals-list{margin:20px 0;}
 .filals-list_it{padding:6px 0 20px;}
 .filals-list_it a{text-decoration:underline;color:#4d6bbc;}
-.filals-list_it_title{margin-bottom:10px;}
+.filals-list_it_title{margin-bottom:10px;font-size:20px;}
+.department_name{font-size:17px;margin-top:10px;}
+
+
+/*vote*/
+.vote_stat_load_wr{width:100%;    background-color: #ddd;}
+.vote_stat_load_wr{margin-bottom:5px;}
+.vote_stat_load{height:20px;text-align: right;line-height: 21px;color: white;background-color: #2196F3;}

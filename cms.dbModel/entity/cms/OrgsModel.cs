@@ -110,7 +110,16 @@ namespace cms.dbModel.entity
         /// </summary>
         public string Frmp { get; set; }
 
+        /// <summary>
+        /// Типы
+        /// </summary>
         public Guid[] Types { get; set; }
+
+        /// <summary>
+        /// Текст для вывода во внешнюю часть
+        /// берётся из карты сайта для контактов
+        /// </summary>
+        public string Text { get; set; }
     }
 
     /// <summary>
@@ -352,11 +361,57 @@ namespace cms.dbModel.entity
         /// Привязка к организации
         /// </summary>
         public Guid IdLinkOrg { get; set; }
+        
         /// <summary>
         /// Должность
         /// </summary>
         public string Post { get; set; }
+
+        /// <summary>
+        /// Статус
+        /// </summary>
         public string Status { get; set; }
+
+        /// <summary>
+        /// Инфа в формате xml
+        /// </summary>
+        public string XmlInfo { get; set; }
+
+        /// <summary>
+        /// Десериализованная инфа по сотруднику
+        /// </summary>
+        public Employee EmployeeInfo { get; set; }
+
+        /// <summary>
+        /// Фотография
+        /// </summary>
+        public string Photo { get; set; }
+
+        /// <summary>
+        /// Список должностей сотрудников
+        /// </summary>
+        public IEnumerable<PeoplePost> Posts { get; set; }
+    }
+
+    /// <summary>
+    /// Должность сотрудника
+    /// </summary>
+    public class PeoplePost
+    {
+        /// <summary>
+        /// Идентификатор
+        /// </summary>
+        public int Id { get; set; }
+
+        /// <summary>
+        /// Родительский ключ
+        /// </summary>
+        public int? Parent { get; set; }
+
+        /// <summary>
+        /// Название
+        /// </summary>
+        public string Name { get; set; }
     }
     
     /// <summary>

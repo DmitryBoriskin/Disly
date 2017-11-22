@@ -85,13 +85,12 @@ namespace Disly.Areas.Admin.Controllers
             {
                 Guid? _parent = (string.IsNullOrEmpty(Request.QueryString["parent"]) && model.Item != null) ? model.Item.ParentId 
                         : Guid.Parse(Request.QueryString["parent"]);
-
                 // хлебные крошки
                 model.BreadCrumbs = _cmsRepository.getSiteMapBreadCrumbs(_parent);
             }
-            else
+            else if (model.Item != null)
             {
-                model.BreadCrumbs = _cmsRepository.getSiteMapBreadCrumbs(null);
+                model.BreadCrumbs = _cmsRepository.getSiteMapBreadCrumbs(model.Item.Id);
             }
 
             // список дочерних элементов

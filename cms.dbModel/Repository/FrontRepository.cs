@@ -14,6 +14,7 @@ namespace cms.dbModel
         public abstract BannersModel[] getBanners(string domain);
 
         public abstract SiteMapModel getSiteMap(string path, string alias, string domain);
+        public abstract string getContactsText(string domain, string frontSection);
         public abstract SiteMapModel[] getSiteMapChild(Guid ParentId);
         public abstract List<Breadcrumbs> getBreadCrumbCollection(string Url, string domain);
 
@@ -25,6 +26,7 @@ namespace cms.dbModel
         public abstract StructureModel getStructureItem(string domain, int num);
         public abstract Departments[] getDepartmentsList(Guid StructureId);
         public abstract Departments getDepartmentsItem(Guid Id);
+        public abstract Departments getOvpDepartaments(Guid id);
 
         public abstract List<MaterialFrontModule> getMaterialsModule(string domain);
 
@@ -32,7 +34,14 @@ namespace cms.dbModel
         public abstract People[] getPeopleList(FilterParams filter);
         public abstract People getPeopleItem(Guid id, string domain);
         public abstract StructureModel[] getDeparatamentsSelectList(string domain);
+        public abstract PeoplePost[] getPeoplePosts(string domain);
 
         public abstract OrgsModel getOrgInfo(string domain);
+
+        public abstract IEnumerable<VoteModel> getVote(string domain, string Ip);
+        public abstract VoteModel getVoteItem(Guid id, string Ip);
+        public abstract VoteAnswer[] getVoteAnswer(Guid VoteId, string Ip);
+        public abstract VoteStat getVoteStat(Guid AnswerId, Guid VoteId, string Ip);
+        public abstract bool GiveVote(Guid VoteId, string[] AnswerId, string Ip);
     }
 }
