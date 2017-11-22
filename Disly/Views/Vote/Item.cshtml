@@ -1,0 +1,43 @@
+﻿@model VoteViewModel
+<form action="/vote/@Model.Item.Id" target="/vote/@Model.Item.Id" class="vote_item" method="post">
+    @if (Model.Item.Answer != null)
+    {
+        <h3>@Model.Item.Header</h3>
+        @Html.Raw(Model.Item.Text)
+        if (Model.Item.ShowStatistic)
+        {
+            foreach (var answer in Model.Item.Answer)
+            {
+                string proc = ((100 / answer.Statistic.AllVoteCount) * answer.Statistic.ThisVoteCount).ToString();
+                <div class="vote_stat">
+                    <div class="vote_stat_text">@answer.Variant</div>
+                    <div class="vote_stat_load_wr">
+                        <div class="vote_stat_load" style="width:@proc%">@proc&nbsp;%</div>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            foreach (var answer in Model.Item.Answer)
+            {
+                if (Model.Item.Type)
+                {
+                    <div class="checkbox">
+                        <label><input required type="radio" name="r-@Model.Item.Id" />@answer.Variant</label>
+                    </div>
+                }
+                else
+                {
+                    <div class="radio">
+                        <label><input required type="radio" name="r-@Model.Item.Id" />@answer.Variant</label>
+                    </div>
+                }
+            }
+            <button type="submit" class="btn btn-default">Проголосовать</button>
+        }
+        <br />
+        <hr />
+        <br />
+    }
+</form>

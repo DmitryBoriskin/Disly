@@ -34,7 +34,8 @@ namespace cms.dbase
                             {
                                 Id = s.id,
                                 DateStart=s.d_date_start,
-                                Header=s.c_header
+                                Header=s.c_header,
+                                Disabled=s.b_disabled
                             });
 
 
@@ -131,6 +132,7 @@ namespace cms.dbase
                       .Set(s => s.c_text, ins.Text)
                       .Set(s => s.b_disabled, ins.Disabled)
                       .Set(s => s.b_his_answer, ins.HisAnswer)
+                      .Set(s => s.b_type, ins.Type)
                       .Set(s => s.d_date_start, ins.DateStart)
                       .Set(s => s.d_date_end, ins.DateEnd)
                       .Update();

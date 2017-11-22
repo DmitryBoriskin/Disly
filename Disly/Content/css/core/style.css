@@ -92,3 +92,9 @@
 .filals-list_it a{text-decoration:underline;color:#4d6bbc;}
 .filals-list_it_title{margin-bottom:10px;font-size:20px;}
 .department_name{font-size:17px;margin-top:10px;}
+
+
+/*vote*/
+.vote_stat_load_wr{width:100%;    background-color: #ddd;}
+.vote_stat_load_wr{margin-bottom:5px;}
+.vote_stat_load{height:20px;text-align: right;line-height: 21px;color: white;background-color: #2196F3;}

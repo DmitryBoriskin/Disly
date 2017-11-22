@@ -1,4 +1,5 @@
 ﻿using cms.dbModel.entity;
+using System.Collections.Generic;
 
 namespace Disly.Models
 {
@@ -7,6 +8,7 @@ namespace Disly.Models
     /// </summary>
     public class VoteViewModel : PageViewModel
     {         
-        public VoteModel[] List { get; set; }        
+        public IEnumerable<VoteModel> List { get; set; }        
+        public VoteModel Item { get; set; }
     }
 }

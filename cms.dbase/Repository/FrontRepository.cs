@@ -989,22 +989,22 @@ namespace cms.dbase
         }
 
 
-        public override IEnumerable<VoteModel> getVote(string domain)
+        public override IEnumerable<VoteModel> getVote(string domain,string Ip)
         {
             using (var db = new CMSdb(_context))
             {
                 var query = db.content_votes
                             .Where(w => w.f_site == domain && w.b_disabled == false)
+                            .OrderBy(o=>o.d_date_start)
                             .Select(s => new VoteModel() {
+                                Id=s.id,
                                 Header=s.c_header,
                                 Text=s.c_text,
+                                Type=s.b_type,
                                 DateStart=s.d_date_start,
                                 DateEnd=s.d_date_end,
-                                Answer= getVoteAnswer(s.id)
-                                //Answer=s.contentvoteanswerscontentvotes.Select(a=>new VoteAnswer() {
-                                //                                                    id=s.id,
-                                //                                                    Variant=a.c_variant
-                                //                                                }).ToArray()  ,                                                              
+                                Answer= getVoteAnswer(s.id, Ip),
+                                ShowStatistic= ShowStatic(s.id,Ip)
                             });
 
                 if (query.Any())
@@ -1014,8 +1014,49 @@ namespace cms.dbase
                 return null;
             }
         }
+        /// <summary>
+        /// определяем показывать статистику или форму голосования
+        /// </summary>
+        /// <param name="VoteId"></param>
+        /// <param name="Ip"></param>
+        /// <returns></returns>
+        public bool ShowStatic(Guid VoteId, string Ip)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var data = db.content_votes.Where(w => w.id == VoteId);
+                if (data.Single().d_date_end <= DateTime.Now) return true;//если опрос завершен по дате
 
-        public override VoteAnswer[] getVoteAnswer(Guid VoteId)
+                var _count = db.content_vote_userss.Where(w => w.f_vote == VoteId && w.c_ip == Ip).Count();
+                if (_count > 0 ) return true;//если пользователь уже принял участие в опросе
+                return false;
+            }
+        }
+        public override VoteModel getVoteItem(Guid id,string Ip)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var query = db.content_votes
+                            .Where(w => w.id == id)
+                            .Select(s => new VoteModel {
+                                Id = s.id,
+                                Header = s.c_header,
+                                Text = s.c_text,
+                                DateStart = s.d_date_start,
+                                DateEnd = s.d_date_end,
+                                Answer = getVoteAnswer(s.id,Ip),
+                                ShowStatistic = ShowStatic(s.id, Ip)
+                            });
+                if (query.Any())
+                {
+                    return query.Single();
+                }
+                return null;
+            }
+
+        }
+
+        public override VoteAnswer[] getVoteAnswer(Guid VoteId, string Ip)
         {
             using (var db = new CMSdb(_context))
             {
@@ -1025,8 +1066,7 @@ namespace cms.dbase
                             .Select(s=>new VoteAnswer() {
                                 Variant=s.c_variant,
                                 id=s.id,
-                                Statistic= getVoteStat(s.id, VoteId,"0.0.0")
-
+                                Statistic= getVoteStat(s.id, VoteId, Ip)
                             });
                 if (query.Any())
                 {
@@ -1039,17 +1079,46 @@ namespace cms.dbase
         {
             using (var db = new CMSdb(_context))
             {                
-                //проверяем даны ли ранее ответы этим пользователем
-                var spot = db.content_vote_userss.Where(w =>(w.f_vote == VoteId && w.c_ip==Ip)).FirstOrDefault();
-                if (spot == null) return null;
+                ////проверяем даны ли ранее ответы этим пользователем
+                //var spot = db.content_vote_userss.Where(w =>(w.f_vote == VoteId && w.c_ip==Ip)).FirstOrDefault();
+                //if (spot == null) return null;
 
 
                 VoteStat data = new VoteStat{
                     AllVoteCount = db.content_vote_userss.Where(w => w.f_vote == VoteId).Count(),
                     ThisVoteCount=db.content_vote_userss.Where(w=>w.f_answer==AnswerId).Count()
                 };
-                return data;
-                
+                return data;                
+            }
+        }
+        /// <summary>
+        /// Записывает данные о факте голосования
+        /// </summary>
+        /// <param name="VoteId">Идентификатор вопроса</param>
+        /// <param name="AnswerId">Индентифкатор ответа</param>
+        /// <param name="Ip">IP адрес пользователя</param>
+        /// <returns></returns>
+        public override bool GiveVote(Guid VoteId, string[] AnswerId, string Ip)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                using (var tran = db.BeginTransaction())
+                {
+                    if (AnswerId.Length > 0)
+                    {
+                        foreach (var x in AnswerId)
+                        {
+                            Guid AnswerItemId=Guid.Parse(x);
+                            db.content_vote_userss
+                              .Value(v => v.c_ip, Ip)
+                              .Value(v => v.f_vote, VoteId)
+                              .Value(v => v.f_answer, AnswerItemId)
+                              .Insert();
+                        }
+                    }
+                    tran.Commit();
+                    return true;
+                }
             }
         }
     }

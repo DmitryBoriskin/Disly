@@ -797,6 +797,8 @@
     <Content Include="Views\FindUs\Index.cshtml" />
     <Content Include="Views\Structure\Ovp.cshtml" />
     <Content Include="Views\Vote\Index.cshtml" />
+    <Content Include="Views\Vote\Item.cshtml" />
+    <Content Include="Views\Vote\List.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
