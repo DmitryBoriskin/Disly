@@ -99,22 +99,22 @@
     {
         <h1>Врачи</h1>
         <div class="row">
-            <div class="col-md-8">
+            <div class="col-md-9">
                 <div class="row">
                     <div class="col-xs-12">
                         @if (Model.DoctorsList != null)
                         {
                             <table class="table">
                                 <tr>
+                                    <th>Изображение</th>
                                     <th>ФИО</th>
                                     <th>Должность</th>
-                                    <th>Изображение</th>
-                                    @*<th>Контакты</th>
-                                        <th>Распиcание</th>*@
+                                    <th>Запись</th>
                                 </tr>
                                 @foreach (var item in Model.DoctorsList)
                                 {
                                     <tr>
+                                        <td><img src="@item.Photo" class="img-circle img-person-list" alt="@item.FIO" /></td>
                                         <td><a href="/@ViewBag.ControllerName/@item.Id">@item.FIO</a></td>
                                         <td>
                                             @if (item.Posts != null)
@@ -123,15 +123,11 @@
 
                                                 foreach (var p in item.Posts)
                                                 {
-                                                    posts += p.Name;
+                                                    <p>@p.Name</p>
                                                 }
-
-                                                <p>@posts</p>
                                             }
                                         </td>
-                                        <td><img src="@item.Photo" class="img-circle img-person-list" alt="@item.FIO" /></td>
-                                        @*<td>@item.Status</td>
-                                            <td></td>*@
+                                        <td>&nbsp;</td>
                                     </tr>
                                 }
                             </table>
@@ -139,7 +135,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <form role="form" class="filtr_news" action="/@ViewBag.ControllerName/">
                     <div class="row">
                         <div class="col-sm-12">
@@ -169,6 +165,24 @@
                                                     <option value="test">test</option>
                                                 }
                                             </optgroup>
+                                        }
+                                    </select>
+
+                                </div>
+                            </div>
+                        }
+
+                        @if (Model.PeoplePosts != null)
+                        {
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label class="label_filtr">Специализации</label>
+                                    <select class="form-control select2" name="type">
+                                        <option value="">не выбрано</option>
+                                        @foreach (var item in Model.PeoplePosts)
+                                        {
+                                            string selected = (item.Id.ToString() == ViewBag.Position) ? "selected" : string.Empty;
+                                            <option value="@item.Id" @selected>@item.Name</option>
                                         }
                                     </select>
 

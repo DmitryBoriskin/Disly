@@ -868,14 +868,59 @@ namespace cms.dbase
                 {
                     query = query
                             .Join(db.content_people_org_links, e => e.id, o => o.f_people, (o, e) => new { e, o })
-                            .Join(db.content_people_department_links.Where(w => w.f_department == Guid.Parse(filter.Group)), m => m.e.id, n => n.f_people, (m, n) => m.o);
+                            .Join(db.content_people_department_links
+                                .Where(w => string.IsNullOrWhiteSpace(filter.Group) || w.f_department == Guid.Parse(filter.Group))
+                                , m => m.e.id, n => n.f_people, (m, n) => m.o);
                 }
 
+                #region временное решение
+                int post = !string.IsNullOrWhiteSpace(filter.Type) ? Int32.Parse(filter.Type) : 0;
+                if (post != 0)
+                {
+                    var queryWithPost = query
+                    .Join(db.content_people_employee_posts_links, p => p.id, pepl => pepl.f_people, (p, pepl) => new { p, pepl.f_post })
+                    .Join(db.content_employee_postss.Where(w => w.id.Equals(post)), pp => pp.f_post, ep => ep.id, (pp, ep) => new { pp, ep})
+                    .Select(s => new
+                    {
+                        people = s.pp.p,
+                        post = new PeoplePost
+                        {
+                            Id = s.ep.id,
+                            Name = s.ep.c_name
+                        }
+                    });
+
+                    if (queryWithPost.Any())
+                    {
+                        LinqToDB.Common.Configuration.Linq.AllowMultipleQuery = true;
+
+                        var result = queryWithPost.Select(s => new People
+                        {
+                            Id = s.people.id,
+                            FIO = s.people.c_surname + " " + s.people.c_name + " " + s.people.c_patronymic,
+                            Photo = s.people.c_photo,
+                            Posts = (from pep in db.content_people_employee_posts_links
+                                     join ep in db.content_employee_postss on pep.f_post equals ep.id
+                                     where pep.f_people.Equals(s.people.id)
+                                     select new PeoplePost
+                                     {
+                                         Id = ep.id,
+                                         Name = ep.c_name
+                                     }).ToArray()
+                        });
+
+                        return result.ToArray();
+                    }
+                    return null;
+                }
+                #endregion
+                
                 var query1 = query.OrderBy(o => o.c_surname);
                 if (query1.Any())
                 {
                     LinqToDB.Common.Configuration.Linq.AllowMultipleQuery = true;
-                    return query1.Select(s => new People()
+
+                    var result = query1.Select(s => new People()
                     {
                         Id = s.id,
                         FIO = s.c_surname + " " + s.c_name + " " + s.c_patronymic,
@@ -885,9 +930,12 @@ namespace cms.dbase
                                  where pep.f_people.Equals(s.id)
                                  select new PeoplePost
                                  {
+                                     Id = ep.id,
                                      Name = ep.c_name
                                  }).ToArray()
-                    }).ToArray();
+                    });
+
+                    return result.ToArray();
                 }
                 return null;
             }
@@ -963,6 +1011,33 @@ namespace cms.dbase
             }
         }
 
+        /// <summary>
+        /// Список должностей
+        /// </summary>
+        /// <returns></returns>
+        public override PeoplePost[] getPeoplePosts(string domain)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var query = (from s in db.cms_sitess
+                             join pol in db.content_people_org_links on s.f_content equals pol.f_org
+                             join pepl in db.content_people_employee_posts_links on pol.f_people equals pepl.f_people
+                             join ep in db.content_employee_postss on pepl.f_post equals ep.id
+                             where s.c_alias.Equals(domain)
+                             select new PeoplePost
+                             {
+                                 Id = ep.id,
+                                 Parent = ep.n_parent,
+                                 Name = ep.c_name
+                             });
+
+                var data = query.GroupBy(x => x.Id).Select(s => s.First());
+
+                if (!data.Any()) return null;
+                return data.ToArray();
+            }
+        }
+
         public override OrgsModel getOrgInfo(string domain)
         {
             using (var db = new CMSdb(_context))
@@ -995,12 +1070,13 @@ namespace cms.dbase
             {
                 var query = db.content_votes
                             .Where(w => w.f_site == domain && w.b_disabled == false)
-                            .Select(s => new VoteModel() {
-                                Header=s.c_header,
-                                Text=s.c_text,
-                                DateStart=s.d_date_start,
-                                DateEnd=s.d_date_end,
-                                Answer= getVoteAnswer(s.id)
+                            .Select(s => new VoteModel()
+                            {
+                                Header = s.c_header,
+                                Text = s.c_text,
+                                DateStart = s.d_date_start,
+                                DateEnd = s.d_date_end,
+                                Answer = getVoteAnswer(s.id)
                                 //Answer=s.contentvoteanswerscontentvotes.Select(a=>new VoteAnswer() {
                                 //                                                    id=s.id,
                                 //                                                    Variant=a.c_variant
@@ -1021,11 +1097,12 @@ namespace cms.dbase
             {
                 var query = db.content_vote_answerss
                             .Where(w => w.f_vote == VoteId)
-                            .OrderBy(o=>o.n_sort)
-                            .Select(s=>new VoteAnswer() {
-                                Variant=s.c_variant,
-                                id=s.id,
-                                Statistic= getVoteStat(s.id, VoteId,"0.0.0")
+                            .OrderBy(o => o.n_sort)
+                            .Select(s => new VoteAnswer()
+                            {
+                                Variant = s.c_variant,
+                                id = s.id,
+                                Statistic = getVoteStat(s.id, VoteId, "0.0.0")
 
                             });
                 if (query.Any())
@@ -1038,18 +1115,19 @@ namespace cms.dbase
         public override VoteStat getVoteStat(Guid AnswerId, Guid VoteId, string Ip)
         {
             using (var db = new CMSdb(_context))
-            {                
+            {
                 //проверяем даны ли ранее ответы этим пользователем
-                var spot = db.content_vote_userss.Where(w =>(w.f_vote == VoteId && w.c_ip==Ip)).FirstOrDefault();
+                var spot = db.content_vote_userss.Where(w => (w.f_vote == VoteId && w.c_ip == Ip)).FirstOrDefault();
                 if (spot == null) return null;
 
 
-                VoteStat data = new VoteStat{
+                VoteStat data = new VoteStat
+                {
                     AllVoteCount = db.content_vote_userss.Where(w => w.f_vote == VoteId).Count(),
-                    ThisVoteCount=db.content_vote_userss.Where(w=>w.f_answer==AnswerId).Count()
+                    ThisVoteCount = db.content_vote_userss.Where(w => w.f_answer == AnswerId).Count()
                 };
                 return data;
-                
+
             }
         }
     }

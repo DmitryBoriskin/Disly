@@ -22,5 +22,10 @@ namespace Disly.Models
         /// Список структур
         /// </summary>
         public StructureModel[] DepartmentsSelectList { get; set; }
+
+        /// <summary>
+        /// Список должностей
+        /// </summary>
+        public PeoplePost[] PeoplePosts { get; set; }
     }
 }
