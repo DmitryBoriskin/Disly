@@ -143,6 +143,10 @@ namespace cms.dbModel.entity
         /// 
         /// </summary>
         public bool Checked { get; set; }
+        /// <summary>
+        /// Создатель записи
+        /// </summary>
+        public bool Origin { get; set; }
     }
 
     /// <summary>

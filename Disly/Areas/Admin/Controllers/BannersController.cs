@@ -83,7 +83,7 @@ namespace Disly.Areas.Admin.Controllers
                 var photo = model.Item.Photo;
                 if (!string.IsNullOrEmpty(photo.Url))
                 {
-                    model.Item.Photo = getInfoPhoto(photo.Url);
+                    model.Item.Photo = Files.getInfoImage(photo.Url);
                 }
             }
 
@@ -180,7 +180,7 @@ namespace Disly.Areas.Admin.Controllers
 
             if (model.Item != null && model.Item.Photo != null && !string.IsNullOrEmpty(model.Item.Photo.Url))
             {
-                model.Item.Photo = getInfoPhoto(model.Item.Photo.Url);
+                model.Item.Photo = Files.getInfoImage(model.Item.Photo.Url);
             }
 
             return View(model);
@@ -216,13 +216,17 @@ namespace Disly.Areas.Admin.Controllers
         [MultiButton(MatchFormKey = "action", MatchFormValue = "delete-btn")]
         public ActionResult Delete(Guid id)
         {
-            model.Item = _cmsRepository.getBanner(id);
 
-            _cmsRepository.deleteBanner(id); //, AccountInfo.id, RequestUserInfo.IP
+           var data = model.Item = _cmsRepository.getBanner(id);
 
-            // удаляем файл изображения
-            if (System.IO.File.Exists(Server.MapPath(model.Item.Photo.Url)))
-                System.IO.File.Delete(Server.MapPath(model.Item.Photo.Url));
+            // удаляем файл изображения и запись
+            if (model.Item != null)
+            {
+                var image = (data.Photo != null) ? data.Photo.Url : null;
+                var res = _cmsRepository.deleteBanner(id); //, AccountInfo.id, RequestUserInfo.IP
+                if (res && !string.IsNullOrEmpty(image))
+                    Files.deleteImage(image);
+            }
 
             // записываем информацию о результатах
             ErrorMassege userMassege = new ErrorMassege();
