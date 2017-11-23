@@ -35,6 +35,22 @@ namespace Integration.Frmp.library.Models
         /// <summary>
         /// Должности
         /// </summary>
-        public IEnumerable<Post> Posts { get; set; }
+        public IEnumerable<PostWithType> Posts { get; set; }
+    }
+
+    /// <summary>
+    /// Должность с типом совместительства
+    /// </summary>
+    public class PostWithType
+    {
+        /// <summary>
+        /// Должность
+        /// </summary>
+        public Post Post { get; set; }
+
+        /// <summary>
+        /// Тип совместительства
+        /// </summary>
+        public PositionType PositionType { get; set; }
     }
 }

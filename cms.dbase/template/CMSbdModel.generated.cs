@@ -1502,12 +1502,14 @@ namespace cms.dbase.models
 	public partial class content_sv_people_front
 	{
 		[Column, Nullable] public Guid?  id           { get; set; } // uniqueidentifier
-		[Column, Nullable] public string c_surname    { get; set; } // varchar(64)
-		[Column, Nullable] public string c_name       { get; set; } // varchar(64)
-		[Column, Nullable] public string c_patronymic { get; set; } // varchar(64)
-		[Column, Nullable] public string c_photo      { get; set; } // nvarchar(1024)
-		[Column, Nullable] public string domain       { get; set; } // varchar(64)
+		[Column, Nullable] public string fio          { get; set; } // varchar(194)
+		[Column, Nullable] public string c_snils      { get; set; } // char(11)
 		[Column, Nullable] public Guid?  f_department { get; set; } // uniqueidentifier
+		[Column, Nullable] public string c_name       { get; set; } // nvarchar(512)
+		[Column, Nullable] public string c_alias      { get; set; } // varchar(64)
+		[Column, Nullable] public bool?  b_doctor     { get; set; } // bit
+		[Column, Nullable] public int?   f_post       { get; set; } // int
+		[Column, Nullable] public string c_photo      { get; set; } // nvarchar(1024)
 	}
 
 	// View
@@ -2225,3 +2227,4 @@ namespace cms.dbase.models
 		}
 	}
 }
+ 

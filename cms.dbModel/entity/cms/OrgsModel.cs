@@ -146,6 +146,10 @@ namespace cms.dbModel.entity
         /// 
         /// </summary>
         public bool Checked { get; set; }
+        /// <summary>
+        /// Создатель записи
+        /// </summary>
+        public bool Origin { get; set; }
     }
 
     /// <summary>
@@ -411,6 +415,11 @@ namespace cms.dbModel.entity
         /// Название
         /// </summary>
         public string Name { get; set; }
+
+        /// <summary>
+        /// Тип
+        /// </summary>
+        public int Type { get; set; }
     }
     
     /// <summary>

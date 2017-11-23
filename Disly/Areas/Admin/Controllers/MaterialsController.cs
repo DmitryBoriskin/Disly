@@ -78,7 +78,7 @@ namespace Disly.Areas.Admin.Controllers
                 var photo = model.Item.PreviewImage;
                 if (!string.IsNullOrEmpty(photo.Url))
                 {
-                    model.Item.PreviewImage = getInfoPhoto(photo.Url);
+                    model.Item.PreviewImage = Files.getInfoImage(photo.Url);
                 }
             }
 
@@ -244,7 +244,7 @@ namespace Disly.Areas.Admin.Controllers
             model.Item = _cmsRepository.getMaterial(Id, Domain);
             if (model.Item != null && model.Item.PreviewImage != null && !string.IsNullOrEmpty(model.Item.PreviewImage.Url))
             {
-                model.Item.PreviewImage = getInfoPhoto(model.Item.PreviewImage.Url);
+                model.Item.PreviewImage = Files.getInfoImage(model.Item.PreviewImage.Url);
             }
             model.ErrorInfo = userMessage;
 
@@ -262,7 +262,14 @@ namespace Disly.Areas.Admin.Controllers
         [MultiButton(MatchFormKey = "action", MatchFormValue = "delete-btn")]
         public ActionResult Delete(Guid Id)
         {
-            var res = _cmsRepository.deleteCmsMaterial(Id);
+            var data = _cmsRepository.getMaterial(Id, Domain);
+            if(data != null)
+            {
+                var image = (data.PreviewImage != null) ? data.PreviewImage.Url : null;
+                var res = _cmsRepository.deleteCmsMaterial(Id);
+                if (res && !string.IsNullOrEmpty(image))
+                    Files.deleteImage(image);
+            }
 
             // записываем информацию о результатах
             ErrorMassege userMassege = new ErrorMassege();

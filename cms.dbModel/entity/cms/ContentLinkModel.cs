@@ -14,13 +14,19 @@ namespace cms.dbModel.entity
         public ContentType ObjctType { get; set; }
 
         /// <summary>
-        /// Объекты, к которыму привязываем
+        /// Объект, к которому привязываем или отвязываем
         /// </summary>
-        public Guid[] LinksId { get; set; }
+        public Guid LinkId { get; set; }
+
         /// <summary>
         /// Тип объекта, к которому привязываем
         /// </summary>
         public ContentLinkType LinkType { get; set; }
+
+        /// <summary>
+        /// Флаг, определяющий привязку контента к объекту
+        /// </summary>
+        public bool Checked { get; set; }
 
     }
  }

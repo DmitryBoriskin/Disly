@@ -159,18 +159,29 @@ namespace cms.dbase
             using (var db = new CMSdb(_context))
             {
                 var query = db.content_eventss
-                                .Where(s => s.id != filtr.RelId) // Само на себя событие не может ссылаться - это зацикливание
-                                .OrderByDescending(s => s.d_date);
+                                .Where(s => s.id != filtr.RelId); // Само на себя событие не может ссылаться - это зацикливание
+                                
 
 
                 if (!string.IsNullOrEmpty(filtr.Domain))
                 {
+                    var contentType = ContentType.EVENT.ToString().ToLower();
+                    var events = db.content_content_links.Where(e => e.f_content_type == contentType)
+                            .Join(db.cms_sitess.Where(o => o.c_alias == filtr.Domain),
+                                    e => e.f_link,
+                                    o => o.f_content,
+                                    (e, o) => e.f_content
+                                    );
 
+                    if (!events.Any())
+                        return null;
+                    query = query.Where(w => events.Contains(w.id));
                 }
 
                 if (filtr.RelId.HasValue && filtr.RelId.Value != Guid.Empty)
                 {
                     var List = query
+                    .OrderByDescending(s => s.d_date)
                     .Take(filtr.Size)
                     .Select(s => new EventsShortModel()
                     {

@@ -2,16 +2,14 @@
 @{
     Layout = "~/Areas/Admin/Views/Shared/_popUp.cshtml";
 }
-<link rel="stylesheet" href="/Content/css/styles_popUp.css" />
 <div>
     @if (Model != null)
     {
-        <div class="buttons">
-            <button type="submit" name="action" value="save-org-btn" class="btn btn-primary icon-create">СОХРАНИТЬ</button>
+        <div class="col-lg-12 content">
+            <div class="alert alert-info">
+                <p><span class="icon-info"></span> Выберите организации, к которым необходимо привязать запись.</p>
+            </div>
         </div>
-        @Html.HiddenFor(m => m.ObjctId)
-        @Html.HiddenFor(m => m.ObjctType)
-
         <div class="scrollbar modal-org-list">
             @if (Model.OrgsTypes != null)
             {
@@ -21,7 +19,6 @@
                             @foreach (var orgtype in Model.OrgsTypes)
                             {
                                 <li>
-                                    <input type="checkbox" class="org-type-chkbx iCheck" data-init="false" />
                                     <a href="#">@orgtype.Title</a>
 
                                     @if (Model.OrgsList != null)
@@ -35,11 +32,15 @@
                                                     @foreach (var item in list)
                                                     {
                                                         <li>
-                                                            <div>
-                                                                @*@Html.CheckBoxFor(m => Model.OrgsId[j].Check, new { type = "checkbox", @data_init = "false" })*@
-                                                                <input type="checkbox" name="OrgsId" class="org-item-chkbx iCheck" value="@item.Id" data-init="false" @(item.Checked ? "checked" : null) />
+                                                            <div class="orgType-item">
+                                                                <label>
+                                                                    <span class="orgType-item-tooltip" data-toggle="tooltip" data-placement="right" title="Сохранено"></span>
+                                                                    <input type="checkbox" class="orgType-item-chkbx iCheck" data-object-id="@Model.ObjctId" data-object-type="@Model.ObjctType" data-link-id="@item.Id" data-link-type="@ContentLinkType.ORG.ToString()" data-init="false" @(item.Checked ? "checked" : null) @(item.Origin? "disabled":null)/>
+                                                                    <span class="orgType-item-html">
+                                                                        <a href="/Admin/orgs/item/@item.Id/" class="icon-location-5" target="_blank">@item.Title</a>
+                                                                    </span>
+                                                                </label>
                                                             </div>
-                                                            <div class="modal-label-org-item">@item.Title</div>
                                                         </li>
                                                     }
                                                 </ul>
@@ -54,8 +55,15 @@
                                                     @foreach (var item in list)
                                                     {
                                                         <li>
-                                                            <div><input type="checkbox" name="OrgsId" class="org-item-chkbx iCheck" value="@item.Id" data-init="false" @(item.Checked ? "checked" : null) /></div>
-                                                            <div class="modal-label-org-item">@item.Title</div>
+                                                            <div class="orgType-item checkbox">
+                                                                <label>
+                                                                    <span class="orgType-item-tooltip" data-toggle="tooltip" data-placement="top" title="Сохранено"></span>
+                                                                    <input type="checkbox" name="OrgsId" class="orgType-item-chkbx iCheck" data-object-id="@Model.ObjctId" data-object-type="@Model.ObjctType" data-link-id="@item.Id" data-link-type="@ContentLinkType.ORG.ToString()" data-init="false" @(item.Checked ? "checked" : null) @(item.Origin? "disabled":null)/>
+                                                                    <span class="orgType-item-html">
+                                                                        <a href="/Admin/orgs/item/@item.Id/" target="_blank">@item.Title</a>
+                                                                    </span>
+                                                                </label>
+                                                            </div>
                                                         </li>
                                                     }
                                                 </ul>
@@ -90,11 +98,12 @@
         $(".org-byType-tree ul").addClass("hidden");
         $(".org-byType-tree li").each(function () {
             if ($(this).find("ul").length > 0) {
-                $(this).addClass("icon-sitemap");
-
-            }
-            else {
-                //$(this).find("[type='checkbox']").attr("disabled", true);
+                $(this).addClass("icon-down-dir");
+            
+                if($(this).find(":checked").length>0)
+                {
+                    $(this).find("ul").toggleClass("hidden");
+                }
             }
         });
 
@@ -102,11 +111,7 @@
             e.preventDefault();
             $(this).parent().find("ul").toggleClass("hidden");
         });
+
+
     });
 </script>
-<style>
-    .icon-sitemap:before {
-        content: '\e972';
-        margin-left: -26px;
-    }
-</style>

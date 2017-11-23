@@ -22,6 +22,7 @@ namespace cms.dbase
             using (var db = new CMSdb(_context))
             {
                 var query = db.content_employee_postss
+                    .Where(w => w.b_doctor)
                     .OrderBy(o => o.id)
                     .Select(s => new EmployeePostModel
                     {

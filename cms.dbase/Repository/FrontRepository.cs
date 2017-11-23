@@ -848,96 +848,143 @@ namespace cms.dbase
         /// <summary>
         /// Список врачей
         /// </summary>
-        /// <param name="filter"></param>
+        /// <param name="filter">фильтр</param>
         /// <returns></returns>
         public override People[] getPeopleList(FilterParams filter)
         {
             using (var db = new CMSdb(_context))
             {
-                string domain = filter.Domain;
-                var query = db.cms_sitess
-                            .Where(w => w.c_alias == domain)
-                            .Join(db.content_people_org_links, e => e.f_content, o => o.f_org, (e, o) => o)
-                            .Join(db.content_peoples, m => m.f_people, n => n.id, (m, n) => n);
+                string domain = filter.Domain; // домен
 
-                if (filter.SearchText != null)
-                {
-                    query = query.Where(w => (w.c_name.Contains(filter.SearchText) || w.c_surname.Contains(filter.SearchText) || w.c_patronymic.Contains(filter.SearchText)));
-                }
-                if (!String.IsNullOrEmpty(filter.Group))
-                {
-                    query = query
-                            .Join(db.content_people_org_links, e => e.id, o => o.f_people, (o, e) => new { e, o })
-                            .Join(db.content_people_department_links
-                                .Where(w => string.IsNullOrWhiteSpace(filter.Group) || w.f_department == Guid.Parse(filter.Group))
-                                , m => m.e.id, n => n.f_people, (m, n) => m.o);
-                }
+                Guid department = !string.IsNullOrWhiteSpace(filter.Group) // департамент
+                    ? Guid.Parse(filter.Group) : Guid.Empty;
 
-                #region временное решение
-                int post = !string.IsNullOrWhiteSpace(filter.Type) ? Int32.Parse(filter.Type) : 0;
-                if (post != 0)
-                {
-                    var queryWithPost = query
-                    .Join(db.content_people_employee_posts_links, p => p.id, pepl => pepl.f_people, (p, pepl) => new { p, pepl.f_post })
-                    .Join(db.content_employee_postss.Where(w => w.id.Equals(post)), pp => pp.f_post, ep => ep.id, (pp, ep) => new { pp, ep})
-                    .Select(s => new
+                string search = filter.SearchText; // поиск по человеку
+
+                int specialization = !string.IsNullOrWhiteSpace(filter.Type) ? Convert.ToInt32(filter.Type) : 0; // специализация
+
+                var data = (from s in db.cms_sitess
+                            join pol in db.content_people_org_links on s.f_content equals pol.f_org
+                            join p in db.content_peoples on pol.f_people equals p.id
+                            join pepl in db.content_people_employee_posts_links on p.id equals pepl.f_people
+                            join ep in db.content_employee_postss on pepl.f_post equals ep.id
+                            join pdl in db.content_people_department_links on pol.id equals pdl.f_people into ps
+                            from pdl in ps.DefaultIfEmpty()
+                            where s.c_alias.Equals(domain)                                     
+                                    && (department.Equals(Guid.Empty) || pdl.f_department.Equals(department))                  
+                                    && ep.b_doctor
+                                    && (string.IsNullOrWhiteSpace(search) || (p.c_surname.Contains(search) 
+                                                                                || p.c_name.Contains(search)
+                                                                                || p.c_patronymic.Contains(search)))
+                                    && (specialization == 0 || pepl.f_post.Equals(specialization))
+                            orderby ep.id, p.c_surname, p.c_name, p.c_patronymic, pepl.n_type
+                            select new { p, ep });
+
+
+                var data2 = data.ToArray()
+                    .GroupBy(g => new { g.p.id })
+                    .Select(s => new People
                     {
-                        people = s.pp.p,
-                        post = new PeoplePost
+                        Id = s.Key.id,
+                        FIO = s.First().p.c_surname + " " + s.First().p.c_name + " " + s.First().p.c_patronymic,
+                        Photo = s.First().p.c_photo,
+                        Posts = s.Select(ep2 => new PeoplePost
                         {
-                            Id = s.ep.id,
-                            Name = s.ep.c_name
-                        }
+                            Id = ep2.ep.id,
+                            Name = ep2.ep.c_name
+                        }).ToArray()
                     });
 
-                    if (queryWithPost.Any())
-                    {
-                        LinqToDB.Common.Configuration.Linq.AllowMultipleQuery = true;
+                if (!data2.Any()) return null;
+                return data2.ToArray();
 
-                        var result = queryWithPost.Select(s => new People
-                        {
-                            Id = s.people.id,
-                            FIO = s.people.c_surname + " " + s.people.c_name + " " + s.people.c_patronymic,
-                            Photo = s.people.c_photo,
-                            Posts = (from pep in db.content_people_employee_posts_links
-                                     join ep in db.content_employee_postss on pep.f_post equals ep.id
-                                     where pep.f_people.Equals(s.people.id)
-                                     select new PeoplePost
-                                     {
-                                         Id = ep.id,
-                                         Name = ep.c_name
-                                     }).ToArray()
-                        });
+                #region comment
+                //var query = db.cms_sitess
+                //            .Where(w => w.c_alias == domain)
+                //            .Join(db.content_people_org_links, e => e.f_content, o => o.f_org, (e, o) => o)
+                //            .Join(db.content_peoples, m => m.f_people, n => n.id, (m, n) => n);
 
-                        return result.ToArray();
-                    }
-                    return null;
-                }
+                //if (filter.SearchText != null)
+                //{
+                //    query = query.Where(w => (w.c_name.Contains(filter.SearchText) || w.c_surname.Contains(filter.SearchText) || w.c_patronymic.Contains(filter.SearchText)));
+                //}
+                //if (!String.IsNullOrEmpty(filter.Group))
+                //{
+                //    query = query
+                //            .Join(db.content_people_org_links, e => e.id, o => o.f_people, (o, e) => new { e, o })
+                //            .Join(db.content_people_department_links
+                //                .Where(w => string.IsNullOrWhiteSpace(filter.Group) || w.f_department == Guid.Parse(filter.Group))
+                //                , m => m.e.id, n => n.f_people, (m, n) => m.o);
+                //}
+
+                //#region временное решение
+                //int post = !string.IsNullOrWhiteSpace(filter.Type) ? Int32.Parse(filter.Type) : 0;
+                //if (post != 0)
+                //{
+                //    var queryWithPost = query
+                //    .Join(db.content_people_employee_posts_links, p => p.id, pepl => pepl.f_people, (p, pepl) => new { p, pepl.f_post })
+                //    .Join(db.content_employee_postss.Where(w => w.id.Equals(post)), pp => pp.f_post, ep => ep.id, (pp, ep) => new { pp, ep })
+                //    .Select(s => new
+                //    {
+                //        people = s.pp.p,
+                //        post = new PeoplePost
+                //        {
+                //            Id = s.ep.id,
+                //            Name = s.ep.c_name
+                //        }
+                //    });
+
+                //    if (queryWithPost.Any())
+                //    {
+                //        LinqToDB.Common.Configuration.Linq.AllowMultipleQuery = true;
+
+                //        var result = queryWithPost.Select(s => new People
+                //        {
+                //            Id = s.people.id,
+                //            FIO = s.people.c_surname + " " + s.people.c_name + " " + s.people.c_patronymic,
+                //            Photo = s.people.c_photo,
+                //            Posts = (from pep in db.content_people_employee_posts_links
+                //                     join ep in db.content_employee_postss on pep.f_post equals ep.id
+                //                     where pep.f_people.Equals(s.people.id)
+                //                     select new PeoplePost
+                //                     {
+                //                         Id = ep.id,
+                //                         Name = ep.c_name,
+                //                         Type = pep.n_type
+                //                     }).OrderBy(o => o.Type).ToArray()
+                //        });
+
+                //        return result.ToArray();
+                //    }
+                //    return null;
+                //}
+                //#endregion
+
+                //var query1 = query.OrderBy(o => o.c_surname);
+                //if (query1.Any())
+                //{
+                //    LinqToDB.Common.Configuration.Linq.AllowMultipleQuery = true;
+
+                //    var result = query1.Select(s => new People()
+                //    {
+                //        Id = s.id,
+                //        FIO = s.c_surname + " " + s.c_name + " " + s.c_patronymic,
+                //        Photo = s.c_photo,
+                //        Posts = (from pep in db.content_people_employee_posts_links
+                //                 join ep in db.content_employee_postss on pep.f_post equals ep.id
+                //                 where pep.f_people.Equals(s.id)
+                //                 select new PeoplePost
+                //                 {
+                //                     Id = ep.id,
+                //                     Name = ep.c_name,
+                //                     Type = pep.n_type
+                //                 }).OrderBy(o => o.Type).ToArray()
+                //    });
+
+                //    return result.ToArray();
+                //}
+                //return null;
                 #endregion
-
-                var query1 = query.OrderBy(o => o.c_surname);
-                if (query1.Any())
-                {
-                    LinqToDB.Common.Configuration.Linq.AllowMultipleQuery = true;
-
-                    var result = query1.Select(s => new People()
-                    {
-                        Id = s.id,
-                        FIO = s.c_surname + " " + s.c_name + " " + s.c_patronymic,
-                        Photo = s.c_photo,
-                        Posts = (from pep in db.content_people_employee_posts_links
-                                 join ep in db.content_employee_postss on pep.f_post equals ep.id
-                                 where pep.f_people.Equals(s.id)
-                                 select new PeoplePost
-                                 {
-                                     Id = ep.id,
-                                     Name = ep.c_name
-                                 }).ToArray()
-                    });
-
-                    return result.ToArray();
-                }
-                return null;
             }
         }
 
@@ -1023,7 +1070,7 @@ namespace cms.dbase
                              join pol in db.content_people_org_links on s.f_content equals pol.f_org
                              join pepl in db.content_people_employee_posts_links on pol.f_people equals pepl.f_people
                              join ep in db.content_employee_postss on pepl.f_post equals ep.id
-                             where s.c_alias.Equals(domain)
+                             where s.c_alias.Equals(domain) && ep.b_doctor
                              select new PeoplePost
                              {
                                  Id = ep.id,

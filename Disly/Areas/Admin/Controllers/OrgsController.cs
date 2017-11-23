@@ -718,21 +718,35 @@ namespace Disly.Areas.Admin.Controllers
             return PartialView("Modal/Orgs", model);
         }
 
+        //[HttpPost]
+        //[MultiButton(MatchFormKey = "action", MatchFormValue = "save-org-btn")]
+        //public ActionResult OrgsListModal(OrgsModalViewModel model)
+        //{
+        //    ContentLinkModel modelInsert = new ContentLinkModel
+        //    {
+        //       ObjctId = model.ObjctId,
+        //       ObjctType = model.ObjctType,
+        //       LinksId= (model.OrgsId != null)? model.OrgsId.Distinct().ToArray(): null,
+        //       LinkType = ContentLinkType.ORG
+        //    };
+
+        //    var res = _cmsRepository.updateContentLinks(modelInsert);
+
+        //    return PartialView("Modal/Success");
+        //}
+
         [HttpPost]
-        [MultiButton(MatchFormKey = "action", MatchFormValue = "save-org-btn")]
-        public ActionResult OrgsListModal(OrgsModalViewModel model)
+        public ActionResult UpdateLinkToOrg (ContentLinkModel data)
         {
-            ContentLinkModel modelInsert = new ContentLinkModel
+            if(data != null)
             {
-               ObjctId = model.ObjctId,
-               ObjctType = model.ObjctType,
-               LinksId= (model.OrgsId != null)? model.OrgsId.Distinct().ToArray(): null,
-               LinkType = ContentLinkType.ORG
-            };
-
-            var res = _cmsRepository.updateContentLinks(modelInsert);
-
-            return PartialView("Modal/Success");
+                var res = _cmsRepository.updateContentLink(data);
+                if (res)
+                    return Json("Success");
+            }
+            
+            //return Response.Status = "OK";
+            return Json("An Error Has occourred"); //Ne
         }
 
 

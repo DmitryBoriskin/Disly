@@ -1015,43 +1015,58 @@ namespace cms.dbase
 
         #region Content links to objects
         /// Добавляем связи новостей и организаций
-        public override bool updateContentLinks(ContentLinkModel data)
+        public override bool updateContentLink(ContentLinkModel data)
         {
-            using (var db = new CMSdb(_context))
+            try
             {
-                using (var tran = db.BeginTransaction())
+                using (var db = new CMSdb(_context))
                 {
-                    //Удаляем существующие связи, кроме того объекта, которому новость/событие принадлежит.
-                    db.content_content_links
-                                            .Where(w => w.f_content == data.ObjctId)
-                                            .Where(w => w.f_link_type == data.LinkType.ToString().ToLower())
-                                            .Where(w => w.b_origin != true)
-                                            .Delete();
-
-                    if (data.LinksId != null && data.LinksId.Count() > 0)
+                    using (var tran = db.BeginTransaction())
                     {
-                        foreach (var link in data.LinksId)
+                        var link = db.content_content_links
+                                                .Where(w => w.f_content == data.ObjctId)
+                                               // .Where(w => w.f_link_type == data.LinkType.ToString().ToLower())
+                                                .Where(w => w.f_link == data.LinkId);
+                                                //.Where(w => w.b_origin != true)
+
+                        if(link.Any())
                         {
-                            var isExist = db.content_content_links
-                                            .Where(t => t.f_content == data.ObjctId)
-                                            .Where(t => t.f_link == link).Any();
-                            if (!isExist)
+                            if(!data.Checked)
                             {
-                                //Добавляем дополнительные связи
+                                //delete
                                 db.content_content_links
-                                                .Value(v => v.f_content, data.ObjctId)
-                                                .Value(v => v.f_content_type, data.ObjctType.ToString().ToLower())
-                                                .Value(v => v.f_link, link)
-                                                .Value(v => v.f_link_type, data.LinkType.ToString().ToLower())
-                                                .Insert();
+                                                .Where(w => w.f_content == data.ObjctId)
+                                                .Where(w => w.f_link_type == data.LinkType.ToString().ToLower())
+                                                .Where(w => w.f_link == data.LinkId)
+                                                .Where(w => w.b_origin != true)
+                                                .Delete();
                             }
                         }
-                      }
+                        else
+                        {
+                            if (data.Checked)
+                            {
+                                //insert
+                                db.content_content_links
+                                           .Value(v => v.f_content, data.ObjctId)
+                                           .Value(v => v.f_content_type, data.ObjctType.ToString().ToLower())
+                                           .Value(v => v.f_link, data.LinkId)
+                                           .Value(v => v.f_link_type, data.LinkType.ToString().ToLower())
+                                           .Insert();
+                            }
+                        }
+
                         tran.Commit();
+                        return true;
                     }
-                    return true;
                 }
             }
+            catch(Exception ex)
+            {
+                OnDislyEvent(new DislyEventArgs(LogLevelEnum.Debug, "", ex));
+                return false;
+            }
+        }
         #endregion
 
 
