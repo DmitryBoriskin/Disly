@@ -63,6 +63,7 @@ namespace cms.dbase.models
 		public ITable<content_org_services>                         content_org_servicess                         { get { return this.GetTable<content_org_services>(); } }
 		public ITable<content_org_structure>                        content_org_structures                        { get { return this.GetTable<content_org_structure>(); } }
 		public ITable<content_orgs>                                 content_orgss                                 { get { return this.GetTable<content_orgs>(); } }
+		public ITable<content_orgs_adminstrativ>                    content_orgs_adminstrativs                    { get { return this.GetTable<content_orgs_adminstrativ>(); } }
 		public ITable<content_orgs_types>                           content_orgs_typess                           { get { return this.GetTable<content_orgs_types>(); } }
 		public ITable<content_orgs_types_link>                      content_orgs_types_links                      { get { return this.GetTable<content_orgs_types_link>(); } }
 		public ITable<content_people>                               content_peoples                               { get { return this.GetTable<content_people>(); } }
@@ -802,6 +803,7 @@ namespace cms.dbase.models
 		[PrimaryKey, NotNull    ] public int    id       { get; set; } // int
 		[Column,        Nullable] public int?   n_parent { get; set; } // int
 		[Column,     NotNull    ] public string c_name   { get; set; } // nvarchar(512)
+		[Column,     NotNull    ] public bool   b_doctor { get; set; } // bit
 
 		#region Associations
 
@@ -1088,6 +1090,12 @@ namespace cms.dbase.models
 		#region Associations
 
 		/// <summary>
+		/// FK_content_orgs_adminstrativ_content_orgs_BackReference
+		/// </summary>
+		[Association(ThisKey="id", OtherKey="f_org", CanBeNull=true, IsBackReference=true)]
+		public IEnumerable<content_orgs_adminstrativ> contentorgsadminstrativcontentorgss { get; set; }
+
+		/// <summary>
 		/// FK_content_orgs_types_link_org_BackReference
 		/// </summary>
 		[Association(ThisKey="id", OtherKey="f_org", CanBeNull=true, IsBackReference=true)]
@@ -1110,6 +1118,31 @@ namespace cms.dbase.models
 		/// </summary>
 		[Association(ThisKey="id", OtherKey="f_org", CanBeNull=true, IsBackReference=true)]
 		public IEnumerable<content_people_org_link> contentorgpeoplelinks { get; set; }
+
+		#endregion
+	}
+
+	[Table(Schema="dbo", Name="content_orgs_adminstrativ")]
+	public partial class content_orgs_adminstrativ
+	{
+		[PrimaryKey, NotNull    ] public Guid   id           { get; set; } // uniqueidentifier
+		[Column,        Nullable] public string c_surname    { get; set; } // varchar(64)
+		[Column,        Nullable] public string c_name       { get; set; } // varchar(64)
+		[Column,        Nullable] public string c_patronymic { get; set; } // varchar(64)
+		[Column,        Nullable] public string c_phone      { get; set; } // varchar(128)
+		[Column,        Nullable] public string c_photo      { get; set; } // nvarchar(1024)
+		[Column,        Nullable] public string c_post       { get; set; } // varchar(128)
+		[Column,        Nullable] public string c_text       { get; set; } // varchar(max)
+		[Column,     NotNull    ] public Guid   f_org        { get; set; } // uniqueidentifier
+		[Column,     NotNull    ] public int    n_sort       { get; set; } // int
+
+		#region Associations
+
+		/// <summary>
+		/// FK_content_orgs_adminstrativ_content_orgs
+		/// </summary>
+		[Association(ThisKey="f_org", OtherKey="id", CanBeNull=false, KeyName="FK_content_orgs_adminstrativ_content_orgs", BackReferenceName="contentorgsadminstrativcontentorgss")]
+		public content_orgs contentorgsadminstrativcontentorgs { get; set; }
 
 		#endregion
 	}
@@ -1216,6 +1249,7 @@ namespace cms.dbase.models
 	{
 		[Column, NotNull] public Guid f_people { get; set; } // uniqueidentifier
 		[Column, NotNull] public int  f_post   { get; set; } // int
+		[Column, NotNull] public int  n_type   { get; set; } // int
 
 		#region Associations
 
@@ -1467,12 +1501,15 @@ namespace cms.dbase.models
 	[Table(Schema="dbo", Name="content_sv_people_front")]
 	public partial class content_sv_people_front
 	{
-		[Column, NotNull    ] public Guid   id           { get; set; } // uniqueidentifier
-		[Column,    Nullable] public string c_surname    { get; set; } // varchar(64)
-		[Column,    Nullable] public string c_name       { get; set; } // varchar(64)
-		[Column,    Nullable] public string c_patronymic { get; set; } // varchar(64)
-		[Column,    Nullable] public string c_photo      { get; set; } // nvarchar(1024)
-		[Column, NotNull    ] public string domain       { get; set; } // varchar(64)
+		[Column, Nullable] public Guid?  id           { get; set; } // uniqueidentifier
+		[Column, Nullable] public string fio          { get; set; } // varchar(194)
+		[Column, Nullable] public string c_snils      { get; set; } // char(11)
+		[Column, Nullable] public Guid?  f_department { get; set; } // uniqueidentifier
+		[Column, Nullable] public string c_name       { get; set; } // nvarchar(512)
+		[Column, Nullable] public string c_alias      { get; set; } // varchar(64)
+		[Column, Nullable] public bool?  b_doctor     { get; set; } // bit
+		[Column, Nullable] public int?   f_post       { get; set; } // int
+		[Column, Nullable] public string c_photo      { get; set; } // nvarchar(1024)
 	}
 
 	// View
@@ -1744,6 +1781,7 @@ namespace cms.dbase.models
 	{
 		[Column, NotNull] public Guid f_people        { get; set; } // uniqueidentifier
 		[Column, NotNull] public int  f_employee_post { get; set; } // int
+		[Column, NotNull] public int  n_type          { get; set; } // int
 
 		#region Associations
 
@@ -2085,6 +2123,12 @@ namespace cms.dbase.models
 				t.id == id);
 		}
 
+		public static content_orgs_adminstrativ Find(this ITable<content_orgs_adminstrativ> table, Guid id)
+		{
+			return table.FirstOrDefault(t =>
+				t.id == id);
+		}
+
 		public static content_orgs_types Find(this ITable<content_orgs_types> table, Guid id)
 		{
 			return table.FirstOrDefault(t =>
@@ -2183,3 +2227,4 @@ namespace cms.dbase.models
 		}
 	}
 }
+ 

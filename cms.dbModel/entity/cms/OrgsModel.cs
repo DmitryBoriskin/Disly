@@ -408,6 +408,11 @@ namespace cms.dbModel.entity
         /// Название
         /// </summary>
         public string Name { get; set; }
+
+        /// <summary>
+        /// Тип
+        /// </summary>
+        public int Type { get; set; }
     }
     
     /// <summary>

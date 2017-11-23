@@ -855,6 +855,24 @@ namespace cms.dbase
             using (var db = new CMSdb(_context))
             {
                 string domain = filter.Domain;
+
+                #region comment
+                //var query = db.content_sv_people_fronts
+                //    .Where(w => w.id != null)
+                //    .Where(w => string.IsNullOrWhiteSpace(filter.Group) || w.f_department.Equals(Guid.Parse(filter.Group)))
+                //    .Where(w => string.IsNullOrWhiteSpace(filter.Type) || w.f_post.Equals(Int32.Parse(filter.Type)))
+                //    .Where(w => (bool)w.b_doctor)
+                //    .Select(s => new People
+                //    {
+                //        Id = (Guid)s.id,
+                //        FIO = s.fio,
+                //        Photo = s.c_photo
+                //    });
+
+                //if (!query.Any()) return null;
+                //return query.ToArray();
+                #endregion
+
                 var query = db.cms_sitess
                             .Where(w => w.c_alias == domain)
                             .Join(db.content_people_org_links, e => e.f_content, o => o.f_org, (e, o) => o)
@@ -879,7 +897,7 @@ namespace cms.dbase
                 {
                     var queryWithPost = query
                     .Join(db.content_people_employee_posts_links, p => p.id, pepl => pepl.f_people, (p, pepl) => new { p, pepl.f_post })
-                    .Join(db.content_employee_postss.Where(w => w.id.Equals(post)), pp => pp.f_post, ep => ep.id, (pp, ep) => new { pp, ep})
+                    .Join(db.content_employee_postss.Where(w => w.id.Equals(post)), pp => pp.f_post, ep => ep.id, (pp, ep) => new { pp, ep })
                     .Select(s => new
                     {
                         people = s.pp.p,
@@ -905,8 +923,9 @@ namespace cms.dbase
                                      select new PeoplePost
                                      {
                                          Id = ep.id,
-                                         Name = ep.c_name
-                                     }).ToArray()
+                                         Name = ep.c_name,
+                                         Type = pep.n_type
+                                     }).OrderBy(o => o.Type).ToArray()
                         });
 
                         return result.ToArray();
@@ -931,13 +950,15 @@ namespace cms.dbase
                                  select new PeoplePost
                                  {
                                      Id = ep.id,
-                                     Name = ep.c_name
-                                 }).ToArray()
+                                     Name = ep.c_name,
+                                     Type = pep.n_type
+                                 }).OrderBy(o => o.Type).ToArray()
                     });
 
                     return result.ToArray();
                 }
                 return null;
+
             }
         }
 
@@ -1023,7 +1044,7 @@ namespace cms.dbase
                              join pol in db.content_people_org_links on s.f_content equals pol.f_org
                              join pepl in db.content_people_employee_posts_links on pol.f_people equals pepl.f_people
                              join ep in db.content_employee_postss on pepl.f_post equals ep.id
-                             where s.c_alias.Equals(domain)
+                             where s.c_alias.Equals(domain) && ep.b_doctor
                              select new PeoplePost
                              {
                                  Id = ep.id,
