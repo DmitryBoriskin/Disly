@@ -220,14 +220,19 @@ namespace Disly.Areas.Admin.Controllers
                 Lang = (String.IsNullOrEmpty(Request.QueryString["lang"])) ? String.Empty : Request.QueryString["lang"],
                 Date = (String.IsNullOrEmpty(Request.QueryString["date"])) ? DateNull : DateTime.Parse(Request.QueryString["date"]),
                 DateEnd = (String.IsNullOrEmpty(Request.QueryString["dateend"])) ? DateNull : DateTime.Parse(Request.QueryString["dateend"]),
-                SearchText = (String.IsNullOrEmpty(Request.QueryString["searchtext"])) ? String.Empty : Request.QueryString["searchtext"],
-                Disabled = (String.IsNullOrEmpty(Request.QueryString["disabled"])) ? false : Convert.ToBoolean(Request.QueryString["disabled"])
+                SearchText = (String.IsNullOrEmpty(Request.QueryString["searchtext"])) ? String.Empty : Request.QueryString["searchtext"]
+                //,
+                //Disabled = (String.IsNullOrEmpty(Request.QueryString["disabled"])) ? Nullable : Convert.ToBoolean(Request.QueryString["disabled"])
             };
-            
-            if (result.Date != DateNull && result.DateEnd == DateNull)
+            if (!String.IsNullOrEmpty(Request.QueryString["disabled"]))
             {
-                result.DateEnd = ((DateTime)result.Date).AddDays(1);
+                result.Disabled = Convert.ToBoolean(Request.QueryString["disabled"]);
             }
+            
+            //if (result.Date != DateNull && result.DateEnd == DateNull)
+            //{
+            //    result.DateEnd = ((DateTime)result.Date).AddDays(1);
+            //}
 
             return result;
         }

@@ -54,7 +54,7 @@ public class Files
 
         if (FinWidth != 0 && FinHeight != 0)
         {
-            _File = Imaging.Resize(_File, FinWidth, FinHeight, "top", "left");
+            _File = Imaging.Resize(_File, FinWidth, FinHeight, "top", "center");
         }
         else if (FinWidth != 0 && FinHeight == 0)
         {

@@ -20,14 +20,29 @@ namespace cms.dbase
             {
                 if (!string.IsNullOrEmpty(filter.Domain))
                 {
-                    var votes = db.content_votes
-                                  .Where(w => w.f_site == filter.Domain)
-                                  .OrderBy(o=>o.d_date_start);
+                    var query = db.content_votes
+                                  .Where(w => w.f_site == filter.Domain).AsQueryable();
+                    if (filter.Disabled != null)
+                    {
+                        query = query.Where(w => w.b_disabled == filter.Disabled);
+                    }
+                    if (filter.SearchText != null)
+                    {
+                        query = query.Where(w => (w.c_header.Contains(filter.SearchText) || w.c_text.Contains(filter.SearchText)));
+                    }
+                    if (filter.Date != null)
+                    {
+                        query = query.Where(w => w.d_date_end >= filter.Date || (w.d_date_end == null && w.d_date_start>=filter.Date));
+                    }
+                    if (filter.DateEnd != null) {
+                        query = query.Where(w => w.d_date_start.Date <= filter.DateEnd );
+                    }
 
+                    query = query.OrderBy(o=>o.d_date_start);
 
-                    int itemCount = votes.Count();
+                    int itemCount = query.Count();
 
-                    var voteList = votes
+                    var voteList = query
                             .Skip(filter.Size * (filter.Page - 1))
                             .Take(filter.Size)
                             .Select(s => new VoteModel
@@ -37,8 +52,6 @@ namespace cms.dbase
                                 Header=s.c_header,
                                 Disabled=s.b_disabled
                             });
-
-
 
                     if (voteList!=null)
                         return new VoteList

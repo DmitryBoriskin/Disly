@@ -777,6 +777,7 @@
     <Content Include="Areas\Admin\Views\MainSpecialist\Item.cshtml" />
     <Content Include="Areas\Admin\Views\Vote\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Vote\Item.cshtml" />
+    <Content Include="Areas\Admin\Views\Orgs\Administrativ.cshtml" />
     <None Include="Content\plugins\datatables\i18n\ru.json" />
     <Content Include="Content\plugins\tinymce\langs\readme.md" />
     <Content Include="Content\plugins\tinymce\skins\lightgray\fonts\tinymce-small.eot" />

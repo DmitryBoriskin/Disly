@@ -89,8 +89,9 @@ namespace Disly.Areas.Admin.Controllers
         }        
 
         public ActionResult Item(Guid Id)
-        {
+        {            
             model.Item = _cmsRepository.getOrgItem(Id);    //+ список структур    
+
 
             // типы организаций
             var types = new MultiSelectList(model.Types, "Id", "Title", model.Item != null ? model.Item.Types : null);
@@ -143,9 +144,9 @@ namespace Disly.Areas.Admin.Controllers
                     _cmsRepository.updateOrg(id, back_model.Item); //, AccountInfo.id, RequestUserInfo.IP
                     userMessege.info = "Запись сохранена";
                     userMessege.buttons = new ErrorMassegeBtn[]{
-                    new ErrorMassegeBtn { url = StartUrl + Request.Url.Query, text = "вернуться в список" },
-                    new ErrorMassegeBtn { url = "/admin/orgs/item/"+id, text = "ок", action = "false" }
-                };
+                        new ErrorMassegeBtn { url = StartUrl + Request.Url.Query, text = "вернуться в список" },
+                        new ErrorMassegeBtn { url = "/admin/orgs/item/"+id, text = "ок", action = "false" }
+                    };
                 }
                 else
                 {
@@ -733,5 +734,120 @@ namespace Disly.Areas.Admin.Controllers
 
             return PartialView("Modal/Success");
         }
+
+
+        #region administrative
+
+        public ActionResult Administrativ(Guid Id)
+        {
+            ViewBag.Title = "Административный персонал";
+            model.AdministrativItem = _cmsRepository.getAdministrativ(Id);
+            model.BreadCrumbOrg = _cmsRepository.getBreadCrumbOrgs(Id, ViewBag.ActionName);
+            return View(model);
+        }
+
+        [HttpPost]
+        [MultiButton(MatchFormKey = "action", MatchFormValue = "save-adminiatrativ-btn")]
+        public ActionResult Administrativ(Guid Id, OrgsViewModel back_model, HttpPostedFileBase upload)
+        {
+            ErrorMassege userMassege = new ErrorMassege
+            {
+                title = "Информация"
+            };
+
+            ViewBag.Title = "Административный персонал";
+
+            if (ModelState.IsValid)
+            {
+                string aliasname = Transliteration.Translit(back_model.AdministrativItem.Surname + "-" + back_model.AdministrativItem.Name);
+
+                #region Изображение
+                string savePath = Settings.UserFiles+Domain+"/administrativ/" + Id + "/";
+
+                int width = 225; // ширина 
+                int height = 225; // высота
+
+                if (upload != null && upload.ContentLength > 0)
+                {
+                    string fileExtension = upload.FileName.Substring(upload.FileName.IndexOf(".")).ToLower();
+
+                    var validExtension = (!string.IsNullOrEmpty(Settings.PicTypes)) ? Settings.PicTypes.Split(',') : "jpg,jpeg,png,gif".Split(',');
+                    if (!validExtension.Contains(fileExtension.Replace(".", "")))
+                    {
+                        model.ErrorInfo = new ErrorMassege()
+                        {
+                            title = "Ошибка",
+                            info = "Вы не можете загружать файлы данного формата",
+                            buttons = new ErrorMassegeBtn[]
+                            {
+                                new ErrorMassegeBtn { url = "#", text = "ок", action = "false", style="primary" }
+                            }
+                        };
+                        return View("Item", model);
+                    }                    
+                    Photo photo = new Photo
+                    {
+                        Name = aliasname + fileExtension,
+                        Size = Files.FileAnliz.SizeFromUpload(upload),
+                        Url = Files.SaveImageResizeRename(upload, savePath, aliasname, width, height)
+                    };
+
+                    back_model.AdministrativItem.Photo = photo;
+                }
+                #endregion
+
+                model.AdministrativItem = _cmsRepository.getAdministrativ(Id);
+                if (model.AdministrativItem == null)
+                {
+                    var OrgId = Request.Params["orgid"];
+                    back_model.AdministrativItem.OrgId = Guid.Parse(OrgId);
+                    _cmsRepository.insAdministrativ(Id, back_model.AdministrativItem);
+                    userMassege.info = "Запись создана";
+                    userMassege.buttons = new ErrorMassegeBtn[]{
+                        new ErrorMassegeBtn { url = StartUrl + Request.Url.Query, text = "вернуться в список" },
+                        new ErrorMassegeBtn { url = "/admin/orgs/administrativ/"+Id, text = "ок", action = "false" }
+                    };
+                }
+                else
+                {
+                    _cmsRepository.updAdministrativ(Id, back_model.AdministrativItem);                    
+                    userMassege.info = "Запись сохранена";
+                    userMassege.buttons = new ErrorMassegeBtn[]{
+                        new ErrorMassegeBtn { url = StartUrl + Request.Url.Query, text = "вернуться в список" },
+                        new ErrorMassegeBtn { url = "/admin/orgs/administrativ/"+Id, text = "ок", action = "false" }
+                    };
+                }
+            }
+            else
+            {
+                userMassege.info = "Ошибка в заполнении формы. Поля в которых допушены ошибки - помечены цветом.";
+                userMassege.buttons = new ErrorMassegeBtn[]
+                {
+                    new ErrorMassegeBtn { url = "#", text = "ок", action = "false" }
+                };
+            }
+            model.BreadCrumbOrg = _cmsRepository.getBreadCrumbOrgs(Id, ViewBag.ActionName);
+            return View(model);
+        }
+
+
+        [HttpPost]
+        [MultiButton(MatchFormKey = "action", MatchFormValue = "cancel-adminiatrativ-btn")]
+        public ActionResult CancelAdministrative(Guid id)
+        {
+            try
+            {
+                var data = _cmsRepository.getStructure(id);
+                if (data != null)
+                    return Redirect(StartUrl + "/item/" + data.OrgId + Request.Url.Query);
+                else
+                    return Redirect(StartUrl + "/item/" + Guid.Parse(Request.Params["orgid"]));
+            }
+            catch
+            {
+                return Redirect(StartUrl);
+            }
+        }
+        #endregion
     }
 }
