@@ -113,9 +113,14 @@
                                 </tr>
                                 @foreach (var item in Model.DoctorsList)
                                 {
+                                    string link = "/" + ViewBag.ControllerName + "/" + item.Id;
                                     <tr>
-                                        <td><img src="@item.Photo" class="img-circle img-person-list" alt="@item.FIO" /></td>
-                                        <td><a href="/@ViewBag.ControllerName/@item.Id">@item.FIO</a></td>
+                                        <td>
+                                            <a href="@link">
+                                                <img src="@item.Photo" class="img-circle img-person-list" alt="@item.FIO" />
+                                            </a>
+                                        </td>
+                                        <td><a href="@link">@item.FIO</a></td>
                                         <td>
                                             @if (item.Posts != null)
                                             {
