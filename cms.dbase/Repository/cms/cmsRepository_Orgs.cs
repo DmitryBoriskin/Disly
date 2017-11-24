@@ -225,6 +225,7 @@ namespace cms.dbase
                         GeopointX = s.n_geopoint_x,
                         GeopointY = s.n_geopoint_y,
                         Structure = getStructureList(s.id),
+                        Administrativ= getAdministrativList(s.id),
                         Oid = s.f_oid,
                         Types = types
                     });

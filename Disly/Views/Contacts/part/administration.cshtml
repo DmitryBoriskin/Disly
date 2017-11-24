@@ -1,0 +1,16 @@
+﻿@model ContatcsViewModel
+@if (Model.Administrativ != null)
+{
+    <table class="table">
+        @foreach (var item in Model.Administrativ)
+        {
+            <tr>
+                <td><img src="@item.Photo.Url" /></td>
+                <td>@item.Surname @item.Name @item.Patronymic<br>@item.Post</td>
+                <td>@item.Phone</td>
+                <td>@Html.Raw(item.Text)</td>
+            </tr>
+
+        }
+    </table>
+}

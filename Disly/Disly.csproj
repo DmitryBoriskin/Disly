@@ -804,6 +804,9 @@
     <Content Include="Views\Vote\Index.cshtml" />
     <Content Include="Views\Vote\Item.cshtml" />
     <Content Include="Views\Vote\List.cshtml" />
+    <Content Include="Views\Contacts\part\nav.cshtml" />
+    <Content Include="Views\Contacts\part\administration.cshtml" />
+    <Content Include="Views\Contacts\part\phone.cshtml" />
     <Content Include="Views\Doctors\Redirect.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>

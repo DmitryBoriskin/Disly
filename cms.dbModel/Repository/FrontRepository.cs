@@ -46,5 +46,8 @@ namespace cms.dbModel
         public abstract bool GiveVote(Guid VoteId, string[] AnswerId, string Ip);
 
         public abstract string getOid(string domain);
+
+
+        public abstract OrgsAdministrativ[] getAdministrativ(string domain);
     }
 }

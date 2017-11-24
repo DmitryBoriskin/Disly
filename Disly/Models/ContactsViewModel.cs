@@ -9,6 +9,19 @@ namespace Disly.Models
     public class ContatcsViewModel : PageViewModel
     {        
         public OrgsModel OrgItem { get; set; }
-        public StructureModel[] Structures { get; set; }        
+        public StructureModel[] Structures { get; set; }      
+        public OrgsAdministrativ[] Administrativ { get; set; }
+        /// <summary>
+        /// тип информации показываемой на странице 
+        /// </summary>
+        public string Type { get; set; }
+        /// <summary>
+        /// Навигация
+        /// </summary>
+        public MaterialsGroup[] Nav { get; set; }
+        /// <summary>
+        /// Доболнительная информация из библиотеки
+        /// </summary>
+        public SiteMapModel DopInfo { get; set; }
     }
 }
