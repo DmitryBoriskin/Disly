@@ -65,6 +65,9 @@ namespace cms.dbase.Repository
                     {
                         FIO = s.C_FIO,
                         SNILS = s.C_SNILS,
+                        District = s.C_District,
+                        DistrictType = s.C_DistrictType,
+                        Spec = s.C_DoctorSpec,
                         Url = s.C_Registry_URL,
                         HospitalOid = s.C_Hospital_OID,
                         HospitalName = s.C_Hospital_Name
