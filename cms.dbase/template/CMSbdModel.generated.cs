@@ -1085,7 +1085,8 @@ namespace cms.dbase.models
 		[Column,        Nullable] public double? n_geopoint_y      { get; set; } // float
 		[Column,        Nullable] public string  c_adress          { get; set; } // nvarchar(512)
 		[Column,     NotNull    ] public int     n_sort            { get; set; } // int
-		[Column,        Nullable] public string  f_frmp            { get; set; } // varchar(64)
+		[Column,        Nullable] public string  f_oid             { get; set; } // varchar(64)
+		[Column,        Nullable] public Guid?   f_guid            { get; set; } // uniqueidentifier
 
 		#region Associations
 
@@ -1501,15 +1502,15 @@ namespace cms.dbase.models
 	[Table(Schema="dbo", Name="content_sv_people_front")]
 	public partial class content_sv_people_front
 	{
-		[Column, Nullable] public Guid?  id           { get; set; } // uniqueidentifier
-		[Column, Nullable] public string fio          { get; set; } // varchar(194)
-		[Column, Nullable] public string c_snils      { get; set; } // char(11)
-		[Column, Nullable] public Guid?  f_department { get; set; } // uniqueidentifier
-		[Column, Nullable] public string c_name       { get; set; } // nvarchar(512)
-		[Column, Nullable] public string c_alias      { get; set; } // varchar(64)
-		[Column, Nullable] public bool?  b_doctor     { get; set; } // bit
-		[Column, Nullable] public int?   f_post       { get; set; } // int
-		[Column, Nullable] public string c_photo      { get; set; } // nvarchar(1024)
+		[Column, NotNull    ] public Guid   id           { get; set; } // uniqueidentifier
+		[Column,    Nullable] public string fio          { get; set; } // varchar(194)
+		[Column, NotNull    ] public string c_snils      { get; set; } // char(11)
+		[Column,    Nullable] public Guid?  f_department { get; set; } // uniqueidentifier
+		[Column, NotNull    ] public string c_name       { get; set; } // nvarchar(512)
+		[Column, NotNull    ] public string c_alias      { get; set; } // varchar(64)
+		[Column, NotNull    ] public bool   b_doctor     { get; set; } // bit
+		[Column, NotNull    ] public int    f_post       { get; set; } // int
+		[Column,    Nullable] public string c_photo      { get; set; } // nvarchar(1024)
 	}
 
 	// View
@@ -1753,10 +1754,10 @@ namespace cms.dbase.models
 	[Table(Schema="dbo", Name="import_frmp_orgs")]
 	public partial class import_frmp_orgs
 	{
-		[Column,     NotNull    ] public Guid     guid     { get; set; } // uniqueidentifier
-		[PrimaryKey, NotNull    ] public string   c_oid    { get; set; } // varchar(64)
-		[Column,        Nullable] public string   c_name   { get; set; } // nvarchar(512)
-		[Column,     NotNull    ] public DateTime d_modify { get; set; } // datetime
+		[Column, NotNull    ] public Guid     guid     { get; set; } // uniqueidentifier
+		[Column,    Nullable] public string   c_oid    { get; set; } // varchar(64)
+		[Column,    Nullable] public string   c_name   { get; set; } // nvarchar(512)
+		[Column, NotNull    ] public DateTime d_modify { get; set; } // datetime
 	}
 
 	[Table(Schema="dbo", Name="import_frmp_orgs_peoples")]
@@ -1764,6 +1765,7 @@ namespace cms.dbase.models
 	{
 		[Column, NotNull] public string f_oid    { get; set; } // varchar(64)
 		[Column, NotNull] public Guid   f_people { get; set; } // uniqueidentifier
+		[Column, NotNull] public Guid   f_guid   { get; set; } // uniqueidentifier
 
 		#region Associations
 
@@ -1850,15 +1852,6 @@ namespace cms.dbase.models
 
 	public static partial class CMSdbStoredProcedures
 	{
-		#region import_frmp_employees
-
-		public static int import_frmp_employees(this DataConnection dataConnection)
-		{
-			return dataConnection.ExecuteProc("[dbo].[import_frmp_employees]");
-		}
-
-		#endregion
-
 		#region sp_alterdiagram
 
 		public static int sp_alterdiagram(this DataConnection dataConnection, string @diagramname, int? @owner_id, int? @version, byte[] @definition)
@@ -2206,12 +2199,6 @@ namespace cms.dbase.models
 		{
 			return table.FirstOrDefault(t =>
 				t.c_alias == c_alias);
-		}
-
-		public static import_frmp_orgs Find(this ITable<import_frmp_orgs> table, string c_oid)
-		{
-			return table.FirstOrDefault(t =>
-				t.c_oid == c_oid);
 		}
 
 		public static import_frmp_peoples Find(this ITable<import_frmp_peoples> table, Guid id)

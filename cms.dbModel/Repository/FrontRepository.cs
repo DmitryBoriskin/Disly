@@ -33,6 +33,7 @@ namespace cms.dbModel
 
         public abstract People[] getPeopleList(FilterParams filter);
         public abstract People getPeopleItem(Guid id, string domain);
+        public abstract string getPeopleSnils(Guid id);
         public abstract StructureModel[] getDeparatamentsSelectList(string domain);
         public abstract PeoplePost[] getPeoplePosts(string domain);
 
@@ -43,5 +44,7 @@ namespace cms.dbModel
         public abstract VoteAnswer[] getVoteAnswer(Guid VoteId, string Ip);
         public abstract VoteStat getVoteStat(Guid AnswerId, Guid VoteId, string Ip);
         public abstract bool GiveVote(Guid VoteId, string[] AnswerId, string Ip);
+
+        public abstract string getOid(string domain);
     }
 }

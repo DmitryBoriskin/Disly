@@ -567,6 +567,7 @@
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\DoctorsController.cs" />
     <Compile Include="Controllers\ContactsController.cs" />
+    <Compile Include="Controllers\RedirectRegistryController.cs" />
     <Compile Include="Controllers\VoteController.cs" />
     <Compile Include="Controllers\StructureController.cs" />
     <Compile Include="Controllers\PressController.cs" />
@@ -580,6 +581,7 @@
     <Compile Include="Areas\Admin\Models\CoreViewModel.cs" />
     <Compile Include="Models\DoctorsViewModel.cs" />
     <Compile Include="Models\ContactsViewModel.cs" />
+    <Compile Include="Models\RedirectRegistryViewModel.cs" />
     <Compile Include="Models\StructureViewModel.cs" />
     <Compile Include="Models\VoteViewModel.cs" />
     <Compile Include="Models\TypePageViewModel.cs" />
@@ -801,6 +803,7 @@
     <Content Include="Views\Vote\Index.cshtml" />
     <Content Include="Views\Vote\Item.cshtml" />
     <Content Include="Views\Vote\List.cshtml" />
+    <Content Include="Views\Doctors\Redirect.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

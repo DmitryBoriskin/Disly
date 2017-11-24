@@ -23,6 +23,12 @@ namespace Disly
                defaults: new { controller = "Home", action = "Index" }
             );
 
+            routes.MapRoute(
+                name: "Registry",
+                url: "RedirectRegistry/{action}/{id}",
+                defaults: new { controller = "RedirectRegistry", action = "Index", id = UrlParameter.Optional }
+            );
+
             //голосование
             routes.MapRoute(
                name: "vote",
@@ -42,7 +48,7 @@ namespace Disly
                defaults: new { controller = "vote", action = "givevote" },
                namespaces: new string[] { "Disly.Controllers" }
             );
-            
+
 
             // Структура
             routes.MapRoute(
@@ -60,7 +66,7 @@ namespace Disly
                url: "Structure/{num}/{id}",
                defaults: new { controller = "Structure", action = "Department" }
             );
-            
+
             //Врачи
             routes.MapRoute(
                name: "Doctors",
@@ -69,7 +75,7 @@ namespace Disly
             );
 
             routes.MapRoute(
-               name:"DoctorsItem",
+               name: "DoctorsItem",
                url: "Doctors/{id}",
                defaults: new { controller = "Doctors", action = "Item" }
             );
@@ -80,7 +86,7 @@ namespace Disly
                url: "contacts/",
                defaults: new { controller = "Contacts", action = "Index" }
             );
-            
+
             // как нас найти findus
             routes.MapRoute(
                name: "findus",
@@ -92,7 +98,7 @@ namespace Disly
             routes.MapRoute(
                name: "PressCentrItem",
                url: "Press/{year}/{month}/{day}/{alias}",
-               defaults: new { controller = "Press", action = "Item", alias = UrlParameter.Optional }               
+               defaults: new { controller = "Press", action = "Item", alias = UrlParameter.Optional }
             );
             routes.MapRoute(
                name: "PressCentrRss",
@@ -124,7 +130,7 @@ namespace Disly
                defaults: new { controller = "Documents", action = "Index", path = UrlParameter.Optional }
             );
 
-           // Типовая страница (карта сайта)
+            // Типовая страница (карта сайта)
             routes.MapRoute(
                name: "Page",
                url: "{*path}",
@@ -133,20 +139,17 @@ namespace Disly
             );
 
 
-          routes.MapRoute(
-              name: "Service",
-              url: "Service/{action}/{*id}",
-              defaults: new { controller = "Service", action = "Index", id = UrlParameter.Optional }
-           );
-
+            routes.MapRoute(
+                name: "Service",
+                url: "Service/{action}/{*id}",
+                defaults: new { controller = "Service", action = "Index", id = UrlParameter.Optional }
+             );
+            
             routes.MapRoute(
                 name: "default",
-                url:"{controller}/{action}/{id}",
+                url: "{controller}/{action}/{id}",
                 defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
             );
-
-
-
         }
     }
 }

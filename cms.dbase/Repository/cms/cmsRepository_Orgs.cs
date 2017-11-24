@@ -225,7 +225,7 @@ namespace cms.dbase
                         GeopointX = s.n_geopoint_x,
                         GeopointY = s.n_geopoint_y,
                         Structure = getStructureList(s.id),
-                        Frmp = s.f_frmp,
+                        Oid = s.f_oid,
                         Types = types
                     });
 
@@ -273,7 +273,7 @@ namespace cms.dbase
                             .Value(s => s.c_adress, model.Address)
                             .Value(s => s.n_geopoint_x, model.GeopointX)
                             .Value(s => s.n_geopoint_y, model.GeopointY)
-                            .Value(s => s.f_frmp, model.Frmp)
+                            .Value(s => s.f_oid, model.Oid)
                             .Insert();
 
                         // обновляем типы мед. учреждений
@@ -349,7 +349,7 @@ namespace cms.dbase
                             .Set(s => s.c_adress, model.Address)
                             .Set(s => s.n_geopoint_x, model.GeopointX)
                             .Set(s => s.n_geopoint_y, model.GeopointY)
-                            .Set(s => s.f_frmp, model.Frmp)
+                            .Set(s => s.f_oid, model.Oid)
                             .Update();
 
                         // обновляем типы мед. учреждений

@@ -42,6 +42,7 @@ namespace Disly.Controllers
             #endregion
 
             model.Materials = _repository.getMaterialsModule(Domain);
+            model.Oid = _repository.getOid(Domain);
 
             return View(_ViewName, model);
         }

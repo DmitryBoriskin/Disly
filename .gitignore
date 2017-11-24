@@ -4,6 +4,7 @@
 */bin/
 */obj/
 cms.dbase/template/CMSbdModel.tt
+cms.dbase/template/OnlineRegister.tt
 ImportFRMP/template/CMSbdModel.tt
 Integration.Frmp.library/template/CMSbdModel.tt
 Integration.Frmp.library/Data
