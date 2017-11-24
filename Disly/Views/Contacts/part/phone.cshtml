@@ -1,0 +1,38 @@
+﻿@model ContatcsViewModel
+<div class="filals-list">
+    @if (Model.Structures != null)
+    {
+        foreach (var item in Model.Structures)
+        {
+            <div class="filals-list_it">
+                <a class="filals-list_it_title" href="/structure/@item.Num">@item.Title</a>
+                <div class="contact_info_it">
+                    @if (item.Departments != null && item.Departments.Count() > 0)
+                    {
+                        foreach (var dep in item.Departments)
+                        {
+                                                    <!-- не выводим название департамента, если он ОВП -->
+                            if (!item.Ovp)
+                            {
+                                <div class="department_name">
+                                    <a href="/structure/@item.Num/@dep.Id">
+                                        @dep.Title
+                                    </a>
+                                </div>
+                            }
+                            if (dep.Phones != null && dep.Phones.Count() > 0)
+                            {
+                                foreach (var phone in dep.Phones)
+                                {
+                                    <div><span><strong>@phone.Label:</strong> </span>@phone.Value</div>
+                                }
+                            }
+                        }
+                    }
+                </div>
+            </div>
+        }
+    }
+
+
+</div>

@@ -257,7 +257,6 @@ namespace cms.dbase
                         FrontSection = s.f_front_section
                     }).First();
 
-
                     return data;
                 }
                 return null;
@@ -1242,6 +1241,41 @@ namespace cms.dbase
                     tran.Commit();
                     return true;
                 }
+            }
+        }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public override OrgsAdministrativ[] getAdministrativ(string domain)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var query= db.cms_sitess.Where(w => w.c_alias == domain);
+                if (query.Any())
+                {
+                    var data = query.Single();
+                    if (data.c_content_type == "org")
+                    {
+                        var adm = db.content_orgs_adminstrativs.Where(w => w.f_org == data.f_content);
+                        if (adm.Any())
+                        {
+                            return adm
+                                .OrderBy(o=>o.n_sort)
+                                .Select(s => new OrgsAdministrativ() {
+                                        Surname=s.c_surname,
+                                        Name=s.c_name,
+                                        Patronymic=s.c_patronymic,
+                                        Phone=s.c_phone,
+                                        Photo=new Photo {Url= s.c_photo}
+                                    }).ToArray();
+                        }
+                    }
+
+                }
+                return null;
             }
         }
     }
