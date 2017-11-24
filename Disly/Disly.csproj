@@ -129,11 +129,12 @@
     </Content>
     <Content Include="Areas\Admin\Views\Feedbacks\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Feedbacks\Item.cshtml" />
-    <Content Include="Content\css\core\style.css" />
+    <Content Include="Content\css\common.css" />
     <Content Include="Content\css\styles_popUp.css" />
     <Content Include="Content\css\styles.css" />
     <Content Include="Content\css\styles_login.css" />
     <Content Include="Content\css\styles_old.css" />
+    <Content Include="Content\css\theme\first.css" />
     <Content Include="Content\decor\chuvashia\bg.png" />
     <Content Include="Content\decor\chuvashia\chuvashia-logo.png" />
     <Content Include="Content\decor\chuvashia\favicon.ico" />
@@ -497,6 +498,7 @@
     <Content Include="Content\plugins\select2\select2.full.min.js" />
     <Content Include="Content\plugins\select2\select2.js" />
     <Content Include="Content\plugins\select2\select2.min.js" />
+    <Content Include="gulpfile.js" />
     <Content Include="test.html" />
     <Content Include="scripts\cms\disly_5_popup.js" />
     <Content Include="scripts\cms\disly_5_login.js" />
@@ -780,6 +782,9 @@
     <Content Include="Areas\Admin\Views\Vote\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Vote\Item.cshtml" />
     <Content Include="Areas\Admin\Views\Orgs\Administrativ.cshtml" />
+    <None Include=".bin\git.cmd" />
+    <None Include=".bin\node.cmd" />
+    <None Include=".bin\npm.cmd" />
     <None Include="Content\plugins\datatables\i18n\ru.json" />
     <Content Include="Content\plugins\tinymce\langs\readme.md" />
     <Content Include="Content\plugins\tinymce\skins\lightgray\fonts\tinymce-small.eot" />
@@ -788,6 +793,8 @@
     <Content Include="Content\plugins\tinymce\skins\lightgray\fonts\tinymce.eot" />
     <Content Include="Content\plugins\tinymce\skins\lightgray\fonts\tinymce.ttf" />
     <Content Include="Content\plugins\tinymce\skins\lightgray\fonts\tinymce.woff" />
+    <Content Include="Content\css\theme\first.less" />
+    <Content Include="package.json" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\services\Pager.cshtml" />

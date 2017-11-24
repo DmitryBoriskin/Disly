@@ -17,10 +17,13 @@
     <link href="/Content/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet">    
     <link href="~/Content/plugins/select2/css/select2.css" rel="stylesheet">
     <link href="~/Content/plugins/select2/css/select2_custom.css" rel="stylesheet">
+
+    <link href="~/Content/css/common.css" rel="stylesheet" />
+    <link href="~/Content/css/theme/first.css" rel="stylesheet" />
+
     
-    <link href="~/Content/decor/first/main.css" rel="stylesheet" />
-    <link href="~/Content/decor/first/color.css" rel="stylesheet" />
-    <link href="~/Content/css/core/style.css" rel="stylesheet" />
+    @*<link href="~/Content/decor/first/main.css" rel="stylesheet" />
+    <link href="~/Content/decor/first/color.css" rel="stylesheet" />*@    
 
     <script type="text/javascript" src="/Content/plugins/jquery/jquery.js"></script>
     <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU"></script>
@@ -39,21 +42,23 @@
             <div class="row">
                 <div class="col-md-8">
                     <a href="/" class="media">
-                        <div class="media-left">
-                            @if (Model.SitesInfo.Logo != null)
+                        
+                            @if (Model.SitesInfo.Logo.Url != null)
                             {
-                                <img src="@Model.SitesInfo.Logo.Url" />
+                                <div class="media-left">
+                                    <img src="@Model.SitesInfo.Logo.Url" />
+                                </div>                                    
                             }
-                        </div>
-                        <div class="media-body">
-                                @if (Model != null && Model.SitesInfo != null)
-                                {
-                                    <h4 class="media-heading">
-                                        @Model.SitesInfo.LongTitle
-                                </h4>
-                                }
-                        </div>
-                    </a>
+
+                                    <div class="media-body">
+                                        @if (Model != null && Model.SitesInfo != null)
+                                        {
+                                            <h4 class="media-heading">
+                                                @Model.SitesInfo.LongTitle
+                                            </h4>
+                                        }
+                                    </div>
+</a>
                 </div>
                 <div class="col-md-4 right_section">
                     <ul class="nav navbar-nav navbar-right">
