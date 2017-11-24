@@ -99,7 +99,10 @@ namespace cms.dbModel.entity
         /// Структурные подразделения, входящие в организацию
         /// </summary>
         public StructureModel[] Structure { get; set; }
-
+        /// <summary>
+        /// Административный персонал, входящий в организацию
+        /// </summary>
+        public OrgsAdministrativ[] Administrativ { get; set; }
         /// <summary>
         /// Домен
         /// </summary>
@@ -434,6 +437,24 @@ namespace cms.dbModel.entity
         /// </summary>
         public double? GeopointY { get; set; }
     }
+
+    /// <summary>
+    /// административный персонал организации
+    /// </summary>
+    public class OrgsAdministrativ
+    {
+        public Guid id { get; set; }
+        public Guid OrgId { get; set; }
+        public string Surname { get; set; }
+        public string Name { get; set; }
+        public string Patronymic { get; set; }
+        //public string Photo { get; set; }
+        public string Phone { get; set; }
+        public string Post { get; set; }
+        public string Text { get; set; }
+        public Photo Photo { get; set; }
+    }
+
 
 #warning Избавиться от моделей ниже
     /// <summary>

@@ -1,0 +1,43 @@
+﻿@model OrgsViewModel
+@{
+    string fileName = (Model.AdministrativItem != null && Model.AdministrativItem.Photo != null) ? Model.AdministrativItem.Photo.Name : string.Empty;
+    string fileSize = (Model.AdministrativItem != null && Model.AdministrativItem.Photo != null) ? Model.AdministrativItem.Photo.Size : string.Empty;
+    string fileUrl = (Model.AdministrativItem != null && Model.AdministrativItem.Photo != null) ? Model.AdministrativItem.Photo.Url : string.Empty;
+    string orgid = Request.Params["orgid"] != null ? Request.Params["orgid"] : ViewBag.OrgId;
+}
+
+@if (Model.UserResolution.Write)
+{
+    <div class="content">
+        <h1>@ViewBag.Title</h1>
+        @Html.Partial("part/bread")
+        @Html.Hidden("orgid", orgid)
+        @Html.TextBoxFor(m => m.AdministrativItem.Surname, new { required = "", type = "text", maxlength = "64", title = "Фамилия" })               
+        @Html.TextBoxFor(m => m.AdministrativItem.Name, new { required = "", type = "text", maxlength = "64", title = "Имя" })
+        @Html.TextBoxFor(m => m.AdministrativItem.Patronymic, new {type = "text", maxlength = "64", title = "Отчество" })
+        @Html.TextBox("upload", null, new { type = "file", title = "Изображение:", data_name = fileName, data_size = fileSize, data_url = fileUrl, accept = ".jpg,.jpeg,.png,.gif" })
+        @Html.TextBoxFor(m => m.AdministrativItem.Photo.Url, new { type = "hidden", value = fileUrl })
+        @Html.TextBoxFor(m => m.AdministrativItem.Post, new { type = "text", maxlength = "128", title = "Должность" })
+        @Html.TextBoxFor(m => m.AdministrativItem.Phone, new { type = "text", maxlength = "128", title = "Телефон" })      
+        @Html.TextAreaFor(m => m.AdministrativItem.Text, new { type = "editor", title = "Дополнительная информация", height = "150" })
+    </div>
+    <div class="dop_info-block">
+        <div class="dop-caption">Дополнительно</div>
+    </div>
+}
+else
+{
+    <div class="content"><p>У вас недостаточно прав.</p></div>
+}
+
+<div class="buttons">
+    @if ((Model.Item != null && Model.UserResolution.Change) || (Model.Item == null && Model.UserResolution.Write))
+    {
+        <button type="submit" name="action" value="save-adminiatrativ-btn" data-primary="true" class="button icon-create">Сохранить</button>
+    }
+    @if (Model.AdministrativItem != null && Model.UserResolution.Delete)
+    {
+        <button type="submit" name="action" value="delete-structure-btn" data-action="delete" class="button icon-delete">Удалить</button>
+    }
+    <button type="submit" name="action" value="cancel-adminiatrativ-btn" data-action="cancel" class="button icon-cancel">Назад</button>
+</div>

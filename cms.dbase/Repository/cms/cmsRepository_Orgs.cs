@@ -503,6 +503,7 @@ namespace cms.dbase
             }
         }
 
+
         /// <summary>
         /// Получаем структурное подразделение
         /// </summary>
@@ -989,6 +990,24 @@ namespace cms.dbase
                     MyBread.Push(new Breadcrumbs
                     {
                         Title = data.c_title,
+                        Url = "/admin/orgs/structure/" + data.id
+                    });
+                }
+                #endregion
+                #region administrativ
+                if (type == "administrativ")
+                {
+                    var data = db.content_orgs_adminstrativs.Where(w => w.id == id).FirstOrDefault();
+                    var Parent = db.content_orgss.Where(w => w.id == data.f_org).FirstOrDefault();
+
+                    MyBread.Push(new Breadcrumbs
+                    {
+                        Title = Parent.c_title,
+                        Url = "/admin/orgs/item/" + Parent.id
+                    });
+                    MyBread.Push(new Breadcrumbs
+                    {
+                        Title = data.c_surname+" "+data.c_name,
                         Url = "/admin/orgs/structure/" + data.id
                     });
                 }
@@ -1486,6 +1505,126 @@ namespace cms.dbase
 
                 if (!data.Any()) return null;
                 else return data.ToArray();
+            }
+        }
+        /// <summary>
+        /// Административный персонал организации
+        /// </summary>
+        /// <param name="id">идентификатор организации</param>
+        /// <returns></returns>
+        public override OrgsAdministrativ[] getAdministrativList(Guid id)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var query = db.content_orgs_adminstrativs.Where(w => w.f_org == id).AsQueryable();
+                if (query.Any())
+                {
+                    query = query.OrderBy(o => o.n_sort);
+                    return query
+                                .Select(s=>new OrgsAdministrativ() {
+                                        id=s.id,
+                                        Surname=s.c_surname,
+                                        Name=s.c_name,
+                                        Patronymic=s.c_patronymic,
+                                        Photo = new Photo { Url=s.c_photo}
+                                })
+                                .ToArray();
+                }
+                return null;
+            }
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public  override OrgsAdministrativ getAdministrativ(Guid id)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var query = db.content_orgs_adminstrativs
+                              .Where(w => w.id == id)
+                              .Select(s => new OrgsAdministrativ {
+                                  id=s.id,
+                                  Surname=s.c_surname,
+                                  Name=s.c_name,
+                                  Patronymic=s.c_patronymic,
+                                  Phone=s.c_phone,
+                                  Photo=new Photo { Url=s.c_photo},
+                                  Post=s.c_post,
+                                  Text=s.c_text,
+                                  OrgId=s.f_org
+                              });
+                if (query.Any())
+                {
+                    return query.Single();
+                }
+                return null;
+            }
+        }
+
+        public override bool insAdministrativ(Guid id, OrgsAdministrativ ins)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                using (var tran = db.BeginTransaction())
+                {
+                    var queryMaxSort = db.content_orgs_adminstrativs
+                    .Where(w => w.f_org == ins.OrgId)
+                    .Select(s => s.n_sort);
+
+                    int maxSort = queryMaxSort.Any() ? queryMaxSort.Max() + 1 : 1;
+
+                    db.content_orgs_adminstrativs
+                        .Value(v => v.id, id)
+                      .Value(v => v.c_surname, ins.Surname)
+                      .Value(v => v.c_name, ins.Name)
+                      .Value(v => v.c_patronymic, ins.Patronymic)
+                      .Value(v => v.c_phone, ins.Phone)                      
+                      .Value(v => v.c_photo, ins.Photo != null ? ins.Photo.Url : null)
+                      .Value(v => v.c_post, ins.Post)
+                      .Value(v => v.c_text, ins.Text)
+                      .Value(v => v.f_org, ins.OrgId)
+                      .Value(v => v.n_sort, maxSort)
+                      .Insert();
+                    tran.Commit();
+                }                    
+
+                return true;
+            }
+        }
+        public override bool updAdministrativ(Guid id, OrgsAdministrativ upd)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var data = db.content_orgs_adminstrativs.Where(w => w.id == id);
+                if (data.Any())
+                {
+                    data.Set(s => s.c_surname, upd.Surname)
+                        .Set(s => s.c_name, upd.Name)
+                        .Set(s => s.c_patronymic, upd.Patronymic)
+                        .Set(s => s.c_phone, upd.Phone)
+                        .Set(s => s.c_photo, upd.Photo.Url)
+                        .Set(s => s.c_post, upd.Post)
+                        .Set(s => s.c_text, upd.Text)
+                        .Update();
+                    return true;
+                }
+                return false;
+            }
+        }
+        public override bool delAdministrativ(Guid id)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var data = db.content_orgs_adminstrativs.Where(w => w.id == id);
+                if (data.Any())
+                {
+                    data.Delete();
+                    return true;
+                }
+                return false;
+
             }
         }
     }

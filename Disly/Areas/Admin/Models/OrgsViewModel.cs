@@ -51,5 +51,9 @@ namespace Disly.Areas.Admin.Models
         /// Типы организаций
         /// </summary>
         public OrgType[] Types { get; set; }
+        /// <summary>
+        /// административный персонал
+        /// </summary>
+        public  OrgsAdministrativ AdministrativItem { get; set; }
     }
 }
