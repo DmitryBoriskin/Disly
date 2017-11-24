@@ -29,6 +29,20 @@ namespace Disly
                 defaults: new { controller = "RedirectRegistry", action = "Index", id = UrlParameter.Optional }
             );
 
+            // карта сайта
+            routes.MapRoute(
+               name: "MapSite",
+               url: "MapSite/",
+               defaults: new { controller = "MapSite", action = "Index" }
+            );
+
+            // лпу
+            routes.MapRoute(
+               name: "LPU",
+               url: "lpu/{action}/{*id}",
+               defaults: new { controller = "LPU", action = "Index", id = UrlParameter.Optional }
+            );
+
             //голосование
             routes.MapRoute(
                name: "vote",
@@ -137,14 +151,13 @@ namespace Disly
                defaults: new { controller = "Page", action = "Index", path = UrlParameter.Optional }
                //constraints: new { path = @"\d{6}" }
             );
-
-
+            
             routes.MapRoute(
                 name: "Service",
                 url: "Service/{action}/{*id}",
                 defaults: new { controller = "Service", action = "Index", id = UrlParameter.Optional }
              );
-            
+
             routes.MapRoute(
                 name: "default",
                 url: "{controller}/{action}/{id}",

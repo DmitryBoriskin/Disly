@@ -165,6 +165,30 @@ namespace cms.dbase
         }
 
         /// <summary>
+        /// Получим список элементов карты сайта для контроллера
+        /// </summary>
+        /// <param name="domain"></param>
+        /// <returns></returns>
+        public override SiteMapModel[] getMapSiteList(string domain)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var query = db.content_sitemaps
+                    .Where(w => w.f_site.Equals(domain))
+                    .Where(w => !w.b_disabled)
+                    .Select(s => new SiteMapModel
+                    {
+                        Title = s.c_title,
+                        Path = s.c_path,
+                        Alias = s.c_alias
+                    });
+
+                if (!query.Any()) return null;
+                return query.ToArray();
+            }
+        }
+
+        /// <summary>
         /// Получение групп меню для элемента карты сайта
         /// </summary>
         /// <param name="id">Идентификатор карты сайта</param>
@@ -1314,6 +1338,72 @@ namespace cms.dbase
                         join o in db.content_orgss on s.f_content equals o.id
                         where s.c_alias.Equals(domain)
                         select o.f_oid).SingleOrDefault();
+            }
+        }
+
+        /// <summary>
+        /// Получаем список типов ЛПУ
+        /// </summary>
+        /// <returns></returns>
+        public override OrgType[] getOrgTypes()
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var query = db.content_orgs_typess
+                    .Where(w => w.n_sort != 0 && w.n_sort != 1000)
+                    .OrderBy(o => o.n_sort)
+                    .Select(s => new OrgType
+                    {
+                        Id = s.id,
+                        Title = s.c_title,
+                        Sort = s.n_sort
+                    });
+
+                if (!query.Any()) return null;
+                return query.ToArray();
+            }
+        }
+
+        /// <summary>
+        /// Получаем список ЛПУ по типу
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public override OrgsModel[] getOrgModels(Guid type)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var query = (from o in db.content_orgss
+                             join t in db.content_orgs_types_links on o.id equals t.f_org
+                             where t.f_type.Equals(type)
+                             select new OrgsModel
+                             {
+                                 Id = o.id,
+                                 Title = o.c_title,
+                                 Phone = o.c_phone,
+                                 PhoneReception = o.c_phone_reception,
+                                 Fax = o.c_fax,
+                                 Email = o.c_email,
+                                 Address = o.c_adress
+                             });
+
+                if (!query.Any()) return null;
+                return query.ToArray();
+            }
+        }
+
+        /// <summary>
+        /// Получаем название типа ЛПУ
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public override string getOrgTypeName(Guid id)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                return db.content_orgs_typess
+                    .Where(w => w.id.Equals(id))
+                    .Select(s => s.c_title).SingleOrDefault();
             }
         }
     }

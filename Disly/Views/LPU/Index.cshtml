@@ -1,0 +1,18 @@
+﻿@model LPUViewModel
+
+<div class="container">
+    @Html.Partial("services/breadcrumbs")
+    <h1>ЛПУ Чувашии</h1>
+
+    @if (Model.OrgTypes != null)
+    {
+        <div class="row">
+            @foreach (var item in Model.OrgTypes)
+            {
+                <div class="col-md-6">
+                    <a href="/lpu/list/@item.Id">@item.Title</a>
+                </div>
+            }
+        </div>
+    }
+</div>

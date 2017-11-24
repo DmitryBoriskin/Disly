@@ -1,0 +1,20 @@
+﻿@model MapSiteViewModel
+
+<div class="container">
+    @Html.Partial("services/breadcrumbs")
+    <h1>Карта сайта</h1>
+
+    @if (Model.List != null)
+    {
+        <ul>
+            @foreach (var item in Model.List.Where(w => w.Path.Equals("/")))
+            {
+                string link = item.Path + item.Alias;
+
+                <li>
+                    <a href="@link">@item.Title</a>
+                </li>
+            }
+        </ul>
+    }
+</div>

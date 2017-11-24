@@ -10,6 +10,7 @@ namespace cms.dbModel
         public abstract string getView(string siteId, string siteSection);
         public abstract SitesModel getSiteInfo(string domain);
         public abstract SiteMapModel[] getSiteMapList(string domain);
+        public abstract SiteMapModel[] getMapSiteList(string domain);
         public abstract string[] getSiteMapGroupMenu(Guid id);
         public abstract BannersModel[] getBanners(string domain);
 
@@ -49,5 +50,10 @@ namespace cms.dbModel
 
 
         public abstract OrgsAdministrativ[] getAdministrativ(string domain);
+
+        // лпу
+        public abstract OrgType[] getOrgTypes();
+        public abstract OrgsModel[] getOrgModels(Guid type);
+        public abstract string getOrgTypeName(Guid id);
     }
 }
