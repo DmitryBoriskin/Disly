@@ -1628,5 +1628,52 @@ namespace cms.dbase
 
             }
         }
+
+
+        public override bool permit_OrgsAdminstrativ(Guid id, Guid OrgId, int num)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                //текущее значение элемента чей приоритет меняется
+                var data = db.content_orgs_adminstrativs
+                    .Where(w => w.id.Equals(id))
+                    .Select(s => new OrgsAdministrativ
+                    {
+                        Sort = s.n_sort,
+                        OrgId = s.f_org
+                    });
+
+                if (data.Any())
+                {
+                    var query = data.FirstOrDefault();
+                    if (num > query.Sort)
+                    {
+                        db.content_orgs_adminstrativs
+                            .Where(w => w.f_org.Equals(OrgId))
+                            .Where(w => w.n_sort > query.Sort && w.n_sort <= num)
+                            .Set(u => u.n_sort, u => u.n_sort - 1)
+                            .Update();
+                    }
+                    else
+                    {
+                        db.content_orgs_adminstrativs
+                            .Where(w => w.f_org.Equals(OrgId))
+                            .Where(w => w.n_sort < query.Sort && w.n_sort >= num)
+                            .Set(u => u.n_sort, u => u.n_sort + 1)
+                            .Update();
+                    }
+                    db.content_orgs_adminstrativs
+                        .Where(w => w.id.Equals(id))
+                        .Set(u => u.n_sort, num)
+                        .Update();
+
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+        }
     }
 }

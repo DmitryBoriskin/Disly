@@ -255,23 +255,46 @@ $(document).ready(function () {
     load_page();
 
     // Добавляем возможность сортировки
-    $('#sorting_element').click(function () {
-        if ($('.sort_list').hasClass('sort_list_on')) {
+    $('#sorting_element,.sorting_element_on').click(function () {
+
+        var SortList = $(this).parent().parent().parent().find('.sort_list');
+
+        if (SortList.hasClass('sort_list_on')) {
             location.reload();
         }
-        $('.sort_list').addClass('sort_list_on');
+        SortList.addClass('sort_list_on');
 
-        $('.sort_list').find('tbody').addClass('sortable');
+        SortList.find('tbody').addClass('sortable');
 
         // сортировка для нетабличных записей
         if ($('.sort_parent').length > 0) {
-            $('.sort_list').find('.sort_parent').addClass('sortable');
+            SortList.find('.sort_parent').addClass('sortable');
         }
 
 
         $('.sortable').each(function () {
             Sorting_init($(this));
         });
+
+        //if ($('.sort_list').hasClass('sort_list_on')) {
+        //    location.reload();
+        //}
+        //$('.sort_list').addClass('sort_list_on');
+
+        //$('.sort_list').find('tbody').addClass('sortable');
+
+        //// сортировка для нетабличных записей
+        //if ($('.sort_parent').length > 0) {
+        //    $('.sort_list').find('.sort_parent').addClass('sortable');
+        //}
+
+
+        //$('.sortable').each(function () {
+        //    Sorting_init($(this));
+        //});
+
+
+
     });
 
     //создание сайта - выбор типов создаваемого сайта

@@ -71,6 +71,7 @@
                     </div>
                     <div class="col-sm-7">
                         <a class="button icon-create green pull-right" href="/admin/orgs/administrativ/@Guid.NewGuid()?orgid=@Model.Item.Id">Добавить</a>
+                        <a class="button icon-sort pull-right sorting_element_on" style="max-width:150px;" data-action="noPreloader-accept" title="Добавляет возможность сортировки элементов списка">Сортировать</a>
                     </div>
                 </div>
 
@@ -84,7 +85,7 @@
                                     <th>ФИО</th>
                                 </tr>
                             </thead>
-                            <tbody data-service="/Admin/Services/ChangePermit?group=orgs_administrativ">
+                            <tbody data-service="/Admin/Services/ChangePermit?group=orgs_administrativ&menuSort=@Model.Item.Id">
                                 @foreach (var item in Model.Item.Administrativ)
                                 {
                                     <tr class="ui-sortable-handle" data-id="@item.id">
