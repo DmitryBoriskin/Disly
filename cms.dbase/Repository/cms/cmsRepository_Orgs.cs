@@ -226,7 +226,7 @@ namespace cms.dbase
                         GeopointY = s.n_geopoint_y,
                         Structure = getStructureList(s.id),
                         Administrativ= getAdministrativList(s.id),
-                        Frmp = s.f_frmp,
+                        Frmp = s.f_oid,
                         Types = types
                     });
 
@@ -274,7 +274,7 @@ namespace cms.dbase
                             .Value(s => s.c_adress, model.Address)
                             .Value(s => s.n_geopoint_x, model.GeopointX)
                             .Value(s => s.n_geopoint_y, model.GeopointY)
-                            .Value(s => s.f_frmp, model.Frmp)
+                            .Value(s => s.f_oid, model.Frmp)
                             .Insert();
 
                         // обновляем типы мед. учреждений
@@ -350,7 +350,7 @@ namespace cms.dbase
                             .Set(s => s.c_adress, model.Address)
                             .Set(s => s.n_geopoint_x, model.GeopointX)
                             .Set(s => s.n_geopoint_y, model.GeopointY)
-                            .Set(s => s.f_frmp, model.Frmp)
+                            .Set(s => s.f_oid, model.Frmp)
                             .Update();
 
                         // обновляем типы мед. учреждений
@@ -1553,7 +1553,8 @@ namespace cms.dbase
                                   Phone=s.c_phone,
                                   Photo=new Photo { Url=s.c_photo},
                                   Post=s.c_post,
-                                  Text=s.c_text
+                                  Text=s.c_text,
+                                  OrgId=s.f_org
                               });
                 if (query.Any())
                 {
@@ -1576,6 +1577,7 @@ namespace cms.dbase
                     int maxSort = queryMaxSort.Any() ? queryMaxSort.Max() + 1 : 1;
 
                     db.content_orgs_adminstrativs
+                        .Value(v => v.id, id)
                       .Value(v => v.c_surname, ins.Surname)
                       .Value(v => v.c_name, ins.Name)
                       .Value(v => v.c_patronymic, ins.Patronymic)
@@ -1603,13 +1605,27 @@ namespace cms.dbase
                         .Set(s => s.c_name, upd.Name)
                         .Set(s => s.c_patronymic, upd.Patronymic)
                         .Set(s => s.c_phone, upd.Phone)
-                        .Set(s => s.c_photo, upd.Photo != null ? upd.Photo.Url : null)
+                        .Set(s => s.c_photo, upd.Photo.Url)
                         .Set(s => s.c_post, upd.Post)
                         .Set(s => s.c_text, upd.Text)
                         .Update();
                     return true;
                 }
                 return false;
+            }
+        }
+        public override bool delAdministrativ(Guid id)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var data = db.content_orgs_adminstrativs.Where(w => w.id == id);
+                if (data.Any())
+                {
+                    data.Delete();
+                    return true;
+                }
+                return false;
+
             }
         }
     }

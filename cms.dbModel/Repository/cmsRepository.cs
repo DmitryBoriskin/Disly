@@ -157,6 +157,7 @@ namespace cms.dbModel
         public abstract OrgsAdministrativ getAdministrativ(Guid id);
         public abstract bool insAdministrativ(Guid id, OrgsAdministrativ ins);
         public abstract bool updAdministrativ(Guid id, OrgsAdministrativ upd);
+        public abstract bool delAdministrativ(Guid id);
 
         //Feedbacks
         public abstract FeedbacksList getFeedbacksList(FilterParams filtr);

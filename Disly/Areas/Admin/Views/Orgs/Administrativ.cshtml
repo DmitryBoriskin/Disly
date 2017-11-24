@@ -16,6 +16,7 @@
         @Html.TextBoxFor(m => m.AdministrativItem.Name, new { required = "", type = "text", maxlength = "64", title = "Имя" })
         @Html.TextBoxFor(m => m.AdministrativItem.Patronymic, new {type = "text", maxlength = "64", title = "Отчество" })
         @Html.TextBox("upload", null, new { type = "file", title = "Изображение:", data_name = fileName, data_size = fileSize, data_url = fileUrl, accept = ".jpg,.jpeg,.png,.gif" })
+        @Html.TextBoxFor(m => m.AdministrativItem.Photo.Url, new { type = "hidden", value = fileUrl })
         @Html.TextBoxFor(m => m.AdministrativItem.Post, new { type = "text", maxlength = "128", title = "Должность" })
         @Html.TextBoxFor(m => m.AdministrativItem.Phone, new { type = "text", maxlength = "128", title = "Телефон" })      
         @Html.TextAreaFor(m => m.AdministrativItem.Text, new { type = "editor", title = "Дополнительная информация", height = "150" })

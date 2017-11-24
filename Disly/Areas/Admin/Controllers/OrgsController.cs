@@ -316,8 +316,8 @@ namespace Disly.Areas.Admin.Controllers
         {
             ErrorMassege userMassage = new ErrorMassege();
             userMassage.title = "Информация";
-            Guid ParentOrgId= _cmsRepository.getStructure(id).OrgId;            
-            if (_cmsRepository.deleteStructure(id))
+            Guid ParentOrgId= _cmsRepository.getAdministrativ(id).OrgId;            
+            if (_cmsRepository.delAdministrativ(id))
             {
                 userMassage.info = "Запись Удалена";
                 userMassage.buttons = new ErrorMassegeBtn[]{
@@ -755,12 +755,18 @@ namespace Disly.Areas.Admin.Controllers
         public ActionResult Administrativ(Guid Id)
         {
             ViewBag.Title = "Административный персонал";
+            var OrgId = Request.Params["orgid"];
             model.AdministrativItem = _cmsRepository.getAdministrativ(Id);
-            model.BreadCrumbOrg = _cmsRepository.getBreadCrumbOrgs(Id, ViewBag.ActionName);
+            if (OrgId == null)
+            {
+                model.BreadCrumbOrg = _cmsRepository.getBreadCrumbOrgs(Id, ViewBag.ActionName);
+            }
+            
             return View(model);
         }
 
         [HttpPost]
+        [ValidateInput(false)]
         [MultiButton(MatchFormKey = "action", MatchFormValue = "save-adminiatrativ-btn")]
         public ActionResult Administrativ(Guid Id, OrgsViewModel back_model, HttpPostedFileBase upload)
         {
@@ -807,7 +813,7 @@ namespace Disly.Areas.Admin.Controllers
                     };
 
                     back_model.AdministrativItem.Photo = photo;
-                }
+                }                
                 #endregion
 
                 model.AdministrativItem = _cmsRepository.getAdministrativ(Id);
@@ -840,6 +846,8 @@ namespace Disly.Areas.Admin.Controllers
                     new ErrorMassegeBtn { url = "#", text = "ок", action = "false" }
                 };
             }
+
+            
             model.BreadCrumbOrg = _cmsRepository.getBreadCrumbOrgs(Id, ViewBag.ActionName);
             return View(model);
         }
@@ -851,7 +859,7 @@ namespace Disly.Areas.Admin.Controllers
         {
             try
             {
-                var data = _cmsRepository.getStructure(id);
+                var data = _cmsRepository.getAdministrativ(id);
                 if (data != null)
                     return Redirect(StartUrl + "/item/" + data.OrgId + Request.Url.Query);
                 else
@@ -862,6 +870,34 @@ namespace Disly.Areas.Admin.Controllers
                 return Redirect(StartUrl);
             }
         }
+        [HttpPost]
+        [ValidateInput(false)]
+        [MultiButton(MatchFormKey = "action", MatchFormValue = "delete-adminiatrativ-btn")]
+        public ActionResult DeleteAdministrative(Guid id)
+        {
+            ErrorMassege userMassage = new ErrorMassege();
+            userMassage.title = "Информация";
+            Guid ParentOrgId= _cmsRepository.getAdministrativ(id).OrgId;
+            if (_cmsRepository.delAdministrativ(id)) //, AccountInfo.id, RequestUserInfo.IP
+            {
+                userMassage.info = "Запись Удалена";
+                userMassage.buttons = new ErrorMassegeBtn[]{
+                    new ErrorMassegeBtn { url = "#", text = "ок", action = "false" },
+                    new ErrorMassegeBtn { url = "/admin/item/"+ParentOrgId, text = "Вернуться в список"}
+                };
+            }
+            else
+            {
+                userMassage.info = "Произошла ошибка";
+                userMassage.buttons = new ErrorMassegeBtn[]{
+                    new ErrorMassegeBtn { url = "#", text = "ок", action = "false" }
+                };
+            }
+            model.ErrorInfo = userMassage;
+            return View("item", model);
+
+        }
+
         #endregion
     }
 }
