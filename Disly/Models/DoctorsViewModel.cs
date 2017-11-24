@@ -32,5 +32,10 @@ namespace Disly.Models
         /// Идентификатор организации
         /// </summary>
         public string Oid { get; set; }
+
+        /// <summary>
+        /// Врачи для регистрации
+        /// </summary>
+        public Doctor[] DoctorsRegistry { get; set; }
     }
 }

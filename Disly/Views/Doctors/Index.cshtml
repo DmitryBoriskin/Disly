@@ -132,7 +132,16 @@
                                                 }
                                             }
                                         </td>
-                                        <td><a href="/RedirectRegistry/Doctors/@item.Id/?oid=@Model.Oid">Расписание</a></td>
+                                        <td>
+                                            @if (item.IsRedirectUrl)
+                                            {
+                                                <a target="_blank" href="/RedirectRegistry/Doctors/@item.Id/?oid=@Model.Oid">Расписание</a>
+                                            }
+                                            else
+                                            {
+                                                <p>По графику</p>
+                                            }
+                                        </td>
                                     </tr>
                                 }
                             </table>

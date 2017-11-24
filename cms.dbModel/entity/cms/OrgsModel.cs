@@ -361,6 +361,11 @@ namespace cms.dbModel.entity
         public string FIO { get; set; }
 
         /// <summary>
+        /// СНИЛС
+        /// </summary>
+        public string SNILS { get; set; }
+
+        /// <summary>
         /// Привязка к организации
         /// </summary>
         public Guid IdLinkOrg { get; set; }
@@ -394,6 +399,11 @@ namespace cms.dbModel.entity
         /// Список должностей сотрудников
         /// </summary>
         public IEnumerable<PeoplePost> Posts { get; set; }
+
+        /// <summary>
+        /// Есть ли ссылка на регистрацию
+        /// </summary>
+        public bool IsRedirectUrl { get; set; }
     }
 
     /// <summary>

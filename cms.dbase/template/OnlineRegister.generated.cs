@@ -76,6 +76,9 @@ namespace cms.dbase.models
 	{
 		[Column, Nullable] public string C_FIO           { get; set; } // varchar(250)
 		[Column, Nullable] public string C_SNILS         { get; set; } // varchar(11)
+		[Column, Nullable] public string C_District      { get; set; } // varchar(250)
+		[Column, Nullable] public string C_DistrictType  { get; set; } // varchar(100)
+		[Column, Nullable] public string C_DoctorSpec    { get; set; } // varchar(250)
 		[Column, Nullable] public string C_Registry_URL  { get; set; } // varchar(71)
 		[Column, Nullable] public string C_Hospital_OID  { get; set; } // varchar(128)
 		[Column, Nullable] public string C_Hospital_Name { get; set; } // varchar(200)

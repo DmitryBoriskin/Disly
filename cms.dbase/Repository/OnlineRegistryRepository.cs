@@ -23,6 +23,31 @@ namespace cms.dbase.Repository
         }
 
         /// <summary>
+        /// Получаем список врачей
+        /// </summary>
+        /// <param name="oid"></param>
+        /// <returns></returns>
+        public override Doctor[] getVDoctors(string oid)
+        {
+            using (var db = new registry(_context))
+            {
+                var query = db.V_Doctorss
+                    .Where(w => w.C_Hospital_OID.Equals(oid))
+                    .Select(s => new Doctor
+                    {
+                        FIO = s.C_FIO,
+                        SNILS = s.C_SNILS,
+                        Url = s.C_Registry_URL,
+                        HospitalOid = s.C_Hospital_OID,
+                        HospitalName = s.C_Hospital_Name
+                    });
+
+                if (!query.Any()) return null;
+                return query.ToArray();
+            }
+        }
+
+        /// <summary>
         /// Получаем список докторов
         /// </summary>
         /// <param name="oid"></param>

@@ -1,9 +1,11 @@
-﻿using cms.dbModel.entity;
+﻿using cms.dbase.Repository;
+using cms.dbModel.entity;
 using Disly.Models;
 using System;
 using System.IO;
 using System.Web.Mvc;
 using System.Xml.Serialization;
+using System.Linq;
 
 namespace Disly.Controllers
 {
@@ -12,6 +14,7 @@ namespace Disly.Controllers
         public const String Name = "Error";
         public const String ActionName_Custom = "Custom";
         private DoctorsViewModel model;
+        private OnlineRegistryRepository repoRegistry;
 
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
@@ -43,7 +46,24 @@ namespace Disly.Controllers
             model.DoctorsList = _repository.getPeopleList(filter);
             model.DepartmentsSelectList = _repository.getDeparatamentsSelectList(Domain);
             model.PeoplePosts = _repository.getPeoplePosts(Domain);
+
+            #region Редирект на регистрацию
             model.Oid = _repository.getOid(Domain);
+            repoRegistry = new OnlineRegistryRepository("registryConnection");
+            model.DoctorsRegistry = repoRegistry.getVDoctors(model.Oid);
+            
+            if (model.DoctorsList != null)
+            {
+                foreach (var d in model.DoctorsList)
+                {
+                    d.IsRedirectUrl = model.DoctorsRegistry
+                        .Where(w => w.SNILS.Equals(d.SNILS))
+                        .Where(w => w.Url != null)
+                        .Select(s => s.Url)
+                        .Any();
+                }
+            }
+            #endregion
 
             ViewBag.SearchText = filter.SearchText;
             ViewBag.DepartGroup = filter.Group;

@@ -888,6 +888,7 @@ namespace cms.dbase
                         Id = s.Key.id,
                         FIO = s.First().p.c_surname + " " + s.First().p.c_name + " " + s.First().p.c_patronymic,
                         Photo = s.First().p.c_photo,
+                        SNILS = s.First().p.c_snils,
                         Posts = s.Select(ep2 => new PeoplePost
                         {
                             Id = ep2.ep.id,
