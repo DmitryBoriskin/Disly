@@ -16,6 +16,21 @@
         public string SNILS { get; set; }
 
         /// <summary>
+        /// Участок
+        /// </summary>
+        public string District { get; set; }
+
+        /// <summary>
+        /// Тип участка
+        /// </summary>
+        public string DistrictType { get; set; }
+
+        /// <summary>
+        /// Специализация
+        /// </summary>
+        public string Spec { get; set; }
+
+        /// <summary>
         /// Ссылка
         /// </summary>
         public string Url { get; set; }
