@@ -17,11 +17,7 @@
         .Where(w => w.MenuAlias.Equals("plate"))
         .Select(s => new
         {
-                    //Title = s.Title,
-                    //Url = !string.IsNullOrEmpty(s.Url) ? s.Url
-                    //: s.Path.Equals("/") ? s.Path + s.Alias : s.Path + "/" + s.Alias
-
-                    Path = s.Path,
+            Path = s.Path,
             Alias = s.Alias,
             Title = s.Title,
             FrontSection = s.FrontSection,
@@ -100,7 +96,7 @@
                 }
                 <div class="col-md-2">
                     <div class="slider-message-block">
-                        <a href="#">
+                        <a href="/RedirectRegistry/Hospitals/@Model.Oid">
                             <div class="slider-message blue">
                                 <div class="icon-slider-message">
                                     <span class="ti-support"></span>
@@ -148,12 +144,8 @@
                 <div class="col-md-3">
                     @if (announcements != null && announcements.Count() > 0)
                     {
-                        //var ann = announcements.ToList();
-
                         foreach (var ann in announcements.ToList()) //for (int j = 0; j < 2; j++)
                         {
-
-                            //string link = "/press/" + ann[j].Date.Year + "/" + ann[j].Date.Month + "/" + ann[j].Date.Day + "/" + ann[j].Alias;
                             string link = "/press/" + ann.Date.Year + "/" + ann.Date.Month + "/" + ann.Date.Day + "/" + ann.Alias;
 
                             <div class="module-material-item">
@@ -183,8 +175,6 @@
                 <div class="col-md-3">
                     @if (news != null && news.Count() > 0)
                     {
-                        //var n = news.ToList();
-
                         foreach (var item in news.ToList()) //for (int j = 0; j < 2; j++)
                         {
                             string link = "/press/" + item.Date.Year + "/" + item.Date.Month + "/" + item.Date.Day + "/" + item.Alias;

@@ -8,6 +8,14 @@ namespace Disly.Models
     /// </summary>
     public class HomePageViewModel : PageViewModel
     {
+        /// <summary>
+        /// Список новостей
+        /// </summary>
         public List<MaterialFrontModule> Materials { get; set; }
+
+        /// <summary>
+        /// Идентификатор организации
+        /// </summary>
+        public string Oid { get; set; }
     }
 }

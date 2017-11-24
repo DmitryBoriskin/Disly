@@ -27,5 +27,10 @@ namespace Disly.Models
         /// Список должностей
         /// </summary>
         public PeoplePost[] PeoplePosts { get; set; }
+
+        /// <summary>
+        /// Идентификатор организации
+        /// </summary>
+        public string Oid { get; set; }
     }
 }

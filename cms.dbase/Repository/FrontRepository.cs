@@ -869,10 +869,10 @@ namespace cms.dbase
                             join ep in db.content_employee_postss on pepl.f_post equals ep.id
                             join pdl in db.content_people_department_links on pol.id equals pdl.f_people into ps
                             from pdl in ps.DefaultIfEmpty()
-                            where s.c_alias.Equals(domain)                                     
-                                    && (department.Equals(Guid.Empty) || pdl.f_department.Equals(department))                  
+                            where s.c_alias.Equals(domain)
+                                    && (department.Equals(Guid.Empty) || pdl.f_department.Equals(department))
                                     && ep.b_doctor
-                                    && (string.IsNullOrWhiteSpace(search) || (p.c_surname.Contains(search) 
+                                    && (string.IsNullOrWhiteSpace(search) || (p.c_surname.Contains(search)
                                                                                 || p.c_name.Contains(search)
                                                                                 || p.c_patronymic.Contains(search)))
                                     && (specialization == 0 || pepl.f_post.Equals(specialization))
@@ -1032,6 +1032,25 @@ namespace cms.dbase
                 return query.SingleOrDefault();
             }
         }
+
+        /// <summary>
+        /// Получаем СНИЛС для редиректа
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public override string getPeopleSnils(Guid id)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var query = db.content_peoples
+                    .Where(w => w.id.Equals(id))
+                    .Select(s => s.c_snils);
+
+                if (!query.Any()) return null;
+                return query.SingleOrDefault();
+            }
+        }
+
         /// <summary>
         /// сгруппированные по структурам департменты для выпадающего спика
         /// </summary>
@@ -1110,22 +1129,23 @@ namespace cms.dbase
         }
 
 
-        public override IEnumerable<VoteModel> getVote(string domain,string Ip)
+        public override IEnumerable<VoteModel> getVote(string domain, string Ip)
         {
             using (var db = new CMSdb(_context))
             {
                 var query = db.content_votes
                             .Where(w => w.f_site == domain && w.b_disabled == false)
-                            .OrderBy(o=>o.d_date_start)
-                            .Select(s => new VoteModel() {
-                                Id=s.id,
-                                Header=s.c_header,
-                                Text=s.c_text,
-                                Type=s.b_type,
-                                DateStart=s.d_date_start,
-                                DateEnd=s.d_date_end,
-                                Answer= getVoteAnswer(s.id, Ip),
-                                ShowStatistic= ShowStatic(s.id,Ip)
+                            .OrderBy(o => o.d_date_start)
+                            .Select(s => new VoteModel()
+                            {
+                                Id = s.id,
+                                Header = s.c_header,
+                                Text = s.c_text,
+                                Type = s.b_type,
+                                DateStart = s.d_date_start,
+                                DateEnd = s.d_date_end,
+                                Answer = getVoteAnswer(s.id, Ip),
+                                ShowStatistic = ShowStatic(s.id, Ip)
                             });
 
                 if (query.Any())
@@ -1149,23 +1169,24 @@ namespace cms.dbase
                 if (data.Single().d_date_end <= DateTime.Now) return true;//если опрос завершен по дате
 
                 var _count = db.content_vote_userss.Where(w => w.f_vote == VoteId && w.c_ip == Ip).Count();
-                if (_count > 0 ) return true;//если пользователь уже принял участие в опросе
+                if (_count > 0) return true;//если пользователь уже принял участие в опросе
                 return false;
             }
         }
-        public override VoteModel getVoteItem(Guid id,string Ip)
+        public override VoteModel getVoteItem(Guid id, string Ip)
         {
             using (var db = new CMSdb(_context))
             {
                 var query = db.content_votes
                             .Where(w => w.id == id)
-                            .Select(s => new VoteModel {
+                            .Select(s => new VoteModel
+                            {
                                 Id = s.id,
                                 Header = s.c_header,
                                 Text = s.c_text,
                                 DateStart = s.d_date_start,
                                 DateEnd = s.d_date_end,
-                                Answer = getVoteAnswer(s.id,Ip),
+                                Answer = getVoteAnswer(s.id, Ip),
                                 ShowStatistic = ShowStatic(s.id, Ip)
                             });
                 if (query.Any())
@@ -1183,11 +1204,12 @@ namespace cms.dbase
             {
                 var query = db.content_vote_answerss
                             .Where(w => w.f_vote == VoteId)
-                            .OrderBy(o=>o.n_sort)
-                            .Select(s=>new VoteAnswer() {
-                                Variant=s.c_variant,
-                                id=s.id,
-                                Statistic= getVoteStat(s.id, VoteId, Ip)
+                            .OrderBy(o => o.n_sort)
+                            .Select(s => new VoteAnswer()
+                            {
+                                Variant = s.c_variant,
+                                id = s.id,
+                                Statistic = getVoteStat(s.id, VoteId, Ip)
                             });
                 if (query.Any())
                 {
@@ -1199,7 +1221,7 @@ namespace cms.dbase
         public override VoteStat getVoteStat(Guid AnswerId, Guid VoteId, string Ip)
         {
             using (var db = new CMSdb(_context))
-            {                
+            {
                 ////проверяем даны ли ранее ответы этим пользователем
                 //var spot = db.content_vote_userss.Where(w =>(w.f_vote == VoteId && w.c_ip==Ip)).FirstOrDefault();
                 //if (spot == null) return null;
@@ -1230,7 +1252,7 @@ namespace cms.dbase
                     {
                         foreach (var x in AnswerId)
                         {
-                            Guid AnswerItemId=Guid.Parse(x);
+                            Guid AnswerItemId = Guid.Parse(x);
                             db.content_vote_userss
                               .Value(v => v.c_ip, Ip)
                               .Value(v => v.f_vote, VoteId)
@@ -1276,6 +1298,22 @@ namespace cms.dbase
 
                 }
                 return null;
+            }
+        }
+
+        /// <summary>
+        /// Получаем OID организации по домену
+        /// </summary>
+        /// <param name="domain">Домен</param>
+        /// <returns></returns>
+        public override string getOid(string domain)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                return (from s in db.cms_sitess
+                        join o in db.content_orgss on s.f_content equals o.id
+                        where s.c_alias.Equals(domain)
+                        select o.f_oid).SingleOrDefault();
             }
         }
     }

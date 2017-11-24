@@ -111,7 +111,7 @@ namespace cms.dbModel.entity
         /// <summary>
         /// Идентификатор в ФРМП
         /// </summary>
-        public string Frmp { get; set; }
+        public string Oid { get; set; }
 
         /// <summary>
         /// Типы

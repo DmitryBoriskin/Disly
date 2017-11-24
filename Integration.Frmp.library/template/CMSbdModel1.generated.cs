@@ -90,10 +90,10 @@ namespace Integration.Frmp.models
 	[Table(Schema="dbo", Name="import_frmp_orgs")]
 	public partial class ImportFrmpOrgs
 	{
-		[Column(@"guid"),                  NotNull] public Guid     Guid    { get; set; } // uniqueidentifier
-		[Column(@"c_oid"),    PrimaryKey,  NotNull] public string   COid    { get; set; } // varchar(64)
-		[Column(@"c_name"),      Nullable         ] public string   CName   { get; set; } // nvarchar(512)
-		[Column(@"d_modify"),              NotNull] public DateTime DModify { get; set; } // datetime
+		[Column(@"guid"),     NotNull    ] public Guid     Guid    { get; set; } // uniqueidentifier
+		[Column(@"c_oid"),       Nullable] public string   COid    { get; set; } // varchar(64)
+		[Column(@"c_name"),      Nullable] public string   CName   { get; set; } // nvarchar(512)
+		[Column(@"d_modify"), NotNull    ] public DateTime DModify { get; set; } // datetime
 	}
 
 	[Table(Schema="dbo", Name="import_frmp_orgs_peoples")]
@@ -101,6 +101,7 @@ namespace Integration.Frmp.models
 	{
 		[Column(@"f_oid"),    NotNull] public string FOid    { get; set; } // varchar(64)
 		[Column(@"f_people"), NotNull] public Guid   FPeople { get; set; } // uniqueidentifier
+		[Column(@"f_guid"),   NotNull] public Guid   FGuid   { get; set; } // uniqueidentifier
 	}
 
 	[Table(Schema="dbo", Name="import_frmp_people_posts_link")]
@@ -147,12 +148,6 @@ namespace Integration.Frmp.models
 
 	public static partial class TableExtensions
 	{
-		public static ImportFrmpOrgs Find(this ITable<ImportFrmpOrgs> table, string COid)
-		{
-			return table.FirstOrDefault(t =>
-				t.COid == COid);
-		}
-
 		public static ImportFrmpPeoples Find(this ITable<ImportFrmpPeoples> table, Guid Id)
 		{
 			return table.FirstOrDefault(t =>

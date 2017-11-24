@@ -43,6 +43,7 @@ namespace Disly.Controllers
             model.DoctorsList = _repository.getPeopleList(filter);
             model.DepartmentsSelectList = _repository.getDeparatamentsSelectList(Domain);
             model.PeoplePosts = _repository.getPeoplePosts(Domain);
+            model.Oid = _repository.getOid(Domain);
 
             ViewBag.SearchText = filter.SearchText;
             ViewBag.DepartGroup = filter.Group;

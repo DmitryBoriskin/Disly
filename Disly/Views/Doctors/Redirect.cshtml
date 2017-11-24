@@ -1,0 +1,27 @@
+﻿@model RedirectRegistryViewModel
+<div class="container">
+    @if (Model.Doctors != null)
+    {
+        <ul>
+            @foreach (var d in Model.Doctors)
+            {
+                <li>
+                    @if (!string.IsNullOrWhiteSpace(d.Url))
+                    {
+                        <a href="@d.Url">@d.FIO</a>
+                    }
+                    else
+                    {
+                        <p>Записаться к врачу нельзя</p>
+                    }
+                </li>
+            }
+        </ul>
+    }
+    else
+    {
+        <div class="alert alert-info">
+            <strong>Записаться к врачу нельзя</strong>
+        </div>
+    }
+</div>

@@ -1086,6 +1086,7 @@ namespace cms.dbase.models
 		[Column,        Nullable] public string  c_adress          { get; set; } // nvarchar(512)
 		[Column,     NotNull    ] public int     n_sort            { get; set; } // int
 		[Column,        Nullable] public string  f_oid             { get; set; } // varchar(64)
+		[Column,        Nullable] public Guid?   f_guid            { get; set; } // uniqueidentifier
 
 		#region Associations
 

@@ -161,7 +161,7 @@ namespace Integration.Frmp.library
                         {
                             db.ImportFrmpOrgss
                                 .Value(v => v.Guid, id)
-                                .Value(v => v.COid, id.ToString())
+                                //.Value(v => v.COid, oid)
                                 .Value(v => v.CName, name)
                                 .Value(v => v.DModify, DateTime.Now)
                                 .Insert();
@@ -169,9 +169,8 @@ namespace Integration.Frmp.library
                         else
                         {
                             db.ImportFrmpOrgss
-                                //.Where(w => w.COid.Equals(org.OID))
                                 .Where(w => w.Guid.Equals(org.ID))
-                                .Where(w => w.COid.ToLower().Equals(org.ID.ToString().ToLower()))
+                                //.Where(w => w.COid.ToLower().Equals(oid))
                                 .Set(u => u.CName, name)
                                 .Set(u => u.DModify, DateTime.Now)
                                 .Update();
@@ -257,8 +256,8 @@ namespace Integration.Frmp.library
                     DateTime? birthDate = employees[i].Birthdate; // дата рождения
                     DateTime? modifyDate = employees[i].ChangeTime; // дата изменения записи
                     string snilsToCheck = employees[i].SNILS; // СНИЛС для проверки
-                    //string orgOid = employees[i].UZ.OID; // идентификатор организации
-                    string orgOid = employees[i].UZ.ID.ToString(); // идентификатор организации
+                    Guid orgOid = employees[i].UZ.ID; // идентификатор организации
+                    //string orgOid = employees[i].UZ.ID.ToString(); // идентификатор организации
 
                     // проверка валидности СНИЛС
                     string snils = string.Empty;
@@ -289,7 +288,7 @@ namespace Integration.Frmp.library
 
                         // записываем данные в таблицу dbo.import_frmp_orgs_peoples
                         var queryLink = db.ImportFrmpOrgsPeopless
-                                .Where(w => w.FOid.Equals(orgOid))
+                                .Where(w => w.FGuid.Equals(orgOid))
                                 .Where(w => w.FPeople.Equals(id));
 
                         // проверим существует ли связь сотрудника с организацией
@@ -297,7 +296,8 @@ namespace Integration.Frmp.library
                         if (!isLinkExist)
                         {
                             db.ImportFrmpOrgsPeopless
-                                .Value(v => v.FOid, orgOid)
+                                //.Value(v => v.FOid, orgOid)
+                                .Value(v => v.FGuid, orgOid)
                                 .Value(v => v.FPeople, id)
                                 .Insert();
                         }
