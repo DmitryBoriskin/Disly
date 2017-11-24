@@ -462,6 +462,7 @@ namespace cms.dbModel.entity
         public string Phone { get; set; }
         public string Post { get; set; }
         public string Text { get; set; }
+        public int Sort { get; set; }
         public Photo Photo { get; set; }
     }
 

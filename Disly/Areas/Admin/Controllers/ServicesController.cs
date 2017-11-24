@@ -378,6 +378,9 @@ namespace Disly.Areas.Admin.Controllers
                 case "vote_answer":
                     Result = _cmsRepository.permit_VoteAnswer(id,Guid.Parse(menuSort),permit);
                     break;
+                case "orgs_administrativ":
+                    Result = _cmsRepository.permit_OrgsAdminstrativ(id, Guid.Parse(menuSort), permit);
+                    break;
             }
             return Content(Result.ToString());
         }
