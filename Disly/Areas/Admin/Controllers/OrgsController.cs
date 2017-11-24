@@ -90,7 +90,7 @@ namespace Disly.Areas.Admin.Controllers
 
         public ActionResult Item(Guid Id)
         {            
-            model.Item = _cmsRepository.getOrgItem(Id);    //+ список структур    
+            model.Item = _cmsRepository.getOrgItem(Id);    //+ список структур    +списо административного персонала
 
 
             // типы организаций

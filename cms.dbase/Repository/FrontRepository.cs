@@ -1295,7 +1295,6 @@ namespace cms.dbase
                                     }).ToArray();
                         }
                     }
-
                 }
                 return null;
             }
