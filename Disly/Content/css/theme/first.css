@@ -35,3 +35,23 @@
 .imglink-benefit-block {
   background-color: #ebedf2;
 }
+.tabs li a {
+  color: #3973e6;
+}
+.tabs li a:hover,
+.tabs li a:active,
+.tabs li a:focus {
+  color: #e55639;
+}
+.tabs li.active a {
+  border-bottom: 2px solid #e55639;
+  color: #e55639;
+}
+.tabs li.active a:hover,
+.tabs li.active a:active,
+.tabs li.active a:focus {
+  color: #e55639;
+}
+.btn-primary {
+  background-color: #3973e6;
+}

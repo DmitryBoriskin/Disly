@@ -467,7 +467,10 @@ namespace cms.dbModel.entity
         public string Post { get; set; }
         public string Text { get; set; }
         public int Sort { get; set; }
-        public Photo Photo { get; set; }
+        public Photo Photo { get; set; }        
+        public Guid? PeopleF { get; set; }
+        public People People { get; set; }
+        public Boolean Leader { get; set; }
     }
 
 

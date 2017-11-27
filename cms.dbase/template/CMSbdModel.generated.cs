@@ -1136,6 +1136,8 @@ namespace cms.dbase.models
 		[Column,        Nullable] public string c_text       { get; set; } // varchar(max)
 		[Column,     NotNull    ] public Guid   f_org        { get; set; } // uniqueidentifier
 		[Column,     NotNull    ] public int    n_sort       { get; set; } // int
+		[Column,     NotNull    ] public bool   b_leader     { get; set; } // bit
+		[Column,        Nullable] public Guid?  f_people     { get; set; } // uniqueidentifier
 
 		#region Associations
 

@@ -14,7 +14,7 @@
             }
             else
             {
-                <ul class="nav nav-pills">
+                <ul class="nav nav-pills tabs">
                     @{
                         string _allactiv = (String.IsNullOrEmpty(ViewBag.CurrentCategory)) ? "class=active" : "";
                     }
@@ -48,7 +48,8 @@
                             }
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-1"></div>
+                    <div class="col-md-3">
                         <form role="form" class="filtr_news" action="/@ViewBag.ControllerName/@ViewBag.Filter.Category/">
                             <div class="row">
 
@@ -79,7 +80,7 @@
 
                                 <div class="col-sm-12 control-filter">
                                     <a class="btn btn-default pull-right" href="/@ViewBag.ControllerName">Очистить</a>
-                                    <button class="btn sub" type="submit">ПРИМЕНИТЬ</button>
+                                    <button class="btn sub btn-primary" type="submit">ПРИМЕНИТЬ</button>
                                 </div>
                             </div>
                         </form>
