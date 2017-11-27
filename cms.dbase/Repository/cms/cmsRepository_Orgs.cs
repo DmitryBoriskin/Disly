@@ -168,21 +168,21 @@ namespace cms.dbase
                 //Получаем сформированный запрос по фильтру
                 var query = db.content_orgss.AsQueryable();
 
-                if(!string.IsNullOrEmpty(filtr.Domain))
+                if (!string.IsNullOrEmpty(filtr.Domain))
                 {
                     //query = query;
                 }
-                if(filtr.RelId.HasValue && filtr.RelId.Value != Guid.Empty)
+                if (filtr.RelId.HasValue && filtr.RelId.Value != Guid.Empty)
                 {
                     var data = query
                         .Select(s => new OrgsShortModel()
-                    {
-                        Id = s.id,
-                        Title = s.c_title,
-                        Types = (s.contentorgstypeslinkorgs.Select(t => t.f_type).Any())?
-                                s.contentorgstypeslinkorgs.Select(t => t.f_type).ToArray(): null,
-                        Checked = ContentLinkExists(filtr.RelId.Value, filtr.RelType, s.id, ContentLinkType.ORG),
-                        Origin = ContentLinkorigin(filtr.RelId.Value, filtr.RelType, s.id, ContentLinkType.ORG)
+                        {
+                            Id = s.id,
+                            Title = s.c_title,
+                            Types = (s.contentorgstypeslinkorgs.Select(t => t.f_type).Any()) ?
+                                s.contentorgstypeslinkorgs.Select(t => t.f_type).ToArray() : null,
+                            Checked = ContentLinkExists(filtr.RelId.Value, filtr.RelType, s.id, ContentLinkType.ORG),
+                            Origin = ContentLinkorigin(filtr.RelId.Value, filtr.RelType, s.id, ContentLinkType.ORG)
                         });
 
                     if (data.Any())
@@ -225,7 +225,7 @@ namespace cms.dbase
                         GeopointX = s.n_geopoint_x,
                         GeopointY = s.n_geopoint_y,
                         Structure = getStructureList(s.id),
-                        Administrativ= getAdministrativList(s.id),
+                        Administrativ = getAdministrativList(s.id),
                         Oid = s.f_oid,
                         Types = types,
                         DepartmentAffiliation = s.f_department_affiliation,
@@ -382,7 +382,7 @@ namespace cms.dbase
                                     .Insert();
                             }
                         }
-                        
+
                         //логирование
                         //insertLog(UserId, IP, "update", id, String.Empty, "Orgs", model.Title);
                         var log = new LogModel()
@@ -402,7 +402,7 @@ namespace cms.dbase
                     }
                     return false;
                 }
-                
+
             }
         }
 
@@ -803,7 +803,7 @@ namespace cms.dbase
                     db.Insert(cdStructur);
                     db.Insert(cdDepart);
                     tran.Commit();
-                    
+
                     //логирование
                     //insertLog(UserId, IP, "insert", IdStructure, String.Empty, "Orgs", logTitle);
                     var log = new LogModel()
@@ -923,13 +923,13 @@ namespace cms.dbase
                     {
                         Id = s.id,
                         Title = s.c_title,
-                        Text=s.c_adress,
+                        Text = s.c_adress,
                         StructureF = s.f_structure,
                         Phones = getDepartmentsPhone(s.id),
                         Peoples = getPeopleDepartment(s.id),
-                        DirecorPost=s.c_director_post,
-                        DirectorF=s.f_director
-                        
+                        DirecorPost = s.c_director_post,
+                        DirectorF = s.f_director
+
                     }).First();
                 }
                 return null;
@@ -1017,7 +1017,7 @@ namespace cms.dbase
                     });
                     MyBread.Push(new Breadcrumbs
                     {
-                        Title = data.c_surname+" "+data.c_name,
+                        Title = data.c_surname + " " + data.c_name,
                         Url = "/admin/orgs/structure/" + data.id
                     });
                 }
@@ -1088,7 +1088,7 @@ namespace cms.dbase
                    .Value(v => v.c_val, Value)
                    .Value(v => v.n_sort, Sort)
                    .Insert();
-                
+
                 //логирование
                 //insertLog(UserId, IP, "insert_phone_depart", idDepart, String.Empty, "Orgs", Label);
                 var log = new LogModel()
@@ -1135,12 +1135,12 @@ namespace cms.dbase
             using (var db = new CMSdb(_context))
             {
                 var data = db.content_sv_people_departments
-                             .Where(w=>w.f_department==idDepart)
+                             .Where(w => w.f_department == idDepart)
                              .Select(s => new People()
                              {
                                  Id = s.id,
-                                 FIO = s.c_surname + " " + s.c_name + " " + s.c_patronymic,                               
-                                 IdLinkOrg=s.idOrgLink
+                                 FIO = s.c_surname + " " + s.c_name + " " + s.c_patronymic,
+                                 IdLinkOrg = s.idOrgLink
                              });
                 if (data.Any()) return data.ToArray();
                 return null;
@@ -1180,10 +1180,10 @@ namespace cms.dbase
                     id = id,
                     f_structure = Structure,
                     c_title = insert.Title,
-                    c_adress=insert.Text,
+                    c_adress = insert.Text,
                     n_sort = MaxSort,
-                    f_director=insert.DirectorF,
-                    c_director_post= insert.DirecorPost
+                    f_director = insert.DirectorF,
+                    c_director_post = insert.DirecorPost
                 };
 
                 using (var tran = db.BeginTransaction())
@@ -1335,7 +1335,7 @@ namespace cms.dbase
                                            {
                                                FIO = s.fkcontentpeopleorglink.c_surname + " " + s.fkcontentpeopleorglink.c_name + " " + s.fkcontentpeopleorglink.c_patronymic,
                                                Id = s.id,
-                                               IdLinkOrg=s.f_people
+                                               IdLinkOrg = s.f_people
                                            }).ToArray();
                         return PeopleList.Any() ? PeopleList : null;
                     }
@@ -1398,13 +1398,13 @@ namespace cms.dbase
             }
             return true;
         }
-        
+
         public override OrgType[] getOrgTypesList(OrgTypeFilter filter)
         {
             using (var db = new CMSdb(_context))
             {
                 var query = db.content_orgs_typess.AsQueryable();
-                             
+
 
                 if (filter.Id.HasValue && filter.Id.Value != Guid.Empty)
                 {
@@ -1431,7 +1431,7 @@ namespace cms.dbase
         }
 
 
-         /// <summary>
+        /// <summary>
         /// Получим список типов организаций с привязанными к ним организациями
         /// </summary>
         /// <returns></returns>
@@ -1531,12 +1531,13 @@ namespace cms.dbase
                 {
                     query = query.OrderBy(o => o.n_sort);
                     return query
-                                .Select(s=>new OrgsAdministrativ() {
-                                        id=s.id,
-                                        Surname=s.c_surname,
-                                        Name=s.c_name,
-                                        Patronymic=s.c_patronymic,
-                                        Photo = new Photo { Url=s.c_photo}
+                                .Select(s => new OrgsAdministrativ()
+                                {
+                                    id = s.id,
+                                    Surname = s.c_surname,
+                                    Name = s.c_name,
+                                    Patronymic = s.c_patronymic,
+                                    Photo = new Photo { Url = s.c_photo }
                                 })
                                 .ToArray();
                 }
@@ -1548,24 +1549,25 @@ namespace cms.dbase
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public  override OrgsAdministrativ getAdministrativ(Guid id)
+        public override OrgsAdministrativ getAdministrativ(Guid id)
         {
             using (var db = new CMSdb(_context))
             {
                 var query = db.content_orgs_adminstrativs
                               .Where(w => w.id == id)
-                              .Select(s => new OrgsAdministrativ {
-                                  id=s.id,
-                                  Surname=s.c_surname,
-                                  Name=s.c_name,
-                                  Patronymic=s.c_patronymic,
-                                  Phone=s.c_phone,
-                                  Photo=new Photo { Url=s.c_photo},
-                                  Post=s.c_post,
-                                  Text=s.c_text,
-                                  OrgId=s.f_org,
-                                  PeopleF=s.f_people,
-                                  Leader=s.b_leader
+                              .Select(s => new OrgsAdministrativ
+                              {
+                                  id = s.id,
+                                  Surname = s.c_surname,
+                                  Name = s.c_name,
+                                  Patronymic = s.c_patronymic,
+                                  Phone = s.c_phone,
+                                  Photo = new Photo { Url = s.c_photo },
+                                  Post = s.c_post,
+                                  Text = s.c_text,
+                                  OrgId = s.f_org,
+                                  PeopleF = s.f_people,
+                                  Leader = s.b_leader
                               });
                 if (query.Any())
                 {
@@ -1598,7 +1600,7 @@ namespace cms.dbase
                       .Value(v => v.c_surname, ins.Surname)
                       .Value(v => v.c_name, ins.Name)
                       .Value(v => v.c_patronymic, ins.Patronymic)
-                      .Value(v => v.c_phone, ins.Phone)                      
+                      .Value(v => v.c_phone, ins.Phone)
                       .Value(v => v.c_photo, ins.Photo != null ? ins.Photo.Url : null)
                       .Value(v => v.c_post, ins.Post)
                       .Value(v => v.c_text, ins.Text)
@@ -1608,7 +1610,7 @@ namespace cms.dbase
                       .Value(v => v.b_leader, ins.Leader)
                       .Insert();
                     tran.Commit();
-                }                    
+                }
 
                 return true;
             }
@@ -1735,7 +1737,6 @@ namespace cms.dbase
                 if (!query.Any()) return null;
                 return query.ToArray();
             }
-            }
         }
 
         /// <summary>
@@ -1748,7 +1749,7 @@ namespace cms.dbase
             using (var db = new CMSdb(_context))
             {
                 var PeopleList = db.content_people_org_links
-                                           .Where(w => w.f_org == idOrg)                                           
+                                           .Where(w => w.f_org == idOrg)
                                            .Select(s => new People
                                            {
                                                FIO = s.fkcontentpeopleorglink.c_surname + " " + s.fkcontentpeopleorglink.c_name + " " + s.fkcontentpeopleorglink.c_patronymic,
@@ -1756,8 +1757,7 @@ namespace cms.dbase
                                                IdLinkOrg = s.f_people
                                            }).ToArray();
                 return PeopleList.Any() ? PeopleList : null;
-            }            
+            }
         }
-
     }
 }
