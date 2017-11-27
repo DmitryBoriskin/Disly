@@ -275,6 +275,7 @@ namespace cms.dbase
                             .Value(s => s.n_geopoint_x, model.GeopointX)
                             .Value(s => s.n_geopoint_y, model.GeopointY)
                             .Value(s => s.f_oid, model.Oid)
+                            .Value(s => s.f_department_affiliation, model.DepartmentAffiliation)
                             .Insert();
 
                         // обновляем типы мед. учреждений
@@ -351,6 +352,7 @@ namespace cms.dbase
                             .Set(s => s.n_geopoint_x, model.GeopointX)
                             .Set(s => s.n_geopoint_y, model.GeopointY)
                             .Set(s => s.f_oid, model.Oid)
+                            .Set(s => s.f_department_affiliation, model.DepartmentAffiliation)
                             .Update();
 
                         // обновляем типы мед. учреждений
@@ -1564,6 +1566,12 @@ namespace cms.dbase
             }
         }
 
+        /// <summary>
+        /// Добавляем административный персонал
+        /// </summary>
+        /// <param name="id">Идентификатор</param>
+        /// <param name="ins">Модель для вставки</param>
+        /// <returns></returns>
         public override bool insAdministrativ(Guid id, OrgsAdministrativ ins)
         {
             using (var db = new CMSdb(_context))
@@ -1594,6 +1602,13 @@ namespace cms.dbase
                 return true;
             }
         }
+
+        /// <summary>
+        /// Обновляем административный персонал
+        /// </summary>
+        /// <param name="id">Идентификатор</param>
+        /// <param name="upd">Модель для обновления</param>
+        /// <returns></returns>
         public override bool updAdministrativ(Guid id, OrgsAdministrativ upd)
         {
             using (var db = new CMSdb(_context))
@@ -1614,6 +1629,12 @@ namespace cms.dbase
                 return false;
             }
         }
+
+        /// <summary>
+        /// Удаляем административный персонал
+        /// </summary>
+        /// <param name="id">Идентификатор</param>
+        /// <returns></returns>
         public override bool delAdministrativ(Guid id)
         {
             using (var db = new CMSdb(_context))
@@ -1629,7 +1650,13 @@ namespace cms.dbase
             }
         }
 
-
+        /// <summary>
+        /// Сортировка административного персонала
+        /// </summary>
+        /// <param name="id">Идентификатор</param>
+        /// <param name="OrgId">Организация</param>
+        /// <param name="num">Сортировка</param>
+        /// <returns></returns>
         public override bool permit_OrgsAdminstrativ(Guid id, Guid OrgId, int num)
         {
             using (var db = new CMSdb(_context))
@@ -1673,6 +1700,27 @@ namespace cms.dbase
                 {
                     return false;
                 }
+            }
+        }
+
+        /// <summary>
+        /// Получим список ведомственных принадлежностей
+        /// </summary>
+        /// <returns></returns>
+        public override DepartmentAffiliationModel[] getDepartmentAffiliations()
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var query = db.content_orgs_department_affiliations
+                    .OrderBy(o => o.n_sort)
+                    .Select(s => new DepartmentAffiliationModel
+                    {
+                        Key = s.id,
+                        Value = s.c_title
+                    });
+
+                if (!query.Any()) return null;
+                return query.ToArray();
             }
         }
     }
