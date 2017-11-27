@@ -15,6 +15,6 @@ namespace Disly.Models
         /// <summary>
         /// Список организаций
         /// </summary>
-        public OrgsModel[] OrgList { get; set; }
+        public OrgFrontModel[] OrgList { get; set; }
     }
 }

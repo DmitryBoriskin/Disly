@@ -227,7 +227,12 @@ namespace cms.dbase
                         Structure = getStructureList(s.id),
                         Administrativ= getAdministrativList(s.id),
                         Oid = s.f_oid,
-                        Types = types
+                        Types = types,
+                        DepartmentAffiliation = s.f_department_affiliation,
+                        Logo = new Photo
+                        {
+                            Url = s.c_logo
+                        }
                     });
 
                 if (!data.Any()) return null;
@@ -276,6 +281,7 @@ namespace cms.dbase
                             .Value(s => s.n_geopoint_y, model.GeopointY)
                             .Value(s => s.f_oid, model.Oid)
                             .Value(s => s.f_department_affiliation, model.DepartmentAffiliation)
+                            .Value(s => s.c_logo, model.Logo.Url)
                             .Insert();
 
                         // обновляем типы мед. учреждений
@@ -353,6 +359,7 @@ namespace cms.dbase
                             .Set(s => s.n_geopoint_y, model.GeopointY)
                             .Set(s => s.f_oid, model.Oid)
                             .Set(s => s.f_department_affiliation, model.DepartmentAffiliation)
+                            .Set(s => s.c_logo, model.Logo.Url)
                             .Update();
 
                         // обновляем типы мед. учреждений

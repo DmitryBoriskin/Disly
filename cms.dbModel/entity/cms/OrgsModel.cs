@@ -33,7 +33,7 @@ namespace cms.dbModel.entity
         /// <summary>
         /// Логотип
         /// </summary>
-        public string Logo { get; set; }
+        public Photo Logo { get; set; }
 
         /// <summary>
         /// Контактная информация
@@ -533,6 +533,52 @@ namespace cms.dbModel.entity
         /// Значение
         /// </summary>
         public string Value { get; set; }
+    }
+
+    /// <summary>
+    /// Модель организации для вывода в списке ЛПУ
+    /// </summary>
+    public class OrgFrontModel
+    {
+        /// <summary>
+        /// Идентификатор
+        /// </summary>
+        public Guid Id { get; set; }
+
+        /// <summary>
+        /// Название
+        /// </summary>
+        public string Title { get; set; }
+
+        /// <summary>
+        /// Телефон
+        /// </summary>
+        public string Phone { get; set; }
+
+        /// <summary>
+        /// Телефон приёмной
+        /// </summary>
+        public string PhoneReception { get; set; }
+
+        /// <summary>
+        /// Факс
+        /// </summary>
+        public string Fax { get; set; }
+
+        /// <summary>
+        /// Email
+        /// </summary>
+        public string Email { get; set; }
+
+        /// <summary>
+        /// Адрес
+        /// </summary>
+        public string Address { get; set; }
+
+        /// <summary>
+        /// Логотип
+        /// </summary>
+        public string Logo { get; set; }
     }
 }
 

@@ -1370,14 +1370,14 @@ namespace cms.dbase
         /// </summary>
         /// <param name="type"></param>
         /// <returns></returns>
-        public override OrgsModel[] getOrgModels(Guid type)
+        public override OrgFrontModel[] getOrgModels(Guid type)
         {
             using (var db = new CMSdb(_context))
             {
                 var query = (from o in db.content_orgss
                              join t in db.content_orgs_types_links on o.id equals t.f_org
                              where t.f_type.Equals(type)
-                             select new OrgsModel
+                             select new OrgFrontModel
                              {
                                  Id = o.id,
                                  Title = o.c_title,
@@ -1385,7 +1385,8 @@ namespace cms.dbase
                                  PhoneReception = o.c_phone_reception,
                                  Fax = o.c_fax,
                                  Email = o.c_email,
-                                 Address = o.c_adress
+                                 Address = o.c_adress,
+                                 Logo = o.c_logo
                              });
 
                 if (!query.Any()) return null;
