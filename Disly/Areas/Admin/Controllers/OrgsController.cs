@@ -706,9 +706,6 @@ namespace Disly.Areas.Admin.Controllers
             _cmsRepository.delPersonsThisDepartment(Guid.Parse(iddep), Guid.Parse(idpeople));
             return null;
         }
-
-
-
         
         /// <summary>
         /// Для конкретного объекта получаем список организаций
@@ -772,9 +769,7 @@ namespace Disly.Areas.Admin.Controllers
         //       LinksId= (model.OrgsId != null)? model.OrgsId.Distinct().ToArray(): null,
         //       LinkType = ContentLinkType.ORG
         //    };
-
         //    var res = _cmsRepository.updateContentLinks(modelInsert);
-
         //    return PartialView("Modal/Success");
         //}
 
@@ -794,17 +789,24 @@ namespace Disly.Areas.Admin.Controllers
 
 
         #region administrative
-
         public ActionResult Administrativ(Guid Id)
         {
             ViewBag.Title = "Административный персонал";
             var OrgId = Request.Params["orgid"];
+            //информация о персоне
             model.AdministrativItem = _cmsRepository.getAdministrativ(Id);
+
+            #region сотрудники для выпадающего списка
+            var _peopList = _cmsRepository.getPersonsThisOrg(model.AdministrativItem.OrgId);
+            if (_peopList != null)
+            {
+                model.PeopleList = new SelectList(_peopList, "Id", "FIO");
+            }
+            #endregion
             if (OrgId == null)
             {
                 model.BreadCrumbOrg = _cmsRepository.getBreadCrumbOrgs(Id, ViewBag.ActionName);
-            }
-            
+            }            
             return View(model);
         }
 
@@ -890,7 +892,14 @@ namespace Disly.Areas.Admin.Controllers
                 };
             }
 
-            
+            #region сотрудники для выпадающего списка
+            var _peopList = _cmsRepository.getPersonsThisOrg(model.AdministrativItem.OrgId);
+            if (_peopList != null)
+            {
+                model.PeopleList = new SelectList(_peopList, "Id", "FIO");
+            }
+            #endregion
+
             model.BreadCrumbOrg = _cmsRepository.getBreadCrumbOrgs(Id, ViewBag.ActionName);
             return View(model);
         }

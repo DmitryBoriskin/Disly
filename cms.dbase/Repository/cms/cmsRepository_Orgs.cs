@@ -1563,7 +1563,9 @@ namespace cms.dbase
                                   Photo=new Photo { Url=s.c_photo},
                                   Post=s.c_post,
                                   Text=s.c_text,
-                                  OrgId=s.f_org
+                                  OrgId=s.f_org,
+                                  PeopleF=s.f_people,
+                                  Leader=s.b_leader
                               });
                 if (query.Any())
                 {
@@ -1601,7 +1603,9 @@ namespace cms.dbase
                       .Value(v => v.c_post, ins.Post)
                       .Value(v => v.c_text, ins.Text)
                       .Value(v => v.f_org, ins.OrgId)
+                      .Value(v => v.f_people, ins.PeopleF)
                       .Value(v => v.n_sort, maxSort)
+                      .Value(v => v.b_leader, ins.Leader)
                       .Insert();
                     tran.Commit();
                 }                    
@@ -1630,6 +1634,8 @@ namespace cms.dbase
                         .Set(s => s.c_photo, upd.Photo.Url)
                         .Set(s => s.c_post, upd.Post)
                         .Set(s => s.c_text, upd.Text)
+                        .Set(s => s.f_people, upd.PeopleF)
+                        .Set(s => s.b_leader, upd.Leader)
                         .Update();
                     return true;
                 }
@@ -1729,6 +1735,29 @@ namespace cms.dbase
                 if (!query.Any()) return null;
                 return query.ToArray();
             }
+            }
         }
+
+        /// <summary>
+        /// список сотрудников организации
+        /// </summary>
+        /// <param name="idOrg">идентификатор организации</param>
+        /// <returns></returns>
+        public override People[] getPersonsThisOrg(Guid idOrg)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var PeopleList = db.content_people_org_links
+                                           .Where(w => w.f_org == idOrg)                                           
+                                           .Select(s => new People
+                                           {
+                                               FIO = s.fkcontentpeopleorglink.c_surname + " " + s.fkcontentpeopleorglink.c_name + " " + s.fkcontentpeopleorglink.c_patronymic,
+                                               Id = s.id,
+                                               IdLinkOrg = s.f_people
+                                           }).ToArray();
+                return PeopleList.Any() ? PeopleList : null;
+            }            
+        }
+
     }
 }
