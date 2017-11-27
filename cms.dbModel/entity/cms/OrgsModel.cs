@@ -134,18 +134,22 @@ namespace cms.dbModel.entity
         ///  Id 
         /// </summary>
         public Guid Id { get; set; }
+
         /// <summary>
         /// название
         /// </summary>
         public string Title { get; set; }
+
         /// <summary>
         /// Список привязанных типов Организаций
         /// </summary>
         public Guid[] Types { get; set; }
+
         /// <summary>
         /// 
         /// </summary>
         public bool Checked { get; set; }
+
         /// <summary>
         /// Создатель записи
         /// </summary>
