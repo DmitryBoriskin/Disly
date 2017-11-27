@@ -40,3 +40,22 @@
 
 .module-material-item:hover:after {    border-bottom: 10px solid rgb(31, 71, 153);}
 .imglink-benefit-block{background-color:@light2;}
+
+.tabs li a {
+    color: @def2;
+
+    &:hover, &:active, &:focus {
+        color: @contrast;
+    }
+}
+.tabs li.active a {
+    border-bottom: 2px solid @contrast;
+    color: @contrast;
+
+    &:hover, &:active, &:focus {
+        color: @contrast;
+    }
+}
+.btn-primary {
+    background-color: @def2;
+}

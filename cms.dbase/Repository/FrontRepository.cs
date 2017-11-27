@@ -1370,26 +1370,85 @@ namespace cms.dbase
         /// </summary>
         /// <param name="type"></param>
         /// <returns></returns>
-        public override OrgsModel[] getOrgModels(Guid type)
+        public override OrgFrontModel[] getOrgModels(Guid? type)
         {
             using (var db = new CMSdb(_context))
             {
-                var query = (from o in db.content_orgss
-                             join t in db.content_orgs_types_links on o.id equals t.f_org
-                             where t.f_type.Equals(type)
-                             select new OrgsModel
-                             {
-                                 Id = o.id,
-                                 Title = o.c_title,
-                                 Phone = o.c_phone,
-                                 PhoneReception = o.c_phone_reception,
-                                 Fax = o.c_fax,
-                                 Email = o.c_email,
-                                 Address = o.c_adress
-                             });
+                if (type != null)
+                {
+                    var query = (from o in db.content_orgss
+                                 join t in db.content_orgs_types_links on o.id equals t.f_org
+                                 join a in db.content_orgs_adminstrativs on o.id equals a.f_org into ps
+                                 from a in ps.DefaultIfEmpty()
+                                 where a.id == null || a.f_org.Equals(o.id) && a.b_leader
+                                 join s in db.cms_sitess on o.id equals s.f_content into ss
+                                 from s in ss.DefaultIfEmpty()
+                                 where s.id == null || s.f_content.Equals(o.id)
+                                 where t.f_type.Equals(type)
+                                 select new OrgFrontModel
+                                 {
+                                     Id = o.id,
+                                     Title = o.c_title,
+                                     Phone = o.c_phone,
+                                     PhoneReception = o.c_phone_reception,
+                                     Fax = o.c_fax,
+                                     Email = o.c_email,
+                                     Address = o.c_adress,
+                                     Logo = o.c_logo,
+                                     Link = s.c_alias,
+                                     Leader = new OrgsAdministrativ
+                                     {
+                                         id = a.id,
+                                         Surname = a.c_surname,
+                                         Name = a.c_name,
+                                         Patronymic = a.c_patronymic,
+                                         Post = a.c_post,
+                                         PeopleF = a.f_people,
+                                         Photo = new Photo { Url = a.c_photo }
+                                     }
+                                 });
 
-                if (!query.Any()) return null;
-                return query.ToArray();
+                    if (!query.Any()) return null;
+                    return query.ToArray();
+                }
+                else
+                {
+                    var query = (from o in db.content_orgss
+                                 join a in db.content_orgs_adminstrativs on o.id equals a.f_org into ps
+                                 from a in ps.DefaultIfEmpty()
+                                 where a.id == null || a.f_org.Equals(o.id) && a.b_leader
+                                 join s in db.cms_sitess on o.id equals s.f_content into ss
+                                 from s in ss.DefaultIfEmpty()
+                                 orderby o.n_sort
+                                 where s.id == null || s.f_content.Equals(o.id)
+                                 select new OrgFrontModel
+                                 {
+                                     Id = o.id,
+                                     Title = o.c_title,
+                                     Phone = o.c_phone,
+                                     PhoneReception = o.c_phone_reception,
+                                     Fax = o.c_fax,
+                                     Email = o.c_email,
+                                     Address = o.c_adress,
+                                     Logo = o.c_logo,
+                                     Link = s.c_alias,
+                                     Affiliation = o.f_department_affiliation,
+                                     Leader = new OrgsAdministrativ
+                                     {
+                                         id = a.id,
+                                         Surname = a.c_surname,
+                                         Name = a.c_name,
+                                         Patronymic = a.c_patronymic,
+                                         Post = a.c_post,
+                                         PeopleF = a.f_people,
+                                         Photo = new Photo { Url = a.c_photo }
+                                     }
+                                 });
+                    if (!query.Any()) return null;
+                    return query.ToArray();
+                }
+
+
             }
         }
 
@@ -1403,6 +1462,42 @@ namespace cms.dbase
             using (var db = new CMSdb(_context))
             {
                 return db.content_orgs_typess
+                    .Where(w => w.id.Equals(id))
+                    .Select(s => s.c_title).SingleOrDefault();
+            }
+        }
+
+        /// <summary>
+        /// Получим список ведомственных принадлежностей
+        /// </summary>
+        /// <returns></returns>
+        public override DepartmentAffiliationModel[] getDepartmentAffiliations()
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var query = db.content_orgs_department_affiliations
+                    .OrderBy(o => o.n_sort)
+                    .Select(s => new DepartmentAffiliationModel
+                    {
+                        Key = s.id,
+                        Value = s.c_title
+                    });
+
+                if (!query.Any()) return null;
+                return query.ToArray();
+            }
+        }
+
+        /// <summary>
+        /// Получим название ведомственной принадлежности
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public override string getAffiliationDepartment(Guid id)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                return db.content_orgs_department_affiliations
                     .Where(w => w.id.Equals(id))
                     .Select(s => s.c_title).SingleOrDefault();
             }

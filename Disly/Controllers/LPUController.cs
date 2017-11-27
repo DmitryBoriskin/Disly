@@ -2,6 +2,7 @@
 using Disly.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Web.Mvc;
 
 namespace Disly.Controllers
@@ -36,27 +37,92 @@ namespace Disly.Controllers
         }
 
         // GET: LPU
-        public ActionResult Index()
+        public ActionResult Index(string t, Guid? id)
         {
-            model.OrgTypes = _repository.getOrgTypes();
-            return View(model);
-        }
+            model.Nav = new MaterialsGroup[]
+            {
+                new MaterialsGroup{Title="Все"},
+                new MaterialsGroup{Title="По типу медицинского учреждения", Alias="typelist"},
+                new MaterialsGroup{Title="По ведомственной принадлежности", Alias="affiliation"},
+            };
 
-        // GET: /lpu/list/{id}
-        public ActionResult List(Guid id)
-        {
-            // хлебные крошки
             model.Breadcrumbs.Add(new Breadcrumbs
             {
                 Title = "ЛПУ",
                 Url = "/lpu"
             });
 
-            // список организаций
-            model.OrgList = _repository.getOrgModels(id);
+            model.Type = t;
+            switch (t)
+            {
+                case "typelist":
+                    model.Breadcrumbs.Add(new Breadcrumbs
+                    {
+                        Title = "По типу медицинского учреждения",
+                        Url = "/lpu?t=typelist"
+                    });
 
-            // название типа организаций
-            ViewBag.TypeTitle = _repository.getOrgTypeName(id);
+                    if (!id.Equals(null))
+                    {
+                        // список организаций
+                        model.OrgList = _repository.getOrgModels(id);
+
+                        // название типа организаций
+                        ViewBag.TypeTitle = _repository.getOrgTypeName((Guid)id);
+
+                        model.Breadcrumbs.Add(new Breadcrumbs
+                        {
+                            Title = ViewBag.TypeTitle,
+                            Url = ""
+                        });
+                    }
+                    else
+                    {
+                        model.OrgTypes = _repository.getOrgTypes();
+                    }
+
+                    break;
+                case "affiliation":
+                    model.Breadcrumbs.Add(new Breadcrumbs
+                    {
+                        Title = "По ведомственной принадлежности",
+                        Url = "/lpu?t=affiliation"
+                    });
+
+                    if (id != null)
+                    {
+                        model.OrgList = _repository.getOrgModels(null)
+                            .Where(w => w.Affiliation.Equals(id)).ToArray();
+
+                        ViewBag.TypeTitle = _repository.getAffiliationDepartment((Guid)id);
+
+                        model.Breadcrumbs.Add(new Breadcrumbs
+                        {
+                            Title = ViewBag.TypeTitle,
+                            Url = ""
+                        });
+                    }
+                    else
+                    {
+                        model.DepartmentAffiliations = _repository.getDepartmentAffiliations();
+                    }
+
+                    break;
+                default:
+                    // хлебные крошки
+
+                    // список организаций
+                    model.OrgList = _repository.getOrgModels(id);
+
+                    // название типа организаций
+                    if (!id.Equals(null))
+                    {
+                        ViewBag.TypeTitle = _repository.getOrgTypeName((Guid)id);
+                    }
+
+                    break;
+            }
+
             return View(model);
         }
     }

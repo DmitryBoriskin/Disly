@@ -1,18 +1,132 @@
 ﻿@model LPUViewModel
 
+@{
+    string title = ViewBag.TypeTitle;
+}
+
 <div class="container">
     @Html.Partial("services/breadcrumbs")
+
     <h1>ЛПУ Чувашии</h1>
+
+    @Html.Partial("Nav")
 
     @if (Model.OrgTypes != null)
     {
         <div class="row">
             @foreach (var item in Model.OrgTypes)
             {
+                string link = "/lpu?t=typelist&id=" + item.Id;
                 <div class="col-md-6">
-                    <a href="/lpu/list/@item.Id">@item.Title</a>
+                    <a href="@link">@item.Title</a>
                 </div>
             }
+        </div>
+    }
+    @if (Model.DepartmentAffiliations != null)
+    {
+        <div class="row">
+            @foreach (var item in Model.DepartmentAffiliations)
+            {
+                string link = "/lpu?t=affiliation&id=" + item.Key;
+                <div class="col-md-6">
+                    <a href="@link">@item.Value</a>
+                </div>
+            }
+        </div>
+    }
+
+    @if (Model.OrgList != null)
+    {
+        if (!string.IsNullOrWhiteSpace(title))
+        {
+            <h2>@title</h2>
+        }
+
+        <div class="row">
+            <div class="col-md-12">
+                @foreach (var item in Model.OrgList)
+                {
+                    <div class="row">
+                        <div class="col-md-1">
+                            @if (!string.IsNullOrWhiteSpace(item.Logo))
+                            {
+                                <img src="@item.Logo" alt="@item.Title" />
+                            }
+                        </div>
+
+                        <div class="col-md-9">
+                            @if (!string.IsNullOrWhiteSpace(item.Title))
+                            {
+                                <div>
+                                    <h4>
+                                        @if (!string.IsNullOrWhiteSpace(item.Link))
+                                        {
+                                            string link = "http://" + item.Link + ".med.cap.ru";
+                                            <strong>
+                                                <a target="_blank" href="@link">@item.Title</a>
+                                            </strong>
+                                        }
+                                        else
+                                        {
+                                            <strong>@item.Title</strong>
+                                        }
+                                    </h4>
+                                </div>
+                            }
+                            @if (!string.IsNullOrWhiteSpace(item.Address))
+                            {
+                                <div>
+                                    <strong>Адрес: </strong>@item.Address
+                                </div>
+                            }
+                            @if (!string.IsNullOrWhiteSpace(item.Phone))
+                            {
+                                <div>
+                                    <strong>Телефон: </strong>@item.Phone
+                                </div>
+                            }
+                            @if (!string.IsNullOrWhiteSpace(item.Fax))
+                            {
+                                <div>
+                                    <strong>Факс: </strong>@item.Fax
+                                </div>
+                            }
+                            @if (!string.IsNullOrWhiteSpace(item.PhoneReception))
+                            {
+                                <div>
+                                    <strong>Телефон регистратуры: </strong>@item.PhoneReception
+                                </div>
+                            }
+                            @if (!string.IsNullOrWhiteSpace(item.Email))
+                            {
+                                <div>
+                                    <strong>E-mail: </strong><a href="mailto:@item.Email">@item.Email</a>
+                                </div>
+                            }
+                        </div>
+                        <div class="col-md-2">
+                            @if (item.Leader != null && item.Leader.id != Guid.Empty)
+                            {
+                                if (item.Leader.Photo != null && !string.IsNullOrWhiteSpace(item.Leader.Photo.Url))
+                                {
+                                    <img class="img-circle img-person-list" src="@item.Leader.Photo.Url" alt="@item.Leader.Surname" />
+                                }
+
+                                if (!string.IsNullOrWhiteSpace(item.Leader.Post))
+                                {
+                                    <div><strong>@item.Leader.Post</strong></div>
+                                }
+
+                                if (!string.IsNullOrWhiteSpace(item.Leader.Surname))
+                                {
+                                    <div>@item.Leader.Surname @item.Leader.Name @item.Leader.Patronymic</div>
+                                }
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
         </div>
     }
 </div>

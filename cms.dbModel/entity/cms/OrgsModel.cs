@@ -33,7 +33,7 @@ namespace cms.dbModel.entity
         /// <summary>
         /// Логотип
         /// </summary>
-        public string Logo { get; set; }
+        public Photo Logo { get; set; }
 
         /// <summary>
         /// Контактная информация
@@ -462,17 +462,70 @@ namespace cms.dbModel.entity
     /// </summary>
     public class OrgsAdministrativ
     {
+        /// <summary>
+        /// Идентификатор
+        /// </summary>
         public Guid id { get; set; }
+
+        /// <summary>
+        /// Организация
+        /// </summary>
         public Guid OrgId { get; set; }
+
+        /// <summary>
+        /// Фамилия
+        /// </summary>
         public string Surname { get; set; }
+
+        /// <summary>
+        /// Имя
+        /// </summary>
         public string Name { get; set; }
+
+        /// <summary>
+        /// Отчество
+        /// </summary>
         public string Patronymic { get; set; }
-        //public string Photo { get; set; }
+
+        /// <summary>
+        /// Телефон
+        /// </summary>
         public string Phone { get; set; }
+
+        /// <summary>
+        /// Должность
+        /// </summary>
         public string Post { get; set; }
+
+        /// <summary>
+        /// Инфа
+        /// </summary>
         public string Text { get; set; }
+
+        /// <summary>
+        /// Сортировка
+        /// </summary>
         public int Sort { get; set; }
-        public Photo Photo { get; set; }
+
+        /// <summary>
+        /// Фотография
+        /// </summary>
+        public Photo Photo { get; set; }        
+        
+        /// <summary>
+        /// Ссылка на человека
+        /// </summary>
+        public Guid? PeopleF { get; set; }
+
+        /// <summary>
+        /// Человек
+        /// </summary>
+        public People People { get; set; }
+
+        /// <summary>
+        /// Флаг лидерства
+        /// </summary>
+        public Boolean Leader { get; set; }
     }
 
 
@@ -533,6 +586,67 @@ namespace cms.dbModel.entity
         /// Значение
         /// </summary>
         public string Value { get; set; }
+    }
+
+    /// <summary>
+    /// Модель организации для вывода в списке ЛПУ
+    /// </summary>
+    public class OrgFrontModel
+    {
+        /// <summary>
+        /// Идентификатор
+        /// </summary>
+        public Guid Id { get; set; }
+
+        /// <summary>
+        /// Название
+        /// </summary>
+        public string Title { get; set; }
+
+        /// <summary>
+        /// Телефон
+        /// </summary>
+        public string Phone { get; set; }
+
+        /// <summary>
+        /// Телефон приёмной
+        /// </summary>
+        public string PhoneReception { get; set; }
+
+        /// <summary>
+        /// Факс
+        /// </summary>
+        public string Fax { get; set; }
+
+        /// <summary>
+        /// Email
+        /// </summary>
+        public string Email { get; set; }
+
+        /// <summary>
+        /// Адрес
+        /// </summary>
+        public string Address { get; set; }
+
+        /// <summary>
+        /// Логотип
+        /// </summary>
+        public string Logo { get; set; }
+
+        /// <summary>
+        /// Ссылка на сайт организации
+        /// </summary>
+        public string Link { get; set; }
+
+        /// <summary>
+        /// Ведомственная принадлежность
+        /// </summary>
+        public Guid? Affiliation { get; set; }
+
+        /// <summary>
+        /// Глава организации
+        /// </summary>
+        public OrgsAdministrativ Leader { get; set; }
     }
 }
 

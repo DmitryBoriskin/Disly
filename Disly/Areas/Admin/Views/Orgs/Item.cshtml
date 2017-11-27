@@ -1,6 +1,9 @@
 ﻿@model OrgsViewModel
 @{ 
     string urlParam = "/Admin/Services/ChangePermit?group=orgs_structure";
+    string fileName = (Model.Item != null && Model.Item.Logo != null) ? Model.Item.Logo.Name : null;
+    string fileSize = (Model.Item != null && Model.Item.Logo != null) ? Model.Item.Logo.Size : null;
+    string fileUrl = (Model.Item != null && Model.Item.Logo != null) ? Model.Item.Logo.Url : null;
 }
 
 @if (Model.UserResolution.Write)
@@ -11,11 +14,7 @@
         @Html.TextBoxFor(m => m.Item.ShortTitle, new {  type = "text", maxlength = "128", title = "Краткое название" })
         <div class="row">
             <div class="col-lg-6">
-                @*<select title="Тип финансирования" class="selectpicker">
-                    <option value="1">Государственный</option>
-                    <option value="2">Частный</option>
-                </select>*@
-                @Html.DropDownListFor(m => m.Item.DepartmentAffiliation, new SelectList(Model.DepartmentAffiliations, "Key", "Value", null), new { @title = "Тип ведомственной принадлежности", @class = "selectpicker", @required = "" })
+                @Html.DropDownListFor(m => m.Item.DepartmentAffiliation, new SelectList(Model.DepartmentAffiliations, "Key", "Value", null), new { @title = "Тип ведомственной принадлежности", @class = "selectpicker" })
             </div>
             <div class="col-lg-6">
                 @Html.DropDownListFor(m => m.Item.Types, (MultiSelectList)ViewBag.Types, new { @title = "Типы мед. учреждений", @class = "selectpicker", @multiple = "multiple" })
@@ -160,9 +159,10 @@
     <div class="dop_info-block">
         <div class="dop-caption">Дополнительно</div>
 
-        @Html.TextBoxFor(m => m.Item.Oid, new { type = "text", title = "Фрмп Id" })
+        @Html.TextBoxFor(m => m.Item.Oid, new { type = "text", title = "ОИД" })
 
-        @Html.TextBoxFor(m => m.Item.Logo, new { type = "file", title = "Логотип", data_name = "", data_size = "", data_url = "", data_help = "размер фотографии" })
+        @Html.TextBox("upload", null, new { type = "file", title = "Изображение", data_name = fileName, data_size = fileSize, data_url = fileUrl, accept = ".jpg,.jpeg,.png,.gif" })
+        @Html.TextBoxFor(m => m.Item.Logo.Url, new { type = "hidden", value = fileUrl })
 
         @if (Model.Item != null)
         {
