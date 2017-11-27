@@ -123,6 +123,11 @@ namespace cms.dbModel.entity
         /// берётся из карты сайта для контактов
         /// </summary>
         public string Text { get; set; }
+
+        /// <summary>
+        /// Ведомственная принадлежность
+        /// </summary>
+        public Guid? DepartmentAffiliation { get; set; }
     }
 
     /// <summary>
@@ -515,6 +520,22 @@ namespace cms.dbModel.entity
         /// Флаг 
         /// </summary>
         public bool Check { get; set; }
+    }
+
+    /// <summary>
+    /// Модель, описывающая ведомственную принадлежность
+    /// </summary>
+    public class DepartmentAffiliationModel
+    {
+        /// <summary>
+        /// Ключ
+        /// </summary>
+        public Guid Key { get; set; }
+
+        /// <summary>
+        /// Значение
+        /// </summary>
+        public string Value { get; set; }
     }
 }
 

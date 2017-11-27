@@ -34,7 +34,8 @@ namespace Disly.Areas.Admin.Controllers
                 UserResolution = UserResolutionInfo,
                 ControllerName = ControllerName,
                 ActionName = ActionName,
-                Types = _cmsRepository.getOrgTypesList(new OrgTypeFilter() { })
+                Types = _cmsRepository.getOrgTypesList(new OrgTypeFilter() { }),
+                DepartmentAffiliations = _cmsRepository.getDepartmentAffiliations()
             };
 
             #region Метатеги

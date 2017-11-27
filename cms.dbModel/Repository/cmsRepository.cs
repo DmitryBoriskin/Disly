@@ -159,6 +159,7 @@ namespace cms.dbModel
         public abstract bool updAdministrativ(Guid id, OrgsAdministrativ upd);
         public abstract bool delAdministrativ(Guid id);
         public abstract bool permit_OrgsAdminstrativ(Guid id, Guid OrgId, int num);
+        public abstract DepartmentAffiliationModel[] getDepartmentAffiliations();
         public abstract People[] getPersonsThisOrg(Guid idOrg);
 
         //Feedbacks
