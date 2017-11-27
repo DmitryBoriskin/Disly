@@ -7,3 +7,31 @@
 .main-menu li > a:hover {
   color: #3973e6;
 }
+.top-slider-wrapper {
+  background-color: #ccd3e0;
+}
+.slider-message-1 span:before,
+.slider-message-1 .slider-message-title {
+  color: #3973e6;
+}
+.slider-message-2 span:before,
+.slider-message-2 .slider-message-title {
+  color: #45474d;
+}
+.slider-message-3 span:before,
+.slider-message-3 .slider-message-title {
+  color: #e55639;
+}
+.module-material-item {
+  background-color: #ebedf2;
+}
+.module-material-item:hover {
+  background-color: #3973e6;
+  color: #fff;
+}
+.module-material-item:hover:after {
+  border-bottom: 10px solid #1f4799;
+}
+.imglink-benefit-block {
+  background-color: #ebedf2;
+}

@@ -43,13 +43,13 @@
     int i = 0;
 }
 <!-- слайдер -->
-<div class="container-fluid">
+<div>
     <div class="top-slider-wrapper">
         <div class="container">
             <div class="row">
                 @if (slider != null && slider.Count() > 0)
                 {
-                    <div class="col-md-10">
+                    <div class="col-sm-12 col-md-9">
                         <div id="myCarousel" class="carousel slide slider" data-ride="carousel">
                             <!-- Wrapper for slides -->
                             <div class="carousel-inner top-slider top-slider-shadow">
@@ -71,33 +71,31 @@
                                                 <div class="slider-text">
                                                     @Html.Raw(text)
                                                 </div>
-
-                                                <!-- Left and right controls -->
-                                                @if (slider.Count() > 1)
-                                                {
-                                                    <div class="slider-controls">
-                                                        <a class="left" href="#myCarousel" data-slide="prev">
-                                                            <span class="ti-arrow-circle-left"></span>
-                                                            <span class="sr-only">Previous</span>
-                                                        </a>
-                                                        <a class="right" href="#myCarousel" data-slide="next">
-                                                            <span class="ti-arrow-circle-right"></span>
-                                                            <span class="sr-only">Next</span>
-                                                        </a>
-                                                    </div>
-                                                }
                                             </div>
                                         </div>
+                                    </div>
+                                }
+                                @if (slider.Count() > 1)
+                                {
+                                    <div class="slider-controls">
+                                        <a class="left" href="#myCarousel" data-slide="prev">
+                                            <span class="ti-arrow-circle-left"></span>
+                                            <span class="sr-only">Previous</span>
+                                        </a>
+                                        <a class="right" href="#myCarousel" data-slide="next">
+                                            <span class="ti-arrow-circle-right"></span>
+                                            <span class="sr-only">Next</span>
+                                        </a>
                                     </div>
                                 }
                             </div>
                         </div>
                     </div>
                 }
-                <div class="col-md-2">
+                <div class="col-sm-12 col-md-3 text-right">
                     <div class="slider-message-block">
                         <a target="_blank" href="/RedirectRegistry/Hospitals/@Model.Oid">
-                            <div class="slider-message blue">
+                            <div class="slider-message slider-message-1">
                                 <div class="icon-slider-message">
                                     <span class="ti-support"></span>
                                 </div>
@@ -107,8 +105,8 @@
                                 </div>
                             </div>
                         </a>
-                        <a href="#">
-                            <div class="slider-message black">
+                        <a href="/contacts?t=phone">
+                            <div class="slider-message slider-message-2">
                                 <div class="icon-slider-message">
                                     <span class="ti-mobile"></span>
                                 </div>
@@ -117,8 +115,8 @@
                                 </div>
                             </div>
                         </a>
-                        <a href="#">
-                            <div class="slider-message orange">
+                        <a href="/vote">
+                            <div class="slider-message slider-message-3">
                                 <div class="icon-slider-message">
                                     <span class="ti-check-box"></span>
                                 </div>
@@ -135,11 +133,11 @@
 </div>
 <!-- конец слайдера -->
 <!-- модуль новостей -->
-<div class="container">
+<div class="container">    
     @if (Model.Materials != null)
     {
-        <div class="news-module">
-            <p class="module-title">Пресс-центр<span class="ti-folder"></span><a class="link-to-archive" href="#">Архив</a></p>
+        <div class="news-module">imglink-benefit-block module-main-page
+            <p class="module-title">Пресс-центр<span class="ti-folder"></span><a class="link-to-archive" href="/press">Архив</a></p>
             <div class="row">
                 <div class="col-md-3">
                     @if (announcements != null && announcements.Count() > 0)
@@ -246,7 +244,7 @@
 </div>
 <!-- конец модуля новостей -->
 <!-- модуль полезные ресурсы -->
-<div class="container-fluid">
+<div>
     @if (benefitBanners != null)
     {
         <div class="imglink-benefit-block module-main-page">
