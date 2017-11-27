@@ -1384,7 +1384,10 @@ namespace cms.dbase
                                  join s in db.cms_sitess on o.id equals s.f_content into ss
                                  from s in ss.DefaultIfEmpty()
                                  where s.id == null || s.f_content.Equals(o.id)
-                                 where t.f_type.Equals(type)
+                                 join p in db.content_people_org_links on a.f_people equals p.id into ts
+                                 from p in ts.DefaultIfEmpty()
+                                 where p.id == null || p.id == a.f_people
+                                 where t.f_type.Equals(type) && o.f_oid != null
                                  select new OrgFrontModel
                                  {
                                      Id = o.id,
@@ -1398,7 +1401,7 @@ namespace cms.dbase
                                      Link = s.c_alias,
                                      Leader = new OrgsAdministrativ
                                      {
-                                         id = a.id,
+                                         id = p.f_people,
                                          Surname = a.c_surname,
                                          Name = a.c_name,
                                          Patronymic = a.c_patronymic,
@@ -1419,8 +1422,11 @@ namespace cms.dbase
                                  where a.id == null || a.f_org.Equals(o.id) && a.b_leader
                                  join s in db.cms_sitess on o.id equals s.f_content into ss
                                  from s in ss.DefaultIfEmpty()
+                                 join p in db.content_people_org_links on a.f_people equals p.id into ts
+                                 from p in ts.DefaultIfEmpty()
+                                 where p.id == null || p.id == a.f_people
                                  orderby o.n_sort
-                                 where s.id == null || s.f_content.Equals(o.id)
+                                 where (s.id == null || s.f_content.Equals(o.id)) && o.f_oid != null
                                  select new OrgFrontModel
                                  {
                                      Id = o.id,
@@ -1435,7 +1441,7 @@ namespace cms.dbase
                                      Affiliation = o.f_department_affiliation,
                                      Leader = new OrgsAdministrativ
                                      {
-                                         id = a.id,
+                                         id = p.f_people,
                                          Surname = a.c_surname,
                                          Name = a.c_name,
                                          Patronymic = a.c_patronymic,

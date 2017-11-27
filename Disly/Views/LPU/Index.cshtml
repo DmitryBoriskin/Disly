@@ -47,7 +47,7 @@
             <div class="col-md-12">
                 @foreach (var item in Model.OrgList)
                 {
-                    <div class="row">
+                    <div class="row org_item">
                         <div class="col-md-1">
                             @if (!string.IsNullOrWhiteSpace(item.Logo))
                             {
@@ -108,20 +108,22 @@
                         <div class="col-md-2">
                             @if (item.Leader != null && item.Leader.id != Guid.Empty)
                             {
-                                if (item.Leader.Photo != null && !string.IsNullOrWhiteSpace(item.Leader.Photo.Url))
+                                <a target="_blank" href="/doctors/@item.Leader.id">
+                                @if (item.Leader.Photo != null && !string.IsNullOrWhiteSpace(item.Leader.Photo.Url))
                                 {
                                     <img class="img-circle img-person-list" src="@item.Leader.Photo.Url" alt="@item.Leader.Surname" />
                                 }
 
-                                if (!string.IsNullOrWhiteSpace(item.Leader.Post))
+                                @if (!string.IsNullOrWhiteSpace(item.Leader.Post))
                                 {
                                     <div><strong>@item.Leader.Post</strong></div>
                                 }
 
-                                if (!string.IsNullOrWhiteSpace(item.Leader.Surname))
+                                @if (!string.IsNullOrWhiteSpace(item.Leader.Surname))
                                 {
                                     <div>@item.Leader.Surname @item.Leader.Name @item.Leader.Patronymic</div>
                                 }
+                                    </a>
                             }
                         </div>
                     </div>
