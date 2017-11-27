@@ -517,6 +517,7 @@ namespace cms.dbase
                     var query = db.content_sv_materials_groupss
                         .Where(w => materialIds.Contains(w.id))
                         .Where(w => w.group_id.Equals(g))
+                        .Where(w => w.b_disabled==false)
                         .OrderByDescending(o => o.d_date)
                         .Select(s => new MaterialFrontModule
                         {
@@ -529,7 +530,7 @@ namespace cms.dbase
                         });
 
                     // берём последние 3 новости данной группы
-                    if (query.Any()) list.AddRange(query.Take(3));
+                    if (query.Any()) list.AddRange(query.Take(5));
                 }
 
                 if (list.Count() > 0) return list;
