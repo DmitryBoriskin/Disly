@@ -68,8 +68,6 @@ namespace Integration.Frmp.library
                         .Select(p => p.RecordPost)
                         .Distinct()
                         .ToArray();
-
-
                     try
                     {
                         ImportPosts(posts);
@@ -92,7 +90,7 @@ namespace Integration.Frmp.library
                     {
                         SrvcLogger.Fatal("{WORK}", "Ошибка при добавлении данных об сотрудниках в таблицу dbo.import_frmp_peoples" + Environment.NewLine + " " + e.ToString());
                     }
-                    
+
                     var postsEmployee = arrayOfEmployees.Employees
                         .Select(s => new EmplPost
                         {
@@ -101,7 +99,8 @@ namespace Integration.Frmp.library
                                     .Select(r => new PostWithType
                                     {
                                         Post = r.RecordPost,
-                                        PositionType = r.RecordPositionType
+                                        PositionType = r.RecordPositionType,
+                                        OrgId = r.Organisation.Equals(s.UZ.Name) ? s.UZ.ID : Guid.Empty
                                     }).ToArray()
                         })
                         .ToArray();
@@ -334,24 +333,30 @@ namespace Integration.Frmp.library
                     {
                         var isExists = db.ImportFrmpPeoplePostsLinks
                             .Where(w => w.FPeople.Equals(item.Id))
-                            .Where(w => w.FEmployeePost.Equals(p.Post.ID));
+                            .Where(w => w.FEmployeePost.Equals(p.Post.ID))
+                            .Where(w => w.FOrgGuid.Equals(p.OrgId));
 
-                        if (!isExists.Any())
+                        if (p.OrgId != Guid.Empty)
                         {
-                            db.ImportFrmpPeoplePostsLinks
-                                .Value(v => v.FPeople, item.Id)
-                                .Value(v => v.FEmployeePost, p.Post.ID)
-                                .Value(v => v.NType, p.PositionType.ID)
-                                .Insert();
-
-                        }
-                        else
-                        {
-                            db.ImportFrmpPeoplePostsLinks
-                                .Where(w => w.FPeople.Equals(item.Id))
-                                .Where(w => w.FEmployeePost.Equals(p.Post.ID))
-                                .Set(u => u.NType, p.PositionType.ID)
-                                .Update();
+                            if (!isExists.Any())
+                            {
+                                db.ImportFrmpPeoplePostsLinks
+                                    .Value(v => v.FPeople, item.Id)
+                                    .Value(v => v.FEmployeePost, p.Post.ID)
+                                    .Value(v => v.NType, p.PositionType.ID)
+                                    .Value(v => v.FOrgGuid, p.OrgId)
+                                    .Insert();
+                            }
+                            else
+                            {
+                                db.ImportFrmpPeoplePostsLinks
+                                    .Where(w => w.FPeople.Equals(item.Id))
+                                    .Where(w => w.FEmployeePost.Equals(p.Post.ID))
+                                    .Where(w => w.FOrgGuid.Equals(p.OrgId))
+                                    .Set(u => u.NType, p.PositionType.ID)
+                                    .Set(u => u.FOrgGuid, p.OrgId)
+                                    .Update();
+                            }
                         }
 
                         if (count % 1000 == 0)
