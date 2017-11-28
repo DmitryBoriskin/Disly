@@ -110,6 +110,7 @@ namespace Integration.Frmp.models
 		[Column(@"f_people"),        NotNull] public Guid FPeople       { get; set; } // uniqueidentifier
 		[Column(@"f_employee_post"), NotNull] public int  FEmployeePost { get; set; } // int
 		[Column(@"n_type"),          NotNull] public int  NType         { get; set; } // int
+		[Column(@"f_org_guid"),      NotNull] public Guid FOrgGuid      { get; set; } // uniqueidentifier
 	}
 
 	[Table(Schema="dbo", Name="import_frmp_peoples")]

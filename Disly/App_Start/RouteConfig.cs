@@ -43,6 +43,19 @@ namespace Disly
                defaults: new { controller = "LPU", action = "Index", id = UrlParameter.Optional }
             );
 
+            // врачи портала
+            routes.MapRoute(
+               name: "PortalDoctors",
+               url: "PortalDoctors/",
+               defaults: new { controller = "PortalDoctors", action = "Index"}
+            );
+
+            routes.MapRoute(
+               name: "PortalDoctorsItem",
+               url: "PortalDoctors/{id}",
+               defaults: new { controller = "Doctors", action = "Item" }
+            );
+
             //голосование
             routes.MapRoute(
                name: "vote",

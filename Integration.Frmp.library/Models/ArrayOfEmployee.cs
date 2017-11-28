@@ -31,7 +31,7 @@ namespace Integration.Frmp.library.Models
         /// Идентификатор
         /// </summary>
         public Guid Id { get; set; }
-
+        
         /// <summary>
         /// Должности
         /// </summary>
@@ -52,5 +52,10 @@ namespace Integration.Frmp.library.Models
         /// Тип совместительства
         /// </summary>
         public PositionType PositionType { get; set; }
+
+        /// <summary>
+        /// Идентификатор организации
+        /// </summary>
+        public Guid OrgId { get; set; }
     }
 }
