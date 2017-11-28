@@ -320,8 +320,6 @@ namespace Disly.Areas.Admin.Controllers
             //    OrgsTypes = _cmsRepository.getOrgTypesList(new OrgTypeFilter() { })
             //};
 
-
-
             return PartialView("Modal/Events", model);
         }
 

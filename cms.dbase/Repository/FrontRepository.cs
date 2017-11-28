@@ -330,7 +330,31 @@ namespace cms.dbase
                 return null;
             }
         }
+        /// <summary>
+        /// Список прикрепленных лдокументов к элементу карты сайта
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public override DocumentsModel[] getAttachDocuments(Guid id)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var data = db.content_documentss.Where(w => w.id_page == id)
+                 .OrderBy(o => o.n_sort)
+                 .Select(s => new DocumentsModel
+                 {
+                     id = s.id,
+                     Title = s.c_title,
+                     FilePath = s.c_file_path,
+                     idPage = s.id_page
+                 })
 
+                 ;
+                if (!data.Any()) { return null; }
+                else { return data.ToArray(); }
+            }
+
+        }
 
         /// <summary>
         /// Получаем хленые крошки
@@ -570,7 +594,11 @@ namespace cms.dbase
                     return query.Select(s => new MaterialsModel
                     {
                         Title = s.c_title,
-                        Text = s.c_text
+                        Text = s.c_text,
+                        Date=s.d_date,
+                        PreviewImage= new Photo {
+                            Url=s.c_preview
+                        }
                     }).First();
                 }
                 return null;

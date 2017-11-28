@@ -44,8 +44,10 @@
   color: #e55639;
 }
 .tabs li.active a {
-  border-bottom: 2px solid #e55639;
   color: #e55639;
+}
+.tabs li.active a:before {
+  background-color: #e55639;
 }
 .tabs li.active a:hover,
 .tabs li.active a:active,
@@ -54,4 +56,24 @@
 }
 .btn-primary {
   background-color: #3973e6;
+}
+.btn-primary:hover,
+.btn-primary:active,
+.btn-primary:focus {
+  background-color: #1f4799;
+}
+.module-media {
+  background-color: #3973e6;
+}
+.media_item_circle__photo {
+  background-color: #3973e6;
+}
+.media_item_circle__video {
+  color: #3973e6;
+}
+.attachfile_item .attachfile_item__ext {
+  color: #e55639;
+}
+.attachfile_item_info {
+  background-color: #ebedf2;
 }

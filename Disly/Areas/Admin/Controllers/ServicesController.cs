@@ -381,6 +381,9 @@ namespace Disly.Areas.Admin.Controllers
                 case "orgs_administrativ":
                     Result = _cmsRepository.permit_OrgsAdminstrativ(id, Guid.Parse(menuSort), permit);
                     break;
+                case "documents":
+                    Result = _cmsRepository.permit_Documents(id, permit);
+                    break;
             }
             return Content(Result.ToString());
         }

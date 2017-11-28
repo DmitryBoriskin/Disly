@@ -1,5 +1,5 @@
 ﻿@model ContatcsViewModel
-<ul class="nav nav-pills">
+<ul class="nav nav-pills tabs">
     @foreach (var item in Model.Nav)
     {
         string _class = (item.Alias == Model.Type) ? "class=active":"";

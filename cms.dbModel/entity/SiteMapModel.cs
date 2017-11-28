@@ -68,6 +68,11 @@ namespace cms.dbModel.entity
         public bool Disabled { get; set; }
 
         /// <summary>
+        /// Заблокировано админом, от удаления и редактирования некоторых параметров
+        /// </summary>
+        public bool Blocked { get; set; }
+
+        /// <summary>
         /// Флаг запрещённости в меню
         /// </summary>
         public bool DisabledMenu { get; set; }

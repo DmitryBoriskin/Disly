@@ -130,11 +130,15 @@
     <Content Include="Areas\Admin\Views\Feedbacks\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Feedbacks\Item.cshtml" />
     <Content Include="Content\css\common.css" />
+    <Content Include="Content\css\print.css" />
     <Content Include="Content\css\styles_popUp.css" />
     <Content Include="Content\css\styles.css" />
     <Content Include="Content\css\styles_login.css" />
     <Content Include="Content\css\styles_old.css" />
     <Content Include="Content\css\theme\first.css" />
+    <Content Include="Content\css\theme\first.min.css">
+      <DependentUpon>first.css</DependentUpon>
+    </Content>
     <Content Include="Content\decor\chuvashia\bg.png" />
     <Content Include="Content\decor\chuvashia\chuvashia-logo.png" />
     <Content Include="Content\decor\chuvashia\favicon.ico" />
@@ -187,7 +191,10 @@
     <Content Include="Content\img\obr-project.png" />
     <Content Include="Content\img\preloader_planet.svg" />
     <Content Include="Content\img\preloader.svg" />
+    <Content Include="Content\img\present-ico.png" />
+    <Content Include="Content\img\share-arrow.png" />
     <Content Include="Content\img\temporal.jpg" />
+    <Content Include="Content\img\youtube-ico.png" />
     <Content Include="Content\js\script.js" />
     <Content Include="Content\plugins\bonsai\css\jquery.bonsai.css" />
     <Content Include="Content\plugins\bonsai\js\jquery.bonsai.js" />
@@ -345,6 +352,13 @@
     <Content Include="Content\plugins\jquery\jquery.ui.js" />
     <Content Include="Content\plugins\mCustomScrollbar\jquery.mCustomScrollbar.css" />
     <Content Include="Content\plugins\mCustomScrollbar\jquery.mCustomScrollbar.js" />
+    <Content Include="Content\plugins\mobileGallery\img\icons.png" />
+    <Content Include="Content\plugins\mobileGallery\img\icons.svg" />
+    <Content Include="Content\plugins\mobileGallery\img\loader.gif" />
+    <Content Include="Content\plugins\mobileGallery\ios-orientationchange-fix.js" />
+    <Content Include="Content\plugins\mobileGallery\js\jquery-2.1.0.min.js" />
+    <Content Include="Content\plugins\mobileGallery\js\jquery.swipebox.js" />
+    <Content Include="Content\plugins\mobileGallery\swipebox.css" />
     <Content Include="Content\plugins\tinymce\jquery.tinymce.min.js" />
     <Content Include="Content\plugins\tinymce\langs\ru.js" />
     <Content Include="Content\plugins\tinymce\license.txt" />
@@ -520,6 +534,7 @@
     <Compile Include="Areas\Admin\Controllers\AccountController.cs" />
     <Compile Include="Areas\Admin\Controllers\BannersController.cs" />
     <Compile Include="Areas\Admin\Controllers\cmsMenuController.cs" />
+    <Compile Include="Areas\Admin\Controllers\DocumentsController .cs" />
     <Compile Include="Areas\Admin\Controllers\VoteController.cs" />
     <Compile Include="Areas\Admin\Controllers\SiteSectionController.cs" />
     <Compile Include="Areas\Admin\Controllers\MainSpecialistController.cs" />
@@ -544,6 +559,7 @@
     <Compile Include="Areas\Admin\Controllers\CoreController.cs" />
     <Compile Include="Areas\Admin\Models\BannersViewModel.cs" />
     <Compile Include="Areas\Admin\Models\cmsMenuViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\DocumentsViewModel.cs" />
     <Compile Include="Areas\Admin\Models\PersonViewModel.cs" />
     <Compile Include="Areas\Admin\Models\SiteSectionViewModel.cs" />
     <Compile Include="Areas\Admin\Models\MainSpecialistViewModel.cs" />
@@ -794,6 +810,7 @@
     <Content Include="Content\fonts\OpenSans\opensans-regular-webfont.ttf" />
     <Content Include="Content\fonts\OpenSans\opensans-regular-webfont.woff" />
     <Content Include="Content\fonts\OpenSans\opensans-regular-webfont.woff2" />
+    <Content Include="Areas\Admin\Views\Documents\Index.cshtml" />
     <None Include="Content\plugins\datatables\i18n\ru.json" />
     <Content Include="Content\plugins\tinymce\langs\readme.md" />
     <Content Include="Content\plugins\tinymce\skins\lightgray\fonts\tinymce-small.eot" />
@@ -827,6 +844,9 @@
     <Content Include="Views\MapSite\Index.cshtml" />
     <Content Include="Views\LPU\Index.cshtml" />
     <Content Include="Views\LPU\Nav.cshtml" />
+    <Content Include="Views\LPU\List.cshtml" />
+    <Content Include="Views\Press\part\Item.cshtml" />
+    <Content Include="Views\Home\part\media.cshtml" />
     <Content Include="Views\PortalDoctors\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>

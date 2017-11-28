@@ -9,5 +9,9 @@ namespace Disly.Models
     {         
         public SiteMapModel Item { get; set; }
         public SiteMapModel[] Child{ get; set; }
+        /// <summary>
+        /// Прикрепленные документы
+        /// </summary>
+        public DocumentsModel[] Documents { get; set; }
     }
 }
