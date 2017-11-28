@@ -556,14 +556,12 @@ a.link-close:before {
 /* ------- // cmsMenu.aspx ---------- */
 
 /* ---------- SiteMap.aspx ---------- */
-    
+
 /* ------- // SiteMap.aspx ---------- */
-
 /* --------- Users.aspx  ------------ */
-
 /* ------- // Users.aspx  ----------- */
-
-.child-list{}
+.child-list {
+}
 .child-list_head h1{display:inline-block;}
 
 
@@ -919,6 +917,9 @@ a.button.icon-cancel{
 }
 .icon-archive:before {
     content: '\ea53';
+}
+.icon-attach:before {
+    content: '\e854';
 }
 .icon-link:before {
     content: '\ea24';

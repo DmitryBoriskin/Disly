@@ -293,7 +293,12 @@ a.button  {
 .icon-recovery:before { 
     content: '\f054';
 }
-
+.icon-icon-trash-2:before {
+    content: '\eb85';
+}
+.delete-document span{
+    cursor: pointer;
+}
 /*Modal*/
 .loader_only {
     display:block;

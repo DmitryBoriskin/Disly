@@ -43,7 +43,7 @@ namespace Disly.Controllers
             #region Создаем переменные (значения по умолчанию)            
             string _ViewName = (ViewName != String.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";
 
-            string PageTitle = "новости";
+            string PageTitle = "Новости";
             string PageDesc = "описание страницы";
             string PageKeyw = "ключевые слова";
             #endregion            
@@ -64,7 +64,7 @@ namespace Disly.Controllers
             #region Создаем переменные (значения по умолчанию)            
             string _ViewName = (ViewName != String.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";
 
-            string PageTitle = "новости";
+            string PageTitle =(model.Item!=null)?model.Item.Title: "Новости";
             string PageDesc = "описание страницы";
             string PageKeyw = "ключевые слова";
             #endregion
