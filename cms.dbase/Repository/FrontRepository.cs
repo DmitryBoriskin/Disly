@@ -1563,7 +1563,7 @@ namespace cms.dbase
                                        domain = s.c_alias
                                    }
                                });
-
+                 
                 // кол-во докторов
                 int itemCount = doctors.Count();
 
