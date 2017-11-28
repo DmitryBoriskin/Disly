@@ -17,6 +17,7 @@ namespace cms.dbModel
         public abstract SiteMapModel getSiteMap(string path, string alias, string domain);
         public abstract string getContactsText(string domain, string frontSection);
         public abstract SiteMapModel[] getSiteMapChild(Guid ParentId);
+        public abstract DocumentsModel[] getAttachDocuments(Guid id);
         public abstract List<Breadcrumbs> getBreadCrumbCollection(string Url, string domain);
 
         public abstract MaterialsList getMaterialsList(FilterParams filtr);
@@ -57,5 +58,8 @@ namespace cms.dbModel
         public abstract string getOrgTypeName(Guid id);
         public abstract DepartmentAffiliationModel[] getDepartmentAffiliations();
         public abstract string getAffiliationDepartment(Guid id);
+
+        // врачи портала
+        public abstract DoctorList getDoctorsList(FilterParams filter);
     }
 }

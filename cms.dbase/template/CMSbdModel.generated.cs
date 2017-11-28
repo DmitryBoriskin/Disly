@@ -1282,9 +1282,10 @@ namespace cms.dbase.models
 	[Table(Schema="dbo", Name="content_people_employee_posts_link")]
 	public partial class content_people_employee_posts_link
 	{
-		[Column, NotNull] public Guid f_people { get; set; } // uniqueidentifier
-		[Column, NotNull] public int  f_post   { get; set; } // int
-		[Column, NotNull] public int  n_type   { get; set; } // int
+		[Column, NotNull    ] public Guid  f_people   { get; set; } // uniqueidentifier
+		[Column, NotNull    ] public int   f_post     { get; set; } // int
+		[Column, NotNull    ] public int   n_type     { get; set; } // int
+		[Column,    Nullable] public Guid? f_org_guid { get; set; } // uniqueidentifier
 
 		#region Associations
 
@@ -1827,6 +1828,7 @@ namespace cms.dbase.models
 		[Column, NotNull] public Guid f_people        { get; set; } // uniqueidentifier
 		[Column, NotNull] public int  f_employee_post { get; set; } // int
 		[Column, NotNull] public int  n_type          { get; set; } // int
+		[Column, NotNull] public Guid f_org_guid      { get; set; } // uniqueidentifier
 
 		#region Associations
 
@@ -1895,6 +1897,15 @@ namespace cms.dbase.models
 
 	public static partial class CMSdbStoredProcedures
 	{
+		#region import_frmp_employees
+
+		public static int import_frmp_employees(this DataConnection dataConnection)
+		{
+			return dataConnection.ExecuteProc("[dbo].[import_frmp_employees]");
+		}
+
+		#endregion
+
 		#region sp_alterdiagram
 
 		public static int sp_alterdiagram(this DataConnection dataConnection, string @diagramname, int? @owner_id, int? @version, byte[] @definition)

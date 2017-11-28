@@ -236,5 +236,6 @@ namespace cms.dbModel
         public abstract bool insDocuments(DocumentsModel insert);
         public abstract DocumentsModel getDocumentsPath(Guid id);
         public abstract bool deleteSiteMapDocuments(Guid id);
+        public abstract bool permit_Documents(Guid id, int num);
     }
 }

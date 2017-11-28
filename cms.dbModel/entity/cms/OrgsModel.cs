@@ -439,6 +439,21 @@ namespace cms.dbModel.entity
         /// Тип
         /// </summary>
         public int Type { get; set; }
+
+        /// <summary>
+        /// Идентификатор организации (поле f_guid)
+        /// </summary>
+        public Guid? OrgId { get; set; }
+
+        /// <summary>
+        /// Домен 
+        /// </summary>
+        public string OrgAlias { get; set; }
+
+        /// <summary>
+        /// Название организации
+        /// </summary>
+        public string OrgTitle { get; set; }
     }
     
     /// <summary>
@@ -527,8 +542,7 @@ namespace cms.dbModel.entity
         /// </summary>
         public Boolean Leader { get; set; }
     }
-
-
+    
 #warning Избавиться от моделей ниже
     /// <summary>
     /// Модель, описывающая совокупность новости и привязанных к ней организаций
@@ -647,6 +661,22 @@ namespace cms.dbModel.entity
         /// Глава организации
         /// </summary>
         public OrgsAdministrativ Leader { get; set; }
+    }
+
+    /// <summary>
+    /// Постраничный список докторов
+    /// </summary>
+    public class DoctorList
+    {
+        /// <summary>
+        /// Список докторов
+        /// </summary>
+        public People[] Doctors { get; set; }
+
+        /// <summary>
+        /// Пейджер
+        /// </summary>
+        public Pager Pager { get; set; }
     }
 }
 

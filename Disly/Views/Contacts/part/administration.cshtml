@@ -2,15 +2,42 @@
 @if (Model.Administrativ != null)
 {
     <table class="table">
+        <tr>
+            <th>Изображение</th>
+            <th>Ф.И.О./Телефон</th>
+            <th>&nbsp;</th>
+        </tr>
         @foreach (var item in Model.Administrativ)
         {
-            <tr>
-                <td><img src="@item.Photo.Url" /></td>
-                <td>@item.Surname @item.Name @item.Patronymic<br>@item.Post</td>
-                <td>@item.Phone</td>
-                <td>@Html.Raw(item.Text)</td>
-            </tr>
+            string fio = item.Surname + " " + item.Name + " " + item.Patronymic;
 
+            <tr>
+                <td>
+                    @if (item.PeopleF != null)
+                    {
+                        <a target="_blank" href="/doctors/@item.PeopleF">
+                            <img class="img-circle img-person-list" src="@item.Photo.Url" />
+                        </a>
+                    }
+                    else
+                    {
+                        <img class="img-circle img-person-list" src="@item.Photo.Url" />
+                    }
+                </td>
+                <td>
+                    @if (item.PeopleF != null)
+                    {
+                        <a href="/doctors/@item.PeopleF">@fio</a>
+                    }
+                    else
+                    {
+                        @fio
+                    }
+                    <br>@item.Post
+                    <p>@item.Phone</p>
+                </td>
+                <td style="width:50%;">@Html.Raw(item.Text)</td>
+            </tr>
         }
     </table>
 }

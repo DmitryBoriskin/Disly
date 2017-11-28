@@ -330,7 +330,31 @@ namespace cms.dbase
                 return null;
             }
         }
+        /// <summary>
+        /// Список прикрепленных лдокументов к элементу карты сайта
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public override DocumentsModel[] getAttachDocuments(Guid id)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var data = db.content_documentss.Where(w => w.id_page == id)
+                 .OrderBy(o => o.n_sort)
+                 .Select(s => new DocumentsModel
+                 {
+                     id = s.id,
+                     Title = s.c_title,
+                     FilePath = s.c_file_path,
+                     idPage = s.id_page
+                 })
 
+                 ;
+                if (!data.Any()) { return null; }
+                else { return data.ToArray(); }
+            }
+
+        }
 
         /// <summary>
         /// Получаем хленые крошки
@@ -517,7 +541,7 @@ namespace cms.dbase
                     var query = db.content_sv_materials_groupss
                         .Where(w => materialIds.Contains(w.id))
                         .Where(w => w.group_id.Equals(g))
-                        .Where(w => w.b_disabled==false)
+                        .Where(w => w.b_disabled == false)
                         .OrderByDescending(o => o.d_date)
                         .Select(s => new MaterialFrontModule
                         {
@@ -1027,27 +1051,6 @@ namespace cms.dbase
         {
             using (var db = new CMSdb(_context))
             {
-                #region comments
-                //var query = db.cms_sitess
-                //              .Join(db.content_people_org_links, e => e.f_content, o => o.f_org, (e, o) => new { o, e })
-                //              .Join(db.content_peoples, m => m.o.f_people, n => n.id, (m, n) => new { m, n });
-
-                //if (!String.IsNullOrEmpty(domain))
-                //{
-                //    query = query.Where(w => w.m.e.c_alias == domain);
-                //}
-
-                //if (query.Any())
-                //{
-                //    return query.Select(s => new People
-                //    {
-                //        Id = s.n.id,
-                //        FIO = s.n.c_surname + " " + s.n.c_name + " " + s.n.c_patronymic
-                //    }).First();                    
-                //}
-                //return null;
-                #endregion
-
                 var query = db.content_peoples
                     .Where(w => w.id.Equals(id))
                     .Select(s => new People
@@ -1298,14 +1301,14 @@ namespace cms.dbase
 
 
         /// <summary>
-        /// 
+        /// Список админстративного персонала
         /// </summary>
         /// <returns></returns>
         public override OrgsAdministrativ[] getAdministrativ(string domain)
         {
             using (var db = new CMSdb(_context))
             {
-                var query= db.cms_sitess.Where(w => w.c_alias == domain);
+                var query = db.cms_sitess.Where(w => w.c_alias == domain);
                 if (query.Any())
                 {
                     var data = query.Single();
@@ -1315,14 +1318,18 @@ namespace cms.dbase
                         if (adm.Any())
                         {
                             return adm
-                                .OrderBy(o=>o.n_sort)
-                                .Select(s => new OrgsAdministrativ() {
-                                        Surname=s.c_surname,
-                                        Name=s.c_name,
-                                        Patronymic=s.c_patronymic,
-                                        Phone=s.c_phone,
-                                        Photo=new Photo {Url= s.c_photo}
-                                    }).ToArray();
+                                .OrderBy(o => o.n_sort)
+                                .Select(s => new OrgsAdministrativ()
+                                {
+                                    Surname = s.c_surname,
+                                    Name = s.c_name,
+                                    Patronymic = s.c_patronymic,
+                                    Phone = s.c_phone,
+                                    Photo = new Photo { Url = s.c_photo },
+                                    Post = s.c_post,
+                                    Text = s.c_text,
+                                    PeopleF = s.f_people
+                                }).ToArray();
                         }
                     }
                 }
@@ -1510,6 +1517,97 @@ namespace cms.dbase
                 return db.content_orgs_department_affiliations
                     .Where(w => w.id.Equals(id))
                     .Select(s => s.c_title).SingleOrDefault();
+            }
+        }
+
+        /// <summary>
+        /// Получаем список врачей для портала
+        /// </summary>
+        /// <param name="filter">Фильтр</param>
+        /// <returns>Список врачей</returns>
+        public override DoctorList getDoctorsList(FilterParams filter)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                string search = !string.IsNullOrWhiteSpace(filter.SearchText)
+                    ? filter.SearchText.ToLower() : null;
+                string post = !string.IsNullOrWhiteSpace(filter.Type)
+                    ? filter.Type : null;
+
+                var doctors = (from p in db.content_peoples
+                               join pol in db.content_people_org_links on p.id equals pol.f_people
+                               join o in db.content_orgss on pol.f_org equals o.id
+                               join s in db.cms_sitess on o.id equals s.f_content into ss
+                               from s in ss.DefaultIfEmpty()
+                               where s.f_content == null || s.f_content == o.id
+                               join pepl in db.content_people_employee_posts_links on p.id equals pepl.f_people
+                               join ep in db.content_employee_postss on pepl.f_post equals ep.id
+                               where search == null || (p.c_surname.Contains(search)
+                                                        || p.c_name.Contains(search)
+                                                        || p.c_patronymic.Contains(search))
+                               where post == null || pepl.f_post.ToString().Equals(post)
+                               orderby p.c_surname, p.c_name, p.c_patronymic, ep.c_name
+                               select new
+                               {
+                                   p = new
+                                   {
+                                       id = p.id,
+                                       surname = p.c_surname,
+                                       name = p.c_name,
+                                       patronymic = p.c_patronymic,
+                                       photo = p.c_photo
+                                   },
+                                   ep = new
+                                   {
+                                       id = ep.id,
+                                       name = ep.c_name,
+                                       org = pepl.f_org_guid,
+                                       title = o.c_title,
+                                       domain = s.c_alias
+                                   }
+                               });
+                 
+                // кол-во докторов
+                int itemCount = doctors.Count();
+
+                doctors = doctors
+                    .Skip(filter.Size * (filter.Page - 1))
+                    .Take(filter.Size)
+                    .Select(s => s);
+
+                var doctors2 = doctors
+                    .ToArray()
+                    .GroupBy(g => g.p.id)
+                    .Select(s => new People
+                    {
+                        Id = s.First().p.id,
+                        FIO = s.First().p.surname + " " + s.First().p.name + " " + s.First().p.patronymic,
+                        Photo = s.First().p.photo,
+                        Posts = s.Select(ep2 => new PeoplePost
+                        {
+                            Id = ep2.ep.id,
+                            Name = ep2.ep.name,
+                            OrgId = ep2.ep.org,
+                            OrgAlias = ep2.ep.domain,
+                            OrgTitle = ep2.ep.title
+                        }).ToArray()
+                    });
+
+                if (doctors2.Any())
+                {
+                    return new DoctorList
+                    {
+                        Doctors = doctors2.ToArray(),
+                        Pager = new Pager
+                        {
+                            page = filter.Page,
+                            size = filter.Size,
+                            items_count = itemCount,
+                            page_count = (itemCount % filter.Size > 0) ? (itemCount / filter.Size) + 1 : itemCount / filter.Size
+                        }
+                    };
+                }
+                return null;
             }
         }
     }

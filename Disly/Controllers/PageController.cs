@@ -47,6 +47,7 @@ namespace Disly.Controllers
                     return Redirect("/" + model.Item.FrontSection);
                 }
                 model.Child = _repository.getSiteMapChild(model.Item.Id);
+                model.Documents = _repository.getAttachDocuments(model.Item.Id);
             }
 
             #region Создаем переменные (значения по умолчанию)

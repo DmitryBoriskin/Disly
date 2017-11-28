@@ -59,11 +59,10 @@ namespace Disly.Areas.Admin.Controllers
         [HttpPost]
         [ValidateInput(false)]
         [MultiButton(MatchFormKey = "action", MatchFormValue = "create-btn-files")]
-        public ActionResult Create(Guid id, IEnumerable<HttpPostedFileBase> uploadFile)
+        public ActionResult Create(Guid id, IEnumerable<HttpPostedFileBase> upload)
         {
-            string savePath = Settings.UserFiles + Domain + "/sitemap/doc/" + id + "/";
-
-            foreach (HttpPostedFileBase doc in uploadFile)
+            string savePath = Settings.UserFiles + Domain + "/sitemap/doc/" + id + "/";            
+            foreach (HttpPostedFileBase doc in upload)
             {
                 if (doc != null && doc.ContentLength > 0)
                 {

@@ -71,3 +71,18 @@
 .media_item_circle__video {
   color: #3973e6;
 }
+.attachfile_item .attachfile_item__ext {
+  color: #e55639;
+}
+.attachfile_item_info {
+  background-color: #ebedf2;
+}
+.sitemap-plate {
+  background-color: #ebedf2;
+}
+.sitemap-plate:hover {
+  background-color: #3973e6;
+}
+.sitemap-plate:hover:after {
+  border-bottom: 10px solid #1f4799;
+}
