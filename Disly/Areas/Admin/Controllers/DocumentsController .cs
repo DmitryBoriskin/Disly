@@ -62,7 +62,10 @@ namespace Disly.Areas.Admin.Controllers
         public ActionResult Create(Guid id, IEnumerable<HttpPostedFileBase> uploadFile)
         {
             string savePath = Settings.UserFiles + Domain + "/sitemap/doc/" + id + "/";
+            if (ModelState.IsValid)
+            {
 
+            }
             foreach (HttpPostedFileBase doc in uploadFile)
             {
                 if (doc != null && doc.ContentLength > 0)

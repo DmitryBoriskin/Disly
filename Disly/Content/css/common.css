@@ -861,3 +861,51 @@ body {
 .media_item_circle__video .ico:before {
     content: '\eff2';
 }
+
+.attachfile_item {    border: 1px solid #e6e6e6;    max-width: 255px;    min-width: 255px;    margin-right: 26px;    display: inline-grid;    margin-bottom: 30px;}
+.attachfile_item_title {
+    padding: 12px 14px 7px 40px;
+    font-size: 14px;
+    line-height: 21px;
+    min-height: 61px;
+    word-wrap: break-word;
+    position: relative;
+    overflow: hidden;    
+}
+.attachfile_item_info {    
+    padding: 5px 14px 7px;
+    border-top: 1px solid #e6e6e6;
+    font-size: 14px;
+    line-height: 21px;
+}
+.attachfile_item {
+    position: relative;
+} 
+.attachfile_item a {    
+    text-decoration: underline;
+}
+.attachfile_item_info div {
+    float: right;
+    color: #999;
+}
+
+.attachfile_item .attachfile_item__ext {    
+    position: absolute;
+    left: 13px;
+    top: 12px;
+    font-size: 22px;
+}
+
+.attachfile_item__ext:before {
+    font-family: fontello;
+    margin-right: 10px;
+}
+.attachfile_item__pdf:before {
+    content: '\e890';
+}
+.attachfile_item__doc:before {
+    content: '\e891';
+}
+.attachfile_item__jpg:before {
+    content: '\e894';
+}

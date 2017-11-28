@@ -22,7 +22,7 @@ namespace Disly
                 "~/Content/plugins/bootstrap/js/bootstrap.min.js",
                 "~/Content/plugins/bootstrap/js/bootstrap-toggle.js",
                 "~/Content/plugins/mCustomScrollbar/jquery.mCustomScrollbar.js",
-                "~/Content/plugins/Disly/DislyControls.js",
+                //"~/Content/plugins/Disly/DislyControls.js",
                 "~/Scripts/cms/disly_5_popup.js"
                 ));
 

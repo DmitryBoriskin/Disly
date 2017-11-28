@@ -95,5 +95,32 @@ namespace cms.dbase
         }
 
 
+        public override bool permit_Documents(Guid id, int num)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var data = db.content_documentss.Where(w => w.id == id).Select(s => new DocumentsModel { idPage = s.id_page, Permit = s.n_sort }).First();
+                var PageId = data.idPage;
+
+                if (num > data.Permit)
+                {
+                    db.content_documentss.Where(w => w.id_page == PageId && w.n_sort > data.Permit && w.n_sort <= num)
+                        .Set(p => p.n_sort, p => p.n_sort - 1)
+                        .Update();
+                }
+                else
+                {
+                    db.content_documentss.Where(w => w.id_page == PageId && w.n_sort < data.Permit && w.n_sort >= num)
+                        .Set(p => p.n_sort, p => p.n_sort + 1)
+                        .Update();
+                }
+                db.content_documentss
+                    .Where(w => w.id == id)
+                    .Set(s => s.n_sort, num)
+                    .Update();
+            }
+            return true;
+        }
+
     }
 }

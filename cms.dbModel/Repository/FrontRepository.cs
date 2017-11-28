@@ -17,6 +17,7 @@ namespace cms.dbModel
         public abstract SiteMapModel getSiteMap(string path, string alias, string domain);
         public abstract string getContactsText(string domain, string frontSection);
         public abstract SiteMapModel[] getSiteMapChild(Guid ParentId);
+        public abstract DocumentsModel[] getAttachDocuments(Guid id);
         public abstract List<Breadcrumbs> getBreadCrumbCollection(string Url, string domain);
 
         public abstract MaterialsList getMaterialsList(FilterParams filtr);

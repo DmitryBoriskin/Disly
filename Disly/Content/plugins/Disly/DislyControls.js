@@ -220,6 +220,7 @@
         var $PreviewBlock = $("<div/>", { "class": "preview" });
         var $Wrap = $("<div/>", { "class": "wrap_info" });
         this.$element.css('display', 'none');
+        var _inp = this.$element;
 
         if (this.$element.attr('data-url')) {
             $Wrap.append('<div class="preview_img"><img src="' + this.$element.attr('data-url') + '" /></div>');
@@ -236,6 +237,9 @@
         } else {
             var $ButtonLoad = $('<div/>', { 'class': 'btn_load' }).append('Выберите файл');
             $Wrap.append($ButtonLoad);
+            $ButtonLoad.click(function () {
+                _inp.trigger('click');
+            });
         }
 
         $PreviewBlock.append($Wrap);
@@ -282,7 +286,7 @@
     // ==================
 
     $(function () {
-        $('input[type=file]:visible').DislyFile()
+        $('input[type=file]:visible:not(.noplagin)').DislyFile()
     })
 
     $(document).on('click.bs.inputFile', '.preview_del', function (e) {
@@ -302,7 +306,7 @@
     })
 
 
-    $(document).on('change.bs.inputFile', 'input:file', function (e) {
+    $(document).on('change.bs.inputFile', 'input:file:not(.noplagin)', function (e) {
         var File = $(this)[0].files[0];
         var fileName = File.name;
         var fileType = File.type;
