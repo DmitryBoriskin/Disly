@@ -16,13 +16,13 @@
         {
             <div class="alert alert-danger" role="alert">@ViewBag.FailAlert</div>
         }
-        @Html.ValidationSummary(false, "", new { @class = "alert alert-danger" })
+        @*@Html.ValidationSummary(false, "", new { @class = "alert alert-danger" })*@
 
         <div>
             <div class="col-xs-4">
                 <div class="form-group">
                     <label for="Item_Desc">Документы:</label>
-                    <input name="uploadFile" type="file" multiple="" />
+                    <input name="upload" type="file" multiple/>
                 </div>
             </div>
             <div class="col-xs-8">
