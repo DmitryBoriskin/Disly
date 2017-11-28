@@ -1301,7 +1301,7 @@ namespace cms.dbase
 
 
         /// <summary>
-        /// 
+        /// Список админстративного персонала
         /// </summary>
         /// <returns></returns>
         public override OrgsAdministrativ[] getAdministrativ(string domain)
@@ -1325,7 +1325,10 @@ namespace cms.dbase
                                     Name = s.c_name,
                                     Patronymic = s.c_patronymic,
                                     Phone = s.c_phone,
-                                    Photo = new Photo { Url = s.c_photo }
+                                    Photo = new Photo { Url = s.c_photo },
+                                    Post = s.c_post,
+                                    Text = s.c_text,
+                                    PeopleF = s.f_people
                                 }).ToArray();
                         }
                     }
