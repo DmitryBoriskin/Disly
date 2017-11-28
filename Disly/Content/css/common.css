@@ -846,9 +846,10 @@ body {
     font-size: 20px;
     font-weight: bold;margin-bottom:8px;
 }
-.media_link_item+.media_link_item{margin-top:30px;}
+.media_link_item+.media_link_item{margin-top:17px;}
 .media_link-present img{max-width:62px;float:left;padding-right:18px;}
-.media_link-yotube{}
+.media_link_item.media_link-yotube {padding-top:24px;padding-bottom:23px;
+}
  
 .media_item_link{position:relative;display:block;max-width:100%;background-repeat:no-repeat;background-size:cover;width:100%;min-height:235px; display:block;}
 
