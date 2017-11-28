@@ -815,6 +815,16 @@ body {
     background-color: #2196F3;
 }
 
+/* ЛПУ */
+.org_item{
+    padding-bottom:15px;
+    padding-top:15px;
+}
+.org_item:not(:last-child){
+    border-bottom:1px solid;
+}
+/*  */
+
 
 .module-media{padding:20px 0 30px;}
 .module-media .module-title{color:#fff;}
