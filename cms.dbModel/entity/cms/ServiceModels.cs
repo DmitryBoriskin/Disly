@@ -62,8 +62,12 @@ namespace cms.dbModel.entity
         /// </summary>
         public string url { get; set; }
         /// <summary>
-        /// 
+        /// Выбрано
         /// </summary>
         public string selected { get; set; }
+        /// <summary>
+        /// Доступно для выбора пользователем
+        /// </summary>
+        public bool available { get; set; }
     }
 }

@@ -17,9 +17,10 @@
     <div class="dop-caption icon-layers">Доп. параметры</div>
     @Html.DropDownListFor(m => m.Item.Group, new SelectList(Model.MenuType, "value", "text", 0), new { @class = "selectpicker", @required = "", @title = "Группа", @data_help = "Определяет, в каком разделе будет отображен данный пункт меню." })
     @Html.TextBoxFor(m => m.Item.Class, new { @class = "uc_input", @title = "Иконка", @placeholder = "Иконка", @MaxLength = "32", @data_help = "В данное поле вписывается class элемента, в котором хранится символ из шрифта Fontello" })
+
     @if (Model.Item != null)
     {
-        @Html.ActionLink("Журнал изменений", "log", "services", new { @id =  Model.Item.id }, new { @id = "LogLists", @class = "button pop-up_frame icon-archive", @data_class = "LogList", @title = "Журнал изменений" })
+        @Html.ActionLink("Журнал изменений", "log", "services", new { @id = Model.Item.id }, new { @id = "LogLists", @class = "button pop-up_frame icon-archive", @data_class = "LogList", @title = "Журнал изменений" })
     }
 </div>
 

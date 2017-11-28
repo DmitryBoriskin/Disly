@@ -897,7 +897,6 @@ a.button.icon-cancel{
     content: '\eaa8';
 }          /* Дополнительные услуги */
 .icon-doc-text:before { content:'\e88d'; }          /* Закупки */
-.icon-megaphone:before { content:'\e94c'; }         /* Пресс-центр */
 .icon-docs:before { content:'\e88c'; }              /* Документы */
 .icon-calendar:before {
     content: '\e8a9';
@@ -911,9 +910,6 @@ a.button.icon-cancel{
 
 .icon-menu:before {
     content:'\ed81';
-}
-.icon-list-add:before {
-    content:'\eaa8';
 }
 .icon-archive:before {
     content: '\ea53';
@@ -932,9 +928,6 @@ a.button.icon-cancel{
 }
 
 /* Заголовки */
-.icon-cog-alt:before {
-    content:'\e8a5'; 
-}
 .icon-info-circled-alt:before {
     content:'\ed8d';
 }
@@ -989,21 +982,18 @@ a.button.icon-cancel{
 .icon-site-page:before {
     content: '\e88d';
 }
+.icon-attention-circled:before { content: '\e885'; }
 /*  */
 }
-.icon-layers:before {
-    content: '\eead';
-}
-.row {
-    margin-left: -5px;
-    margin-right: -5px;
-}
 
-[class^=col],
-[class^=col] {
-    padding-left: 5px;
-    padding-right: 5px;
-}
+ /* Деградация */
+ .lt-ie9 del.cross {
+ display:inline;
+ text-decoration: line-through;
+ }
+ .lt-ie9 .del-cross {
+ text-decoration: line-through;
+ }
 
 .depart_phone_wr{position:relative}
 .depart_phone_del{position:absolute;top:30px; right:7px;display:block;cursor:pointer;}
