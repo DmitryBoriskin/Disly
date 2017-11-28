@@ -60,21 +60,21 @@
                         <td>
                             @item.Title
                         </td>
-                        <td class="td-center">
-                            <input type="checkbox" class="iCheck" data-init="false" data-group="@Model.Alias" data-url="@item.MenuId" data-action="read" checked="@item.Read" data-toggle="tooltip" data-placement="top" title="Сохранено">
+                        <td class="groupClaim-item td-center">
+                            <span class="groupClaim-item-tooltip" data-toggle="tooltip" data-placement="left" title="Сохранено"></span>
+                            <input type="checkbox" class="iCheck" data-init="false" data-group="@Model.Alias" data-url="@item.MenuId" data-action="read" checked="@item.Read" >
                         </td>
-                        <td class="td-center">
-                            <div class="CB_Block">
-                                <input type="checkbox" class="iCheck" data-init="false" data-group="@Model.Alias" data-url="@item.MenuId" data-action="write" checked="@item.Write" data-toggle="tooltip" data-placement="top" title="Сохранено">
-                            </div>
+                        <td class="groupClaim-item td-center">
+                            <span class="groupClaim-item-tooltip" data-toggle="tooltip" data-placement="left" title="Сохранено"></span>
+                            <input type="checkbox" class="iCheck" data-init="false" data-group="@Model.Alias" data-url="@item.MenuId" data-action="write" checked="@item.Write">
                         </td>
-                        <td class="td-center">
-                            <div class="CB_Block">
-                                <input type="checkbox" class="iCheck" data-init="false" data-group="@Model.Alias" data-url="@item.MenuId" data-action="change" checked="@item.Change" data-toggle="tooltip" data-placement="top" title="Сохранено">
-                            </div>
+                        <td class="groupClaim-item td-center">
+                            <span class="groupClaim-item-tooltip" data-toggle="tooltip" data-placement="left" title="Сохранено"></span>
+                            <input type="checkbox" class="iCheck" data-init="false" data-group="@Model.Alias" data-url="@item.MenuId" data-action="change" checked="@item.Change">
                         </td>
-                        <td class="td-center">
-                            <input type="checkbox" class="iCheck" data-init="false" data-group="@Model.Alias" data-url="@item.MenuId" data-action="delete" checked="@item.Delete" data-toggle="tooltip" data-placement="top" title="Сохранено">
+                        <td class="groupClaim-item td-center">
+                            <span class="groupClaim-item-tooltip" data-toggle="tooltip" data-placement="left" title="Сохранено"></span>
+                            <input type="checkbox" class="iCheck" data-init="false" data-group="@Model.Alias" data-url="@item.MenuId" data-action="delete" checked="@item.Delete">
                         </td>
                     </tr>
                 }
