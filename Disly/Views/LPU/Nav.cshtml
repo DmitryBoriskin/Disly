@@ -1,11 +1,11 @@
-﻿@model ContatcsViewModel
-<ul class="nav nav-pills tabs">
+﻿@model LPUViewModel
+
+<ul class="nav nav-pills">
     @foreach (var item in Model.Nav)
     {
-        string _class = (item.Alias == Model.Type) ? "class=active":"";
-        string _href = "/contacts";
+        string _class = (item.Alias == Model.Type) ? "class=active" : "";
+        string _href = "/lpu";
         _href += (!String.IsNullOrEmpty(item.Alias)) ? "?t=" + item.Alias : "";
         <li @_class><a href="@_href">@item.Title</a></li>
-    }    
+    }
 </ul>
-

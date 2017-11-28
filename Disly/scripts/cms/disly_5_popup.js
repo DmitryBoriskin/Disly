@@ -8,6 +8,27 @@
     // устанавливаем курсор
     setCursor();
 
+
+    //удаление документов при помощи AJAX
+    if ($('.delete-document').length > 0) {
+        $('.delete-document').click(function () {
+            var elem = $(this);
+            var id = $(this).find('span').attr('data-delete');
+
+            $.ajax({
+                type: "POST",
+                url: '/admin/Documents/Delete/' + id,
+                contentType: false,
+                processData: false,
+                data: false,
+                success: function (result) {
+                    if (result !== '') alert(result);
+                    else elem.parent().remove();
+                }
+            });
+        });
+    }
+
     //Назначение прав группе
     $("#modal-userGroupResolutions-table input[type='checkbox']").on('ifChanged', function () {
         var targetUrl = "/Admin/Services/UpdateGroupClaims";
