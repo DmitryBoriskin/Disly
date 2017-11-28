@@ -230,5 +230,11 @@ namespace cms.dbModel
         public abstract bool insAnswer(Guid idVote, string Variant);
         public abstract bool permit_VoteAnswer(Guid id, Guid VoteId, int num);
         public abstract bool delVoteAnswer(Guid id);
+
+        //Документы
+        public abstract DocumentsModel[] getDocuments(Guid id);
+        public abstract bool insDocuments(DocumentsModel insert);
+        public abstract DocumentsModel getDocumentsPath(Guid id);
+        public abstract bool deleteSiteMapDocuments(Guid id);
     }
 }
