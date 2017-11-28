@@ -34,6 +34,7 @@ button
 	data-action = "noPreloader-accept" - нажатие по кнопке не вызывает прелоадер
 	data-primary = "true"	- кнопка будет реагировать на правильность заполнения формы
 	data-action = "delete,cancel"        - кнопка перед выполнением своего события будет выводит всплывающее окно()
+
 swipebox (документация на сайте http://brutaldesign.github.io/swipebox/)
 	<a href="big/image.jpg" class="swipebox" title="My Caption">
 		<img src="small/image.jpg" alt="image">
