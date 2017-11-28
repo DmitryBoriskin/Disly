@@ -731,6 +731,7 @@ namespace cms.dbase
                                 .Value(v => v.c_alias, sm_item.c_alias)
                                 .Value(v => v.c_title, sm_item.c_title)
                                 .Value(v => v.b_disabled, false)
+                                .Value(v => v.b_blocked, false)
                                 .Value(v => v.b_disabled_menu, false)
                                 .Insert();
 

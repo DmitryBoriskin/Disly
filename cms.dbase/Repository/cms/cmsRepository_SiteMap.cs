@@ -26,9 +26,8 @@ namespace cms.dbase
                 if (string.IsNullOrEmpty(filtr.Group))
                 {
                     var query = db.content_sitemaps
-                        .Where(w => w.f_site.Equals(site))
-                        .Where(w => !w.id.Equals(null))
-                        .Where(w => w.uui_parent.Equals(null))
+                        .Where(w => w.f_site == site)
+                        .Where(w => w.uui_parent == null)
                         .Where(w => !w.c_alias.Equals(" "));
 
                     if (query.Any())
@@ -49,12 +48,14 @@ namespace cms.dbase
                             Desc = s.c_desc,
                             Keyw = s.c_keyw,
                             Disabled = s.b_disabled,
+                            Blocked = s.b_blocked,
                             DisabledMenu = s.b_disabled_menu,
                             Sort = s.n_sort,
                             ParentId = s.uui_parent,
                             CountSibling = getCountSiblings(s.id)
-                        }).Skip(filtr.Size * (filtr.Page - 1))
-                          .Take(filtr.Size);
+                        })
+                        .Skip(filtr.Size * (filtr.Page - 1))
+                        .Take(filtr.Size);
 
                         var siteMapList = list.OrderBy(o => o.Sort).ToArray();
 
@@ -74,17 +75,16 @@ namespace cms.dbase
                 else
                 {
                     Guid menuId = Guid.Empty;
-                    var res = Guid.TryParse(filtr.Group, out menuId); // Вообще filtr.Group должен быть типа Guid!!!, если внего передается Guid
-
+                    var res = Guid.TryParse(filtr.Group, out menuId); // Вообще filtr.Group должен быть типа Guid!!!, если в него передается Guid
                     if (!res)
                         throw new Exception("getSiteMapList: не удалось Guid.TryParse(filtr.Group, out menuId)");
 
+
 #warning Для чего здесь опять view? 
                     var query = db.content_sv_sitemap_menus
-                        .Where(w => w.f_site.Equals(site))
-                        .Where(w => !w.id.Equals(null))
-                        .Where(w => w.f_menutype.Equals(menuId))
-                        .OrderBy(o => o.menu_sort);
+                        .Where(w => w.f_site == site)
+                        .Where(w => w.f_menutype == menuId)
+                        .OrderBy(w => w.menu_sort);
 
                     if (query.Any())
                     {
@@ -104,6 +104,7 @@ namespace cms.dbase
                             Desc = s.c_desc,
                             Keyw = s.c_keyw,
                             Disabled = s.b_disabled,
+                            Blocked = s.b_blocked, //???
                             DisabledMenu = s.b_disabled_menu,
                             Sort = s.n_sort,
                             ParentId = s.uui_parent,
@@ -155,6 +156,7 @@ namespace cms.dbase
                         Desc = s.c_desc,
                         Keyw = s.c_keyw,
                         Disabled = s.b_disabled,
+                        Blocked = s.b_blocked,
                         DisabledMenu = s.b_disabled_menu,
                         Sort = s.n_sort,
                         ParentId = s.uui_parent,
@@ -258,6 +260,7 @@ namespace cms.dbase
                             .Value(p => p.c_desc, item.Desc)
                             .Value(p => p.c_keyw, item.Keyw)
                             .Value(p => p.b_disabled, item.Disabled)
+                            .Value(p => p.b_blocked, item.Blocked)
                             .Value(p => p.b_disabled_menu, item.DisabledMenu)
                             .Value(p => p.n_sort, maxSort)
                             .Value(p => p.uui_parent, item.ParentId)
@@ -341,6 +344,7 @@ namespace cms.dbase
                             .Set(u => u.c_desc, item.Desc)
                             .Set(u => u.c_keyw, item.Keyw)
                             .Set(u => u.b_disabled, item.Disabled)
+                            .Set(u => u.b_blocked, item.Blocked)
                             .Set(u => u.b_disabled_menu, item.DisabledMenu)
                             .Update();
 
@@ -470,7 +474,8 @@ namespace cms.dbase
                     .Select(s => new Catalog_list
                     {
                         text = s.c_title,
-                        value = s.id.ToString()
+                        value = s.id.ToString(),
+                        available = s.b_available
                     });
                 if (!data.Any()) { return null; }
                 else { return data.ToArray(); }
@@ -632,6 +637,7 @@ namespace cms.dbase
                         Alias = s.c_alias,
                         Title = s.c_title,
                         Disabled = s.b_disabled,
+                        Blocked = s.b_blocked,
                         DisabledMenu = s.b_disabled_menu,
                         Sort = s.n_sort,
                         CountSibling = getCountSiblings(s.id)

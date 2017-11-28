@@ -3,6 +3,8 @@ using System;
 using System.Configuration;
 using System.Web.Mvc;
 using Disly.Areas.Admin.Service;
+using System.Linq;
+using cms.dbModel.entity;
 
 namespace Disly.Areas.Admin.Controllers
 {
@@ -75,8 +77,16 @@ namespace Disly.Areas.Admin.Controllers
         {
             // текущий элемент карты сайта
             model.Item = _cmsRepository.getSiteMapItem(id);
-            var m = new MultiSelectList(model.MenuTypes, "value", "text", model.Item != null ?  model.Item.MenuGroups : null);
-            ViewBag.GroupMenu = m;
+            var mg = new MultiSelectList(model.MenuTypes, "value", "text", model.Item != null ? model.Item.MenuGroups : null);
+            ViewBag.GroupMenu = mg;
+
+            var aviable = (model.MenuTypes != null)? 
+                        (model.MenuTypes.Where(p => p.available).Any())? 
+                                    model.MenuTypes.Where(p => p.available).ToArray() : new Catalog_list[] {} 
+                                        : new Catalog_list[] { };
+            var mgAviable = new MultiSelectList(aviable, "value", "text", model.Item != null ? model.Item.MenuGroups : null);
+            ViewBag.GroupMenuAviable = mgAviable;
+        
 
             if (model.Item != null)
                 model.Item.MenuGroups = null;
@@ -115,6 +125,7 @@ namespace Disly.Areas.Admin.Controllers
             userMessage.title = "Информация";
 
             #region Данные необходимые для сохранения
+            back_model.Item.Id = id;
             if (string.IsNullOrEmpty(Request.Form["Item_ParentId"]))
             {
                 back_model.Item.ParentId = null;

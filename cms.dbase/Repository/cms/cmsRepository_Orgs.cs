@@ -1735,7 +1735,6 @@ namespace cms.dbase
                 if (!query.Any()) return null;
                 return query.ToArray();
             }
-            }
         }
 
         /// <summary>
@@ -1748,7 +1747,7 @@ namespace cms.dbase
             using (var db = new CMSdb(_context))
             {
                 var PeopleList = db.content_people_org_links
-                                           .Where(w => w.f_org == idOrg)                                           
+                                           .Where(w => w.f_org == idOrg)
                                            .Select(s => new People
                                            {
                                                FIO = s.fkcontentpeopleorglink.c_surname + " " + s.fkcontentpeopleorglink.c_name + " " + s.fkcontentpeopleorglink.c_patronymic,
@@ -1756,7 +1755,7 @@ namespace cms.dbase
                                                IdLinkOrg = s.f_people
                                            }).ToArray();
                 return PeopleList.Any() ? PeopleList : null;
-            }            
+            }
         }
 
     }

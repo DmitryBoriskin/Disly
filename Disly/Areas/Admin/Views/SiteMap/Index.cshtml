@@ -57,6 +57,7 @@
                     <thead>
                         <tr>
                             <th class="map_site_title">Название</th>
+                            <th class="map_site_title"></th>
                             <th class="map_site_attach">Вложения</th>
                         </tr>
                     </thead>
@@ -83,6 +84,12 @@
                                     }
 
                                     <td class="@_class @disabled"><a href="/admin/sitemap/item/@item.Id">@item.Title</a></td>
+                                    <td>
+                                        @if (item.Blocked)
+                                        {
+                                            <del class="cross"><a title="Удаление страницы не разрешено!" class="icon-attention-circled"> </a></del>
+                                        }
+                                    </td>
                                     <td class="sort-element @disabled">@item.CountSibling</td>
                                 }
                             </tr>
