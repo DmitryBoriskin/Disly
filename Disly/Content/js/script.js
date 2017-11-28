@@ -18,12 +18,25 @@
 
 
 
+    //original photo
+    if ($('.show_original').length > 0) {
+        $('.show_original').swipebox();
+    }
+
+
+
     // анимация баннеров
     if ($('.ling_img_on').length > 0) {
         $('.ling_img_on').each(function () {
             CaruselSlide($(this));
         });
     }
+
+    //share
+    $('body').on('click', '.btn_share', function (e) {
+        e.preventDefault();
+        ShowShare($(this));
+    });
 
 
     //Фильтр по новостям
@@ -162,3 +175,37 @@ function Coords(x, y, title, desc, zoom, height,id) {
         $('ymaps.ymaps-map').css({ 'height': height + 'px', "width": "inherit" });
     });
 }
+
+
+
+
+//поделиться share
+function ShowShare(e) {
+    var x = e.offset().top + 20;
+    var y = e.offset().left;
+    CreateMaskForShare();
+    CreateSharePanel(x, y);
+}
+
+function CreateMaskForShare() {
+    var html = '<div style="position:absolute;top:0;left:0;width:100%;height:100%;z-index:9999;background-color:transparent" id="mask-for-share"></div>';
+    $(document.body).html($(document.body).html() + html);
+}
+
+function CreateSharePanel(x, y) {
+    var code = '<script type="text/javascript" src="//yastatic.net/share/share.js" charset="utf-8"></script>' +
+        '<div class="yashare-auto-init" data-yashareL10n="ru" data-yashareType="medium" data-yashareQuickServices="vkontakte,facebook,twitter,odnoklassniki,moimir,gplus" data-yashareTheme="counter"></div>';
+
+    var html = '<div style="position:absolute;top:' + x + 'px;left:' + y + 'px;text-align:left" id="share-container">' +
+        '<img src="/Content/img/share-arrow.png" alt="" style="margin-bottom:-13px;margin-left:10px">' +
+        '<div style="border:1px solid #d9d9d9;background-color:white;padding:9px;overflow:hidden">' +
+        code;
+    +'</div></div>';
+
+    $('#mask-for-share').html(html);
+}
+
+$(document).on('click', '#mask-for-share', null,
+    function () {
+        document.body.removeChild(document.getElementById('mask-for-share'));
+    });

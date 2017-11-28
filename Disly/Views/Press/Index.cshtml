@@ -5,12 +5,12 @@
         <div class="col-md-12">
 
 
-            <h1>Новости</h1>
+            <h1>@ViewBag.Title</h1>
             @Html.Partial("services/breadcrumbs")
             @if (!String.IsNullOrEmpty(ViewBag.Alias))
             {
-                <h2>@Model.Item.Title</h2>
-                @Html.Raw(Model.Item.Text)
+                @Html.Partial("part/Item")
+                
             }
             else
             {

@@ -130,6 +130,7 @@
     <Content Include="Areas\Admin\Views\Feedbacks\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Feedbacks\Item.cshtml" />
     <Content Include="Content\css\common.css" />
+    <Content Include="Content\css\print.css" />
     <Content Include="Content\css\styles_popUp.css" />
     <Content Include="Content\css\styles.css" />
     <Content Include="Content\css\styles_login.css" />
@@ -187,7 +188,10 @@
     <Content Include="Content\img\obr-project.png" />
     <Content Include="Content\img\preloader_planet.svg" />
     <Content Include="Content\img\preloader.svg" />
+    <Content Include="Content\img\present-ico.png" />
+    <Content Include="Content\img\share-arrow.png" />
     <Content Include="Content\img\temporal.jpg" />
+    <Content Include="Content\img\youtube-ico.png" />
     <Content Include="Content\js\script.js" />
     <Content Include="Content\plugins\bonsai\css\jquery.bonsai.css" />
     <Content Include="Content\plugins\bonsai\js\jquery.bonsai.js" />
@@ -345,6 +349,13 @@
     <Content Include="Content\plugins\jquery\jquery.ui.js" />
     <Content Include="Content\plugins\mCustomScrollbar\jquery.mCustomScrollbar.css" />
     <Content Include="Content\plugins\mCustomScrollbar\jquery.mCustomScrollbar.js" />
+    <Content Include="Content\plugins\mobileGallery\img\icons.png" />
+    <Content Include="Content\plugins\mobileGallery\img\icons.svg" />
+    <Content Include="Content\plugins\mobileGallery\img\loader.gif" />
+    <Content Include="Content\plugins\mobileGallery\ios-orientationchange-fix.js" />
+    <Content Include="Content\plugins\mobileGallery\js\jquery-2.1.0.min.js" />
+    <Content Include="Content\plugins\mobileGallery\js\jquery.swipebox.js" />
+    <Content Include="Content\plugins\mobileGallery\swipebox.css" />
     <Content Include="Content\plugins\tinymce\jquery.tinymce.min.js" />
     <Content Include="Content\plugins\tinymce\langs\ru.js" />
     <Content Include="Content\plugins\tinymce\license.txt" />
@@ -825,6 +836,8 @@
     <Content Include="Views\MapSite\Index.cshtml" />
     <Content Include="Views\LPU\Index.cshtml" />
     <Content Include="Views\LPU\List.cshtml" />
+    <Content Include="Views\Press\part\Item.cshtml" />
+    <Content Include="Views\Home\part\media.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

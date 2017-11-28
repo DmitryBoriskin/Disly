@@ -570,7 +570,11 @@ namespace cms.dbase
                     return query.Select(s => new MaterialsModel
                     {
                         Title = s.c_title,
-                        Text = s.c_text
+                        Text = s.c_text,
+                        Date=s.d_date,
+                        PreviewImage= new Photo {
+                            Url=s.c_preview
+                        }
                     }).First();
                 }
                 return null;

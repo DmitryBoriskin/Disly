@@ -49,8 +49,10 @@
     }
 }
 .tabs li.active a {
-    border-bottom: 2px solid @contrast;
     color: @contrast;
+    &:before {
+        background-color: @contrast;
+    }
 
     &:hover, &:active, &:focus {
         color: @contrast;
@@ -58,4 +60,12 @@
 }
 .btn-primary {
     background-color: @def2;
+    &:hover,&:active,&:focus{background-color:@def1;}
+}
+.module-media{background-color:@def2;}
+.media_item_circle__photo {
+    background-color:@def2; 
+}
+.media_item_circle__video{
+    color:@def2;
 }
