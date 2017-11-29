@@ -1,4 +1,5 @@
-﻿@{
+﻿@model FiltrModel
+@{
     Layout = null;
 }
 
@@ -18,7 +19,10 @@
             {
                 <div class="filtr-item @Item.selected">
                     <div class="filtr-item_link">
-                        <a class="tree-btn pop-up_frame edit" href="@Item.url" title="Редактирование @Model.Title.ToLower()"> </a>
+                        @if (!Model.ReadOnly) //Model.AccountGroup.ToLower().Equals("developer")
+                        {
+                            <a class="tree-btn pop-up_frame edit" href="@Item.url" title="Редактирование @Model.Title.ToLower()"> </a>
+                        }
                         <a href="@Item.link">@Item.text</a>
                     </div>
                 </div>
