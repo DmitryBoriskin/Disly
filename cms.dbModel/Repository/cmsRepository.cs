@@ -71,7 +71,7 @@ namespace cms.dbModel
 
         public abstract ResolutionsModel[] getGroupResolutions(string alias);
         public abstract bool updateGroupClaims(GroupClaims GroupClaim);
-
+        public abstract bool updateUserClaims(UserClaims claim);
 
         // Материалы
         public abstract MaterialsGroup[] getAllMaterialGroups();

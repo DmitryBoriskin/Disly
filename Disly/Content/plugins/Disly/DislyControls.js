@@ -237,9 +237,9 @@
         } else {
             var $ButtonLoad = $('<div/>', { 'class': 'btn_load' }).append('Выберите файл');
             $Wrap.append($ButtonLoad);
-            $ButtonLoad.click(function () {
-                _inp.trigger('click');
-            });
+            //$ButtonLoad.click(function () {
+            //    _inp.trigger('click');
+            //});
         }
 
         $PreviewBlock.append($Wrap);
