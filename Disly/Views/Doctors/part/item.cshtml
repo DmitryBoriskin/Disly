@@ -1,0 +1,95 @@
+﻿@model DoctorsViewModel
+
+<div class="row">
+    <div class="col-md-8">
+        <div>
+            <strong>Место работы: </strong>
+            @Model.DoctorsItem.EmployeeInfo.UZ.Name
+        </div>
+
+        <div>
+            <strong>Занимаемая должность: </strong>
+            <ol>
+                @foreach (var p in Model.DoctorsItem.EmployeeInfo.EmployeeRecords)
+                {
+                    <li>@p.RecordPost.Name</li>
+                }
+            </ol>
+        </div>
+
+        <div>
+            <strong>Специальность по основной должности: </strong>
+            <ol>
+                @foreach (var p in Model.DoctorsItem.EmployeeInfo.EmployeeRecords)
+                {
+                    <li>@p.RecrodPosition.Name</li>
+                }
+            </ol>
+        </div>
+
+        <div>
+            <strong>Дата рождения: </strong>
+            @if (Model.DoctorsItem.EmployeeInfo.Birthdate != null)
+            {
+                string birthDate = Convert.ToDateTime(Model.DoctorsItem.EmployeeInfo.Birthdate).ToString("dd MMMM yyyy") + " г.";
+                @birthDate
+            }
+        </div>
+
+        <div>
+            <strong>Образовательные учреждения: </strong>
+            <ol>
+                @foreach (var e in Model.DoctorsItem.EmployeeInfo.EmployeeSertificateEducation.OrderBy(o => o.IssueDate))
+                {
+                    <li>
+                        <strong>Название: </strong>@e.IssueOrg.Name<br />
+                        <strong>Год выпуска: </strong>@(e.IssueDate != null ? Convert.ToDateTime(e.IssueDate).Year.ToString() + " г." : null)<br />
+                        <strong>Специальность: </strong>@e.EducationSpeciality.Name
+                    </li>
+                }
+            </ol>
+        </div>
+
+        <div>
+            <strong>Стаж работы в отрасли: </strong>
+            <ol>
+                @foreach (var s in Model.DoctorsItem.EmployeeInfo.EmployeeRecords.OrderBy(o => o.DateBegin))
+                {
+                    string dateBegin = s.DateBegin != null ? Convert.ToDateTime(s.DateBegin).ToString("dd.MM.yyyy") + " г. " : null;
+                    string dateEnd = s.DateEnd != null ? "—" + Convert.ToDateTime(s.DateEnd).ToString("dd.MM.yyyy") + " г. " : null;
+                    string experience = dateBegin + dateEnd + s.RecordPost.Name + " " + s.Organisation;
+
+                    <li>@experience</li>
+                }
+            </ol>
+        </div>
+
+        <div>
+            @if (Model.DoctorsItem.EmployeeInfo.EmployeeAwards != null)
+            {
+                <strong>Награды: </strong>
+                <ol>
+                    @foreach (var a in Model.DoctorsItem.EmployeeInfo.EmployeeAwards.OrderBy(o => o.Issued))
+                    {
+                        string dateAward = a.Issued != null ? Convert.ToDateTime(a.Issued).ToString("dd.MM.yyyy") + " г. " : null;
+                        <li>
+                            @dateAward + @a.Name
+                        </li>
+                    }
+                </ol>
+            }
+        </div>
+    </div>
+    
+    <div class="col-md-3 col-md-push-1">
+        <div class="dop-block">
+            @*<div class="dop-block_info">
+                <label>Опубликовано</label>
+                <div>@Model.Item.Date.ToString("dd MMMM yyyy")<br>@Model.Item.Date.ToString("HH:mm")</div>
+            </div>*@
+            <a class="btn_print" onClick="window.print()">Распечатать</a><br />
+            <a class="btn_share" title="Поделиться" href="../../../../#">Поделиться</a>
+        </div>
+    </div>
+</div>
+

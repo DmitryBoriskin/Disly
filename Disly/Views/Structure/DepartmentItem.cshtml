@@ -1,10 +1,11 @@
 ﻿@model StructureViewModel
-<h1>@Model.DepartmentItem.Title</h1>
 @Html.Partial("services/breadcrumbs")
+<h1>@Model.DepartmentItem.Title</h1>
+
 <div class="structur">
     <div class="row">        
-        <div class="col-sm-9">
-            @*@if (Model.DepartmentItem.Phones != null)
+        <div class="col-md-8">
+            @if (Model.DepartmentItem.Phones != null)
             {
                 <dl class="dl-horizontal">
                     @foreach (var item in Model.DepartmentItem.Phones)
@@ -14,7 +15,7 @@
                     }                    
                 </dl>
             }
-            @if (Model.DepartmentItem.Peoples != null)
+            @*@if (Model.DepartmentItem.Peoples != null)
             {
                 <table class="table">
                     @foreach (var item in Model.DepartmentItem.Peoples)
@@ -29,19 +30,25 @@
             }*@            
             <div>@Html.Raw(Model.DepartmentItem.Text)</div>
         </div>
-        <div class="col-sm-3">
-            <div class="boss">
+        <div class="col-md-3 col-md-push-1">
+            <div class="boss pull-right">
                 @if (Model.DepartmentItem.Boss != null)
                 {
-                    <a href="/doctors/@Model.DepartmentItem.Boss.Id"><img src="~/Content/img/no_avatar.png"/></a>
-                    <a href="/doctors/@Model.DepartmentItem.Boss.Id">@Model.DepartmentItem.Boss.FIO</a>                    
-                    <br>
-                    @Model.DepartmentItem.Boss.Post
+                    <a href="/doctors/@Model.DepartmentItem.Boss.Id" class="boss_img_wrap">
+                        @if (Model.DepartmentItem.Boss.Photo != null)
+                        {
+                            <img src="@Model.DepartmentItem.Boss.Photo" title="@Model.DepartmentItem.Boss.FIO"/>
+                        }
+                        else
+                        {
+                            <img src="~/Content/img/no_avatar.png" />
+                        }                        
+                    </a>
+                    <a class="boss_fio" href="/doctors/@Model.DepartmentItem.Boss.Id">@Model.DepartmentItem.Boss.FIO</a>                    
+                    <div class="boss_post">@Model.DepartmentItem.Boss.Post</div>
                 }                
+                <a class="link_all" href="/doctors/?group=@Model.DepartmentItem.Id">все сотрудники</a>
             </div>
-
-            <a class="btn btn-default" href="/doctors/?group=@Model.DepartmentItem.Id">Сотрудники</a>
-
         </div>
     </div>
 </div>
