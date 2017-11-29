@@ -16,7 +16,7 @@ namespace Disly.Areas.Admin.Controllers
             return View(viewName, Menu);
         }
 
-        public ActionResult Filtr(string Title, string Alias, string Icon, string Url, Catalog_list[] Items, string BtnName = "Добавить", string viewName = "Templates/Filtr/Default")
+        public ActionResult Filtr(string Title, string Alias, string Icon, string Url, Catalog_list[] Items, string BtnName = "Добавить", string viewName = "Templates/Filtr/Default", bool readOnly = true)
         {
             string Link = Request.Url.PathAndQuery.ToLower();
             string nowValue = Request.QueryString[Alias];
@@ -38,7 +38,8 @@ namespace Disly.Areas.Admin.Controllers
                 Link = Link,
                 Url = Url.ToLower(),
                 Items = Items,
-                AccountGroup = AccountInfo.Group
+                AccountGroup = AccountInfo.Group,
+                ReadOnly = readOnly
             };
 
             return View(viewName, Model);
