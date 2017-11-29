@@ -44,6 +44,7 @@ namespace Disly.Controllers
                 new MaterialsGroup{Title="Все"},
                 new MaterialsGroup{Title="По типу медицинского учреждения", Alias="typelist"},
                 new MaterialsGroup{Title="По ведомственной принадлежности", Alias="affiliation"},
+                new MaterialsGroup{Title="Медицинские услуги", Alias="services"}
             };
 
             model.Breadcrumbs.Add(new Breadcrumbs
@@ -105,6 +106,29 @@ namespace Disly.Controllers
                     else
                     {
                         model.DepartmentAffiliations = _repository.getDepartmentAffiliations();
+                    }
+
+                    break;
+                case "services":
+                    model.Breadcrumbs.Add(new Breadcrumbs
+                    {
+                        Title = "Медицинские услуги",
+                        Url = "/lpu?t=services"
+                    });
+                    if (id != null)
+                    {
+                        ViewBag.TypeTitle = _repository.getMedicalServiceTitle((Guid)id);
+
+                        model.Breadcrumbs.Add(new Breadcrumbs
+                        {
+                            Title = ViewBag.TypeTitle,
+                            Url = ""
+                        });
+                        model.OrgList = _repository.getOrgPortalModels((Guid)id);
+                    }
+                    else
+                    {
+                        model.MedicalServices = _repository.getMedicalServices(null);
                     }
 
                     break;

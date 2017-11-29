@@ -208,6 +208,8 @@ namespace cms.dbase
                 if (getTypes != null)
                     types = getTypes.Select(t => t.Id).ToArray();
 
+                var services = getOrgMedicalServicesLinks(id);
+
                 var data = db.content_orgss.Where(w => w.id == id)
                     .Select(s => new OrgsModel
                     {
@@ -228,6 +230,7 @@ namespace cms.dbase
                         Administrativ = getAdministrativList(s.id),
                         Oid = s.f_oid,
                         Types = types,
+                        Services = services,
                         DepartmentAffiliation = s.f_department_affiliation,
                         Logo = new Photo
                         {
@@ -305,8 +308,23 @@ namespace cms.dbase
                             }
                         }
 
+                        // обновляем медицинские услуги
+                        if (model.Services != null)
+                        {
+                            // удаляем старые услуги
+                            db.content_orgs_medical_services_linkss
+                                .Where(w => w.f_org.Equals(id)).Delete();
+
+                            foreach (var s in model.Services)
+                            {
+                                db.content_orgs_medical_services_linkss
+                                    .Value(v => v.f_org, id)
+                                    .Value(v => v.f_medical_service, s)
+                                    .Insert();
+                            }
+                        }
+
                         //логирование
-                        // insertLog(UserId, IP, "insert", id, String.Empty, "Orgs", model.Title);
                         var log = new LogModel()
                         {
                             Site = _domain,
@@ -383,8 +401,23 @@ namespace cms.dbase
                             }
                         }
 
+                        // обновляем медицинские услуги
+                        if (model.Services != null)
+                        {
+                            // удаляем старые услуги
+                            db.content_orgs_medical_services_linkss
+                                .Where(w => w.f_org.Equals(id)).Delete();
+
+                            foreach (var s in model.Services)
+                            {
+                                db.content_orgs_medical_services_linkss
+                                    .Value(v => v.f_org, id)
+                                    .Value(v => v.f_medical_service, s)
+                                    .Insert();
+                            }
+                        }
+
                         //логирование
-                        //insertLog(UserId, IP, "update", id, String.Empty, "Orgs", model.Title);
                         var log = new LogModel()
                         {
                             Site = _domain,
@@ -1399,6 +1432,11 @@ namespace cms.dbase
             return true;
         }
 
+        /// <summary>
+        /// Получаем список типов организаций
+        /// </summary>
+        /// <param name="filter"></param>
+        /// <returns></returns>
         public override OrgType[] getOrgTypesList(OrgTypeFilter filter)
         {
             using (var db = new CMSdb(_context))
@@ -1758,6 +1796,46 @@ namespace cms.dbase
                                                IdLinkOrg = s.f_people
                                            }).ToArray();
                 return PeopleList.Any() ? PeopleList : null;
+            }
+        }
+
+        /// <summary>
+        /// Получим список медицинских услуг
+        /// </summary>
+        /// <returns></returns>
+        public override MedicalService[] getMedicalServices()
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var query = db.content_medical_servicess
+                    .OrderBy(o => o.n_sort)
+                    .Select(s => new MedicalService
+                    {
+                        Id = s.id,
+                        Title = s.c_title,
+                        Sort = s.n_sort
+                    });
+
+                if (!query.Any()) return null;
+                return query.ToArray();
+            }
+        }
+
+        /// <summary>
+        /// Получаем связи медицинские услуги привязанные к организации
+        /// </summary>
+        /// <param name="org"></param>
+        /// <returns></returns>
+        public override Guid[] getOrgMedicalServicesLinks(Guid org)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var query = db.content_orgs_medical_services_linkss
+                    .Where(w => w.f_org.Equals(org))
+                    .Select(s => s.f_medical_service);
+
+                if (!query.Any()) return null;
+                return query.ToArray();
             }
         }
     }

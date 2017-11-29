@@ -56,6 +56,13 @@ namespace Disly
                defaults: new { controller = "Doctors", action = "Item" }
             );
 
+            // медицинские услуги портала
+            routes.MapRoute(
+               name: "MedicalServices",
+               url: "MedicalServices/",
+               defaults: new { controller = "MedicalServices", action = "Index", id = UrlParameter.Optional }
+            );
+
             //голосование
             routes.MapRoute(
                name: "vote",
