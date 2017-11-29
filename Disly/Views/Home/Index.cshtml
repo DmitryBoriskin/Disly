@@ -5,6 +5,7 @@
         .Where(w => w.SectionAlias.Equals("slider"))
         .Select(s => new
         {
+            Id = s.Id,
             Title = s.Title,
             Url = s.Photo.Url,
             Text = s.Text,
@@ -30,6 +31,7 @@
         .Where(w => w.SectionAlias.Equals("benefits"))
         .Select(s => new
         {
+            Id = s.Id,
             Title = s.Title,
             Url = s.Photo.Url,
             Text = s.Text,
@@ -226,6 +228,8 @@
                     <div class="carousel-inner" data-count="4">
                         @foreach (var item in benefitBanners)
                         {
+                            string link = "/redirect/banners/" + item.Id;
+
                             string title = item.Title;
                             if (title.Length > 70)
                             {
@@ -233,7 +237,7 @@
                             }
 
                             <div class="linkimg_item col-md-3">
-                                <a href="@item.Link">
+                                <a href="@link">
                                     <div class="imglink-item">
                                         @if (!string.IsNullOrEmpty(item.Url))
                                         {

@@ -13,6 +13,7 @@ namespace cms.dbModel
         public abstract SiteMapModel[] getMapSiteList(string domain);
         public abstract string[] getSiteMapGroupMenu(Guid id);
         public abstract BannersModel[] getBanners(string domain);
+        public abstract BannersModel getBanner(Guid id);
 
         public abstract SiteMapModel getSiteMap(string path, string alias, string domain);
         public abstract string getContactsText(string domain, string frontSection);

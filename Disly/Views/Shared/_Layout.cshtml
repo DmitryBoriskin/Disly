@@ -158,6 +158,7 @@
                         .OrderBy(o => o.Sort)
                         .Select(s => new
                         {
+                            Id = s.Id,
                             Title = s.Title,
                             Url = s.Photo.Url,
                             Text = s.Text
@@ -169,9 +170,13 @@
                 </div>                
                 @foreach (var item in bannerBottom)
                 {
-                    <div class="col-sm-2">@*@item.Url*@
-                        <a href="#" class="bottom-linkimg-item">@item.Title</a>
-                    </div>
+                    string redirectLink = "/redirect/banners/" + item.Id;
+
+                    <div class="col-sm-2">
+                        <a href="redirectLink">
+                            <div class="bottom-banner-item">
+                                <div class="bottom-banner-inner">@item.Title</div>
+                            </div>
                 }
             </div>
         }
@@ -212,22 +217,22 @@
                 </div>
                 <div class="col-md-4">
                     <div class="footer-right">
-                        <form>
-                            <input class="search-form" type="text" placeholder="Поиск по сайту" value="" />
-                            <a href="" class="icon-search bottom-search"></a>
-                        </form>
-                        <ul class="nav navbar-nav bottom_menu navbar-left">
-                            <li><a href=""><span class="ti-layers-alt top-icon"></span>Карта сайта</a></li>
-                            <li><a href=""><span class="ti-rss-alt top-icon"></span>RSS</a></li>
-                            <li><a href=""><span class="ti-new-window top-icon"></span>Медицинский портал</a></li>
-                        </ul>
-                        <ul class="nav navbar-nav versions navbar-left">
-                            @*<li><a href="">English version</a></li>*@
-                            <li><a href=""><span class="spec-info">Aa</span>Для слабовидящих</a></li>
-                        </ul>
-                    </div>                    
+                    <form>
+                        <input class="search-form" type="text" placeholder="Поиск по сайту" value="" />
+                        <a href="" class="icon-search bottom-search"></a>
+                    </form>
+                    <ul class="nav navbar-nav bottom_menu navbar-left">
+                        <li><a href=""><span class="ti-layers-alt top-icon"></span>Карта сайта</a></li>
+                        <li><a href=""><span class="ti-rss-alt top-icon"></span>RSS</a></li>
+                        <li><a href=""><span class="ti-new-window top-icon"></span>Медицинский портал</a></li>
+                    </ul>
+                    <ul class="nav navbar-nav versions navbar-left">
+                        @*<li><a href="">English version</a></li>*@
+                        <li><a href=""><span class="spec-info">Aa</span>Для слабовидящих</a></li>
+                    </ul>
                 </div>
-                <div class="col-md-12 metrica-block">                    
+                </div>
+                <div class="col-md-12 metrica-block">
                     <div class="float-right social_network_list">
                        @if (Model != null && Model.SitesInfo != null)
                        {
