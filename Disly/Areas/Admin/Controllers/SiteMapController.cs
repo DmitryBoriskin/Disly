@@ -77,6 +77,13 @@ namespace Disly.Areas.Admin.Controllers
         {
             // текущий элемент карты сайта
             model.Item = _cmsRepository.getSiteMapItem(id);
+            if(model.Item == null)
+            {
+                model.Item = new SiteMapModel()
+                {
+                    Id = id
+                };
+            }
             var mg = new MultiSelectList(model.MenuTypes, "value", "text", model.Item != null ? model.Item.MenuGroups : null);
             ViewBag.GroupMenu = mg;
 
@@ -97,6 +104,7 @@ namespace Disly.Areas.Admin.Controllers
                         : Guid.Parse(Request.QueryString["parent"]);
                 // хлебные крошки
                 model.BreadCrumbs = _cmsRepository.getSiteMapBreadCrumbs(_parent);
+                model.Item.ParentId = _parent;
             }
             else if (model.Item != null)
             {
@@ -165,7 +173,27 @@ namespace Disly.Areas.Admin.Controllers
             {
                 if (_cmsRepository.checkSiteMap(id))
                 {
-                    _cmsRepository.updateSiteMapItem(id, back_model.Item); //, AccountInfo.id, RequestUserInfo.IP
+                    //Если запись заблокирована от редактирования некоторых полей
+                    var siteMapItem = _cmsRepository.getSiteMapItem(id);
+                    if (siteMapItem.Blocked && !model.Account.Group.ToLower().Equals("developer") && !model.Account.Group.ToLower().Equals("administrator"))
+                    {
+                        siteMapItem.Disabled = back_model.Item.Disabled;
+                        siteMapItem.DisabledMenu = back_model.Item.DisabledMenu;
+                        siteMapItem.Keyw = back_model.Item.Keyw;
+                        siteMapItem.Desc = back_model.Item.Desc;
+                        siteMapItem.Text = back_model.Item.Text;
+                        siteMapItem.Url = back_model.Item.Url;
+                        siteMapItem.ParentId = back_model.Item.ParentId;
+                        siteMapItem.MenuGroups = back_model.Item.MenuGroups;
+                        siteMapItem.Path = back_model.Item.Path;
+
+                        _cmsRepository.updateSiteMapItem(id, siteMapItem);
+                    }
+                    else
+                    {
+                        _cmsRepository.updateSiteMapItem(id, back_model.Item); //, AccountInfo.id, RequestUserInfo.IP
+                    }
+
                     userMessage.info = "Запись обновлена";
                 }
                 else
@@ -192,10 +220,18 @@ namespace Disly.Areas.Admin.Controllers
 
             model.Item = _cmsRepository.getSiteMapItem(id);
 
-            var m = new MultiSelectList(model.MenuTypes, "value", "text", model.Item.MenuGroups);
-            ViewBag.GroupMenu = m;
-            model.Item.MenuGroups = null;
+            var mg = new MultiSelectList(model.MenuTypes, "value", "text", model.Item != null ? model.Item.MenuGroups : null);
+            ViewBag.GroupMenu = mg;
 
+            var aviable = (model.MenuTypes != null) ?
+                        (model.MenuTypes.Where(t => t.available).Any()) ?
+                                    model.MenuTypes.Where(t => t.available).ToArray() : new Catalog_list[] { }
+                                        : new Catalog_list[] { };
+            var mgAviable = new MultiSelectList(aviable, "value", "text", model.Item != null ? model.Item.MenuGroups : null);
+            ViewBag.GroupMenuAviable = mgAviable;
+
+
+            model.Item.MenuGroups = null;
             model.ErrorInfo = userMessage;
 
             return View(model);

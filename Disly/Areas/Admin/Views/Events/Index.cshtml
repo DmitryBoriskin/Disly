@@ -34,7 +34,7 @@
                     </a>
                     <div class="li-desc ">
                         @if (item.Locked)
-                        {<a class="icon-lock" title="Заблокировано администратором портала"></a>}
+                        {<span class="icon-lock" title="Заблокировано администратором портала"></span>}
                         <a title="@item.Title" class="li-caption" href="/admin/events/item/@item.Id/@ViewBag.urlQuery">@item.Title</a><br />
                         <span>Дата проведения:</span> @Convert.ToDateTime(item.DateBegin).ToString("dd MMMM yyyy")
                         @if (item.DateEnd.HasValue)

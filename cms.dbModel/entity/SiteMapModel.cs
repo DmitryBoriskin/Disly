@@ -38,7 +38,7 @@ namespace cms.dbModel.entity
         public string Title { get; set; }
         
         /// <summary>
-        /// Текси
+        /// Текст
         /// </summary>
         public string Text { get; set; }
 
