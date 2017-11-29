@@ -709,10 +709,11 @@ namespace cms.dbase
         }
         /// <summary>
         /// Изменение прав для группы
+        /// При этом необходимо всем пользователям этой группы поменять в другой таблице (раньше можно было отдельным пользователям давать отдельные права)
         /// </summary>
-        /// <param name="claim"></param>
+        /// <param name="groupClaim"></param>
         /// <returns></returns>
-        public override bool updateGroupClaims(GroupClaims claim)
+        public override bool updateGroupClaims(GroupClaims groupClaim)
         {
             using (var db = new CMSdb(_context))
             {
@@ -720,42 +721,127 @@ namespace cms.dbase
                 {
                     cms_resolutions_templates cdGroupResolution = null;
 
+                    if (string.IsNullOrEmpty(groupClaim.GroupAlias) || groupClaim.ContentId == Guid.Empty)
+                        throw new Exception("updateGroupClaims: alias or contentId Is Null Or Empty");
+
+
                     var query = db.cms_resolutions_templatess
-                        .Where(t => t.f_menu_id == claim.ContentId);
+                        .Where(t => t.f_menu_id == groupClaim.ContentId)
+                        .Where(t => t.f_user_group == groupClaim.GroupAlias);
 
-                    if (!string.IsNullOrEmpty(claim.GroupAlias))
-                    {
-                        query = query.Where(t => t.f_user_group == claim.GroupAlias);
-                    }
-
-                    if (query.Any())
-                    {
-                        cdGroupResolution = query.SingleOrDefault();//test
-                        if (claim.Claim.ToLower() == "read")
-                            cdGroupResolution.b_read = claim.Checked;
-                        if (claim.Claim.ToLower() == "write")
-                            cdGroupResolution.b_write = claim.Checked;
-                        if (claim.Claim.ToLower() == "change")
-                            cdGroupResolution.b_change = claim.Checked;
-                        if (claim.Claim.ToLower() == "delete")
-                            cdGroupResolution.b_delete = claim.Checked;
-                        db.Update(cdGroupResolution);
-                    }
-                    else
-                    {
+                    if (!query.Any())
                         cdGroupResolution = new cms_resolutions_templates()
                         {
-                            f_user_group = claim.GroupAlias,
-                            f_menu_id = claim.ContentId
+                            f_user_group = groupClaim.GroupAlias,
+                            f_menu_id = groupClaim.ContentId
                         };
-                        db.Insert(cdGroupResolution);
-                    }
-                    tran.Commit();
+                    else
+                        cdGroupResolution = query.SingleOrDefault();
 
+                    switch (groupClaim.Claim)
+                    {
+                        case ClaimType.read:
+                            cdGroupResolution.b_read = groupClaim.Checked;
+                            break;
+                        case ClaimType.write:
+                            cdGroupResolution.b_write = groupClaim.Checked;
+                            break;
+                        case ClaimType.change:
+                            cdGroupResolution.b_change = groupClaim.Checked;
+                            break;
+                        case ClaimType.delete:
+                            cdGroupResolution.b_delete = groupClaim.Checked;
+                            break;
+                        default:
+                            return false;
+                    }
+
+                    if (!query.Any())
+                        db.Insert(cdGroupResolution);
+                    else
+                        db.Update(cdGroupResolution);
+
+
+                    //Права пользователей группы
+                    var groupUsers = db.cms_userss
+                                        .Where(p => p.f_group != null)
+                                        .Where(p => p.f_group == groupClaim.GroupAlias);
+                    if(groupUsers.Any())
+                    {
+                        foreach (var user in groupUsers.ToArray())
+                        {
+                            var userClaims = new UserClaims()
+                            {
+                                UserId = user.id,
+                                ContentId = groupClaim.ContentId,
+                                Claim = groupClaim.Claim,
+                                Checked = groupClaim.Checked
+                            };
+                            updateUserClaims(userClaims);
+                        }
+                    }
+
+                    tran.Commit();
                     return true;
                 }
             }
         }
+
+        public override bool updateUserClaims(UserClaims claim)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                using (var tran = db.BeginTransaction())
+                {
+                    cms_resolutions cdUserClaim = null;
+
+                    if (claim.UserId == Guid.Empty || claim.ContentId == Guid.Empty)
+                        throw new Exception("updateUserClaims: user or contentId Is Null Or Empty");
+
+                    var query = db.cms_resolutionss
+                                .Where(u => u.c_user_id == claim.UserId)
+                                .Where(u => u.c_menu_id == claim.ContentId);
+
+                    if (!query.Any())
+                    {
+                        cdUserClaim = new cms_resolutions()
+                        {
+                            c_user_id = claim.UserId,
+                            c_menu_id = claim.ContentId
+                        };
+                    }
+                    else
+                    {
+                        cdUserClaim = query.SingleOrDefault();
+                    }
+
+                    switch (claim.Claim)
+                    {
+                        case ClaimType.read:
+                            cdUserClaim.b_read = claim.Checked;
+                            break;
+                        case ClaimType.write:
+                            cdUserClaim.b_write = claim.Checked;
+                            break;
+                        case ClaimType.change:
+                            cdUserClaim.b_change = claim.Checked;
+                            break;
+                        case ClaimType.delete:
+                            cdUserClaim.b_delete = claim.Checked;
+                            break;
+                        }
+
+                    if (!query.Any())
+                        db.Insert(cdUserClaim);
+                    else
+                        db.Update(cdUserClaim);
+
+                    tran.Commit();
+                    return true;
+                }
+            }
+        }
+
         /// <summary>
         /// 
         /// </summary>

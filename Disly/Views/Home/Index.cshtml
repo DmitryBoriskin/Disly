@@ -148,24 +148,14 @@
 
                             <div class="module-material-item">
                                 <div class="module-material-item-date">
-                                    <div class="module-material-item-day">
-                                        @ann.Date.Day.ToString()
-                                    </div>
+                                    <div class="module-material-item-day">@ann.Date.Day.ToString()</div>
                                     <div class="module-material-item-otherdate">
-                                        <div>
-                                            @ann.Date.ToString("MMMM")
-                                        </div>
-                                        <div>
-                                            @ann.Date.ToString("yyyy")
-                                        </div>
+                                        <div>@ann.Date.ToString("MMMM")</div>
+                                        <div>@ann.Date.ToString("yyyy")</div>
                                     </div>
                                 </div>
-                                <a href="/press/@ann.GroupAlias">
-                                    <div class="module-material-item-group-link">@ann.GroupName</div>
-                                </a>
-                                <a href="@link">
-                                    <div class="module-material-title">@ann.Title</div>
-                                </a>
+                                <a  class="module-material-item-group-link" href="/press/@ann.GroupAlias">@ann.GroupName                                </a>
+                                <a  class="module-material-title" href="@link">@ann.Title</a>
                             </div>
                         }
                     }
@@ -179,24 +169,14 @@
 
                             <div class="module-material-item">
                                 <div class="module-material-item-date">
-                                    <div class="module-material-item-day">
-                                        @item.Date.Day.ToString()
-                                    </div>
+                                    <div class="module-material-item-day">@item.Date.Day.ToString()</div>
                                     <div class="module-material-item-otherdate">
-                                        <div>
-                                            @item.Date.ToString("MMMM")
-                                        </div>
-                                        <div>
-                                            @item.Date.ToString("yyyy")
-                                        </div>
+                                        <div>@item.Date.ToString("MMMM")</div>
+                                        <div>@item.Date.ToString("yyyy")</div>
                                     </div>
                                 </div>
-                                <a href="/press/@item.GroupAlias">
-                                    <div class="module-material-item-group-link">@item.GroupName</div>
-                                </a>
-                                <a href="@link">
-                                    <div class="module-material-title">@item.Title</div>
-                                </a>
+                                <a href="/press/@item.GroupAlias" class="module-material-item-group-link">@item.GroupName</a>
+                                <a href="@link" class="module-material-title">@item.Title</a>
                             </div>
                         }
                     }
@@ -212,21 +192,13 @@
                         <div class="event-item-module">
                             <div class="event-item-module-opacity top-op">
                                 <div class="module-material-item-date">
-                                    <div class="module-material-item-day">
-                                        @ev.Date.Day.ToString()
-                                    </div>
+                                    <div class="module-material-item-day">@ev.Date.Day.ToString()</div>
                                     <div class="module-material-item-otherdate">
-                                        <div>
-                                            @ev.Date.ToString("MMMM")
-                                        </div>
-                                        <div>
-                                            @ev.Date.ToString("yyyy")
-                                        </div>
+                                        <div>@ev.Date.ToString("MMMM")</div>
+                                        <div>@ev.Date.ToString("yyyy")</div>
                                     </div>
                                 </div>
-                                <a href="/press/@ev.GroupAlias">
-                                    <div class="module-material-item-group-link">@ev.GroupName</div>
-                                </a>
+                                <a href="/press/@ev.GroupAlias" class="module-material-item-group-link">@ev.GroupName</a>
                             </div>
                             <a href="@link">
                                 <img src="@photo" alt="@ev.Title" />
@@ -311,11 +283,8 @@
                     {
                         fullPath = "/" + item.FrontSection;
                     }
-
                     <div class="col-sm-3">
-                        <a href="@fullPath">
-                            <div class="sitemap-plate">@item.Title</div>
-                        </a>
+                        <a href="@fullPath" class="sitemap-plate">@item.Title</a>
                     </div>
                 }
             </div>

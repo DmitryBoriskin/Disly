@@ -432,7 +432,7 @@ a.link-close:before {
 .disabled .li-caption {
 
 }
-.icon-lock:before {content:'\e855'; color:#85afcc;}
+.icon-lock::before {content:'\e855'; /*color:#85afcc;*/}
 
 /* -------- Log  ------ */
 .log-list {
@@ -755,7 +755,7 @@ a.tree-btn.new:before {
     min-height:52px;
     padding:0 20px;
     background: #e6edf2;
-    z-index:999;
+    z-index:99;
 }
 .button {
     overflow:hidden;
@@ -815,22 +815,23 @@ a.button.icon-cancel{
 }
 
 
-
-
 /* ----------- Шрифтовые иконки fontello ----------- */
-[class^="icon-"]:before,
-[class*=" icon-"]:before,
-[class^="icon-"]:after,
-[class*=" icon-"]:after {
+
+[class^="icon-"]::before,
+[class*=" icon-"]::before,
+[class^="icon-"]::after,
+[class*=" icon-"]::after {
     font-family:'fontello';
     font-size:16px;
     padding-right:10px;
 }
-[class^="icon-"]:hover:before,
-[class*=" icon-"]:hover:before,
-[class^="icon-"]:hover:after,
-[class*=" icon-"]:hover:after {
-    text-decoration: none;
+
+[class^="icon-"]:hover::before,
+[class*=" icon-"]:hover::before,
+[class^="icon-"]:hover::after,
+[class*=" icon-"]:hover::after
+{
+    text-decoration: none !important;
 }
 
 /* Кнопки */

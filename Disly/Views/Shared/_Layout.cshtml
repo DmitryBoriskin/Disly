@@ -48,24 +48,20 @@
         <div class="head">
             <div class="row">
                 <div class="col-md-8">
-                    <a href="/" class="media">
-                        
-                            @if (Model.SitesInfo.Logo.Url != null)
+                    <a href="/" class="head_link">
+                        @if (Model.SitesInfo.Logo.Url != null)
+                        {
+                            <div class="head_logo">
+                                <img src="@Model.SitesInfo.Logo.Url" />
+                            </div>
+                        }
+                        <div class="head_title">
+                            @if (Model != null && Model.SitesInfo != null)
                             {
-                                <div class="media-left">
-                                    <img src="@Model.SitesInfo.Logo.Url" />
-                                </div>                                    
+                                <h4>@Model.SitesInfo.LongTitle</h4>
                             }
-
-                                    <div class="media-body">
-                                        @if (Model != null && Model.SitesInfo != null)
-                                        {
-                                            <h4 class="media-heading">
-                                                @Model.SitesInfo.LongTitle
-                                            </h4>
-                                        }
-                                    </div>
-</a>
+                        </div>
+                    </a>
                 </div>
                 <div class="col-md-4 right_section">
                     <ul class="nav navbar-nav navbar-right">
@@ -88,7 +84,7 @@
                             </a>
                         </li>
                     </ul>
-                    <div class="float-right spec-version-link">
+                    <div class="pull-right spec-version-link">
                         <a href="/spec">
                             <span class="spec-info">Aa</span>
                             Для слабовидящих
@@ -100,8 +96,9 @@
         </div>
         <!-- конец названия сайта -->
         <!-- главное меню -->
-        <div class="main-menu">
-            @if (Model != null && Model.SiteMapArray != null && Model.SiteMapArray.Count() > 0)
+        <div class="main-menu_wr">
+            <div class="main-menu">
+                @if (Model != null && Model.SiteMapArray != null && Model.SiteMapArray.Count() > 0)
             {
                 var mainMenu = Model.SiteMapArray
                     .Where(w => w.MenuAlias.Equals("main"))
@@ -114,35 +111,37 @@
                         FrontSection = s.FrontSection,
                         Url = s.Url
                     });
-                <ul class="nav navbar-nav navbar-left">
-                    @foreach (var item in mainMenu)
-                    {
-                        string fullPath = "/";
+                    <ul class="nav navbar-nav navbar-left">
+                        @foreach (var item in mainMenu)
+                        {
+                            string fullPath = "/";
 
-                        if (!string.IsNullOrEmpty(item.Url))
-                        {
-                            fullPath = item.Url;
-                        }
-                        else if (item.FrontSection.ToLower().Equals("page"))
-                        {
-                            fullPath = item.Path + item.Alias;
-                        }
-                        else
-                        {
-                            fullPath = "/" + item.FrontSection;
-                        }
+                            if (!string.IsNullOrEmpty(item.Url))
+                            {
+                                fullPath = item.Url;
+                            }
+                            else if (item.FrontSection.ToLower().Equals("page"))
+                            {
+                                fullPath = item.Path + item.Alias;
+                            }
+                            else
+                            {
+                                fullPath = "/" + item.FrontSection;
+                            }
 
-                        <li>
-                            <a href="@fullPath">@item.Title</a>
-                        </li>
-                    }
+                            <li>
+                                <a href="@fullPath">@item.Title</a>
+                            </li>
+                        }
+                    </ul>
+                }
+                <ul class="nav navbar-nav navbar-right">
+                    @*<li><a href="">EN</a></li>*@
+                    <li><a href="" class="icon-search"></a></li>
                 </ul>
-            }
-            <ul class="nav navbar-nav navbar-right">
-                @*<li><a href="">EN</a></li>*@
-                <li><a href="" class="icon-search"></a></li>
-            </ul>
+            </div>
         </div>
+
         <!-- конец главного меню -->
     </div>
     <!-- конец шапки -->
@@ -182,13 +181,17 @@
         <div class="footer">
             <div class="row">
                 <div class="col-md-8">
-                    <div class="media">
-                        <div class="media-left">
+                    <div class="media">                        
                             @if (Model.SitesInfo.Logo != null)
                             {
-                                <img class="logo-small" src="@Model.SitesInfo.Logo.Url" />
+                                if (Model.SitesInfo.Logo.Url != null)
+                                {
+                                    <div class="media-left">
+                                        <img class="logo-small" src="@Model.SitesInfo.Logo.Url" />
+                                    </div>
+                                }
                             }
-                        </div>
+
                         @if (Model != null && Model.SitesInfo != null)
                         {
                             <div class="media-body">
@@ -208,37 +211,17 @@
                         <a href="" class="icon-search bottom-search"></a>
                     </form>
                     <ul class="nav navbar-nav bottom_menu navbar-left">
-                        <li>
-                            <a href="">
-                                <span class="ti-layers-alt top-icon"></span>
-                                Карта сайта
-                            </a>
-                        </li>
-                        <li>
-                            <a href="">
-                                <span class="ti-rss-alt top-icon"></span>
-                                RSS
-                            </a>
-                        </li>
-                        <li>
-                            <a href="">
-                                <span class="ti-new-window top-icon"></span>
-                                Медицинский портал
-                            </a>
-                        </li>
+                        <li><a href=""><span class="ti-layers-alt top-icon"></span>Карта сайта</a></li>
+                        <li><a href=""><span class="ti-rss-alt top-icon"></span>RSS</a></li>
+                        <li><a href=""><span class="ti-new-window top-icon"></span>Медицинский портал</a></li>
                     </ul>
                     <ul class="nav navbar-nav versions navbar-left">
                         @*<li><a href="">English version</a></li>*@
-                        <li>
-                            <a href="">
-                                <span class="spec-info">Aa</span>
-                                Для слабовидящих
-                            </a>
-                        </li>
+                        <li><a href=""><span class="spec-info">Aa</span>Для слабовидящих</a></li>
                     </ul>
                 </div>
                 <div class="col-md-12 metrica-block">
-                    <div class="float-left">
+                    <div class="pull-left">
                         <div class="metrica">
                             <img src="~/Content/img/metrica1.png" />
                         </div>

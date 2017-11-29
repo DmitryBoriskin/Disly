@@ -1,6 +1,7 @@
 ﻿@model PortalDoctorsViewModel
 
 <div class="container">
+    @Html.Partial("services/breadcrumbs")
     @if (Model.Doctor != null)
     {
         <h1>@Model.Doctor.FIO</h1>
@@ -187,7 +188,6 @@
                     </div>
                 </form>
             </div>
-
         </div>
     }
 </div>

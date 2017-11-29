@@ -38,6 +38,7 @@
         var _checked = $(this).is(':checked');
 
         var el = $(this);
+        var elTooltip = $(this).closest(".groupClaim-item").find(".groupClaim-item-tooltip").first();
 
         try
         {
@@ -61,26 +62,17 @@
                 data: JSON.stringify(params)
             })
                 .done(function (response) {
-                    el.tooltip('show');
-                    //content.html("Сохранено");
-                    //content.fadeIn("slow");
-                    //EnableButton(el);
+                    elTooltip.tooltip('show');
                 })
                 .fail(function (jqXHR, status) {
-                    //content.html("Ошибка" + " " + status + " " + jqXHR);
-                    //content.fadeIn("slow");
-                    //EnableButton(el);
+                    console.log("Ошибка" + " " + status + " " + jqXHR);
+                    elTooltip.attr("title", "Ошибка сохранения");
                 })
                 .always(function (response) {
                     setTimeout(function () {
                         //content.fadeOut("slow");
-                        el.tooltip('hide');
+                        elTooltip.tooltip('hide');
                     }, 1000);
-                    //EnableButton(el);
-                    //content.html("Выполнено " + response);
-                    //if (documentSetId !== null) {
-                    //    //CaseReloadEDocument(e, el, documentSetId);
-                    //}
                 });
         }
         catch(ex){
@@ -139,7 +131,7 @@
                     }
                 })
                 .fail(function (jqXHR, status) {
-                    //content.html("Ошибка" + " " + status + " " + jqXHR);
+                    console.log("Ошибка" + " " + status + " " + jqXHR);
                     elTooltip.attr("title", "Ошибка сохранения");
                     elTooltip.tooltip('show');
                 })
@@ -208,7 +200,7 @@
                     }
                 })
                 .fail(function (jqXHR, status) {
-                    //content.html("Ошибка" + " " + status + " " + jqXHR);
+                    console.log("Ошибка" + " " + status + " " + jqXHR);
                     elTooltip.attr("title", "Ошибка сохранения");
                     elTooltip.tooltip('show');
                 })
