@@ -61,11 +61,13 @@ namespace cms.dbase.models
 		public ITable<content_materials>                            content_materialss                            { get { return this.GetTable<content_materials>(); } }
 		public ITable<content_materials_groups>                     content_materials_groupss                     { get { return this.GetTable<content_materials_groups>(); } }
 		public ITable<content_materials_groups_link>                content_materials_groups_links                { get { return this.GetTable<content_materials_groups_link>(); } }
+		public ITable<content_medical_services>                     content_medical_servicess                     { get { return this.GetTable<content_medical_services>(); } }
 		public ITable<content_org_services>                         content_org_servicess                         { get { return this.GetTable<content_org_services>(); } }
 		public ITable<content_org_structure>                        content_org_structures                        { get { return this.GetTable<content_org_structure>(); } }
 		public ITable<content_orgs>                                 content_orgss                                 { get { return this.GetTable<content_orgs>(); } }
 		public ITable<content_orgs_adminstrativ>                    content_orgs_adminstrativs                    { get { return this.GetTable<content_orgs_adminstrativ>(); } }
 		public ITable<content_orgs_department_affiliation>          content_orgs_department_affiliations          { get { return this.GetTable<content_orgs_department_affiliation>(); } }
+		public ITable<content_orgs_medical_services_links>          content_orgs_medical_services_linkss          { get { return this.GetTable<content_orgs_medical_services_links>(); } }
 		public ITable<content_orgs_types>                           content_orgs_typess                           { get { return this.GetTable<content_orgs_types>(); } }
 		public ITable<content_orgs_types_link>                      content_orgs_types_links                      { get { return this.GetTable<content_orgs_types_link>(); } }
 		public ITable<content_people>                               content_peoples                               { get { return this.GetTable<content_people>(); } }
@@ -1034,6 +1036,24 @@ namespace cms.dbase.models
 		#endregion
 	}
 
+	[Table(Schema="dbo", Name="content_medical_services")]
+	public partial class content_medical_services
+	{
+		[PrimaryKey, NotNull] public Guid   id      { get; set; } // uniqueidentifier
+		[Column,     NotNull] public string c_title { get; set; } // nvarchar(256)
+		[Column,     NotNull] public int    n_sort  { get; set; } // int
+
+		#region Associations
+
+		/// <summary>
+		/// FK_content_orgs_medical_services_links_content_medical_services_BackReference
+		/// </summary>
+		[Association(ThisKey="id", OtherKey="f_medical_service", CanBeNull=true, IsBackReference=true)]
+		public IEnumerable<content_orgs_medical_services_links> contentorgsmedicalserviceslinkscontentmedicalservicess { get; set; }
+
+		#endregion
+	}
+
 	[Table(Schema="dbo", Name="content_org_services")]
 	public partial class content_org_services
 	{
@@ -1127,6 +1147,12 @@ namespace cms.dbase.models
 		public IEnumerable<content_orgs_types_link> contentorgstypeslinkorgs { get; set; }
 
 		/// <summary>
+		/// FK_content_orgs_medical_services_links_content_orgs_BackReference
+		/// </summary>
+		[Association(ThisKey="id", OtherKey="f_org", CanBeNull=true, IsBackReference=true)]
+		public IEnumerable<content_orgs_medical_services_links> contentorgsmedicalserviceslinkscontentorgss { get; set; }
+
+		/// <summary>
 		/// FK_content_orgs_structure_BackReference
 		/// </summary>
 		[Association(ThisKey="id", OtherKey="f_ord", CanBeNull=true, IsBackReference=true)]
@@ -1182,6 +1208,29 @@ namespace cms.dbase.models
 		[Column, NotNull] public int    n_sort  { get; set; } // int
 	}
 
+	[Table(Schema="dbo", Name="content_orgs_medical_services_links")]
+	public partial class content_orgs_medical_services_links
+	{
+		[Column, NotNull] public Guid f_org             { get; set; } // uniqueidentifier
+		[Column, NotNull] public Guid f_medical_service { get; set; } // uniqueidentifier
+
+		#region Associations
+
+		/// <summary>
+		/// FK_content_orgs_medical_services_links_content_orgs
+		/// </summary>
+		[Association(ThisKey="f_org", OtherKey="id", CanBeNull=false, KeyName="FK_content_orgs_medical_services_links_content_orgs", BackReferenceName="contentorgsmedicalserviceslinkscontentorgss")]
+		public content_orgs contentorgsmedicalserviceslinkscontentorgs { get; set; }
+
+		/// <summary>
+		/// FK_content_orgs_medical_services_links_content_medical_services
+		/// </summary>
+		[Association(ThisKey="f_medical_service", OtherKey="id", CanBeNull=false, KeyName="FK_content_orgs_medical_services_links_content_medical_services", BackReferenceName="contentorgsmedicalserviceslinkscontentmedicalservicess")]
+		public content_medical_services contentorgsmedicalserviceslinkscontentmedicalservices { get; set; }
+
+		#endregion
+	}
+
 	[Table(Schema="dbo", Name="content_orgs_types")]
 	public partial class content_orgs_types
 	{
@@ -1210,16 +1259,16 @@ namespace cms.dbase.models
 		#region Associations
 
 		/// <summary>
-		/// FK_content_orgs_types_link_org
-		/// </summary>
-		[Association(ThisKey="f_org", OtherKey="id", CanBeNull=false, KeyName="FK_content_orgs_types_link_org", BackReferenceName="contentorgstypeslinkorgs")]
-		public content_orgs contentorgstypeslinkorg { get; set; }
-
-		/// <summary>
 		/// FK_content_orgs_types_link_org_types
 		/// </summary>
 		[Association(ThisKey="f_type", OtherKey="id", CanBeNull=false, KeyName="FK_content_orgs_types_link_org_types", BackReferenceName="contentorgstypeslinkorgtypess")]
 		public content_orgs_types contentorgstypeslinkorgtypes { get; set; }
+
+		/// <summary>
+		/// FK_content_orgs_types_link_org
+		/// </summary>
+		[Association(ThisKey="f_org", OtherKey="id", CanBeNull=false, KeyName="FK_content_orgs_types_link_org", BackReferenceName="contentorgstypeslinkorgs")]
+		public content_orgs contentorgstypeslinkorg { get; set; }
 
 		#endregion
 	}
@@ -2158,6 +2207,12 @@ namespace cms.dbase.models
 				t.id == id);
 		}
 
+		public static content_medical_services Find(this ITable<content_medical_services> table, Guid id)
+		{
+			return table.FirstOrDefault(t =>
+				t.id == id);
+		}
+
 		public static content_org_services Find(this ITable<content_org_services> table, Guid id)
 		{
 			return table.FirstOrDefault(t =>
@@ -2274,3 +2329,4 @@ namespace cms.dbase.models
 		}
 	}
 }
+ 

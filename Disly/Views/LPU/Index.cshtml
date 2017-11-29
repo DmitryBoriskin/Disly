@@ -36,6 +36,19 @@
         </div>
     }
 
+    @if (Model.MedicalServices != null)
+    {
+        <div class="row">
+            @foreach (var item in Model.MedicalServices)
+            {
+                string link = "/lpu?t=services&id=" + item.Id;
+                <div class="col-md-6">
+                    <a href="@link">@item.Title</a>
+                </div>
+            }
+        </div>
+    }
+
     @if (Model.OrgList != null)
     {
         if (!string.IsNullOrWhiteSpace(title))
@@ -109,21 +122,21 @@
                             @if (item.Leader != null && item.Leader.id != Guid.Empty)
                             {
                                 <a target="_blank" href="/doctors/@item.Leader.id">
-                                @if (item.Leader.Photo != null && !string.IsNullOrWhiteSpace(item.Leader.Photo.Url))
-                                {
-                                    <img class="img-circle img-person-list" src="@item.Leader.Photo.Url" alt="@item.Leader.Surname" />
-                                }
+                                    @if (item.Leader.Photo != null && !string.IsNullOrWhiteSpace(item.Leader.Photo.Url))
+                                    {
+                                        <img class="img-circle img-person-list" src="@item.Leader.Photo.Url" alt="@item.Leader.Surname" />
+                                    }
 
-                                @if (!string.IsNullOrWhiteSpace(item.Leader.Post))
-                                {
-                                    <div><strong>@item.Leader.Post</strong></div>
-                                }
+                                    @if (!string.IsNullOrWhiteSpace(item.Leader.Post))
+                                    {
+                                        <div><strong>@item.Leader.Post</strong></div>
+                                    }
 
-                                @if (!string.IsNullOrWhiteSpace(item.Leader.Surname))
-                                {
-                                    <div>@item.Leader.Surname @item.Leader.Name @item.Leader.Patronymic</div>
-                                }
-                                    </a>
+                                    @if (!string.IsNullOrWhiteSpace(item.Leader.Surname))
+                                    {
+                                        <div>@item.Leader.Surname @item.Leader.Name @item.Leader.Patronymic</div>
+                                    }
+                                </a>
                             }
                         </div>
                     </div>

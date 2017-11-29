@@ -31,5 +31,10 @@ namespace Disly.Models
         /// тип информации показываемой на странице 
         /// </summary>
         public string Type { get; set; }
+
+        /// <summary>
+        /// Медицинские услуги
+        /// </summary>
+        public MedicalService[] MedicalServices { get; set; }
     }
 }
