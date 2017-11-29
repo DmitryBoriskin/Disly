@@ -83,6 +83,19 @@
     
     <div class="col-md-3 col-md-push-1">
         <div class="dop-block">
+            @if (Model.DoctorsItem.Photo != null)
+            {
+                <a href="/doctors/@Model.DoctorsItem.Id" class="boss_img_wrap">
+                    @if (Model.DoctorsItem.Photo != null)
+                    {
+                        <img src="@Model.DoctorsItem.Photo" title="@Model.DoctorsItem.Photo" />
+                    }
+                    else
+                    {
+                        <img src="~/Content/img/no_avatar.png" />
+                    }
+                </a>
+            }
             @*<div class="dop-block_info">
                 <label>Опубликовано</label>
                 <div>@Model.Item.Date.ToString("dd MMMM yyyy")<br>@Model.Item.Date.ToString("HH:mm")</div>

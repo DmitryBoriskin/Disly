@@ -35,6 +35,17 @@ body {
     padding: 15px 0;
     border-bottom: 1px solid #ccc;
 }
+.head_link:hover{text-decoration:none;}
+.head_logo {
+    padding-right: 20px;
+}
+.head_title{
+    padding:5px 0 5px;
+}
+.head_title h4 {
+    font-family: 'PT Serif';
+    font-size: 22px;
+}
 
     .head .media-heading {
         font-family: 'PT Serif';
@@ -62,17 +73,10 @@ body {
         background-color: transparent !important;
         padding-right: 5px !important;
     }
-
-.float-right {
-    float: right;
-}
-
-.float-left {
-    float: left;
-}
 /*  */
 
 /* главное меню */
+.main-menu_wr{padding-bottom:4px;}
 .main-menu {
     text-transform: uppercase;
     font-weight: bold;
@@ -80,7 +84,7 @@ body {
 
     .main-menu li > a {
         background-color: transparent !important;
-        padding: 10px 25px !important;
+        padding: 13px 25px 16px!important;
         padding-left: 0 !important;
         font-size: 14px;
         color:#333;
@@ -236,7 +240,7 @@ body {
 
 .top-slider-wrapper {    
     padding-top: 30px;
-    padding-bottom: 40px;
+    padding-bottom: 20px;
 }
 
 .slider-img {
@@ -334,14 +338,15 @@ body {
 
 /* баннеры полезные ресурсы */
 .imglink-benefit-block {    
-    padding-top: 25px;
-    padding-bottom:40px;
+    padding-top: 18px;
+    padding-bottom:14px;
 }
 
 .module-title {
     font-family: OpenSans;
     font-weight: bold;
     font-size: 20px;
+    margin-bottom:13px;
 }
 
     .module-title > span {
@@ -396,12 +401,14 @@ body {
 
 /* модуль новостей на главной */
 .news-module {
-    padding: 25px 0;
+    padding: 18px 0 20px;
 }
 
 
 .module-material-item:hover a {
-    color: #fff;
+    color: #fff;    
+}
+.module-material-item a:hover {
     text-decoration: underline;
 }
 
@@ -413,7 +420,7 @@ body {
 .module-material-item {
     width: 254px;
     height: 170px;
-    padding: 10px 15px;
+    padding: 8px 15px 10px;
     margin-bottom: 20px;
     position: relative;
     overflow: hidden;
@@ -430,30 +437,34 @@ body {
         display: block;
         border-right: 10px solid rgb(255, 255, 255);
     }
-
+.module-material-item-date {clear:both;}
 .module-material-item-day {
-    font-family: 'Open Sans';
+    font-family: OpenSans;
+    font-weight:600;
     font-size: 30px;
-    display: table-cell;
+    float: left;
+    line-height:34px;
+    padding-right:6px;
 }
 
-.module-material-item-otherdate {
-    display: table-cell;
+.module-material-item-otherdate {    
     text-transform: uppercase;
     font-size: 12px;
-    color: #666666;
-    position: relative;
-    bottom: 13px;
-    left: 5px;
+    color: #666;    
     line-height: 1.1;
+    padding:4px 0 0 5px;
 }
-
+.module-material-title {
+    clear: both;
+    display: block;
+    max-height: 110px;
+    overflow: hidden;color:#222;
+    position:absolute;bottom:18px;
+}
 .module-material-item-group-link {
-    position: relative;
-    bottom: 42px;
-    float: right;
     text-transform: uppercase;
     font-size: 12px;
+    position:absolute;right:10px;top:10px;
 }
 
 .event-item-module {
