@@ -161,6 +161,8 @@ namespace cms.dbModel
         public abstract bool permit_OrgsAdminstrativ(Guid id, Guid OrgId, int num);
         public abstract DepartmentAffiliationModel[] getDepartmentAffiliations();
         public abstract People[] getPersonsThisOrg(Guid idOrg);
+        public abstract MedicalService[] getMedicalServices();
+        public abstract Guid[] getOrgMedicalServicesLinks(Guid org);
 
         //Feedbacks
         public abstract FeedbacksList getFeedbacksList(FilterParams filtr);

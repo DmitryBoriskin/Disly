@@ -58,6 +58,9 @@ namespace cms.dbModel
         public abstract string getOrgTypeName(Guid id);
         public abstract DepartmentAffiliationModel[] getDepartmentAffiliations();
         public abstract string getAffiliationDepartment(Guid id);
+        public abstract MedicalService[] getMedicalServices(string domain);
+        public abstract OrgFrontModel[] getOrgPortalModels(Guid service);
+        public abstract string getMedicalServiceTitle(Guid id);
 
         // врачи портала
         public abstract DoctorList getDoctorsList(FilterParams filter);

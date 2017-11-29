@@ -72,7 +72,7 @@ namespace Disly.Controllers
                     model.Structures = _repository.getStructures(Domain);
                     break;
                 default:
-                    PageTitle = "Контактная byajhvfwbz";
+                    PageTitle = "Контактная информация";
                     model.OrgItem = _repository.getOrgInfo(Domain);
                     break;
             }
