@@ -163,15 +163,14 @@
                             Text = s.Text
                         });
 
-            <div class="row bottom-banners">
+            <div class="row bottom-linkimg">
+                <div class="col-sm-2">
+                    <div class="bottom-linkimg_head">Официальные сетевые ресурсы</div>
+                </div>                
                 @foreach (var item in bannerBottom)
                 {
-                    <div class="col-sm-2">
-                        <a href="@item.Url">
-                            <div class="bottom-banner-item">
-                                <div class="bottom-banner-inner">@item.Title</div>
-                            </div>
-                        </a>
+                    <div class="col-sm-2">@*@item.Url*@
+                        <a href="#" class="bottom-linkimg-item">@item.Title</a>
                     </div>
                 }
             </div>
@@ -194,41 +193,41 @@
 
                         @if (Model != null && Model.SitesInfo != null)
                         {
-                            <div class="media-body">
-                                @Model.SitesInfo.LongTitle
+                            <div class="bottom_info">
+                                <div class="bottom_info_title">@Model.SitesInfo.LongTitle</div>                                
                                 <div class="small_address">
                                     <div>@Model.SitesInfo.Adress</div>
                                     <div>@Model.SitesInfo.Phone</div>
                                     <div><a href="@Model.SitesInfo.Site">@Model.SitesInfo.Site</a></div>
+                                </div>
+                                <div class="metrica">
+                                    <img src="~/Content/img/metrica1.png" />
+                                </div>
+                                <div class="metrica">
+                                    <img src="~/Content/img/metrica2.png" />
                                 </div>
                             </div>
                         }
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <form>
-                        <input class="search-form" type="text" placeholder="Поиск по сайту" value="" />
-                        <a href="" class="icon-search bottom-search"></a>
-                    </form>
-                    <ul class="nav navbar-nav bottom_menu navbar-left">
-                        <li><a href=""><span class="ti-layers-alt top-icon"></span>Карта сайта</a></li>
-                        <li><a href=""><span class="ti-rss-alt top-icon"></span>RSS</a></li>
-                        <li><a href=""><span class="ti-new-window top-icon"></span>Медицинский портал</a></li>
-                    </ul>
-                    <ul class="nav navbar-nav versions navbar-left">
-                        @*<li><a href="">English version</a></li>*@
-                        <li><a href=""><span class="spec-info">Aa</span>Для слабовидящих</a></li>
-                    </ul>
+                    <div class="footer-right">
+                        <form>
+                            <input class="search-form" type="text" placeholder="Поиск по сайту" value="" />
+                            <a href="" class="icon-search bottom-search"></a>
+                        </form>
+                        <ul class="nav navbar-nav bottom_menu navbar-left">
+                            <li><a href=""><span class="ti-layers-alt top-icon"></span>Карта сайта</a></li>
+                            <li><a href=""><span class="ti-rss-alt top-icon"></span>RSS</a></li>
+                            <li><a href=""><span class="ti-new-window top-icon"></span>Медицинский портал</a></li>
+                        </ul>
+                        <ul class="nav navbar-nav versions navbar-left">
+                            @*<li><a href="">English version</a></li>*@
+                            <li><a href=""><span class="spec-info">Aa</span>Для слабовидящих</a></li>
+                        </ul>
+                    </div>                    
                 </div>
-                <div class="col-md-12 metrica-block">
-                    <div class="pull-left">
-                        <div class="metrica">
-                            <img src="~/Content/img/metrica1.png" />
-                        </div>
-                        <div class="metrica">
-                            <img src="~/Content/img/metrica2.png" />
-                        </div>
-                    </div>
+                <div class="col-md-12 metrica-block">                    
                     <div class="float-right social_network_list">
                        @if (Model != null && Model.SitesInfo != null)
                        {

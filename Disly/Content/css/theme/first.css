@@ -89,3 +89,9 @@
 .sitemap-plate:hover:after {
   border-bottom: 10px solid #1f4799;
 }
+.bottom-linkimg-item:hover {
+  color: #3973e6;
+}
+.footer-right li a:hover {
+  color: #3973e6;
+}
