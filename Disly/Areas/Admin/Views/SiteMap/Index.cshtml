@@ -87,7 +87,7 @@
                                     <td>
                                         @if (item.Blocked)
                                         {
-                                            <del class="cross"><a title="Удаление страницы не разрешено!" class="icon-attention-circled"> </a></del>
+                                            <span title="Удаление страницы не разрешено!" class="icon-attention-circled"></span>
                                         }
                                     </td>
                                     <td class="sort-element @disabled">@item.CountSibling</td>
@@ -102,7 +102,7 @@
 
     <div class="dop_info-block">
         <div class="dop-caption">Фильтр</div>
-        @{ Html.RenderAction("Filtr", "Templates", new { @Title = "Группы меню", @Alias = "group", @Icon = "icon-th-list-3", @Url = "/admin/services/sitemapmenu/", @BtnName = "Новая группа меню", @Items = Model.MenuTypes }); }
+        @{ Html.RenderAction("Filtr", "Templates", new { @Title = "Группы меню", @Alias = "group", @Icon = "icon-th-list-3", @Url = "/admin/services/sitemapmenu/", @BtnName = "Новая группа меню", @Items = Model.MenuTypes, @readOnly = true}); }
     </div>
     <div class="buttons"></div>
             }

@@ -12,5 +12,9 @@ namespace Disly.Areas.Admin.Models
         public string Url { get; set; }
         public Catalog_list[] Items { get; set; }
         public string AccountGroup { get; set; }
+        /// <summary>
+        /// Флаг, отображающий является ли фильтр редактируемым
+        /// </summary>
+        public bool ReadOnly { get; set; }
     }
 }

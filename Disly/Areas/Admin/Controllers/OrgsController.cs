@@ -35,7 +35,8 @@ namespace Disly.Areas.Admin.Controllers
                 ControllerName = ControllerName,
                 ActionName = ActionName,
                 Types = _cmsRepository.getOrgTypesList(new OrgTypeFilter() { }),
-                DepartmentAffiliations = _cmsRepository.getDepartmentAffiliations()
+                DepartmentAffiliations = _cmsRepository.getDepartmentAffiliations(),
+                MedicalServices = _cmsRepository.getMedicalServices()
             };
 
             #region Метатеги
@@ -92,18 +93,13 @@ namespace Disly.Areas.Admin.Controllers
         public ActionResult Item(Guid Id)
         {            
             model.Item = _cmsRepository.getOrgItem(Id);    //+ список структур    +списо административного персонала
-
-
+            
             // типы организаций
-            var types = new MultiSelectList(model.Types, "Id", "Title", model.Item != null ? model.Item.Types : null);
-            ViewBag.Types = types;
-
             if (model.Item != null)
             {
                 ViewBag.Titlecoord = model.Item.ShortTitle;
                 ViewBag.Xcoord = model.Item.GeopointX;
                 ViewBag.Ycoord = model.Item.GeopointY;
-                model.Item.Types = null;
             }
             
             return View("Item", model);
@@ -159,7 +155,7 @@ namespace Disly.Areas.Admin.Controllers
                             info = "Вы не можете загружать файлы данного формата",
                             buttons = new ErrorMassegeBtn[]
                             {
-                             new ErrorMassegeBtn { url = "#", text = "ок", action = "false", style="primary" }
+                                new ErrorMassegeBtn { url = "#", text = "ок", action = "false", style="primary" }
                             }
                         };
 
@@ -186,7 +182,8 @@ namespace Disly.Areas.Admin.Controllers
                 {
                     _cmsRepository.updateOrg(id, back_model.Item); //, AccountInfo.id, RequestUserInfo.IP
                     userMessege.info = "Запись сохранена";
-                    userMessege.buttons = new ErrorMassegeBtn[]{
+                    userMessege.buttons = new ErrorMassegeBtn[]
+                    {
                         new ErrorMassegeBtn { url = StartUrl + Request.Url.Query, text = "вернуться в список" },
                         new ErrorMassegeBtn { url = "/admin/orgs/item/"+id, text = "ок", action = "false" }
                     };
@@ -224,10 +221,7 @@ namespace Disly.Areas.Admin.Controllers
                 #endregion
             }
 
-            // типы организаций
-            var types = new MultiSelectList(model.Types, "Id", "Title", model.Item != null ? model.Item.Types : null);
-            ViewBag.Types = types;
-            model.Item.Types = null;
+            model.Item = _cmsRepository.getOrgItem(id);
 
             model.ErrorInfo = userMessege;
             return View("Item", model);

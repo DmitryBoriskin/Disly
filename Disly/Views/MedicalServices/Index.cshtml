@@ -1,0 +1,24 @@
+﻿@model MedicalServicesViewModel
+
+<div class="container">
+    @Html.Partial("services/breadcrumbs")
+
+    <h1>Медицинские услуги</h1>
+
+    @if (Model.MedicalServices != null)
+    {
+        <div class="row">
+            @foreach (var item in Model.MedicalServices)
+            {
+                string link = "/structure";
+                <div class="col-md-6">
+                    <a href="@link">@item.Title</a>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <p>Список медицинских услуг пуст.</p>
+    }
+</div>

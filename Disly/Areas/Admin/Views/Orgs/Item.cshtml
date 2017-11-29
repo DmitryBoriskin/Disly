@@ -13,21 +13,36 @@
         @Html.TextBoxFor(m => m.Item.Title, new { required = "", type = "text", maxlength = "256", title = "Полное название" })
         @Html.TextBoxFor(m => m.Item.ShortTitle, new {  type = "text", maxlength = "128", title = "Краткое название" })
         <div class="row">
-            <div class="col-lg-6">
-                @Html.DropDownListFor(m => m.Item.DepartmentAffiliation, new SelectList(Model.DepartmentAffiliations, "Key", "Value", null), new { @title = "Тип ведомственной принадлежности", @class = "selectpicker" })
+            <div class="col-md-6">
+                @Html.DropDownListFor(m => m.Item.DepartmentAffiliation, new SelectList(Model.DepartmentAffiliations, "Key", "Value", null), new { @title = "Тип ведомственной принадлежности:", @class = "selectpicker" })
             </div>
-            <div class="col-lg-6">
-                @Html.DropDownListFor(m => m.Item.Types, (MultiSelectList)ViewBag.Types, new { @title = "Типы мед. учреждений", @class = "selectpicker", @multiple = "multiple" })
+
+            <div class="col-md-12">
+                @*@Html.DropDownListFor(m => m.Item.Types, (MultiSelectList)ViewBag.Types, new { @title = "Типы мед. учреждений", @class = "selectpicker", @multiple = "multiple" })*@
+                <div class="form-group">
+                    <label for="itemTypes-select">Типы мед. учреждений:</label>
+                    <select name="Item.Types" id="itemTypes-select" class="form-control select2" multiple>
+                        @foreach (var type in Model.Types)
+                        {
+                            <option value="@type.Id" @(Model.Item != null && Model.Item.Types != null && Model.Item.Types.Any(s => s == type.Id) ? "selected" : null)>@type.Title</option>
+                        }
+                    </select>
+                </div>
+            </div>
+
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label for="itemServices-select">Медицинские услуги:</label>
+                    <select name="Item.Services" id="itemServices-select" class="form-control select2" multiple>
+                        @foreach (var serv in Model.MedicalServices)
+                        {
+                            <option value="@serv.Id" @(Model.Item != null && Model.Item.Services != null && Model.Item.Services.Any(s => s == serv.Id) ? "selected" : null)>@serv.Title</option>
+                        }
+                    </select>
+                </div>
             </div>
         </div>
         
-        <select class="selectpicker" title="Направления деятельности" multiple>
-            <option value="1">Сестринское дело</option>
-            <option value="2">Генетика</option>
-            <option value="3">Рентегенология</option>
-            <option value="4">Лучевая диагностика</option>
-        </select>
-
         <div class="group-block open" title="Телефон и e-mail">
             <div class="row">
                 <div class="col-md-4">@Html.TextBoxFor(m => m.Item.Phone, new { type = "text", maxlength = "256", title = "Телефон приемной" })</div>

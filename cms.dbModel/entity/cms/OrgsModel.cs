@@ -119,6 +119,11 @@ namespace cms.dbModel.entity
         public Guid[] Types { get; set; }
 
         /// <summary>
+        /// Медицинские услуги
+        /// </summary>
+        public Guid[] Services { get; set; }
+
+        /// <summary>
         /// Текст для вывода во внешнюю часть
         /// берётся из карты сайта для контактов
         /// </summary>
@@ -677,6 +682,27 @@ namespace cms.dbModel.entity
         /// Пейджер
         /// </summary>
         public Pager Pager { get; set; }
+    }
+
+    /// <summary>
+    /// Медицинская услуга
+    /// </summary>
+    public class MedicalService
+    {
+        /// <summary>
+        /// Идентификатор
+        /// </summary>
+        public Guid Id { get; set; }
+
+        /// <summary>
+        /// Название
+        /// </summary>
+        public string Title { get; set; }
+
+        /// <summary>
+        /// Сортировка
+        /// </summary>
+        public int Sort { get; set; }
     }
 }
 

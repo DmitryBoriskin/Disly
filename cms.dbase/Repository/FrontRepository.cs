@@ -595,9 +595,10 @@ namespace cms.dbase
                     {
                         Title = s.c_title,
                         Text = s.c_text,
-                        Date=s.d_date,
-                        PreviewImage= new Photo {
-                            Url=s.c_preview
+                        Date = s.d_date,
+                        PreviewImage = new Photo
+                        {
+                            Url = s.c_preview
                         }
                     }).First();
                 }
@@ -1520,6 +1521,117 @@ namespace cms.dbase
             }
         }
 
+
+
+        /// <summary>
+        /// Получим список медицинских услуг для организации
+        /// </summary>
+        /// <param name="domain"></param>
+        /// <returns></returns>
+        public override MedicalService[] getMedicalServices(string domain)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                if (!string.IsNullOrWhiteSpace(domain))
+                {
+                    var query = (from s in db.cms_sitess
+                                 join o in db.content_orgss on s.f_content equals o.id
+                                 join omsl in db.content_orgs_medical_services_linkss on o.id equals omsl.f_org
+                                 join ms in db.content_medical_servicess on omsl.f_medical_service equals ms.id
+                                 where s.c_alias.Equals(domain)
+                                 orderby ms.n_sort
+                                 select new MedicalService
+                                 {
+                                     Id = ms.id,
+                                     Title = ms.c_title,
+                                     Sort = ms.n_sort
+                                 });
+
+                    if (!query.Any()) return null;
+                    return query.ToArray();
+                }
+                else
+                {
+                    var query = (from  ms in db.content_medical_servicess
+                                 orderby ms.n_sort
+                                 select new MedicalService
+                                 {
+                                     Id = ms.id,
+                                     Title = ms.c_title,
+                                     Sort = ms.n_sort
+                                 });
+
+                    if (!query.Any()) return null;
+                    return query.ToArray();
+                }
+                
+            }
+        }
+
+        /// <summary>
+        /// Получим список организаций, представляющих медицинскую услугу
+        /// </summary>
+        /// <param name="service"></param>
+        /// <returns></returns>
+        public override OrgFrontModel[] getOrgPortalModels(Guid service)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var query = (from o in db.content_orgss
+                             join omsl in db.content_orgs_medical_services_linkss on o.id equals omsl.f_org
+                             join a in db.content_orgs_adminstrativs on o.id equals a.f_org into ps
+                             from a in ps.DefaultIfEmpty()
+                             where a.id == null || (a.f_org.Equals(o.id) && a.b_leader)
+                             join s in db.cms_sitess on o.id equals s.f_content into ss
+                             from s in ss.DefaultIfEmpty()
+                             join p in db.content_people_org_links on a.f_people equals p.id into ts
+                             from p in ts.DefaultIfEmpty()
+                             where p.id == null || p.id == a.f_people
+                             where omsl.f_medical_service.Equals(service)
+                             select new OrgFrontModel
+                             {
+                                 Id = o.id,
+                                 Title = o.c_title,
+                                 Phone = o.c_phone,
+                                 PhoneReception = o.c_phone_reception,
+                                 Fax = o.c_fax,
+                                 Email = o.c_email,
+                                 Address = o.c_adress,
+                                 Logo = o.c_logo,
+                                 Link = s.c_alias,
+                                 Leader = new OrgsAdministrativ
+                                 {
+                                     id = p.f_people,
+                                     Surname = a.c_surname,
+                                     Name = a.c_name,
+                                     Patronymic = a.c_patronymic,
+                                     Post = a.c_post,
+                                     PeopleF = a.f_people,
+                                     Photo = new Photo { Url = a.c_photo }
+                                 }
+                             });
+
+                if (!query.Any()) return null;
+                return query.ToArray();
+            }
+        }
+
+        /// <summary>
+        /// Получим название медицинской услуги
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public override string getMedicalServiceTitle(Guid id)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                return db.content_medical_servicess
+                    .Where(w => w.id.Equals(id))
+                    .Select(s => s.c_title)
+                    .SingleOrDefault();
+            }
+        }
+
         /// <summary>
         /// Получаем список врачей для портала
         /// </summary>
@@ -1566,7 +1678,7 @@ namespace cms.dbase
                                        domain = s.c_alias
                                    }
                                });
-                 
+
                 // кол-во докторов
                 int itemCount = doctors.Count();
 

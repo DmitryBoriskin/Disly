@@ -1,27 +1,31 @@
 ﻿using cms.dbModel.entity;
 using Disly.Models;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Web;
 using System.Web.Mvc;
 
 namespace Disly.Controllers
 {
-    public class MapSiteController : RootController
+    public class MedicalServicesController : RootController
     {
-        private MapSiteViewModel model;
+        private MedicalServicesViewModel model;
 
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             base.OnActionExecuting(filterContext);
 
-            model = new MapSiteViewModel
+            model = new MedicalServicesViewModel
             {
                 SitesInfo = siteModel,
                 SiteMapArray = siteMapArray,
                 BannerArray = bannerArray,
                 Breadcrumbs = new List<Breadcrumbs>()
             };
+
             #region Создаем переменные (значения по умолчанию)
-            string PageTitle = "Карта сайта";
+            string PageTitle = "Медицинские услуги";
             string PageDesc = "описание страницы";
             string PageKeyw = "ключевые слова";
             #endregion
@@ -33,10 +37,16 @@ namespace Disly.Controllers
             #endregion
         }
 
-        // GET: MapSite
+        // GET: PortalMedicalServices
         public ActionResult Index()
         {
-            model.List = _repository.getMapSiteList(Domain);
+            model.Breadcrumbs.Add(new Breadcrumbs
+            {
+                Title = "Медицинские услуги",
+                Url = ""
+            });
+            model.MedicalServices = _repository.getMedicalServices(Domain);
+
             return View(model);
         }
     }

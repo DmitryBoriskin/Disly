@@ -588,6 +588,7 @@
     <Compile Include="Controllers\LPUController.cs" />
     <Compile Include="Controllers\MapSiteController.cs" />
     <Compile Include="Controllers\PortalDoctorsController.cs" />
+    <Compile Include="Controllers\MedicalServicesController.cs" />
     <Compile Include="Controllers\RedirectRegistryController.cs" />
     <Compile Include="Controllers\VoteController.cs" />
     <Compile Include="Controllers\StructureController.cs" />
@@ -605,6 +606,7 @@
     <Compile Include="Models\LPUViewModel.cs" />
     <Compile Include="Models\MapSiteViewModel.cs" />
     <Compile Include="Models\PortalDoctorsViewModel.cs" />
+    <Compile Include="Models\MedicalServicesViewModel.cs" />
     <Compile Include="Models\RedirectRegistryViewModel.cs" />
     <Compile Include="Models\StructureViewModel.cs" />
     <Compile Include="Models\VoteViewModel.cs" />
@@ -850,6 +852,7 @@
     <Content Include="Views\PortalDoctors\Index.cshtml" />
     <Content Include="Views\Doctors\part\item.cshtml" />
     <Content Include="Views\Doctors\part\list.cshtml" />
+    <Content Include="Views\MedicalServices\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

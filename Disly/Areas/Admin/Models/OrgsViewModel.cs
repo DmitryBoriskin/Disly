@@ -60,5 +60,10 @@ namespace Disly.Areas.Admin.Models
         /// Ведомственная принадлежность
         /// </summary>
         public DepartmentAffiliationModel[] DepartmentAffiliations { get; set; }
+
+        /// <summary>
+        /// Список медицинских услуг
+        /// </summary>
+        public MedicalService[] MedicalServices { get; set; }
     }
 }
