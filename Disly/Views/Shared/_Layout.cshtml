@@ -158,6 +158,7 @@
                         .OrderBy(o => o.Sort)
                         .Select(s => new
                         {
+                            Id = s.Id,
                             Title = s.Title,
                             Url = s.Photo.Url,
                             Text = s.Text
@@ -166,8 +167,10 @@
             <div class="row bottom-banners">
                 @foreach (var item in bannerBottom)
                 {
+                    string redirectLink = "/redirect/banners/" + item.Id;
+
                     <div class="col-sm-2">
-                        <a href="@item.Url">
+                        <a href="redirectLink">
                             <div class="bottom-banner-item">
                                 <div class="bottom-banner-inner">@item.Title</div>
                             </div>
