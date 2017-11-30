@@ -1838,5 +1838,88 @@ namespace cms.dbase
                 return query.ToArray();
             }
         }
+
+        /// <summary>
+        /// Получим ссылку для редактирования организации
+        /// </summary>
+        /// <param name="domain">Домен</param>
+        /// <returns></returns>
+        public override Guid? getOrgLinkByDomain(string domain)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var query = (from s in db.cms_sitess
+                             join o in db.content_orgss on s.f_content equals o.id
+                             where s.c_alias.Equals(domain)
+                             select o.id);
+
+                if (!query.Any()) return null;
+                return query.SingleOrDefault();
+            }
+        }
+
+        /// <summary>
+        /// Доступна ли структура для админа сайта
+        /// </summary>
+        /// <param name="structureId"></param>
+        /// <param name="orgId"></param>
+        /// <returns></returns>
+        public override bool IsStructureAllowedToOrg(Guid structureId, Guid orgId)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var query = db.content_org_structures
+                    .Where(w => w.f_ord.Equals(orgId))
+                    .Where(w => w.id.Equals(structureId));
+
+                return query.Any();
+            }
+        }
+
+        /// <summary>
+        /// Доступен ли административный персонал для организации
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="orgId"></param>
+        /// <returns></returns>
+        public override bool IsAdministrativeAllowedToOrg(Guid id, Guid orgId)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var query = db.content_orgs_adminstrativs
+                    .Where(w => w.f_org.Equals(orgId))
+                    .Where(w => w.id.Equals(id));
+
+                return query.Any();
+            }
+        }
+
+        /// <summary>
+        /// Доступен ли департамент для организации
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="structure"></param>
+        /// <returns></returns>
+        public override bool IsDepartmentAllowedToOrg(Guid id, Guid orgId)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                // список структур организации
+                var structureIds = db.content_org_structures
+                    .Where(w => w.f_ord.Equals(orgId))
+                    .Select(s => s.id);
+
+                if (!structureIds.Any()) return false;
+
+                // структура владеющая департаментом
+                var query = db.content_departmentss
+                    .Where(w => w.id.Equals(id))
+                    .Select(s => s.f_structure);
+
+                if (!query.Any()) return false;
+
+                return structureIds.Contains(query.SingleOrDefault());
+            }
+        }
     }
 }

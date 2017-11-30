@@ -1,17 +1,17 @@
 ﻿@model OrgsViewModel
-@{ 
+@{
     string urlParam = "/Admin/Services/ChangePermit?group=orgs_structure";
     string fileName = (Model.Item != null && Model.Item.Logo != null) ? Model.Item.Logo.Name : null;
     string fileSize = (Model.Item != null && Model.Item.Logo != null) ? Model.Item.Logo.Size : null;
     string fileUrl = (Model.Item != null && Model.Item.Logo != null) ? Model.Item.Logo.Url : null;
 }
 
-@if (Model.UserResolution.Write)
+@if (Model.UserResolution.Read)
 {
     <div class="content">
         <h1>@ViewBag.Title</h1>
         @Html.TextBoxFor(m => m.Item.Title, new { required = "", type = "text", maxlength = "256", title = "Полное название" })
-        @Html.TextBoxFor(m => m.Item.ShortTitle, new {  type = "text", maxlength = "128", title = "Краткое название" })
+        @Html.TextBoxFor(m => m.Item.ShortTitle, new { type = "text", maxlength = "128", title = "Краткое название" })
         <div class="row">
             <div class="col-md-6">
                 @Html.DropDownListFor(m => m.Item.DepartmentAffiliation, new SelectList(Model.DepartmentAffiliations, "Key", "Value", null), new { @title = "Тип ведомственной принадлежности:", @class = "selectpicker" })
@@ -42,7 +42,7 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="group-block open" title="Телефон и e-mail">
             <div class="row">
                 <div class="col-md-4">@Html.TextBoxFor(m => m.Item.Phone, new { type = "text", maxlength = "256", title = "Телефон приемной" })</div>
@@ -53,7 +53,7 @@
                 <div class="col-md-4">@Html.TextBoxFor(m => m.Item.Email, new { type = "text", maxlength = "256", title = "E-mail приемной" })</div>
             </div>
         </div>
-        
+
 
         <div class="group-block open" title="Адрес">
             @Html.TextBoxFor(m => m.Item.Address, new { type = "text", maxlength = "512", title = "Адрес организации:" })
@@ -69,24 +69,29 @@
                 <div class="col-xs-12">
                     <div id="map">
                         <script type="text/javascript">
-                        Coords('@ViewBag.Ycoord', '@ViewBag.Xcoord', '@ViewBag.Titlecoord', '', '14');
+                            Coords('@ViewBag.Ycoord', '@ViewBag.Xcoord', '@ViewBag.Titlecoord', '', '14');
                         </script>
                     </div>
                 </div>
             </div>
         </div>
 
-        @if (Model.Item != null)
+        @if (Model.Item != null && Model.SectionResolution != null)
         {
-            
             <div class="child-list">
                 <div class="row">
                     <div class="col-sm-5">
                         <h3 class="nesting_title">Административный персонал</h3>
                     </div>
                     <div class="col-sm-7">
-                        <a class="button icon-create green pull-right" href="/admin/orgs/administrativ/@Guid.NewGuid()?orgid=@Model.Item.Id">Добавить</a>
-                        <a class="button icon-sort pull-right sorting_element_on" style="max-width:150px;" data-action="noPreloader-accept" title="Добавляет возможность сортировки элементов списка">Сортировать</a>
+                        @if (Model.SectionResolution.Write)
+                        {
+                            <a class="button icon-create green pull-right" href="/admin/orgs/administrativ/@Guid.NewGuid()?orgid=@Model.Item.Id">Добавить</a>
+                        }
+                        @if (Model.SectionResolution.Change)
+                        {
+                            <a class="button icon-sort pull-right sorting_element_on" style="max-width:150px;" data-action="noPreloader-accept" title="Добавляет возможность сортировки элементов списка">Сортировать</a>
+                        }
                     </div>
                 </div>
 
@@ -111,9 +116,8 @@
                             </tbody>
                         </table>
                     </div>
-
                 }
-             
+
             </div>
             <br /><hr /><br />
 
@@ -123,9 +127,15 @@
                         <h3 class="nesting_title">Структурные подразделения</h3>
                     </div>
                     <div class="col-sm-7">
-                        <a class="button icon-create green pull-right" href="/admin/orgs/structure/@Guid.NewGuid()?orgid=@Model.Item.Id">Добавить</a>
-                        <a class="button icon-create green pull-right" href="/admin/orgs/ovp/@Guid.NewGuid()?orgid=@Model.Item.Id">Добавить ОВП/ФАП</a>
-                        <a class="button icon-sort pull-right" style="max-width:150px;" data-action="noPreloader-accept" id="sorting_element" title="Добавляет возможность сортировки элементов списка">Сортировать</a>
+                        @if (Model.SectionResolution.Write)
+                        {
+                            <a class="button icon-create green pull-right" href="/admin/orgs/structure/@Guid.NewGuid()?orgid=@Model.Item.Id">Добавить</a>
+                            <a class="button icon-create green pull-right" href="/admin/orgs/ovp/@Guid.NewGuid()?orgid=@Model.Item.Id">Добавить ОВП/ФАП</a>
+                        }
+                        @if (Model.SectionResolution.Change)
+                        {
+                            <a class="button icon-sort pull-right" style="max-width:150px;" data-action="noPreloader-accept" id="sorting_element" title="Добавляет возможность сортировки элементов списка">Сортировать</a>
+                        }
                     </div>
                 </div>
                 <div class="sort_list">
@@ -135,13 +145,13 @@
                                 <th>&nbsp;</th>
                                 <th>Название</th>
                             </tr>
-                        </thead>     
+                        </thead>
                         <tbody data-service="@urlParam">
                             @if (Model.Item.Structure != null)
                             {
                                 foreach (var item in Model.Item.Structure)
                                 {
-                                    <tr  class="ui-sortable-handle" data-id="@item.Id">
+                                    <tr class="ui-sortable-handle" data-id="@item.Id">
                                         <td class="map_site_icon"></td>
                                         <td>
                                             @if (item.Ovp)
@@ -158,7 +168,7 @@
                                 }
                             }
                         </tbody>
-                        
+
 
 
                     </table>
@@ -194,9 +204,9 @@
                 <a class="button icon-create" href="/Admin/Sites/Master/@Guid.NewGuid()/?type=org&contentid=@Model.Item.Id" target="_blank">Создать сайт организации</a>
             }
         }
-        
 
-        
+
+
 
         @if (Model.Item != null)
                 {
