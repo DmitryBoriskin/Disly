@@ -49,6 +49,10 @@ namespace Disly.Areas.Admin.Controllers
         // GET: Admin/Orgs
         public ActionResult Index()
         {
+            #region администратор сайта
+            //model.Account.Domains
+            #endregion
+
             var orgfilter = FilterParams.Extend<OrgFilter>(filter);
             model.OrgList = _cmsRepository.getOrgs(orgfilter);//+ список организаций
             return View(model);
@@ -751,21 +755,6 @@ namespace Disly.Areas.Admin.Controllers
 
             return PartialView("Modal/Orgs", model);
         }
-
-        //[HttpPost]
-        //[MultiButton(MatchFormKey = "action", MatchFormValue = "save-org-btn")]
-        //public ActionResult OrgsListModal(OrgsModalViewModel model)
-        //{
-        //    ContentLinkModel modelInsert = new ContentLinkModel
-        //    {
-        //       ObjctId = model.ObjctId,
-        //       ObjctType = model.ObjctType,
-        //       LinksId= (model.OrgsId != null)? model.OrgsId.Distinct().ToArray(): null,
-        //       LinkType = ContentLinkType.ORG
-        //    };
-        //    var res = _cmsRepository.updateContentLinks(modelInsert);
-        //    return PartialView("Modal/Success");
-        //}
 
         [HttpPost]
         public ActionResult UpdateLinkToOrg (ContentLinkModel data)
