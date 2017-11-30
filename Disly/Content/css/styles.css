@@ -395,6 +395,9 @@ a.link-close:before {
     max-width:150px;
     margin-right: 15px;
 }
+.li-image-link{
+    display:block;
+}
 .li-caption {
     font-size: 1.3em;
 }
@@ -1027,7 +1030,12 @@ a.button.icon-cancel{
 
 
 /*banners*/
-.list_img_preview{max-width:145px;}
+.list_img_preview{
+    max-width:145px;
+    margin-left: auto;
+	margin-right: auto;
+    display: block;
+}
 
 /*Orgs*/
 

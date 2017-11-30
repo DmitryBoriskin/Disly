@@ -1,6 +1,7 @@
 ﻿@model OrgsViewModel
 @{
     string urlParam = "/Admin/Services/ChangePermit?group=orgs";
+    Guid? orgId = ViewBag.OrgId;
 }
 
 @if (Model.UserResolution.Read)
@@ -10,27 +11,60 @@
             <div class="col-sm-8"><h1>@ViewBag.Title</h1></div>
             <div class="col-sm-4"><a class="button icon-sort pull-right" style="max-width:150px;" data-action="noPreloader-accept" id="sorting_element" title="Добавляет возможность сортировки элементов списка">Сортировать</a></div>
         </div>
-        
-        
+
+
         @if (Model.OrgList != null)
         {
-            <div class="sort_list">
-                <table id="sm_list" class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th class="map_site_title">Название</th>
-                        </tr>
-                    </thead>
-                    <tbody  data-service="@urlParam">
-                        @foreach (var item in Model.OrgList)
-                        {
-                            <tr class="ui-sortable-handle" data-id="@item.Id">
-                                <td><a href="/admin/orgs/item/@item.Id">@item.Title</a></td>
-                            </tr>
-                        }
-                    </tbody>                    
-                </table>
-            </div>
+            if (orgId != null)
+            {
+                var currentOrg = Model.OrgList.Where(w => w.Id.Equals((Guid)orgId)).SingleOrDefault();
+
+                string imgUrl = (!string.IsNullOrEmpty(currentOrg.Logo.Url) && File.Exists(Server.MapPath(currentOrg.Logo.Url))) ? currentOrg.Logo.Url : "/Content/img/nophoto.jpg";
+                string link = "/admin/orgs/item/" + currentOrg.Id;
+
+                <div class="row list-item ui-sortable-handle" data-id="@currentOrg.Id">
+                    <div class="list-item">
+                        <div class="col-md-3">
+                            <a href="@link" class="li-image-link">
+                                <img src="@imgUrl" alt="@currentOrg.Title" class="list_img_preview" />
+                            </a>
+                        </div>
+                        <div class="col-md-9">
+                            <div class="li-desc">
+                                <a href="@link" class="li-caption">@currentOrg.Title</a><br />
+                                <span>Адрес: </span>@currentOrg.Address
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+
+            <h4>Остальные организации</h4>
+
+            foreach (var item in Model.OrgList)
+            {
+                if (!item.Id.Equals(orgId))
+                {
+                    string imgUrl = (!string.IsNullOrEmpty(item.Logo.Url) && File.Exists(Server.MapPath(item.Logo.Url))) ? item.Logo.Url : "/Content/img/nophoto.jpg";
+                    string link = "/admin/orgs/item/" + item.Id;
+
+                    <div class="row list-item ui-sortable-handle" data-id="@item.Id">
+                        <div class="list-item">
+                            <div class="col-md-3">
+                                <a href="@link" class="li-image-link">
+                                    <img src="@imgUrl" alt="@item.Title" class="list_img_preview" />
+                                </a>
+                            </div>
+                            <div class="col-md-9">
+                                <div class="li-desc">
+                                    <a href="@link" class="li-caption">@item.Title</a><br />
+                                    <span>Адрес: </span>@item.Address
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
         }
         else
         {
@@ -48,12 +82,12 @@
 
     </div>
 
-    <div class="buttons">
-        @if (Model.UserResolution.Write)
-        {
-            <button type="submit" name="action" value="insert-btn" class="button icon-create">Создать</button>            
-        }
-    </div>
+        <div class="buttons">
+            @if (Model.UserResolution.Write)
+            {
+                <button type="submit" name="action" value="insert-btn" class="button icon-create">Создать</button>
+            }
+        </div>
 }
 else
 {

@@ -15,7 +15,7 @@ namespace Disly.Areas.Admin.Controllers
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             base.OnActionExecuting(filterContext);
-
+            
             model = new MainSpecialistViewModel()
             {
                 Account = AccountInfo,
@@ -36,6 +36,18 @@ namespace Disly.Areas.Admin.Controllers
         // GET: Admin/MainSpecialist
         public ActionResult Index()
         {
+            ViewBag.MainSpecId = mainSpecialist;
+
+            #region администратор сайта
+            if (model.Account.Group.ToLower() == "admin")
+            {
+                if (mainSpecialist != null)
+                {
+                    return RedirectToAction("Item", new { id = mainSpecialist });
+                }
+            }
+            #endregion
+
             // наполняем фильтр
             filter = getFilter(page_size);
 
@@ -48,6 +60,16 @@ namespace Disly.Areas.Admin.Controllers
         // GET: Admin/MainSpecialist/Item/{id}
         public ActionResult Item(Guid id, string specialisations)
         {
+            #region администратор сайта
+            if (model.Account.Group.ToLower() == "admin")
+            {
+                if (mainSpecialist != null && !id.Equals((Guid)mainSpecialist))
+                {
+                    return RedirectToAction("Item", new { id = mainSpecialist });
+                }
+            }
+            #endregion
+
             model.Item = _cmsRepository.getMainSpecialistItem(id);
 
             if (model.Item != null)
@@ -66,8 +88,7 @@ namespace Disly.Areas.Admin.Controllers
                 // список сотрудников для данных специализаций
                 model.EmployeeList = _cmsRepository.getEmployeeList(specs.ToArray());
             }
-
-
+            
             return View("Item", model);
         }
 

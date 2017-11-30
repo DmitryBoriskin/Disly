@@ -4,216 +4,230 @@
     string fileName = (Model.Item != null && Model.Item.Logo != null) ? Model.Item.Logo.Name : null;
     string fileSize = (Model.Item != null && Model.Item.Logo != null) ? Model.Item.Logo.Size : null;
     string fileUrl = (Model.Item != null && Model.Item.Logo != null) ? Model.Item.Logo.Url : null;
+    Guid? orgId = ViewBag.OrgId;
 }
 
 @if (Model.UserResolution.Read)
 {
-    <div class="content">
-        <h1>@ViewBag.Title</h1>
-        @Html.TextBoxFor(m => m.Item.Title, new { required = "", type = "text", maxlength = "256", title = "Полное название" })
-        @Html.TextBoxFor(m => m.Item.ShortTitle, new { type = "text", maxlength = "128", title = "Краткое название" })
-        <div class="row">
-            <div class="col-md-6">
-                @Html.DropDownListFor(m => m.Item.DepartmentAffiliation, new SelectList(Model.DepartmentAffiliations, "Key", "Value", null), new { @title = "Тип ведомственной принадлежности:", @class = "selectpicker" })
-            </div>
+    if (orgId != null)
+    {
+        <div class="content">
+            <h1>@ViewBag.Title</h1>
 
-            <div class="col-md-12">
-                @*@Html.DropDownListFor(m => m.Item.Types, (MultiSelectList)ViewBag.Types, new { @title = "Типы мед. учреждений", @class = "selectpicker", @multiple = "multiple" })*@
-                <div class="form-group">
-                    <label for="itemTypes-select">Типы мед. учреждений:</label>
-                    <select name="Item.Types" id="itemTypes-select" class="form-control select2" multiple>
-                        @foreach (var type in Model.Types)
-                        {
-                            <option value="@type.Id" @(Model.Item != null && Model.Item.Types != null && Model.Item.Types.Any(s => s == type.Id) ? "selected" : null)>@type.Title</option>
-                        }
-                    </select>
-                </div>
-            </div>
-
-            <div class="col-md-12">
-                <div class="form-group">
-                    <label for="itemServices-select">Медицинские услуги:</label>
-                    <select name="Item.Services" id="itemServices-select" class="form-control select2" multiple>
-                        @foreach (var serv in Model.MedicalServices)
-                        {
-                            <option value="@serv.Id" @(Model.Item != null && Model.Item.Services != null && Model.Item.Services.Any(s => s == serv.Id) ? "selected" : null)>@serv.Title</option>
-                        }
-                    </select>
-                </div>
-            </div>
-        </div>
-
-        <div class="group-block open" title="Телефон и e-mail">
-            <div class="row">
-                <div class="col-md-4">@Html.TextBoxFor(m => m.Item.Phone, new { type = "text", maxlength = "256", title = "Телефон приемной" })</div>
-                <div class="col-md-4">@Html.TextBoxFor(m => m.Item.PhoneReception, new { type = "text", maxlength = "256", title = "Телефон регистратуры" })</div>
-                <div class="col-md-4">@Html.TextBoxFor(m => m.Item.Fax, new { type = "text", maxlength = "256", title = "Факс" })</div>
-            </div>
-            <div class="row">
-                <div class="col-md-4">@Html.TextBoxFor(m => m.Item.Email, new { type = "text", maxlength = "256", title = "E-mail приемной" })</div>
-            </div>
-        </div>
-
-
-        <div class="group-block open" title="Адрес">
-            @Html.TextBoxFor(m => m.Item.Address, new { type = "text", maxlength = "512", title = "Адрес организации:" })
+            @Html.TextBoxFor(m => m.Item.Title, new { required = "", type = "text", maxlength = "256", title = "Полное название" })
+            @Html.TextBoxFor(m => m.Item.ShortTitle, new { type = "text", maxlength = "128", title = "Краткое название" })
             <div class="row">
                 <div class="col-md-6">
-                    @Html.TextBoxFor(m => m.Item.GeopointX, new { type = "text", maxlength = "128", title = "X - координата:", @class = "Item_CoordX" })
+                    @Html.DropDownListFor(m => m.Item.DepartmentAffiliation, new SelectList(Model.DepartmentAffiliations, "Key", "Value", null), new { @title = "Тип ведомственной принадлежности:", @class = "selectpicker" })
                 </div>
-                <div class="col-md-6">
-                    @Html.TextBoxFor(m => m.Item.GeopointY, new { type = "text", maxlength = "128", title = "Y - координата:", @class = "Item_CoordY" })
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="itemTypes-select">Типы мед. учреждений:</label>
+                        <select name="Item.Types" id="itemTypes-select" class="form-control select2" multiple>
+                            @foreach (var type in Model.Types)
+                            {
+                                <option value="@type.Id" @(Model.Item != null && Model.Item.Types != null && Model.Item.Types.Any(s => s == type.Id) ? "selected" : null)>@type.Title</option>
+                            }
+                        </select>
+                    </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-xs-12">
-                    <div id="map">
-                        <script type="text/javascript">
-                            Coords('@ViewBag.Ycoord', '@ViewBag.Xcoord', '@ViewBag.Titlecoord', '', '14');
-                        </script>
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="itemServices-select">Медицинские услуги:</label>
+                        <select name="Item.Services" id="itemServices-select" class="form-control select2" multiple>
+                            @foreach (var serv in Model.MedicalServices)
+                            {
+                                <option value="@serv.Id" @(Model.Item != null && Model.Item.Services != null && Model.Item.Services.Any(s => s == serv.Id) ? "selected" : null)>@serv.Title</option>
+                            }
+                        </select>
                     </div>
                 </div>
             </div>
-        </div>
 
-        @if (Model.Item != null && Model.SectionResolution != null)
-        {
-            <div class="child-list">
+            <div class="group-block open" title="Телефон и e-mail">
                 <div class="row">
-                    <div class="col-sm-5">
-                        <h3 class="nesting_title">Административный персонал</h3>
+                    <div class="col-md-4">@Html.TextBoxFor(m => m.Item.Phone, new { type = "text", maxlength = "256", title = "Телефон приемной" })</div>
+                    <div class="col-md-4">@Html.TextBoxFor(m => m.Item.PhoneReception, new { type = "text", maxlength = "256", title = "Телефон регистратуры" })</div>
+                    <div class="col-md-4">@Html.TextBoxFor(m => m.Item.Fax, new { type = "text", maxlength = "256", title = "Факс" })</div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">@Html.TextBoxFor(m => m.Item.Email, new { type = "text", maxlength = "256", title = "E-mail приемной" })</div>
+                </div>
+            </div>
+
+
+            <div class="group-block open" title="Адрес">
+                @Html.TextBoxFor(m => m.Item.Address, new { type = "text", maxlength = "512", title = "Адрес организации:" })
+                <div class="row">
+                    <div class="col-md-6">
+                        @Html.TextBoxFor(m => m.Item.GeopointX, new { type = "text", maxlength = "128", title = "X - координата:", @class = "Item_CoordX" })
                     </div>
-                    <div class="col-sm-7">
-                        @if (Model.SectionResolution.Write)
-                        {
-                            <a class="button icon-create green pull-right" href="/admin/orgs/administrativ/@Guid.NewGuid()?orgid=@Model.Item.Id">Добавить</a>
-                        }
-                        @if (Model.SectionResolution.Change)
-                        {
-                            <a class="button icon-sort pull-right sorting_element_on" style="max-width:150px;" data-action="noPreloader-accept" title="Добавляет возможность сортировки элементов списка">Сортировать</a>
-                        }
+                    <div class="col-md-6">
+                        @Html.TextBoxFor(m => m.Item.GeopointY, new { type = "text", maxlength = "128", title = "Y - координата:", @class = "Item_CoordY" })
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div id="map">
+                            <script type="text/javascript">
+                                Coords('@ViewBag.Ycoord', '@ViewBag.Xcoord', '@ViewBag.Titlecoord', '', '14');
+                            </script>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-                @if (Model.Item.Administrativ != null)
-                {
+            @if (Model.Item != null && Model.SectionResolution != null)
+            {
+                <div class="child-list">
+                    <div class="row">
+                        <div class="col-sm-5">
+                            <h3 class="nesting_title">Административный персонал</h3>
+                        </div>
+                        <div class="col-sm-7">
+                            @if (Model.SectionResolution.Write)
+                        {
+                                <a class="button icon-create green pull-right" href="/admin/orgs/administrativ/@Guid.NewGuid()?orgid=@Model.Item.Id">Добавить</a>
+                            }
+                            @if (Model.SectionResolution.Change)
+                        {
+                                <a class="button icon-sort pull-right sorting_element_on" style="max-width:150px;" data-action="noPreloader-accept" title="Добавляет возможность сортировки элементов списка">Сортировать</a>
+                            }
+                        </div>
+                    </div>
+
+                    @if (Model.Item.Administrativ != null)
+                    {
+                        <div class="sort_list">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>&nbsp;</th>
+                                        <th>ФИО</th>
+                                    </tr>
+                                </thead>
+                                <tbody data-service="/Admin/Services/ChangePermit?group=orgs_administrativ&menuSort=@Model.Item.Id">
+                                    @foreach (var item in Model.Item.Administrativ)
+                                    {
+                                        <tr class="ui-sortable-handle" data-id="@item.id">
+                                            <td></td>
+                                            <td><a href="/admin/orgs/administrativ/@item.id">@item.Surname @item.Name @item.Patronymic</a></td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+
+                </div>
+                <br /><hr /><br />
+
+                <div class="child-list">
+                    <div class="row">
+                        <div class="col-sm-5">
+                            <h3 class="nesting_title">Структурные подразделения</h3>
+                        </div>
+                        <div class="col-sm-7">
+                            @if (Model.SectionResolution.Write)
+                        {
+                                <a class="button icon-create green pull-right" href="/admin/orgs/structure/@Guid.NewGuid()?orgid=@Model.Item.Id">Добавить</a>
+                                <a class="button icon-create green pull-right" href="/admin/orgs/ovp/@Guid.NewGuid()?orgid=@Model.Item.Id">Добавить ОВП/ФАП</a>
+                            }
+                            @if (Model.SectionResolution.Change)
+                        {
+                                <a class="button icon-sort pull-right" style="max-width:150px;" data-action="noPreloader-accept" id="sorting_element" title="Добавляет возможность сортировки элементов списка">Сортировать</a>
+                            }
+                        </div>
+                    </div>
                     <div class="sort_list">
                         <table class="table table-striped">
                             <thead>
                                 <tr>
                                     <th>&nbsp;</th>
-                                    <th>ФИО</th>
+                                    <th>Название</th>
                                 </tr>
                             </thead>
-                            <tbody data-service="/Admin/Services/ChangePermit?group=orgs_administrativ&menuSort=@Model.Item.Id">
-                                @foreach (var item in Model.Item.Administrativ)
+                            <tbody data-service="@urlParam">
+                                @if (Model.Item.Structure != null)
                                 {
-                                    <tr class="ui-sortable-handle" data-id="@item.id">
-                                        <td></td>
-                                        <td><a href="/admin/orgs/administrativ/@item.id">@item.Surname @item.Name @item.Patronymic</a></td>
-                                    </tr>
+                                    foreach (var item in Model.Item.Structure)
+                                    {
+                                        <tr class="ui-sortable-handle" data-id="@item.Id">
+                                            <td class="map_site_icon"></td>
+                                            <td>
+                                                @if (item.Ovp)
+                                                {
+                                                    <a href="/admin/orgs/ovp/@item.Id">@item.Title</a>
+                                                }
+                                                else
+                                                {
+                                                    <a href="/admin/orgs/structure/@item.Id">@item.Title</a>
+                                                }
+                                            </td>
+                                        </tr>
+
+                                    }
                                 }
                             </tbody>
+
+
+
                         </table>
                     </div>
-                }
-
-            </div>
-            <br /><hr /><br />
-
-            <div class="child-list">
-                <div class="row">
-                    <div class="col-sm-5">
-                        <h3 class="nesting_title">Структурные подразделения</h3>
-                    </div>
-                    <div class="col-sm-7">
-                        @if (Model.SectionResolution.Write)
-                        {
-                            <a class="button icon-create green pull-right" href="/admin/orgs/structure/@Guid.NewGuid()?orgid=@Model.Item.Id">Добавить</a>
-                            <a class="button icon-create green pull-right" href="/admin/orgs/ovp/@Guid.NewGuid()?orgid=@Model.Item.Id">Добавить ОВП/ФАП</a>
-                        }
-                        @if (Model.SectionResolution.Change)
-                        {
-                            <a class="button icon-sort pull-right" style="max-width:150px;" data-action="noPreloader-accept" id="sorting_element" title="Добавляет возможность сортировки элементов списка">Сортировать</a>
-                        }
-                    </div>
-                </div>
-                <div class="sort_list">
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th>&nbsp;</th>
-                                <th>Название</th>
-                            </tr>
-                        </thead>
-                        <tbody data-service="@urlParam">
-                            @if (Model.Item.Structure != null)
-                            {
-                                foreach (var item in Model.Item.Structure)
-                                {
-                                    <tr class="ui-sortable-handle" data-id="@item.Id">
-                                        <td class="map_site_icon"></td>
-                                        <td>
-                                            @if (item.Ovp)
-                                            {
-                                                <a href="/admin/orgs/ovp/@item.Id">@item.Title</a>
-                                            }
-                                            else
-                                            {
-                                                <a href="/admin/orgs/structure/@item.Id">@item.Title</a>
-                                            }
-                                        </td>
-                                    </tr>
-
-                                }
-                            }
-                        </tbody>
-
-
-
-                    </table>
-                </div>
-            </div>
-        }
-        else
-        {
-            <br />
-            <p>Структурные подразделения можно будет добавить после сохранения организации.</p>
-        }
-    </div>
-    <div class="dop_info-block">
-        <div class="dop-caption">Дополнительно</div>
-
-        @Html.TextBoxFor(m => m.Item.Oid, new { type = "text", title = "ОИД" })
-
-        @Html.TextBox("upload", null, new { type = "file", title = "Изображение", data_name = fileName, data_size = fileSize, data_url = fileUrl, accept = ".jpg,.jpeg,.png,.gif" })
-        @Html.TextBoxFor(m => m.Item.Logo.Url, new { type = "hidden", value = fileUrl })
-
-        @if (Model.Item != null)
-        {
-            if (Model.Item.SiteId != null)
-            {
-                <br />
-                <div class="alert alert-info">
-                    <strong>Сайт данной организации создан!</strong><br>
-                    <a href="/admin/sites/item/@Model.Item.SiteId" target="_blank">Редактировать сайт</a>
                 </div>
             }
             else
             {
-                <a class="button icon-create" href="/Admin/Sites/Master/@Guid.NewGuid()/?type=org&contentid=@Model.Item.Id" target="_blank">Создать сайт организации</a>
+                <br />
+                <p>Структурные подразделения можно будет добавить после сохранения организации.</p>
             }
-        }
+        </div>
+        <div class="dop_info-block">
+            <div class="dop-caption">Дополнительно</div>
 
+            @Html.TextBoxFor(m => m.Item.Oid, new { type = "text", title = "ОИД" })
 
+            @Html.TextBox("upload", null, new { type = "file", title = "Изображение", data_name = fileName, data_size = fileSize, data_url = fileUrl, accept = ".jpg,.jpeg,.png,.gif" })
+            @Html.TextBoxFor(m => m.Item.Logo.Url, new { type = "hidden", value = fileUrl })
 
-
-        @if (Model.Item != null)
+            @if (Model.Item != null)
+            {
+                if (Model.Item.SiteId != null)
                 {
-            @Html.ActionLink("Журнал изменений", "log", "services", new { @id = Model.Item.Id }, new { @id = "LogLists", @class = "button pop-up_frame icon-archive", @data_class = "LogList", @title = "Журнал изменений" })
-        }
+                    <br />
+                    <div class="alert alert-info">
+                        <strong>Сайт данной организации создан!</strong><br>
+                        <a href="/admin/sites/item/@Model.Item.SiteId" target="_blank">Редактировать сайт</a>
+                    </div>
+                }
+                else
+                {
+                    <a class="button icon-create" href="/Admin/Sites/Master/@Guid.NewGuid()/?type=org&contentid=@Model.Item.Id" target="_blank">Создать сайт организации</a>
+                }
+            }
 
-    </div>
+
+
+
+            @if (Model.Item != null)
+            {
+                @Html.ActionLink("Журнал изменений", "log", "services", new { @id = Model.Item.Id }, new { @id = "LogLists", @class = "button pop-up_frame icon-archive", @data_class = "LogList", @title = "Журнал изменений" })
+            }
+
+        </div>
+    }
+    else
+    {
+        <div class="content">
+            <h1>@ViewBag.Title</h1>
+            <div class="alert alert-info">
+                <strong>Вы не можете просматривать информацию из данного раздела.</strong>
+            </div>
+        </div>
+        <div class="buttons"></div>
+    }
 }
 else
 {
