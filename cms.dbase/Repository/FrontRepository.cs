@@ -629,11 +629,11 @@ namespace cms.dbase
                         }
                     }).SingleOrDefault();
 
-                    //db.content_materialss
-                    //    .Where(w => w.id.Equals(material.Id))
-                    //    .Set(u =)
-
-
+                    db.content_materialss
+                        .Where(w => w.id.Equals(material.Id))
+                        .Set(u => u.n_count_see, u => u.n_count_see + 1)
+                        .Update();
+                    
                     return material;
                 }
                 return null;

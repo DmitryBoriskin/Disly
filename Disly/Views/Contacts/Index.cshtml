@@ -1,64 +1,65 @@
 ﻿@model ContatcsViewModel
-
-<div class="container">
-    @Html.Partial("services/breadcrumbs")
-    <h1>Контакты</h1>
-    @Html.Partial("part/nav")   
-    <div class="col-md-12">
-        <div class="row">
-            @switch (Model.Type)
+<div class="type-page">
+    <div class="container">
+        @Html.Partial("services/breadcrumbs")
+        <h1>Контакты</h1>
+        @Html.Partial("part/nav")
+        <div class="col-md-12">
+            <div class="row">
+                @switch (Model.Type)
             {
                 case "administration":
-                    @Html.Partial("part/administration")
-                    break;
-                case "dop":
-                    @Html.Raw(Model.DopInfo.Text)
-                    break;
-                case "phone":
-                    @Html.Partial("part/phone")
-                    break;
-                default:
-                    <div>
-                        @if (!string.IsNullOrEmpty(Model.OrgItem.Address))
-                        {
-                            <div class="contact_info_it">
-                                <span>Адрес: </span>
-                                @Model.OrgItem.Address
-                            </div>
-                        }
-                        @if (!string.IsNullOrEmpty(Model.OrgItem.Phone))
-                        {
-                            <div class="contact_info_it">
-                                <span>Телефон: </span>
-                                @Model.OrgItem.Phone
-                            </div>
-                        }
-                        @if (!string.IsNullOrEmpty(Model.OrgItem.PhoneReception))
-                        {
-                            <div class="contact_info_it">
-                                <span>Телефон регистратуры:</span>
-                                @Model.OrgItem.PhoneReception
-                            </div>
+                        @Html.Partial("part/administration")
+                        break;
+                    case "dop":
+                        @Html.Raw(Model.DopInfo.Text)
+                        break;
+                    case "phone":
+                        @Html.Partial("part/phone")
+                        break;
+                    default:
+                        <div>
+                            @if (!string.IsNullOrEmpty(Model.OrgItem.Address))
+                            {
+                                <div class="contact_info_it">
+                                    <span>Адрес: </span>
+                                    @Model.OrgItem.Address
+                                </div>
+                            }
+                            @if (!string.IsNullOrEmpty(Model.OrgItem.Phone))
+                            {
+                                <div class="contact_info_it">
+                                    <span>Телефон: </span>
+                                    @Model.OrgItem.Phone
+                                </div>
+                            }
+                            @if (!string.IsNullOrEmpty(Model.OrgItem.PhoneReception))
+                            {
+                                <div class="contact_info_it">
+                                    <span>Телефон регистратуры:</span>
+                                    @Model.OrgItem.PhoneReception
+                                </div>
 
-                        }
-                        @if (!string.IsNullOrEmpty(Model.OrgItem.Fax))
-                        {
-                            <div class="contact_info_it">
-                                <span>Факс: </span>
-                                @Model.OrgItem.Fax
-                            </div>
-                        }
-                        @if (!string.IsNullOrEmpty(Model.OrgItem.Email))
-                        {
-                            <div class="contact_info_it">
-                                <span>E-mail приёмной:</span>
-                                <a href="mailto:@Model.OrgItem.Email">@Model.OrgItem.Email</a>
-                            </div>
-                        }
-                    </div>
-                    break;
-            }
+                            }
+                            @if (!string.IsNullOrEmpty(Model.OrgItem.Fax))
+                            {
+                                <div class="contact_info_it">
+                                    <span>Факс: </span>
+                                    @Model.OrgItem.Fax
+                                </div>
+                            }
+                            @if (!string.IsNullOrEmpty(Model.OrgItem.Email))
+                            {
+                                <div class="contact_info_it">
+                                    <span>E-mail приёмной:</span>
+                                    <a href="mailto:@Model.OrgItem.Email">@Model.OrgItem.Email</a>
+                                </div>
+                            }
+                        </div>
+                        break;
+                }
+            </div>
         </div>
-    </div>
 
+    </div>
 </div>

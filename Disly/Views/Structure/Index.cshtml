@@ -1,6 +1,8 @@
 ﻿@model StructureViewModel
-<div class="container">
-    @if (Model.DepartmentItem != null)
+
+<div class="type-page">
+    <div class="container">
+        @if (Model.DepartmentItem != null)
     {
         if(Model.StructureItem != null)
         {
@@ -27,16 +29,17 @@
         {
             //список
             @Html.Partial("services/breadcrumbs")
-            <h1>Струкутура</h1>            
+                <h1>Струкутура</h1>
             if (Model.Structures != null)
             {
-                <div class="child">
-                    @foreach (var item in Model.Structures)
+                    <div class="child">
+                        @foreach (var item in Model.Structures)
                     {
-                        <div class="child_link"><span>—</span><a href="/structure/@item.Num">@item.Title</a></div>
+                            <div class="child_link"><span>—</span><a href="/structure/@item.Num">@item.Title</a></div>
                     }
-                </div>
+                    </div>
             }
         }
-    }    
+    }
+    </div>
 </div>
