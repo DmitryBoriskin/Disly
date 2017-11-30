@@ -60,7 +60,7 @@ namespace cms.dbase
                 return null;
             }
         }
-        public override FeedbackModel getFeedback(Guid id)
+        public override FeedbackModel getFeedbackItem(Guid id)
         {
             using (var db = new CMSdb(_context))
             {

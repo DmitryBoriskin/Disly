@@ -523,6 +523,7 @@
     <Content Include="scripts\uc_script.js" />
     <Content Include="UC_params.txt" />
     <Content Include="Userfiles\chuvashia\styles.css" />
+    <Content Include="Views\Feedback\Index.cshtml" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -581,6 +582,7 @@
     <Compile Include="Areas\Admin\Models\VoteViewModel.cs" />
     <Compile Include="Areas\Admin\Service\SpotCoord.cs" />
     <Compile Include="Areas\Admin\Service\Transliteration.cs" />
+    <Compile Include="Controllers\FeedbackController.cs" />
     <Compile Include="Controllers\FindUsController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\DoctorsController.cs" />
@@ -601,6 +603,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Areas\Admin\Models\CoreViewModel.cs" />
+    <Compile Include="Models\FeedbackViewModel.cs" />
     <Compile Include="Models\DoctorsViewModel.cs" />
     <Compile Include="Models\ContactsViewModel.cs" />
     <Compile Include="Models\LPUViewModel.cs" />

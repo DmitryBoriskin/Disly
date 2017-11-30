@@ -1,4 +1,4 @@
-.head_title h4 {
+﻿.head_title h4 {
   color: #1f4799;
 }
 .media-heading {
@@ -88,4 +88,13 @@
 }
 .sitemap-plate:hover:after {
   border-bottom: 10px solid #1f4799;
+}
+.bottomIndent-15 {
+  margin-bottom: 15px;
+}
+.bottomIndent-20 {
+  margin-bottom: 20px;
+}
+.bottomIndent-30 {
+  margin-bottom: 30px;
 }

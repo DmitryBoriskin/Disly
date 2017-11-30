@@ -166,7 +166,7 @@ namespace cms.dbModel
 
         //Feedbacks
         public abstract FeedbacksList getFeedbacksList(FilterParams filtr);
-        public abstract FeedbackModel getFeedback(Guid id);
+        public abstract FeedbackModel getFeedbackItem(Guid id);
         
         public abstract bool insertCmsFeedback(FeedbackModel eventData);
         public abstract bool updateCmsFeedback(FeedbackModel eventData);
@@ -180,11 +180,14 @@ namespace cms.dbModel
         public abstract bool checkSiteMap(Guid id);
         public abstract bool createSiteMapItem(Guid id, SiteMapModel item);
         public abstract bool updateSiteMapItem(Guid id, SiteMapModel item);
+        public abstract bool deleteSiteMapItem(Guid id);
+
         public abstract SiteMapMenu[] getSiteMapFrontSectionList();
         public abstract SiteMapMenu getSiteMapMenu(Guid id);
         public abstract Catalog_list[] getSiteMapMenuTypes();
         public abstract bool createOrUpdateSiteMapMenu(SiteMapMenu item);
-        public abstract bool deleteSiteMapItem(Guid id);
+        public abstract bool deleteSiteMapMenu(Guid id);
+
         public abstract SiteMapModel[] getSiteMapChildrens(Guid parent);
         public abstract BreadCrumbSiteMap[] getSiteMapBreadCrumbs(Guid? id);
         public abstract BreadCrumbSiteMap getSiteMapBreadCrumbItem(Guid id);

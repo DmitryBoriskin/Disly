@@ -102,13 +102,12 @@
 
     <div class="dop_info-block">
         <div class="dop-caption">Фильтр</div>
-        @{ Html.RenderAction("Filtr", "Templates", new { @Title = "Группы меню", @Alias = "group", @Icon = "icon-th-list-3", @Url = "/admin/services/sitemapmenu/", @BtnName = "Новая группа меню", @Items = Model.MenuTypes, @readOnly = true}); }
+        @{ Html.RenderAction("Filtr", "Templates", new { @Title = "Группы меню", @Alias = "group", @Icon = "icon-th-list-3", @Url = "/admin/services/sitemapmenu/", @BtnName = "Новая группа меню", @Items = Model.MenuTypes, @readOnly = true }); }
     </div>
-    <div class="buttons"></div>
-            }
-            else
-            {
-                <div class="content">
-                    <p>У вас недостаточно прав.</p>
-                </div>
-            }
+}
+else
+{
+    <div class="content">
+        <p>У вас недостаточно прав.</p>
+    </div>
+}

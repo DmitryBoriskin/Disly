@@ -32,7 +32,7 @@
             <div class="col-md-6"><button type="submit" name="action" value="clear-btn" class="button btn-default">Сбросить</button></div>
         </div>
         <p>&nbsp;</p>
-        @{ Html.RenderAction("Filtr", "Templates", new { @Title = "Группы", @Alias = "group", @Icon = "icon-users-3", @Url = "/admin/services/GroupClaims/", @BtnName = "Новая группа пользователей", @Items = Model.GroupList }); }
+        @{ Html.RenderAction("Filtr", "Templates", new { @Title = "Группы", @Alias = "group", @Icon = "icon-users-3", @Url = "/admin/services/GroupClaims/", @BtnName = "Новая группа пользователей", @Items = Model.GroupList, @readOnly = false }); }
     </div>
     
     <div class="buttons">

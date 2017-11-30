@@ -407,6 +407,59 @@ namespace cms.dbase
         }
 
         /// <summary>
+        /// Получаем новости для модуля на главной странице
+        /// </summary>
+        /// <returns></returns>
+        public override List<MaterialFrontModule> getMaterialsModule(string domain)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var contentType = ContentType.MATERIAL.ToString().ToLower();
+
+                // список id-новостей для данного сайта
+                var materialIds = db.content_content_links.Where(e => e.f_content_type == contentType)
+                    .Join(db.cms_sitess.Where(o => o.c_alias == domain),
+                            e => e.f_link,
+                            o => o.f_content,
+                            (e, o) => e.f_content
+                            );
+
+                if (!materialIds.Any())
+                    return null;
+
+                // список групп
+                var groups = db.content_materials_groupss
+                    .Select(s => s.id).ToArray();
+
+                List<MaterialFrontModule> list = new List<MaterialFrontModule>();
+
+                foreach (var g in groups)
+                {
+                    var query = db.content_sv_materials_groupss
+                        .Where(w => materialIds.Contains(w.id))
+                        .Where(w => w.group_id.Equals(g))
+                        .Where(w => w.b_disabled == false)
+                        .OrderByDescending(o => o.d_date)
+                        .Select(s => new MaterialFrontModule
+                        {
+                            Title = s.c_title,
+                            Alias = s.c_alias,
+                            Date = s.d_date,
+                            GroupName = s.group_title,
+                            GroupAlias = s.group_alias,
+                            Photo = s.c_preview
+                        });
+
+                    // берём последние 3 новости данной группы
+                    if (query.Any()) list.AddRange(query.Take(5));
+                }
+
+                if (list.Count() > 0) return list;
+                else return null;
+            }
+        }
+
+        /// <summary>
         /// Получим список новостей для определенной сущности
         /// </summary>
         /// <param name="filter">Фильтр</param>
@@ -508,59 +561,16 @@ namespace cms.dbase
                 return null;
             }
         }
-
+        
         /// <summary>
-        /// Получаем новости для модуля на главной странице
+        /// Новость
         /// </summary>
+        /// <param name="year"></param>
+        /// <param name="month"></param>
+        /// <param name="day"></param>
+        /// <param name="alias"></param>
+        /// <param name="domain"></param>
         /// <returns></returns>
-        public override List<MaterialFrontModule> getMaterialsModule(string domain)
-        {
-            using (var db = new CMSdb(_context))
-            {
-                var contentType = ContentType.MATERIAL.ToString().ToLower();
-
-                // список id-новостей для данного сайта
-                var materialIds = db.content_content_links.Where(e => e.f_content_type == contentType)
-                    .Join(db.cms_sitess.Where(o => o.c_alias == domain),
-                            e => e.f_link,
-                            o => o.f_content,
-                            (e, o) => e.f_content
-                            );
-
-                if (!materialIds.Any())
-                    return null;
-
-                // список групп
-                var groups = db.content_materials_groupss
-                    .Select(s => s.id).ToArray();
-
-                List<MaterialFrontModule> list = new List<MaterialFrontModule>();
-
-                foreach (var g in groups)
-                {
-                    var query = db.content_sv_materials_groupss
-                        .Where(w => materialIds.Contains(w.id))
-                        .Where(w => w.group_id.Equals(g))
-                        .Where(w => w.b_disabled == false)
-                        .OrderByDescending(o => o.d_date)
-                        .Select(s => new MaterialFrontModule
-                        {
-                            Title = s.c_title,
-                            Alias = s.c_alias,
-                            Date = s.d_date,
-                            GroupName = s.group_title,
-                            GroupAlias = s.group_alias,
-                            Photo = s.c_preview
-                        });
-
-                    // берём последние 3 новости данной группы
-                    if (query.Any()) list.AddRange(query.Take(5));
-                }
-
-                if (list.Count() > 0) return list;
-                else return null;
-            }
-        }
         public override MaterialsModel getMaterialsItem(string year, string month, string day, string alias, string domain)
         {
             using (var db = new CMSdb(_context))
@@ -1720,6 +1730,77 @@ namespace cms.dbase
                     };
                 }
                 return null;
+            }
+        }
+
+        public override FeedbacksList getFeedbacksList(FilterParams filtr)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var query = db.content_feedbackss.Where(w => w.id != null);
+                query = query.OrderByDescending(o => o.d_date);
+
+                if (query.Any())
+                {
+                    int ItemCount = query.Count();
+
+                    var List = query
+                        .Select(s => new FeedbackModel
+                        {
+                            Id = s.id,
+                            Title = s.c_title,
+                            Text = s.c_text,
+                            Date = s.d_date,
+                            SenderName = s.c_sender_name,
+                            SenderEmail = s.c_sender_email,
+                            Answer = s.c_answer,
+                            Answerer = s.c_answerer,
+                            IsNew = s.b_new,
+                            Disabled = s.b_disabled
+                        }).
+                        Skip(filtr.Size * (filtr.Page - 1)).
+                        Take(filtr.Size);
+
+                    FeedbackModel[] eventsInfo = List.ToArray();
+
+                    return new FeedbacksList
+                    {
+                        Data = eventsInfo,
+                        Pager = new Pager
+                        {
+                            page = filtr.Page,
+                            size = filtr.Size,
+                            items_count = ItemCount,
+                            page_count = (ItemCount % filtr.Size > 0) ? (ItemCount / filtr.Size) + 1 : ItemCount / filtr.Size
+                        }
+                    };
+                }
+                return null;
+            }
+        }
+        public override FeedbackModel getFeedbackItem(Guid id)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var data = db.content_feedbackss.
+                    Where(w => w.id == id).
+                    Select(s => new FeedbackModel
+                    {
+                        Id = s.id,
+                        Title = s.c_title,
+                        Text = s.c_text,
+                        Date = s.d_date,
+                        SenderName = s.c_sender_name,
+                        SenderEmail = s.c_sender_email,
+                        Answer = s.c_answer,
+                        Answerer = s.c_answerer,
+                        IsNew = s.b_new,
+                        Disabled = s.b_disabled
+                    });
+
+
+                if (!data.Any()) { return null; }
+                else { return data.First(); }
             }
         }
     }

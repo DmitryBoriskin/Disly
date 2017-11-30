@@ -53,7 +53,6 @@ namespace Disly.Areas.Admin.Controllers
         /// <returns></returns>
         public ActionResult Index(string category, string type)
         {
-            // Наполняем модель данными
             model.List = _cmsRepository.getFeedbacksList(filter);
             return View(model);
         }
@@ -64,7 +63,7 @@ namespace Disly.Areas.Admin.Controllers
         /// <returns></returns>
         public ActionResult Item(Guid Id)
         {
-            model.Item = _cmsRepository.getFeedback(Id);
+            model.Item = _cmsRepository.getFeedbackItem(Id);
             if (model.Item == null)
                 model.Item = new FeedbackModel()
                 {
@@ -137,7 +136,7 @@ namespace Disly.Areas.Admin.Controllers
             if (ModelState.IsValid)
             {
                 var res = false;
-                var getFeedback = _cmsRepository.getFeedback(Id);
+                var getFeedback = _cmsRepository.getFeedbackItem(Id);
 
                 bindData.Item.Id = Id;
                 //Определяем Insert или Update
