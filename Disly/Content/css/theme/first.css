@@ -10,6 +10,9 @@
 .main-menu li > a:hover {
   color: #3973e6;
 }
+.seacrh_button:before {
+  color: #3973e6;
+}
 .top-slider-wrapper {
   background-color: #ccd3e0;
 }
@@ -99,4 +102,11 @@
   -webkit-box-shadow: 0px 18px 30px -10px rgba(0, 0, 0, 0.75);
   -moz-box-shadow: 0px 18px 30px -10px rgba(0, 0, 0, 0.75);
   box-shadow: 0px 18px 30px -10px rgba(0, 0, 0, 0.75);
+}
+.linkimg_item a:hover .imglink-title {
+  color: #3973e6;
+}
+.seacrh_input:focus + .seacrh_button:hover {
+  background-color: #3973e6;
+  color: #fff;
 }
