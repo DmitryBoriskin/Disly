@@ -1,16 +1,17 @@
 ﻿@model TypePageViewModel
-<div class="container">
-    @Html.Partial("services/breadcrumbs")
-    @if (Model.Item != null)
+<div class="type-page">
+    <div class="container">
+        @Html.Partial("services/breadcrumbs")
+        @if (Model.Item != null)
     {
-        <h1>@Model.Item.Title</h1>
+            <h1>@Model.Item.Title</h1>
     }
-    @if (Model.Child != null)
+        @if (Model.Child != null)
     {
         if (Model.Child.Length > 0)
         {
-            <div class="child">
-                @foreach (var item in Model.Child)
+                <div class="child">
+                    @foreach (var item in Model.Child)
                 {
                     string fullPath = "/";
 
@@ -31,34 +32,36 @@
                         <span>—</span><a href="@fullPath">@item.Title</a>
                     </div>
                 }
-            </div>
+                </div>
         }
     }
-    @if (Model.Item != null)
+        @if (Model.Item != null)
     {
-        @Html.Raw(Model.Item.Text)
+            @Html.Raw(Model.Item.Text)
     }
-    @if (Model.Documents != null)
+        @if (Model.Documents != null)
     {
-        <div class="attachfile">
-            <h2>Прикрепленные файлы</h2>
-            <div class="attachfile_list">
-                @foreach (var doc in Model.Documents)
+            <div class="attachfile">
+                <h2>Прикрепленные файлы</h2>
+                <div class="attachfile_list">
+                    @foreach (var doc in Model.Documents)
                 {
                     if (System.IO.File.Exists(Server.MapPath(doc.FilePath)))
                     {
                         string exten = Files.FileAnliz.Extension(doc.FilePath).Replace(".", "");
-                        <div class="attachfile_item">
-                            <span class="attachfile_item__ext attachfile_item__@exten"></span>
-                            <div class="attachfile_item_title">@doc.Title</div>
-                            <div class="attachfile_item_info">
-                                <a target="_blank" href="@doc.FilePath">Скачать</a>
-                                <div> (@exten, &nbsp; @Files.FileAnliz.Size(doc.FilePath))</div>
+                            <div class="attachfile_item">
+                                <span class="attachfile_item__ext attachfile_item__@exten"></span>
+                                <div class="attachfile_item_title">@doc.Title</div>
+                                <div class="attachfile_item_info">
+                                    <a target="_blank" href="@doc.FilePath">Скачать</a>
+                                    <div> (@exten, &nbsp; @Files.FileAnliz.Size(doc.FilePath))</div>
+                                </div>
                             </div>
-                        </div>
                     }
                 }
+                </div>
             </div>
-        </div>
     }
+    </div>
+
 </div>
