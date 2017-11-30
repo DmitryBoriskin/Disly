@@ -856,7 +856,7 @@
     <Content Include="Views\Doctors\part\item.cshtml" />
     <Content Include="Views\Doctors\part\list.cshtml" />
     <Content Include="Views\MedicalServices\Index.cshtml" />
-    <Content Include="Views\Page\part\childlist.cshtml" />
+    <Content Include="Views\Shared\part\childlist.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -869,7 +869,6 @@
     <Folder Include="Views\Core\" />
     <Folder Include="Views\Redirect\" />
     <Folder Include="Views\Service\" />
-    <Folder Include="Views\Shared\part\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\cms.dbase\cms.dbase.csproj">
