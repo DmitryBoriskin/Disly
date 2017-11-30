@@ -22,7 +22,7 @@
                 string imgUrl = (!string.IsNullOrEmpty(currentOrg.Logo.Url) && File.Exists(Server.MapPath(currentOrg.Logo.Url))) ? currentOrg.Logo.Url : "/Content/img/nophoto.jpg";
                 string link = "/admin/orgs/item/" + currentOrg.Id;
 
-                <div class="row list-item ui-sortable-handle" data-id="@currentOrg.Id">
+                <div class="row" data-id="@currentOrg.Id">
                     <div class="list-item">
                         <div class="col-md-3">
                             <a href="@link" class="li-image-link">
@@ -48,17 +48,11 @@
                     string imgUrl = (!string.IsNullOrEmpty(item.Logo.Url) && File.Exists(Server.MapPath(item.Logo.Url))) ? item.Logo.Url : "/Content/img/nophoto.jpg";
                     string link = "/admin/orgs/item/" + item.Id;
 
-                    <div class="row list-item ui-sortable-handle" data-id="@item.Id">
+                    <div class="row" data-id="@item.Id">
                         <div class="list-item">
-                            <div class="col-md-3">
-                                <a href="@link" class="li-image-link">
-                                    <img src="@imgUrl" alt="@item.Title" class="list_img_preview" />
-                                </a>
-                            </div>
-                            <div class="col-md-9">
+                            <div class="col-md-12">
                                 <div class="li-desc">
                                     <a href="@link" class="li-caption">@item.Title</a><br />
-                                    <span>Адрес: </span>@item.Address
                                 </div>
                             </div>
                         </div>

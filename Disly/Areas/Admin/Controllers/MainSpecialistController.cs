@@ -36,8 +36,12 @@ namespace Disly.Areas.Admin.Controllers
         // GET: Admin/MainSpecialist
         public ActionResult Index()
         {
-            ViewBag.MainSpecId = mainSpecialist;
+            // наполняем фильтр
+            filter = getFilter(page_size);
 
+            // наполняем модель данными
+            model.List = _cmsRepository.getMainSpecialistList(filter);
+            
             #region администратор сайта
             if (model.Account.Group.ToLower() == "admin")
             {
@@ -45,15 +49,13 @@ namespace Disly.Areas.Admin.Controllers
                 {
                     return RedirectToAction("Item", new { id = mainSpecialist });
                 }
+
+                return View(model);
             }
             #endregion
 
-            // наполняем фильтр
-            filter = getFilter(page_size);
-
-            // наполняем модель данными
-            model.List = _cmsRepository.getMainSpecialistList(filter);
-
+            ViewBag.MainSpecId = Guid.NewGuid();
+            
             return View(model);
         }
 
@@ -63,13 +65,14 @@ namespace Disly.Areas.Admin.Controllers
             #region администратор сайта
             if (model.Account.Group.ToLower() == "admin")
             {
+                ViewBag.MainSpecId = mainSpecialist;
                 if (mainSpecialist != null && !id.Equals((Guid)mainSpecialist))
                 {
                     return RedirectToAction("Item", new { id = mainSpecialist });
                 }
             }
             #endregion
-
+            
             model.Item = _cmsRepository.getMainSpecialistItem(id);
 
             if (model.Item != null)
