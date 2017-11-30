@@ -6,7 +6,7 @@ namespace Disly.Controllers
     public class RedirectController : RootController
     {
         // GET: Redirect
-        public ActionResult Banners(Guid id)
+        public ActionResult Link(Guid id)
         {
             var banner = _repository.getBanner(id);
 
