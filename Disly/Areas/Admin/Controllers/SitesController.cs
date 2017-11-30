@@ -192,7 +192,7 @@ namespace Disly.Areas.Admin.Controllers
                 //    {
                 //        Id = Guid.NewGuid(),
                 //        SiteId = input.Site.C_Domain,
-                //        Domain = input.Site.C_Domain + "." + Request.Url.Authority.Substring(0, Request.Url.Authority.IndexOf(":"))
+                //        Domain = input.Site.C_Domain + "." + Request.Url.Authority.Substring(0, Request.Url.Authority.LastIndexOf(":"))
                 //    };
                 //    _repository.createSiteDomain(sitedomain);
 

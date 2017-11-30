@@ -42,6 +42,11 @@ namespace cms.dbModel.entity
         public string Text { get; set; }
 
         /// <summary>
+        /// Кол-во переходов
+        /// </summary>
+        public int CountClick { get; set; }
+
+        /// <summary>
         /// Дата
         /// </summary>
         public DateTime Date { get; set; }

@@ -322,24 +322,37 @@ namespace Disly.Areas.Admin.Controllers
 
         #region Карта сайта
         [HttpGet]
-        public ActionResult SitemapMenu(string id)
+        public ActionResult SitemapMenu(Guid id)
         {
             SiteMapMenu model = new SiteMapMenu();
-
-            if (!string.IsNullOrEmpty(id))
-                model = _cmsRepository.getSiteMapMenu(Guid.Parse(id));
+            model = _cmsRepository.getSiteMapMenu(id);
 
             return PartialView("SiteMapMenuGroup", model);
         }
 
         [HttpPost]
-        [MultiButton(MatchFormKey = "action", MatchFormValue = "save-group-sitemapmenu")]
-        public ActionResult SitemapMenu(SiteMapMenu model)
+        [MultiButton(MatchFormKey = "action", MatchFormValue = "save-menugroup-btn")]
+        public ActionResult SaveSitemapMenu(SiteMapMenu model)
         {
             if (ModelState.IsValid)
-                _cmsRepository.createOrUpdateSiteMapMenu(model);
-
-            return Redirect("/admin/sitemap");
+            {
+               var res = _cmsRepository.createOrUpdateSiteMapMenu(model);
+               if (res)
+                    return PartialView("Modal/Success");
+            }
+           return PartialView("Modal/Error");
+        }
+        [HttpPost]
+        [MultiButton(MatchFormKey = "action", MatchFormValue = "delete-menugroup-btn")]
+        public ActionResult DeleteSitemapMenu(Guid id)
+        {
+            if (ModelState.IsValid)
+            {
+                var res = _cmsRepository.deleteSiteMapMenu(id);
+                if (res)
+                    return PartialView("Modal/Success");
+            }
+            return PartialView("Modal/Error");
         }
         #endregion
 

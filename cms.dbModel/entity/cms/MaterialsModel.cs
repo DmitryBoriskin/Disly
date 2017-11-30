@@ -39,8 +39,20 @@ namespace cms.dbModel.entity
         /// Алиас
         /// </summary>
         public string Alias { get; set; }
+
+        /// <summary>
+        /// Год
+        /// </summary>
         public int Year { get; set; }
+
+        /// <summary>
+        /// Месяц
+        /// </summary>
         public int Month { get; set; }
+
+        /// <summary>
+        /// День
+        /// </summary>
         public int Day { get; set; }
 
         /// <summary>
@@ -85,6 +97,11 @@ namespace cms.dbModel.entity
         /// </summary>
         [Required]
         public bool Important { get; set; }
+
+        /// <summary>
+        /// Кол-во просмотров
+        /// </summary>
+        public int CountSee { get; set; }
 
         /// <summary>
         /// Флаг запрещённости отображения во внешней части
