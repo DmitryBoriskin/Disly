@@ -30,20 +30,66 @@ namespace cms.dbModel.entity
         /// Хэш для шифрования пароля
         /// </summary>
         public string Hash { get; set; }
+
+        /// <summary>
+        /// Группа
+        /// </summary>
         public string Group { get; set; }        
+
+        /// <summary>
+        /// Фамилия
+        /// </summary>
         public string Surname { get; set; }
+
+        /// <summary>
+        /// Имя
+        /// </summary>
         public string Name { get; set; }        
+
+        /// <summary>
+        /// Отчество
+        /// </summary>
         public string Patronymic { get; set; }
+
+        /// <summary>
+        /// Есть ли ошибки
+        /// </summary>
         public bool CountError { get; set; }
+
+        /// <summary>
+        /// Дата
+        /// </summary>
         public DateTime? LockDate { get; set; }
+
+        /// <summary>
+        /// Запрещён
+        /// </summary>
         public bool Disabled { get; set; }
+
+        /// <summary>
+        /// Список доменов
+        /// </summary>
         public DomainList[] Domains { get; set; }
     }
 
+    /// <summary>
+    /// Домен
+    /// </summary>
     public class DomainList
     {
+        /// <summary>
+        /// Сортировка
+        /// </summary>
         public int Permit { get; set; }
+
+        /// <summary>
+        /// Идентификатор сайта
+        /// </summary>
         public string SiteId { get; set; }
+
+        /// <summary>
+        /// Название домена
+        /// </summary>
         public string DomainName { get; set; }
     }
 }

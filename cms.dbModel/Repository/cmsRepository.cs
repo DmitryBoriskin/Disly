@@ -163,6 +163,10 @@ namespace cms.dbModel
         public abstract People[] getPersonsThisOrg(Guid idOrg);
         public abstract MedicalService[] getMedicalServices();
         public abstract Guid[] getOrgMedicalServicesLinks(Guid org);
+        public abstract Guid? getOrgLinkByDomain(string domain);
+        public abstract bool IsStructureAllowedToOrg(Guid structureId, Guid orgId);
+        public abstract bool IsAdministrativeAllowedToOrg(Guid id, Guid orgId);
+        public abstract bool IsDepartmentAllowedToOrg(Guid id, Guid orgId);
 
         //Feedbacks
         public abstract FeedbacksList getFeedbacksList(FilterParams filtr);
