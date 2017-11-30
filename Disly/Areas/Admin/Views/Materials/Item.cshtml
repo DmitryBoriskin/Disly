@@ -146,6 +146,12 @@
             }
 
             @Html.ActionLink("Журнал изменений", "log", "services", new { @id = Model.Item.Id }, new { @id = "LogLists", @class = "button pop-up_frame icon-archive", @data_class = "LogList", @title = "Журнал изменений" })
+
+            @if (Model.Item != null)
+            {
+                <br />
+                <div class="alert alert-info">Кол-во просмотров: <strong>@Model.Item.CountSee</strong></div>
+            }
         </div>
     }
     else
