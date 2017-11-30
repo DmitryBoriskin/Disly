@@ -14,7 +14,6 @@ namespace Disly.Areas.Admin.Controllers
         //ovp- это вьюха объединяющая в себе структурное подразделение и департамент(отдел)
         OrgsViewModel model;
         FilterParams filter;
-        Guid? orgId;
 
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
@@ -27,10 +26,7 @@ namespace Disly.Areas.Admin.Controllers
             ViewBag.Query = Request.QueryString;
 
             filter = getFilter();
-
-            // идентификатор организации
-            orgId = _cmsRepository.getOrgLinkByDomain(Domain);
-
+            
             model = new OrgsViewModel()
             {
                 Account = AccountInfo,
@@ -43,6 +39,8 @@ namespace Disly.Areas.Admin.Controllers
                 MedicalServices = _cmsRepository.getMedicalServices(),
                 SectionResolution = _accountRepository.getCmsUserResolutioInfo(AccountInfo.id, "structure")
             };
+
+            ViewBag.OrgId = orgId;
 
             #region Метатеги
             ViewBag.Title = UserResolutionInfo.Title;
@@ -67,9 +65,9 @@ namespace Disly.Areas.Admin.Controllers
                 }
             }
             #endregion
-
+            
             var orgfilter = FilterParams.Extend<OrgFilter>(filter);
-            model.OrgList = _cmsRepository.getOrgs(orgfilter);//+ список организаций
+            model.OrgList = _cmsRepository.getOrgs(orgfilter);// список организаций
             return View(model);
         }
 
@@ -109,6 +107,7 @@ namespace Disly.Areas.Admin.Controllers
             return Redirect(StartUrl + "item/" + Guid.NewGuid() + "/" + query);
         }
 
+        // GET: /admin/orgs/item/{id}
         public ActionResult Item(Guid Id)
         {
             #region администратор сайта
@@ -255,9 +254,7 @@ namespace Disly.Areas.Admin.Controllers
             model.ErrorInfo = userMessege;
             return View("Item", model);
         }
-
-
-
+        
         [HttpPost]
         [ValidateInput(false)]
         [MultiButton(MatchFormKey = "action", MatchFormValue = "delete-btn")]

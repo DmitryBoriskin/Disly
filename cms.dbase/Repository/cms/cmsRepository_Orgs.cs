@@ -147,6 +147,11 @@ namespace cms.dbase
                     Id = s.id,
                     Title = s.c_title,
                     Sort = s.n_sort,
+                    Address = s.c_adress,
+                    Logo = new Photo
+                    {
+                        Url = s.c_logo
+                    },
                     Types = s.contentorgstypeslinkorgs.Select(t => t.f_type).ToArray()
                 });
                 if (data.Any())

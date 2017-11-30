@@ -286,5 +286,24 @@ namespace cms.dbase
                 }
             }
         }
+
+        /// <summary>
+        /// Получаем идентификатор сайта главного специалиста
+        /// </summary>
+        /// <param name="domain">Домен</param>
+        /// <returns></returns>
+        public override Guid? getMainSpecLinkByDomain(string domain)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var query = (from s in db.cms_sitess
+                             join ms in db.content_main_specialistss on s.f_content equals ms.id
+                             where s.c_alias.Equals(domain)
+                             select ms.id);
+
+                if (!query.Any()) return null;
+                return query.SingleOrDefault();
+            }
+        }
     }
 }
