@@ -982,6 +982,7 @@ namespace cms.dbase.models
 		[Column,     NotNull    ] public Guid     f_content_origin      { get; set; } // uniqueidentifier
 		[Column,     NotNull    ] public string   c_content_type_origin { get; set; } // varchar(64)
 		[Column,     NotNull    ] public bool     b_locked              { get; set; } // bit
+		[Column,     NotNull    ] public int      n_count_see           { get; set; } // int
 
 		#region Associations
 
@@ -1023,16 +1024,16 @@ namespace cms.dbase.models
 		#region Associations
 
 		/// <summary>
-		/// fk_content_materials_groups
-		/// </summary>
-		[Association(ThisKey="f_group", OtherKey="id", CanBeNull=false, KeyName="fk_content_materials_groups", BackReferenceName="fkcontentmaterialsgroupss")]
-		public content_materials_groups fkcontentmaterialsgroups { get; set; }
-
-		/// <summary>
 		/// fk_content_materials_groups_link_material
 		/// </summary>
 		[Association(ThisKey="f_material", OtherKey="id", CanBeNull=false, KeyName="fk_content_materials_groups_link_material", BackReferenceName="fkcontentmaterialsgroupslinkmaterials")]
 		public content_materials fkcontentmaterialsgroupslinkmaterial { get; set; }
+
+		/// <summary>
+		/// fk_content_materials_groups
+		/// </summary>
+		[Association(ThisKey="f_group", OtherKey="id", CanBeNull=false, KeyName="fk_content_materials_groups", BackReferenceName="fkcontentmaterialsgroupss")]
+		public content_materials_groups fkcontentmaterialsgroups { get; set; }
 
 		#endregion
 	}
