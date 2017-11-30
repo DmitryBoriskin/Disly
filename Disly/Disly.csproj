@@ -589,6 +589,7 @@
     <Compile Include="Controllers\ContactsController.cs" />
     <Compile Include="Controllers\LPUController.cs" />
     <Compile Include="Controllers\MapSiteController.cs" />
+    <Compile Include="Controllers\SearchController.cs" />
     <Compile Include="Controllers\PortalDoctorsController.cs" />
     <Compile Include="Controllers\MedicalServicesController.cs" />
     <Compile Include="Controllers\RedirectController.cs" />
@@ -857,6 +858,7 @@
     <Content Include="Views\Doctors\part\list.cshtml" />
     <Content Include="Views\MedicalServices\Index.cshtml" />
     <Content Include="Views\Shared\part\childlist.cshtml" />
+    <Content Include="Views\Search\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

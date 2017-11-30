@@ -198,6 +198,7 @@ namespace cms.dbase
                         };
                         db.Insert(cdSiteSection);
 
+
                         //
                         front_section cdSection = new front_section
                         {
