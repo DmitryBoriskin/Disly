@@ -3,38 +3,11 @@
     <div class="container">
         @Html.Partial("services/breadcrumbs")
         @if (Model.Item != null)
-    {
-            <h1>@Model.Item.Title</h1>
-    }
-        @if (Model.Child != null)
-    {
-        if (Model.Child.Length > 0)
         {
-                <div class="child">
-                    @foreach (var item in Model.Child)
-                {
-                    string fullPath = "/";
-
-                    if (!string.IsNullOrEmpty(item.Url))
-                    {
-                        fullPath = item.Url;
-                    }
-                    else if (item.FrontSection.ToLower().Equals("page"))
-                    {
-                        fullPath = item.Path + item.Alias;
-                    }
-                    else
-                    {
-                        fullPath = "/" + item.FrontSection;
-                    }
-
-                    <div class="child_link">
-                        <span>—</span><a href="@fullPath">@item.Title</a>
-                    </div>
-                }
-                </div>
+            <h1>@Model.Item.Title</h1>
         }
-    }
+        @Html.Partial("part/childlist")
+    
         @if (Model.Item != null)
     {
             @Html.Raw(Model.Item.Text)

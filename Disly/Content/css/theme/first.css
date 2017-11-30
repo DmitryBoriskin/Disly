@@ -1,4 +1,4 @@
-﻿.head_title h4 {
+.head_title h4 {
   color: #1f4799;
 }
 .media-heading {
@@ -8,6 +8,9 @@
   background-color: #3973e6;
 }
 .main-menu li > a:hover {
+  color: #3973e6;
+}
+.seacrh_button:before {
   color: #3973e6;
 }
 .top-slider-wrapper {
@@ -100,12 +103,10 @@
   -moz-box-shadow: 0px 18px 30px -10px rgba(0, 0, 0, 0.75);
   box-shadow: 0px 18px 30px -10px rgba(0, 0, 0, 0.75);
 }
-.bottomIndent-15 {
-  margin-bottom: 15px;
+.linkimg_item a:hover .imglink-title {
+  color: #3973e6;
 }
-.bottomIndent-20 {
-  margin-bottom: 20px;
-}
-.bottomIndent-30 {
-  margin-bottom: 30px;
+.seacrh_input:focus + .seacrh_button:hover {
+  background-color: #3973e6;
+  color: #fff;
 }

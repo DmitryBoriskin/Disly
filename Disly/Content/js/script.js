@@ -18,6 +18,11 @@
 
 
 
+    //раскрытие кнопки поиска
+    if ($('.seacrh_button__hide').length > 0) {
+        SearchWork();
+    }
+
     //original photo
     if ($('.show_original').length > 0) {
         $('.show_original').swipebox();
@@ -72,6 +77,62 @@
         });
     }
 });
+
+
+
+function SearchWork() {
+    $('.seacrh_button__hide').click(function (e) {
+        var SerachInp = $('.search_form .seacrh_input').val();
+        if (SerachInp === "") {
+            document.getElementById("search_focus").focus();
+        }
+        else {
+            CommitSearch();
+        }
+        e.preventDefault();
+    });
+
+    $('.search_form .seacrh_input').focusout(function () {
+        $('.search.menu_item').removeClass('act');
+    });
+
+    $('.search_form .seacrh_input').focus(function () {
+        $('.search.menu_item').addClass('act');
+        $('.menu-fix').addClass('hov_el');
+    });
+    if ($('.menu-fix a.act').length > 0) {
+        $('.menu-fix').addClass('hov_el');
+    }
+
+
+
+    $("#InputSearch").keydown(function (event) {
+        if (event.keyCode == 13) {
+            CommitSearch();
+            event.preventDefault();
+        }
+    });
+    $(".search_form").submit(function (e) {
+        CommitSearch();
+        e.preventDefault();
+    });
+
+
+    function CommitSearch() {
+        var SerachInp = $('.search_form .seacrh_input').val();
+        var EndUrl = "%20url%3Ahttp%3A%2F%2F" + SiteId + "med.cap.ru*&web=0";
+        var SearchText = SerachInp.replace(" ", "%20") + EndUrl;
+        //alert(StartUrl);
+        //alert("осуществляем поиск по " + $SerachInp.val());
+        var Link = "/Search?searchid=2297106&text=" + SearchText;
+        if (SearchText != "") {
+            document.location.href = Link;
+        }
+    }
+
+}
+
+
 
 function CaruselSlide(obj) {
     var WrItem = obj.find('.carousel-inner');
