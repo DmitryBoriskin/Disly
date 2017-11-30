@@ -1,17 +1,18 @@
 ﻿@model DoctorsViewModel
-<div class="container">
-    @Html.Partial("services/breadcrumbs")
-    @if (Model.DoctorsItem != null)
-    {
-        <h1>@Model.DoctorsItem.FIO</h1>
-
-        if (Model.DoctorsItem.EmployeeInfo != null)
+<div class="type-page">
+    <div class="container">
+        @Html.Partial("services/breadcrumbs")
+        @if (Model.DoctorsItem != null)
         {
-            @Html.Partial("part/item")            
+            <h1>@Model.DoctorsItem.FIO</h1>
+            if (Model.DoctorsItem.EmployeeInfo != null)
+            {
+                @Html.Partial("part/item")
+            }
         }
-    }
-    else
-    {
-        @Html.Partial("part/list")
-    }
+        else
+        {
+            @Html.Partial("part/list")
+        }
+    </div>
 </div>
