@@ -54,9 +54,7 @@ namespace Disly.Controllers
             string _alias = UrlPath.Substring(UrlPath.LastIndexOf("/") + 1);
             #endregion
             currentPage = _repository.getSiteMap(_path, _alias, Domain);
-
-
-
+            
             ControllerName = filterContext.RouteData.Values["Controller"].ToString().ToLower();
             ActionName = filterContext.RouteData.Values["Action"].ToString().ToLower();
             ViewName = _repository.getView(Domain, ControllerName);

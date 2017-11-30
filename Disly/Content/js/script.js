@@ -124,18 +124,34 @@ function SearchWork() {
     });
 
 
+
     function CommitSearch() {
         var SerachInp = $('.search-input').val();
         var EndUrl = "%20url%3Ahttp%3A%2F%2F" + SiteId + "med.cap.ru*&web=0";
-        var SearchText = SerachInp.replace(" ", "%20") + EndUrl;
-        //alert(StartUrl);
-        //alert("осуществляем поиск по " + $SerachInp.val());
+        var SearchText = SerachInp.replace(" ", "%20") + EndUrl;        
         var Link = "/Search?searchid=2297106&text=" + SearchText;
         if (SearchText != "") {
             document.location.href = Link;
         }
     }
+    //bottom form
+    $('.search-form-bottom').submit(function (e) {
+        CommitSearchBottom();
+        e.preventDefault();
+    });
+    $('.search-form-bottom .bottom-search').click(function (e) {
+        CommitSearchBottom();        
+        e.preventDefault();
+    });
 
+
+    function CommitSearchBottom() {
+        var SerachInp = $('.search-form').val();
+        var EndUrl = "%20url%3Ahttp%3A%2F%2F" + SiteId + "med.cap.ru*&web=0";
+        var SearchText = SerachInp.replace(" ", "%20") + EndUrl;
+        var Link = "/Search?searchid=2297106&text=" + SearchText;
+        document.location.href = Link;        
+    }
 }
 
 
