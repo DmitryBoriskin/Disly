@@ -708,16 +708,17 @@ namespace cms.dbase.models
 	[Table(Schema="dbo", Name="content_banners")]
 	public partial class content_banners
 	{
-		[PrimaryKey, NotNull    ] public Guid     id         { get; set; } // uniqueidentifier
-		[Column,     NotNull    ] public string   f_site     { get; set; } // varchar(64)
-		[Column,     NotNull    ] public string   c_title    { get; set; } // nvarchar(512)
-		[Column,        Nullable] public string   c_photo    { get; set; } // nvarchar(1024)
-		[Column,        Nullable] public string   c_url      { get; set; } // nvarchar(1024)
-		[Column,        Nullable] public string   c_text     { get; set; } // nvarchar(max)
-		[Column,     NotNull    ] public DateTime d_date     { get; set; } // datetime
-		[Column,     NotNull    ] public int      n_sort     { get; set; } // int
-		[Column,     NotNull    ] public bool     b_disabled { get; set; } // bit
-		[Column,     NotNull    ] public Guid     f_section  { get; set; } // uniqueidentifier
+		[PrimaryKey, NotNull    ] public Guid     id            { get; set; } // uniqueidentifier
+		[Column,     NotNull    ] public string   f_site        { get; set; } // varchar(64)
+		[Column,     NotNull    ] public string   c_title       { get; set; } // nvarchar(512)
+		[Column,        Nullable] public string   c_photo       { get; set; } // nvarchar(1024)
+		[Column,        Nullable] public string   c_url         { get; set; } // nvarchar(1024)
+		[Column,        Nullable] public string   c_text        { get; set; } // nvarchar(max)
+		[Column,     NotNull    ] public DateTime d_date        { get; set; } // datetime
+		[Column,     NotNull    ] public int      n_sort        { get; set; } // int
+		[Column,     NotNull    ] public bool     b_disabled    { get; set; } // bit
+		[Column,     NotNull    ] public Guid     f_section     { get; set; } // uniqueidentifier
+		[Column,     NotNull    ] public int      n_count_click { get; set; } // int
 
 		#region Associations
 
