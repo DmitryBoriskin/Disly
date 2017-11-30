@@ -60,12 +60,13 @@
                                 {
                                     string active = i == 0 ? "active" : string.Empty;
                                     string text = !string.IsNullOrEmpty(item.Text) ? item.Text : "&nbsp;";
+                                    string link = "/redirect/link/" + item.Id;
                                     i++;
 
                                     <div class="item @active">
                                         <div class="slider-item">
                                             <div class="slider-img">
-                                                <a href="@item.Link">
+                                                <a href="@link">
                                                     <img src="@item.Url" alt="@item.Title">
                                                 </a>
                                             </div>
