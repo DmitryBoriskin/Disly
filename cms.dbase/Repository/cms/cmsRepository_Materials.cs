@@ -163,7 +163,8 @@ namespace cms.dbase
                                 Desc = s.c_desc,
                                 Disabled = s.b_disabled,
                                 Important = s.b_important,
-                                Locked = s.b_locked
+                                Locked = s.b_locked,
+                                CountSee = s.n_count_see
                             });
 
                     if (materialsList.Any())
@@ -212,14 +213,13 @@ namespace cms.dbase
                         Desc = s.c_desc,
                         Disabled = s.b_disabled,
                         Important = s.b_important,
+                        CountSee = s.n_count_see,
                         Locked = s.b_locked,
                         ContentLink = (Guid)s.f_content_origin,
                         ContentLinkType = s.c_content_type_origin,
-
                         GroupsId = s.fkcontentmaterialsgroupslinkmaterials
                                     .Select(g =>
                                     g.f_group).ToArray(),
-
                         Groups = s.fkcontentmaterialsgroupslinkmaterials
                                     .Select(g => new MaterialsGroup()
                                     {

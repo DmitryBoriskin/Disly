@@ -4,6 +4,7 @@
 @light1: #ccd3e0;
 @light2: #ebedf2;
 @contrast: #e55639;
+@bottom-shadow: 0px 18px 30px -10px rgba(0,0,0,0.75);
 
 .head_title h4 {    
     color: @def1
@@ -88,6 +89,16 @@
 }
 .sitemap-plate:hover:after {
     border-bottom: 10px solid @def1;
+}
+.bottom-linkimg-item:hover {
+    color: @def2;
+}
+.footer-right li a:hover{color:@def2;}
+.media_item_link {
+    -webkit-box-shadow: @bottom-shadow;
+    -moz-box-shadow: @bottom-shadow;
+    box-shadow: @bottom-shadow;
+}
 }
 
 .bottomIndent {

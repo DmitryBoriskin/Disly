@@ -591,6 +591,7 @@
     <Compile Include="Controllers\MapSiteController.cs" />
     <Compile Include="Controllers\PortalDoctorsController.cs" />
     <Compile Include="Controllers\MedicalServicesController.cs" />
+    <Compile Include="Controllers\RedirectController.cs" />
     <Compile Include="Controllers\RedirectRegistryController.cs" />
     <Compile Include="Controllers\VoteController.cs" />
     <Compile Include="Controllers\StructureController.cs" />
@@ -849,7 +850,6 @@
     <Content Include="Views\MapSite\Index.cshtml" />
     <Content Include="Views\LPU\Index.cshtml" />
     <Content Include="Views\LPU\Nav.cshtml" />
-    <Content Include="Views\LPU\List.cshtml" />
     <Content Include="Views\Press\part\Item.cshtml" />
     <Content Include="Views\Home\part\media.cshtml" />
     <Content Include="Views\PortalDoctors\Index.cshtml" />
@@ -866,6 +866,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Views\Core\" />
+    <Folder Include="Views\Redirect\" />
     <Folder Include="Views\Service\" />
   </ItemGroup>
   <ItemGroup>

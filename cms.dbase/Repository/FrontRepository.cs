@@ -236,10 +236,36 @@ namespace cms.dbase
             }
         }
 
+        /// <summary>
+        /// Получаем баннер
+        /// </summary>
+        /// <param name="id">Идентификатор</param>
+        /// <returns></returns>
+        public override BannersModel getBanner(Guid id)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var query = db.content_bannerss
+                    .Where(w => w.id.Equals(id))
+                    .Select(s => new BannersModel
+                    {
+                        Id = s.id,
+                        Url = s.c_url
+                    });
 
+                if (!query.Any()) return null;
+                else
+                {
+                    db.content_bannerss
+                        .Where(w => w.id.Equals(id))
+                        .Set(u => u.n_count_click, u => u.n_count_click + 1)
+                        .Update();
 
-
-
+                    return query.SingleOrDefault();
+                }
+            }
+        }
+        
         // Определяем - это сайт организации, события или персоны
         private SiteContentType db_getDomainContentTypeId(CMSdb db, string domain)
         {
@@ -601,8 +627,9 @@ namespace cms.dbase
                 query = query.Where(w => (w.n_year == _year) && (w.n_month == _month) && (w.n_day == _day) && (w.c_alias.ToLower() == alias.ToLower()));
                 if (query.Any())
                 {
-                    return query.Select(s => new MaterialsModel
+                    var material = query.Select(s => new MaterialsModel
                     {
+                        Id = s.id,
                         Title = s.c_title,
                         Text = s.c_text,
                         Date = s.d_date,
@@ -610,7 +637,14 @@ namespace cms.dbase
                         {
                             Url = s.c_preview
                         }
-                    }).First();
+                    }).SingleOrDefault();
+
+                    db.content_materialss
+                        .Where(w => w.id.Equals(material.Id))
+                        .Set(u => u.n_count_see, u => u.n_count_see + 1)
+                        .Update();
+                    
+                    return material;
                 }
                 return null;
 

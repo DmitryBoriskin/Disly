@@ -63,6 +63,13 @@ namespace Disly
                defaults: new { controller = "MedicalServices", action = "Index", id = UrlParameter.Optional }
             );
 
+            // перенаправление
+            routes.MapRoute(
+               name: "Redirect",
+               url: "Redirect/{action}/{*id}",
+               defaults: new { controller = "Redirect", action = "Index", id = UrlParameter.Optional }
+            );
+
             //голосование
             routes.MapRoute(
                name: "vote",

@@ -114,6 +114,7 @@ namespace cms.dbase
                         Sort = s.n_sort,
                         Disabled = s.b_disabled,
                         Section = s.f_section,
+                        CountClick = s.n_count_click,
                         Photo = new Photo
                         {
                             Url = s.c_photo
@@ -157,6 +158,7 @@ namespace cms.dbase
                         Title = s.c_title,
                         Url = s.c_url,
                         Text = s.c_text,
+                        CountClick = s.n_count_click,
                         Date = s.d_date,
                         Sort = s.n_sort,
                         Disabled = s.b_disabled,

@@ -5,6 +5,7 @@
         .Where(w => w.SectionAlias.Equals("slider"))
         .Select(s => new
         {
+            Id = s.Id,
             Title = s.Title,
             Url = s.Photo.Url,
             Text = s.Text,
@@ -30,6 +31,7 @@
         .Where(w => w.SectionAlias.Equals("benefits"))
         .Select(s => new
         {
+            Id = s.Id,
             Title = s.Title,
             Url = s.Photo.Url,
             Text = s.Text,
@@ -58,12 +60,13 @@
                                 {
                                     string active = i == 0 ? "active" : string.Empty;
                                     string text = !string.IsNullOrEmpty(item.Text) ? item.Text : "&nbsp;";
+                                    string link = "/redirect/link/" + item.Id;
                                     i++;
 
                                     <div class="item @active">
                                         <div class="slider-item">
                                             <div class="slider-img">
-                                                <a href="@item.Link">
+                                                <a href="@link">
                                                     <img src="@item.Url" alt="@item.Title">
                                                 </a>
                                             </div>
@@ -226,6 +229,8 @@
                     <div class="carousel-inner" data-count="4">
                         @foreach (var item in benefitBanners)
                         {
+                            string link = "/redirect/link/" + item.Id;
+
                             string title = item.Title;
                             if (title.Length > 70)
                             {
@@ -233,7 +238,7 @@
                             }
 
                             <div class="linkimg_item col-md-3">
-                                <a href="@item.Link">
+                                <a href="@link">
                                     <div class="imglink-item">
                                         @if (!string.IsNullOrEmpty(item.Url))
                                         {

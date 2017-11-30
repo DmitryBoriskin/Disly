@@ -89,6 +89,17 @@
 .sitemap-plate:hover:after {
   border-bottom: 10px solid #1f4799;
 }
+.bottom-linkimg-item:hover {
+  color: #3973e6;
+}
+.footer-right li a:hover {
+  color: #3973e6;
+}
+.media_item_link {
+  -webkit-box-shadow: 0px 18px 30px -10px rgba(0, 0, 0, 0.75);
+  -moz-box-shadow: 0px 18px 30px -10px rgba(0, 0, 0, 0.75);
+  box-shadow: 0px 18px 30px -10px rgba(0, 0, 0, 0.75);
+}
 .bottomIndent-15 {
   margin-bottom: 15px;
 }

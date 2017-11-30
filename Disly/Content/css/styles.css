@@ -1027,7 +1027,7 @@ a.button.icon-cancel{
 
 
 /*banners*/
-.list_img_preview{width:145px;}
+.list_img_preview{max-width:145px;}
 
 /*Orgs*/
 
