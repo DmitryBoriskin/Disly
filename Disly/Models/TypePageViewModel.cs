@@ -8,7 +8,6 @@ namespace Disly.Models
     public class TypePageViewModel : PageViewModel
     {         
         public SiteMapModel Item { get; set; }
-        public SiteMapModel[] Child{ get; set; }
         /// <summary>
         /// Прикрепленные документы
         /// </summary>

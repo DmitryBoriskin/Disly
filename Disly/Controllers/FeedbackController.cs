@@ -58,6 +58,7 @@ namespace Disly.Controllers
         {
             ViewBag.Alias = (RouteData.Values["alias"] != null) ? RouteData.Values["alias"] : String.Empty;
             model.Item = _repository.getFeedbackItem(id);
+            model.Child = _repository.getSiteMapChild(id);
 
             #region Создаем переменные (значения по умолчанию)
             string _ViewName = (ViewName != String.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";
