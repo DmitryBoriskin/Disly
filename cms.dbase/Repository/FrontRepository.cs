@@ -284,7 +284,7 @@ namespace cms.dbase
             catch (Exception ex)
             {
                 throw new Exception("cms_sites: Обнаружено более одной записи у поля, которое в принципе не может быть не уникальным!!!" + ex);
-            }
+            }   
 
             return null;
         }

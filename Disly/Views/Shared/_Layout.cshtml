@@ -93,19 +93,24 @@
             <!-- главное меню -->
             <div class="main-menu_wr">
                 <div class="main-menu">
+                    <form class="searchform">
+                        <a class="searchform_close ti-close" href="#"></a>
+                        <button class="searchform_btn" type="submit">Найти</button>
+                        <div class="searchform_input_wr"><input id="search_focus" class="search-input" type="search" name="q" placeholder="Поиск по сайту"/></div>                                                
+                    </form>
                     @if (Model != null && Model.SiteMapArray != null && Model.SiteMapArray.Count() > 0)
-            {
-                var mainMenu = Model.SiteMapArray
-                    .Where(w => w.MenuAlias.Equals("main"))
-                    .OrderBy(o => o.MenuSort)
-                    .Select(s => new
                     {
-                        Path = s.Path,
-                        Alias = s.Alias,
-                        Title = s.Title,
-                        FrontSection = s.FrontSection,
-                        Url = s.Url
-                    });
+                        var mainMenu = Model.SiteMapArray
+                            .Where(w => w.MenuAlias.Equals("main"))
+                            .OrderBy(o => o.MenuSort)
+                            .Select(s => new
+                            {
+                                Path = s.Path,
+                                Alias = s.Alias,
+                                Title = s.Title,
+                                FrontSection = s.FrontSection,
+                                Url = s.Url
+                            });
                         <ul class="nav navbar-nav navbar-left">
                             @foreach (var item in mainMenu)
                         {
@@ -127,20 +132,13 @@
                             <li>
                                 <a href="@fullPath">@item.Title</a>
                             </li>
-                        }
+                            }
                         </ul>
-                }
-                    <ul class="nav navbar-nav navbar-right">
-                        @*<li><a href="">EN</a></li>*@
+                    }
+                    <ul class="nav navbar-nav navbar-right">                        
                         <li>
-                            <div class="search menu_item">
-                                <form class="search_form search_form_hide" name="searchfrom">
-                                    <input id="search_focus" class="seacrh_input" type="search" name="search" placeholder="Поиск по сайту...">
-                                    <a href="#" class="seacrh_button seacrh_button__hide icon-search"></a>
-                                </form>
-                            </div>
-                        </li>
-                        
+                            <a href="#" class="searchform_show seacrh_button__hide icon-search"></a>
+                        </li>                        
                     </ul>
                 </div>
             </div>

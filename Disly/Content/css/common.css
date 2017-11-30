@@ -119,11 +119,46 @@ body {
 
 
 /*блок поиска*/
-input#filtr_data {
+.searchform.show{display:block;}
+.searchform {
+    display: none;
+    position: absolute;
+    width: 100%;
+    left: 0;
+    z-index: 2;    
+}
+
+.searchform_input_wr{width:100%;padding-right:110px;}
+.searchform input {
+    width: 100%;
+    padding: 11px 10px;
+    border-top: 0;
+    border-right: 0;
+    border-bottom: 1px solid #ccc;
+    border-left: 1px solid #ccc;
+    line-height: 23px;
+}
+.searchform input:active,
+.searchform input:focus,
+.searchform input:hover{
+    outline:none;
+}
+.searchform button{float:right;font-weight:normal;padding:10px 15px;color:#fff;border:none;    line-height: 26px;}
+.searchform_close {
+    float: right;
+    font-size: 22px;
+    margin-left: 5px;
+    line-height: 46px;
+    vertical-align:middle;
+    padding:0 5px;
+    background-color:#fff;
+}
+.searchform_close:hover{text-decoration:none;}
+/*input#filtr_data {
     max-width: 140px;
 }
 .search_form_hide .seacrh_input {
-    width: 50px;
+    width: 46px;
     font-size: 14px;
     -webkit-transition: all 0.5s;
     -moz-transition: all 0.5s;
@@ -134,19 +169,23 @@ input#filtr_data {
     right: -22px;    
     cursor: pointer;
     z-index: 9;
-    padding: 15px 25px;
+    padding: 13px 25px;
 }
 
-    .search_form_hide .seacrh_input:focus {
+.search_form_hide .seacrh_input:focus {
         width: 380px;
         cursor: auto;
         background-image: none;
         display: block;
         outline: none;
-        right: 55px;
-        background-color:#ccc;
+        right: 51px;
+        background-color:#ccc;       
+}
 
-    }
+.search_form_hide .seacrh_input:focus::-webkit-input-placeholder {color:rgba(255,255,255,.7);}
+.search_form_hide .seacrh_input:focus::-moz-placeholder          {color:rgba(255,255,255,.7);}
+.search_form_hide .seacrh_input:focus:-moz-placeholder           {color:rgba(255,255,255,.7);}
+.search_form_hide .seacrh_input:focus:-ms-input-placeholder      {color:rgba(255,255,255,.7);}
 
 .seacrh_input:focus+.seacrh_button {
     background-color: #ccc;
@@ -156,30 +195,28 @@ input#filtr_data {
 }
 
 .search_form_hide .seacrh_button {
-    width: 50px;
-    height: 50px;    
+    width: 46px;
+    height: 46px;    
     cursor: pointer;
     color: #fff;    
     display: block;    
-    line-height:40px;
+    line-height:46px;
 }
 
 .search.menu_item {
     text-align: center;
     width: 47px;
-    height: 50px;
-    margin-right: 8px;
+    height: 46px;
+    margin-right: 5px;
 }
 
 .seacrh_button__hide {
     width: 15px;
-}
-
+}*/
 /*  */
-
 /* нижние баннеры */
 .bottom-linkimg {
-   padding-bottom:39px; 
+    padding-bottom: 39px;
 }
 
 .bottom-linkimg_head {
@@ -1150,15 +1187,16 @@ body {
 .main-menu {
     text-transform: uppercase;
     font-weight: bold;
+    position: relative;
 }
 
-    .main-menu li > a {
+.main-menu li > a {
         background-color: transparent !important;
-        padding: 13px 25px 13px!important;
-        padding-left: 0 !important;
+        padding: 13px 12px 13px!important;        
         font-size: 14px;
         color:#333;
     }
+.main-menu .navbar-left li:first-child> a{padding-left: 0 !important;}
 
 .icon-search {
     text-decoration: none !important;
