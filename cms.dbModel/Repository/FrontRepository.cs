@@ -65,5 +65,9 @@ namespace cms.dbModel
 
         // врачи портала
         public abstract DoctorList getDoctorsList(FilterParams filter);
+
+        //Обратная связь
+        public abstract FeedbacksList getFeedbacksList(FilterParams filtr);
+        public abstract FeedbackModel getFeedbackItem(Guid id);
     }
 }

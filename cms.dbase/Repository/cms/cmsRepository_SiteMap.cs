@@ -453,7 +453,8 @@ namespace cms.dbase
                     {
                         Id = s.id,
                         Text = s.c_title,
-                        Sort = s.n_sort
+                        Sort = s.n_sort,
+                        Value = s.c_alias
                     });
 
                 if (!query.Any()) return null;
@@ -525,6 +526,43 @@ namespace cms.dbase
                         IP = _ip,
                     };
                     insertLog(log);
+
+                    tran.Commit();
+                    return true;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Добавляем меню в карту сайта
+        /// </summary>
+        /// <param name="item">Элемент карты сайта</param>
+        /// <returns></returns>
+        public override bool deleteSiteMapMenu(Guid id)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                using (var tran = db.BeginTransaction())
+                {
+                    var query = db.content_sitemap_menuss.Where(w => w.id == id);
+                    if (query.Any())
+                    {
+                        var siteMapMenuItem = query.SingleOrDefault();
+                       
+                        var log = new LogModel()
+                        {
+                            Site = _domain,
+                            Section = LogSection.SiteMap,
+                            Action = LogAction.delete,
+                            PageId = id,
+                            PageName = siteMapMenuItem.c_title + "(" + siteMapMenuItem.c_alias + ")",
+                            UserId = _currentUserId,
+                            IP = _ip,
+                        };
+                        insertLog(log);
+
+                        db.Delete(siteMapMenuItem);
+                    }
 
                     tran.Commit();
                     return true;

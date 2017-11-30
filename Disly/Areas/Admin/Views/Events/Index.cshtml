@@ -34,7 +34,9 @@
                     </a>
                     <div class="li-desc ">
                         @if (item.Locked)
-                        {<span class="icon-lock" title="Заблокировано администратором портала"></span>}
+                        {
+                            <span class="icon-lock" title="Заблокировано администратором портала"></span>
+                        }
                         <a title="@item.Title" class="li-caption" href="/admin/events/item/@item.Id/@ViewBag.urlQuery">@item.Title</a><br />
                         <span>Дата проведения:</span> @Convert.ToDateTime(item.DateBegin).ToString("dd MMMM yyyy")
                         @if (item.DateEnd.HasValue)
@@ -69,13 +71,13 @@
         </div>
     </div>
 
-                <div class="buttons">
-                    @if (Model.UserResolution.Write)
-                    {
-                        <button type="submit" name="action" value="insert-btn" class="button icon-create">Создать</button>
-                        <button type="submit" name="action" value="rssimport-btn" class="button icon-create green">Импорт с других сайтов</button>
-                    }
-                </div>
+    <div class="buttons">
+        @if (Model.UserResolution.Write)
+        {
+            <button type="submit" name="action" value="insert-btn" class="button icon-create">Создать</button>
+            <button type="submit" name="action" value="rssimport-btn" class="button icon-create green">Импорт с других сайтов</button>
+        }
+    </div>
 }
 else
 {

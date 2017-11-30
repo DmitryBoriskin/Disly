@@ -572,7 +572,6 @@ a.link-close:before {
     min-width: 330px;
     width: 330px;
     min-height: 1000px;
-    margin:0; 
     padding: 30px; 
     background: #f5f8fa;
 }

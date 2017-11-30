@@ -19,7 +19,7 @@
             {
                 <div class="filtr-item @Item.selected">
                     <div class="filtr-item_link">
-                        @if (!Model.ReadOnly) //Model.AccountGroup.ToLower().Equals("developer")
+                        @if (!Model.ReadOnly || Model.AccountGroup.ToLower().Equals("developer"))
                         {
                             <a class="tree-btn pop-up_frame edit" href="@Item.url" title="Редактирование @Model.Title.ToLower()"> </a>
                         }
