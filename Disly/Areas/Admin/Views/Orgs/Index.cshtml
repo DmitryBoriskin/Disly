@@ -15,24 +15,24 @@
 
         @if (Model.OrgList != null)
         {
-            if (orgId != null)
+            if (Model.Item != null)
             {
-                var currentOrg = Model.OrgList.Where(w => w.Id.Equals((Guid)orgId)).SingleOrDefault();
+                //var currentOrg = Model.OrgList.Where(w => w.Id.Equals((Guid)orgId)).SingleOrDefault();
 
-                string imgUrl = (!string.IsNullOrEmpty(currentOrg.Logo.Url) && File.Exists(Server.MapPath(currentOrg.Logo.Url))) ? currentOrg.Logo.Url : "/Content/img/nophoto.jpg";
-                string link = "/admin/orgs/item/" + currentOrg.Id;
+                string imgUrl = (!string.IsNullOrEmpty(Model.Item.Logo.Url) && File.Exists(Server.MapPath(Model.Item.Logo.Url))) ? Model.Item.Logo.Url : "/Content/img/nophoto.jpg";
+                string link = "/admin/orgs/item/" + Model.Item.Id;
 
-                <div class="row" data-id="@currentOrg.Id">
+                <div class="row" data-id="@Model.Item.Id">
                     <div class="list-item">
                         <div class="col-md-3">
                             <a href="@link" class="li-image-link">
-                                <img src="@imgUrl" alt="@currentOrg.Title" class="list_img_preview" />
+                                <img src="@imgUrl" alt="@Model.Item.Title" class="list_img_preview" />
                             </a>
                         </div>
                         <div class="col-md-9">
                             <div class="li-desc">
-                                <a href="@link" class="li-caption">@currentOrg.Title</a><br />
-                                <span>Адрес: </span>@currentOrg.Address
+                                <a href="@link" class="li-caption">@Model.Item.Title</a><br />
+                                <span>Адрес: </span>@Model.Item.Address
                             </div>
                         </div>
                     </div>
@@ -45,7 +45,6 @@
             {
                 if (!item.Id.Equals(orgId))
                 {
-                    string imgUrl = (!string.IsNullOrEmpty(item.Logo.Url) && File.Exists(Server.MapPath(item.Logo.Url))) ? item.Logo.Url : "/Content/img/nophoto.jpg";
                     string link = "/admin/orgs/item/" + item.Id;
 
                     <div class="row" data-id="@item.Id">

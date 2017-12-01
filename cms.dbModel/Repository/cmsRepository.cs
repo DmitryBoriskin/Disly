@@ -111,7 +111,7 @@ namespace cms.dbModel
 
         //Orgs
         public abstract OrgsList getOrgsList(OrgFilter filtr);
-        public abstract OrgsModel[] getOrgs(OrgFilter filtr);
+        public abstract OrgsModel[] getOrgs(OrgFilter filtr, Guid? except);
         public abstract OrgsModel getOrgItem(Guid id);
 
         public abstract OrgsShortModel[] getOrgsListWhithChekedFor(OrgFilter filtr);

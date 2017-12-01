@@ -133,7 +133,7 @@ namespace cms.dbase
         /// </summary>
         /// <param name="filtr">Фильтр</param>
         /// <returns></returns>         
-        public override OrgsModel[] getOrgs(OrgFilter filtr)
+        public override OrgsModel[] getOrgs(OrgFilter filtr, Guid? except)
         {
             using (var db = new CMSdb(_context))
             {
@@ -142,16 +142,14 @@ namespace cms.dbase
 
                 //data.OrderBy(o => o.n_sort); ХЗ почему эта строка нормально не сортирует
 
-                var data = query.Select(s => new OrgsModel()
+                var data = query
+                    .Where(w => !w.id.Equals(except))
+                    .Select(s => new OrgsModel()
                 {
                     Id = s.id,
                     Title = s.c_title,
                     Sort = s.n_sort,
                     Address = s.c_adress,
-                    Logo = new Photo
-                    {
-                        Url = s.c_logo
-                    },
                     Types = s.contentorgstypeslinkorgs.Select(t => t.f_type).ToArray()
                 });
                 if (data.Any())

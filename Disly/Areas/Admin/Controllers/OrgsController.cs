@@ -67,7 +67,13 @@ namespace Disly.Areas.Admin.Controllers
             #endregion
             
             var orgfilter = FilterParams.Extend<OrgFilter>(filter);
-            model.OrgList = _cmsRepository.getOrgs(orgfilter);// список организаций
+
+            // Текущая организация
+            if (orgId != null)
+            {
+                model.Item = _cmsRepository.getOrgItem((Guid)orgId);
+            }
+            model.OrgList = _cmsRepository.getOrgs(orgfilter, orgId);// список организаций
             return View(model);
         }
 
