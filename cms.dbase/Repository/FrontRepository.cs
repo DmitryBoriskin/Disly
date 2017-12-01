@@ -1146,8 +1146,9 @@ namespace cms.dbase
         /// Список должностей
         /// </summary>
         /// <returns></returns>
-        public override PeoplePost[] getPeoplePosts(string domain)
+        public override PeoplePost[] getPeoplePosts()
         {
+            string domain = _domain;
             using (var db = new CMSdb(_context))
             {
                 var query = (from s in db.cms_sitess
@@ -1176,7 +1177,7 @@ namespace cms.dbase
         /// </summary>
         /// <param name="domain"></param>
         /// <returns></returns>
-        public override OrgsModel getOrgInfo(string domain)
+        public override OrgsModel getOrgInfo()
         {
             string domain = _domain;
             using (var db = new CMSdb(_context))
@@ -1207,7 +1208,7 @@ namespace cms.dbase
         /// <param name="domain"></param>
         /// <param name="Ip"></param>
         /// <returns></returns>
-        public override IEnumerable<VoteModel> getVote(string domain, string Ip)
+        public override IEnumerable<VoteModel> getVote( string Ip)
         {
             string domain = _domain;
             using (var db = new CMSdb(_context))

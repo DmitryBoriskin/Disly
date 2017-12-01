@@ -39,7 +39,7 @@ namespace cms.dbModel
         public abstract People getPeopleItem(Guid id);
         public abstract string getPeopleSnils(Guid id);
         public abstract StructureModel[] getDeparatamentsSelectList(); //string domain
-        public abstract PeoplePost[] getPeoplePosts(string domain);
+        public abstract PeoplePost[] getPeoplePosts();//string domain
 
         public abstract OrgsModel getOrgInfo(); //string domain
         public abstract string getOid(string domain);

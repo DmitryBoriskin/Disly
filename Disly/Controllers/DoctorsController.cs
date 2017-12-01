@@ -45,7 +45,7 @@ namespace Disly.Controllers
             var filter = getFilter();
             model.DoctorsList = _repository.getPeopleList(filter);
             model.DepartmentsSelectList = _repository.getDeparatamentsSelectList(); //Domain
-            model.PeoplePosts = _repository.getPeoplePosts(Domain);
+            model.PeoplePosts = _repository.getPeoplePosts();//Domain
 
             #region Редирект на регистрацию
             model.Oid = _repository.getOid(Domain);
