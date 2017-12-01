@@ -146,6 +146,11 @@ namespace cms.dbModel.entity
         /// Список дополнительных доменов
         /// </summary>
         public IEnumerable<string> DomainListArray { get; set; }
+
+        /// <summary>
+        /// Тема
+        /// </summary>
+        public string Theme { get; set; }
     }
 
     /// <summary>
