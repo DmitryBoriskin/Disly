@@ -14,6 +14,7 @@ namespace Disly.Areas.Admin.Controllers
         //ovp- это вьюха объединяющая в себе структурное подразделение и департамент(отдел)
         OrgsViewModel model;
         FilterParams filter;
+        Guid? orgId;
 
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
@@ -27,6 +28,9 @@ namespace Disly.Areas.Admin.Controllers
 
             filter = getFilter();
 
+            // идентификатор организации
+            orgId = _cmsRepository.getOrgLinkByDomain(Domain);
+
             model = new OrgsViewModel()
             {
                 Account = AccountInfo,
@@ -36,7 +40,8 @@ namespace Disly.Areas.Admin.Controllers
                 ActionName = ActionName,
                 Types = _cmsRepository.getOrgTypesList(new OrgTypeFilter() { }),
                 DepartmentAffiliations = _cmsRepository.getDepartmentAffiliations(),
-                MedicalServices = _cmsRepository.getMedicalServices()
+                MedicalServices = _cmsRepository.getMedicalServices(),
+                SectionResolution = _accountRepository.getCmsUserResolutioInfo(AccountInfo.id, "structure")
             };
 
             #region Метатеги
@@ -49,11 +54,25 @@ namespace Disly.Areas.Admin.Controllers
         // GET: Admin/Orgs
         public ActionResult Index()
         {
+            #region администратор сайта
+            if (model.Account.Group.ToLower() == "admin")
+            {
+                if (orgId != null)
+                {
+                    return RedirectToAction("Item", new { id = orgId });
+                }
+                else
+                {
+                    return RedirectToAction("Index", "Main");
+                }
+            }
+            #endregion
+
             var orgfilter = FilterParams.Extend<OrgFilter>(filter);
             model.OrgList = _cmsRepository.getOrgs(orgfilter);//+ список организаций
             return View(model);
         }
-             
+
         /// <summary>
         /// Формируем строку фильтра
         /// </summary>
@@ -88,12 +107,22 @@ namespace Disly.Areas.Admin.Controllers
             string query = HttpUtility.UrlDecode(Request.Url.Query);
             query = addFiltrParam(query, "page", String.Empty);
             return Redirect(StartUrl + "item/" + Guid.NewGuid() + "/" + query);
-        }        
+        }
 
         public ActionResult Item(Guid Id)
-        {            
+        {
+            #region администратор сайта
+            if (model.Account.Group.ToLower() == "admin")
+            {
+                if (orgId != null && !Id.Equals((Guid)orgId))
+                {
+                    return RedirectToAction("Item", new { id = orgId });
+                }
+            }
+            #endregion
+
             model.Item = _cmsRepository.getOrgItem(Id);    //+ список структур    +списо административного персонала
-            
+
             // типы организаций
             if (model.Item != null)
             {
@@ -101,7 +130,7 @@ namespace Disly.Areas.Admin.Controllers
                 ViewBag.Xcoord = model.Item.GeopointX;
                 ViewBag.Ycoord = model.Item.GeopointY;
             }
-            
+
             return View("Item", model);
         }
 
@@ -256,10 +285,26 @@ namespace Disly.Areas.Admin.Controllers
 
         }
 
-
         // GET: Admin/Orgs/structure/{Guid}
         public ActionResult Structure(Guid id)
         {
+            #region администратор сайта
+            if (model.Account.Group.ToLower() == "admin")
+            {
+                if (orgId != null)
+                {
+                    if (!_cmsRepository.IsStructureAllowedToOrg(id, (Guid)orgId))
+                    {
+                        return RedirectToAction("Item", new { id = orgId });
+                    }
+                }
+                else
+                {
+                    return RedirectToAction("Index", "Main");
+                }
+            }
+            #endregion
+
             ViewBag.Title = "Структурное подразделение";
             model.StructureItem = _cmsRepository.getStructure(id);//+ список подразделений      
             if (model.StructureItem != null)
@@ -273,7 +318,7 @@ namespace Disly.Areas.Admin.Controllers
             }
             return View("Structure", model);
         }
-        
+
         [HttpPost]
         [ValidateInput(false)]
         [MultiButton(MatchFormKey = "action", MatchFormValue = "save-structure-btn")]
@@ -325,7 +370,7 @@ namespace Disly.Areas.Admin.Controllers
                         }
                         else { userMessage.info = "Произошла ошибка"; }
                     }
-                    else { userMessage.info = "Произошла ошибка"; } 
+                    else { userMessage.info = "Произошла ошибка"; }
                     #endregion
                 }
                 else
@@ -338,14 +383,14 @@ namespace Disly.Areas.Admin.Controllers
                                  new ErrorMassegeBtn { url = "/admin/orgs/structure/"+id, text = "ок"}
                              };
                     }
-                    else { userMessage.info = "Произошла ошибка"; } 
+                    else { userMessage.info = "Произошла ошибка"; }
                     #endregion
                 }
             }
             model.ErrorInfo = userMessage;
             return View("Structure", model);
         }
-                
+
         [HttpPost]
         [ValidateInput(false)]
         [MultiButton(MatchFormKey = "action", MatchFormValue = "delete-structure-btn")]
@@ -353,7 +398,7 @@ namespace Disly.Areas.Admin.Controllers
         {
             ErrorMassege userMassage = new ErrorMassege();
             userMassage.title = "Информация";
-            Guid ParentOrgId= _cmsRepository.getAdministrativ(id).OrgId;            
+            Guid ParentOrgId = _cmsRepository.getAdministrativ(id).OrgId;
             if (_cmsRepository.delAdministrativ(id))
             {
                 userMassage.info = "Запись Удалена";
@@ -362,7 +407,8 @@ namespace Disly.Areas.Admin.Controllers
                     new ErrorMassegeBtn { url = "/admin/orgs/item/"+ParentOrgId, text = "Вернуться в организацию"}
                 };
             }
-            else {
+            else
+            {
                 userMassage.info = "Произошла ошибка";
                 userMassage.buttons = new ErrorMassegeBtn[]{
                     new ErrorMassegeBtn { url = "#", text = "ок", action = "false" }
@@ -376,10 +422,27 @@ namespace Disly.Areas.Admin.Controllers
         #region Ovp
         public ActionResult Ovp(Guid id)
         {
+            #region администратор сайта
+            if (model.Account.Group.ToLower() == "admin")
+            {
+                if (orgId != null)
+                {
+                    if (!_cmsRepository.IsStructureAllowedToOrg(id, (Guid)orgId))
+                    {
+                        return RedirectToAction("Item", new { id = orgId });
+                    }
+                }
+                else
+                {
+                    return RedirectToAction("Index", "Main");
+                }
+            }
+            #endregion
+
             ViewBag.Title = "ОВП/ОФП";
             var OrgId = Request.Params["orgid"];
-            model.StructureItem = _cmsRepository.getStructure(id);  
-            
+            model.StructureItem = _cmsRepository.getStructure(id);
+
             if (model.StructureItem != null)
             {
                 if (!model.StructureItem.Ovp)
@@ -412,12 +475,12 @@ namespace Disly.Areas.Admin.Controllers
                            }, "Value", "Text"
                        );
 
-                    }                    
+                    }
                 }
             }
             else
             {
-                
+
 
             }
             return View("Ovp", model);
@@ -451,7 +514,7 @@ namespace Disly.Areas.Admin.Controllers
             }
             catch { }
             #endregion
-            
+
             if (model.StructureItem == null)
             {
                 #region создание
@@ -461,7 +524,7 @@ namespace Disly.Areas.Admin.Controllers
                     if (OrgId != null)
                     {
                         Guid OrgGuid = Guid.Parse(OrgId);
-                        if(_cmsRepository.insOvp(id, OrgGuid, back_model.StructureItem)) //, AccountInfo.id, RequestUserInfo.IP
+                        if (_cmsRepository.insOvp(id, OrgGuid, back_model.StructureItem)) //, AccountInfo.id, RequestUserInfo.IP
                         {
                             userMessage.info = "Запись создана";
                             userMessage.buttons = new ErrorMassegeBtn[]{
@@ -475,7 +538,7 @@ namespace Disly.Areas.Admin.Controllers
                             {
                                 new ErrorMassegeBtn { url = "#", text = "ок", action = "false" }
                             };
-                        }                        
+                        }
                     }
                     else
                     {
@@ -496,8 +559,9 @@ namespace Disly.Areas.Admin.Controllers
                     return Redirect("/admin/orgs/structure/" + id);//если струкутра с таким id уже существует и не является типом OVP
                 }
                 #region обновление
-                if (ModelState.IsValid) {
-                    if (_cmsRepository.setOvp(id, back_model.StructureItem,back_model.DepartmentItem)) //, AccountInfo.id, RequestUserInfo.IP
+                if (ModelState.IsValid)
+                {
+                    if (_cmsRepository.setOvp(id, back_model.StructureItem, back_model.DepartmentItem)) //, AccountInfo.id, RequestUserInfo.IP
                     {
                         userMessage.info = "Запись обновлена";
                         userMessage.buttons = new ErrorMassegeBtn[]{
@@ -520,43 +584,64 @@ namespace Disly.Areas.Admin.Controllers
         {
             return Redirect(StartUrl + Request.Url.Query);
         }
+
         [HttpPost]
         [MultiButton(MatchFormKey = "action", MatchFormValue = "cancel-structure-btn")]
         public ActionResult CancelStructure(Guid id)
         {
-            try {
-                var data = _cmsRepository.getStructure(id);                
-                if (data != null)                
+            try
+            {
+                var data = _cmsRepository.getStructure(id);
+                if (data != null)
                     return Redirect(StartUrl + "/item/" + data.OrgId + Request.Url.Query);
                 else
                     return Redirect(StartUrl + "/item/" + Guid.Parse(Request.Params["orgid"]));
             }
-            catch {
+            catch
+            {
                 return Redirect(StartUrl);
-            }            
+            }
         }
+
         [HttpPost]
         [MultiButton(MatchFormKey = "action", MatchFormValue = "cancel-department-btn")]
         public ActionResult CancelDepartment(Guid id)
         {
-            try {
-                var data = _cmsRepository.getDepartamentItem(id);                
-                if (data != null)                                    
+            try
+            {
+                var data = _cmsRepository.getDepartamentItem(id);
+                if (data != null)
                     return Redirect(StartUrl + "/structure/" + data.StructureF + Request.Url.Query);
                 else
-                    return Redirect(StartUrl + "/structure/" + Guid.Parse(Request.Params["strucid"]));                                
+                    return Redirect(StartUrl + "/structure/" + Guid.Parse(Request.Params["strucid"]));
             }
-            catch {
+            catch
+            {
                 return Redirect(StartUrl);
-            }            
+            }
         }
-        //[HttpPost]
-        //public ActionResult()
-        // GET: Admin/Orgs/department/{Guid}
+        
         public ActionResult Department(Guid id)
         {
-            ViewBag.Title = "Отделение";            
-            model.DepartmentItem=_cmsRepository.getDepartamentItem(id);
+            #region администратор сайта
+            if (model.Account.Group.ToLower() == "admin")
+            {
+                if (orgId != null)
+                {
+                    if (!_cmsRepository.IsDepartmentAllowedToOrg(id, (Guid)orgId))
+                    {
+                        return RedirectToAction("Item", new { id = orgId });
+                    }
+                }
+                else
+                {
+                    return RedirectToAction("Index", "Main");
+                }
+            }
+            #endregion
+
+            ViewBag.Title = "Отделение";
+            model.DepartmentItem = _cmsRepository.getDepartamentItem(id);
             if (model.DepartmentItem != null)
             {
                 model.BreadCrumbOrg = _cmsRepository.getBreadCrumbOrgs(id, ViewBag.ActionName);
@@ -567,14 +652,14 @@ namespace Disly.Areas.Admin.Controllers
                 {
                     model.PeopleList = new SelectList(_peopList, "Id", "FIO");
                 }
-                
+
 
                 model.PeopleLStatus = new SelectList(
                    new List<SelectListItem>
                    {
                         new SelectListItem { Text = "Не выбрано", Value =""},
                         new SelectListItem { Text = "Начальник отделения", Value ="boss"},
-                        new SelectListItem { Text = "Старшая медсестра", Value = "sister" },                        
+                        new SelectListItem { Text = "Старшая медсестра", Value = "sister" },
                    }, "Value", "Text"
                );
             }
@@ -585,10 +670,10 @@ namespace Disly.Areas.Admin.Controllers
                 {
                     ViewBag.StrucId = StrucId;
                     model.BreadCrumbOrg = _cmsRepository.getBreadCrumbOrgs(Guid.Parse(StrucId), "structure");
-                }                
+                }
             }
             return View("department", model);
-        }                
+        }
         [HttpPost]
         [ValidateInput(false)]
         [MultiButton(MatchFormKey = "action", MatchFormValue = "save-department-btn")]
@@ -621,7 +706,7 @@ namespace Disly.Areas.Admin.Controllers
                 else
                 {
                     #region обновление
-                    if(_cmsRepository.updDepartament(id, back_model.DepartmentItem)) //, AccountInfo.id, RequestUserInfo.IP
+                    if (_cmsRepository.updDepartament(id, back_model.DepartmentItem)) //, AccountInfo.id, RequestUserInfo.IP
                     {
                         userMessage.info = "Запись обновлена";
                         userMessage.buttons = new ErrorMassegeBtn[]{
@@ -662,6 +747,7 @@ namespace Disly.Areas.Admin.Controllers
             model.ErrorInfo = userMassage;
             return View("department", model);
         }
+
         /// <summary>
         /// Добавление телефонного номера отделению
         /// </summary>
@@ -676,12 +762,12 @@ namespace Disly.Areas.Admin.Controllers
             _cmsRepository.insDepartmentsPhone(Guid.Parse(IdDepartment), PhoneLabel, PhoneValue); //, AccountInfo.id, RequestUserInfo.IP
             return Redirect(((System.Web.HttpRequestWrapper)Request).RawUrl);
         }
+
         public ActionResult DelPhoneDepart(int id)
         {
             _cmsRepository.delDepartmentsPhone(id);
             return null;
         }
-
         
         [HttpPost]
         [MultiButton(MatchFormKey = "action", MatchFormValue = "add-new-people-depart")]
@@ -700,7 +786,7 @@ namespace Disly.Areas.Admin.Controllers
             _cmsRepository.delPersonsThisDepartment(Guid.Parse(iddep), Guid.Parse(idpeople));
             return null;
         }
-        
+
         /// <summary>
         /// Для конкретного объекта получаем список организаций
         /// </summary>
@@ -722,7 +808,7 @@ namespace Disly.Areas.Admin.Controllers
                 ObjctId = objId,
                 ObjctType = objType,
                 OrgsList = _cmsRepository.getOrgsListWhithChekedFor(filtr),
-                OrgsTypes = _cmsRepository.getOrgTypesList(new OrgTypeFilter(){ })
+                OrgsTypes = _cmsRepository.getOrgTypesList(new OrgTypeFilter() { })
             };
 
             #region for test
@@ -752,31 +838,16 @@ namespace Disly.Areas.Admin.Controllers
             return PartialView("Modal/Orgs", model);
         }
 
-        //[HttpPost]
-        //[MultiButton(MatchFormKey = "action", MatchFormValue = "save-org-btn")]
-        //public ActionResult OrgsListModal(OrgsModalViewModel model)
-        //{
-        //    ContentLinkModel modelInsert = new ContentLinkModel
-        //    {
-        //       ObjctId = model.ObjctId,
-        //       ObjctType = model.ObjctType,
-        //       LinksId= (model.OrgsId != null)? model.OrgsId.Distinct().ToArray(): null,
-        //       LinkType = ContentLinkType.ORG
-        //    };
-        //    var res = _cmsRepository.updateContentLinks(modelInsert);
-        //    return PartialView("Modal/Success");
-        //}
-
         [HttpPost]
-        public ActionResult UpdateLinkToOrg (ContentLinkModel data)
+        public ActionResult UpdateLinkToOrg(ContentLinkModel data)
         {
-            if(data != null)
+            if (data != null)
             {
                 var res = _cmsRepository.updateContentLink(data);
                 if (res)
                     return Json("Success");
             }
-            
+
             //return Response.Status = "OK";
             return Json("An Error Has occourred"); //Ne
         }
@@ -785,6 +856,23 @@ namespace Disly.Areas.Admin.Controllers
         #region administrative
         public ActionResult Administrativ(Guid Id)
         {
+            #region администратор сайта
+            if (model.Account.Group.ToLower() == "admin")
+            {
+                if (orgId != null)
+                {
+                    if (!_cmsRepository.IsAdministrativeAllowedToOrg(Id, (Guid)orgId))
+                    {
+                        return RedirectToAction("Item", new { id = orgId });
+                    }
+                }
+                else
+                {
+                    return RedirectToAction("Index", "Main");
+                }
+            }
+            #endregion
+
             ViewBag.Title = "Административный персонал";
             var OrgId = Request.Params["orgid"];
             //информация о персоне
@@ -800,7 +888,7 @@ namespace Disly.Areas.Admin.Controllers
             if (OrgId == null)
             {
                 model.BreadCrumbOrg = _cmsRepository.getBreadCrumbOrgs(Id, ViewBag.ActionName);
-            }            
+            }
             return View(model);
         }
 
@@ -821,7 +909,7 @@ namespace Disly.Areas.Admin.Controllers
                 string aliasname = Transliteration.Translit(back_model.AdministrativItem.Surname + "-" + back_model.AdministrativItem.Name);
 
                 #region Изображение
-                string savePath = Settings.UserFiles+Domain+"/administrativ/" + Id + "/";
+                string savePath = Settings.UserFiles + Domain + "/administrativ/" + Id + "/";
 
                 int width = 225; // ширина 
                 int height = 225; // высота
@@ -843,7 +931,7 @@ namespace Disly.Areas.Admin.Controllers
                             }
                         };
                         return View("Item", model);
-                    }                    
+                    }
                     Photo photo = new Photo
                     {
                         Name = aliasname + fileExtension,
@@ -852,7 +940,7 @@ namespace Disly.Areas.Admin.Controllers
                     };
 
                     back_model.AdministrativItem.Photo = photo;
-                }                
+                }
                 #endregion
 
                 model.AdministrativItem = _cmsRepository.getAdministrativ(Id);
@@ -869,7 +957,7 @@ namespace Disly.Areas.Admin.Controllers
                 }
                 else
                 {
-                    _cmsRepository.updAdministrativ(Id, back_model.AdministrativItem);                    
+                    _cmsRepository.updAdministrativ(Id, back_model.AdministrativItem);
                     userMassege.info = "Запись сохранена";
                     userMassege.buttons = new ErrorMassegeBtn[]{
                         new ErrorMassegeBtn { url = StartUrl + Request.Url.Query, text = "вернуться в список" },
@@ -923,7 +1011,7 @@ namespace Disly.Areas.Admin.Controllers
         {
             ErrorMassege userMassage = new ErrorMassege();
             userMassage.title = "Информация";
-            Guid ParentOrgId= _cmsRepository.getAdministrativ(id).OrgId;
+            Guid ParentOrgId = _cmsRepository.getAdministrativ(id).OrgId;
             if (_cmsRepository.delAdministrativ(id)) //, AccountInfo.id, RequestUserInfo.IP
             {
                 userMassage.info = "Запись Удалена";

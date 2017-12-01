@@ -14,7 +14,7 @@
 
 }
 
-@if (Model.UserResolution.Write)
+@if (Model.UserResolution.Read)
 {
     <div class="content">
         <h1>@ViewBag.Title</h1>
@@ -177,11 +177,11 @@ else
 }
 
 <div class="buttons">
-    @if ((Model.Item != null && Model.UserResolution.Change) || (Model.Item == null && Model.UserResolution.Write))
+    @if ((Model.Item != null && Model.SectionResolution.Change) || (Model.Item == null && Model.SectionResolution.Write))
     {
         <button type="submit" name="action" value="save-ovp-btn" data-primary="true" class="button icon-create">Сохранить</button>
     }
-    @if (Model.StructureItem != null && Model.UserResolution.Delete)
+    @if (Model.StructureItem != null && Model.SectionResolution.Delete)
     {
         <button type="submit" name="action" value="delete-structure-btn" data-action="delete" class="button icon-delete">Удалить</button>
     }

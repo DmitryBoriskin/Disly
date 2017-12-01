@@ -18,18 +18,10 @@
     <link href="~/Content/plugins/select2/css/select2.css" rel="stylesheet">
     <link href="~/Content/plugins/select2/css/select2_custom.css" rel="stylesheet">
 
-
     <link href="~/Content/plugins/mobileGallery/swipebox.css" rel="stylesheet">
-
     <link href="~/Content/css/common.css" rel="stylesheet" />
     <link href="~/Content/css/theme/first.css" rel="stylesheet" />
-
     <link rel="stylesheet" type="text/css" media="print" href="~/Content/css/print.css">
-
-    @*
-    <link href="~/Content/decor/first/main.css" rel="stylesheet" />
-    <link href="~/Content/decor/first/color.css" rel="stylesheet" />
-    *@    
 
     <script type="text/javascript" src="/Content/plugins/jquery/jquery.js"></script>
     <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU"></script>
@@ -42,63 +34,66 @@
 </head>
 
 <body>
-    <!-- шапка -->
-    <div class="container">
-        <!-- название сайта -->
-        <div class="head">
-            <div class="row">
-                <div class="col-md-8">
-                    <a href="/" class="head_link">
-                        @if (Model.SitesInfo.Logo.Url != null)
-                        {
-                            <div class="head_logo">
-                                <img src="@Model.SitesInfo.Logo.Url" />
-                            </div>
-                        }
-                        <div class="head_title">
-                            @if (Model != null && Model.SitesInfo != null)
+    <div class="cont_wrap">
+
+
+        <!-- шапка -->
+        <div class="container">
+            <!-- название сайта -->
+            <div class="head">
+                <div class="row">
+                    <div class="col-md-8">
+                        <a href="/" class="head_link">
+                            @if (Model.SitesInfo.Logo.Url != null)
                             {
-                                <h4>@Model.SitesInfo.LongTitle</h4>
+                                <div class="head_logo">
+                                    <img src="@Model.SitesInfo.Logo.Url" />
+                                </div>
                             }
-                        </div>
-                    </a>
-                </div>
-                <div class="col-md-4 right_section">
-                    <ul class="nav navbar-nav navbar-right">
-                        <li>
-                            <a href="/mapsite">
-                                <span class="ti-layers-alt top-icon"></span>
-                                Карта сайта
-                            </a>
-                        </li>
-                        <li>
-                            <a href="/rss">
-                                <span class="ti-rss-alt top-icon"></span>
-                                RSS
-                            </a>
-                        </li>
-                        <li>
-                            <a target="_blank" href="http://www.med.cap.ru/">
-                                <span class="ti-new-window top-icon"></span>
-                                Медицинский портал
-                            </a>
-                        </li>
-                    </ul>
-                    <div class="pull-right spec-version-link">
-                        <a href="/spec">
-                            <span class="spec-info">Aa</span>
-                            Для слабовидящих
+                            <div class="head_title">
+                                @if (Model != null && Model.SitesInfo != null)
+                                {
+                                    <h4>@Model.SitesInfo.LongTitle</h4>
+                                }
+                            </div>
                         </a>
                     </div>
+                    <div class="col-md-4 right_section">
+                        <ul class="nav navbar-nav navbar-right">
+                            <li>
+                                <a href="/mapsite">
+                                    <span class="ti-layers-alt top-icon"></span>
+                                    Карта сайта
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/rss">
+                                    <span class="ti-rss-alt top-icon"></span>
+                                    RSS
+                                </a>
+                            </li>
+                            <li>
+                                <a target="_blank" href="http://www.med.cap.ru/">
+                                    <span class="ti-new-window top-icon"></span>
+                                    Медицинский портал
+                                </a>
+                            </li>
+                        </ul>
+                        <div class="pull-right spec-version-link">
+                            <a href="/spec">
+                                <span class="spec-info">Aa</span>
+                                Для слабовидящих
+                            </a>
+                        </div>
+                    </div>
                 </div>
-            </div>
 
-        </div>
-        <!-- конец названия сайта -->
-        <!-- главное меню -->
-        <div class="main-menu_wr">
-            <div class="main-menu">
-                @if (Model != null && Model.SiteMapArray != null && Model.SiteMapArray.Count() > 0)
+            </div>
+            <!-- конец названия сайта -->
+            <!-- главное меню -->
+            <div class="main-menu_wr">
+                <div class="main-menu">
+                    @if (Model != null && Model.SiteMapArray != null && Model.SiteMapArray.Count() > 0)
             {
                 var mainMenu = Model.SiteMapArray
                     .Where(w => w.MenuAlias.Equals("main"))
@@ -111,8 +106,8 @@
                         FrontSection = s.FrontSection,
                         Url = s.Url
                     });
-                    <ul class="nav navbar-nav navbar-left">
-                        @foreach (var item in mainMenu)
+                        <ul class="nav navbar-nav navbar-left">
+                            @foreach (var item in mainMenu)
                         {
                             string fullPath = "/";
 
@@ -133,25 +128,33 @@
                                 <a href="@fullPath">@item.Title</a>
                             </li>
                         }
-                    </ul>
+                        </ul>
                 }
-                <ul class="nav navbar-nav navbar-right">
-                    @*<li><a href="">EN</a></li>*@
-                    <li><a href="" class="icon-search"></a></li>
-                </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        @*<li><a href="">EN</a></li>*@
+                        <li>
+                            <div class="search menu_item">
+                                <form class="search_form search_form_hide" name="searchfrom">
+                                    <input id="search_focus" class="seacrh_input" type="search" name="search" placeholder="Поиск по сайту...">
+                                    <a href="#" class="seacrh_button seacrh_button__hide icon-search"></a>
+                                </form>
+                            </div>
+                        </li>
+                        
+                    </ul>
+                </div>
             </div>
+
+            <!-- конец главного меню -->
         </div>
-
-        <!-- конец главного меню -->
-    </div>
-    <!-- конец шапки -->
-    <!-- контентная часть -->
-    @RenderBody()
-    <!-- конец контентной части -->
-
-    <div class="container">
-        <!-- нижние баннеры -->
-        @if (Model != null && Model.BannerArray != null && Model.BannerArray.Count() > 0)
+        <!-- конец шапки -->
+        <!-- контентная часть -->
+        @RenderBody()
+        <!-- конец контентной части -->
+        <div class="bottom_block">
+            <div class="container">
+                <!-- нижние баннеры -->
+                @if (Model != null && Model.BannerArray != null && Model.BannerArray.Count() > 0)
         {
             var bannerBottom = Model.BannerArray
                         .Where(w => w.SectionAlias.Equals("text"))
@@ -164,119 +167,124 @@
                             Text = s.Text
                         });
 
-            <div class="row bottom-linkimg">
-                <div class="col-sm-2">
-                    <div class="bottom-linkimg_head">Официальные сетевые ресурсы</div>
-                </div>                
-                @foreach (var item in bannerBottom)
+                    <div class="row bottom-linkimg">
+                        <div class="col-sm-2">
+                            <div class="bottom-linkimg_head">Официальные сетевые ресурсы</div>
+                        </div>
+                        @foreach (var item in bannerBottom)
                 {
                     string redirectLink = "/redirect/link/" + item.Id;
-                    <div class="col-sm-2">
-                        <a href="@redirectLink" class="bottom-linkimg-item">@item.Title</a>
-                     </div>
+                            <div class="col-sm-2">
+                                <a href="@redirectLink" class="bottom-linkimg-item">@item.Title</a>
+                            </div>
                 }
-            </div>
+                    </div>
         }
-        <!-- конец нижних баннеров -->
-        <!-- подвал -->
-        <div class="footer">
-            <div class="row">
-                <div class="col-md-8">
-                    <div class="media">                        
-                            @if (Model.SitesInfo.Logo != null)
+                <!-- конец нижних баннеров -->
+                <!-- подвал -->
+                <div class="footer">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="media">
+                                @if (Model.SitesInfo.Logo != null)
                             {
                                 if (Model.SitesInfo.Logo.Url != null)
                                 {
-                                    <div class="media-left">
-                                        <img class="logo-small" src="@Model.SitesInfo.Logo.Url" />
-                                    </div>
+                                        <div class="media-left">
+                                            <img class="logo-small" src="@Model.SitesInfo.Logo.Url" />
+                                        </div>
                                 }
                             }
 
-                        @if (Model != null && Model.SitesInfo != null)
+                                @if (Model != null && Model.SitesInfo != null)
                         {
-                            <div class="bottom_info">
-                                <div class="bottom_info_title">@Model.SitesInfo.LongTitle</div>                                
-                                <div class="small_address">
-                                    <div>@Model.SitesInfo.Adress</div>
-                                    <div>@Model.SitesInfo.Phone</div>
-                                    <div><a href="@Model.SitesInfo.Site">@Model.SitesInfo.Site</a></div>
-                                </div>
-                                <div class="metrica">
-                                    <img src="~/Content/img/metrica1.png" />
-                                </div>
-                                <div class="metrica">
-                                    <img src="~/Content/img/metrica2.png" />
-                                </div>
-                            </div>
+                                    <div class="bottom_info">
+                                        <div class="bottom_info_title">@Model.SitesInfo.LongTitle</div>
+                                        <div class="small_address">
+                                            <div>@Model.SitesInfo.Adress</div>
+                                            <div>@Model.SitesInfo.Phone</div>
+                                            <div><a href="@Model.SitesInfo.Site">@Model.SitesInfo.Site</a></div>
+                                        </div>
+                                        <div class="metrica">
+                                            <img src="~/Content/img/metrica1.png" />
+                                        </div>
+                                        <div class="metrica">
+                                            <img src="~/Content/img/metrica2.png" />
+                                        </div>
+                                    </div>
                         }
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="footer-right">
-                    <form>
-                        <input class="search-form" type="text" placeholder="Поиск по сайту" value="" />
-                        <a href="" class="icon-search bottom-search"></a>
-                    </form>
-                    <ul class="nav navbar-nav bottom_menu navbar-left">
-                        <li><a href=""><span class="ti-layers-alt top-icon"></span>Карта сайта</a></li>
-                        <li><a href=""><span class="ti-rss-alt top-icon"></span>RSS</a></li>
-                        <li><a href=""><span class="ti-new-window top-icon"></span>Медицинский портал</a></li>
-                    </ul>
-                    <ul class="nav navbar-nav versions navbar-left">
-                        @*<li><a href="">English version</a></li>*@
-                        <li><a href=""><span class="spec-info">Aa</span>Для слабовидящих</a></li>
-                    </ul>
-                </div>
-                </div>
-                <div class="col-md-12 metrica-block">
-                    <div class="float-right social_network_list">
-                       @if (Model != null && Model.SitesInfo != null)
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="footer-right">
+                                <form>
+                                    <input class="search-form" type="text" placeholder="Поиск по сайту" value="" />
+                                    <a href="" class="icon-search bottom-search"></a>
+                                </form>
+                                <ul class="nav navbar-nav bottom_menu navbar-left">
+                                    <li><a href=""><span class="ti-layers-alt top-icon"></span>Карта сайта</a></li>
+                                    <li><a href=""><span class="ti-rss-alt top-icon"></span>RSS</a></li>
+                                    <li><a href=""><span class="ti-new-window top-icon"></span>Медицинский портал</a></li>
+                                </ul>
+                                <ul class="nav navbar-nav versions navbar-left">
+                                    @*<li><a href="">English version</a></li>*@
+                                    <li><a href=""><span class="spec-info">Aa</span>Для слабовидящих</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-md-12 metrica-block">
+                            <div class="float-right social_network_list">
+                                @if (Model != null && Model.SitesInfo != null)
                        {
                             if (!string.IsNullOrEmpty(Model.SitesInfo.Facebook))
                             {
-                                <a href="@Model.SitesInfo.Facebook" class="icon-facebook-4"></a>
+                                        <a href="@Model.SitesInfo.Facebook" class="icon-facebook-4"></a>
                             }
                             if (!string.IsNullOrEmpty(Model.SitesInfo.Vk))
                             {
-                                <a href="@Model.SitesInfo.Vk" class="icon-vk"></a>
+                                        <a href="@Model.SitesInfo.Vk" class="icon-vk"></a>
                             }
                             if (!string.IsNullOrEmpty(Model.SitesInfo.Instagramm))
                             {
-                                <a href="@Model.SitesInfo.Instagramm" class="icon-instagramm"></a>
+                                        <a href="@Model.SitesInfo.Instagramm" class="icon-instagramm"></a>
                             }
                             if (!string.IsNullOrEmpty(Model.SitesInfo.Odnoklassniki))
                             {
-                                <a href="@Model.SitesInfo.Odnoklassniki" class="icon-odnoklassniki"></a>
+                                        <a href="@Model.SitesInfo.Odnoklassniki" class="icon-odnoklassniki"></a>
                             }
                             if (!string.IsNullOrEmpty(Model.SitesInfo.Twitter))
                             {
-                                <a href="@Model.SitesInfo.Twitter" class="icon-twitter"></a>
+                                        <a href="@Model.SitesInfo.Twitter" class="icon-twitter"></a>
                             }
                        }
+                            </div>
+                        </div>
                     </div>
                 </div>
+                <div class="footer-copyright">
+                    <div class="row">
+                        <div class="col-md-6">
+                            &copy;&nbsp;2009-@currentYear&nbsp;@ViewBag.MedCap<br />
+                            @ViewBag.Quote
+                        </div>
+                        <div class="col-md-4">
+                            @ViewBag.Concept<br />
+                            @ViewBag.Coordination
+                        </div>
+                        <div class="col-md-2">
+                            Конструктор сайтов:
+                            <a href="#">
+                                <div class="asoft_logo"></div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <!-- конец подвала -->
             </div>
         </div>
-        <div class="footer-copyright">
-            <div class="row">
-                <div class="col-md-6">
-                    &copy;&nbsp;2009-@currentYear&nbsp;@ViewBag.MedCap<br />
-                    @ViewBag.Quote
-                </div>
-                <div class="col-md-4">
-                    @ViewBag.Concept<br />
-                    @ViewBag.Coordination
-                </div>
-                <div class="col-md-2">
-                    Конструктор сайтов:
-                    <a href="#">
-                        <div class="asoft_logo"></div>
-                    </a>
-                </div>
-            </div>
-        </div>
-        <!-- конец подвала -->
-    </div> 
+    </div>
+    <script type="text/javascript">
+        var SiteId = "@Model.SitesInfo.Alias";
+    </script>
 </body>
 </html>

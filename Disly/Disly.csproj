@@ -856,6 +856,7 @@
     <Content Include="Views\Doctors\part\item.cshtml" />
     <Content Include="Views\Doctors\part\list.cshtml" />
     <Content Include="Views\MedicalServices\Index.cshtml" />
+    <Content Include="Views\Shared\part\childlist.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

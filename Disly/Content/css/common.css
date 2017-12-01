@@ -4,14 +4,29 @@
 @import url('/Content/fonts/fontello/fontello.css');
 @import url('/Content/fonts/OpenSans/opensans.css');
 
-html {    overflow-x: hidden;}
+html {
+    overflow-x: hidden;
+    overflow-y: scroll;
+    height: 100%;
+}
 body {
     font-family: PtSans;
     color: #000;
     background-color: #fff;
     font-size: 16px;
+    height: 100%;
 }
-.type-page{padding-bottom:40px;}
+.cont_wrap { min-height: 100%;    position: relative;    padding-bottom: 435px;}
+.bottom_block {
+    padding: 25px 0;
+    width: 100%;
+    position: absolute !important;
+    bottom: 0;
+    z-index:2;
+}
+.type-page {
+    padding-bottom: 40px;
+}
 
 @media (min-width: 1200px) {
     .container {
@@ -101,6 +116,65 @@ body {
     font-weight: bold;
     margin-right: 4px;
 }
+
+
+/*блок поиска*/
+input#filtr_data {
+    max-width: 140px;
+}
+.search_form_hide .seacrh_input {
+    width: 50px;
+    font-size: 14px;
+    -webkit-transition: all 0.5s;
+    -moz-transition: all 0.5s;
+    transition: all 0.5s;
+    background-color: rgba(255, 255, 255, 0);
+    border: none;
+    position: absolute;
+    right: -22px;    
+    cursor: pointer;
+    z-index: 9;
+    padding: 15px 25px;
+}
+
+    .search_form_hide .seacrh_input:focus {
+        width: 380px;
+        cursor: auto;
+        background-image: none;
+        display: block;
+        outline: none;
+        right: 55px;
+        background-color:#ccc;
+
+    }
+
+.seacrh_input:focus+.seacrh_button {
+    background-color: #ccc;
+}
+.seacrh_input:focus + .seacrh_button:hover:before {
+    color: #fff;
+}
+
+.search_form_hide .seacrh_button {
+    width: 50px;
+    height: 50px;    
+    cursor: pointer;
+    color: #fff;    
+    display: block;    
+    line-height:40px;
+}
+
+.search.menu_item {
+    text-align: center;
+    width: 47px;
+    height: 50px;
+    margin-right: 8px;
+}
+
+.seacrh_button__hide {
+    width: 15px;
+}
+
 /*  */
 
 /* нижние баннеры */
@@ -1080,7 +1154,7 @@ body {
 
     .main-menu li > a {
         background-color: transparent !important;
-        padding: 13px 25px 16px!important;
+        padding: 13px 25px 13px!important;
         padding-left: 0 !important;
         font-size: 14px;
         color:#333;
@@ -1235,6 +1309,7 @@ body {
 }
 
 .top-slider-wrapper {    
+    margin-top:3px;
     padding-top: 30px;
     padding-bottom: 20px;
 }
@@ -1367,6 +1442,7 @@ body {
     padding: 20px 15px;
     font-size: 18px;
     background-color: #fff;
+    color:#222;
 }
 
 .imglink-pic {

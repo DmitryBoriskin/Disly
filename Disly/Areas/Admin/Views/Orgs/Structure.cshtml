@@ -5,13 +5,13 @@
 @{
     string urlParam = "/Admin/Services/ChangePermit?group=orgs_department";
 }
-@if (Model.UserResolution.Write)
+@if (Model.UserResolution.Read)
 {
     <div class="content">
         <h1>@ViewBag.Title</h1>
         @Html.Partial("part/bread")
         @Html.Hidden("orgid", orgid)
-        @Html.TextBoxFor(m => m.StructureItem.Title, new { required = "", type = "text", maxlength = "256", title = "Название подразделения" })               
+        @Html.TextBoxFor(m => m.StructureItem.Title, new { required = "", type = "text", maxlength = "256", title = "Название подразделения" })
         <div class="group-block open" title="Телефон и e-mail">
             <div class="row">
                 <div class="col-md-4">@Html.TextBoxFor(m => m.StructureItem.Phone, new { type = "text", maxlength = "256", title = "Телефон приемной" })</div>
@@ -36,7 +36,7 @@
                 <div class="col-xs-12">
                     <div id="map">
                         <script type="text/javascript">
-                        Coords('@ViewBag.Ycoord', '@ViewBag.Xcoord', '@ViewBag.Titlecoord', '', '14');
+                            Coords('@ViewBag.Ycoord', '@ViewBag.Xcoord', '@ViewBag.Titlecoord', '', '14');
                         </script>
                     </div>
                 </div>
@@ -49,15 +49,21 @@
             @Html.TextAreaFor(m => m.StructureItem.Schedule, new { type = "editor", title = "Текст", height = "100" })
         </div>
 
-        @if (Model.StructureItem != null)
+        @if (Model.StructureItem != null && Model.SectionResolution != null)
         {
             <div class="child-list">
                 <div class="child-list_head">
                     <div class="row">
                         <div class="col-lg-5"><h1>Отделения</h1></div>
-                        <div class="col-lg-7 text-right">                            
-                            <a class="button icon-create green pull-right" href="/admin/orgs/department/@Guid.NewGuid()?strucid=@Model.StructureItem.Id">Добавить</a>
-                            <a class="button icon-sort pull-right" style="max-width:150px;"data-action="noPreloader-accept" id="sorting_element" title="Добавляет возможность сортировки элементов списка">Сортировать</a>
+                        <div class="col-lg-7 text-right">
+                            @if (Model.SectionResolution.Write)
+                            {
+                                <a class="button icon-create green pull-right" href="/admin/orgs/department/@Guid.NewGuid()?strucid=@Model.StructureItem.Id">Добавить</a>
+                            }
+                            @if (Model.SectionResolution.Change)
+                            {
+                                <a class="button icon-sort pull-right" style="max-width:150px;" data-action="noPreloader-accept" id="sorting_element" title="Добавляет возможность сортировки элементов списка">Сортировать</a>
+                            }
                         </div>
                     </div>
                 </div>
@@ -68,8 +74,8 @@
                                 <th>&nbsp;</th>
                                 <th>Название</th>
                             </tr>
-                        </thead>  
-                        <tbody  data-service="@urlParam">
+                        </thead>
+                        <tbody data-service="@urlParam">
                             @if (Model.StructureItem.Departments != null)
                             {
                                 foreach (var item in Model.StructureItem.Departments)
@@ -82,7 +88,7 @@
                                     </tr>
                                 }
                             }
-                        </tbody>                        
+                        </tbody>
                     </table>
                 </div>
 
@@ -92,7 +98,7 @@
         {
             <p>
                 <br />
-                Отделения можно добавлять только после создания струкутурного подразделения. 
+                Отделения можно добавлять только после создания струкутурного подразделения.
             </p>
         }
 
@@ -101,13 +107,6 @@
         <div class="dop-caption">Дополнительно</div>
         <div class="group-block open" title="Руководитель отделения">
             @Html.TextBoxFor(m => m.DepartmentItem.DirecorPost, new { type = "text", title = "Должность" })
-            @*@if (Model.DepartmentItem != null)
-            {
-                if (PeopleList != null)
-                {
-                    @Html.DropDownListFor(m => m.DepartmentItem.DirectorF, PeopleList, new { @class = "selectpicker", @title = "Выберите врача из списка" })
-                }
-            }*@
         </div>
 
     </div>
@@ -118,11 +117,11 @@ else
 }
 
 <div class="buttons">
-    @if ((Model.Item != null && Model.UserResolution.Change) || (Model.Item == null && Model.UserResolution.Write))
+    @if ((Model.StructureItem != null && Model.SectionResolution.Change) || (Model.StructureItem == null && Model.SectionResolution.Write))
     {
         <button type="submit" name="action" value="save-structure-btn" data-primary="true" class="button icon-create">Сохранить</button>
     }
-    @if (Model.StructureItem != null && Model.UserResolution.Delete)
+    @if (Model.StructureItem != null && Model.SectionResolution.Delete)
     {
         <button type="submit" name="action" value="delete-structure-btn" data-action="delete" class="button icon-delete">Удалить</button>
     }

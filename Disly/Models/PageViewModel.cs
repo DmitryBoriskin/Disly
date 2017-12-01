@@ -36,7 +36,7 @@ namespace Disly.Models
         /// </summary>
         public SiteMapModel CurrentPage { get; set; }
         /// <summary>
-        /// Дочерние элементы
+        /// дочерние элементы
         /// </summary>
         public SiteMapModel[] Child { get; set; }
     }

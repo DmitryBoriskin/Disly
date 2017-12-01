@@ -59,7 +59,7 @@
             }            
         </div>
         <div class="col-md-3 col-md-push-1">
-            <div class="boss pull-right">
+            <div class="boss">
                 @if (Model.DepartmentItem.Boss != null)
                 {
                     <a href="/doctors/@Model.DepartmentItem.Boss.Id" class="boss_img_wrap">
@@ -75,7 +75,7 @@
                     <a class="boss_fio" href="/doctors/@Model.DepartmentItem.Boss.Id">@Model.DepartmentItem.Boss.FIO</a>
                     <div class="boss_post">@Model.DepartmentItem.Boss.Post</div>
                 }
-                <a class="link_all" href="/doctors/?group=@Model.DepartmentItem.Id">все сотрудники</a>
+                <a class="link_all" href="/doctors/?group=@Model.DepartmentItem.Id">все сотрудники</a>                
                 <div id="coords" class="buildmap" style="width: 100%; height: 250px;" data-zoom="11" data-height="300" data-x="@Model.StructureItem.GeopointX.ToString().Replace(",", ".")" data-y="@Model.StructureItem.GeopointY.ToString().Replace(",", ".")" data-title="@Model.StructureItem.Title"></div>
             </div>
         </div>
