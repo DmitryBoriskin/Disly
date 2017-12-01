@@ -10,7 +10,7 @@ namespace Disly.Models
     {        
         public OrgsModel OrgItem { get; set; }
         public StructureModel[] Structures { get; set; }      
-        public OrgsAdministrativ[] Administrativ { get; set; }
+        public OrgsAdministrative[] Administrativ { get; set; }
         /// <summary>
         /// тип информации показываемой на странице 
         /// </summary>

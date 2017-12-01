@@ -86,7 +86,7 @@ namespace cms.dbase
                 if (data != null)
                 {
                     SiteId = data.f_site;
-                }                
+                }
 
                 return SiteId;
             }

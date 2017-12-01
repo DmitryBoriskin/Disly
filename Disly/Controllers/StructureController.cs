@@ -40,7 +40,7 @@ namespace Disly.Controllers
             string _alias = UrlPath.Substring(UrlPath.LastIndexOf("/") + 1);
             #endregion
 
-            model.Structures = _repository.getStructures(Domain);
+            model.Structures = _repository.getStructures(); //Domain
             //если в списке только одна структура — редиректим на него
             if (model.Structures.Length ==1)
             {
@@ -70,7 +70,7 @@ namespace Disly.Controllers
         /// <returns></returns>
         public ActionResult Item(int num)
         {
-            model.StructureItem = _repository.getStructureItem(Domain, num);
+            model.StructureItem = _repository.getStructureItem(num); //Domain, 
             if (model.StructureItem != null)
             {
                 if (model.Breadcrumbs != null)
@@ -114,7 +114,7 @@ namespace Disly.Controllers
         /// <returns></returns>
         public ActionResult Department(int num, Guid id)
         {
-            model.StructureItem = _repository.getStructureItem(Domain, num);
+            model.StructureItem = _repository.getStructureItem(num); //Domain,
             if (model.StructureItem != null)
             {
                 if (model.Breadcrumbs != null)

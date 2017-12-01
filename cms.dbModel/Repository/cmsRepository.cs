@@ -153,10 +153,10 @@ namespace cms.dbModel
         public abstract bool setCheckedOrgs(Guid id, Guid material);
         public abstract OrgsModelSmall[] getOrgAttachedToTypes(Guid id);
 
-        public abstract OrgsAdministrativ[] getAdministrativList(Guid id);
-        public abstract OrgsAdministrativ getAdministrativ(Guid id);
-        public abstract bool insAdministrativ(Guid id, OrgsAdministrativ ins);
-        public abstract bool updAdministrativ(Guid id, OrgsAdministrativ upd);
+        public abstract OrgsAdministrative[] getAdministrativList(Guid id);
+        public abstract OrgsAdministrative getAdministrativ(Guid id);
+        public abstract bool insAdministrativ(Guid id, OrgsAdministrative ins);
+        public abstract bool updAdministrativ(Guid id, OrgsAdministrative upd);
         public abstract bool delAdministrativ(Guid id);
         public abstract bool permit_OrgsAdminstrativ(Guid id, Guid OrgId, int num);
         public abstract DepartmentAffiliationModel[] getDepartmentAffiliations();

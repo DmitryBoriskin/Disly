@@ -8,12 +8,6 @@
     <div class="content">
         <h1>@ViewBag.Title</h1>
 
-        @if (Model.Item != null)
-        {
-            <h1>@Model.Item.Title</h1>
-        }
-        @Html.Partial("part/childlist")
-
         @if (Model.List != null)
         {
             foreach (FeedbackModel Item in Model.List.Data)

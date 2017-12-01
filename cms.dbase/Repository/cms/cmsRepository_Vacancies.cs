@@ -18,8 +18,9 @@ namespace cms.dbase
         {
             using (var db = new CMSdb(_context))
             {
-                var query = db.content_vacanciess.Where(w => w.id != null);
-                query = query.OrderByDescending(o => o.d_date);
+                var query = db.content_vacanciess
+                    .Where(w => w.f_site == _domain)
+                    .OrderByDescending(o => o.d_date);
 
                 if (query.Any())
                 {
@@ -114,7 +115,8 @@ namespace cms.dbase
                             c_salary = vacancy.Salary,
                             c_desc = vacancy.Desc,
                             b_temporarily = vacancy.Temporarily,
-                            b_disabled = vacancy.Disabled
+                            b_disabled = vacancy.Disabled,
+                            f_site = _domain
                         };
 
 

@@ -38,8 +38,11 @@ namespace Disly.Controllers
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             base.OnActionExecuting(filterContext);
-            
-            try { Domain = _repository.getSiteId(Request.Url.Host.ToLower().Replace("www.", "")); }
+
+            try {
+                var domainUrl = Request.Url.Host.ToLower().Replace("www.", "");
+                Domain = _repository.getSiteId(domainUrl);
+            }
             catch
             {
                 if (Request.Url.Host.ToLower().Replace("www.", "") != ConfigurationManager.AppSettings["BaseURL"]) filterContext.Result = Redirect("/Error/");
@@ -47,25 +50,24 @@ namespace Disly.Controllers
             }
 
             #region Получаем данные из адресной строки
-            string UrlPath = "/" + (String)RouteData.Values["path"];
+            string UrlPath = Request.Path;
             if (UrlPath.LastIndexOf("/") > 0 && UrlPath.LastIndexOf("/") == UrlPath.Length - 1) UrlPath = UrlPath.Substring(0, UrlPath.Length - 1);
 
             string _path = UrlPath.Substring(0, UrlPath.LastIndexOf("/") + 1);
             string _alias = UrlPath.Substring(UrlPath.LastIndexOf("/") + 1);
             #endregion
-            currentPage = _repository.getSiteMap(_path, _alias, Domain);
-
+            currentPage = _repository.getSiteMap(_path, _alias); //, Domain
 
 
             ControllerName = filterContext.RouteData.Values["Controller"].ToString().ToLower();
             ActionName = filterContext.RouteData.Values["Action"].ToString().ToLower();
-            ViewName = _repository.getView(Domain, ControllerName);
+            ViewName = _repository.getView(ControllerName); //Domain, 
 
-            siteModel = _repository.getSiteInfo(Domain);
-            siteMapArray = _repository.getSiteMapList(Domain);            
+            siteModel = _repository.getSiteInfo(); //Domain
+            siteMapArray = _repository.getSiteMapList(); //Domain
 
-            breadcrumb=_repository.getBreadCrumbCollection(((System.Web.HttpRequestWrapper)Request).RawUrl, Domain);
-            bannerArray = _repository.getBanners(Domain);
+            breadcrumb =_repository.getBreadCrumbCollection(((System.Web.HttpRequestWrapper)Request).RawUrl); // Domain
+            bannerArray = _repository.getBanners(); //Domain
 
             ViewBag.MedCap = MedCap = Settings.MedCap;
             ViewBag.Quote = Quote = Settings.Quote;
@@ -76,7 +78,16 @@ namespace Disly.Controllers
 
         public RootController()
         {
-            _repository = new FrontRepository("cmsdbConnection");
+            var domainUrl = "";
+
+            if (System.Web.HttpContext.Current != null)
+            {
+                var context = System.Web.HttpContext.Current;
+
+                if (context.Request != null && context.Request.Url != null && !string.IsNullOrEmpty(context.Request.Url.Host))
+                    domainUrl = context.Request.Url.Host.ToLower().Replace("www.", "");
+            }
+            _repository = new FrontRepository("cmsdbConnection", domainUrl);
         }
         
         [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = true)]

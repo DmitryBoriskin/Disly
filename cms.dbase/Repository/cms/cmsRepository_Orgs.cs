@@ -1560,7 +1560,7 @@ namespace cms.dbase
         /// </summary>
         /// <param name="id">идентификатор организации</param>
         /// <returns></returns>
-        public override OrgsAdministrativ[] getAdministrativList(Guid id)
+        public override OrgsAdministrative[] getAdministrativList(Guid id)
         {
             using (var db = new CMSdb(_context))
             {
@@ -1569,7 +1569,7 @@ namespace cms.dbase
                 {
                     query = query.OrderBy(o => o.n_sort);
                     return query
-                                .Select(s => new OrgsAdministrativ()
+                                .Select(s => new OrgsAdministrative()
                                 {
                                     id = s.id,
                                     Surname = s.c_surname,
@@ -1587,13 +1587,13 @@ namespace cms.dbase
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public override OrgsAdministrativ getAdministrativ(Guid id)
+        public override OrgsAdministrative getAdministrativ(Guid id)
         {
             using (var db = new CMSdb(_context))
             {
                 var query = db.content_orgs_adminstrativs
                               .Where(w => w.id == id)
-                              .Select(s => new OrgsAdministrativ
+                              .Select(s => new OrgsAdministrative
                               {
                                   id = s.id,
                                   Surname = s.c_surname,
@@ -1621,7 +1621,7 @@ namespace cms.dbase
         /// <param name="id">Идентификатор</param>
         /// <param name="ins">Модель для вставки</param>
         /// <returns></returns>
-        public override bool insAdministrativ(Guid id, OrgsAdministrativ ins)
+        public override bool insAdministrativ(Guid id, OrgsAdministrative ins)
         {
             using (var db = new CMSdb(_context))
             {
@@ -1660,7 +1660,7 @@ namespace cms.dbase
         /// <param name="id">Идентификатор</param>
         /// <param name="upd">Модель для обновления</param>
         /// <returns></returns>
-        public override bool updAdministrativ(Guid id, OrgsAdministrativ upd)
+        public override bool updAdministrativ(Guid id, OrgsAdministrative upd)
         {
             using (var db = new CMSdb(_context))
             {
@@ -1717,7 +1717,7 @@ namespace cms.dbase
                 //текущее значение элемента чей приоритет меняется
                 var data = db.content_orgs_adminstrativs
                     .Where(w => w.id.Equals(id))
-                    .Select(s => new OrgsAdministrativ
+                    .Select(s => new OrgsAdministrative
                     {
                         Sort = s.n_sort,
                         OrgId = s.f_org

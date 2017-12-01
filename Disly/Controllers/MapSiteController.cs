@@ -36,7 +36,7 @@ namespace Disly.Controllers
         // GET: MapSite
         public ActionResult Index()
         {
-            model.List = _repository.getMapSiteList(Domain);
+            model.List = _repository.getSiteMapListShort(); //Domain
             return View(model);
         }
     }
