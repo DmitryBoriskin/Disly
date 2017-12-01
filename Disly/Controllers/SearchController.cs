@@ -29,7 +29,7 @@ namespace Disly.Controllers
         /// Сраница по умолчанию
         /// </summary>
         /// <returns></returns>
-        public ActionResult Index()
+        public ActionResult Index(string searchtext)
         {
             #region Получаем данные из адресной строки
             string UrlPath = "/" + (String)RouteData.Values["path"];
@@ -38,6 +38,7 @@ namespace Disly.Controllers
             string _path = UrlPath.Substring(0, UrlPath.LastIndexOf("/") + 1);
             string _alias = UrlPath.Substring(UrlPath.LastIndexOf("/") + 1);
             #endregion
+            ViewBag.SearchText = (searchtext!=null)?searchtext.Replace("%20", " "):String.Empty;
 
             model.Item = _repository.getSiteMap(_path,_alias,Domain);
             if (model.Item != null)

@@ -9,6 +9,11 @@
 .head_title h4 {
     color: @def1
 }
+.bottom_menu a:hover,
+.right_section a:hover{
+    color:@def2;
+    &:before{color:#ccc;}
+}
 
 .media-heading {
     color: @def1;
@@ -142,23 +147,12 @@
     box-shadow: @bottom-shadow;
 }
 
-.bottomIndent {
-    &-15 {
-        margin-bottom: 15px;
-    }
-
-    &-20 {
-        margin-bottom: 20px;
-    }
-
-    &-30 {
-        margin-bottom: 30px;
-    }
-}
-
 .linkimg_item a:hover .imglink-title {
     color: @def2;
 }
 
 .searchform button{background-color:@def2;}
 .searchform button:hover{background-color:@def1;}
+
+.searchform_dop button{background-color:@def2;}
+.searchform_dop button:hover{background-color:@def1;}
