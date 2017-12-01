@@ -148,6 +148,9 @@ namespace cms.dbModel.entity
         public IEnumerable<string> DomainListArray { get; set; }
     }
 
+    /// <summary>
+    /// Сокращённая модель сайта
+    /// </summary>
     public class SitesShortModel
     {
         /// <summary>
@@ -183,6 +186,7 @@ namespace cms.dbModel.entity
         /// </summary>
         public bool Checked { get; set; }
     }
+
     /// <summary>
     /// Модель, описывающая домен
     /// </summary>
