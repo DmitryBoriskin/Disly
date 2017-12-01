@@ -15,7 +15,7 @@ namespace Disly.Areas.Admin.Controllers
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             base.OnActionExecuting(filterContext);
-            
+
             model = new MainSpecialistViewModel()
             {
                 Account = AccountInfo,
@@ -41,7 +41,7 @@ namespace Disly.Areas.Admin.Controllers
 
             // наполняем модель данными
             model.List = _cmsRepository.getMainSpecialistList(filter);
-            
+
             #region администратор сайта
             if (model.Account.Group.ToLower() == "admin")
             {
@@ -55,7 +55,7 @@ namespace Disly.Areas.Admin.Controllers
             #endregion
 
             ViewBag.MainSpecId = Guid.NewGuid();
-            
+
             return View(model);
         }
 
@@ -72,7 +72,7 @@ namespace Disly.Areas.Admin.Controllers
                 }
             }
             #endregion
-            
+
             model.Item = _cmsRepository.getMainSpecialistItem(id);
 
             if (model.Item != null)
@@ -91,7 +91,7 @@ namespace Disly.Areas.Admin.Controllers
                 // список сотрудников для данных специализаций
                 model.EmployeeList = _cmsRepository.getEmployeeList(specs.ToArray());
             }
-            
+
             return View("Item", model);
         }
 
@@ -126,18 +126,20 @@ namespace Disly.Areas.Admin.Controllers
                 else
                     userMessage.info = "Произошла ошибка";
 
-                userMessage.buttons = new ErrorMassegeBtn[]{
+                userMessage.buttons = new ErrorMassegeBtn[]
+                {
                      new ErrorMassegeBtn { url = StartUrl + Request.Url.Query, text = "Вернуться в список" },
                      new ErrorMassegeBtn { url = "#", text = "ок", action = "false" }
-                 };
+                };
             }
             else
             {
                 userMessage.info = "Ошибка в заполнении формы. Поля в которых допушены ошибки - помечены цветом.";
 
-                userMessage.buttons = new ErrorMassegeBtn[]{
+                userMessage.buttons = new ErrorMassegeBtn[]
+                {
                      new ErrorMassegeBtn { url = "#", text = "ок", action = "false" }
-                 };
+                };
             }
 
             string specialisations = null;
@@ -156,7 +158,7 @@ namespace Disly.Areas.Admin.Controllers
                 return View("Item", model);
             }
         }
-        
+
         [HttpPost]
         [MultiButton(MatchFormKey = "action", MatchFormValue = "insert-btn")]
         public ActionResult Insert()
@@ -185,7 +187,8 @@ namespace Disly.Areas.Admin.Controllers
             ErrorMassege userMassege = new ErrorMassege();
             userMassege.title = "Информация";
             userMassege.info = "Запись Удалена";
-            userMassege.buttons = new ErrorMassegeBtn[]{
+            userMassege.buttons = new ErrorMassegeBtn[]
+            {
                 new ErrorMassegeBtn { url = "#", text = "ок", action = "false" }
             };
 

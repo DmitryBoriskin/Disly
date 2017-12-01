@@ -947,7 +947,8 @@ namespace Disly.Areas.Admin.Controllers
                     back_model.AdministrativItem.OrgId = Guid.Parse(OrgId);
                     _cmsRepository.insAdministrativ(Id, back_model.AdministrativItem);
                     userMassege.info = "Запись создана";
-                    userMassege.buttons = new ErrorMassegeBtn[]{
+                    userMassege.buttons = new ErrorMassegeBtn[]
+                    {
                         new ErrorMassegeBtn { url = StartUrl + Request.Url.Query, text = "вернуться в список" },
                         new ErrorMassegeBtn { url = "/admin/orgs/administrativ/"+Id, text = "ок", action = "false" }
                     };
@@ -956,7 +957,8 @@ namespace Disly.Areas.Admin.Controllers
                 {
                     _cmsRepository.updAdministrativ(Id, back_model.AdministrativItem);
                     userMassege.info = "Запись сохранена";
-                    userMassege.buttons = new ErrorMassegeBtn[]{
+                    userMassege.buttons = new ErrorMassegeBtn[]
+                    {
                         new ErrorMassegeBtn { url = StartUrl + Request.Url.Query, text = "вернуться в список" },
                         new ErrorMassegeBtn { url = "/admin/orgs/administrativ/"+Id, text = "ок", action = "false" }
                     };
