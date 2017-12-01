@@ -133,13 +133,15 @@
 
                                                         <p>
                                                             @if (!string.IsNullOrWhiteSpace(linkToOrg))
-                                                        {
-                                                                <a target="_blank" href="@linkToOrg">@p.OrgTitle</a> @p.Name
-                                                        }
-                                                        else
-                                                        {
-                                                                @p.OrgTitle @p.Name
-                                                        }
+                                                            {
+                                                                    <a target="_blank" href="@linkToOrg">@p.OrgTitle</a> @p.Name
+                                                            }
+                                                            else
+                                                            {
+                                                                string s = p.OrgTitle + " " + p.Name;
+
+                                                                @s
+                                                            }
                                                         </p>
                                                 }
                                             }
