@@ -26,7 +26,7 @@ namespace Disly.Areas.Admin.Controllers
             ViewBag.Query = Request.QueryString;
 
             filter = getFilter();
-            
+
             model = new OrgsViewModel()
             {
                 Account = AccountInfo,
@@ -65,7 +65,7 @@ namespace Disly.Areas.Admin.Controllers
                 }
             }
             #endregion
-            
+
             var orgfilter = FilterParams.Extend<OrgFilter>(filter);
 
             // Текущая организация
@@ -225,9 +225,10 @@ namespace Disly.Areas.Admin.Controllers
                 else
                 {
                     userMessege.info = "Произошла ошибка";
-                    userMessege.buttons = new ErrorMassegeBtn[]{
-                    new ErrorMassegeBtn { url = "#", text = "ок", action = "false" }
-                };
+                    userMessege.buttons = new ErrorMassegeBtn[]
+                    {
+                        new ErrorMassegeBtn { url = "#", text = "ок", action = "false" }
+                    };
                 }
                 #endregion
             }
@@ -239,7 +240,8 @@ namespace Disly.Areas.Admin.Controllers
                     if (_cmsRepository.insertOrg(id, back_model.Item)) //, AccountInfo.id, RequestUserInfo.IP
                     {
                         userMessege.info = "Запись создана";
-                        userMessege.buttons = new ErrorMassegeBtn[]{
+                        userMessege.buttons = new ErrorMassegeBtn[]
+                        {
                             new ErrorMassegeBtn { url = StartUrl + Request.Url.Query, text = "вернуться в список" },
                             new ErrorMassegeBtn { url = "/admin/orgs/item"+id, text = "ок", action = "false" }
                         };
@@ -260,7 +262,7 @@ namespace Disly.Areas.Admin.Controllers
             model.ErrorInfo = userMessege;
             return View("Item", model);
         }
-        
+
         [HttpPost]
         [ValidateInput(false)]
         [MultiButton(MatchFormKey = "action", MatchFormValue = "delete-btn")]
@@ -623,7 +625,7 @@ namespace Disly.Areas.Admin.Controllers
                 return Redirect(StartUrl);
             }
         }
-        
+
         public ActionResult Department(Guid id)
         {
             #region администратор сайта
@@ -771,7 +773,7 @@ namespace Disly.Areas.Admin.Controllers
             _cmsRepository.delDepartmentsPhone(id);
             return null;
         }
-        
+
         [HttpPost]
         [MultiButton(MatchFormKey = "action", MatchFormValue = "add-new-people-depart")]
         public ActionResult AddPeople()

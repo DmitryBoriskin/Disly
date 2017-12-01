@@ -114,7 +114,6 @@ namespace cms.dbase
                         Email = s.c_email,
                         Site = s.c_url,
                         Worktime = s.c_worktime,
-                        //Logo = s.c_logo,
                         Logo = new Photo
                         {
                             Url = s.c_logo
@@ -130,6 +129,11 @@ namespace cms.dbase
             }
         }
 
+        /// <summary>
+        /// Получаем сайт по домену
+        /// </summary>
+        /// <param name="domain">Домен</param>
+        /// <returns></returns>
         public override SitesModel getSite(string domain)
         {
             using (var db = new CMSdb(_context))
@@ -147,7 +151,6 @@ namespace cms.dbase
                         Email = s.c_email,
                         Site = s.c_url,
                         Worktime = s.c_worktime,
-                        //Logo = s.c_logo,
                         Logo = new Photo
                         {
                             Url = s.c_logo
@@ -194,8 +197,7 @@ namespace cms.dbase
                             .Set(u => u.c_twitter, item.Twitter)
                             .Set(s => s.c_logo, item.Logo.Url)
                             .Update();
-
-                        //insertLog(user, ip, "update", item.Id, String.Empty, "Sites", item.Title);
+                        
                         var log = new LogModel()
                         {
                             Site = _domain,
@@ -218,6 +220,11 @@ namespace cms.dbase
         }
 
         #region Работа с логами
+        /// <summary>
+        /// Список логов по пользователю
+        /// </summary>
+        /// <param name="UserId"></param>
+        /// <returns></returns>
         public override cmsLogModel[] getCmsUserLog(Guid UserId)
         {
             using (var db = new CMSdb(_context))
@@ -240,6 +247,12 @@ namespace cms.dbase
                 else { return data.ToArray(); }
             }
         }
+
+        /// <summary>
+        /// Список логов по странице
+        /// </summary>
+        /// <param name="PageId"></param>
+        /// <returns></returns>
         public override cmsLogModel[] getCmsPageLog(Guid PageId)
         {
             using (var db = new CMSdb(_context))
@@ -262,6 +275,10 @@ namespace cms.dbase
             }
         }
 
+        /// <summary>
+        /// Добавление логов
+        /// </summary>
+        /// <param name="log"></param>
         public override void insertLog(LogModel log)
         {
             using (var db = new CMSdb(_context))
@@ -285,6 +302,11 @@ namespace cms.dbase
         #endregion
 
         #region CmsMenu
+        /// <summary>
+        /// Проверка существования эл-та меню
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public override bool check_cmsMenu(Guid id)
         {
             using (var db = new CMSdb(_context))
@@ -297,6 +319,12 @@ namespace cms.dbase
                 return result;
             }
         }
+
+        /// <summary>
+        /// Проверка существования эл-та меню
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public override bool check_cmsMenu(string alias)
         {
             using (var db = new CMSdb(_context))
@@ -310,6 +338,11 @@ namespace cms.dbase
             }
         }
 
+        /// <summary>
+        /// Список эл-тов меню
+        /// </summary>
+        /// <param name="user_id"></param>
+        /// <returns></returns>
         public override cmsMenuModel[] getCmsMenu(Guid user_id)
         {
             using (var db = new CMSdb(_context))
@@ -328,6 +361,13 @@ namespace cms.dbase
                 else { return data.ToArray(); }
             }
         }
+
+        /// <summary>
+        /// Список эл-тов меню
+        /// </summary>
+        /// <param name="group_id"></param>
+        /// <param name="user_id"></param>
+        /// <returns></returns>
         public override cmsMenuItem[] getCmsMenuItems(string group_id, Guid user_id)
         {
             using (var db = new CMSdb(_context))
@@ -349,6 +389,12 @@ namespace cms.dbase
                 else { return data.ToArray(); }
             }
         }
+
+        /// <summary>
+        /// Эл-т меню
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public override cmsMenuItem getCmsMenuItem(Guid id)
         {
             using (var db = new CMSdb(_context))
@@ -370,6 +416,11 @@ namespace cms.dbase
                 else { return data.First(); }
             }
         }
+
+        /// <summary>
+        /// Список типов эл-тов меню
+        /// </summary>
+        /// <returns></returns>
         public override cmsMenuType[] getCmsMenuType()
         {
             using (var db = new CMSdb(_context))
@@ -388,6 +439,12 @@ namespace cms.dbase
             }
         }
 
+        /// <summary>
+        /// Создание эл-та меню
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="Item"></param>
+        /// <returns></returns>
         public override bool createCmsMenu(Guid id, cmsMenuItem Item)
         {
             using (var db = new CMSdb(_context))
@@ -406,9 +463,7 @@ namespace cms.dbase
                         .Value(p => p.f_group, Item.Group)
                         .Value(p => p.c_desc, Item.Desc)
                        .Insert();
-
-
-                    //insertLog(UserId, IP, "insert", id, String.Empty, "CmsMenu", Item.Title);
+                    
                     // логирование
                     var log = new LogModel()
                     {
@@ -477,8 +532,7 @@ namespace cms.dbase
                             .Value(v => v.b_importent, false)
                             .Insert();
                     }
-
-                    //insertLog(UserId, IP, "change_resolutions", id, String.Empty, "CmsMenu", Item.Title);
+                    
                     // логирование
                     log = new LogModel()
                     {
@@ -497,6 +551,13 @@ namespace cms.dbase
                 }
             }
         }
+
+        /// <summary>
+        /// Обновление эл-та меню
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="Item"></param>
+        /// <returns></returns>
         public override bool updateCmsMenu(Guid id, cmsMenuItem Item)
         {
             using (var db = new CMSdb(_context))
@@ -514,8 +575,7 @@ namespace cms.dbase
                         .Set(p => p.f_group, Item.Group)
                         .Set(p => p.c_desc, Item.Desc)
                         .Update();
-
-                        //insertLog(UserId, IP, "update", id, String.Empty, "CmsMenu", Item.Title);
+                        
                         // логирование
                         var log = new LogModel()
                         {
@@ -536,6 +596,12 @@ namespace cms.dbase
                 }
             }
         }
+
+        /// <summary>
+        /// Удаление эл-та меню
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public override bool deleteCmsMenu(Guid id)
         {
             using (var db = new CMSdb(_context))
@@ -552,8 +618,7 @@ namespace cms.dbase
                         .Update();
 
                     db.cms_menus.Where(w => w.id == id).Delete();
-
-                    //insertLog(UserId, IP, "delete", id, String.Empty, "CmsMenu", logTitle);
+                    
                     // логирование
                     var log = new LogModel()
                     {
@@ -572,17 +637,28 @@ namespace cms.dbase
                 }
             }
         }
+
+        /// <summary>
+        /// Сортировка меню
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="num"></param>
+        /// <returns></returns>
         public override bool permit_cmsMenu(Guid id, int num)
         {
             using (var db = new CMSdb(_context))
             {
-                //db.cmsMenu_ChangePermit(id, num).ToArray();
                 return true;
             }
         }
         #endregion
 
         #region Site
+        /// <summary>
+        /// Список сайтов
+        /// </summary>
+        /// <param name="filtr"></param>
+        /// <returns></returns>
         public override SitesList getSiteList(FilterParams filtr)
         {
             using (var db = new CMSdb(_context))
@@ -633,6 +709,11 @@ namespace cms.dbase
             }
         }
 
+        /// <summary>
+        /// Список сайтов
+        /// </summary>
+        /// <param name="filtr"></param>
+        /// <returns></returns>
         public override SitesShortModel[] getSiteListWithCheckedForUser(SiteFilter filtr)
         {
             using (var db = new CMSdb(_context))
@@ -662,6 +743,11 @@ namespace cms.dbase
             }
         }
 
+        /// <summary>
+        /// Проверка существования сайта
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public override bool check_Site(Guid id)
         {
             using (var db = new CMSdb(_context))
@@ -673,6 +759,11 @@ namespace cms.dbase
             }
         }
 
+        /// <summary>
+        /// Добавление сайта
+        /// </summary>
+        /// <param name="ins"></param>
+        /// <returns></returns>
         public override bool insertSite(SitesModel ins)
         {
             using (var db = new CMSdb(_context))
@@ -786,8 +877,7 @@ namespace cms.dbase
                             }
                         }
                         #endregion
-
-                        // insertLog(UserId, IP, "insert", ins.Id, String.Empty, "Sites", ins.Title);
+                        
                         // логирование
                         var log = new LogModel()
                         {
@@ -808,11 +898,13 @@ namespace cms.dbase
                 }
             }
         }
-
-
-
-
-
+        
+        /// <summary>
+        /// Обновление сайта
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="upd"></param>
+        /// <returns></returns>
         public override bool updateSite(Guid id, SitesModel upd)
         {
             using (var db = new CMSdb(_context))
@@ -829,13 +921,11 @@ namespace cms.dbase
                             .Set(s => s.c_email, upd.Email)
                             .Set(s => s.c_url, upd.Site)
                             .Set(s => s.c_worktime, upd.Worktime)
-                            //.Set(s => s.c_logo, upd.Logo)
-                            //.Set(s => s.c_logo, upd.Logo.Url)
                             .Set(s => s.c_scripts, upd.Scripts)
                             .Set(s => s.b_site_off, upd.SiteOff)
                             .Update();
+
                         //Логирование
-                        // insertLog(UserId, IP, "update", id, String.Empty, "Sites", upd.Title);
                         var log = new LogModel()
                         {
                             Site = _domain,
@@ -856,6 +946,11 @@ namespace cms.dbase
             }
         }
 
+        /// <summary>
+        /// Удаление сайта
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public override bool deleteSite(Guid id)
         {
             try {
@@ -868,8 +963,8 @@ namespace cms.dbase
                         {
                             string logTitle = data.Select(s => s.c_name).FirstOrDefault();
                             data.Delete();
+
                             //логирование
-                            //insertLog(UserId, IP, "delete", id, String.Empty, "Sites", logTitle);
                             var log = new LogModel()
                             {
                                 Site = _domain,
@@ -897,6 +992,12 @@ namespace cms.dbase
            
         }
 
+        /// <summary>
+        /// Список доменов
+        /// </summary>
+        /// <param name="db"></param>
+        /// <param name="SiteId"></param>
+        /// <returns></returns>
         private Domain[] getSiteDomains(CMSdb db, string SiteId)
         {
             var data = db.cms_sites_domainss.Where(w => w.f_site == SiteId);
@@ -908,23 +1009,26 @@ namespace cms.dbase
                 }).ToArray();
             return null;
         }
-        //список доменных имен по алиасу сайта
+
+        /// <summary>
+        /// список доменных имен по алиасу сайта
+        /// </summary>
+        /// <param name="SiteId"></param>
+        /// <returns></returns>
         public override Domain[] getSiteDomains(string SiteId)
         {
             using (var db = new CMSdb(_context))
             {
-                //var data = db.cms_sites_domainss.Where(w => w.f_site == SiteId);
-                //if (data.Any())
-                //    return data.Select(s => new Domain()
-                //    {
-                //        DomainName = s.c_domain,
-                //        id = s.id
-                //    }).ToArray();
-                //return null;
                 return getSiteDomains(db, SiteId);
             }
         }
 
+        /// <summary>
+        /// Добавление домена
+        /// </summary>
+        /// <param name="SiteId"></param>
+        /// <param name="NewDomain"></param>
+        /// <returns></returns>
         public override bool insertDomain(String SiteId, string NewDomain)
         {
             using (var db = new CMSdb(_context))
@@ -941,7 +1045,6 @@ namespace cms.dbase
                                      .Value(v => v.c_domain, NewDomain)
                                      .Insert();
                         //логирование
-                        //insertLog(UserId, IP, "insert_domain", NewGuid, String.Empty, "Sites", NewDomain);
                         var log = new LogModel()
                         {
                             Site = _domain,
@@ -962,6 +1065,11 @@ namespace cms.dbase
             }
         }
 
+        /// <summary>
+        /// Удаление домена
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public override bool deleteDomain(Guid id)
         {
             using (var db = new CMSdb(_context))
@@ -975,7 +1083,6 @@ namespace cms.dbase
                         data.Delete();
 
                         //логирование
-                        // insertLog(UserId, IP, "delete_domain", id, _site, "Sites", _domain);
                         var log = new LogModel()
                         {
                             Site = _domain,
@@ -996,6 +1103,7 @@ namespace cms.dbase
                     
             }
         }
+
         /// <summary>
         /// Служит для определения идентификатора сайта
         /// </summary>
@@ -1015,7 +1123,11 @@ namespace cms.dbase
         #endregion
 
         #region Content links to objects
+        /// <summary>
         /// Добавляем связи новостей и организаций
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
         public override bool updateContentLink(ContentLinkModel data)
         {
             try
@@ -1026,9 +1138,7 @@ namespace cms.dbase
                     {
                         var link = db.content_content_links
                                                 .Where(w => w.f_content == data.ObjctId)
-                                               // .Where(w => w.f_link_type == data.LinkType.ToString().ToLower())
                                                 .Where(w => w.f_link == data.LinkId);
-                                                //.Where(w => w.b_origin != true)
 
                         if(link.Any())
                         {
@@ -1072,20 +1182,17 @@ namespace cms.dbase
 
 
         #region Person
+        /// <summary>
+        /// Список пользователей
+        /// </summary>
+        /// <param name="filtr"></param>
+        /// <returns></returns>
         public override UsersList getPersonList(FilterParams filtr)
         {
             using (var db = new CMSdb(_context))
             {
-                //string[] filtr, string group, bool disabeld, int page, int size
                 var query = db.content_peoples.Where(w => w.id != null);
-                //if ((bool)filtr.Disabled)
-                //{
-                //    query = query.Where(w => w.b_disabled == filtr.Disabled);
-                //}
-                //if (filtr.Group != String.Empty)
-                //{
-                //    query = query.Where(w => w.f_group == filtr.Group);
-                //}
+
                 if (filtr.SearchText != null)
                 {
                     foreach (string param in filtr.SearchText.Split(' '))
@@ -1096,8 +1203,7 @@ namespace cms.dbase
                         }
                     }
                 }
-
-
+                
                 query = query.OrderBy(o => new { o.c_surname, o.c_name });
 
                 if (query.Any())
@@ -1110,12 +1216,8 @@ namespace cms.dbase
                             Id = s.id,
                             Surname = s.c_surname,
                             Name = s.c_name,
+                            Patronymic = s.c_patronymic,
                             FIO = s.c_surname + " " + s.c_name + " " + s.c_patronymic
-                            //EMail = s.c_email,
-                            //Group = s.f_group,
-                            //GroupName = s.f_group_name,
-                            //Disabled = s.b_disabled
-
                         }).
                         Skip(filtr.Size * (filtr.Page - 1)).
                         Take(filtr.Size);
@@ -1138,6 +1240,11 @@ namespace cms.dbase
             }
         }
 
+        /// <summary>
+        /// Получаем пользователя
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public override UsersModel getPerson(Guid id)
         {
             using (var db = new CMSdb(_context))

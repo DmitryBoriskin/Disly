@@ -31,6 +31,9 @@ namespace cms.dbase
 #warning  Дописать потом что должно происходить!!!
             }
 
+            if (filtr.Disabled != null && (bool)filtr.Disabled)
+                query = query.Where(w => w.b_disabled);
+
             if (!string.IsNullOrEmpty(filtr.SearchText))
             {
                 query = query.Where(w => w.c_title.Contains(filtr.SearchText));
@@ -232,6 +235,7 @@ namespace cms.dbase
                         Structure = getStructureList(s.id),
                         Administrativ = getAdministrativList(s.id),
                         Oid = s.f_oid,
+                        Disabled = s.b_disabled,
                         Types = types,
                         Services = services,
                         DepartmentAffiliation = s.f_department_affiliation,
@@ -288,6 +292,7 @@ namespace cms.dbase
                             .Value(s => s.f_oid, model.Oid)
                             .Value(s => s.f_department_affiliation, model.DepartmentAffiliation)
                             .Value(s => s.c_logo, model.Logo.Url)
+                            .Value(s => s.b_disabled, model.Disabled)
                             .Insert();
 
                         // обновляем типы мед. учреждений
@@ -381,6 +386,7 @@ namespace cms.dbase
                             .Set(s => s.f_oid, model.Oid)
                             .Set(s => s.f_department_affiliation, model.DepartmentAffiliation)
                             .Set(s => s.c_logo, model.Logo.Url)
+                            .Set(s => s.b_disabled, model.Disabled)
                             .Update();
 
                         // обновляем типы мед. учреждений
