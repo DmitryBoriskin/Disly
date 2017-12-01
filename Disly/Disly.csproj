@@ -135,10 +135,6 @@
     <Content Include="Content\css\styles.css" />
     <Content Include="Content\css\styles_login.css" />
     <Content Include="Content\css\styles_old.css" />
-    <Content Include="Content\css\theme\first.css" />
-    <Content Include="Content\css\theme\first.min.css">
-      <DependentUpon>first.css</DependentUpon>
-    </Content>
     <Content Include="Content\decor\chuvashia\bg.png" />
     <Content Include="Content\decor\chuvashia\chuvashia-logo.png" />
     <Content Include="Content\decor\chuvashia\favicon.ico" />
@@ -818,6 +814,7 @@
     <Content Include="Content\fonts\OpenSans\opensans-regular-webfont.woff" />
     <Content Include="Content\fonts\OpenSans\opensans-regular-webfont.woff2" />
     <Content Include="Areas\Admin\Views\Documents\Index.cshtml" />
+    <Content Include="Content\css\theme\turquoise.less" />
     <None Include="Content\plugins\datatables\i18n\ru.json" />
     <Content Include="Content\plugins\tinymce\langs\readme.md" />
     <Content Include="Content\plugins\tinymce\skins\lightgray\fonts\tinymce-small.eot" />

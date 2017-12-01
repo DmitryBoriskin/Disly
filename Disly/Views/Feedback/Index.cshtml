@@ -10,85 +10,81 @@
         <div class="col-md-12">
             @Html.Partial("services/breadcrumbs")
             <h1>@ViewBag.Title</h1>
-            @if (!String.IsNullOrEmpty(ViewBag.Alias))
-            {
-                @Html.Partial("part/Item")
-            }
-            else
-            {
-                <div class="row">
-                    <div class="col-md-8">
-                        <div class="feedback_list">
-                            @if (Model.List != null)
+            <div class="row padding-top-30">
+                <div class="col-md-8">
+                    <div class="feedback_list">
+                        @if (Model.List != null)
+                        {
+                            if (Model.List.Data != null)
                             {
-                                if (Model.List.Data != null)
+                                foreach (var item in Model.List.Data)
                                 {
-                                    foreach (var item in Model.List.Data)
+                                    if (!string.IsNullOrEmpty(item.Text))
                                     {
-                                        if (!string.IsNullOrEmpty(item.Text))
-                                        {
-                                            shortTitle = Regex.Replace(item.Title, @"<[^>]*>", String.Empty);
-                                            shortTitle = shortTitle.Length > maxChars ? shortTitle.Substring(0, maxChars) + " ..." : shortTitle;
-                                        }
-   
-                                            <div class="feedback_item bottomIndent-20">
-                                                <div class="feedback-item-date"><span>@item.Date.ToString("HH:mm | dd.MM.yyyy")</span></div>
-                                                <div class="feedback-item-title" href="/">@shortTitle</div>
-                                                <a class="feedback-item-more" role="button" data-toggle="collapse" href="#collapseExample_@item.Id" aria-expanded="false" aria-controls="collapseExample_@item.Id">Читать &raquo;</a>
-                                                <div class="collapse" id="collapseExample_@item.Id">
-                                                    <div class="feedback-item-text">@Html.Raw(item.Text)</div>
-                                                    <div class="feedback-item-sender">@item.SenderName</div>
-                                                    <div class="feedback-item-answer">@Html.Raw(item.Answer)</div>
-                                                    <div class="feedback-item-answerer">@item.Answerer</div>
-                                                </div>
-                                            </div>
+                                        shortTitle = Regex.Replace(item.Title, @"<[^>]*>", String.Empty);
+                                        shortTitle = shortTitle.Length > maxChars ? shortTitle.Substring(0, maxChars) + " ..." : shortTitle;
                                     }
+
+                                    <div class="feedback_item">
+                                        <div class="feedback-item-date"><span>@item.Date.ToString("dd.MM.yyyy")</span></div>
+                                        <div class="feedback-item-title" href="/">@shortTitle</div>                                        
+                                        <div class="feedback-item-sender">@item.SenderName</div>
+                                        @if (item.Answer != null)
+                                        {
+                                            <div class="collapse feedback-item_info" id="collapseExample_@item.Id">
+                                                <div class="feedback-item-answer">@Html.Raw(item.Answer)</div>
+                                                <div class="feedback-item-answerer">@item.Answerer</div>
+                                            </div>
+                                            <a class="feedback-item-more" role="button" data-toggle="collapse" href="#collapseExample_@item.Id" aria-expanded="false" aria-controls="collapseExample_@item.Id"></a>
+                                        }                                        
+                                    </div>
                                 }
-                                Html.RenderAction("Pager", "Service", new { @Model = Model.List.Pager });
                             }
-                            else
-                            {
-                                <div class="col-md-12">Нет сообщений</div>
-                            }
-                        </div>
-                    </div>
-                    <div class="col-md-1"></div>
-                    <div class="col-md-3">
-                        <form role="form" class="filtr_news" action="/@ViewBag.ControllerName/@ViewBag.Filter.Category/">
-                            <div class="row">
-
-                                <div class="col-sm-12">
-                                    <div class="form-group search_news">
-                                        <label class="label_filtr" for="search_news">Ключевые слова</label>
-                                        <input type="text" class="filtr_data form-control" name="searchtext" id="search_news" value="@ViewBag.Filter.SearchText" />
-                                    </div>
-                                </div>
-
-
-                                <div class="form-group col-sm-6 col-md-6 data_start_wr">
-                                    <label class="label_filtr" for="data_start">Дата начала</label>
-                                    <div class='input-group date' id="date-begin">
-                                        <input type='text' class="form-control" name="date" data-type="date" data-mask="99.99.9999" placeholder="дд.мм.гггг" value="@ViewBag.Filter.Date" />
-                                    </div>
-                                </div>
-
-                                <div class="form-group col-sm-6 col-md-6 date-end_wr">
-                                    <label class="label_filtr" for="data_fin">Дата конца</label>
-                                    <div class='input-group date' id="date-end">
-                                        <input type='text' class="form-control" name="dateend" data-type="date" data-mask="99.99.9999" placeholder="дд.мм.гггг" value="@ViewBag.Filter.DateEnd" />
-
-                                    </div>
-                                </div>
-
-                                <div class="col-sm-12 control-filter">
-                                    <a class="btn btn-default pull-right" href="/@ViewBag.ControllerName">Очистить</a>
-                                    <button class="btn sub btn-primary" type="submit">ПРИМЕНИТЬ</button>
-                                </div>
-                            </div>
-                        </form>
+                            Html.RenderAction("Pager", "Service", new { @Model = Model.List.Pager });
+                        }
+                        else
+                        {
+                            <div class="col-md-12">Нет сообщений</div>
+                        }
                     </div>
                 </div>
-            }
+                <div class="col-md-1"></div>
+                <div class="col-md-3">
+                    <form role="form" class="filtr_news" action="/@ViewBag.ControllerName/@ViewBag.Filter.Category/">
+                        <div class="row">
+
+                            <div class="col-sm-12">
+                                <div class="form-group search_news">
+                                    <label class="label_filtr" for="search_news">Ключевые слова</label>
+                                    <input type="text" class="filtr_data form-control" name="searchtext" id="search_news" value="@ViewBag.Filter.SearchText" />
+                                </div>
+                            </div>
+
+
+                            <div class="form-group col-sm-6 col-md-6 data_start_wr">
+                                <label class="label_filtr" for="data_start">Дата начала</label>
+                                <div class='input-group date' id="date-begin">
+                                    <input type='text' class="form-control" name="date" data-type="date" data-mask="99.99.9999" placeholder="дд.мм.гггг" value="@ViewBag.Filter.Date" />
+                                </div>
+                            </div>
+
+                            <div class="form-group col-sm-6 col-md-6 date-end_wr">
+                                <label class="label_filtr" for="data_fin">Дата конца</label>
+                                <div class='input-group date' id="date-end">
+                                    <input type='text' class="form-control" name="dateend" data-type="date" data-mask="99.99.9999" placeholder="дд.мм.гггг" value="@ViewBag.Filter.DateEnd" />
+
+                                </div>
+                            </div>
+
+                            <div class="col-sm-12 control-filter">
+                                <a class="btn btn-default pull-right" href="/@ViewBag.ControllerName">Очистить</a>
+                                <button class="btn sub btn-primary" type="submit">ПРИМЕНИТЬ</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
         </div>
     </div>
 </div>
