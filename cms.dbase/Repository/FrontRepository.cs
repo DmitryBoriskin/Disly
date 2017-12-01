@@ -1616,12 +1616,26 @@ namespace cms.dbase
         {
             using (var db = new CMSdb(_context))
             {
-                string search = !string.IsNullOrWhiteSpace(filter.SearchText)
-                    ? filter.SearchText.ToLower() : null;
+                var search = !string.IsNullOrWhiteSpace(filter.SearchText)
+                    ? filter.SearchText.ToLower().Split(' ') : null; // поиск по человеку
+
+
+                var people = (from  p in db.content_peoples
+                              select  p);
+
+                if (search != null)
+                {
+                    foreach (string item in search)
+                    {
+                        people = people.Where(w => w.c_surname.Contains(item)
+                                                || w.c_name.Contains(item)
+                                                || w.c_patronymic.Contains(item));
+                    }
+                }
                 string post = !string.IsNullOrWhiteSpace(filter.Type)
                     ? filter.Type : null;
 
-                var doctors = (from p in db.content_peoples
+                var doctors = (from p in people
                                join pol in db.content_people_org_links on p.id equals pol.f_people
                                join o in db.content_orgss on pol.f_org equals o.id
                                join s in db.cms_sitess on o.id equals s.f_content into ss
@@ -1629,9 +1643,6 @@ namespace cms.dbase
                                where s.f_content == null || s.f_content == o.id
                                join pepl in db.content_people_employee_posts_links on p.id equals pepl.f_people
                                join ep in db.content_employee_postss on pepl.f_post equals ep.id
-                               where search == null || (p.c_surname.Contains(search)
-                                                        || p.c_name.Contains(search)
-                                                        || p.c_patronymic.Contains(search))
                                where post == null || pepl.f_post.ToString().Equals(post)
                                orderby p.c_surname, p.c_name, p.c_patronymic, ep.c_name
                                select new
