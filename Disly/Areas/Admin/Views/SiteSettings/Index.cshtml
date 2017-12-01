@@ -18,6 +18,7 @@
 
 <div class="dop_info-block">
     @Html.TextBoxFor(m => m.Item.Alias, new { @title = "Домен" })
+    @*@Html.DropDownListFor(m => m.Item.DepartmentAffiliation, new SelectList(Model.DepartmentAffiliations, "Key", "Value", null), new { @title = "Тип ведомственной принадлежности:", @class = "selectpicker" })*@
     @Html.TextBoxFor(m => m.Item.Site, new { @title = "Ссылка" })
     @Html.TextBox("upload", null, new { type = "file", title = "Изображение", data_name = fileName, data_size = fileSize, data_url = fileUrl, accept = ".jpg,.jpeg,.png,.gif" })
     @Html.TextBoxFor(m => m.Item.Logo.Url, new { type = "hidden", value = fileUrl })
