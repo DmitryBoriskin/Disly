@@ -20,7 +20,7 @@ body {
 .bottom_block {
     padding: 25px 0;
     width: 100%;
-    position: absolute !important;
+    
     bottom: 0;
     z-index:2;
 }
@@ -30,20 +30,18 @@ body {
 
 @media (min-width: 1200px) {
     .container {
-        width: 1110px !important;
-        /*padding: 0;*/
+        width: 1110px !important;        
+    }
+    .bottom_block {
+        position: absolute;
     }
 }
 
-.bottomIndent-15 {
-  margin-bottom: 15px;
-}
-.bottomIndent-20 {
-  margin-bottom: 20px;
-}
-.bottomIndent-30 {
-  margin-bottom: 30px;
-}
+.bottomIndent-15 {  margin-bottom: 15px;}
+.bottomIndent-20 {  margin-bottom: 20px;}
+.bottomIndent-30 {  margin-bottom: 30px;}
+.padding-top-20{    padding-top:20px;}
+.padding-top-30{    padding-top:20px;}
 
 .module-main-page {
     margin-bottom: 0px;
@@ -1077,4 +1075,18 @@ body {
     text-decoration-color: #fff;
     color:#fff;
 }
-
+/*feedback*/
+.feedback_item{margin-bottom:30px;border-bottom:1px solid #999;padding-bottom:20px;}
+.feedback-item-date{color:#999;font-size:12px;}
+.feedback-item-title{}
+.feedback-item-sender{color:#999;}
+.feedback-item-sender:before{content:'—';}
+.feedback-item-more{color:#222;}
+.feedback-item-more[aria-expanded="false"]:before{content:'Читать »';}
+.feedback-item-more[aria-expanded="true"]:before{/*content:'Скрыть';*/display:none;}
+.feedback-item_info{padding-left:60px;}
+.feedback-item_info:before{
+    content:'\ea94';
+    font-family:fontello;
+    position:relative;top:20px;right:30px;
+}

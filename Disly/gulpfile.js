@@ -9,8 +9,13 @@ var paths = {
     webroot: "./Content/"
 };
 //  регистрируем задачу по преобразованию styles.less в файл css
-gulp.task("first", function () {
-    return gulp.src('content/css/theme/first.less')
+gulp.task("blue", function () {
+    return gulp.src('content/css/theme/blue.less')
                .pipe(less())
                .pipe(gulp.dest(paths.webroot + 'css/theme'))
+});
+gulp.task("turquoise", function () {
+    return gulp.src('content/css/theme/turquoise.less')
+        .pipe(less())
+        .pipe(gulp.dest(paths.webroot + 'css/theme'))
 });
