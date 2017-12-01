@@ -1,36 +1,57 @@
 ﻿@model MainSpecialistViewModel
-
+@{
+    Guid? mainSpecId = ViewBag.MainSpecId;
+}
 @if (Model.UserResolution.Read)
 {
-    <div class="content">
-        <h1>@ViewBag.Title</h1>
-        @if (Model.List != null)
-        {
-            foreach (var item in Model.List.Data)
+    if (mainSpecId != null)
+    {
+        <div class="content">
+            <h1>@ViewBag.Title</h1>
+            @if (Model.List != null)
             {
-                <div class="list-item">
-                    <a href="/admin/mainspecialist/item/@item.Id">
-                        @item.Name
-                    </a>
-                </div>
+                foreach (var item in Model.List.Data)
+                {
+                    <div class="list-item">
+                        <a href="/admin/mainspecialist/item/@item.Id">
+                            @item.Name
+                        </a>
+                    </div>
+                }
+                Html.RenderAction("Pager", "Templates", new { @Model = Model.List.Pager });
             }
-            Html.RenderAction("Pager", "Templates", new { @Model = Model.List.Pager });
-        }
-        else
-        {
-            <div class="alert alert-info">Не найдено ни одной записи.</div>
-        }
-    </div>
+            else
+            {
+                <div class="alert alert-info">Не найдено ни одной записи.</div>
+            }
+        </div>
 
-    <div class="dop_info-block">
-    </div>
+        <div class="dop_info-block">
+            <div class="dop-caption">Фильтр</div>
+            @Html.TextBox("searchtext", Request.QueryString["searchtext"], new { @title = "Поиск по названию", @placeholder = "поиск...", @MaxLength = "512" })
+            <div class="row">
+                <div class="col-md-6"><button type="submit" name="action" value="search-btn" class="button btn-primary">Применить</button></div>
+                <div class="col-md-6"><button type="submit" name="action" value="clear-btn" class="button btn-default">Сбросить</button></div>
+            </div>
+        </div>
 
-    <div class="buttons">
-        @if (Model.UserResolution.Write)
-        {
-            <button type="submit" name="action" value="insert-btn" class="button icon-create">Создать</button>
-        }
-    </div>
+        <div class="buttons">
+            @if (Model.UserResolution.Write)
+            {
+                <button type="submit" name="action" value="insert-btn" class="button icon-create">Создать</button>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="content">
+            <h1>@ViewBag.Title</h1>
+            <div class="alert alert-info">
+                <strong>Вы не можете просматривать информацию из данного раздела.</strong>
+            </div>
+        </div>
+        <div class="buttons"></div>
+    }
 }
 else
 {

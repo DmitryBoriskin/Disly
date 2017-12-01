@@ -35,6 +35,12 @@ namespace Disly
                url: "MapSite/",
                defaults: new { controller = "MapSite", action = "Index" }
             );
+            // поиск
+            routes.MapRoute(
+               name: "Search",
+               url: "Search/",
+               defaults: new { controller = "Search", action = "Index" }
+            );
 
             // лпу
             routes.MapRoute(

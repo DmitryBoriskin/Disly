@@ -76,13 +76,90 @@
             Coords(x, y, title, desc, zoom, height,id);
         });
     }
+
+
+    if ($('.searchform_dop').length > 0) {
+        SearchDopWork()
+    }
 });
 
+function SearchDopWork() {
+    $('.searchform_show_dop').click(function (e) {
+        $('.searchform_dop').toggleClass('show');
+        document.getElementById("search_focus_dop").focus();
+        e.preventDefault();
+    });
+    //hide form
+    $('.searchform_close_dop').click(function (e) {
+        $('.searchform_dop').toggleClass('show');
+        e.preventDefault();
+    });
 
+    $('#search_focus_dop').focusout(function () {
+        setTimeout(function () {
+            $('.searchform_dop').toggleClass('show');
+        }, 400);
+    });
+
+
+    $('.searchform_btn_dop').click(function (e) {
+        var SerachInp = $('#search_focus_dop').val();
+        if (SerachInp === "") {
+            document.getElementById("search_focus_dop").focus();
+        }
+        else {
+            CommitSearchDop();
+        }
+        e.preventDefault();
+    });
+
+
+    $(".searchform_btn_dop").keydown(function (event) {
+        if (event.keyCode == 13) {
+            CommitSearchDop();
+            event.preventDefault();
+        }
+    });
+    $(".searchform_dop").submit(function (e) {
+        CommitSearchDop();
+        e.preventDefault();
+    });
+
+
+
+    function CommitSearchDop() {
+        var SerachInp = $('.search-input_dop').val();
+        var EndUrl = "%20url%3Ahttp%3A%2F%2F" + SiteId + ".med.cap.ru*&web=0";
+        var SearchText = SerachInp.replace(" ", "%20") + EndUrl;
+        var Link = "/Search?searchid=2297106&text=" + SearchText + "&searchtext=" + SerachInp.replace(" ", "%20");
+        if (SearchText != "") {
+            document.location.href = Link;
+        }
+    }
+}
 
 function SearchWork() {
-    $('.seacrh_button__hide').click(function (e) {
-        var SerachInp = $('.search_form .seacrh_input').val();
+    //show form
+    $('.searchform_show').click(function (e) {
+        $('.searchform').toggleClass('show');
+        document.getElementById("search_focus").focus();
+        e.preventDefault();
+    });
+    //hide form
+    $('.searchform_close').click(function (e) {
+        $('.searchform').toggleClass('show');
+        e.preventDefault();
+    });
+    
+    $('#search_focus').focusout(function () {
+        setTimeout(function () {
+            $('.searchform').toggleClass('show');
+        }, 400);        
+    });
+
+
+    $('.searchform_btn').click(function (e) {
+        var SerachInp = $('#search_focus').val();
         if (SerachInp === "") {
             document.getElementById("search_focus").focus();
         }
@@ -91,45 +168,48 @@ function SearchWork() {
         }
         e.preventDefault();
     });
-
-    $('.search_form .seacrh_input').focusout(function () {
-        $('.search.menu_item').removeClass('act');
-    });
-
-    $('.search_form .seacrh_input').focus(function () {
-        $('.search.menu_item').addClass('act');
-        $('.menu-fix').addClass('hov_el');
-    });
-    if ($('.menu-fix a.act').length > 0) {
-        $('.menu-fix').addClass('hov_el');
-    }
-
-
-
-    $("#InputSearch").keydown(function (event) {
+    
+    
+    $(".searchform_btn").keydown(function (event) {
         if (event.keyCode == 13) {
             CommitSearch();
             event.preventDefault();
         }
     });
-    $(".search_form").submit(function (e) {
+    $(".searchform").submit(function (e) {
         CommitSearch();
         e.preventDefault();
     });
 
 
+
     function CommitSearch() {
-        var SerachInp = $('.search_form .seacrh_input').val();
-        var EndUrl = "%20url%3Ahttp%3A%2F%2F" + SiteId + "med.cap.ru*&web=0";
-        var SearchText = SerachInp.replace(" ", "%20") + EndUrl;
-        //alert(StartUrl);
-        //alert("осуществляем поиск по " + $SerachInp.val());
-        var Link = "/Search?searchid=2297106&text=" + SearchText;
+        var SerachInp = $('.search-input').val();
+        var EndUrl = "%20url%3Ahttp%3A%2F%2F" + SiteId + ".med.cap.ru*&web=0";
+        var SearchText = SerachInp.replace(" ", "%20") + EndUrl;        
+        var Link = "/Search?searchid=2297106&text=" + SearchText + "&searchtext=" + SerachInp.replace(" ", "%20");
         if (SearchText != "") {
             document.location.href = Link;
         }
     }
+    //bottom form
+    $('.search-form-bottom').submit(function (e) {
+        CommitSearchBottom();
+        e.preventDefault();
+    });
+    $('.search-form-bottom .bottom-search').click(function (e) {
+        CommitSearchBottom();        
+        e.preventDefault();
+    });
 
+
+    function CommitSearchBottom() {
+        var SerachInp = $('.search-form').val();
+        var EndUrl = "%20url%3Ahttp%3A%2F%2F" + SiteId + "med.cap.ru*&web=0";
+        var SearchText = SerachInp.replace(" ", "%20") + EndUrl;
+        var Link = "/Search?searchid=2297106&text=" + SearchText;
+        document.location.href = Link;        
+    }
 }
 
 

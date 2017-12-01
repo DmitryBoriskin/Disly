@@ -121,7 +121,7 @@ namespace Disly.Areas.Admin.Controllers
             var orgfilter = FilterParams.Extend<OrgFilter>(filter);
             var evfilter = FilterParams.Extend<EventFilter>(filter);
 
-            model.OrgsList = new SelectList(_cmsRepository.getOrgs(orgfilter), "Id", "Title", ContentId);
+            model.OrgsList = new SelectList(_cmsRepository.getOrgs(orgfilter, null), "Id", "Title", ContentId);
             model.PeopleList = new SelectList(_cmsRepository.getPersonList(filter).Data, "Id", "FIO", ContentId);
             model.EventsList = new SelectList(_cmsRepository.getEventsList(evfilter).Data, "Id", "Title", ContentId);
             #endregion
@@ -289,7 +289,7 @@ namespace Disly.Areas.Admin.Controllers
                 );
             var orgfilter = FilterParams.Extend<OrgFilter>(filter);
             var evfilter = FilterParams.Extend<EventFilter>(filter);
-            model.OrgsList = new SelectList(_cmsRepository.getOrgs(orgfilter), "Id", "Title", ContentId);
+            model.OrgsList = new SelectList(_cmsRepository.getOrgs(orgfilter, null), "Id", "Title", ContentId);
             model.PeopleList = new SelectList(_cmsRepository.getPersonList(filter).Data, "Id", "FIO", ContentId);
             model.EventsList = new SelectList(_cmsRepository.getEventsList(evfilter).Data, "Id", "Title", ContentId);
             #endregion

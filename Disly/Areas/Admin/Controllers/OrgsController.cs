@@ -14,7 +14,6 @@ namespace Disly.Areas.Admin.Controllers
         //ovp- это вьюха объединяющая в себе структурное подразделение и департамент(отдел)
         OrgsViewModel model;
         FilterParams filter;
-        Guid? orgId;
 
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
@@ -28,9 +27,6 @@ namespace Disly.Areas.Admin.Controllers
 
             filter = getFilter();
 
-            // идентификатор организации
-            orgId = _cmsRepository.getOrgLinkByDomain(Domain);
-
             model = new OrgsViewModel()
             {
                 Account = AccountInfo,
@@ -43,6 +39,8 @@ namespace Disly.Areas.Admin.Controllers
                 MedicalServices = _cmsRepository.getMedicalServices(),
                 SectionResolution = _accountRepository.getCmsUserResolutioInfo(AccountInfo.id, "structure")
             };
+
+            ViewBag.OrgId = orgId;
 
             #region Метатеги
             ViewBag.Title = UserResolutionInfo.Title;
@@ -69,7 +67,13 @@ namespace Disly.Areas.Admin.Controllers
             #endregion
 
             var orgfilter = FilterParams.Extend<OrgFilter>(filter);
-            model.OrgList = _cmsRepository.getOrgs(orgfilter);//+ список организаций
+
+            // Текущая организация
+            if (orgId != null)
+            {
+                model.Item = _cmsRepository.getOrgItem((Guid)orgId);
+            }
+            model.OrgList = _cmsRepository.getOrgs(orgfilter, orgId);// список организаций
             return View(model);
         }
 
@@ -109,6 +113,7 @@ namespace Disly.Areas.Admin.Controllers
             return Redirect(StartUrl + "item/" + Guid.NewGuid() + "/" + query);
         }
 
+        // GET: /admin/orgs/item/{id}
         public ActionResult Item(Guid Id)
         {
             #region администратор сайта
@@ -220,9 +225,10 @@ namespace Disly.Areas.Admin.Controllers
                 else
                 {
                     userMessege.info = "Произошла ошибка";
-                    userMessege.buttons = new ErrorMassegeBtn[]{
-                    new ErrorMassegeBtn { url = "#", text = "ок", action = "false" }
-                };
+                    userMessege.buttons = new ErrorMassegeBtn[]
+                    {
+                        new ErrorMassegeBtn { url = "#", text = "ок", action = "false" }
+                    };
                 }
                 #endregion
             }
@@ -234,7 +240,8 @@ namespace Disly.Areas.Admin.Controllers
                     if (_cmsRepository.insertOrg(id, back_model.Item)) //, AccountInfo.id, RequestUserInfo.IP
                     {
                         userMessege.info = "Запись создана";
-                        userMessege.buttons = new ErrorMassegeBtn[]{
+                        userMessege.buttons = new ErrorMassegeBtn[]
+                        {
                             new ErrorMassegeBtn { url = StartUrl + Request.Url.Query, text = "вернуться в список" },
                             new ErrorMassegeBtn { url = "/admin/orgs/item"+id, text = "ок", action = "false" }
                         };
@@ -255,8 +262,6 @@ namespace Disly.Areas.Admin.Controllers
             model.ErrorInfo = userMessege;
             return View("Item", model);
         }
-
-
 
         [HttpPost]
         [ValidateInput(false)]
@@ -620,7 +625,7 @@ namespace Disly.Areas.Admin.Controllers
                 return Redirect(StartUrl);
             }
         }
-        
+
         public ActionResult Department(Guid id)
         {
             #region администратор сайта
@@ -768,7 +773,7 @@ namespace Disly.Areas.Admin.Controllers
             _cmsRepository.delDepartmentsPhone(id);
             return null;
         }
-        
+
         [HttpPost]
         [MultiButton(MatchFormKey = "action", MatchFormValue = "add-new-people-depart")]
         public ActionResult AddPeople()
@@ -950,7 +955,8 @@ namespace Disly.Areas.Admin.Controllers
                     back_model.AdministrativItem.OrgId = Guid.Parse(OrgId);
                     _cmsRepository.insAdministrativ(Id, back_model.AdministrativItem);
                     userMassege.info = "Запись создана";
-                    userMassege.buttons = new ErrorMassegeBtn[]{
+                    userMassege.buttons = new ErrorMassegeBtn[]
+                    {
                         new ErrorMassegeBtn { url = StartUrl + Request.Url.Query, text = "вернуться в список" },
                         new ErrorMassegeBtn { url = "/admin/orgs/administrativ/"+Id, text = "ок", action = "false" }
                     };
@@ -959,7 +965,8 @@ namespace Disly.Areas.Admin.Controllers
                 {
                     _cmsRepository.updAdministrativ(Id, back_model.AdministrativItem);
                     userMassege.info = "Запись сохранена";
-                    userMassege.buttons = new ErrorMassegeBtn[]{
+                    userMassege.buttons = new ErrorMassegeBtn[]
+                    {
                         new ErrorMassegeBtn { url = StartUrl + Request.Url.Query, text = "вернуться в список" },
                         new ErrorMassegeBtn { url = "/admin/orgs/administrativ/"+Id, text = "ок", action = "false" }
                     };

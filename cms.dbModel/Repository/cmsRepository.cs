@@ -111,7 +111,7 @@ namespace cms.dbModel
 
         //Orgs
         public abstract OrgsList getOrgsList(OrgFilter filtr);
-        public abstract OrgsModel[] getOrgs(OrgFilter filtr);
+        public abstract OrgsModel[] getOrgs(OrgFilter filtr, Guid? except);
         public abstract OrgsModel getOrgItem(Guid id);
 
         public abstract OrgsShortModel[] getOrgsListWhithChekedFor(OrgFilter filtr);
@@ -225,6 +225,7 @@ namespace cms.dbModel
         public abstract bool createMainSpecialist(MainSpecialistModel item);
         public abstract bool updateMainSpecialist(MainSpecialistModel item);
         public abstract bool deleteMainSpecialist(Guid id);
+        public abstract Guid? getMainSpecLinkByDomain(string domain);
 
         // Врачи
         public abstract EmployeeModel getEmployee(Guid id);

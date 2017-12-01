@@ -20,7 +20,7 @@
 
     <link href="~/Content/plugins/mobileGallery/swipebox.css" rel="stylesheet">
     <link href="~/Content/css/common.css" rel="stylesheet" />
-    <link href="~/Content/css/theme/first.css" rel="stylesheet" />
+    <link href="~/Content/css/theme/blue.css" rel="stylesheet" />
     <link rel="stylesheet" type="text/css" media="print" href="~/Content/css/print.css">
 
     <script type="text/javascript" src="/Content/plugins/jquery/jquery.js"></script>
@@ -67,7 +67,7 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="/rss">
+                                <a href="/press/rss">
                                     <span class="ti-rss-alt top-icon"></span>
                                     RSS
                                 </a>
@@ -93,19 +93,24 @@
             <!-- главное меню -->
             <div class="main-menu_wr">
                 <div class="main-menu">
+                    <form class="searchform">
+                        <a class="searchform_close ti-close" href="#"></a>
+                        <button class="searchform_btn" type="submit">Найти</button>
+                        <div class="searchform_input_wr"><input id="search_focus" class="search-input" type="search" name="q" placeholder="Поиск по сайту"/></div>                                                
+                    </form>
                     @if (Model != null && Model.SiteMapArray != null && Model.SiteMapArray.Count() > 0)
-            {
-                var mainMenu = Model.SiteMapArray
-                    .Where(w => w.MenuAlias.Equals("main"))
-                    .OrderBy(o => o.MenuSort)
-                    .Select(s => new
                     {
-                        Path = s.Path,
-                        Alias = s.Alias,
-                        Title = s.Title,
-                        FrontSection = s.FrontSection,
-                        Url = s.Url
-                    });
+                        var mainMenu = Model.SiteMapArray
+                            .Where(w => w.MenuAlias.Equals("main"))
+                            .OrderBy(o => o.MenuSort)
+                            .Select(s => new
+                            {
+                                Path = s.Path,
+                                Alias = s.Alias,
+                                Title = s.Title,
+                                FrontSection = s.FrontSection,
+                                Url = s.Url
+                            });
                         <ul class="nav navbar-nav navbar-left">
                             @foreach (var item in mainMenu)
                         {
@@ -127,20 +132,13 @@
                             <li>
                                 <a href="@fullPath">@item.Title</a>
                             </li>
-                        }
+                            }
                         </ul>
-                }
-                    <ul class="nav navbar-nav navbar-right">
-                        @*<li><a href="">EN</a></li>*@
+                    }
+                    <ul class="nav navbar-nav navbar-right">                        
                         <li>
-                            <div class="search menu_item">
-                                <form class="search_form search_form_hide" name="searchfrom">
-                                    <input id="search_focus" class="seacrh_input" type="search" name="search" placeholder="Поиск по сайту...">
-                                    <a href="#" class="seacrh_button seacrh_button__hide icon-search"></a>
-                                </form>
-                            </div>
-                        </li>
-                        
+                            <a href="#" class="searchform_show seacrh_button__hide icon-search"></a>
+                        </li>                        
                     </ul>
                 </div>
             </div>
@@ -217,7 +215,7 @@
                         </div>
                         <div class="col-md-4">
                             <div class="footer-right">
-                                <form>
+                                <form class="search-form-bottom">
                                     <input class="search-form" type="text" placeholder="Поиск по сайту" value="" />
                                     <a href="" class="icon-search bottom-search"></a>
                                 </form>

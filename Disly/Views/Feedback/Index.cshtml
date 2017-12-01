@@ -10,14 +10,7 @@
         <div class="col-md-12">
             @Html.Partial("services/breadcrumbs")
             <h1>@ViewBag.Title</h1>
-
-            @if (Model.Item != null)
-            {
-                <h1>@Model.Item.Title</h1>
-            }
-            @Html.Partial("part/childlist", Model)
-
-            <div class="row">
+            <div class="row padding-top-30">
                 <div class="col-md-8">
                     <div class="feedback_list">
                         @if (Model.List != null)
@@ -32,16 +25,18 @@
                                         shortTitle = shortTitle.Length > maxChars ? shortTitle.Substring(0, maxChars) + " ..." : shortTitle;
                                     }
 
-                                    <div class="feedback_item bottomIndent-20">
-                                        <div class="feedback-item-date"><span>@item.Date.ToString("HH:mm | dd.MM.yyyy")</span></div>
-                                        <div class="feedback-item-title" href="/">@shortTitle</div>
-                                        <a class="feedback-item-more" role="button" data-toggle="collapse" href="#collapseExample_@item.Id" aria-expanded="false" aria-controls="collapseExample_@item.Id">Читать &raquo;</a>
-                                        <div class="collapse" id="collapseExample_@item.Id">
-                                            <div class="feedback-item-text">@Html.Raw(item.Text)</div>
-                                            <div class="feedback-item-sender">@item.SenderName</div>
-                                            <div class="feedback-item-answer">@Html.Raw(item.Answer)</div>
-                                            <div class="feedback-item-answerer">@item.Answerer</div>
-                                        </div>
+                                    <div class="feedback_item">
+                                        <div class="feedback-item-date"><span>@item.Date.ToString("dd.MM.yyyy")</span></div>
+                                        <div class="feedback-item-title" href="/">@shortTitle</div>                                        
+                                        <div class="feedback-item-sender">@item.SenderName</div>
+                                        @if (item.Answer != null)
+                                        {
+                                            <div class="collapse feedback-item_info" id="collapseExample_@item.Id">
+                                                <div class="feedback-item-answer">@Html.Raw(item.Answer)</div>
+                                                <div class="feedback-item-answerer">@item.Answerer</div>
+                                            </div>
+                                            <a class="feedback-item-more" role="button" data-toggle="collapse" href="#collapseExample_@item.Id" aria-expanded="false" aria-controls="collapseExample_@item.Id"></a>
+                                        }                                        
                                     </div>
                                 }
                             }
@@ -89,6 +84,7 @@
                     </form>
                 </div>
             </div>
+
         </div>
     </div>
 </div>

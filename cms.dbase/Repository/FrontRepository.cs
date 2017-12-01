@@ -76,10 +76,7 @@ namespace cms.dbase
             using (var db = new CMSdb(_context))
             {
                 string ViewPath = "~/Error/404/";
-
-                //var query = db.front_site_sections.Where(w => w.f_site == siteId && w.f_front_section == siteSection)
-                //               .Join(db.front_page_viewss,e=>e.f_page_view,o=>o.id,(e,o)=>o);
-
+                
                 var query = (from s in db.front_site_sections
                              join v in db.front_page_viewss
                              on s.f_page_view equals v.id
@@ -87,15 +84,7 @@ namespace cms.dbase
                              select v.c_url);
                 if (query.Any())
                     ViewPath = query.SingleOrDefault();
-
-                //if (query.Any()) {
-                //    ViewPath = query.SingleOrDefault().c_url;
-                //}
-
-                //var data = db.front_sv_page_veiws.Where(w => w.f_site == siteId && w.f_pege_type == siteSection).FirstOrDefault();
-                //if (data != null) {
-                //    ViewPath = data.c_url;
-                //}
+                
                 return ViewPath;
             }
         }
@@ -123,7 +112,6 @@ namespace cms.dbase
                         Email = s.c_email,
                         Site = s.c_url,
                         Worktime = s.c_worktime,
-                        //Logo = s.c_logo,
                         Logo = new Photo
                         {
                             Url = s.c_logo
@@ -408,7 +396,6 @@ namespace cms.dbase
                     if (item_data != null)
                     {
                         data.Add(item_data);
-                        //.ToList().Add(item_data);
                     }
 
                     Url = Url.Substring(0, _lastIndex);
@@ -681,38 +668,6 @@ namespace cms.dbase
             string domain = _domain;
             using (var db = new CMSdb(_context))
             {
-                #region comments
-                //var query = db.content_org_structures
-                //            .Join(db.cms_sitess.Where(o => o.c_alias == domain), o => o.f_ord, e => e.f_content, (e, o) => e)
-                //            .OrderBy(o => o.n_sort)
-                //            .Select(s => new StructureModel()
-                //            {
-                //                Id = s.id,
-                //                Title = s.c_title,
-                //                Phone = s.c_phone,
-                //                Num = s.num,
-                //                GeopointX = s.n_geopoint_x,
-                //                GeopointY = s.n_geopoint_y,
-                //                // список департаментов
-                //                Departments = (from st in db.content_org_structures
-                //                               join d in db.content_departmentss
-                //                               on st.id equals d.f_structure
-                //                               where d.f_structure.Equals(s.id)
-                //                               select new Departments
-                //                               {
-                //                                   Title = d.c_title,
-                //                                   // список телефонов
-                //                                   Phones = db.content_departments_phones
-                //                                                .Where(w => w.f_department.Equals(d.id))
-                //                                                .Select(dp => new DepartmentsPhone
-                //                                                {
-                //                                                    Label = dp.c_key,
-                //                                                    Value = dp.c_val
-                //                                                }).ToArray()
-                //                               }).ToArray()
-                //            });
-                #endregion
-
                 var query = from str in db.content_org_structures
                             join site in db.cms_sitess on str.f_ord equals site.f_content
                             join dep in db.content_departmentss on str.id equals dep.f_structure
@@ -796,7 +751,7 @@ namespace cms.dbase
         }
 
         /// <summary>
-        /// Список подразделений
+        /// Получаем список департаментов
         /// </summary>
         /// <param name="StructureId"></param>
         /// <returns></returns>
@@ -822,7 +777,7 @@ namespace cms.dbase
         }
 
         /// <summary>
-        /// подразделение
+        /// Получаем департамент
         /// </summary>
         /// <param name="Id"></param>
         /// <returns></returns>
@@ -890,7 +845,7 @@ namespace cms.dbase
         }
 
         /// <summary>
-        /// Структурное подразделение
+        /// Получаем ОВП
         /// </summary>
         /// <param name="Id">идентификатор струкутуры(родителя)</param>
         /// <returns></returns>
@@ -971,36 +926,47 @@ namespace cms.dbase
                 Guid department = !string.IsNullOrWhiteSpace(filter.Group) // департамент
                     ? Guid.Parse(filter.Group) : Guid.Empty;
 
-                string search = filter.SearchText; // поиск по человеку
+                var search = !string.IsNullOrWhiteSpace(filter.SearchText) 
+                    ? filter.SearchText.ToLower().Split(' ') : null; // поиск по человеку
+
+
+                var people = (from s in db.cms_sitess
+                              join pol in db.content_people_org_links on s.f_content equals pol.f_org
+                              join p in db.content_peoples on pol.f_people equals p.id
+                              select new { p, pol, s });
+
+                if (search != null)
+                {
+                    foreach (string item in search)
+                    {
+                        people = people.Where(w => w.p.c_surname.Contains(item)
+                                                || w.p.c_name.Contains(item)
+                                                || w.p.c_patronymic.Contains(item));
+                    }
+                }
 
                 int specialization = !string.IsNullOrWhiteSpace(filter.Type) ? Convert.ToInt32(filter.Type) : 0; // специализация
 
-                var data = (from s in db.cms_sitess
-                            join pol in db.content_people_org_links on s.f_content equals pol.f_org
-                            join p in db.content_peoples on pol.f_people equals p.id
-                            join pepl in db.content_people_employee_posts_links on p.id equals pepl.f_people
+                var data = (from p in people
+                            join pepl in db.content_people_employee_posts_links on p.p.id equals pepl.f_people
                             join ep in db.content_employee_postss on pepl.f_post equals ep.id
-                            join pdl in db.content_people_department_links on pol.id equals pdl.f_people into ps
+                            join pdl in db.content_people_department_links on p.pol.id equals pdl.f_people into ps
                             from pdl in ps.DefaultIfEmpty()
-                            where s.c_alias.Equals(domain)
+                            where p.s.c_alias.Equals(domain)
                                     && (department.Equals(Guid.Empty) || pdl.f_department.Equals(department))
                                     && ep.b_doctor
-                                    && (string.IsNullOrWhiteSpace(search) || (p.c_surname.Contains(search)
-                                                                                || p.c_name.Contains(search)
-                                                                                || p.c_patronymic.Contains(search)))
                                     && (specialization == 0 || pepl.f_post.Equals(specialization))
-                            orderby ep.id, p.c_surname, p.c_name, p.c_patronymic, pepl.n_type
+                            orderby ep.id, p.p.c_surname, p.p.c_name, p.p.c_patronymic, pepl.n_type
                             select new { p, ep });
 
-
                 var data2 = data.ToArray()
-                    .GroupBy(g => new { g.p.id })
+                    .GroupBy(g => new { g.p.p.id })
                     .Select(s => new People
                     {
                         Id = s.Key.id,
-                        FIO = s.First().p.c_surname + " " + s.First().p.c_name + " " + s.First().p.c_patronymic,
-                        Photo = s.First().p.c_photo,
-                        SNILS = s.First().p.c_snils,
+                        FIO = s.First().p.p.c_surname + " " + s.First().p.p.c_name + " " + s.First().p.p.c_patronymic,
+                        Photo = s.First().p.p.c_photo,
+                        SNILS = s.First().p.p.c_snils,
                         Posts = s.Select(ep2 => new PeoplePost
                         {
                             Id = ep2.ep.id,
@@ -1206,10 +1172,11 @@ namespace cms.dbase
         }
 
         /// <summary>
-        /// 
+        /// Получем организацию
         /// </summary>
+        /// <param name="domain"></param>
         /// <returns></returns>
-        public override OrgsModel getOrgInfo()
+        public override OrgsModel getOrgInfo(string domain)
         {
             string domain = _domain;
             using (var db = new CMSdb(_context))
@@ -1224,8 +1191,7 @@ namespace cms.dbase
                                  Email = s.c_email,
                                  PhoneReception = s.c_phone_reception,
                                  GeopointX = s.n_geopoint_x,
-                                 GeopointY = s.n_geopoint_y,
-                                 //Text = text
+                                 GeopointY = s.n_geopoint_y
                              });
 
                 if (data.Any())
@@ -1236,11 +1202,12 @@ namespace cms.dbase
         }
 
         /// <summary>
-        /// 
+        /// Получем список голосования
         /// </summary>
+        /// <param name="domain"></param>
         /// <param name="Ip"></param>
         /// <returns></returns>
-        public override IEnumerable<VoteModel> getVote(string Ip)
+        public override IEnumerable<VoteModel> getVote(string domain, string Ip)
         {
             string domain = _domain;
             using (var db = new CMSdb(_context))
@@ -1293,7 +1260,7 @@ namespace cms.dbase
         }
 
         /// <summary>
-        /// 
+        /// Голосование
         /// </summary>
         /// <param name="id"></param>
         /// <param name="Ip"></param>
@@ -1323,7 +1290,7 @@ namespace cms.dbase
         }
 
         /// <summary>
-        /// 
+        /// Получаем ответы на голосование
         /// </summary>
         /// <param name="VoteId"></param>
         /// <param name="Ip"></param>
@@ -1350,7 +1317,7 @@ namespace cms.dbase
         }
 
         /// <summary>
-        /// 
+        /// Статистика по голосованию
         /// </summary>
         /// <param name="AnswerId"></param>
         /// <param name="VoteId"></param>
@@ -1360,10 +1327,7 @@ namespace cms.dbase
         {
             using (var db = new CMSdb(_context))
             {
-                ////проверяем даны ли ранее ответы этим пользователем
-                //var spot = db.content_vote_userss.Where(w =>(w.f_vote == VoteId && w.c_ip==Ip)).FirstOrDefault();
-                //if (spot == null) return null;
-
+                // проверяем даны ли ранее ответы этим пользователем
                 VoteStat data = new VoteStat
                 {
                     AllVoteCount = db.content_vote_userss.Where(w => w.f_vote == VoteId).Count(),
@@ -1405,8 +1369,7 @@ namespace cms.dbase
                 }
             }
         }
-
-
+        
         /// <summary>
         /// Список админстративного персонала
         /// </summary>
@@ -1773,12 +1736,26 @@ namespace cms.dbase
         {
             using (var db = new CMSdb(_context))
             {
-                string search = !string.IsNullOrWhiteSpace(filter.SearchText)
-                    ? filter.SearchText.ToLower() : null;
+                var search = !string.IsNullOrWhiteSpace(filter.SearchText)
+                    ? filter.SearchText.ToLower().Split(' ') : null; // поиск по человеку
+
+
+                var people = (from  p in db.content_peoples
+                              select  p);
+
+                if (search != null)
+                {
+                    foreach (string item in search)
+                    {
+                        people = people.Where(w => w.c_surname.Contains(item)
+                                                || w.c_name.Contains(item)
+                                                || w.c_patronymic.Contains(item));
+                    }
+                }
                 string post = !string.IsNullOrWhiteSpace(filter.Type)
                     ? filter.Type : null;
 
-                var doctors = (from p in db.content_peoples
+                var doctors = (from p in people
                                join pol in db.content_people_org_links on p.id equals pol.f_people
                                join o in db.content_orgss on pol.f_org equals o.id
                                join s in db.cms_sitess on o.id equals s.f_content into ss
@@ -1786,9 +1763,6 @@ namespace cms.dbase
                                where s.f_content == null || s.f_content == o.id
                                join pepl in db.content_people_employee_posts_links on p.id equals pepl.f_people
                                join ep in db.content_employee_postss on pepl.f_post equals ep.id
-                               where search == null || (p.c_surname.Contains(search)
-                                                        || p.c_name.Contains(search)
-                                                        || p.c_patronymic.Contains(search))
                                where post == null || pepl.f_post.ToString().Equals(post)
                                orderby p.c_surname, p.c_name, p.c_patronymic, ep.c_name
                                select new
@@ -1856,7 +1830,7 @@ namespace cms.dbase
         }
 
         /// <summary>
-        /// Список Сообщений из обратной связи
+        /// Получаем список отзывов
         /// </summary>
         /// <param name="filtr"></param>
         /// <returns></returns>

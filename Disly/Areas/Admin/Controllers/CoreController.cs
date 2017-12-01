@@ -35,6 +35,9 @@ namespace Disly.Areas.Admin.Controllers
         public int page_size = 40;
         public int last_items = 10;
 
+        protected Guid? orgId;
+        protected Guid? mainSpecialist;
+
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             cmsRepository.DislyEvent += CmsRepository_DislyEvent;
@@ -110,6 +113,12 @@ namespace Disly.Areas.Admin.Controllers
             }
             catch { }
             #endregion
+
+            // идентификатор организации
+            orgId = _cmsRepository.getOrgLinkByDomain(Domain);
+
+            // идентификатор главного специалиста
+            mainSpecialist = _cmsRepository.getMainSpecLinkByDomain(Domain);
         }
 
         private void CmsRepository_DislyEvent(object sender, DislyEventArgs e)

@@ -111,22 +111,7 @@ namespace cms.dbase
                 if (!string.IsNullOrEmpty(filtr.Domain))
                 {
                     var contentType = ContentType.MATERIAL.ToString().ToLower();
-
-                    //Атавизм
-                    //var content = db_getDomainContentTypeId(db, filtr.Domain);
-
-                    //if (content != null && content.Id.HasValue)
-                    //{
-                    //    var materials = db.content_content_links
-                    //                .Where(w => w.f_link == content.Id)
-                    //                .Where(w => w.f_content_type == contentType);
-                    //if (!materials.Any())
-                    //    return null;
-                    //var materialsId = materials.Select(m => m.f_content);
-
-
-                    //Select t.*, s.* from[dbo].[content_content_link] t left join[dbo].[cms_sites] s
-                    //on t.f_link = s.f_content Where s.c_alias = 'main'
+                    
                     var materials = db.content_content_links.Where(e => e.f_content_type == contentType)
                         .Join(db.cms_sitess.Where(o => o.c_alias == filtr.Domain),
                                 e => e.f_link,

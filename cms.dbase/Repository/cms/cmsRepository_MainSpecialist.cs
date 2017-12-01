@@ -68,13 +68,21 @@ namespace cms.dbase
             using (var db = new CMSdb(_context))
             {
                 var query = db.content_main_specialistss
-                    .OrderBy(o => o.c_name);
+                    .Select(s => s);
+
+                if (!string.IsNullOrWhiteSpace(filter.SearchText))
+                {
+                    query = query
+                        .Where(w => w.c_name.ToLower()
+                        .Contains(filter.SearchText.ToLower()));
+                }
 
                 var itemCount = query.Count();
 
                 var list = query
                     .Skip(filter.Size * (filter.Page - 1))
                     .Take(filter.Size)
+                    .OrderBy(o => o.c_name)
                     .Select(s => new MainSpecialistModel
                     {
                         Id = s.id,
@@ -284,6 +292,25 @@ namespace cms.dbase
 
                     return true;
                 }
+            }
+        }
+
+        /// <summary>
+        /// Получаем идентификатор сайта главного специалиста
+        /// </summary>
+        /// <param name="domain">Домен</param>
+        /// <returns></returns>
+        public override Guid? getMainSpecLinkByDomain(string domain)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var query = (from s in db.cms_sitess
+                             join ms in db.content_main_specialistss on s.f_content equals ms.id
+                             where s.c_alias.Equals(domain)
+                             select ms.id);
+
+                if (!query.Any()) return null;
+                return query.SingleOrDefault();
             }
         }
     }
