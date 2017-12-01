@@ -34,8 +34,8 @@ namespace Disly.Areas.Admin.Controllers
                 Settings = SettingsInfo,
                 UserResolution = UserResolutionInfo,
                 ControllerName = ControllerName,
-                ActionName = ActionName
-            };
+                ActionName = ActionName,
+        };
 
             #region Метатеги
             ViewBag.Title = UserResolutionInfo.Title;

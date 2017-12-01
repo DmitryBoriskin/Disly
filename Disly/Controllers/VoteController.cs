@@ -38,7 +38,7 @@ namespace Disly.Controllers
             string _path = UrlPath.Substring(0, UrlPath.LastIndexOf("/") + 1);
             string _alias = UrlPath.Substring(UrlPath.LastIndexOf("/") + 1);
             #endregion
-             model.List=_repository.getVote(Domain,_ip);
+             model.List=_repository.getVote(_ip); //Domain,
 
             #region Создаем переменные (значения по умолчанию)            
             string _ViewName = (ViewName != String.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";

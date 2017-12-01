@@ -14,6 +14,7 @@ namespace cms.dbase
         /// Контекст подключения
         /// </summary>
         private string _context = null;
+        private string _domain = string.Empty;
 
         /// <summary>
         /// Конструктор
@@ -21,40 +22,57 @@ namespace cms.dbase
         public FrontRepository()
         {
             _context = "defaultConnection";
+            LinqToDB.Common.Configuration.Linq.AllowMultipleQuery = true;
         }
 
-        public FrontRepository(string ConnectionString)
+        public FrontRepository(string ConnectionString, string DomainUrl)
         {
             _context = ConnectionString;
+            _domain = (!string.IsNullOrEmpty(DomainUrl)) ? getSiteId(DomainUrl) : "";
+            LinqToDB.Common.Configuration.Linq.AllowMultipleQuery = true;
         }
 
         /// <summary>
         /// Получение идентификатора сайта
         /// </summary>
-        /// <param name="Domain">Домен</param>
+        /// <param name="domain">Домен</param>
         /// <returns></returns>
-        public override string getSiteId(string Domain)
+        public override string getSiteId(string domain)
         {
-            using (var db = new CMSdb(_context))
+            try
             {
-                string SiteId = String.Empty;
+                if (string.IsNullOrEmpty(domain))
+                    throw new Exception("FrontRepository: getSideId Domain is empty!");
 
-                var data = db.cms_sites_domainss.Where(w => w.c_domain == Domain).FirstOrDefault();
+                using (var db = new CMSdb(_context))
+                {
+                    var data = db.cms_sites_domainss
+                        .Where(w => w.c_domain == domain);
 
-                SiteId = data.f_site;
+                    if (data.Any())
+                    {
+                        //Может быть найдено несколько записей по разным доменам, но ссылаются на один сайт
+                        var _domain = data.FirstOrDefault();
+                        return _domain.f_site;
+                    }
 
-                return SiteId;
+                    throw new Exception("FrontRepository: getSideId Domain '" + domain + "' was not found!");
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("FrontRepository: getSideId Domain '" + domain + "' непредвиденная ошибка!" + ex.Message);
             }
         }
 
         /// <summary>
         /// Получение вьюхи
         /// </summary>
-        /// <param name="siteId">Домен</param>
         /// <param name="siteSection">Секция</param>
         /// <returns></returns>
-        public override string getView(string siteId, string siteSection)
+        public override string getView(string siteSection) //string siteId,
         {
+            string siteId = _domain;
             using (var db = new CMSdb(_context))
             {
                 string ViewPath = "~/Error/404/";
@@ -74,10 +92,10 @@ namespace cms.dbase
         /// <summary>
         /// Получение информации по сайту
         /// </summary>
-        /// <param name="domain">Домен</param>
         /// <returns></returns>
-        public override SitesModel getSiteInfo(string domain)
+        public override SitesModel getSiteInfo()
         {
+            string domain = _domain;
             using (var db = new CMSdb(_context))
             {
                 var data = db.cms_sitess
@@ -108,18 +126,46 @@ namespace cms.dbase
                         Theme = s.c_theme
                     });
 
-                if (!data.Any()) return null;
-                else return data.SingleOrDefault();
+                if (data.Any())
+                    return data.SingleOrDefault();
+
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Получим список элементов карты сайта для контроллера
+        /// </summary>
+        /// <returns></returns>
+        public override SiteMapModel[] getSiteMapListShort()
+        {
+            string domain = _domain;
+            using (var db = new CMSdb(_context))
+            {
+                var query = db.content_sitemaps
+                    .Where(w => w.f_site.Equals(domain))
+                    .Where(w => !w.b_disabled)
+                    .Select(s => new SiteMapModel
+                    {
+                        Title = s.c_title,
+                        Path = s.c_path,
+                        Alias = s.c_alias
+                    });
+
+                if (query.Any())
+                    return query.ToArray();
+
+                return null;
             }
         }
 
         /// <summary>
         /// Получение меню из карты сайта
         /// </summary>
-        /// <param name="domain">Домен</param>
         /// <returns></returns>
-        public override SiteMapModel[] getSiteMapList(string domain)
+        public override SiteMapModel[] getSiteMapList() //string domain
         {
+            string domain = _domain;
             using (var db = new CMSdb(_context))
             {
                 var data = db.content_sv_sitemap_menus
@@ -148,32 +194,10 @@ namespace cms.dbase
                         MenuGroups = getSiteMapGroupMenu(s.id)
                     });
 
-                if (!data.Any()) return null;
-                else return data.ToArray();
-            }
-        }
+                if (data.Any())
+                    return data.ToArray();
 
-        /// <summary>
-        /// Получим список элементов карты сайта для контроллера
-        /// </summary>
-        /// <param name="domain"></param>
-        /// <returns></returns>
-        public override SiteMapModel[] getMapSiteList(string domain)
-        {
-            using (var db = new CMSdb(_context))
-            {
-                var query = db.content_sitemaps
-                    .Where(w => w.f_site.Equals(domain))
-                    .Where(w => !w.b_disabled)
-                    .Select(s => new SiteMapModel
-                    {
-                        Title = s.c_title,
-                        Path = s.c_path,
-                        Alias = s.c_alias
-                    });
-
-                if (!query.Any()) return null;
-                return query.ToArray();
+                return null;
             }
         }
 
@@ -190,18 +214,20 @@ namespace cms.dbase
                     .Where(w => w.f_sitemap.Equals(id))
                     .Select(s => s.f_menutype.ToString());
 
-                if (!data.Any()) return null;
-                else { return data.ToArray(); }
+                if (data.Any())
+                    return data.ToArray();
+
+                return null;
             }
         }
 
         /// <summary>
         /// Получение списка баннеров
         /// </summary>
-        /// <param name="domain">Домен</param>
         /// <returns></returns>
-        public override BannersModel[] getBanners(string domain)
+        public override BannersModel[] getBanners()
         {
+            string domain = _domain;
             using (var db = new CMSdb(_context))
             {
                 var data = db.content_sv_banners_sections
@@ -220,8 +246,10 @@ namespace cms.dbase
                         SectionAlias = s.c_alias
                     });
 
-                if (!data.Any()) return null;
-                else return data.ToArray();
+                if (data.Any())
+                    return data.ToArray();
+
+                return null;
             }
         }
 
@@ -242,8 +270,7 @@ namespace cms.dbase
                         Url = s.c_url
                     });
 
-                if (!query.Any()) return null;
-                else
+                if (query.Any())
                 {
                     db.content_bannerss
                         .Where(w => w.id.Equals(id))
@@ -252,90 +279,42 @@ namespace cms.dbase
 
                     return query.SingleOrDefault();
                 }
+
+                return null;
             }
         }
 
         /// <summary>
-        /// Определяем - это сайт организации, события или персоны
-        /// </summary>
-        /// <param name="db"></param>
-        /// <param name="domain"></param>
-        /// <returns></returns>
-        private SiteContentType db_getDomainContentTypeId(CMSdb db, string domain)
-        {
-            try
-            {
-                var linkIdData = db.cms_sitess.Where(d => d.c_alias.Equals(domain)).SingleOrDefault();
-                if (linkIdData != null)
-                {
-                    return new SiteContentType()
-                    {
-                        Id = linkIdData.f_content,
-                        CType = linkIdData.c_content_type
-                    };
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("cms_sites: Обнаружено более одной записи у поля, которое в принципе не может быть не уникальным!!!" + ex);
-            }   
-
-            return null;
-        }
-
-        /// <summary>
-        /// Эл-т карты сайта
+        /// карта сайта
         /// </summary>
         /// <param name="path"></param>
         /// <param name="alias"></param>
-        /// <param name="domain"></param>
         /// <returns></returns>
-        public override SiteMapModel getSiteMap(string path, string alias, string domain)
+        public override SiteMapModel getSiteMap(string path, string alias) //, string domain
         {
+            string domain = _domain;
             using (var db = new CMSdb(_context))
             {
                 var query = db.content_sitemaps.Where(w => w.c_path == path && w.c_alias == alias && w.f_site == domain);
-                if (query.Any())
+                var data = query.Select(s => new SiteMapModel
                 {
-                    var data = query.Select(s => new SiteMapModel
-                    {
-                        Title = s.c_title,
-                        Text = s.c_text,
-                        Alias = s.c_alias,
-                        Path = s.c_path,
-                        Id = s.id,
-                        FrontSection = s.f_front_section
-                    }).First();
+                    Title = s.c_title,
+                    Text = s.c_text,
+                    Alias = s.c_alias,
+                    Path = s.c_path,
+                    Id = s.id,
+                    FrontSection = s.f_front_section
+                });
 
-                    return data;
-                }
+                if (data.Any())
+                    return data.First();
+
                 return null;
             }
-
         }
 
         /// <summary>
-        /// Получим текст для 
-        /// </summary>
-        /// <param name="domain"></param>
-        /// <param name="frontSection"></param>
-        /// <returns></returns>
-        public override string getContactsText(string domain, string frontSection)
-        {
-            using (var db = new CMSdb(_context))
-            {
-                var query = db.content_sitemaps
-                    .Where(w => w.f_site.Equals(domain))
-                    .Where(w => w.f_front_section.Equals(frontSection))
-                    .Select(s => s.c_text);
-
-                if (!query.Any()) return null;
-                return query.SingleOrDefault();
-            }
-        }
-
-        /// <summary>
-        /// Список эл-тов карты сайта
+        /// Дочерние элементы
         /// </summary>
         /// <param name="ParentId"></param>
         /// <returns></returns>
@@ -353,11 +332,11 @@ namespace cms.dbase
                                      Path = c.c_path,
                                      FrontSection = c.f_front_section,
                                      Url = c.c_url
-                                 }).ToArray();
+                                 });
+
                 if (data.Any())
-                {
-                    return data;
-                }
+                    return data.ToArray();
+
                 return null;
             }
         }
@@ -379,23 +358,23 @@ namespace cms.dbase
                      Title = s.c_title,
                      FilePath = s.c_file_path,
                      idPage = s.id_page
-                 })
+                 });
 
-                 ;
-                if (!data.Any()) { return null; }
-                else { return data.ToArray(); }
+                if (data.Any())
+                    return data.ToArray();
+
+                return data.ToArray();
             }
-
         }
 
         /// <summary>
         /// Получаем хленые крошки
         /// </summary>
         /// <param name="Url">относительная ссылка на страницу</param>
-        /// <param name="domain"></param>
         /// <returns></returns>
-        public override List<Breadcrumbs> getBreadCrumbCollection(string Url, string domain)
+        public override List<Breadcrumbs> getBreadCrumbCollection(string Url)
         {
+            string domain = _domain;
             using (var db = new CMSdb(_context))
             {
                 int _len = Url.Count();
@@ -430,10 +409,8 @@ namespace cms.dbase
                     data.Reverse();
                     return data;
                 }
-                else
-                {
-                    return null;
-                }
+
+                return null;
             }
         }
 
@@ -441,8 +418,9 @@ namespace cms.dbase
         /// Получаем новости для модуля на главной странице
         /// </summary>
         /// <returns></returns>
-        public override List<MaterialFrontModule> getMaterialsModule(string domain)
+        public override List<MaterialFrontModule> getMaterialsModule()
         {
+            string domain = _domain;
             using (var db = new CMSdb(_context))
             {
                 var contentType = ContentType.MATERIAL.ToString().ToLower();
@@ -482,11 +460,14 @@ namespace cms.dbase
                         });
 
                     // берём последние 3 новости данной группы
-                    if (query.Any()) list.AddRange(query.Take(5));
+                    if (query.Any())
+                        list.AddRange(query.Take(5));
                 }
 
-                if (list.Count() > 0) return list;
-                else return null;
+                if (list.Any())
+                    return list;
+
+                return null;
             }
         }
 
@@ -502,7 +483,10 @@ namespace cms.dbase
                 if (!string.IsNullOrEmpty(filter.Domain))
                 {
                     var contentType = ContentType.MATERIAL.ToString().ToLower();
-                    
+
+                    //Запрос типа:
+                    //Select t.*, s.* from[dbo].[content_content_link] t left join[dbo].[cms_sites] s
+                    //on t.f_link = s.f_content Where s.c_alias = 'main'
                     var materials = db.content_content_links.Where(e => e.f_content_type == contentType)
                         .Join(db.cms_sitess.Where(o => o.c_alias == filter.Domain),
                                 e => e.f_link,
@@ -586,10 +570,11 @@ namespace cms.dbase
                             }
                         };
                 }
+
                 return null;
             }
         }
-        
+
         /// <summary>
         /// Новость
         /// </summary>
@@ -597,10 +582,10 @@ namespace cms.dbase
         /// <param name="month"></param>
         /// <param name="day"></param>
         /// <param name="alias"></param>
-        /// <param name="domain"></param>
         /// <returns></returns>
-        public override MaterialsModel getMaterialsItem(string year, string month, string day, string alias, string domain)
+        public override MaterialsModel getMaterialsItem(string year, string month, string day, string alias)
         {
+            string domain = _domain;
             using (var db = new CMSdb(_context))
             {
                 int _year = Convert.ToInt32(year);
@@ -645,11 +630,11 @@ namespace cms.dbase
                         .Where(w => w.id.Equals(material.Id))
                         .Set(u => u.n_count_see, u => u.n_count_see + 1)
                         .Update();
-                    
+
                     return material;
                 }
-                return null;
 
+                return null;
             }
         }
 
@@ -678,10 +663,10 @@ namespace cms.dbase
         /// <summary>
         /// Список структурных подразделений
         /// </summary>
-        /// <param name="domain"></param>
         /// <returns></returns>
-        public override StructureModel[] getStructures(string domain)
+        public override StructureModel[] getStructures() //string domain
         {
+            string domain = _domain;
             using (var db = new CMSdb(_context))
             {
                 var query = from str in db.content_org_structures
@@ -721,8 +706,10 @@ namespace cms.dbase
                         }).ToArray()
                     });
 
-                if (!data.Any()) return null;
-                return data.ToArray();
+                if (data.Any())
+                    return data.ToArray();
+
+                return null;
             }
         }
 
@@ -732,8 +719,9 @@ namespace cms.dbase
         /// <param name="domain"></param>
         /// <param name="num"></param>
         /// <returns></returns>
-        public override StructureModel getStructureItem(string domain, int num)
+        public override StructureModel getStructureItem(int num) //string domain,
         {
+            string domain = _domain;
             using (var db = new CMSdb(_context))
             {
                 var data = db.content_org_structures.Where(w => w.num == num)
@@ -755,10 +743,10 @@ namespace cms.dbase
                                DirecorPost = s.c_director_post,
                                Ovp = s.b_ovp
                            });
+
                 if (data.Any())
-                {
                     return data.First();
-                }
+
                 return null;
             }
         }
@@ -784,9 +772,9 @@ namespace cms.dbase
                 {
                     return query.ToArray();
                 }
+
                 return null;
             }
-
         }
 
         /// <summary>
@@ -920,6 +908,7 @@ namespace cms.dbase
 
                     return data;
                 }
+
                 return null;
             }
         }
@@ -986,8 +975,98 @@ namespace cms.dbase
                         }).ToArray()
                     });
 
-                if (!data2.Any()) return null;
-                return data2.ToArray();
+                if (data2.Any())
+                    return data2.ToArray();
+
+                return null;
+
+                #region comment
+                //var query = db.cms_sitess
+                //            .Where(w => w.c_alias == domain)
+                //            .Join(db.content_people_org_links, e => e.f_content, o => o.f_org, (e, o) => o)
+                //            .Join(db.content_peoples, m => m.f_people, n => n.id, (m, n) => n);
+
+                //if (filter.SearchText != null)
+                //{
+                //    query = query.Where(w => (w.c_name.Contains(filter.SearchText) || w.c_surname.Contains(filter.SearchText) || w.c_patronymic.Contains(filter.SearchText)));
+                //}
+                //if (!String.IsNullOrEmpty(filter.Group))
+                //{
+                //    query = query
+                //            .Join(db.content_people_org_links, e => e.id, o => o.f_people, (o, e) => new { e, o })
+                //            .Join(db.content_people_department_links
+                //                .Where(w => string.IsNullOrWhiteSpace(filter.Group) || w.f_department == Guid.Parse(filter.Group))
+                //                , m => m.e.id, n => n.f_people, (m, n) => m.o);
+                //}
+
+                //#region временное решение
+                //int post = !string.IsNullOrWhiteSpace(filter.Type) ? Int32.Parse(filter.Type) : 0;
+                //if (post != 0)
+                //{
+                //    var queryWithPost = query
+                //    .Join(db.content_people_employee_posts_links, p => p.id, pepl => pepl.f_people, (p, pepl) => new { p, pepl.f_post })
+                //    .Join(db.content_employee_postss.Where(w => w.id.Equals(post)), pp => pp.f_post, ep => ep.id, (pp, ep) => new { pp, ep })
+                //    .Select(s => new
+                //    {
+                //        people = s.pp.p,
+                //        post = new PeoplePost
+                //        {
+                //            Id = s.ep.id,
+                //            Name = s.ep.c_name
+                //        }
+                //    });
+
+                //    if (queryWithPost.Any())
+                //    {
+                //        LinqToDB.Common.Configuration.Linq.AllowMultipleQuery = true;
+
+                //        var result = queryWithPost.Select(s => new People
+                //        {
+                //            Id = s.people.id,
+                //            FIO = s.people.c_surname + " " + s.people.c_name + " " + s.people.c_patronymic,
+                //            Photo = s.people.c_photo,
+                //            Posts = (from pep in db.content_people_employee_posts_links
+                //                     join ep in db.content_employee_postss on pep.f_post equals ep.id
+                //                     where pep.f_people.Equals(s.people.id)
+                //                     select new PeoplePost
+                //                     {
+                //                         Id = ep.id,
+                //                         Name = ep.c_name,
+                //                         Type = pep.n_type
+                //                     }).OrderBy(o => o.Type).ToArray()
+                //        });
+
+                //        return result.ToArray();
+                //    }
+                //    return null;
+                //}
+                //#endregion
+
+                //var query1 = query.OrderBy(o => o.c_surname);
+                //if (query1.Any())
+                //{
+                //    LinqToDB.Common.Configuration.Linq.AllowMultipleQuery = true;
+
+                //    var result = query1.Select(s => new People()
+                //    {
+                //        Id = s.id,
+                //        FIO = s.c_surname + " " + s.c_name + " " + s.c_patronymic,
+                //        Photo = s.c_photo,
+                //        Posts = (from pep in db.content_people_employee_posts_links
+                //                 join ep in db.content_employee_postss on pep.f_post equals ep.id
+                //                 where pep.f_people.Equals(s.id)
+                //                 select new PeoplePost
+                //                 {
+                //                     Id = ep.id,
+                //                     Name = ep.c_name,
+                //                     Type = pep.n_type
+                //                 }).OrderBy(o => o.Type).ToArray()
+                //    });
+
+                //    return result.ToArray();
+                //}
+                //return null;
+                #endregion
             }
         }
 
@@ -995,9 +1074,8 @@ namespace cms.dbase
         /// Получает отдельного сотрудника
         /// </summary>
         /// <param name="id">Идентификатор</param>
-        /// <param name="domain">Домен</param>
         /// <returns></returns>
-        public override People getPeopleItem(Guid id, string domain)
+        public override People getPeopleItem(Guid id)
         {
             using (var db = new CMSdb(_context))
             {
@@ -1011,8 +1089,10 @@ namespace cms.dbase
                         Photo = s.c_photo
                     });
 
-                if (!query.Any()) return null;
-                return query.SingleOrDefault();
+                if (query.Any())
+                    return query.SingleOrDefault();
+
+                return null;
             }
         }
 
@@ -1029,18 +1109,20 @@ namespace cms.dbase
                     .Where(w => w.id.Equals(id))
                     .Select(s => s.c_snils);
 
-                if (!query.Any()) return null;
-                return query.SingleOrDefault();
+                if (query.Any())
+                    return query.SingleOrDefault();
+
+                return null;
             }
         }
 
         /// <summary>
         /// сгруппированные по структурам департменты для выпадающего спика
         /// </summary>
-        /// <param name="domain"></param>
         /// <returns></returns>
-        public override StructureModel[] getDeparatamentsSelectList(string domain)
+        public override StructureModel[] getDeparatamentsSelectList()
         {
+            string domain = _domain;
             using (var db = new CMSdb(_context))
             {
                 var data = db.cms_sitess.Where(w => w.c_alias == domain)
@@ -1054,7 +1136,9 @@ namespace cms.dbase
 
 
 
-                if (data.Any()) return data.ToArray();
+                if (data.Any())
+                    return data.ToArray();
+
                 return null;
             }
         }
@@ -1063,8 +1147,9 @@ namespace cms.dbase
         /// Список должностей
         /// </summary>
         /// <returns></returns>
-        public override PeoplePost[] getPeoplePosts(string domain)
+        public override PeoplePost[] getPeoplePosts()
         {
+            string domain = _domain;
             using (var db = new CMSdb(_context))
             {
                 var query = (from s in db.cms_sitess
@@ -1081,8 +1166,10 @@ namespace cms.dbase
 
                 var data = query.GroupBy(x => x.Id).Select(s => s.First());
 
-                if (!data.Any()) return null;
-                return data.ToArray();
+                if (data.Any())
+                    return data.ToArray();
+
+                return null;
             }
         }
 
@@ -1091,8 +1178,9 @@ namespace cms.dbase
         /// </summary>
         /// <param name="domain"></param>
         /// <returns></returns>
-        public override OrgsModel getOrgInfo(string domain)
+        public override OrgsModel getOrgInfo()
         {
+            string domain = _domain;
             using (var db = new CMSdb(_context))
             {
                 var data = db.cms_sitess.Where(w => w.c_alias == domain)
@@ -1107,10 +1195,10 @@ namespace cms.dbase
                                  GeopointX = s.n_geopoint_x,
                                  GeopointY = s.n_geopoint_y
                              });
+
                 if (data.Any())
-                {
                     return data.First();
-                }
+
                 return null;
             }
         }
@@ -1121,8 +1209,9 @@ namespace cms.dbase
         /// <param name="domain"></param>
         /// <param name="Ip"></param>
         /// <returns></returns>
-        public override IEnumerable<VoteModel> getVote(string domain, string Ip)
+        public override IEnumerable<VoteModel> getVote( string Ip)
         {
+            string domain = _domain;
             using (var db = new CMSdb(_context))
             {
                 var query = db.content_votes
@@ -1141,9 +1230,8 @@ namespace cms.dbase
                             });
 
                 if (query.Any())
-                {
                     return query.ToArray();
-                }
+
                 return null;
             }
         }
@@ -1159,10 +1247,16 @@ namespace cms.dbase
             using (var db = new CMSdb(_context))
             {
                 var data = db.content_votes.Where(w => w.id == VoteId);
-                if (data.Single().d_date_end <= DateTime.Now) return true;//если опрос завершен по дате
 
+                //если опрос завершен по дате
+                if (data.Single().d_date_end <= DateTime.Now)
+                    return true;
+
+                //если пользователь уже принял участие в опросе
                 var _count = db.content_vote_userss.Where(w => w.f_vote == VoteId && w.c_ip == Ip).Count();
-                if (_count > 0) return true;//если пользователь уже принял участие в опросе
+                if (_count > 0)
+                    return true;
+
                 return false;
             }
         }
@@ -1190,9 +1284,8 @@ namespace cms.dbase
                                 ShowStatistic = ShowStatic(s.id, Ip)
                             });
                 if (query.Any())
-                {
                     return query.Single();
-                }
+
                 return null;
             }
 
@@ -1217,10 +1310,10 @@ namespace cms.dbase
                                 id = s.id,
                                 Statistic = getVoteStat(s.id, VoteId, Ip)
                             });
+
                 if (query.Any())
-                {
                     return query.ToArray();
-                }
+
                 return null;
             }
         }
@@ -1242,6 +1335,7 @@ namespace cms.dbase
                     AllVoteCount = db.content_vote_userss.Where(w => w.f_vote == VoteId).Count(),
                     ThisVoteCount = db.content_vote_userss.Where(w => w.f_answer == AnswerId).Count()
                 };
+
                 return data;
             }
         }
@@ -1271,6 +1365,7 @@ namespace cms.dbase
                               .Insert();
                         }
                     }
+
                     tran.Commit();
                     return true;
                 }
@@ -1281,7 +1376,7 @@ namespace cms.dbase
         /// Список админстративного персонала
         /// </summary>
         /// <returns></returns>
-        public override OrgsAdministrativ[] getAdministrativ(string domain)
+        public override OrgsAdministrative[] getAdministrative(string domain)
         {
             using (var db = new CMSdb(_context))
             {
@@ -1291,23 +1386,23 @@ namespace cms.dbase
                     var data = query.Single();
                     if (data.c_content_type == "org")
                     {
-                        var adm = db.content_orgs_adminstrativs.Where(w => w.f_org == data.f_content);
+                        var adm = db.content_orgs_adminstrativs
+                            .Where(w => w.f_org == data.f_content)
+                            .OrderBy(o => o.n_sort)
+                            .Select(s => new OrgsAdministrative()
+                            {
+                                Surname = s.c_surname,
+                                Name = s.c_name,
+                                Patronymic = s.c_patronymic,
+                                Phone = s.c_phone,
+                                Photo = new Photo { Url = s.c_photo },
+                                Post = s.c_post,
+                                Text = s.c_text,
+                                PeopleF = s.f_people
+                            });
+
                         if (adm.Any())
-                        {
-                            return adm
-                                .OrderBy(o => o.n_sort)
-                                .Select(s => new OrgsAdministrativ()
-                                {
-                                    Surname = s.c_surname,
-                                    Name = s.c_name,
-                                    Patronymic = s.c_patronymic,
-                                    Phone = s.c_phone,
-                                    Photo = new Photo { Url = s.c_photo },
-                                    Post = s.c_post,
-                                    Text = s.c_text,
-                                    PeopleF = s.f_people
-                                }).ToArray();
-                        }
+                            return adm.ToArray();
                     }
                 }
                 return null;
@@ -1323,10 +1418,12 @@ namespace cms.dbase
         {
             using (var db = new CMSdb(_context))
             {
-                return (from s in db.cms_sitess
-                        join o in db.content_orgss on s.f_content equals o.id
-                        where s.c_alias.Equals(domain)
-                        select o.f_oid).SingleOrDefault();
+                return
+                    (from s in db.cms_sitess
+                     join o in db.content_orgss on s.f_content equals o.id
+                     where s.c_alias.Equals(domain)
+                     select o.f_oid
+                    ).SingleOrDefault();
             }
         }
 
@@ -1348,8 +1445,10 @@ namespace cms.dbase
                         Sort = s.n_sort
                     });
 
-                if (!query.Any()) return null;
-                return query.ToArray();
+                if (query.Any())
+                    return query.ToArray();
+
+                return null;
             }
         }
 
@@ -1387,7 +1486,7 @@ namespace cms.dbase
                                      Address = o.c_adress,
                                      Logo = o.c_logo,
                                      Link = s.c_alias,
-                                     Leader = new OrgsAdministrativ
+                                     Leader = new OrgsAdministrative
                                      {
                                          id = p.f_people,
                                          Surname = a.c_surname,
@@ -1399,8 +1498,10 @@ namespace cms.dbase
                                      }
                                  });
 
-                    if (!query.Any()) return null;
-                    return query.ToArray();
+                    if (query.Any())
+                        return query.ToArray();
+
+                    return null;
                 }
                 else
                 {
@@ -1427,7 +1528,7 @@ namespace cms.dbase
                                      Logo = o.c_logo,
                                      Link = s.c_alias,
                                      Affiliation = o.f_department_affiliation,
-                                     Leader = new OrgsAdministrativ
+                                     Leader = new OrgsAdministrative
                                      {
                                          id = p.f_people,
                                          Surname = a.c_surname,
@@ -1438,11 +1539,12 @@ namespace cms.dbase
                                          Photo = new Photo { Url = a.c_photo }
                                      }
                                  });
-                    if (!query.Any()) return null;
-                    return query.ToArray();
+
+                    if (query.Any())
+                        return query.ToArray();
+
+                    return null;
                 }
-
-
             }
         }
 
@@ -1455,9 +1557,13 @@ namespace cms.dbase
         {
             using (var db = new CMSdb(_context))
             {
-                return db.content_orgs_typess
+                var data = db.content_orgs_typess
                     .Where(w => w.id.Equals(id))
-                    .Select(s => s.c_title).SingleOrDefault();
+                    .Select(s => s.c_title);
+                if (data.Any())
+                    return data.SingleOrDefault();
+
+                return null;
             }
         }
 
@@ -1477,8 +1583,10 @@ namespace cms.dbase
                         Value = s.c_title
                     });
 
-                if (!query.Any()) return null;
-                return query.ToArray();
+                if (query.Any())
+                    return query.ToArray();
+
+                return null;
             }
         }
 
@@ -1491,12 +1599,16 @@ namespace cms.dbase
         {
             using (var db = new CMSdb(_context))
             {
-                return db.content_orgs_department_affiliations
+                var query = db.content_orgs_department_affiliations
                     .Where(w => w.id.Equals(id))
-                    .Select(s => s.c_title).SingleOrDefault();
+                    .Select(s => s.c_title);
+
+                if (query.Any())
+                    return query.SingleOrDefault();
+
+                return null;
             }
         }
-
 
 
         /// <summary>
@@ -1523,12 +1635,14 @@ namespace cms.dbase
                                      Sort = ms.n_sort
                                  });
 
-                    if (!query.Any()) return null;
-                    return query.ToArray();
+                    if (query.Any())
+                        return query.ToArray();
+
+                    return null;
                 }
                 else
                 {
-                    var query = (from  ms in db.content_medical_servicess
+                    var query = (from ms in db.content_medical_servicess
                                  orderby ms.n_sort
                                  select new MedicalService
                                  {
@@ -1537,10 +1651,11 @@ namespace cms.dbase
                                      Sort = ms.n_sort
                                  });
 
-                    if (!query.Any()) return null;
-                    return query.ToArray();
+                    if (query.Any())
+                        return query.ToArray();
+
+                    return null;
                 }
-                
             }
         }
 
@@ -1575,7 +1690,7 @@ namespace cms.dbase
                                  Address = o.c_adress,
                                  Logo = o.c_logo,
                                  Link = s.c_alias,
-                                 Leader = new OrgsAdministrativ
+                                 Leader = new OrgsAdministrative
                                  {
                                      id = p.f_people,
                                      Surname = a.c_surname,
@@ -1587,8 +1702,10 @@ namespace cms.dbase
                                  }
                              });
 
-                if (!query.Any()) return null;
-                return query.ToArray();
+                if (query.Any())
+                    return query.ToArray();
+
+                return null;
             }
         }
 
@@ -1601,10 +1718,14 @@ namespace cms.dbase
         {
             using (var db = new CMSdb(_context))
             {
-                return db.content_medical_servicess
+                var query = db.content_medical_servicess
                     .Where(w => w.id.Equals(id))
-                    .Select(s => s.c_title)
-                    .SingleOrDefault();
+                    .Select(s => s.c_title);
+
+                if (query.Any())
+                    return query.SingleOrDefault();
+
+                return null;
             }
         }
 
@@ -1717,16 +1838,21 @@ namespace cms.dbase
         /// <returns></returns>
         public override FeedbacksList getFeedbacksList(FilterParams filtr)
         {
+            FeedbackModel[] feedbacks = null;
             using (var db = new CMSdb(_context))
             {
-                var query = db.content_feedbackss.Where(w => w.id != null);
-                query = query.OrderByDescending(o => o.d_date);
+                var query = db.content_feedbackss
+                    .Where(w => w.f_site == _domain)
+                    .Where(w => w.b_disabled == filtr.Disabled)
+                    .OrderByDescending(o => o.d_date);
 
                 if (query.Any())
                 {
                     int ItemCount = query.Count();
 
                     var List = query
+                        .Skip(filtr.Size * (filtr.Page - 1))
+                        .Take(filtr.Size)
                         .Select(s => new FeedbackModel
                         {
                             Id = s.id,
@@ -1739,15 +1865,12 @@ namespace cms.dbase
                             Answerer = s.c_answerer,
                             IsNew = s.b_new,
                             Disabled = s.b_disabled
-                        }).
-                        Skip(filtr.Size * (filtr.Page - 1)).
-                        Take(filtr.Size);
-
-                    FeedbackModel[] eventsInfo = List.ToArray();
+                        });
+                    feedbacks = List.ToArray();
 
                     return new FeedbacksList
                     {
-                        Data = eventsInfo,
+                        Data = feedbacks,
                         Pager = new Pager
                         {
                             page = filtr.Page,
@@ -1760,35 +1883,51 @@ namespace cms.dbase
                 return null;
             }
         }
-
         /// <summary>
-        /// Получаем отзыв
+        /// Сохранение сообщения  из обратной связи при отправке пользователем
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="feedback"></param>
         /// <returns></returns>
-        public override FeedbackModel getFeedbackItem(Guid id)
+        public override bool insertFeedbackItem(FeedbackModel feedback)
         {
-            using (var db = new CMSdb(_context))
+            try
             {
-                var data = db.content_feedbackss.
-                    Where(w => w.id == id).
-                    Select(s => new FeedbackModel
+                using (var db = new CMSdb(_context))
+                {
+                    using (var tran = db.BeginTransaction())
                     {
-                        Id = s.id,
-                        Title = s.c_title,
-                        Text = s.c_text,
-                        Date = s.d_date,
-                        SenderName = s.c_sender_name,
-                        SenderEmail = s.c_sender_email,
-                        Answer = s.c_answer,
-                        Answerer = s.c_answerer,
-                        IsNew = s.b_new,
-                        Disabled = s.b_disabled
-                    });
+                        content_feedbacks cdFeedback = db.content_feedbackss
+                                                    .Where(p => p.id == feedback.Id)
+                                                    .SingleOrDefault();
+                        if (cdFeedback != null)
+                        {
+                            throw new Exception("Запись с таким Id уже существует");
+                        }
 
-
-                if (!data.Any()) { return null; }
-                else { return data.First(); }
+                        cdFeedback = new content_feedbacks
+                        {
+                            id = feedback.Id,
+                            c_title = feedback.Title,
+                            c_text = feedback.Text,
+                            d_date = feedback.Date,
+                            c_sender_name = feedback.SenderName,
+                            c_sender_email = feedback.SenderEmail,
+                            c_answer = feedback.Answer,
+                            c_answerer = feedback.Answerer,
+                            b_new = feedback.IsNew,
+                            b_disabled = feedback.Disabled,
+                            f_site = _domain
+                        };
+                        db.Insert(cdFeedback);
+                        tran.Commit();
+                        return true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                //write to log ex
+                return false;
             }
         }
     }

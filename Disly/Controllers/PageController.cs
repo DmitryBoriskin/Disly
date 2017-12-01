@@ -39,7 +39,7 @@ namespace Disly.Controllers
             string _alias = UrlPath.Substring(UrlPath.LastIndexOf("/") + 1);
             #endregion
 
-            model.Item = _repository.getSiteMap(_path,_alias,Domain);
+            model.Item = _repository.getSiteMap(_path,_alias); //,Domain
             if (model.Item != null)
             {
                 if (model.Item.FrontSection.ToLower() != "page")

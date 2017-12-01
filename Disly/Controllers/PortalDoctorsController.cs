@@ -28,8 +28,8 @@ namespace Disly.Controllers
         {
             var filter = getFilter();
             model.DoctorList = _repository.getDoctorsList(filter);
-            model.PeoplePosts = _repository.getPeoplePosts(Domain);
-            
+            model.PeoplePosts = _repository.getPeoplePosts();//Domain
+
             ViewBag.SearchText = filter.SearchText;
             ViewBag.Position = filter.Type;
 
@@ -51,7 +51,7 @@ namespace Disly.Controllers
         // GET: portaldoctors/id
         public ActionResult Item(Guid id)
         {
-            model.Doctor = _repository.getPeopleItem(id, null);
+            model.Doctor = _repository.getPeopleItem(id);
 
             // десериализация xml
             XmlSerializer serializer = new XmlSerializer(typeof(Employee));
