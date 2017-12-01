@@ -76,9 +76,67 @@
             Coords(x, y, title, desc, zoom, height,id);
         });
     }
+
+
+    if ($('.searchform_dop').length > 0) {
+        SearchDopWork()
+    }
 });
 
+function SearchDopWork() {
+    $('.searchform_show_dop').click(function (e) {
+        $('.searchform_dop').toggleClass('show');
+        document.getElementById("search_focus_dop").focus();
+        e.preventDefault();
+    });
+    //hide form
+    $('.searchform_close_dop').click(function (e) {
+        $('.searchform_dop').toggleClass('show');
+        e.preventDefault();
+    });
 
+    $('#search_focus_dop').focusout(function () {
+        setTimeout(function () {
+            $('.searchform_dop').toggleClass('show');
+        }, 400);
+    });
+
+
+    $('.searchform_btn_dop').click(function (e) {
+        var SerachInp = $('#search_focus_dop').val();
+        if (SerachInp === "") {
+            document.getElementById("search_focus_dop").focus();
+        }
+        else {
+            CommitSearchDop();
+        }
+        e.preventDefault();
+    });
+
+
+    $(".searchform_btn_dop").keydown(function (event) {
+        if (event.keyCode == 13) {
+            CommitSearchDop();
+            event.preventDefault();
+        }
+    });
+    $(".searchform_dop").submit(function (e) {
+        CommitSearchDop();
+        e.preventDefault();
+    });
+
+
+
+    function CommitSearchDop() {
+        var SerachInp = $('.search-input_dop').val();
+        var EndUrl = "%20url%3Ahttp%3A%2F%2F" + SiteId + ".med.cap.ru*&web=0";
+        var SearchText = SerachInp.replace(" ", "%20") + EndUrl;
+        var Link = "/Search?searchid=2297106&text=" + SearchText + "&searchtext=" + SerachInp.replace(" ", "%20");
+        if (SearchText != "") {
+            document.location.href = Link;
+        }
+    }
+}
 
 function SearchWork() {
     //show form
@@ -129,7 +187,7 @@ function SearchWork() {
         var SerachInp = $('.search-input').val();
         var EndUrl = "%20url%3Ahttp%3A%2F%2F" + SiteId + ".med.cap.ru*&web=0";
         var SearchText = SerachInp.replace(" ", "%20") + EndUrl;        
-        var Link = "/Search?searchid=2297106&text=" + SearchText;
+        var Link = "/Search?searchid=2297106&text=" + SearchText + "&searchtext=" + SerachInp.replace(" ", "%20");
         if (SearchText != "") {
             document.location.href = Link;
         }

@@ -10,7 +10,10 @@
     color: @def1
 }
 .bottom_menu a:hover,
-.right_section a:hover{color:@def2;}
+.right_section a:hover{
+    color:@def2;
+    &:before{color:#ccc;}
+}
 
 .media-heading {
     color: @def1;
@@ -150,3 +153,6 @@
 
 .searchform button{background-color:@def2;}
 .searchform button:hover{background-color:@def1;}
+
+.searchform_dop button{background-color:@def2;}
+.searchform_dop button:hover{background-color:@def1;}

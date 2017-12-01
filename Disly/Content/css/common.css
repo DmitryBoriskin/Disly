@@ -202,9 +202,20 @@ body {
     line-height: 20px;
 }
 
+/* блок доп поиска на странице результатов поиска */
+.searchform_input_wr_dop {
+    padding-right: 78px;
+    width: 100%;
+    border: 1px solid #ccc;
+}
+.searchform_dop input:active,
+.searchform_dop input:focus,
+.searchform_dop input:hover {
+    outline: none;
+}
+.searchform_dop button{float:right;font-weight:normal;padding:10px 15px;color:#fff;border:none;    line-height: 26px;}
+.search-input_dop{width:100%;border:0;line-height:44px;padding:0 10px;}
 /*  */
-/*  */
-
 /* подвал */
 .logo-small {
     width: 33px;

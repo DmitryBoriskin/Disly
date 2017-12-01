@@ -1,8 +1,13 @@
 .head_title h4 {
   color: #1f4799;
 }
+.bottom_menu a:hover,
 .right_section a:hover {
   color: #3973e6;
+}
+.bottom_menu a:hover:before,
+.right_section a:hover:before {
+  color: #ccc;
 }
 .media-heading {
   color: #1f4799;
@@ -113,5 +118,11 @@
   background-color: #3973e6;
 }
 .searchform button:hover {
+  background-color: #1f4799;
+}
+.searchform_dop button {
+  background-color: #3973e6;
+}
+.searchform_dop button:hover {
   background-color: #1f4799;
 }
