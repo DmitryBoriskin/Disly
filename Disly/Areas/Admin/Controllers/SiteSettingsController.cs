@@ -32,9 +32,11 @@ namespace Disly.Areas.Admin.Controllers
             ViewBag.KeyWords = "";
             #endregion
 
-            Dictionary<string, string> themes = new Dictionary<string, string>();
-            themes.Add("blue", "Синяя");
-            themes.Add("turquoise", "Бирюзовая");
+            model.Themes = new SelectList(new List<SelectListItem>
+                {
+                    new SelectListItem { Text = "Бирюзовая", Value = "turquoise" },
+                    new SelectListItem { Text = "Синяя", Value = "blue" }
+                }, "Value", "Text");
         }
 
         // GET: Admin/SiteSettings
@@ -58,7 +60,7 @@ namespace Disly.Areas.Admin.Controllers
                 #region Сохранение изображения
                 // путь для сохранения изображения
                 string savePath = Settings.UserFiles + Domain + Settings.LogoDir;
-                
+
                 int width = 80; // ширина
                 int height = 0; // высота
 
@@ -94,7 +96,6 @@ namespace Disly.Areas.Admin.Controllers
                 #endregion
 
                 _cmsRepository.updateSiteInfo(backModel.Item);
-                //_cmsRepository.updateSiteInfo(backModel.Item, AccountInfo.id, RequestUserInfo.IP);
                 userMessage.info = "Запись обновлена";
             }
             else

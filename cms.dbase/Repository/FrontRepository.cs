@@ -104,7 +104,8 @@ namespace cms.dbase
                         Vk = s.c_vk,
                         Instagramm = s.c_instagramm,
                         Odnoklassniki = s.c_odnoklassniki,
-                        Twitter = s.c_twitter
+                        Twitter = s.c_twitter,
+                        Theme = s.c_theme
                     });
 
                 if (!data.Any()) return null;

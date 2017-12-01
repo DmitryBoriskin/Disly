@@ -416,6 +416,7 @@ namespace cms.dbase.models
 		[Column,        Nullable] public string c_instagramm    { get; set; } // nvarchar(512)
 		[Column,        Nullable] public string c_odnoklassniki { get; set; } // nvarchar(512)
 		[Column,        Nullable] public string c_twitter       { get; set; } // nvarchar(512)
+		[Column,        Nullable] public string c_theme         { get; set; } // nvarchar(256)
 
 		#region Associations
 
@@ -430,6 +431,12 @@ namespace cms.dbase.models
 		/// </summary>
 		[Association(ThisKey="c_alias", OtherKey="f_site", CanBeNull=true, IsBackReference=true)]
 		public IEnumerable<content_vote> contentvotecmssites { get; set; }
+
+		/// <summary>
+		/// FK_content_vacancies_cms_sites_BackReference
+		/// </summary>
+		[Association(ThisKey="c_alias", OtherKey="f_site", CanBeNull=true, IsBackReference=true)]
+		public IEnumerable<content_vacancies> contentvacanciescmssitess { get; set; }
 
 		/// <summary>
 		/// fk_sites_domains_BackReference
@@ -460,6 +467,12 @@ namespace cms.dbase.models
 		/// </summary>
 		[Association(ThisKey="c_alias", OtherKey="f_site", CanBeNull=true, IsBackReference=true)]
 		public IEnumerable<front_site_section> sitefrontsections { get; set; }
+
+		/// <summary>
+		/// FK_content_feedbacks_cms_sites_BackReference
+		/// </summary>
+		[Association(ThisKey="c_alias", OtherKey="f_site", CanBeNull=true, IsBackReference=true)]
+		public IEnumerable<content_feedbacks> contentfeedbackscmssitess { get; set; }
 
 		#endregion
 	}
@@ -888,6 +901,17 @@ namespace cms.dbase.models
 		[Column,        Nullable] public string   c_answerer     { get; set; } // varchar(256)
 		[Column,     NotNull    ] public bool     b_new          { get; set; } // bit
 		[Column,     NotNull    ] public bool     b_disabled     { get; set; } // bit
+		[Column,     NotNull    ] public string   f_site         { get; set; } // varchar(64)
+
+		#region Associations
+
+		/// <summary>
+		/// FK_content_feedbacks_cms_sites
+		/// </summary>
+		[Association(ThisKey="f_site", OtherKey="c_alias", CanBeNull=false, KeyName="FK_content_feedbacks_cms_sites", BackReferenceName="contentfeedbackscmssitess")]
+		public cms_sites contentfeedbackscmssites { get; set; }
+
+		#endregion
 	}
 
 	[Table(Schema="dbo", Name="content_main_specialist_employees_link")]
@@ -900,16 +924,16 @@ namespace cms.dbase.models
 		#region Associations
 
 		/// <summary>
-		/// FK_content_main_specialist_employees_link_content_people
-		/// </summary>
-		[Association(ThisKey="f_employee", OtherKey="id", CanBeNull=false, KeyName="FK_content_main_specialist_employees_link_content_people", BackReferenceName="contentmainspecialistemployeeslinkcontentpeoples")]
-		public content_people contentmainspecialistemployeeslinkcontentpeople { get; set; }
-
-		/// <summary>
 		/// FK_content_main_specialist_employees_link_content_main_specialists
 		/// </summary>
 		[Association(ThisKey="f_main_specialist", OtherKey="id", CanBeNull=false, KeyName="FK_content_main_specialist_employees_link_content_main_specialists", BackReferenceName="contentmainspecialistemployeeslinkcontentmainspecialistss")]
 		public content_main_specialists contentmainspecialistemployeeslinkcontentmainspecialists { get; set; }
+
+		/// <summary>
+		/// FK_content_main_specialist_employees_link_content_people
+		/// </summary>
+		[Association(ThisKey="f_employee", OtherKey="id", CanBeNull=false, KeyName="FK_content_main_specialist_employees_link_content_people", BackReferenceName="contentmainspecialistemployeeslinkcontentpeoples")]
+		public content_people contentmainspecialistemployeeslinkcontentpeople { get; set; }
 
 		#endregion
 	}
@@ -923,16 +947,16 @@ namespace cms.dbase.models
 		#region Associations
 
 		/// <summary>
-		/// FK_content_main_specialist_specialisations_link_content_main_specialists
-		/// </summary>
-		[Association(ThisKey="f_main_specialist", OtherKey="id", CanBeNull=false, KeyName="FK_content_main_specialist_specialisations_link_content_main_specialists", BackReferenceName="contentmainspecialistspecialisationslinkcontentmainspecialistss")]
-		public content_main_specialists contentmainspecialistspecialisationslinkcontentmainspecialists { get; set; }
-
-		/// <summary>
 		/// FK_content_main_specialist_specialisations_link_content_employee_posts
 		/// </summary>
 		[Association(ThisKey="f_specialisation", OtherKey="id", CanBeNull=false, KeyName="FK_content_main_specialist_specialisations_link_content_employee_posts", BackReferenceName="contentmainspecialistspecialisationslinkcontentemployeepostss")]
 		public content_employee_posts contentmainspecialistspecialisationslinkcontentemployeeposts { get; set; }
+
+		/// <summary>
+		/// FK_content_main_specialist_specialisations_link_content_main_specialists
+		/// </summary>
+		[Association(ThisKey="f_main_specialist", OtherKey="id", CanBeNull=false, KeyName="FK_content_main_specialist_specialisations_link_content_main_specialists", BackReferenceName="contentmainspecialistspecialisationslinkcontentmainspecialistss")]
+		public content_main_specialists contentmainspecialistspecialisationslinkcontentmainspecialists { get; set; }
 
 		#endregion
 	}
@@ -1659,6 +1683,17 @@ namespace cms.dbase.models
 		[Column,     NotNull    ] public DateTime d_date        { get; set; } // datetime
 		[Column,     NotNull    ] public bool     b_temporarily { get; set; } // bit
 		[Column,     NotNull    ] public bool     b_disabled    { get; set; } // bit
+		[Column,     NotNull    ] public string   f_site        { get; set; } // varchar(64)
+
+		#region Associations
+
+		/// <summary>
+		/// FK_content_vacancies_cms_sites
+		/// </summary>
+		[Association(ThisKey="f_site", OtherKey="c_alias", CanBeNull=false, KeyName="FK_content_vacancies_cms_sites", BackReferenceName="contentvacanciescmssitess")]
+		public cms_sites contentvacanciescmssites { get; set; }
+
+		#endregion
 	}
 
 	[Table(Schema="dbo", Name="content_vote")]

@@ -815,6 +815,7 @@
     <Content Include="Content\fonts\OpenSans\opensans-regular-webfont.woff2" />
     <Content Include="Areas\Admin\Views\Documents\Index.cshtml" />
     <Content Include="Content\css\theme\turquoise.less" />
+    <Content Include="Content\css\theme\blue.less" />
     <None Include="Content\plugins\datatables\i18n\ru.json" />
     <Content Include="Content\plugins\tinymce\langs\readme.md" />
     <Content Include="Content\plugins\tinymce\skins\lightgray\fonts\tinymce-small.eot" />
@@ -823,7 +824,6 @@
     <Content Include="Content\plugins\tinymce\skins\lightgray\fonts\tinymce.eot" />
     <Content Include="Content\plugins\tinymce\skins\lightgray\fonts\tinymce.ttf" />
     <Content Include="Content\plugins\tinymce\skins\lightgray\fonts\tinymce.woff" />
-    <Content Include="Content\css\theme\first.less" />
     <Content Include="package.json" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <Content Include="Views\_ViewStart.cshtml" />
