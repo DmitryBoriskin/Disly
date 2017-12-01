@@ -821,6 +821,7 @@ namespace cms.dbase
                                 .Value(v => v.c_path, sm_item.c_path)
                                 .Value(v => v.c_alias, sm_item.c_alias)
                                 .Value(v => v.c_title, sm_item.c_title)
+                                .Value(v => v.n_sort, sm_item.n_sort)
                                 .Value(v => v.b_disabled, false)
                                 .Value(v => v.b_blocked, false)
                                 .Value(v => v.b_disabled_menu, false)

@@ -98,6 +98,8 @@ body {
     color: #ccc;
 }
 
+.spec-version-link span{color:#333;}
+
 .right_section a:hover{text-decoration:none;}
 /*  */
 
@@ -371,12 +373,12 @@ body {
     }
 
 .slider-message {    
-    padding: 13px 30px;
+    padding: 12px 30px;
     margin-bottom: 15px;
     font-size: 14px;
     background-color:#fff;color:#999;
 }
-.slider-message-text{color:#333;}
+.slider-message-text{color:#999;line-height:19px;padding-top:5px;}
 .slider-message-title{text-transform: uppercase;}
 
 .slider-message-full {
@@ -581,6 +583,13 @@ body {
     color: #fff;
 }
 
+.alldoc_photo {
+    width: 80px;
+    height: 80px;
+    display: block;
+    border-radius: 50%;
+    overflow: hidden;
+}
 .img-person-list {
     max-width: 80px;
 }
@@ -868,8 +877,12 @@ body {
 
 .boss{padding:0 0 0 20px;}
 .boss img {  width: 100%; }
-
-.boss_img_wrap{margin-bottom:10px;padding-bottom:10px;display:block;}
+.boss_img_wrap {
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    display: block;
+}
+.boss_img_wrap img{max-width:100%;}
 .boss_fio {
     color: #333;
     margin-bottom: 10px;
@@ -1076,7 +1089,7 @@ body {
     color:#fff;
 }
 /*feedback*/
-.feedback_item{margin-bottom:30px;border-bottom:1px solid #999;padding-bottom:20px;}
+.feedback_item{margin-bottom:40px;border-bottom:1px solid #999;padding-bottom:20px;}
 .feedback-item-date{color:#999;font-size:12px;}
 .feedback-item-title{}
 .feedback-item-sender{color:#999;}
@@ -1090,3 +1103,4 @@ body {
     font-family:fontello;
     position:relative;top:20px;right:30px;
 }
+.feedback-item-answerer{cursor:pointer;}
