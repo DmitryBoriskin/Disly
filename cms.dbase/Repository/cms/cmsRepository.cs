@@ -162,7 +162,11 @@ namespace cms.dbase
                         Instagramm = s.c_instagramm,
                         Odnoklassniki = s.c_odnoklassniki,
                         Twitter = s.c_twitter,
-                        Theme = s.c_theme
+                        Theme = s.c_theme,
+                        BackGroundImg = new Photo
+                        {
+                            Url = s.c_background_img
+                        }
                     });
 
                 if (!data.Any()) { return null; }
@@ -196,10 +200,11 @@ namespace cms.dbase
                             .Set(u => u.c_instagramm, item.Instagramm)
                             .Set(u => u.c_odnoklassniki, item.Odnoklassniki)
                             .Set(u => u.c_twitter, item.Twitter)
-                            .Set(s => s.c_logo, item.Logo.Url)
                             .Set(s => s.c_theme, item.Theme)
+                            .Set(s => s.c_logo, item.Logo.Url)
+                            .Set(s => s.c_background_img, item.BackGroundImg.Url)
                             .Update();
-                        
+
                         var log = new LogModel()
                         {
                             Site = _domain,

@@ -123,7 +123,11 @@ namespace cms.dbase
                         Instagramm = s.c_instagramm,
                         Odnoklassniki = s.c_odnoklassniki,
                         Twitter = s.c_twitter,
-                        Theme = s.c_theme
+                        Theme = s.c_theme,
+                        BackGroundImg = new Photo
+                        {
+                            Url = s.c_background_img
+                        }
                     });
 
                 if (data.Any())

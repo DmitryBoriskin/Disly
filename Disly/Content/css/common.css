@@ -296,7 +296,10 @@ body {
 .top-slider {
     height: 220px;
 }
-
+.top-slider-wrapper{
+    background-repeat: no-repeat;
+    background-position: center left;
+}
 .top-slider-shadow {
     -webkit-box-shadow: 0px 20px 26px -10px rgba(0,0,0,0.47);
     -moz-box-shadow: 0px 20px 26px -10px rgba(0,0,0,0.47);

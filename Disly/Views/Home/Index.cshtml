@@ -43,10 +43,15 @@
     var news = (Model.Materials != null) ? Model.Materials.Where(w => w.GroupAlias.Equals("news")) : null;
     var events = (Model.Materials != null) ? Model.Materials.Where(w => w.GroupAlias.Equals("events")) : null;
     int i = 0;
+
+    string backgroundSlider = Model.SitesInfo.BackGroundImg != null 
+        ? "style=background-image:url(" + Model.SitesInfo.BackGroundImg.Url + ");" 
+        : null;
+
 }
 <!-- слайдер -->
 <div>
-    <div class="top-slider-wrapper">
+    <div class="top-slider-wrapper" @backgroundSlider>
         <div class="container">
             <div class="row">
                 @if (slider != null && slider.Count() > 0)
