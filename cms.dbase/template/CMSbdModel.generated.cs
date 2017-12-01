@@ -1133,6 +1133,7 @@ namespace cms.dbase.models
 		[Column,        Nullable] public string  f_oid                    { get; set; } // varchar(64)
 		[Column,        Nullable] public Guid?   f_guid                   { get; set; } // uniqueidentifier
 		[Column,        Nullable] public Guid?   f_department_affiliation { get; set; } // uniqueidentifier
+		[Column,     NotNull    ] public bool    b_disabled               { get; set; } // bit
 
 		#region Associations
 

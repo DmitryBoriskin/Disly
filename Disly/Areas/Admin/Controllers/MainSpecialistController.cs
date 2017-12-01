@@ -16,6 +16,9 @@ namespace Disly.Areas.Admin.Controllers
         {
             base.OnActionExecuting(filterContext);
 
+            // наполняем фильтр
+            filter = getFilter();
+
             model = new MainSpecialistViewModel()
             {
                 Account = AccountInfo,
@@ -36,9 +39,6 @@ namespace Disly.Areas.Admin.Controllers
         // GET: Admin/MainSpecialist
         public ActionResult Index()
         {
-            // наполняем фильтр
-            filter = getFilter(page_size);
-
             // наполняем модель данными
             model.List = _cmsRepository.getMainSpecialistList(filter);
 
@@ -195,6 +195,22 @@ namespace Disly.Areas.Admin.Controllers
             model.ErrorInfo = userMassege;
 
             return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        [MultiButton(MatchFormKey = "action", MatchFormValue = "search-btn")]
+        public ActionResult Search(string searchtext, string size, DateTime? date, DateTime? dateend)
+        {
+            string query = HttpUtility.UrlDecode(Request.Url.Query);
+            query = addFiltrParam(query, "searchtext", searchtext);
+            return Redirect(StartUrl + query);
+        }
+
+        [HttpPost]
+        [MultiButton(MatchFormKey = "action", MatchFormValue = "clear-btn")]
+        public ActionResult ClearFiltr()
+        {
+            return Redirect(StartUrl);
         }
     }
 }

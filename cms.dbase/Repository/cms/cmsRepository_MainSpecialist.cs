@@ -68,13 +68,21 @@ namespace cms.dbase
             using (var db = new CMSdb(_context))
             {
                 var query = db.content_main_specialistss
-                    .OrderBy(o => o.c_name);
+                    .Select(s => s);
+
+                if (!string.IsNullOrWhiteSpace(filter.SearchText))
+                {
+                    query = query
+                        .Where(w => w.c_name.ToLower()
+                        .Contains(filter.SearchText.ToLower()));
+                }
 
                 var itemCount = query.Count();
 
                 var list = query
                     .Skip(filter.Size * (filter.Page - 1))
                     .Take(filter.Size)
+                    .OrderBy(o => o.c_name)
                     .Select(s => new MainSpecialistModel
                     {
                         Id = s.id,

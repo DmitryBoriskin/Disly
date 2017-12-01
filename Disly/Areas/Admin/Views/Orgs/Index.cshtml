@@ -12,34 +12,31 @@
             <div class="col-sm-4"><a class="button icon-sort pull-right" style="max-width:150px;" data-action="noPreloader-accept" id="sorting_element" title="Добавляет возможность сортировки элементов списка">Сортировать</a></div>
         </div>
 
-
-        @if (Model.OrgList != null)
+        @if (Model.Item != null)
         {
-            if (Model.Item != null)
-            {
-                //var currentOrg = Model.OrgList.Where(w => w.Id.Equals((Guid)orgId)).SingleOrDefault();
+            string imgUrl = (!string.IsNullOrEmpty(Model.Item.Logo.Url) && File.Exists(Server.MapPath(Model.Item.Logo.Url))) ? Model.Item.Logo.Url : "/Content/img/nophoto.jpg";
+            string link = "/admin/orgs/item/" + Model.Item.Id;
 
-                string imgUrl = (!string.IsNullOrEmpty(Model.Item.Logo.Url) && File.Exists(Server.MapPath(Model.Item.Logo.Url))) ? Model.Item.Logo.Url : "/Content/img/nophoto.jpg";
-                string link = "/admin/orgs/item/" + Model.Item.Id;
-
-                <div class="row" data-id="@Model.Item.Id">
-                    <div class="list-item">
-                        <div class="col-md-3">
-                            <a href="@link" class="li-image-link">
-                                <img src="@imgUrl" alt="@Model.Item.Title" class="list_img_preview" />
-                            </a>
-                        </div>
-                        <div class="col-md-9">
-                            <div class="li-desc">
-                                <a href="@link" class="li-caption">@Model.Item.Title</a><br />
-                                <span>Адрес: </span>@Model.Item.Address
-                            </div>
+            <div class="row" data-id="@Model.Item.Id">
+                <div class="list-item">
+                    <div class="col-md-3">
+                        <a href="@link" class="li-image-link">
+                            <img src="@imgUrl" alt="@Model.Item.Title" class="list_img_preview" />
+                        </a>
+                    </div>
+                    <div class="col-md-9">
+                        <div class="li-desc">
+                            <a href="@link" class="li-caption">@Model.Item.Title</a><br />
+                            <span>Адрес: </span>@Model.Item.Address
                         </div>
                     </div>
                 </div>
-            }
+            </div>
+        }
+        <h4>Остальные организации</h4>
+        @if (Model.OrgList != null)
+        {
 
-            <h4>Остальные организации</h4>
 
             foreach (var item in Model.OrgList)
             {
@@ -72,15 +69,14 @@
             <div class="col-md-6"><button type="submit" name="action" value="search-btn" class="button btn-primary">Применить</button></div>
             <div class="col-md-6"><button type="submit" name="action" value="clear-btn" class="button btn-default">Сбросить</button></div>
         </div>
-
     </div>
 
-        <div class="buttons">
-            @if (Model.UserResolution.Write)
-            {
-                <button type="submit" name="action" value="insert-btn" class="button icon-create">Создать</button>
-            }
-        </div>
+    <div class="buttons">
+        @if (Model.UserResolution.Write)
+        {
+            <button type="submit" name="action" value="insert-btn" class="button icon-create">Создать</button>
+        }
+    </div>
 }
 else
 {

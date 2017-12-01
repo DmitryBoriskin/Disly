@@ -7,17 +7,15 @@
         @if (Model.List != null)
         {
             <div class="list-item row">
-                <div class="col-md-6"><span>ФИО</span></div>
-                <div class="col-md-3 li-desc"><span>E-mail</span></div>
-                <div class="col-md-3 li-desc"><span>Группа</span></div>
+                <div class="col-md-12"><span>ФИО</span></div>
             </div>
             foreach (UsersModel Item in Model.List.Data)
             {
                 string disabled = (Item.Disabled) ? "disabled" : String.Empty;
                 <div class="list-item row @disabled">
-                    <div class="col-md-6"><a title="" class="li-caption" href="/admin/Person/item/@Item.Id/@ViewBag.urlQuery">@Item.FullName</a></div>
-                    <div class="col-md-3 li-desc">@Item.EMail</div>
-                    <div class="col-md-3 li-desc">@Item.GroupName</div>
+                    <div class="col-md-12">
+                        <a title="@Item.FullName" class="li-caption" href="/admin/Person/item/@Item.Id/@ViewBag.urlQuery">@Item.FullName</a>
+                    </div>
                 </div>
             }
             Html.RenderAction("Pager", "Templates", new { @Model = Model.List.Pager });
@@ -32,7 +30,6 @@
         <div class="dop-caption">Фильтр</div>
         @Html.TextBox("searchtext", Request.QueryString["searchtext"], new { @title = "Поиск", @placeholder = "Поиск по ФИО", @MaxLength = "512" })
         @Html.CheckBox("disabled", Convert.ToBoolean(Request.QueryString["disabled"]), new { @title = "Отображать", @data_on = "Только запрещенные", @data_onstyle = "danger", @data_off = "Все записи", @data_width = "270" })
-        @* @Html.DropDownList("group", new SelectList(Model.GroupList, "value", "text", Request.QueryString["group"]), new { @title = "Организация", @class = "selectpicker", @data_live_search = "true" })*@
         <div class="row">
             <div class="col-md-6"><button type="submit" name="action" value="search-btn" class="button btn-primary">Применить</button></div>
             <div class="col-md-6"><button type="submit" name="action" value="clear-btn" class="button btn-default">Сбросить</button></div>

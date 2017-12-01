@@ -4,9 +4,19 @@ using System.ComponentModel.DataAnnotations;
 
 namespace cms.dbModel.entity
 {
+    /// <summary>
+    /// Список организаций с пейджером
+    /// </summary>
     public class OrgsList
     {
+        /// <summary>
+        /// Список организаций
+        /// </summary>
         public OrgsModel[] Data;
+
+        /// <summary>
+        /// Пейджер
+        /// </summary>
         public Pager Pager;
     }
 
@@ -99,10 +109,12 @@ namespace cms.dbModel.entity
         /// Структурные подразделения, входящие в организацию
         /// </summary>
         public StructureModel[] Structure { get; set; }
+
         /// <summary>
         /// Административный персонал, входящий в организацию
         /// </summary>
         public OrgsAdministrativ[] Administrativ { get; set; }
+
         /// <summary>
         /// Домен
         /// </summary>
