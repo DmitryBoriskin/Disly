@@ -54,7 +54,7 @@ namespace Disly.Areas.Admin.Models
         /// <summary>
         /// административный персонал
         /// </summary>
-        public  OrgsAdministrativ AdministrativItem { get; set; }
+        public  OrgsAdministrative AdministrativItem { get; set; }
 
         /// <summary>
         /// Ведомственная принадлежность

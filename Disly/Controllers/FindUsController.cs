@@ -38,8 +38,8 @@ namespace Disly.Controllers
             string _alias = UrlPath.Substring(UrlPath.LastIndexOf("/") + 1);
             #endregion            
 
-            model.OrgItem = _repository.getOrgInfo(Domain);
-            model.Structures = _repository.getStructures(Domain);
+            model.OrgItem = _repository.getOrgInfo(); //Domain
+            model.Structures = _repository.getStructures(); //Domain
 
             #region Создаем переменные (значения по умолчанию)
             PageViewModel Model = new PageViewModel();

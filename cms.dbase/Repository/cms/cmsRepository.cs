@@ -86,7 +86,7 @@ namespace cms.dbase
                 if (data != null)
                 {
                     SiteId = data.f_site;
-                }                
+                }
 
                 return SiteId;
             }
@@ -161,7 +161,8 @@ namespace cms.dbase
                         Vk = s.c_vk,
                         Instagramm = s.c_instagramm,
                         Odnoklassniki = s.c_odnoklassniki,
-                        Twitter = s.c_twitter
+                        Twitter = s.c_twitter,
+                        Theme = s.c_theme
                     });
 
                 if (!data.Any()) { return null; }
@@ -196,6 +197,7 @@ namespace cms.dbase
                             .Set(u => u.c_odnoklassniki, item.Odnoklassniki)
                             .Set(u => u.c_twitter, item.Twitter)
                             .Set(s => s.c_logo, item.Logo.Url)
+                            .Set(s => s.c_theme, item.Theme)
                             .Update();
                         
                         var log = new LogModel()

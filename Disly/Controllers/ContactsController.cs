@@ -20,7 +20,7 @@ namespace Disly.Controllers
             {
                 SitesInfo = siteModel,
                 SiteMapArray = siteMapArray,
-                Breadcrumbs= breadcrumb,
+                Breadcrumbs = breadcrumb,
                 BannerArray = bannerArray
             };
         }
@@ -56,33 +56,33 @@ namespace Disly.Controllers
                 new MaterialsGroup{Title="Телефонный справочник", Alias="phone"},
                 new MaterialsGroup{Title="Дополнительная информация", Alias="dop"}
             };
-            model.Type= t;
+            model.Type = t;
             switch (t)
             {
                 case "administration":
                     PageTitle = "Администрация";
-                    model.Administrativ = _repository.getAdministrativ(Domain);                    
+                    model.Administrativ = _repository.getAdministrative(Domain);
                     break;
                 case "dop":
                     PageTitle = "Дополнительная информация";
-                    model.DopInfo = _repository.getSiteMap("/", "contacts", Domain);                    
+                    model.DopInfo = _repository.getSiteMap("/", "contacts"); //, Domain
                     break;
                 case "phone":
                     PageTitle = "Телефонный правочник";
-                    model.Structures = _repository.getStructures(Domain);
+                    model.Structures = _repository.getStructures(); //Domain
                     break;
                 default:
                     PageTitle = "Контактная информация";
-                    model.OrgItem = _repository.getOrgInfo(Domain);
+                    model.OrgItem = _repository.getOrgInfo(); //Domain
                     break;
             }
-                              
+
             #region Метатеги
             ViewBag.Title = PageTitle;
             ViewBag.Description = PageDesc;
             ViewBag.KeyWords = PageKeyw;
             #endregion
-            return View(_ViewName,model);            
+            return View(_ViewName, model);
         }
     }
 }
