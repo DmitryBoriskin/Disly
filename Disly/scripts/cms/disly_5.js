@@ -257,7 +257,13 @@ $(document).ready(function () {
     // Добавляем возможность сортировки
     $('#sorting_element,.sorting_element_on').click(function () {
 
-        var SortList = $(this).parent().parent().parent().find('.sort_list');
+        var SortList;
+        if ($(this).hasClass('sorting_element_on')) {
+            SortList = $(this).parent().parent().parent().find('.sort_list');
+        }
+        else {
+            SortList = $(this).parent().parent().parent().parent().find('.sort_list');
+        }
 
         if (SortList.hasClass('sort_list_on')) {
             location.reload();
