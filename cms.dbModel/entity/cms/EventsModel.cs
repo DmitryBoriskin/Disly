@@ -3,75 +3,105 @@ using System.ComponentModel.DataAnnotations;
 
 namespace cms.dbModel.entity
 {
+    /// <summary>
+    /// Список событий с пэйджером
+    /// </summary>
     public class EventsList
     {
+        /// <summary>
+        /// Список событий
+        /// </summary>
         public EventsModel[] Data;
+
+        /// <summary>
+        /// Пэйджер
+        /// </summary>
         public Pager Pager;
     }
 
+    /// <summary>
+    /// Событие
+    /// </summary>
     public class EventsModel
     {
-        public Guid Id { get; set; }
         /// <summary>
-        /// ???
+        /// Идентификатор
+        /// </summary>
+        public Guid Id { get; set; }
+
+        /// <summary>
+        /// Целочисленный идентификатор
         /// </summary>
         public int Num { get; set; }
+
         /// <summary>
-        /// varchar(512)
+        /// Название
         /// </summary>
         [Required(ErrorMessage = "Поле «Название» не должно быть пустым.")]
         public string Title { get; set; }
+
         /// <summary>
-        /// varchar(512)
+        /// Алиас
         /// </summary>
         public string Alias { get; set; }
 
         /// <summary>
-        /// varchar(512)
+        /// Текст
         /// </summary>
         public string Text { get; set; }
+
         /// <summary>
-        /// varchar(512)
+        /// Место
         /// </summary>
         public string Place { get; set; }
+
         /// <summary>
-        /// varchar(1024)
+        /// Создатель события
         /// </summary>
         public string EventMaker { get; set; }
+
         /// <summary>
-        /// varchar(1024)
+        /// Ссылка
         /// </summary>
         public string Url { get; set; }
+
         /// <summary>
-        /// varchar(512)
+        /// Название ссылки
         /// </summary>
         public string UrlName { get; set; }
+
         /// <summary>
         /// Дата начала события
         /// </summary>
         [Display(Name = "Дата начала события")]
         [Required(ErrorMessage = "Поле «Название» не должно быть пустым.")]
         public DateTime DateBegin { get; set; }
+        
         /// <summary>
         /// Дата окончания события
         /// </summary>
         public DateTime? DateEnd { get; set; }
+        
         /// <summary>
         /// Ежегодное событие
         /// </summary>
         public bool Annually { get; set; }
+        
         /// <summary>
-        /// varchar(1024)
+        /// Описание
         /// </summary>
         public string Desc { get; set; }
+
         /// <summary>
-        /// varchar(512)
+        /// Ключевые слова
         /// </summary>
         public string KeyW { get; set; }
+
         /// <summary>
-        /// 
+        /// Флаг запрещённости
         /// </summary>
         public bool Disabled { get; set; }
+
         /// <summary>
         /// Ссылка на редактирование сайта. будет заполнено если у события есть сайт
         /// </summary>
@@ -112,10 +142,12 @@ namespace cms.dbModel.entity
         /// Идентификатор
         /// </summary>
         public Guid Id { get; set; }
+        
         /// <summary>
         /// Дата начала события
         /// </summary>
         public DateTime DateBegin { get; set; }
+        
         /// <summary>
         /// Название
         /// </summary>
