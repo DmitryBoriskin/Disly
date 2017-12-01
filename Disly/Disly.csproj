@@ -857,6 +857,7 @@
     <Content Include="Views\Doctors\part\list.cshtml" />
     <Content Include="Views\MedicalServices\Index.cshtml" />
     <Content Include="Views\Shared\part\childlist.cshtml" />
+    <Content Include="Views\Feedback\Form.cshtml" />
     <Content Include="Views\Search\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>

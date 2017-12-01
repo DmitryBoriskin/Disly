@@ -113,8 +113,7 @@ namespace cms.dbModel.entity
         /// <summary>
         /// Административный персонал, входящий в организацию
         /// </summary>
-        public OrgsAdministrativ[] Administrativ { get; set; }
-
+        public OrgsAdministrative[] Administrativ { get; set; }
         /// <summary>
         /// Домен
         /// </summary>
@@ -492,7 +491,7 @@ namespace cms.dbModel.entity
     /// <summary>
     /// административный персонал организации
     /// </summary>
-    public class OrgsAdministrativ
+    public class OrgsAdministrative
     {
         /// <summary>
         /// Идентификатор
@@ -677,7 +676,7 @@ namespace cms.dbModel.entity
         /// <summary>
         /// Глава организации
         /// </summary>
-        public OrgsAdministrativ Leader { get; set; }
+        public OrgsAdministrative Leader { get; set; }
     }
 
     /// <summary>

@@ -19,14 +19,17 @@ namespace cms.dbase
         {
             using (var db = new CMSdb(_context))
             {
-                var query = db.content_feedbackss.Where(w => w.id != null);
-                query = query.OrderByDescending(o => o.d_date);
+                var query = db.content_feedbackss
+                    .Where(w => w.f_site == _domain)
+                    .OrderByDescending(o => o.d_date);
 
                 if (query.Any())
                 {
                     int ItemCount = query.Count();
 
                     var List = query
+                        .Skip(filtr.Size * (filtr.Page - 1))
+                        .Take(filtr.Size)
                         .Select(s => new FeedbackModel
                         {
                             Id = s.id,
@@ -39,9 +42,7 @@ namespace cms.dbase
                             Answerer = s.c_answerer,
                             IsNew = s.b_new,
                             Disabled = s.b_disabled
-                        }).
-                        Skip(filtr.Size * (filtr.Page - 1)).
-                        Take(filtr.Size);
+                        });
 
                     FeedbackModel[] eventsInfo = List.ToArray();
 
@@ -111,7 +112,8 @@ namespace cms.dbase
                         c_answer = feedback.Answer,
                         c_answerer = feedback.Answerer,
                         b_new = feedback.IsNew,
-                        b_disabled = feedback.Disabled
+                        b_disabled = feedback.Disabled,
+                        f_site = _domain
                     };
 
                     using (var tran = db.BeginTransaction())

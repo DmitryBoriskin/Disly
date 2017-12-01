@@ -1,5 +1,6 @@
 ﻿using cms.dbModel.entity;
 using Disly.Areas.Admin.Models;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -30,6 +31,10 @@ namespace Disly.Areas.Admin.Controllers
             ViewBag.Description = "";
             ViewBag.KeyWords = "";
             #endregion
+
+            Dictionary<string, string> themes = new Dictionary<string, string>();
+            themes.Add("blue", "Синяя");
+            themes.Add("turquoise", "Бирюзовая");
         }
 
         // GET: Admin/SiteSettings

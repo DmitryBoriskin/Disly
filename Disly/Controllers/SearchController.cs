@@ -40,7 +40,7 @@ namespace Disly.Controllers
             #endregion
             ViewBag.SearchText = (searchtext!=null)?searchtext.Replace("%20", " "):String.Empty;
 
-            model.Item = _repository.getSiteMap(_path,_alias,Domain);
+            model.Item = _repository.getSiteMap(_path,_alias);//,Domain
             if (model.Item != null)
             {
                 if (model.Item.FrontSection.ToLower() != "page")
