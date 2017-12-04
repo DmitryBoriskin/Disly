@@ -110,7 +110,12 @@ namespace cms.dbModel.entity
         /// <summary>
         /// Сортировка внутри меню
         /// </summary>
-        public int MenuSort { get; set; }        
+        public int MenuSort { get; set; }
+
+        /// <summary>
+        /// Изображение
+        /// </summary>
+        public Photo Photo { get; set; }
     }
 
     /// <summary>

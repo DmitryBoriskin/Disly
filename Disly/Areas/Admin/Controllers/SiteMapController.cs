@@ -5,6 +5,7 @@ using System.Web.Mvc;
 using Disly.Areas.Admin.Service;
 using System.Linq;
 using cms.dbModel.entity;
+using System.Web;
 
 namespace Disly.Areas.Admin.Controllers
 {
@@ -127,7 +128,7 @@ namespace Disly.Areas.Admin.Controllers
         [HttpPost]
         [ValidateInput(false)]
         [MultiButton(MatchFormKey = "action", MatchFormValue = "save-btn")]
-        public ActionResult Item(Guid id, SiteMapViewModel back_model)
+        public ActionResult Item(Guid id, SiteMapViewModel back_model, HttpPostedFileBase upload)
         {
             ErrorMassege userMessage = new ErrorMassege();
             userMessage.title = "Информация";
@@ -144,13 +145,9 @@ namespace Disly.Areas.Admin.Controllers
             }
 
             var p = back_model.Item.ParentId != null ? _cmsRepository.getSiteMapItem((Guid)back_model.Item.ParentId) : null;
-
-            //back_model.Item.Path = p == null ? "/" :
-            //    p.Path.Equals("/") ? p.Path + p.Alias : p.Path + "/" + p.Alias;
-
-            back_model.Item.Path = p == null ? "/" :p.Path + p.Alias + "/";
-
-
+            
+            back_model.Item.Path = p == null ? "/" : p.Path + p.Alias + "/";
+            
             back_model.Item.Site = Domain;
 
             if (String.IsNullOrEmpty(back_model.Item.Alias))
@@ -171,6 +168,46 @@ namespace Disly.Areas.Admin.Controllers
 
             if (ModelState.IsValid)
             {
+                #region Сохранение изображение
+                // путь для сохранения изображения
+                string savePath = Settings.UserFiles + Domain + Settings.SiteMapDir;
+
+                int width = 264;
+                int height = 70;
+
+                if (upload != null && upload.ContentLength > 0)
+                {
+                    string fileExtension = upload.FileName.Substring(upload.FileName.LastIndexOf(".")).ToLower();
+
+                    var validExtension = (!string.IsNullOrEmpty(Settings.PicTypes)) ? Settings.PicTypes.Split(',') : "jpg,jpeg,png,gif".Split(',');
+                    if (!validExtension.Contains(fileExtension.Replace(".", "")))
+                    {
+                        model.Item = _cmsRepository.getSiteMapItem(id);
+
+                        model.ErrorInfo = new ErrorMassege()
+                        {
+                            title = "Ошибка",
+                            info = "Вы не можете загружать файлы данного формата",
+                            buttons = new ErrorMassegeBtn[]
+                            {
+                                new ErrorMassegeBtn { url = "#", text = "ок", action = "false", style="primary" }
+                            }
+                        };
+
+                        return View("Item", model);
+                    }
+
+                    Photo photoNew = new Photo()
+                    {
+                        Name = id.ToString() + fileExtension,
+                        Size = Files.FileAnliz.SizeFromUpload(upload),
+                        Url = Files.SaveImageResizeRename(upload, savePath, id.ToString(), width, height)
+                    };
+
+                    back_model.Item.Photo = photoNew;
+                }
+                #endregion
+
                 if (_cmsRepository.checkSiteMap(id))
                 {
                     //Если запись заблокирована от редактирования некоторых полей
@@ -204,16 +241,18 @@ namespace Disly.Areas.Admin.Controllers
 
                 string backUrl = back_model.Item.ParentId != null ? "item/" + back_model.Item.ParentId : string.Empty;
 
-                userMessage.buttons = new ErrorMassegeBtn[]{
+                userMessage.buttons = new ErrorMassegeBtn[]
+                {
                      new ErrorMassegeBtn { url = StartUrl + backUrl, text = "Вернуться в список" },
                      new ErrorMassegeBtn { url = "#", text = "ок", action = "false" }
-                 };
+                };
             }
             else
             {
                 userMessage.info = "Ошибка в заполнении формы. Поля в которых допушены ошибки - помечены цветом.";
 
-                userMessage.buttons = new ErrorMassegeBtn[]{
+                userMessage.buttons = new ErrorMassegeBtn[]
+                {
                     new ErrorMassegeBtn { url = "#", text = "ок", action = "false" }
                 };
             }
@@ -276,7 +315,8 @@ namespace Disly.Areas.Admin.Controllers
             ErrorMassege userMassege = new ErrorMassege();
             userMassege.title = "Информация";
             userMassege.info = "Запись Удалена";
-            userMassege.buttons = new ErrorMassegeBtn[]{
+            userMassege.buttons = new ErrorMassegeBtn[]
+            {
                 new ErrorMassegeBtn { url = "#", text = "ок", action = "false" }
             };
             

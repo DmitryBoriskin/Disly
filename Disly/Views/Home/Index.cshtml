@@ -16,13 +16,15 @@
     var sitemapPlates = (Model.SiteMapArray != null) ?
         Model.SiteMapArray
         .Where(w => w.MenuAlias.Equals("plate"))
+        .OrderBy(o => o.MenuSort)
         .Select(s => new
         {
             Path = s.Path,
             Alias = s.Alias,
             Title = s.Title,
             FrontSection = s.FrontSection,
-            Url = s.Url
+            Url = s.Url,
+            Photo = s.Photo
         })
         : null;
 
@@ -43,10 +45,15 @@
     var news = (Model.Materials != null) ? Model.Materials.Where(w => w.GroupAlias.Equals("news")) : null;
     var events = (Model.Materials != null) ? Model.Materials.Where(w => w.GroupAlias.Equals("events")) : null;
     int i = 0;
+
+    string backgroundSlider = Model.SitesInfo.BackGroundImg != null
+        ? "style=background-image:url(" + Model.SitesInfo.BackGroundImg.Url + ");"
+        : null;
+
 }
 <!-- слайдер -->
 <div>
-    <div class="top-slider-wrapper">
+    <div class="top-slider-wrapper" @backgroundSlider>
         <div class="container">
             <div class="row">
                 @if (slider != null && slider.Count() > 0)
@@ -118,7 +125,7 @@
                                 </div>
                             </div>
                         </a>
-                        <a href="/feedback">
+                        <a href="/vote">
                             <div class="slider-message orange">
                                 <div class="icon-slider-message">
                                     <span class="ti-check-box"></span>
@@ -136,7 +143,7 @@
 </div>
 <!-- конец слайдера -->
 <!-- модуль новостей -->
-<div class="container">    
+<div class="container">
     @if (Model.Materials != null)
     {
         <div class="news-module">
@@ -157,8 +164,8 @@
                                         <div>@ann.Date.ToString("yyyy")</div>
                                     </div>
                                 </div>
-                                <a  class="module-material-item-group-link" href="/press/@ann.GroupAlias">@ann.GroupName                                </a>
-                                <a  class="module-material-title" href="@link">@ann.Title</a>
+                                <a class="module-material-item-group-link" href="/press/@ann.GroupAlias">@ann.GroupName                                </a>
+                                <a class="module-material-title" href="@link">@ann.Title</a>
                             </div>
                         }
                     }
@@ -289,7 +296,16 @@
                         fullPath = "/" + item.FrontSection;
                     }
                     <div class="col-sm-3">
-                        <a href="@fullPath" class="sitemap-plate">@item.Title</a>
+                        @if (!string.IsNullOrWhiteSpace(item.Photo.Url))
+                        {
+                            <a href="@fullPath" title="@item.Title">
+                                <img src="@item.Photo.Url" alt="@item.Title" />
+                            </a>
+                        }
+                        else
+                        {
+                            <a href="@fullPath" class="sitemap-plate">@item.Title</a>
+                        }
                     </div>
                 }
             </div>

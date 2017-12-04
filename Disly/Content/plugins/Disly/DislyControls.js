@@ -290,7 +290,8 @@
     })
 
     $(document).on('click.bs.inputFile', '.preview_del', function (e) {
-        var $file = $(this).parents('.fileupload').find('input:file');
+        var fileUpload = $(this).closest('.fileupload');
+        var $file = fileUpload.find('input:file');
 
         $file.removeAttr('data-url');
         $file.removeAttr('data-size');
@@ -299,8 +300,13 @@
 
         $file.siblings('.preview').remove();
 
-        $file.siblings('input[type=hidden]#' + $file.attr('id')).removeAttr('value');
-        $('.fileupload').siblings('input[type=hidden]').removeAttr('value');
+        var ul = $file.siblings('input[type=hidden]').attr('value');
+
+        $file.siblings('input[type=hidden]').removeAttr('value');
+        $("input[value='" + ul + "']").removeAttr('value');
+
+        //$file.siblings('input[type=hidden]#' + $file.attr('id')).removeAttr('value');
+        //$('.fileupload').next('input[type=hidden]').removeAttr('value');
 
         $file.DislyFile('create');
     })
@@ -318,7 +324,7 @@
         }
 
         $(this).attr('data-name', fileName);
-        $(this).attr('name', 'upload');
+        //$(this).attr('name', 'upload');
         $(this).siblings('.preview').remove();
         $(this).DislyFile('create');
     })

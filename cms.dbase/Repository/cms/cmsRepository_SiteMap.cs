@@ -161,7 +161,11 @@ namespace cms.dbase
                         Sort = s.n_sort,
                         ParentId = s.uui_parent,
                         CountSibling = getCountSiblings(s.id),
-                        MenuGroups = getSiteMapGroupMenu(id)
+                        MenuGroups = getSiteMapGroupMenu(id),
+                        Photo = new Photo
+                        {
+                            Url = s.c_photo
+                        }
                     });
 
                 if (!data.Any())
@@ -264,6 +268,7 @@ namespace cms.dbase
                             .Value(p => p.b_disabled_menu, item.DisabledMenu)
                             .Value(p => p.n_sort, maxSort)
                             .Value(p => p.uui_parent, item.ParentId)
+                            .Value(p => p.c_photo, item.Photo != null ? item.Photo.Url : null)
                             .Insert();
 
                         // группы меню
@@ -346,6 +351,7 @@ namespace cms.dbase
                             .Set(u => u.b_disabled, item.Disabled)
                             .Set(u => u.b_blocked, item.Blocked)
                             .Set(u => u.b_disabled_menu, item.DisabledMenu)
+                            .Set(u => u.c_photo, item.Photo != null ? item.Photo.Url : null)
                             .Update();
 
                         #region обновим алиасы для дочерних эл-тов
@@ -397,7 +403,6 @@ namespace cms.dbase
                         }
 
                         // логирование
-                        //insertLog(userId, IP, "update", id, String.Empty, "SiteMap", item.Title);
                         var log = new LogModel()
                         {
                             Site = _domain,

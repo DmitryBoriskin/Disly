@@ -131,7 +131,7 @@ namespace Disly.Areas.Admin.Controllers
                             info = "Вы не можете загружать файлы данного формата",
                             buttons = new ErrorMassegeBtn[]
                             {
-                             new ErrorMassegeBtn { url = "#", text = "ок", action = "false", style="primary" }
+                                new ErrorMassegeBtn { url = "#", text = "ок", action = "false", style="primary" }
                             }
                         };
 
