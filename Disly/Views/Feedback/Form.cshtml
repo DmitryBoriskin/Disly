@@ -44,47 +44,48 @@
                 </div>
             }
             <div id="reviewss-from" class="select_choice">
-                @using (Html.BeginForm("FeedbackSend", "Feedback", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                @using (Html.BeginForm("Form", "Feedback", FormMethod.Post, new { enctype = "multipart/form-data" }))
                 {
                     <div class="form-group">
                         <label for="feedback-senderName-input">Ф.И.О.</label>
-                        <input type="text" id="feedback-senderName-input" name="SenderName" value="@ViewBag.SenderName" class="form-control" required maxlength="256"/>
+                        <input type="text" id="feedback-senderName-input" name="SenderName" value="@ViewBag.SenderName" class="form-control" maxlength="256" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="feedback-senderEmail-input">Электронная почта</label>
+                        <input type="email" id="feedback-senderEmail-input" name="SenderEmail" value="@ViewBag.SenderEmail" class="form-control" maxlength="50" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="feedback-senderContacts-input">Дополнительные контакты</label>
+                        <textarea class="form-control" id="feedback-senderContacts-input" name="SenderContacts" rows="3" maxlength="256">@ViewBag.SenderContacts</textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="feedback-theme-input">Тема обращения</label>
+                        <input type="text" id="feedback-theme-input" name="Theme" value="@ViewBag.Theme" class="form-control" rows="7" maxlength="256" required />
                     </div>
                         <div class="form-group">
-                            <label for="feedback-senderEmail-input">Электронная почта</label>
-                            <input type="email" id="feedback-senderEmail-input" name="SenderEmail" value="@ViewBag.SenderEmail" class="form-control" required maxlength="50"/>
+                            <label for="feedback-text-area">Текст вопроса</label>
+                            <textarea class="form-control" id="feedback-text-area" name="Text" rows="7" maxlength="2048" required>@ViewBag.Text</textarea>
                         </div>
-                            <div class="form-group">
-                                <label for="feedback-senderEmail-input">Дополнительные контакты</label>
-                                <input type="text" id="feedback-senderEmail-input" name="SenderContacts" value="@ViewBag.SenderContacts" class="form-control" maxlength="256"/>
-                            </div>
 
-                            <div class="form-group">
-                                <label for="feedback-theme-input">Тема обращения</label>
-                                <input type="text" id="feedback-theme-input" name="Theme" value="@ViewBag.Theme" class="form-control" rows="7" required maxlength="256">
-                            </div>
-                            <div class="form-group">
-                                <label for="feedback-text-area">Текст вопроса</label>
-                                <textarea class="form-control" id="feedback-text-area" name="Text" rows="7" required maxlength="2048">@ViewBag.Text</textarea>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="feedback-byEmail-radio">Ответ отправлять:</label>
-                                <div>
-                                    <label class="radio-inline"><input type="radio" id="feedback-byEmail-radio" name="ByEmail" value="True" @(ViewBag.ByEmail ? "checked" : null)>В электронной форме</label>
-                                    <label class="radio-inline"><input type="radio" id="feedback-byEmail-radio" name="ByEmail" value="False">На бумажном носителе</label>
+                            @*<div class="form-group">
+                                    <label for="feedback-byEmail-radio">Ответ отправлять:</label>
+                                    <div>
+                                        <label class="radio-inline"><input type="radio" id="feedback-byEmail-radio" name="ByEmail" value="True" @(ViewBag.ByEmail ? "checked" : null)>В электронной форме</label>
+                                        <label class="radio-inline"><input type="radio" id="feedback-byEmail-radio" name="ByEmail" value="False">На бумажном носителе</label>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="feedback-postAddress-radio">Адрес</label>
-                                <input type="text" id="feedback-postAddress-radio" name="PostAddress" value="@ViewBag.PostAddress" class="form-control" maxlength="1024" />
-                            </div>
+                                <div class="form-group">
+                                    <label for="feedback-postAddress-radio">Адрес</label>
+                                    <input type="text" id="feedback-postAddress-radio" name="PostAddress" value="@ViewBag.PostAddress" class="form-control" maxlength="1024" />
+                                </div>
+                            *@
 
                             <div class="form-group">
                                 <label for="feedback-file-input">Прикрепить файл</label>
                                 <div>
                                     <label class="custom-file">
-                                        <input type="file" id="feedback-file-input" name="FileToUpload" max-size="10485760" class="custom-file-input">
+                                        <input type="file" id="feedback-file-input" name="FileToUpload" max-size="10485760" class="custom-file-input" accept="image/jpg,image/jpeg,image/png,application/pdf,application/msword,application/excel">
                                         <span class="custom-file-control"></span>
                                         <input type="hidden" name="FileUploaded" value="@ViewBag.File" />
                                     </label>
@@ -92,15 +93,31 @@
                             </div>
 
                             <div class="checkbox">
-                                <label><input type="checkbox" name="IsAgree" @(ViewBag.IsAgree? "checked":null) value="True" required>Я согласен на обработку своих персональных данных в соответствии с Федеральным законом №152-ФЗ от 27.07.2006 г. «О персональных данных»</label>
+                                <label>
+                                    <input type="checkbox" id="feedback-isAgree-chkbx" name="IsAgree" @(ViewBag.IsAgree ? "checked" : null) value="True" />
+                                    Я согласен на обработку своих персональных данных в соответствии с Федеральным законом №152-ФЗ от 27.07.2006 г. «О персональных данных»
+                                </label>
                             </div>
                             <div class="g-recaptcha" data-sitekey="@ViewBag.CaptchaKey"></div>
                             <div id="fb"></div>
                             <br>
-                            <button id="feedback-send-btn" type="submit" name="action" value="send-btn" class="btn">ОТПРАВИТЬ</button>
+                            <button id="feedback-send-btn" type="submit" name="action" value="send-btn" class="btn" @(ViewBag.IsAgree ? "" : "disabled")>ОТПРАВИТЬ</button>
                 }
             </div>
         </div>
     </div>
 </div>
+<script>
+    $(document).ready(function () {
+        var _isAgree = $("#feedback-isAgree-chkbx");
+        _isAgree.click(function () {
+            if ($(this).is(':checked')) {
+                $("#feedback-send-btn").prop("disabled", false);
+            }
+            else {
+                $("#feedback-send-btn").prop("disabled", true);
+            }
+        });
 
+    });
+</script>

@@ -520,7 +520,6 @@
     <Content Include="scripts\uc_script _old.js" />
     <Content Include="scripts\uc_script.js" />
     <Content Include="UC_params.txt" />
-    <Content Include="Userfiles\chuvashia\styles.css" />
     <Content Include="Views\Feedback\Index.cshtml" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -864,6 +863,7 @@
     <Content Include="Views\Shared\part\childlist.cshtml" />
     <Content Include="Views\Feedback\Form.cshtml" />
     <Content Include="Views\Search\Index.cshtml" />
+    <Content Include="Views\Feedback\AnswerForm.cshtml" />
     <Content Include="Views\EventsFront\Index.cshtml" />
     <Content Include="Views\EventsFront\Item.cshtml" />
     <None Include="Web.Debug.config">
@@ -875,6 +875,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Userfiles\" />
     <Folder Include="Views\Core\" />
     <Folder Include="Views\Redirect\" />
     <Folder Include="Views\Service\" />

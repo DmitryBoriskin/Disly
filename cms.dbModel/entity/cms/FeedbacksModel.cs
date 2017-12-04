@@ -56,7 +56,12 @@ namespace cms.dbModel.entity
         /// имя отправителя varchar(256)
         /// </summary>
         public string SenderName { get; set; }
-        
+
+        /// <summary>
+        /// контакты отправителя nvarchar(1024)
+        /// </summary>
+        public string SenderContacts { get; set; }
+
         /// <summary>
         /// ответ varchar(4096)
         /// </summary>
@@ -66,7 +71,12 @@ namespace cms.dbModel.entity
         /// имя, ответившего на сообщение varchar(256)
         /// </summary>
         public string Answerer { get; set; }
-        
+
+        /// <summary>
+        /// Guid, код для ответа через форму на сайте
+        /// </summary>
+        public Guid? AnswererCode { get; set; }
+
         /// <summary>
         /// Новое
         /// </summary>

@@ -1,0 +1,96 @@
+﻿@model FeedbackViewModel
+@{
+    var item = Model.Item;
+}
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            @Html.Partial("services/breadcrumbs")
+            <h1>@ViewBag.Title</h1>
+
+            @Html.Partial("part/childlist", Model)
+
+            @*<h2>Задайте вопрос</h2>*@
+            @if (ViewBag.FormStatus != null)
+            {
+                string status = ViewBag.FormStatus;
+                <div id="feedback_status" class="feedback_status">
+                    @switch (status)
+                    {
+                        case "send":
+                            {
+                                <div class="alert alert-success">
+                                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                    Ваше сообщение отправлено.
+                                </div>
+                            }
+                            break;
+                        case "captcha":
+                            {
+                                <div class="alert alert-warning">
+                                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                    Сообщение не отправлено. Введите каптчу.
+                                </div>
+                            }
+                            break;
+                        default:
+                            {
+                                <div class="alert alert-danger">
+                                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                    Ваше сообщение не отправлено.
+                                    @Html.ValidationSummary(false, "")
+                                </div>
+                            }
+                            break;
+                    }
+                </div>
+            }
+
+            <div class="feedback_item">
+                <div>Обращение от:</div>
+
+                <blockquote>
+                    <div class="feedback-item-date"><span>@item.Date.ToString("dd.MM.yyyy")</span></div>
+                    <div class="feedback-item-title" href="/">@item.Title</div>
+                    <div class="feedback-item-text" href="/">@item.Text</div>
+                    <div class="feedback-item-sender">@item.SenderName</div>
+
+                </blockquote>
+            </div>
+
+
+            <div id="reviewss-from" class="select_choice">
+                @using (Html.BeginForm("AnswerForm", "Feedback", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                {
+                    <input type="hidden" name="Id" value="@Model.Item.Id"/>
+                    <input type="hidden" name="AnswererCode" value="@Model.Item.AnswererCode" />
+                    <div class="form-group">
+                        <label for="feedback-answer-area">Текст ответа</label>
+                        <textarea class="form-control" id="feedback-answer-area" name="Answer" rows="7" maxlength="2048" required>@(!string.IsNullOrEmpty(ViewBag.Answer) ? ViewBag.Text : Model.Item.Answer)</textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="feedback-answerer-input">Отвечает</label>
+                        <input type="text" id="feedback-answerer-input" name="Answerer" value="@(!string.IsNullOrEmpty(ViewBag.Answerer)?ViewBag.Text: Model.Item.Answerer)" class="form-control" maxlength="256" placeholder="специалист такой-то" required />
+                    </div>
+
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" id="feedback-publish-chkbx" name="Publish" @(Model.Item.Disabled ? null : "checked") value="True" />
+                            Опубликовать на сайте
+                        </label>
+                    </div>
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" id="feedback-byEmail-chkbx" name="ByEmail" value="True" />
+                            Отправить ответ по Email
+                        </label>
+                    </div>
+                    <div class="g-recaptcha" data-sitekey="@ViewBag.CaptchaKey"></div>
+                    <div id="fb"></div>
+                    <br>
+                    <button id="feedback-send-btn" type="submit" name="action" value="answer-btn" class="btn">ОТПРАВИТЬ</button>
+                }
+            </div>
+        </div>
+    </div>
+</div>

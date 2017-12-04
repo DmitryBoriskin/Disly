@@ -15,17 +15,21 @@ public class Settings
     public static string OrgDir = ConfigurationManager.AppSettings["OrgDir"];
     public static string SiteMapDir = ConfigurationManager.AppSettings["SiteMapDir"];
 
-    public static string EventsDir = ReadAppSetting("EventsDir");  // ConfigurationManager.AppSettings["EventsDir"];
-    public static string MaterialsDir = ReadAppSetting("MaterialsDir"); // ConfigurationManager.AppSettings["MaterialsDir"];
 
-    public static string mailServer = ConfigurationManager.AppSettings["MailServer"];
-    public static int mailServerPort = Convert.ToInt32(ConfigurationManager.AppSettings["MailServerPort"]);
-    public static bool mailServerSSL = Convert.ToBoolean(ConfigurationManager.AppSettings["MailServerSSL"]);
-    public static string mailUser = ConfigurationManager.AppSettings["MailFrom"];
-    public static string mailPass = ConfigurationManager.AppSettings["MailPass"];
-    public static string mailEncoding = ConfigurationManager.AppSettings["MailEncoding"];
-    public static string mailAddresName = ConfigurationManager.AppSettings["MailAddresName"];
-    public static string mailTo = ConfigurationManager.AppSettings["MailTo"];
+    public static string EventsDir = ReadAppSetting("EventsDir");
+    public static string MaterialsDir = ReadAppSetting("MaterialsDir");
+    public static string FeedbacksDir = ReadAppSetting("FeedbacksDir");
+
+    public static string mailServer = ReadAppSetting("MailServer");
+
+    public static int mailServerPort = Convert.ToInt32(ReadAppSetting("MailServerPort"));
+    public static bool mailServerSSL = Convert.ToBoolean(ReadAppSetting("MailServerSSL"));
+
+    public static string mailUser = ReadAppSetting("MailFrom");
+    public static string mailPass = ReadAppSetting("MailPass");
+    public static string mailEncoding = ReadAppSetting("MailEncoding");
+    public static string mailAddresName = ReadAppSetting("MailAddresName");
+    public static string mailTo = ReadAppSetting("MailTo");
 
     public static string MedCap = ConfigurationManager.AppSettings["MedCap"];
     public static string Quote = ConfigurationManager.AppSettings["Quote"];
