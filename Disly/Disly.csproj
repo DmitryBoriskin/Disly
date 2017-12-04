@@ -520,7 +520,6 @@
     <Content Include="scripts\uc_script _old.js" />
     <Content Include="scripts\uc_script.js" />
     <Content Include="UC_params.txt" />
-    <Content Include="Userfiles\chuvashia\styles.css" />
     <Content Include="Views\Feedback\Index.cshtml" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -868,6 +867,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Userfiles\" />
     <Folder Include="Views\Core\" />
     <Folder Include="Views\Redirect\" />
     <Folder Include="Views\Service\" />
