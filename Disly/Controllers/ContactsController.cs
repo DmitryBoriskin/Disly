@@ -65,7 +65,7 @@ namespace Disly.Controllers
                     break;
                 case "dop":
                     PageTitle = "Дополнительная информация";
-                    model.DopInfo = _repository.getSiteMap("/", "contacts"); //, Domain
+                    model.DopInfo = _repository.getSiteMap("contacts"); 
                     break;
                 case "phone":
                     PageTitle = "Телефонный правочник";

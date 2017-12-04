@@ -319,6 +319,35 @@ namespace cms.dbase
         }
 
         /// <summary>
+        /// Получим эл-т карты сайта
+        /// </summary>
+        /// <param name="frontSection"></param>
+        /// <returns></returns>
+        public override SiteMapModel getSiteMap(string frontSection)
+        {
+            string domain = _domain;
+
+            using (var db = new CMSdb(_context))
+            {
+                var query = db.content_sitemaps
+                    .Where(w => w.f_site.Equals(domain))
+                    .Where(w => w.f_front_section.Equals(frontSection))
+                    .Select(s => new SiteMapModel
+                    {
+                        Title = s.c_title,
+                        Text = s.c_text,
+                        Alias = s.c_alias,
+                        Path = s.c_path,
+                        Id = s.id,
+                        FrontSection = s.f_front_section
+                    });
+
+                if (!query.Any()) return null;
+                return query.SingleOrDefault();
+            }
+        }
+
+        /// <summary>
         /// Дочерние элементы
         /// </summary>
         /// <param name="ParentId"></param>
