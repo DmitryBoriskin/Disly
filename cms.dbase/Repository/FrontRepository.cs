@@ -2002,6 +2002,45 @@ namespace cms.dbase
         }
 
         /// <summary>
+        /// Записываем ответ на сообщение
+        /// </summary>
+        /// <param name="feedback"></param>
+        /// <returns></returns>
+        public override bool updateFeedbackItem(FeedbackModel feedback)
+        {
+            try
+            {
+                using (var db = new CMSdb(_context))
+                {
+                    using (var tran = db.BeginTransaction())
+                    {
+                        content_feedbacks cdFeedback = db.content_feedbackss
+                                                    .Where(p => p.id == feedback.Id)
+                                                    .SingleOrDefault();
+                        if (cdFeedback == null)
+                        {
+                            throw new Exception("Запись с таким Id не существует");
+                        }
+
+                        cdFeedback.c_answer = feedback.Answer;
+                        cdFeedback.c_answerer = feedback.Answerer;
+                        cdFeedback.b_disabled = feedback.Disabled;
+                        //c_code = feedback.AnswererCode Возможно можно будет удалить
+
+                        db.Update(cdFeedback);
+                        tran.Commit();
+                        return true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                //write to log ex
+                return false;
+            }
+        }
+
+        /// <summary>
         /// Получаем список событий
         /// </summary>
         /// <param name="filter"></param>
