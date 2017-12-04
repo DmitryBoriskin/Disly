@@ -14,7 +14,7 @@
     <h1>@ViewBag.Title</h1>
     @Html.TextBoxFor(m => m.Item.Title, new { @title = "Название", @required = "" })
     @Html.TextBoxFor(m => m.Item.LongTitle, new { @title = "Полное название" })
-    <div class="group-block" title="Пользовательские скрипты">
+    <div class="group-block open" title="Пользовательские скрипты">
         @Html.TextAreaFor(m => m.Item.Scripts, new { @type = "editor", @height = "300" })
     </div>
     @Html.HiddenFor(m => m.Item.Id)
