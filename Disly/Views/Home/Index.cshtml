@@ -16,6 +16,7 @@
     var sitemapPlates = (Model.SiteMapArray != null) ?
         Model.SiteMapArray
         .Where(w => w.MenuAlias.Equals("plate"))
+        .OrderBy(o => o.MenuSort)
         .Select(s => new
         {
             Path = s.Path,
