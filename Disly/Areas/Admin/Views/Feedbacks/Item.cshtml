@@ -11,6 +11,9 @@
             <div class="col-lg-5">
                 @Html.TextBoxFor(m => m.Item.SenderEmail, new { type = "text", title = "Email отправителя", maxlength = "50" })
             </div>
+            <div class="col-lg-12">
+                @Html.TextAreaFor(m => m.Item.SenderContacts, new { type = "text", title = "Контакты отправителя", maxlength = "256" })
+            </div>
         </div>
         <div class="row">
             <div class="col-lg-12">@Html.TextBoxFor(m => m.Item.Title, new { required = "required", type = "text", maxlength = "256", title = "Заголовок" })</div>

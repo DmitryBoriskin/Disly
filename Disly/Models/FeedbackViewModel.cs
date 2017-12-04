@@ -56,22 +56,9 @@ namespace Disly.Models
         /// </summary>
         public HttpPostedFileBase FileToUpload { get; set; }
         /// <summary>
-        /// 
-        /// </summary>
-        public string FileUploaded { get; set; }
-        /// <summary>
         /// Согласен на обработку данных
         /// </summary>
         public bool IsAgree { get; set; }
-
-        ///// <summary>
-        ///// Отправлять по Email
-        ///// </summary>
-        //public bool ByEmail { get; set; }
-        ///// <summary>
-        ///// Адрес, на который необходимо отправлять ответ
-        ///// </summary>
-        //public string PostAddress { get; set; }
     }
 
     public class FeedbackAnswerFormViewModel

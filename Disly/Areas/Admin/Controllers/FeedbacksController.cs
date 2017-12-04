@@ -35,7 +35,7 @@ namespace Disly.Areas.Admin.Controllers
                 UserResolution = UserResolutionInfo,
                 ControllerName = ControllerName,
                 ActionName = ActionName,
-        };
+            };
 
             #region Метатеги
             ViewBag.Title = UserResolutionInfo.Title;
@@ -181,17 +181,21 @@ namespace Disly.Areas.Admin.Controllers
         [MultiButton(MatchFormKey = "action", MatchFormValue = "delete-btn")]
         public ActionResult Delete(Guid Id)
         {
-           // var res = _cmsRepository.deleteCmsFeedback(Id);
+            var res = _cmsRepository.deleteCmsFeedback(Id);
 
-            // записываем информацию о результатах
-            ErrorMassege userMassege = new ErrorMassege();
-            userMassege.title = "Информация";
-            userMassege.info = "Запись Удалена";
-            userMassege.buttons = new ErrorMassegeBtn[]{
-                 new ErrorMassegeBtn { url = "#", text = "ок", action = "false" }
-             };
+            if (res)
+            {
+                // записываем информацию о результатах
+                ErrorMassege userMessage = new ErrorMassege();
+                userMessage.title = "Информация";
+                userMessage.info = "Запись Удалена";
+                userMessage.buttons = new ErrorMassegeBtn[]
+                {
+                    new ErrorMassegeBtn { url = "#", text = "ок", action = "false" }
+                };
 
-            model.ErrorInfo = userMassege;
+                model.ErrorInfo = userMessage;
+            }
 
             return View("Item", model);
         }
