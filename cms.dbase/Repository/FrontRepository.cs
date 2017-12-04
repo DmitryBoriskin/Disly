@@ -302,7 +302,8 @@ namespace cms.dbase
                     Alias = s.c_alias,
                     Path = s.c_path,
                     Id = s.id,
-                    FrontSection = s.f_front_section
+                    FrontSection = s.f_front_section,
+                    ParentId = s.uui_parent
                 });
 
                 if (data.Any())
@@ -1883,6 +1884,39 @@ namespace cms.dbase
             }
         }
         /// <summary>
+        /// Отзыв
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public override FeedbackModel getFeedbackItem(Guid id)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var data = db.content_feedbackss
+                    .Where(w => w.id == id)
+                    .Select(s => new FeedbackModel
+                    {
+                        Id = s.id,
+                        Title = s.c_title,
+                        Text = s.c_text,
+                        Date = s.d_date,
+                        SenderName = s.c_sender_name,
+                        SenderEmail = s.c_sender_email,
+                        SenderContacts = s.c_sender_contacts,
+                        Answer = s.c_answer,
+                        Answerer = s.c_answerer,
+                        IsNew = s.b_new,
+                        Disabled = s.b_disabled,
+                        AnswererCode = s.c_code
+                    });
+
+                if (data.Any())
+                    return data.First();
+
+                return null;
+            }
+        }
+        /// <summary>
         /// Сохранение сообщения  из обратной связи при отправке пользователем
         /// </summary>
         /// <param name="feedback"></param>
@@ -1911,13 +1945,53 @@ namespace cms.dbase
                             d_date = feedback.Date,
                             c_sender_name = feedback.SenderName,
                             c_sender_email = feedback.SenderEmail,
+                            c_sender_contacts = feedback.SenderContacts,
                             c_answer = feedback.Answer,
                             c_answerer = feedback.Answerer,
                             b_new = feedback.IsNew,
                             b_disabled = feedback.Disabled,
-                            f_site = _domain
+                            f_site = _domain,
+                            c_code = feedback.AnswererCode
                         };
                         db.Insert(cdFeedback);
+                        tran.Commit();
+                        return true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                //write to log ex
+                return false;
+            }
+        }
+        /// <summary>
+        /// Записываем ответ на сообщение
+        /// </summary>
+        /// <param name="feedback"></param>
+        /// <returns></returns>
+        public override bool updateFeedbackItem(FeedbackModel feedback)
+        {
+            try
+            {
+                using (var db = new CMSdb(_context))
+                {
+                    using (var tran = db.BeginTransaction())
+                    {
+                        content_feedbacks cdFeedback = db.content_feedbackss
+                                                    .Where(p => p.id == feedback.Id)
+                                                    .SingleOrDefault();
+                        if (cdFeedback == null)
+                        {
+                            throw new Exception("Запись с таким Id не существует");
+                        }
+
+                        cdFeedback.c_answer = feedback.Answer;
+                        cdFeedback.c_answerer = feedback.Answerer;
+                        cdFeedback.b_disabled = feedback.Disabled;
+                        //c_code = feedback.AnswererCode Возможно можно будет удалить
+   
+                        db.Update(cdFeedback);
                         tran.Commit();
                         return true;
                     }

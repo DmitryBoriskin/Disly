@@ -60,8 +60,9 @@ namespace cms.dbModel
 
         //Обратная связь
         public abstract FeedbacksList getFeedbacksList(FilterParams filtr);
+        public abstract FeedbackModel getFeedbackItem(Guid id);
         public abstract bool insertFeedbackItem(FeedbackModel feedback);
-
+        public abstract bool updateFeedbackItem(FeedbackModel feedback);
         //Vote
         public abstract IEnumerable<VoteModel> getVote(string Ip); //string domain,
         public abstract VoteModel getVoteItem(Guid id, string Ip);

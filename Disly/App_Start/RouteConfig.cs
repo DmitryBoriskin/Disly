@@ -183,12 +183,7 @@ namespace Disly
              url: "Feedback/{*action}",
              defaults: new { controller = "Feedback", action = "Index", path = UrlParameter.Optional }
              );
-            routes.MapRoute(
-            name: "FeedbackItem",
-            url: "Feedback/{id}",
-            defaults: new { controller = "Feedback", action = "Item", path = UrlParameter.Optional }
-            );
-
+            
             // Типовая страница (карта сайта)
             routes.MapRoute(
                name: "Page",

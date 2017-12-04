@@ -65,9 +65,9 @@ namespace cms.dbase
         {
             using (var db = new CMSdb(_context))
             {
-                var data = db.content_feedbackss.
-                    Where(w => w.id == id).
-                    Select(s => new FeedbackModel
+                var data = db.content_feedbackss
+                    .Where(w => w.id == id)
+                    .Select(s => new FeedbackModel
                     {
                         Id = s.id,
                         Title = s.c_title,
@@ -82,8 +82,10 @@ namespace cms.dbase
                     });
 
 
-                if (!data.Any()) { return null; }
-                else { return data.First(); }
+                if (data.Any())
+                    return data.SingleOrDefault();
+
+                return null; 
             }
         }
 
