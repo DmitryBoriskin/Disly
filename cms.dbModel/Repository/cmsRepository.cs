@@ -247,5 +247,12 @@ namespace cms.dbModel
         public abstract DocumentsModel getDocumentsPath(Guid id);
         public abstract bool deleteSiteMapDocuments(Guid id);
         public abstract bool permit_Documents(Guid id, int num);
+
+        //фотоальбом
+        public abstract PhotoAlbumList getPhotoAlbum(FilterParams filter);
+        public abstract PhotoAlbum getPhotoAlbumItem(Guid id);
+        public abstract bool insPhotoAlbum(Guid id, PhotoAlbum ins);
+        public abstract bool updPhotoAlbum(Guid id, PhotoAlbum upd);
+        public abstract bool delPhotoAlbum(Guid id);
     }
 }

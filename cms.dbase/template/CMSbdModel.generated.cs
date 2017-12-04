@@ -1414,11 +1414,13 @@ namespace cms.dbase.models
 	[Table(Schema="dbo", Name="content_photoalbum")]
 	public partial class content_photoalbum
 	{
-		[PrimaryKey, NotNull    ] public Guid     id        { get; set; } // uniqueidentifier
-		[Column,     NotNull    ] public string   c_title   { get; set; } // varchar(512)
-		[Column,        Nullable] public string   c_preview { get; set; } // varchar(512)
-		[Column,        Nullable] public string   c_text    { get; set; } // varchar(max)
-		[Column,     NotNull    ] public DateTime d_date    { get; set; } // datetime
+		[PrimaryKey, NotNull    ] public Guid     id                    { get; set; } // uniqueidentifier
+		[Column,     NotNull    ] public string   c_title               { get; set; } // varchar(512)
+		[Column,        Nullable] public string   c_preview             { get; set; } // varchar(512)
+		[Column,        Nullable] public string   c_text                { get; set; } // varchar(max)
+		[Column,     NotNull    ] public DateTime d_date                { get; set; } // datetime
+		[Column,     NotNull    ] public Guid     f_content_origin      { get; set; } // uniqueidentifier
+		[Column,     NotNull    ] public string   c_content_type_origin { get; set; } // varchar(64)
 
 		#region Associations
 
@@ -1434,13 +1436,13 @@ namespace cms.dbase.models
 	[Table(Schema="dbo", Name="content_photos")]
 	public partial class content_photos
 	{
-		[PrimaryKey, NotNull    ] public Guid     id        { get; set; } // uniqueidentifier
-		[Column,     NotNull    ] public Guid     f_album   { get; set; } // uniqueidentifier
-		[Column,     NotNull    ] public string   c_title   { get; set; } // varchar(512)
-		[Column,     NotNull    ] public DateTime d_date    { get; set; } // datetime
-		[Column,     NotNull    ] public string   c_preview { get; set; } // varchar(512)
-		[Column,     NotNull    ] public string   c_photo   { get; set; } // varchar(512)
-		[Column,        Nullable] public int?     n_sort    { get; set; } // int
+		[PrimaryKey, NotNull] public Guid     id        { get; set; } // uniqueidentifier
+		[Column,     NotNull] public Guid     f_album   { get; set; } // uniqueidentifier
+		[Column,     NotNull] public string   c_title   { get; set; } // varchar(512)
+		[Column,     NotNull] public DateTime d_date    { get; set; } // datetime
+		[Column,     NotNull] public string   c_preview { get; set; } // varchar(512)
+		[Column,     NotNull] public string   c_photo   { get; set; } // varchar(512)
+		[Column,     NotNull] public int      n_sort    { get; set; } // int
 
 		#region Associations
 
@@ -2428,4 +2430,3 @@ namespace cms.dbase.models
 		}
 	}
 }
- 
