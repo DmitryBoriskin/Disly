@@ -122,7 +122,12 @@ namespace cms.dbase
                         Vk = s.c_vk,
                         Instagramm = s.c_instagramm,
                         Odnoklassniki = s.c_odnoklassniki,
-                        Twitter = s.c_twitter
+                        Twitter = s.c_twitter,
+                        Theme = s.c_theme,
+                        BackGroundImg = new Photo
+                        {
+                            Url = s.c_background_img
+                        }
                     });
 
                 if (data.Any())
@@ -190,7 +195,8 @@ namespace cms.dbase
                         ParentId = s.uui_parent,
                         MenuAlias = s.menu_alias,
                         MenuSort = s.menu_sort,
-                        MenuGroups = getSiteMapGroupMenu(s.id)
+                        MenuGroups = getSiteMapGroupMenu(s.id),
+                        Photo = new Photo { Url = s.c_photo }
                     });
 
                 if (data.Any())
@@ -310,6 +316,35 @@ namespace cms.dbase
                     return data.First();
 
                 return null;
+            }
+        }
+
+        /// <summary>
+        /// Получим эл-т карты сайта
+        /// </summary>
+        /// <param name="frontSection"></param>
+        /// <returns></returns>
+        public override SiteMapModel getSiteMap(string frontSection)
+        {
+            string domain = _domain;
+
+            using (var db = new CMSdb(_context))
+            {
+                var query = db.content_sitemaps
+                    .Where(w => w.f_site.Equals(domain))
+                    .Where(w => w.f_front_section.Equals(frontSection))
+                    .Select(s => new SiteMapModel
+                    {
+                        Title = s.c_title,
+                        Text = s.c_text,
+                        Alias = s.c_alias,
+                        Path = s.c_path,
+                        Id = s.id,
+                        FrontSection = s.f_front_section
+                    });
+
+                if (!query.Any()) return null;
+                return query.SingleOrDefault();
             }
         }
 

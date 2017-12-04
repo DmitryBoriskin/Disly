@@ -14,6 +14,7 @@ namespace cms.dbModel
         public abstract string[] getSiteMapGroupMenu(Guid id);
 
         public abstract SiteMapModel getSiteMap(string path, string alias); //, string domain
+        public abstract SiteMapModel getSiteMap(string frontSection);
         public abstract SiteMapModel[] getSiteMapChild(Guid ParentId);
         public abstract List<Breadcrumbs> getBreadCrumbCollection(string Url); //, string domain
 

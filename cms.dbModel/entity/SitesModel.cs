@@ -151,6 +151,11 @@ namespace cms.dbModel.entity
         /// Тема
         /// </summary>
         public string Theme { get; set; }
+
+        /// <summary>
+        /// Изображение под слайдером
+        /// </summary>
+        public Photo BackGroundImg { get; set; }
     }
 
     /// <summary>

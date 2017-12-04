@@ -32,10 +32,10 @@
       <publishTime>07/27/2017 11:42:40</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Banners/Index.cshtml">
-      <publishTime>10/27/2017 10:16:16</publishTime>
+      <publishTime>11/30/2017 10:14:18</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Banners/Item.cshtml">
-      <publishTime>10/27/2017 10:16:16</publishTime>
+      <publishTime>11/30/2017 09:57:10</publishTime>
     </File>
     <File Include="Areas/Admin/Views/cmsMenu/Index.cshtml">
       <publishTime>05/22/2017 13:19:24</publishTime>
@@ -47,13 +47,13 @@
       <publishTime>11/29/2017 13:56:59</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Events/Index.cshtml">
-      <publishTime>11/29/2017 12:16:40</publishTime>
+      <publishTime>11/30/2017 12:59:24</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Events/Item.cshtml">
       <publishTime>11/29/2017 11:09:44</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Feedbacks/Index.cshtml">
-      <publishTime>09/29/2017 10:22:18</publishTime>
+      <publishTime>12/01/2017 12:43:58</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Feedbacks/Item.cshtml">
       <publishTime>11/28/2017 11:49:36</publishTime>
@@ -65,16 +65,16 @@
       <publishTime>07/06/2017 16:20:43</publishTime>
     </File>
     <File Include="Areas/Admin/Views/MainSpecialist/Index.cshtml">
-      <publishTime>11/17/2017 15:44:13</publishTime>
+      <publishTime>12/01/2017 11:50:08</publishTime>
     </File>
     <File Include="Areas/Admin/Views/MainSpecialist/Item.cshtml">
       <publishTime>11/17/2017 15:44:13</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Materials/Index.cshtml">
-      <publishTime>11/29/2017 12:16:40</publishTime>
+      <publishTime>11/30/2017 10:14:18</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Materials/Item.cshtml">
-      <publishTime>11/29/2017 11:09:44</publishTime>
+      <publishTime>11/30/2017 09:57:10</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Materials/Orgs.cshtml">
       <publishTime>11/13/2017 09:30:29</publishTime>
@@ -83,34 +83,34 @@
       <publishTime>11/13/2017 09:30:29</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Orgs/Administrativ.cshtml">
-      <publishTime>11/27/2017 15:49:00</publishTime>
+      <publishTime>11/30/2017 12:59:24</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Orgs/Department.cshtml">
-      <publishTime>11/20/2017 10:53:53</publishTime>
+      <publishTime>11/30/2017 12:59:24</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Orgs/Index.cshtml">
-      <publishTime>10/27/2017 10:16:16</publishTime>
+      <publishTime>12/01/2017 11:50:08</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Orgs/Item.cshtml">
-      <publishTime>11/29/2017 13:56:59</publishTime>
+      <publishTime>12/01/2017 11:50:08</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Orgs/Ovp.cshtml">
-      <publishTime>11/20/2017 10:53:53</publishTime>
+      <publishTime>11/30/2017 12:59:24</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Orgs/part/bread.cshtml">
       <publishTime>09/29/2017 10:22:18</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Orgs/Structure.cshtml">
-      <publishTime>10/27/2017 10:16:16</publishTime>
+      <publishTime>11/30/2017 12:59:24</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Person/Index.cshtml">
-      <publishTime>11/22/2017 09:55:21</publishTime>
+      <publishTime>12/01/2017 11:50:08</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Person/Item.cshtml">
       <publishTime>11/22/2017 09:55:21</publishTime>
     </File>
     <File Include="Areas/Admin/Views/PortalUsers/Index.cshtml">
-      <publishTime>11/13/2017 09:30:29</publishTime>
+      <publishTime>11/30/2017 12:59:24</publishTime>
     </File>
     <File Include="Areas/Admin/Views/PortalUsers/Item.cshtml">
       <publishTime>11/13/2017 09:30:29</publishTime>
@@ -131,7 +131,7 @@
       <publishTime>05/22/2017 13:20:00</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Services/SiteMapMenuGroup.cshtml">
-      <publishTime>10/23/2017 15:08:43</publishTime>
+      <publishTime>11/30/2017 12:59:24</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Services/UserResolutions.cshtml">
       <publishTime>05/22/2017 13:20:01</publishTime>
@@ -164,7 +164,7 @@
       <publishTime>11/15/2017 08:54:59</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Shared/Templates/Filtr/Default.cshtml">
-      <publishTime>11/29/2017 16:58:50</publishTime>
+      <publishTime>11/30/2017 12:59:24</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Shared/Templates/Menu/Default.cshtml">
       <publishTime>05/22/2017 13:24:25</publishTime>
@@ -182,7 +182,7 @@
       <publishTime>11/28/2017 15:51:43</publishTime>
     </File>
     <File Include="Areas/Admin/Views/SiteMap/Index.cshtml">
-      <publishTime>11/29/2017 16:58:50</publishTime>
+      <publishTime>11/30/2017 12:59:24</publishTime>
     </File>
     <File Include="Areas/Admin/Views/SiteMap/Item.cshtml">
       <publishTime>11/29/2017 12:16:40</publishTime>
@@ -206,7 +206,7 @@
       <publishTime>11/16/2017 16:18:40</publishTime>
     </File>
     <File Include="Areas/Admin/Views/SiteSettings/Index.cshtml">
-      <publishTime>11/24/2017 15:34:48</publishTime>
+      <publishTime>12/04/2017 08:36:14</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Users/Index.cshtml">
       <publishTime>11/14/2017 10:03:36</publishTime>
@@ -242,25 +242,25 @@
       <publishTime>05/22/2017 13:13:09</publishTime>
     </File>
     <File Include="bin/cms.dbase.dll">
-      <publishTime>11/29/2017 17:15:12</publishTime>
+      <publishTime>12/04/2017 08:54:22</publishTime>
     </File>
     <File Include="bin/cms.dbase.dll.config">
       <publishTime>05/22/2017 13:02:04</publishTime>
     </File>
     <File Include="bin/cms.dbase.pdb">
-      <publishTime>11/29/2017 17:15:12</publishTime>
+      <publishTime>12/04/2017 08:54:22</publishTime>
     </File>
     <File Include="bin/cms.dbModel.dll">
-      <publishTime>11/29/2017 17:15:10</publishTime>
+      <publishTime>12/04/2017 08:54:19</publishTime>
     </File>
     <File Include="bin/cms.dbModel.pdb">
-      <publishTime>11/29/2017 17:15:10</publishTime>
+      <publishTime>12/04/2017 08:54:19</publishTime>
     </File>
     <File Include="bin/Disly.dll">
-      <publishTime>11/29/2017 17:15:24</publishTime>
+      <publishTime>12/04/2017 08:54:23</publishTime>
     </File>
     <File Include="bin/Disly.pdb">
-      <publishTime>11/29/2017 17:15:24</publishTime>
+      <publishTime>12/04/2017 08:54:23</publishTime>
     </File>
     <File Include="bin/EntityFramework.dll">
       <publishTime>05/22/2017 13:30:29</publishTime>
@@ -329,7 +329,7 @@
       <publishTime>05/22/2017 13:13:42</publishTime>
     </File>
     <File Include="Content/css/common.css">
-      <publishTime>11/29/2017 16:58:50</publishTime>
+      <publishTime>12/04/2017 08:36:14</publishTime>
     </File>
     <File Include="Content/css/core/style.css">
       <publishTime>11/22/2017 12:09:25</publishTime>
@@ -338,7 +338,7 @@
       <publishTime>11/29/2017 13:56:59</publishTime>
     </File>
     <File Include="Content/css/styles.css">
-      <publishTime>11/29/2017 12:16:40</publishTime>
+      <publishTime>11/30/2017 16:37:07</publishTime>
     </File>
     <File Include="Content/css/styles_login.css">
       <publishTime>07/07/2017 08:10:41</publishTime>
@@ -347,16 +347,28 @@
       <publishTime>05/22/2017 13:11:44</publishTime>
     </File>
     <File Include="Content/css/styles_popUp.css">
-      <publishTime>11/28/2017 11:18:12</publishTime>
+      <publishTime>11/30/2017 12:59:24</publishTime>
+    </File>
+    <File Include="Content/css/theme/blue.css">
+      <publishTime>12/04/2017 08:36:14</publishTime>
+    </File>
+    <File Include="Content/css/theme/blue.less">
+      <publishTime>12/04/2017 08:36:14</publishTime>
     </File>
     <File Include="Content/css/theme/first.css">
-      <publishTime>11/29/2017 17:15:24</publishTime>
+      <publishTime>11/30/2017 09:57:10</publishTime>
     </File>
     <File Include="Content/css/theme/first.less">
-      <publishTime>11/29/2017 16:58:50</publishTime>
+      <publishTime>11/30/2017 09:57:10</publishTime>
     </File>
     <File Include="Content/css/theme/first.min.css">
       <publishTime>11/28/2017 11:49:36</publishTime>
+    </File>
+    <File Include="Content/css/theme/turquoise.css">
+      <publishTime>12/01/2017 12:17:01</publishTime>
+    </File>
+    <File Include="Content/css/theme/turquoise.less">
+      <publishTime>12/01/2017 12:17:01</publishTime>
     </File>
     <File Include="Content/decor/chuvashia/bg.png">
       <publishTime>05/22/2017 13:15:35</publishTime>
@@ -842,7 +854,7 @@
       <publishTime>11/28/2017 11:18:12</publishTime>
     </File>
     <File Include="Content/js/script.js">
-      <publishTime>11/28/2017 11:18:12</publishTime>
+      <publishTime>12/01/2017 11:50:08</publishTime>
     </File>
     <File Include="Content/plugins/bonsai/css/jquery.bonsai.css">
       <publishTime>11/13/2017 09:30:29</publishTime>
@@ -983,7 +995,7 @@
       <publishTime>11/15/2017 08:54:59</publishTime>
     </File>
     <File Include="Content/plugins/Disly/DislyControls.js">
-      <publishTime>11/29/2017 11:09:45</publishTime>
+      <publishTime>12/04/2017 08:36:14</publishTime>
     </File>
     <File Include="Content/plugins/icheck/icheck.js">
       <publishTime>10/26/2017 11:50:50</publishTime>
@@ -1859,7 +1871,7 @@
       <publishTime>05/22/2017 13:02:02</publishTime>
     </File>
     <File Include="gulpfile.js">
-      <publishTime>11/24/2017 16:08:04</publishTime>
+      <publishTime>12/01/2017 12:17:01</publishTime>
     </File>
     <File Include="package.json">
       <publishTime>11/24/2017 16:08:15</publishTime>
@@ -1868,7 +1880,7 @@
       <publishTime>11/24/2017 16:08:15</publishTime>
     </File>
     <File Include="scripts/cms/disly_5.js">
-      <publishTime>11/24/2017 15:35:06</publishTime>
+      <publishTime>12/01/2017 11:50:08</publishTime>
     </File>
     <File Include="scripts/cms/disly_5_login.js">
       <publishTime>07/06/2017 10:46:02</publishTime>
@@ -1904,7 +1916,7 @@
       <publishTime>05/22/2017 13:09:46</publishTime>
     </File>
     <File Include="Views/Contacts/Index.cshtml">
-      <publishTime>11/27/2017 15:49:00</publishTime>
+      <publishTime>11/30/2017 09:25:11</publishTime>
     </File>
     <File Include="Views/Contacts/part/administration.cshtml">
       <publishTime>11/29/2017 13:56:59</publishTime>
@@ -1916,7 +1928,7 @@
       <publishTime>11/24/2017 11:17:45</publishTime>
     </File>
     <File Include="Views/Doctors/Index.cshtml">
-      <publishTime>11/29/2017 11:09:45</publishTime>
+      <publishTime>11/30/2017 09:25:11</publishTime>
     </File>
     <File Include="Views/Doctors/part/item.cshtml">
       <publishTime>11/29/2017 13:56:59</publishTime>
@@ -1936,11 +1948,17 @@
     <File Include="Views/Error/Index.cshtml">
       <publishTime>05/22/2017 13:12:35</publishTime>
     </File>
+    <File Include="Views/Feedback/Form.cshtml">
+      <publishTime>12/01/2017 12:43:58</publishTime>
+    </File>
+    <File Include="Views/Feedback/Index.cshtml">
+      <publishTime>12/01/2017 12:43:58</publishTime>
+    </File>
     <File Include="Views/FindUs/Index.cshtml">
-      <publishTime>11/17/2017 17:09:38</publishTime>
+      <publishTime>11/30/2017 09:25:11</publishTime>
     </File>
     <File Include="Views/Home/Index.cshtml">
-      <publishTime>11/29/2017 17:14:48</publishTime>
+      <publishTime>12/04/2017 08:58:02</publishTime>
     </File>
     <File Include="Views/Home/Modern.cshtml">
       <publishTime>05/22/2017 13:12:57</publishTime>
@@ -1949,7 +1967,7 @@
       <publishTime>11/29/2017 13:56:59</publishTime>
     </File>
     <File Include="Views/LPU/Index.cshtml">
-      <publishTime>11/29/2017 13:56:59</publishTime>
+      <publishTime>11/30/2017 09:25:11</publishTime>
     </File>
     <File Include="Views/LPU/Nav.cshtml">
       <publishTime>11/29/2017 13:56:59</publishTime>
@@ -1961,16 +1979,16 @@
       <publishTime>01/01/0001 00:00:00</publishTime>
     </File>
     <File Include="Views/MedicalServices/Index.cshtml">
-      <publishTime>11/29/2017 13:56:59</publishTime>
+      <publishTime>11/30/2017 09:25:11</publishTime>
     </File>
     <File Include="Views/Page/Index.cshtml">
-      <publishTime>11/28/2017 15:21:37</publishTime>
+      <publishTime>11/30/2017 16:34:07</publishTime>
     </File>
     <File Include="Views/PortalDoctors/Index.cshtml">
-      <publishTime>11/29/2017 13:56:59</publishTime>
+      <publishTime>12/04/2017 08:36:14</publishTime>
     </File>
     <File Include="Views/Press/Index.cshtml">
-      <publishTime>11/29/2017 13:56:59</publishTime>
+      <publishTime>11/30/2017 09:25:11</publishTime>
     </File>
     <File Include="Views/Press/part/Item.cshtml">
       <publishTime>11/29/2017 13:56:59</publishTime>
@@ -1978,11 +1996,17 @@
     <File Include="Views/Press/Rss.cshtml">
       <publishTime>11/14/2017 10:03:36</publishTime>
     </File>
+    <File Include="Views/Search/Index.cshtml">
+      <publishTime>12/01/2017 11:50:08</publishTime>
+    </File>
     <File Include="Views/Shared/footer.cshtml">
       <publishTime>05/22/2017 13:13:00</publishTime>
     </File>
     <File Include="Views/Shared/menu.cshtml">
       <publishTime>05/22/2017 13:13:00</publishTime>
+    </File>
+    <File Include="Views/Shared/part/childlist.cshtml">
+      <publishTime>11/30/2017 12:59:24</publishTime>
     </File>
     <File Include="Views/Shared/services/breadcrumbs.cshtml">
       <publishTime>11/13/2017 09:30:29</publishTime>
@@ -1991,22 +2015,22 @@
       <publishTime>11/13/2017 09:30:29</publishTime>
     </File>
     <File Include="Views/Shared/_Layout.cshtml">
-      <publishTime>11/29/2017 17:14:48</publishTime>
+      <publishTime>12/01/2017 13:53:19</publishTime>
     </File>
     <File Include="Views/Structure/DepartmentItem.cshtml">
       <publishTime>11/29/2017 13:56:59</publishTime>
     </File>
     <File Include="Views/Structure/Index.cshtml">
-      <publishTime>11/29/2017 11:09:45</publishTime>
+      <publishTime>11/30/2017 09:25:11</publishTime>
     </File>
     <File Include="Views/Structure/Ovp.cshtml">
-      <publishTime>11/29/2017 13:56:59</publishTime>
+      <publishTime>11/30/2017 12:59:24</publishTime>
     </File>
     <File Include="Views/Structure/StructureItem.cshtml">
-      <publishTime>11/22/2017 12:09:25</publishTime>
+      <publishTime>11/30/2017 12:59:24</publishTime>
     </File>
     <File Include="Views/Vote/Index.cshtml">
-      <publishTime>11/22/2017 12:09:25</publishTime>
+      <publishTime>11/30/2017 09:25:11</publishTime>
     </File>
     <File Include="Views/Vote/Item.cshtml">
       <publishTime>11/22/2017 12:09:25</publishTime>

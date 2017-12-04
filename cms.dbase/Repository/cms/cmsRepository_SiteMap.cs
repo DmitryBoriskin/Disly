@@ -161,7 +161,11 @@ namespace cms.dbase
                         Sort = s.n_sort,
                         ParentId = s.uui_parent,
                         CountSibling = getCountSiblings(s.id),
-                        MenuGroups = getSiteMapGroupMenu(id)
+                        MenuGroups = getSiteMapGroupMenu(id),
+                        Photo = new Photo
+                        {
+                            Url = s.c_photo
+                        }
                     });
 
                 if (!data.Any())
@@ -264,6 +268,7 @@ namespace cms.dbase
                             .Value(p => p.b_disabled_menu, item.DisabledMenu)
                             .Value(p => p.n_sort, maxSort)
                             .Value(p => p.uui_parent, item.ParentId)
+                            .Value(p => p.c_photo, item.Photo != null ? item.Photo.Url : null)
                             .Insert();
 
                         // группы меню
@@ -320,7 +325,7 @@ namespace cms.dbase
         /// <param name="userId">Идентификатор пользователя</param>
         /// <param name="IP">Ip-адрес</param>
         /// <returns></returns>
-        public override bool updateSiteMapItem(Guid id, SiteMapModel item)
+        public override bool updateSiteMapItem(Guid id, SiteMapModel item, string domain)
         {
             using (var db = new CMSdb(_context))
             {
@@ -330,7 +335,7 @@ namespace cms.dbase
 
                     if (data.Any())
                     {
-                        var oldRecord = data.FirstOrDefault();
+                        var oldRecord = data.SingleOrDefault();
 
                         data.Where(w => w.id.Equals(id))
                             .Set(u => u.f_site, item.Site)
@@ -346,6 +351,7 @@ namespace cms.dbase
                             .Set(u => u.b_disabled, item.Disabled)
                             .Set(u => u.b_blocked, item.Blocked)
                             .Set(u => u.b_disabled_menu, item.DisabledMenu)
+                            .Set(u => u.c_photo, item.Photo != null ? item.Photo.Url : null)
                             .Update();
 
                         #region обновим алиасы для дочерних эл-тов
@@ -370,34 +376,71 @@ namespace cms.dbase
                         }
                         #endregion
 
-
+                        #region группы меню
                         // группы меню
-                        var menu = db.content_sitemap_menutypess
-                            .Where(w => w.f_sitemap.Equals(id)).Delete();
+                        var menuOldQuery = db.content_sitemap_menutypess
+                            .Where(w => w.f_site.Equals(domain))
+                            .Where(w => w.f_sitemap.Equals(id))
+                            .Select(s => s.f_menutype);
 
-                        if (item.MenuGroups != null)
+                        if (menuOldQuery.Any())
                         {
-                            foreach (var m in item.MenuGroups)
+                            var menuOld = menuOldQuery.ToArray();
+                            if (item.MenuGroups != null)
                             {
-                                Guid menuId = Guid.Parse(m);
+                                foreach (var m in item.MenuGroups)
+                                {
+                                    Guid menuId = Guid.Parse(m);
 
-                                var _maxSortMenu = db.content_sitemap_menutypess
-                                    .Where(w => w.f_site.Equals(item.Site))
-                                    .Where(w => w.f_menutype.Equals(menuId));
+                                    if (!menuOld.Contains(menuId))
+                                    {
+                                        var maxSortQuery = db.content_sitemap_menutypess
+                                            .Where(w => w.f_site.Equals(item.Site))
+                                            .Where(w => w.f_menutype.Equals(menuId));
 
-                                int resmaxSortMenu = _maxSortMenu.Any() ? _maxSortMenu.Select(s => s.n_sort).Max() : 0;
+                                        int maxSort = maxSortQuery.Any() ? maxSortQuery.Select(s => s.n_sort).Max() : 0;
 
-                                var res = db.content_sitemap_menutypess
-                                    .Value(p => p.f_sitemap, id)
-                                    .Value(p => p.f_menutype, menuId)
-                                    .Value(p => p.f_site, item.Site)
-                                    .Value(p => p.n_sort, resmaxSortMenu + 1)
-                                    .Insert();
+                                        db.content_sitemap_menutypess
+                                            .Value(p => p.f_sitemap, id)
+                                            .Value(p => p.f_menutype, menuId)
+                                            .Value(p => p.f_site, item.Site)
+                                            .Value(p => p.n_sort, maxSort + 1)
+                                            .Insert();
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                db.content_sitemap_menutypess
+                                    .Where(w => w.f_sitemap.Equals(id)).Delete();
                             }
                         }
+                        else
+                        {
+                            if (item.MenuGroups != null)
+                            {
+                                foreach (var m in item.MenuGroups)
+                                {
+                                    Guid menuId = Guid.Parse(m);
+
+                                    var _maxSortMenu = db.content_sitemap_menutypess
+                                        .Where(w => w.f_site.Equals(item.Site))
+                                        .Where(w => w.f_menutype.Equals(menuId));
+
+                                    int resmaxSortMenu = _maxSortMenu.Any() ? _maxSortMenu.Select(s => s.n_sort).Max() : 0;
+
+                                    var res = db.content_sitemap_menutypess
+                                        .Value(p => p.f_sitemap, id)
+                                        .Value(p => p.f_menutype, menuId)
+                                        .Value(p => p.f_site, item.Site)
+                                        .Value(p => p.n_sort, resmaxSortMenu + 1)
+                                        .Insert();
+                                }
+                            }
+                        }
+                        #endregion
 
                         // логирование
-                        //insertLog(userId, IP, "update", id, String.Empty, "SiteMap", item.Title);
                         var log = new LogModel()
                         {
                             Site = _domain,

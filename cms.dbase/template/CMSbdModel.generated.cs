@@ -74,6 +74,8 @@ namespace cms.dbase.models
 		public ITable<content_people_department_link>               content_people_department_links               { get { return this.GetTable<content_people_department_link>(); } }
 		public ITable<content_people_employee_posts_link>           content_people_employee_posts_links           { get { return this.GetTable<content_people_employee_posts_link>(); } }
 		public ITable<content_people_org_link>                      content_people_org_links                      { get { return this.GetTable<content_people_org_link>(); } }
+		public ITable<content_photoalbum>                           content_photoalbums                           { get { return this.GetTable<content_photoalbum>(); } }
+		public ITable<content_photos>                               content_photoss                               { get { return this.GetTable<content_photos>(); } }
 		public ITable<content_services>                             content_servicess                             { get { return this.GetTable<content_services>(); } }
 		public ITable<content_sitemap>                              content_sitemaps                              { get { return this.GetTable<content_sitemap>(); } }
 		public ITable<content_sitemap_menus>                        content_sitemap_menuss                        { get { return this.GetTable<content_sitemap_menus>(); } }
@@ -1409,6 +1411,50 @@ namespace cms.dbase.models
 		#endregion
 	}
 
+	[Table(Schema="dbo", Name="content_photoalbum")]
+	public partial class content_photoalbum
+	{
+		[PrimaryKey, NotNull    ] public Guid     id                    { get; set; } // uniqueidentifier
+		[Column,     NotNull    ] public string   c_title               { get; set; } // varchar(512)
+		[Column,        Nullable] public string   c_preview             { get; set; } // varchar(512)
+		[Column,        Nullable] public string   c_text                { get; set; } // varchar(max)
+		[Column,     NotNull    ] public DateTime d_date                { get; set; } // datetime
+		[Column,     NotNull    ] public Guid     f_content_origin      { get; set; } // uniqueidentifier
+		[Column,     NotNull    ] public string   c_content_type_origin { get; set; } // varchar(64)
+
+		#region Associations
+
+		/// <summary>
+		/// FK_content_photos_content_photoalbum_BackReference
+		/// </summary>
+		[Association(ThisKey="id", OtherKey="f_album", CanBeNull=true, IsBackReference=true)]
+		public IEnumerable<content_photos> contentphotoscontentphotoalbums { get; set; }
+
+		#endregion
+	}
+
+	[Table(Schema="dbo", Name="content_photos")]
+	public partial class content_photos
+	{
+		[PrimaryKey, NotNull] public Guid     id        { get; set; } // uniqueidentifier
+		[Column,     NotNull] public Guid     f_album   { get; set; } // uniqueidentifier
+		[Column,     NotNull] public string   c_title   { get; set; } // varchar(512)
+		[Column,     NotNull] public DateTime d_date    { get; set; } // datetime
+		[Column,     NotNull] public string   c_preview { get; set; } // varchar(512)
+		[Column,     NotNull] public string   c_photo   { get; set; } // varchar(512)
+		[Column,     NotNull] public int      n_sort    { get; set; } // int
+
+		#region Associations
+
+		/// <summary>
+		/// FK_content_photos_content_photoalbum
+		/// </summary>
+		[Association(ThisKey="f_album", OtherKey="id", CanBeNull=false, KeyName="FK_content_photos_content_photoalbum", BackReferenceName="contentphotoscontentphotoalbums")]
+		public content_photoalbum contentphotoscontentphotoalbum { get; set; }
+
+		#endregion
+	}
+
 	[Table(Schema="dbo", Name="content_services")]
 	public partial class content_services
 	{
@@ -1443,6 +1489,7 @@ namespace cms.dbase.models
 		[Column,     NotNull    ] public int    n_sort          { get; set; } // int
 		[Column,        Nullable] public Guid?  uui_parent      { get; set; } // uniqueidentifier
 		[Column,     NotNull    ] public bool   b_blocked       { get; set; } // bit
+		[Column,        Nullable] public string c_photo         { get; set; } // nvarchar(1024)
 
 		#region Associations
 
@@ -1671,6 +1718,7 @@ namespace cms.dbase.models
 		[Column, NotNull    ] public int    menu_sort       { get; set; } // int
 		[Column, NotNull    ] public Guid   f_menutype      { get; set; } // uniqueidentifier
 		[Column,    Nullable] public string menu_alias      { get; set; } // nvarchar(256)
+		[Column,    Nullable] public string c_photo         { get; set; } // nvarchar(1024)
 	}
 
 	[Table(Schema="dbo", Name="content_vacancies")]
@@ -2298,6 +2346,18 @@ namespace cms.dbase.models
 		}
 
 		public static content_people_org_link Find(this ITable<content_people_org_link> table, Guid id)
+		{
+			return table.FirstOrDefault(t =>
+				t.id == id);
+		}
+
+		public static content_photoalbum Find(this ITable<content_photoalbum> table, Guid id)
+		{
+			return table.FirstOrDefault(t =>
+				t.id == id);
+		}
+
+		public static content_photos Find(this ITable<content_photos> table, Guid id)
 		{
 			return table.FirstOrDefault(t =>
 				t.id == id);

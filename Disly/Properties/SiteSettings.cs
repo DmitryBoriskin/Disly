@@ -13,6 +13,7 @@ public class Settings
     public static string BannersDir = ConfigurationManager.AppSettings["BannersDir"];
     public static string LogoDir = ConfigurationManager.AppSettings["LogoDir"];
     public static string OrgDir = ConfigurationManager.AppSettings["OrgDir"];
+    public static string SiteMapDir = ConfigurationManager.AppSettings["SiteMapDir"];
 
 
     public static string EventsDir = ReadAppSetting("EventsDir");

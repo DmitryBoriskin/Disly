@@ -9,6 +9,7 @@ public enum ContentType
     UNDEFINED = 0,
     MATERIAL = 1,
     EVENT = 2,
+    PHOTO = 3,
 }
 /// <summary>
 /// Типы объектов, которые могут иметь свои сайты(домены)

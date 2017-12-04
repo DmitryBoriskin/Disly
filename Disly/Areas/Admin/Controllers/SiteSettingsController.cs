@@ -1,5 +1,6 @@
 ﻿using cms.dbModel.entity;
 using Disly.Areas.Admin.Models;
+using Disly.Areas.Admin.Service;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -32,9 +33,11 @@ namespace Disly.Areas.Admin.Controllers
             ViewBag.KeyWords = "";
             #endregion
 
-            Dictionary<string, string> themes = new Dictionary<string, string>();
-            themes.Add("blue", "Синяя");
-            themes.Add("turquoise", "Бирюзовая");
+            model.Themes = new SelectList(new List<SelectListItem>
+                {
+                    new SelectListItem { Text = "Бирюзовая", Value = "turquoise" },
+                    new SelectListItem { Text = "Синяя", Value = "blue" }
+                }, "Value", "Text");
         }
 
         // GET: Admin/SiteSettings
@@ -48,66 +51,97 @@ namespace Disly.Areas.Admin.Controllers
         [HttpPost]
         [ValidateInput(false)]
         [MultiButton(MatchFormKey = "action", MatchFormValue = "save-btn")]
-        public ActionResult Index(SitesViewModel backModel, HttpPostedFileBase upload)
+        public ActionResult Index(SitesViewModel backModel, HttpPostedFileBase upload, HttpPostedFileBase uploadBack)
         {
             ErrorMassege userMessage = new ErrorMassege();
             userMessage.title = "Информация";
 
+            var old = _cmsRepository.getSite(Domain);
+
             if (ModelState.IsValid)
             {
-                #region Сохранение изображения
-                // путь для сохранения изображения
-                string savePath = Settings.UserFiles + Domain + Settings.LogoDir;
+                #region Сохранение изображений
                 
-                int width = 80; // ширина
-                int height = 0; // высота
-
                 if (upload != null && upload.ContentLength > 0)
                 {
-                    string fileExtension = upload.FileName.Substring(upload.FileName.LastIndexOf(".")).ToLower();
 
-                    var validExtension = (!string.IsNullOrEmpty(Settings.PicTypes)) ? Settings.PicTypes.Split(',') : "jpg,jpeg,png,gif".Split(',');
-                    if (!validExtension.Contains(fileExtension.Replace(".", "")))
-                    {
-                        model.ErrorInfo = new ErrorMassege()
-                        {
-                            title = "Ошибка",
-                            info = "Вы не можете загружать файлы данного формата",
-                            buttons = new ErrorMassegeBtn[]
-                            {
-                             new ErrorMassegeBtn { url = "#", text = "ок", action = "false", style="primary" }
-                            }
-                        };
-
+                    var photo = imageWorker(upload, 1);
+                    if (photo == null)
                         return View("Item", model);
-                    }
 
-                    Photo photoNew = new Photo()
-                    {
-                        Name = Domain + fileExtension,
-                        Size = Files.FileAnliz.SizeFromUpload(upload),
-                        Url = Files.SaveImageResizeRename(upload, savePath, Domain, width, height)
-                    };
-
-                    backModel.Item.Logo = photoNew;
+                    backModel.Item.Logo = photo;
                 }
+                
+                if (uploadBack != null && uploadBack.ContentLength > 0)
+                {
+                    var photo = imageWorker(uploadBack, 2);
+                    if (photo == null)
+                        return View("Item", model);
+
+                    backModel.Item.BackGroundImg = photo;
+                }
+                
                 #endregion
 
                 _cmsRepository.updateSiteInfo(backModel.Item);
-                //_cmsRepository.updateSiteInfo(backModel.Item, AccountInfo.id, RequestUserInfo.IP);
                 userMessage.info = "Запись обновлена";
             }
             else
             {
                 userMessage.info = "Ошибка в заполнении формы. Поля в которых допушены ошибки - помечены цветом.";
 
-                userMessage.buttons = new ErrorMassegeBtn[]{
+                userMessage.buttons = new ErrorMassegeBtn[]
+                {
                     new ErrorMassegeBtn { url = "#", text = "ок", action = "false" }
                 };
             }
 
             model.Item = _cmsRepository.getSite(Domain);
             return View(model);
+        }
+
+        /// <summary>
+        /// Сохранение изображений
+        /// </summary>
+        /// <param name="upload"></param>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        private Photo imageWorker(HttpPostedFileBase upload, int type)
+        {
+            // путь для сохранения изображения
+            string savePath = Settings.UserFiles + Domain + Settings.LogoDir;
+
+            int width = 0; // ширина
+            int height = 0; // высота
+
+            switch (type)
+            {
+                case 1:
+                    width = 80;
+                    break;
+                case 2:
+                    height = 290;
+                    break;
+            }
+
+            string fileExtension = upload.FileName.Substring(upload.FileName.LastIndexOf(".")).ToLower();
+
+            var validExtension = (!string.IsNullOrEmpty(Settings.PicTypes)) ? Settings.PicTypes.Split(',') : "jpg,jpeg,png,gif".Split(',');
+            if (!validExtension.Contains(fileExtension.Replace(".", "")))
+            {
+                return null;
+            }
+
+            string fileName = Transliteration.Translit(upload.FileName.Substring(0, upload.FileName.LastIndexOf(".")));
+
+            Photo photoNew = new Photo()
+            {
+                Name = fileName + fileExtension,
+                Size = Files.FileAnliz.SizeFromUpload(upload),
+                Url = Files.SaveImageResizeRename(upload, savePath, fileName, width, height)
+            };
+
+            return photoNew;
         }
     }
 }

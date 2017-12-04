@@ -161,7 +161,12 @@ namespace cms.dbase
                         Vk = s.c_vk,
                         Instagramm = s.c_instagramm,
                         Odnoklassniki = s.c_odnoklassniki,
-                        Twitter = s.c_twitter
+                        Twitter = s.c_twitter,
+                        Theme = s.c_theme,
+                        BackGroundImg = new Photo
+                        {
+                            Url = s.c_background_img
+                        }
                     });
 
                 if (!data.Any()) { return null; }
@@ -195,9 +200,11 @@ namespace cms.dbase
                             .Set(u => u.c_instagramm, item.Instagramm)
                             .Set(u => u.c_odnoklassniki, item.Odnoklassniki)
                             .Set(u => u.c_twitter, item.Twitter)
+                            .Set(s => s.c_theme, item.Theme)
                             .Set(s => s.c_logo, item.Logo.Url)
+                            .Set(s => s.c_background_img, item.BackGroundImg.Url)
                             .Update();
-                        
+
                         var log = new LogModel()
                         {
                             Site = _domain,
@@ -821,6 +828,7 @@ namespace cms.dbase
                                 .Value(v => v.c_path, sm_item.c_path)
                                 .Value(v => v.c_alias, sm_item.c_alias)
                                 .Value(v => v.c_title, sm_item.c_title)
+                                .Value(v => v.n_sort, sm_item.n_sort)
                                 .Value(v => v.b_disabled, false)
                                 .Value(v => v.b_blocked, false)
                                 .Value(v => v.b_disabled_menu, false)
