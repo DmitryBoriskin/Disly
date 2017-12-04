@@ -76,9 +76,11 @@ namespace Disly.Controllers
             ViewBag.Title = PageTitle;
             ViewBag.Description = PageDesc;
             ViewBag.KeyWords = PageKeyw;
+            #endregion
+
             ViewBag.ByEmail = true;
             ViewBag.IsAgree = false;
-            #endregion
+            ViewBag.captchaKey = Settings.captchaKey;
 
             return View(_ViewName, model);
         }
@@ -101,8 +103,10 @@ namespace Disly.Controllers
             ViewBag.Title = PageTitle;
             ViewBag.Description = PageDesc;
             ViewBag.KeyWords = PageKeyw;
-            ViewBag.ByEmail = true;
             #endregion
+
+            ViewBag.ByEmail = true;
+            ViewBag.captchaKey = Settings.captchaKey;
 
             var newId = Guid.NewGuid();
             if (ModelState.IsValid)
@@ -228,9 +232,11 @@ namespace Disly.Controllers
             ViewBag.Title = PageTitle;
             ViewBag.Description = PageDesc;
             ViewBag.KeyWords = PageKeyw;
+            #endregion
+
             ViewBag.ByEmail = false;
             ViewBag.Publish = false;
-            #endregion
+            ViewBag.captchaKey = Settings.captchaKey;
 
             var feedbackItem = _repository.getFeedbackItem(id);
             if(feedbackItem == null || (feedbackItem!= null && feedbackItem.AnswererCode.HasValue && feedbackItem.AnswererCode.Value != code))
@@ -265,8 +271,10 @@ namespace Disly.Controllers
             ViewBag.Title = PageTitle;
             ViewBag.Description = PageDesc;
             ViewBag.KeyWords = PageKeyw;
-            ViewBag.ByEmail = true;
             #endregion
+
+            ViewBag.ByEmail = true;
+            ViewBag.captchaKey = Settings.captchaKey;
 
             if (ModelState.IsValid)
             {
