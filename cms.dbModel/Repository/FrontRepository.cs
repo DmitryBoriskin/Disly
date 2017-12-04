@@ -63,7 +63,7 @@ namespace cms.dbModel
         public abstract FeedbacksList getFeedbacksList(FilterParams filtr);
         public abstract FeedbackModel getFeedbackItem(Guid id);
         public abstract bool insertFeedbackItem(FeedbackModel feedback);
-        public abstract bool updateFeedbackItem(FeedbackModel feedback);
+
         //Vote
         public abstract IEnumerable<VoteModel> getVote(string Ip); //string domain,
         public abstract VoteModel getVoteItem(Guid id, string Ip);
@@ -73,5 +73,9 @@ namespace cms.dbModel
 
         //Attached Documents
         public abstract DocumentsModel[] getAttachDocuments(Guid id);
+
+        // события
+        public abstract EventsList getEvents(FilterParams filter);
+        public abstract EventsModel getEvent(int num, string alias);
     }
 }
