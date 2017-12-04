@@ -238,7 +238,11 @@ namespace cms.dbModel.entity
         /// <summary>
         /// Голосование
         /// </summary>
-        Vote = 14
+        Vote = 14,
+        /// <summary>
+        /// Фотоальбомы
+        /// </summary>
+        PhotoAlbums=15
     }
 
     /// <summary>

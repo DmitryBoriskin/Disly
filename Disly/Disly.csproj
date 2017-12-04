@@ -533,6 +533,7 @@
     <Compile Include="Areas\Admin\Controllers\BannersController.cs" />
     <Compile Include="Areas\Admin\Controllers\cmsMenuController.cs" />
     <Compile Include="Areas\Admin\Controllers\DocumentsController .cs" />
+    <Compile Include="Areas\Admin\Controllers\PhotoAlbumsController.cs" />
     <Compile Include="Areas\Admin\Controllers\VoteController.cs" />
     <Compile Include="Areas\Admin\Controllers\SiteSectionController.cs" />
     <Compile Include="Areas\Admin\Controllers\MainSpecialistController.cs" />
@@ -558,6 +559,7 @@
     <Compile Include="Areas\Admin\Models\BannersViewModel.cs" />
     <Compile Include="Areas\Admin\Models\cmsMenuViewModel.cs" />
     <Compile Include="Areas\Admin\Models\DocumentsViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\PhotoViewModel.cs" />
     <Compile Include="Areas\Admin\Models\PersonViewModel.cs" />
     <Compile Include="Areas\Admin\Models\SiteSectionViewModel.cs" />
     <Compile Include="Areas\Admin\Models\MainSpecialistViewModel.cs" />
@@ -817,6 +819,7 @@
     <Content Include="Areas\Admin\Views\Documents\Index.cshtml" />
     <Content Include="Content\css\theme\turquoise.less" />
     <Content Include="Content\css\theme\blue.less" />
+    <Content Include="Areas\Admin\Views\PhotoAlbums\Index.cshtml" />
     <None Include="Content\plugins\datatables\i18n\ru.json" />
     <Content Include="Content\plugins\tinymce\langs\readme.md" />
     <Content Include="Content\plugins\tinymce\skins\lightgray\fonts\tinymce-small.eot" />
