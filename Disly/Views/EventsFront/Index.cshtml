@@ -43,7 +43,7 @@
                         </div>
                         <div class="col-md-1"></div>
                         <div class="col-md-3">
-                            <form role="form" class="filtr_news" action="/@ViewBag.ControllerName/@ViewBag.Filter.Category/">
+                            <form role="form" class="filtr_news" action="/events/">
                                 <div class="row">
 
                                     <div class="col-sm-12">
@@ -53,7 +53,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="form-group col-sm-6 col-md-6 data_start_wr">
+                                    @*<div class="form-group col-sm-6 col-md-6 data_start_wr">
                                         <label class="label_filtr" for="data_start">Дата начала</label>
                                         <div class='input-group date' id="date-begin">
                                             <input type='text' class="form-control" name="date" data-type="date" data-mask="99.99.9999" placeholder="дд.мм.гггг" value="@ViewBag.Filter.Date" />
@@ -66,10 +66,10 @@
                                             <input type='text' class="form-control" name="dateend" data-type="date" data-mask="99.99.9999" placeholder="дд.мм.гггг" value="@ViewBag.Filter.DateEnd" />
 
                                         </div>
-                                    </div>
+                                    </div>*@
 
                                     <div class="col-sm-12 control-filter">
-                                        <a class="btn btn-default pull-right" href="/@ViewBag.ControllerName">Очистить</a>
+                                        <a class="btn btn-default pull-right" href="/events">Очистить</a>
                                         <button class="btn sub btn-primary" type="submit">ПРИМЕНИТЬ</button>
                                     </div>
 
