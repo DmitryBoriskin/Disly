@@ -17,8 +17,6 @@ public class Settings
 
     public static string EventsDir = ReadAppSetting("EventsDir");  // ConfigurationManager.AppSettings["EventsDir"];
     public static string MaterialsDir = ReadAppSetting("MaterialsDir"); // ConfigurationManager.AppSettings["MaterialsDir"];
-    public static string PhotoDir = ReadAppSetting("PhotoDir");
-    
 
     public static string mailServer = ConfigurationManager.AppSettings["MailServer"];
     public static int mailServerPort = Convert.ToInt32(ConfigurationManager.AppSettings["MailServerPort"]);

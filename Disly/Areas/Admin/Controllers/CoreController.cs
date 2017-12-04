@@ -10,7 +10,6 @@ using System.Text.RegularExpressions;
 using System.Web;
 using System.IO;
 using Portal.Code;
-using System.Drawing.Imaging;
 
 namespace Disly.Areas.Admin.Controllers
 {
@@ -192,15 +191,6 @@ namespace Disly.Areas.Admin.Controllers
 
             return query;
         }
-
-        public static ImageCodecInfo GetEncoderInfo(String mimeType)
-        {
-            foreach (var enc in ImageCodecInfo.GetImageEncoders())
-                if (enc.MimeType.ToLower() == mimeType.ToLower())
-                    return enc;
-            return null;
-        }
-
 
 #warning В будущем переписать используя json объект 
         public FilterParams getFilter(int defaultPageSize = 20)

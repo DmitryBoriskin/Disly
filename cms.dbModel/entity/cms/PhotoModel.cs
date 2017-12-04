@@ -21,9 +21,16 @@ namespace cms.dbModel.entity
 
     public class PhotoAlbum
     {
-        public Guid Id { get; set; }   
+        public Guid Id { get; set; }
+        /// <summary>
+        /// ссылка на организацию/событие/персону по умолчанию
+        /// </summary>
+        public Guid ContentLink { get; set; }
+        /// <summary>
+        /// Тип (организация/событие/персона) по умолчанию
+        /// </summary>
+        public string ContentLinkType { get; set; }
         public string Title { get; set; }
-        public string Path { get; set; }
         public Photo PreviewImage { get; set; }
         public string Text { get; set; }
         public bool Disabled { get; set; }
@@ -42,7 +49,6 @@ namespace cms.dbModel.entity
         /// </summary>
         [Required(ErrorMessage = "Поле «Заголовок» не должно быть пустым.")]
         public string Title { get; set; }
-        public string Path { get; set; }
         /// <summary>
         /// Превью фотографии
         /// </summary>
