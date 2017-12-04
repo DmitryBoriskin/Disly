@@ -195,7 +195,8 @@ namespace cms.dbase
                         ParentId = s.uui_parent,
                         MenuAlias = s.menu_alias,
                         MenuSort = s.menu_sort,
-                        MenuGroups = getSiteMapGroupMenu(s.id)
+                        MenuGroups = getSiteMapGroupMenu(s.id),
+                        Photo = new Photo { Url = s.c_photo }
                     });
 
                 if (data.Any())
