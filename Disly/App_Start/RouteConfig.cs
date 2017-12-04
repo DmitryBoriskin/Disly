@@ -127,6 +127,18 @@ namespace Disly
                defaults: new { controller = "Doctors", action = "Item" }
             );
 
+            // события
+            routes.MapRoute(
+               name: "EventsItem",
+               url: "Events/{num}/{alias}",
+               defaults: new { controller = "EventsFront", action = "Item", alias = UrlParameter.Optional }
+            );
+            routes.MapRoute(
+               name: "Events",
+               url: "Events/{action}",
+               defaults: new { controller = "EventsFront", action = "Index" }
+            );
+
             // Контакты
             routes.MapRoute(
                name: "contacts",

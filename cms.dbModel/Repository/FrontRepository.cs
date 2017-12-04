@@ -72,5 +72,9 @@ namespace cms.dbModel
 
         //Attached Documents
         public abstract DocumentsModel[] getAttachDocuments(Guid id);
+
+        // события
+        public abstract EventsList getEvents(FilterParams filter);
+        public abstract EventsModel getEvent(int num, string alias);
     }
 }

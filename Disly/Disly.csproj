@@ -582,6 +582,7 @@
     <Compile Include="Areas\Admin\Models\VoteViewModel.cs" />
     <Compile Include="Areas\Admin\Service\SpotCoord.cs" />
     <Compile Include="Areas\Admin\Service\Transliteration.cs" />
+    <Compile Include="Controllers\EventsFrontController.cs" />
     <Compile Include="Controllers\FeedbackController.cs" />
     <Compile Include="Controllers\FindUsController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
@@ -605,6 +606,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Areas\Admin\Models\CoreViewModel.cs" />
+    <Compile Include="Models\EventViewModel.cs" />
     <Compile Include="Models\FeedbackViewModel.cs" />
     <Compile Include="Models\DoctorsViewModel.cs" />
     <Compile Include="Models\ContactsViewModel.cs" />
@@ -862,6 +864,8 @@
     <Content Include="Views\Shared\part\childlist.cshtml" />
     <Content Include="Views\Feedback\Form.cshtml" />
     <Content Include="Views\Search\Index.cshtml" />
+    <Content Include="Views\EventsFront\Index.cshtml" />
+    <Content Include="Views\EventsFront\Item.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
