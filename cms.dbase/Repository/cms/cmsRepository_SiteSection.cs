@@ -202,6 +202,7 @@ namespace cms.dbase
                         //
                         front_section cdSection = new front_section
                         {
+                            id=Guid.NewGuid(),
                             c_name = sitesection.Title,
                             c_alias = sitesection.Alias,
                             c_default_view= sitesection.Id
