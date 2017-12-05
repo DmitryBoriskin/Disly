@@ -11,19 +11,20 @@
     <div class="dop_info-block">
         <div class="dop-caption">Настройки</div>
 
-        @if (Model.Item == null)
-        {
-            <div class="form-group">
-                <label for="itemGroups-select">Специализация:</label>
-                <select name="Item.Specialisations" id="itemGroups-select" class="form-control select2" multiple required>
-                    @foreach (var post in Model.EmployeePostList)
-                    {
-                        <option value="@post.Id" @(Model.Item != null && Model.Item.Specialisations != null && Model.Item.Specialisations.Any(s => s == post.Id) ? "selected" : null)>@post.Name</option>
-                    }
-                </select>
-            </div>
-        }
-
+        <div class="alert alert-info">
+            При добавлении новой специализации
+            необходимо нажать кнопку "Сохранить",
+            чтобы подгрузился новый список врачей
+        </div>
+        <div class="form-group">
+            <label for="itemGroups-select">Специализация:</label>
+            <select name="Item.Specialisations" id="itemGroups-select" class="form-control select2" multiple required>
+                @foreach (var post in Model.EmployeePostList)
+                {
+                    <option value="@post.Id" @(Model.Item != null && Model.Item.Specialisations != null && Model.Item.Specialisations.Any(s => s == post.Id) ? "selected" : null)>@post.Name</option>
+                }
+            </select>
+        </div>
 
         @if (Model.EmployeeList != null)
         {
@@ -40,12 +41,28 @@
             <div class="form-group">
                 <label for="itemGroups-select">Экспертный совет:</label>
                 <select name="Item.EmployeeExpSoviet" id="itemGroups-select" class="form-control select2" multiple required>
-                    @foreach (var emp in Model.EmployeeList)
+                    @foreach (var emp in Model.AllDoctors)
                     {
                         <option value="@emp.Id" @(Model.Item != null && Model.Item.EmployeeExpSoviet != null && Model.Item.EmployeeExpSoviet.Any(s => s == emp.Id) ? "selected" : null)>@emp.Fullname</option>
                     }
                 </select>
             </div>
+        }
+
+        @if (Model.Item != null)
+        {
+            if (Model.Item.SiteId != Guid.Empty)
+            {
+                <br />
+                    <div class="alert alert-info">
+                        <strong>Сайт данной специалиста создан!</strong><br>
+                        <a class="button icon-create" href="/admin/sites/item/@Model.Item.SiteId">Редактировать сайт</a>
+                    </div>
+            }
+            else
+            {
+                <a class="button icon-create" href="/Admin/Sites/Master/@Guid.NewGuid()/?type=spec&contentid=@Model.Item.Id">Создать сайт</a>
+            }
         }
     </div>
 }

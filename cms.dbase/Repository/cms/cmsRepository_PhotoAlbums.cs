@@ -9,7 +9,7 @@ using System.Web;
 namespace cms.dbase
 {
     /// <summary>
-    /// Репозиторий для работы с новостями
+    /// Репозиторий для работы с фотоальбомами
     /// </summary>
     public partial class cmsRepository : abstract_cmsRepository
     {
@@ -18,7 +18,7 @@ namespace cms.dbase
             using (var db = new CMSdb(_context))
             {
                 if (!string.IsNullOrEmpty(filter.Domain))
-                {   
+                {
                     var query = db.content_photoalbums.Where(w => w.f_site == filter.Domain);
                     if (filter.SearchText != null) {
                         query = query.Where(w => (w.c_title.Contains(filter.SearchText)));
@@ -26,20 +26,20 @@ namespace cms.dbase
                     if (filter.Disabled != null) {
                         query = query.Where(w => w.c_disabled == filter.Disabled);
                     }
-                    query = query.OrderBy(o => o.d_date);
+                    query = query.OrderByDescending(o => o.d_date);
                     int itemCount = query.Count();
+                    if (query.Any())
+                    {
                     var photoalbumsList = query
                                             .Skip(filter.Size * (filter.Page - 1))
                                             .Take(filter.Size)
                                             .Select(s => new PhotoAlbum
                                             {
-                                                Id=s.id,
-                                                Title=s.c_title,
-                                                Date=s.d_date,
-                                                PreviewImage=new Photo() { Url=s.c_preview}
+                                            Id = s.id,
+                                            Title = s.c_title,
+                                            Date = s.d_date,
+                                            PreviewImage = new Photo() { Url = s.c_preview }
                                             });
-
-                    if (photoalbumsList.Any())
                         return new PhotoAlbumList
                         {
                             Data = photoalbumsList.ToArray(),
@@ -52,6 +52,7 @@ namespace cms.dbase
                             }
                         };
                 }
+                }
                 return null;
             }
         }
@@ -63,6 +64,7 @@ namespace cms.dbase
                            .Where(w => w.id == id)
                            .Select(s => new PhotoAlbum {
                                Id=s.id,
+                               Path=s.c_path,
                                Title=s.c_title,
                                Date=s.d_date,
                                PreviewImage = new Photo() { Url = s.c_preview },
@@ -73,16 +75,18 @@ namespace cms.dbase
                     var data = query.Single();
                     data.Photos = db.content_photoss
                                    .Where(w => w.f_album == id)
+                                   .OrderBy(o=>o.n_sort)
                                    .Select(s=>new PhotoModel() {
                                        PreviewImage=new Photo { Url=s.c_preview},
                                        Id=s.id,
                                        Title=s.c_title
                                    }).ToArray();
-                    return query.Single();
+                    return data;
                 }
                 return null;
             }
         }
+        
         public override bool insPhotoAlbum(Guid id, PhotoAlbum ins)
         {
             try
@@ -110,7 +114,7 @@ namespace cms.dbase
                             c_preview = (ins.PreviewImage != null) ? ins.PreviewImage.Url : null                         
                         };
 
-                        db.Insert(cdPhotoAlbum);                        
+                        db.Insert(cdPhotoAlbum);
 
                         var log = new LogModel()
                         {
@@ -194,5 +198,112 @@ namespace cms.dbase
         }
 
 
+        public override bool insertPhotos(Guid AlbumId, PhotoModel[] insert)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                //try
+                //{
+                    var queryMaxSort = db.content_photoss
+                                         .Where(w => w.f_album==AlbumId)                        
+                                         .Select(s => s.n_sort);
+                    int maxSort = queryMaxSort.Any() ? queryMaxSort.Max() + 1 : 0;
+                if (insert != null)
+                {
+                    if(insert.Length>0)
+                    foreach (PhotoModel item in insert)
+                    {
+                        if (item != null)
+                        {
+                            maxSort++;
+                            db.content_photoss
+                              .Value(v => v.f_album, AlbumId)
+                              .Value(v => v.c_title, item.Title)
+                              .Value(v => v.d_date, item.Date)
+                              .Value(v => v.c_preview, item.PreviewImage.Url)
+                              .Value(v => v.c_photo, item.PhotoImage.Url)
+                              .Value(v => v.n_sort, maxSort)
+                              .Insert();
+                        }                        
+                    }
+                }
+                    
+                    return true;
+                //}
+                //catch { return false; }
+            }
+        }
+        public override bool sortingPhotos(Guid id, int num)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var data = db.content_photoss.Where(w => w.id == id).Select(s => new PhotoModel { AlbumId = s.f_album, Sort= s.n_sort }).First();
+                var AlbumId = data.AlbumId;
+
+                if (num > data.Sort)
+                {
+                    db.content_photoss.Where(w => w.f_album == AlbumId && w.n_sort > data.Sort && w.n_sort <= num)
+                        .Set(p => p.n_sort, p => p.n_sort - 1)
+                        .Update();
+                }
+                else
+                {
+                    db.content_photoss.Where(w => w.f_album == AlbumId && w.n_sort < data.Sort && w.n_sort >= num)
+                        .Set(p => p.n_sort, p => p.n_sort + 1)
+                        .Update();
+                }
+                db.content_photoss
+                    .Where(w => w.id == id)
+                    .Set(s => s.n_sort, num)
+                    .Update();
+            }
+            return true;
+        }
+
+        public override PhotoModel getPhotoItem(Guid id)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var query = db.content_photoss.Where(w => w.id == id);
+                if (query.Any())
+                {
+                    return query.Select(s => new PhotoModel
+                    {
+                        Id = s.id,
+                        PhotoImage = new Photo { Url = s.c_photo },
+                        PreviewImage = new Photo { Url = s.c_preview }
+                    }).SingleOrDefault();
+
+                }
+                return null;
+        }
+        }
+        public override bool delPhotoItem(Guid id)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                using (var tran = db.BeginTransaction())
+                {
+
+                    var data = db.content_photoss.Where(w=>w.id==id);
+                    if (data.Any())
+                    {
+                        Guid AlbumId = data.Single().f_album;
+                        int ThisSort = data.Single().n_sort;
+                        // удаление фотографии
+                        data.Delete();
+                        //корректировка порядка
+                        db.content_photoss
+                            .Where(w => (w.f_album == AlbumId && w.n_sort > ThisSort))
+                            .Set(u => u.n_sort, u => u.n_sort - 1)
+                            .Update();
+                        tran.Commit();
+                        return true;
+                    }
+                    return false;
+                }                    
+
+    }
+}
     }
 }

@@ -62,6 +62,7 @@ namespace cms.dbModel.entity
         /// Дата
         /// </summary>        
         public DateTime Date { get; set; }
+        public int Sort { get; set; }
     }
 
 

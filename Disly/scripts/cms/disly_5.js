@@ -137,6 +137,58 @@ $(document).ready(function () {
         $(this).mask($(this).attr('data-mask'));
     });
 
+    //сортировка фотографий галлери
+    $('#sorting_photo').click(function () {
+        if ($('.photoalbum').hasClass('Sortable')) {
+            location.reload();
+        }
+        else {
+            $('.photoalbum').addClass('Sortable');
+            $('.Sortable').each(function () { sortingPhotoInit($(this)); });        
+        }        
+    });
+    //удаление фотогрфии из галлереи
+    if ($('.photoalbum').length > 0) {
+        // Центрирование фотографий по вертикали в фотоальбоме
+        var photoImg = $('.photoalbum').find('img');
+        photoImg.each(function () {
+            var margin = ($(this).parent().height() - $(this).height()) / 2;
+            $(this).css('margin', margin + 'px 0');
+        });
+
+        // Удаление фотографий из альбома
+        $('.delPhoto').click(function () {
+            var elem = $(this);
+            var id = $(this).attr('data-id');
+            $.ajax({
+                type: "POST",
+                url: '/admin/photoalbums/DeletePhoto/' + id,
+                contentType: false,
+                processData: false,
+                data: false,
+                success: function (result) {
+                    if (result == "true") {
+                        elem.parent().remove()
+                    }
+                    else {
+                        if (result !== '') alert(result);
+                    }
+                }
+            });
+        });
+    }
+
+    $('#sorting_photo').click(function () {
+        if ($('.photoalbum').hasClass('Sortable')) {
+            location.reload();
+        }
+        else {
+            $('.photoalbum').addClass('Sortable');
+            $('.Sortable').each(function () { sortingPhotoInit($(this)); });        
+        }
+
+        
+    });
 
 
 
@@ -323,7 +375,7 @@ $(document).ready(function () {
                 $People.find('select').removeAttr('required');
                 $Event.find('select').removeAttr('required');
                 break;
-            case 'people':
+            case 'spec':
                 $People.show();
                 $Org.removeClass('invalid');
                 $People.addClass('invalid');
@@ -358,7 +410,7 @@ $(document).ready(function () {
     if ($('#site_type').length > 0) {
         var $Type = $('#site_type');
         var $Org = $('#site_org');
-        var $People = $('#site_people');
+        var $People = $('#site_spec');
         var $Event = $('#site_event');
         var $ContentId = $('#Item_ContentId');
 
@@ -536,6 +588,35 @@ function setCursor() {
     else if ($('.content input[required]').val() === '') $('.content input[required]:first').focus();
     else if ($('.content input:not([type=file]):not([data-focus=False])').length > 0) $('.content input:not([type=file]):not([data-focus=False]):first').focus();
 }
+
+
+
+function sortingPhotoInit(Object) {
+    Object.sortable({
+        axis: "x, y",
+        start: function () { $(this).addClass('Active'); },
+        stop: function (event, ui) {
+            $(this).removeClass('Active');
+            var _Album = $('.photoalbum').data('album');
+            var _ServiceUrl = $(this).attr('data-service');
+            var _SortableItem = ui.item;
+            var _Id = _SortableItem.find('div').attr('data-id');
+            var _Num = $(this).find('.ui-sortable-handle').index(_SortableItem) + 1;
+            //var _section = _SortableItem.attr('data-section');
+
+            _ServiceUrl = _ServiceUrl;
+
+            $.ajax({
+                type: 'POST',
+                url: _ServiceUrl,
+                data: { album: _Album, id: _Id, permit: _Num },
+                error: function () { Content = '<div>Error!</div>'; },
+                success: function (data) { }
+            });
+        }
+    }).disableSelection();
+}
+
 
 // TinyMCE
 function InitTinyMCE(id, _width, _height, directory) {

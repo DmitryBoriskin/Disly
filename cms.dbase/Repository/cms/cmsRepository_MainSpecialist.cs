@@ -126,6 +126,10 @@ namespace cms.dbase
                         Id = s.id,
                         Name = s.c_name,
                         Desc = s.c_desc,
+                        SiteId = (from site in db.cms_sitess
+                                  join cms in db.content_main_specialistss on site.f_content equals cms.id
+                                  where cms.id.Equals(s.id)
+                                  select site.id).SingleOrDefault(),
                         Specialisations = (from l in db.content_main_specialist_specialisations_links
                                            join m in db.content_main_specialistss
                                            on l.f_main_specialist equals m.id
@@ -134,12 +138,12 @@ namespace cms.dbase
                         EmployeeMainSpecs = (from l in db.content_main_specialist_employees_links
                                              join m in db.content_main_specialistss
                                              on l.f_main_specialist equals m.id
-                                             where (l.f_main_specialist.Equals(m.id) && l.f_type.Equals("main"))
+                                             where (l.f_main_specialist.Equals(s.id) && l.f_type.Equals("main"))
                                              select l.f_employee).ToArray(),
                         EmployeeExpSoviet = (from l in db.content_main_specialist_employees_links
                                              join m in db.content_main_specialistss
                                              on l.f_main_specialist equals m.id
-                                             where (l.f_main_specialist.Equals(m.id) && l.f_type.Equals("soviet"))
+                                             where (l.f_main_specialist.Equals(s.id) && l.f_type.Equals("soviet"))
                                              select l.f_employee).ToArray()
                     });
 
@@ -158,8 +162,7 @@ namespace cms.dbase
             {
                 var query = db.cms_content_sv_people_postss
                     .Where(w => specialisations.Contains(w.f_post))
-                    .OrderBy(o => o.f_post)
-                    .ThenBy(o => o.c_surname)
+                    .OrderBy(o => o.c_surname)
                     .ThenBy(o => o.c_name)
                     .ThenBy(o => o.c_patronymic)
                     .Select(s => new EmployeeModel
@@ -169,6 +172,32 @@ namespace cms.dbase
                         Name = s.c_name,
                         Patronymic = s.c_patronymic
                     });
+
+                if (!query.Any()) return null;
+                else return query.ToArray();
+            }
+        }
+
+        /// <summary>
+        /// Получаем список всех врачей
+        /// </summary>
+        /// <returns></returns>
+        public override EmployeeModel[] getEmployeeList()
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var query = (from p in db.content_peoples
+                             join pepl in db.content_people_employee_posts_links on p.id equals pepl.f_people
+                             join ep in db.content_employee_postss on pepl.f_post equals ep.id
+                             orderby p.c_surname, p.c_name, p.c_patronymic
+                             where ep.b_doctor
+                             select new EmployeeModel
+                             {
+                                 Id = p.id,
+                                 Surname = p.c_surname,
+                                 Name = p.c_name,
+                                 Patronymic = p.c_patronymic
+                             }).Distinct();
 
                 if (!query.Any()) return null;
                 else return query.ToArray();

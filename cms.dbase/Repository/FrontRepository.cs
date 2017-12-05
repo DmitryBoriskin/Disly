@@ -338,6 +338,7 @@ namespace cms.dbase
                 if (data.Any())
                     return data.First();
 
+
                 return null;
             }
         }
@@ -519,7 +520,7 @@ namespace cms.dbase
 
                     // берём последние 3 новости данной группы
                     if (query.Any())
-                        list.AddRange(query.Take(5));
+                        list.AddRange(query.Take(2));
                 }
 
                 if (list.Any())
@@ -850,10 +851,7 @@ namespace cms.dbase
                             {
                                 Id = s.id,
                                 Title = s.c_title,
-                                Text = s.c_adress,
-                                DirecorPost = s.c_director_post,
-                                DirectorF = s.f_director
-
+                                Text = s.c_adress
                             });
                 if (query.Any())
                 {
@@ -918,10 +916,7 @@ namespace cms.dbase
                             {
                                 Id = s.id,
                                 Title = s.c_title,
-                                Text = s.c_adress,
-                                DirecorPost = s.c_director_post,
-                                DirectorF = s.f_director
-
+                                Text = s.c_adress
                             });
                 if (query.Any())
                 {

@@ -125,6 +125,7 @@ namespace Integration.Frmp.models
 		[Column(@"d_birthdate"),     Nullable         ] public DateTime? DBirthdate  { get; set; } // datetime2(7)
 		[Column(@"d_modify"),        Nullable         ] public DateTime? DModify     { get; set; } // datetime2(7)
 		[Column(@"xml_info"),        Nullable         ] public string    XmlInfo     { get; set; } // nvarchar(max)
+		[Column(@"c_photo"),         Nullable         ] public string    CPhoto      { get; set; } // varchar(max)
 	}
 
 	[Table(Schema="dbo", Name="import_frmp_posts")]

@@ -1048,6 +1048,7 @@ a.button.icon-cancel{
 
     .photoalbum li {
         position: relative;
+        padding:0;
         width: 120px;
         height: 120px;
         margin: 2px;
@@ -1080,7 +1081,12 @@ a.button.icon-cancel{
             font-size: 16px;
             color: #eee;
         }
-
+ul.photoalbum.Sortable.ui-sortable {
+    border: 2px dashed #006bb3 !important;
+}
+.photoalbum.sortable.ui-sortable .ui-sortable-handle {
+    cursor: move;
+}
 div.ListItem img.photo-preview {
     width: initial;
     height: initial;

@@ -101,18 +101,19 @@
             <div class="sort_list">
                 <table class="table table-striped">
                     <tr>
-                        <th>&nbsp;</th>
-                        <th>Название</th>
+                        <th>ФИО</th>
+                        <th>Статус</th>
+                        <th>Должность</th>
+                        <th></th>
                     </tr>
                     @if (Model.DepartmentItem.Peoples != null)
                     {
                         foreach (var item in Model.DepartmentItem.Peoples)
                         {
                             <tr>
-                                <td class="map_site_icon"></td>
-                                <td>
-                                    <a href="@item.Id">@item.FIO</a>
-                                </td>
+                                <td>@item.FIO</td>
+                                <td>@item.Status</td>
+                                <td>@item.Post</td>
                                 <td class="text-right">
                                     <a class="del_icon del_people_for_dep" data-dep="@Model.DepartmentItem.Id" data-people="@item.Id" ></a>
                                 </td>
@@ -130,16 +131,7 @@
     </div>
     <div class="dop_info-block">
         <div class="dop-caption">Дополнительно</div>
-        <div class="group-block open" title="Руководитель отделения">
-            @Html.TextBoxFor(m => m.DepartmentItem.DirecorPost, new {type = "text", title = "Должность" })
-            @if (Model.DepartmentItem != null)
-            {
-                if (PeopleList != null)
-                {
-                    @Html.DropDownListFor(m => m.DepartmentItem.DirectorF, PeopleList, new { @class = "selectpicker", @title = "Выберите врача из списка" })
-                }
-            }            
-        </div>
+    
     </div>
 }
 else

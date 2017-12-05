@@ -15,6 +15,7 @@ namespace Integration.Frmp.library
         {
             string startTime = System.Configuration.ConfigurationManager.AppSettings["Integration.StartTime"];
             string dirName = System.Configuration.ConfigurationManager.AppSettings["Integration.DirName"];
+            string saveImgPath = System.Configuration.ConfigurationManager.AppSettings["Integration.SaveImgPath"];
             string fileName = System.Configuration.ConfigurationManager.AppSettings["Integration.FileName"];
 
             string sMinDate = System.Configuration.ConfigurationManager.AppSettings["Employee.MinDate"];
@@ -27,7 +28,8 @@ namespace Integration.Frmp.library
                 DirName = dirName,
                 FileName = fileName,
                 MinDate = minDate,
-                MaxDate = maxDate
+                MaxDate = maxDate,
+                SaveImgPath = saveImgPath
             };
         }
     }

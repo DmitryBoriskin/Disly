@@ -19,5 +19,5 @@ public enum ContentLinkType
     UNDEFINED = 0,
     EVENT = 1,
     ORG = 2,
-    PERSON = 3
+    SPEC = 3
 }

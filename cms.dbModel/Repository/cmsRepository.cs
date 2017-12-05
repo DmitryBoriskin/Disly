@@ -222,6 +222,7 @@ namespace cms.dbModel
         public abstract MainSpecialistList getMainSpecialistList(FilterParams filter);
         public abstract MainSpecialistModel getMainSpecialistItem(Guid id);
         public abstract EmployeeModel[] getEmployeeList(int[] specialisations);
+        public abstract EmployeeModel[] getEmployeeList();
         public abstract bool createMainSpecialist(MainSpecialistModel item);
         public abstract bool updateMainSpecialist(MainSpecialistModel item);
         public abstract bool deleteMainSpecialist(Guid id);
@@ -254,5 +255,9 @@ namespace cms.dbModel
         public abstract bool insPhotoAlbum(Guid id, PhotoAlbum ins);
         public abstract bool updPhotoAlbum(Guid id, PhotoAlbum upd);
         public abstract bool delPhotoAlbum(Guid id);
+        public abstract bool insertPhotos(Guid AlbumId, PhotoModel[] insert);
+        public abstract bool sortingPhotos(Guid id, int num);
+        public abstract PhotoModel getPhotoItem(Guid id);
+        public abstract bool delPhotoItem(Guid id);
     }
 }
