@@ -1,4 +1,5 @@
 ﻿using cms.dbModel.entity;
+using System;
 using System.Web;
 using System.Web.Mvc;
 
@@ -51,25 +52,40 @@ namespace Disly.Models
         /// </summary>
         public string Text { get; set; }
         /// <summary>
-        /// Отправлять по Email
-        /// </summary>
-        public bool ByEmail { get; set; }
-        /// <summary>
-        /// Адрес, на который необходимо отправлять ответ
-        /// </summary>
-        public string PostAddress { get; set; }
-        /// <summary>
         /// Загруженный файл
         /// </summary>
         public HttpPostedFileBase FileToUpload { get; set; }
         /// <summary>
-        /// 
-        /// </summary>
-        public string FileUploaded { get; set; }
-        /// <summary>
         /// Согласен на обработку данных
         /// </summary>
         public bool IsAgree { get; set; }
+    }
 
+    public class FeedbackAnswerFormViewModel
+    {
+        /// <summary>
+        /// id сообщения на которое отвечаем
+        /// </summary>
+        public Guid Id { get; set; }
+        /// <summary>
+        /// проверочный код
+        /// </summary>
+        public Guid AnswererCode { get; set; }
+        /// <summary>
+        /// отвечает(кто)
+        /// </summary>
+        public string Answerer { get; set; }
+        /// <summary>
+        /// текст ответа
+        /// </summary>
+        public string Answer { get; set; }
+        /// <summary>
+        /// Опубликовать на сайте
+        /// </summary>
+        public bool Publish { get; set; }
+        /// <summary>
+        /// Отправить ответ по email
+        /// </summary>
+        public bool ByEmail { get; set; }
     }
 }

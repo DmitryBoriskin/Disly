@@ -183,7 +183,7 @@ namespace cms.dbModel
         public abstract int getCountSiblings(Guid id);
         public abstract bool checkSiteMap(Guid id);
         public abstract bool createSiteMapItem(Guid id, SiteMapModel item);
-        public abstract bool updateSiteMapItem(Guid id, SiteMapModel item);
+        public abstract bool updateSiteMapItem(Guid id, SiteMapModel item, string domain);
         public abstract bool deleteSiteMapItem(Guid id);
 
         public abstract SiteMapMenu[] getSiteMapFrontSectionList();

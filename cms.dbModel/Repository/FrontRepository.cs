@@ -61,7 +61,9 @@ namespace cms.dbModel
 
         //Обратная связь
         public abstract FeedbacksList getFeedbacksList(FilterParams filtr);
+        public abstract FeedbackModel getFeedbackItem(Guid id);
         public abstract bool insertFeedbackItem(FeedbackModel feedback);
+        public abstract bool updateFeedbackItem(FeedbackModel feedback);
 
         //Vote
         public abstract IEnumerable<VoteModel> getVote(string Ip); //string domain,
@@ -72,5 +74,9 @@ namespace cms.dbModel
 
         //Attached Documents
         public abstract DocumentsModel[] getAttachDocuments(Guid id);
+
+        // события
+        public abstract EventsList getEvents(FilterParams filter);
+        public abstract EventsModel getEvent(int num, string alias);
     }
 }
