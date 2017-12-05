@@ -74,11 +74,6 @@ namespace Disly.Controllers
                     model.Info = _repository.getSiteMap(sibling.Path, type);
                     break;
                 default:
-                    model.Breadcrumbs.Add(new Breadcrumbs
-                    {
-                        Title = "Медицинские услуги",
-                        Url = ""
-                    });
                     model.MedicalServices = _repository.getMedicalServices(Domain);
                     break;
             }
