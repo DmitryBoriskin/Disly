@@ -194,5 +194,33 @@ namespace cms.dbase
         }
 
 
+        public override bool insertPhotos(Guid AlbumId, PhotoModel[] insert)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                //try
+                //{
+                    var queryMaxSort = db.content_photoss
+                                         .Where(w => w.f_album==AlbumId)                        
+                                         .Select(s => s.n_sort);
+                    int maxSort = queryMaxSort.Any() ? queryMaxSort.Max() + 1 : 0;
+                    foreach (PhotoModel item in insert)
+                    {
+                        maxSort++;
+                        db.content_photoss                          
+                          .Value(v => v.f_album, AlbumId)
+                          .Value(v => v.c_title, item.Title)
+                          .Value(v => v.d_date, item.Date)
+                          .Value(v => v.c_preview, item.PreviewImage.Url)
+                          .Value(v => v.c_photo, item.PhotoImage.Url)
+                          .Value(v => v.n_sort, maxSort)
+                          .Insert();
+                    }
+                    return true;
+                //}
+                //catch { return false; }
+            }
+        }
+
     }
 }

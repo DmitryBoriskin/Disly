@@ -2,6 +2,9 @@
 using Disly.Areas.Admin.Models;
 using Disly.Areas.Admin.Service;
 using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -14,6 +17,8 @@ namespace Disly.Areas.Admin.Controllers
     {
         PhotoViewModel model;
         FilterParams filter;
+
+        string[] allowedExtensions = new string[] { ".jpg", ".jpeg", ".gif", ".png" };
 
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
@@ -115,7 +120,7 @@ namespace Disly.Areas.Admin.Controllers
         [HttpPost]
         [ValidateInput(false)]
         [MultiButton(MatchFormKey = "action", MatchFormValue = "save-btn")]
-        public ActionResult Save(Guid id, PhotoViewModel bindData, HttpPostedFileBase upload)
+        public ActionResult Save(Guid id, PhotoViewModel bindData, HttpPostedFileBase upload, IEnumerable<HttpPostedFileBase> uploadPhoto)
         {
             ErrorMassege userMessage = new ErrorMassege();
             userMessage.title = "Информация";
@@ -144,6 +149,91 @@ namespace Disly.Areas.Admin.Controllers
                         status = true;
                     }
                     else{userMessage.info = "Произошла ошибка";}
+                }
+                if (status)
+                {
+                    #region save-photos
+                    string savePath = Settings.UserFiles + Domain + Settings.PhotoDir + bindData.Album.Date.ToString("yyyy") + "_" + bindData.Album.Date.ToString("MM") + "/" + bindData.Album.Date.ToString("dd") + "/" + id;
+                    int counter = 0;
+                    string serverPath = savePath;
+
+                    PhotoModel[] photoList = new PhotoModel[uploadPhoto.Count()];
+
+                    foreach (HttpPostedFileBase photos in uploadPhoto)
+                    {
+                        if (photos != null && photos.ContentLength > 0)
+                        {
+                            //try
+                            //{
+                                if (!allowedExtensions.Contains(Path.GetExtension(photos.FileName.ToLower())))
+                                {
+                                    Exception ex = new Exception("неверный формат файла \"" + Path.GetFileName(photos.FileName) + "\". Доступные расширения: .jpg, .jpeg, .png, .gif");
+                                    throw ex;
+                                }
+                                if (!Directory.Exists(Server.MapPath(serverPath))) { DirectoryInfo di = Directory.CreateDirectory(Server.MapPath(serverPath)); }
+
+                                double filesCount = Directory.EnumerateFiles(Server.MapPath(serverPath)).Count();
+                                double newFilenameInt = Math.Ceiling(filesCount / 2) + 1;
+                                string newFilename = newFilenameInt.ToString() + ".jpg";
+
+                                while (System.IO.File.Exists(Server.MapPath(Path.Combine(serverPath, newFilename))))
+                                {
+                                    newFilenameInt++;
+                                    newFilename = newFilenameInt.ToString() + ".jpg";
+                                }
+
+                                //сохраняем оригинал
+                                photos.SaveAs(Server.MapPath(Path.Combine(serverPath, newFilename)));
+
+                                ImageCodecInfo myImageCodecInfo = GetEncoderInfo("image/jpeg");
+                                EncoderParameters myEncoderParameters = new EncoderParameters(1);
+                                myEncoderParameters.Param[0] = new EncoderParameter(Encoder.Quality, 100L); //cжатие 90
+
+
+                                Bitmap _File = (Bitmap)Bitmap.FromStream(photos.InputStream);
+                                //оригинал
+                                Bitmap _FileOrigin = Imaging.Resize(_File, 4000, "width");
+                                _FileOrigin.Save(Server.MapPath(serverPath + "/" + newFilename), myImageCodecInfo, myEncoderParameters);
+
+                                //сохраняем full hd
+                                Bitmap _FileHd = Imaging.Resize(_File, 2000, "width");
+                                _FileHd.Save(Server.MapPath(serverPath + "/hd_" + newFilename), myImageCodecInfo, myEncoderParameters);
+
+                                //сохраняем превью
+                                Bitmap _FilePrev = Imaging.Resize(_File, 120, 120, "center", "center");
+                                _FilePrev.Save(Server.MapPath(serverPath + "/prev_" + newFilename), myImageCodecInfo, myEncoderParameters);
+
+
+                                photoList[counter] = new PhotoModel()
+                                {
+                                    Id = Guid.NewGuid(),
+                                    AlbumId = id,
+                                    Title = Path.GetFileName(photos.FileName),
+                                    Date = DateTime.Now,
+                                    PreviewImage =new Photo {Url= serverPath + "/prev_" + newFilename },
+                                    PhotoImage =new Photo {Url= serverPath + "/" + newFilename } 
+                                };
+                                counter++;
+
+                                //записываем обложку фотоальбома
+                                
+                                
+                            //}
+                            //catch (Exception ex)
+                            //{
+                            //    ViewBag.Message = "Произошла ошибка: " + ex.Message.ToString();
+                            //    break;
+                            //}
+                        }
+                        else
+                        {
+                            ModelState.AddModelError("", "Фотоальбом должен содержать хотя бы одну фотографию.");
+                            break;
+                        }
+                    }
+                    #endregion
+                    //model.Album.PreviewImage = new Photo { Url = photoList[0].PreviewImage.Url };
+                    _cmsRepository.insertPhotos(id, photoList);
                 }
                 userMessage.buttons = new ErrorMassegeBtn[]{
                      new ErrorMassegeBtn { url = StartUrl + Request.Url.Query, text = "Вернуться в список" },

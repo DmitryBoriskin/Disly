@@ -23,7 +23,8 @@ public class Settings
     public static string EventsDir = ReadAppSetting("EventsDir");
     public static string MaterialsDir = ReadAppSetting("MaterialsDir");
     public static string FeedbacksDir = ReadAppSetting("FeedbacksDir");
-
+    public static string PhotoDir = ReadAppSetting("PhotoDir");
+    
     public static string mailServer = ReadAppSetting("MailServer");
 
     public static int mailServerPort = Convert.ToInt32(ReadAppSetting("MailServerPort"));
