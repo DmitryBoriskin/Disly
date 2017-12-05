@@ -38,14 +38,51 @@ namespace Disly.Controllers
         }
 
         // GET: PortalMedicalServices
-        public ActionResult Index()
+        public ActionResult Index(string type)
         {
             model.Breadcrumbs.Add(new Breadcrumbs
             {
                 Title = "Медицинские услуги",
-                Url = ""
+                Url = "/medicalservices"
             });
-            model.MedicalServices = _repository.getMedicalServices(Domain);
+
+            model.Nav = new MaterialsGroup[]
+            {
+                new MaterialsGroup{Title = "Медицинские услуги"},
+                new MaterialsGroup{Title = "Платные услуги", Alias="paid"},
+                new MaterialsGroup{Title = "Дополнительная информация", Alias = "dop"}
+            };
+
+            model.Type = type;
+            var sibling = _repository.getSiteMap("medicalservices");
+            switch (type)
+            {
+                case "paid":
+                    model.Breadcrumbs.Add(new Breadcrumbs
+                    {
+                        Title = "Платные услуги",
+                        Url = ""
+                    });
+                    model.Info = _repository.getSiteMap(sibling.Path, type);
+                    break;
+                case "dop":
+                    model.Breadcrumbs.Add(new Breadcrumbs
+                    {
+                        Title = "Дополнительная информация",
+                        Url = ""
+                    });
+                    model.Info = _repository.getSiteMap(sibling.Path, type);
+                    break;
+                default:
+                    model.Breadcrumbs.Add(new Breadcrumbs
+                    {
+                        Title = "Медицинские услуги",
+                        Url = ""
+                    });
+                    model.MedicalServices = _repository.getMedicalServices(Domain);
+                    break;
+            }
+
 
             return View(model);
         }
