@@ -18,17 +18,12 @@ namespace cms.dbase
             using (var db = new CMSdb(_context))
             {
                 if (!string.IsNullOrEmpty(filter.Domain))
-                {
-                    var contentType = ContentType.PHOTO.ToString().ToLower();
-                    var photoalbums=db.content_content_links.Where(w=>w.f_content_type== contentType)
-                                      .Join(db.cms_sitess.Where(o => o.c_alias == filter.Domain),
-                                            e => e.f_link,
-                                            o => o.f_content,
-                                            (e, o) => e.f_content
-                                            );
-                    if (!photoalbums.Any()) return null;
-                    var query = db.content_photoalbums.Where(w => photoalbums.Contains(w.id)).AsQueryable();
-                    query= query.OrderBy(o => o.d_date);
+                {   
+                    var query = db.content_photoalbums.Where(w => w.f_site == filter.Domain);
+                    if (filter.SearchText != null) {
+                        query = query.Where(w => (w.c_title.Contains(filter.SearchText)));
+                    }
+                    query = query.OrderBy(o => o.d_date);
                     int itemCount = query.Count();
                     var photoalbumsList = query
                                             .Skip(filter.Size * (filter.Page - 1))
@@ -68,9 +63,7 @@ namespace cms.dbase
                                Title=s.c_title,
                                Date=s.d_date,
                                PreviewImage = new Photo() { Url = s.c_preview },
-                               Text=s.c_text,
-                               ContentLink = (Guid)s.f_content_origin,
-                               ContentLinkType = s.c_content_type_origin,
+                               Text=s.c_text
                            });
                 if (data.Any())
                 {
