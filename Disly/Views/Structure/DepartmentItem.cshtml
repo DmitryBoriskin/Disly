@@ -32,51 +32,7 @@
         </div>
         <div class="col-md-3 col-md-push-1">
             <div class="boss pull-right">
-                @if (Model.DepartmentItem.Boss != null)
-                {
-                    foreach (var boss in Model.DepartmentItem.Boss)
-                    {
-                        <a href="/doctors/@boss.Id" class="boss_img_wrap">
-                            @if (boss.Photo != null)
-                            {
-                                <img src="@boss.Photo" title="@boss.FIO" />
-                            }
-                            else
-                            {
-                                <img src="~/Content/img/no_avatar.png" />
-                            }
-                        </a>
-                        <a class="boss_fio" href="/doctors/@boss.Id">@boss.FIO</a>
-                        if (!String.IsNullOrEmpty(boss.Post))
-                        {
-                            <div class="boss_post">@boss.Post</div>
-                        }
-
-                    }
-                }  
-                SISTER
-                @if (Model.DepartmentItem.Sister != null)
-                {
-                    foreach (var boss in Model.DepartmentItem.Sister)
-                    {
-                        <a href="/doctors/@boss.Id" class="boss_img_wrap">
-                            @if (boss.Photo != null)
-                            {
-                                <img src="@boss.Photo" title="@boss.FIO" />
-                            }
-                            else
-                            {
-                                <img src="~/Content/img/no_avatar.png" />
-                            }
-                        </a>
-                        <a class="boss_fio" href="/doctors/@boss.Id">@boss.FIO</a>
-                        if (!String.IsNullOrEmpty(boss.Post))
-                        {
-                            <div class="boss_post">@boss.Post</div>
-                        }
-
-                    }
-                }  
+                @Html.Partial("part/boss_list") 
                 <a class="link_all" href="/doctors/?group=@Model.DepartmentItem.Id">все сотрудники</a>
             </div>
         </div>
