@@ -1,6 +1,6 @@
 ﻿@model OrgsViewModel
 @{
-    string orgid = Request.Params["orgid"] != null ? Request.Params["orgid"] : ViewBag.OrgId;
+    string orgid = Request.Params["orgid"] != null ? Request.Params["orgid"] : ViewBag.OrgId.ToString();
 }
 @{
     string urlParam = "/Admin/Services/ChangePermit?group=orgs_department";

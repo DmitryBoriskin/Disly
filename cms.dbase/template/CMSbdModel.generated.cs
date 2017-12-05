@@ -767,13 +767,11 @@ namespace cms.dbase.models
 	[Table(Schema="dbo", Name="content_departments")]
 	public partial class content_departments
 	{
-		[PrimaryKey, NotNull    ] public Guid   id              { get; set; } // uniqueidentifier
-		[Column,     NotNull    ] public Guid   f_structure     { get; set; } // uniqueidentifier
-		[Column,     NotNull    ] public string c_title         { get; set; } // varchar(1024)
-		[Column,        Nullable] public string c_adress        { get; set; } // varchar(max)
-		[Column,     NotNull    ] public int    n_sort          { get; set; } // int
-		[Column,        Nullable] public Guid?  f_director      { get; set; } // uniqueidentifier
-		[Column,        Nullable] public string c_director_post { get; set; } // varchar(1024)
+		[PrimaryKey, NotNull    ] public Guid   id          { get; set; } // uniqueidentifier
+		[Column,     NotNull    ] public Guid   f_structure { get; set; } // uniqueidentifier
+		[Column,     NotNull    ] public string c_title     { get; set; } // varchar(1024)
+		[Column,        Nullable] public string c_adress    { get; set; } // varchar(max)
+		[Column,     NotNull    ] public int    n_sort      { get; set; } // int
 
 		#region Associations
 
@@ -907,6 +905,8 @@ namespace cms.dbase.models
 		[Column,     NotNull    ] public string   f_site            { get; set; } // varchar(64)
 		[Column,        Nullable] public string   c_sender_contacts { get; set; } // nvarchar(1024)
 		[Column,        Nullable] public Guid?    c_code            { get; set; } // uniqueidentifier
+		[Column,     NotNull    ] public bool     b_anonymous       { get; set; } // bit
+		[Column,     NotNull    ] public string   c_type            { get; set; } // varchar(15)
 
 		#region Associations
 
@@ -1473,7 +1473,7 @@ namespace cms.dbase.models
 	{
 		[PrimaryKey, NotNull    ] public Guid   id              { get; set; } // uniqueidentifier
 		[Column,     NotNull    ] public string f_site          { get; set; } // varchar(64)
-		[Column,     NotNull    ] public string f_front_section { get; set; } // nvarchar(16)
+		[Column,     NotNull    ] public string f_front_section { get; set; } // varchar(16)
 		[Column,     NotNull    ] public string c_path          { get; set; } // varchar(1024)
 		[Column,        Nullable] public string c_alias         { get; set; } // varchar(64)
 		[Column,        Nullable] public string c_title         { get; set; } // nvarchar(256)
@@ -1493,6 +1493,12 @@ namespace cms.dbase.models
 		[Column,        Nullable] public string c_photo         { get; set; } // nvarchar(1024)
 
 		#region Associations
+
+		/// <summary>
+		/// fk_content_sitemap_front_section
+		/// </summary>
+		[Association(ThisKey="f_front_section", OtherKey="c_alias", CanBeNull=false, KeyName="fk_content_sitemap_front_section", BackReferenceName="fkcontentsitemapfrontsections")]
+		public front_section fkcontentsitemapfrontsection { get; set; }
 
 		/// <summary>
 		/// fk_content_sitemap_from_sites
@@ -1835,7 +1841,7 @@ namespace cms.dbase.models
 		[PrimaryKey, NotNull    ] public Guid   id          { get; set; } // uniqueidentifier
 		[Column,        Nullable] public string f_site      { get; set; } // varchar(64)
 		[Column,     NotNull    ] public string c_title     { get; set; } // nvarchar(256)
-		[Column,        Nullable] public string f_pege_type { get; set; } // varchar(16)
+		[Column,        Nullable] public string f_page_type { get; set; } // varchar(64)
 		[Column,     NotNull    ] public string c_url       { get; set; } // varchar(1024)
 
 		#region Associations
@@ -1884,6 +1890,12 @@ namespace cms.dbase.models
 		public IEnumerable<front_modules> modulesections { get; set; }
 
 		/// <summary>
+		/// fk_content_sitemap_front_section_BackReference
+		/// </summary>
+		[Association(ThisKey="c_alias", OtherKey="f_front_section", CanBeNull=true, IsBackReference=true)]
+		public IEnumerable<content_sitemap> fkcontentsitemapfrontsections { get; set; }
+
+		/// <summary>
 		/// FK_front_section_site_BackReference
 		/// </summary>
 		[Association(ThisKey="c_alias", OtherKey="f_front_section", CanBeNull=true, IsBackReference=true)]
@@ -1908,16 +1920,16 @@ namespace cms.dbase.models
 		public front_page_views sitefrontsectionpageviews { get; set; }
 
 		/// <summary>
-		/// FK_site_front_section
-		/// </summary>
-		[Association(ThisKey="f_site", OtherKey="c_alias", CanBeNull=false, KeyName="FK_site_front_section", BackReferenceName="sitefrontsections")]
-		public cms_sites sitefrontsection { get; set; }
-
-		/// <summary>
 		/// FK_front_section_site
 		/// </summary>
 		[Association(ThisKey="f_front_section", OtherKey="c_alias", CanBeNull=false, KeyName="FK_front_section_site", BackReferenceName="frontsectionsites")]
 		public front_section frontsectionsite { get; set; }
+
+		/// <summary>
+		/// FK_site_front_section
+		/// </summary>
+		[Association(ThisKey="f_site", OtherKey="c_alias", CanBeNull=false, KeyName="FK_site_front_section", BackReferenceName="sitefrontsections")]
+		public cms_sites sitefrontsection { get; set; }
 
 		#endregion
 	}

@@ -900,9 +900,7 @@ namespace cms.dbase
                     throw new Exception("У данного ОВП в базе не существует отдела");
                 }
                 cdDepart.c_title = updStructure.Title;
-                cdDepart.c_adress = updDepart.Text;
-                cdDepart.f_director = updDepart.DirectorF;
-                cdDepart.c_director_post = updDepart.DirecorPost;
+                cdDepart.c_adress = updDepart.Text;                
                 using (var tran = db.BeginTransaction())
                 {
                     db.Update(cdStructur);
@@ -968,9 +966,7 @@ namespace cms.dbase
                         Text = s.c_adress,
                         StructureF = s.f_structure,
                         Phones = getDepartmentsPhone(s.id),
-                        Peoples = getPeopleDepartment(s.id),
-                        DirecorPost = s.c_director_post,
-                        DirectorF = s.f_director
+                        Peoples = getPeopleDepartment(s.id)
 
                     }).First();
                 }
@@ -1182,7 +1178,9 @@ namespace cms.dbase
                              {
                                  Id = s.id,
                                  FIO = s.c_surname + " " + s.c_name + " " + s.c_patronymic,
-                                 IdLinkOrg = s.idOrgLink
+                                 IdLinkOrg = s.idOrgLink,
+                                 Post=s.c_post,
+                                 Status=s.c_status
                              });
                 if (data.Any()) return data.ToArray();
                 return null;
@@ -1223,9 +1221,7 @@ namespace cms.dbase
                     f_structure = Structure,
                     c_title = insert.Title,
                     c_adress = insert.Text,
-                    n_sort = MaxSort,
-                    f_director = insert.DirectorF,
-                    c_director_post = insert.DirecorPost
+                    n_sort = MaxSort
                 };
 
                 using (var tran = db.BeginTransaction())
@@ -1271,9 +1267,7 @@ namespace cms.dbase
                     throw new Exception("Запись с таким Id не существует");
                 }
                 cdDepart.c_title = insert.Title;
-                cdDepart.c_adress = insert.Text;
-                cdDepart.f_director = insert.DirectorF;
-                cdDepart.c_director_post = insert.DirecorPost;
+                cdDepart.c_adress = insert.Text;                
 
                 using (var tran = db.BeginTransaction())
                 {

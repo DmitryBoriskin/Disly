@@ -851,10 +851,7 @@ namespace cms.dbase
                             {
                                 Id = s.id,
                                 Title = s.c_title,
-                                Text = s.c_adress,
-                                DirecorPost = s.c_director_post,
-                                DirectorF = s.f_director
-
+                                Text = s.c_adress
                             });
                 if (query.Any())
                 {
@@ -919,10 +916,7 @@ namespace cms.dbase
                             {
                                 Id = s.id,
                                 Title = s.c_title,
-                                Text = s.c_adress,
-                                DirecorPost = s.c_director_post,
-                                DirectorF = s.f_director
-
+                                Text = s.c_adress
                             });
                 if (query.Any())
                 {
