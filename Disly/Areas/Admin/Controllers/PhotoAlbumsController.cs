@@ -2,7 +2,9 @@
 using Disly.Areas.Admin.Models;
 using Disly.Areas.Admin.Service;
 using System;
+using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Web;
 using System.Web.Mvc;
 
@@ -47,11 +49,8 @@ namespace Disly.Areas.Admin.Controllers
 
         // GET: Materials
         public ActionResult Index(string category, string type)
-        {
-            // Наполняем фильтр значениями
-            //var mfilter = FilterParams.Extend<MaterialFilter>(filter);
+        {            
             model.List = _cmsRepository.getPhotoAlbum(filter);
-
             return View(model);
         }
 
@@ -165,31 +164,59 @@ namespace Disly.Areas.Admin.Controllers
         {
             return Redirect(StartUrl + Request.Url.Query);
         }
-
+        /// <summary>
+        /// удаляем фотоальбом и входящие в него фотографии
+        /// </summary>
+        /// <param name="Id"></param>
+        /// <returns></returns>
         [HttpPost]
         [MultiButton(MatchFormKey = "action", MatchFormValue = "delete-btn")]
         public ActionResult Delete(Guid Id)
         {
-            var data = _cmsRepository.getMaterial(Id, Domain);
-            if(data != null)
-            {
-                var image = (data.PreviewImage != null) ? data.PreviewImage.Url : null;
-                var res = _cmsRepository.deleteCmsMaterial(Id);
-                if (res && !string.IsNullOrEmpty(image))
-                    Files.deleteImage(image);
-            }
 
             // записываем информацию о результатах
             ErrorMassege userMassege = new ErrorMassege();
             userMassege.title = "Информация";
-            userMassege.info = "Запись Удалена";
+
+            var data = _cmsRepository.getPhotoAlbumItem(Id);
+            if(data != null)
+            {
+                var delpath = data.Path;
+
+                if (_cmsRepository.delPhotoAlbum(Id))
+                {
+                    userMassege.info = "Запись Удалена";
+                    #region удаление файлов
+                    try
+                    {
+                        try
+                        {
+                            Directory.Delete(Server.MapPath(delpath), true);
+                        }
+                        catch (IOException)
+                        {
+                            Thread.Sleep(0);
+                            Directory.Delete(Server.MapPath(delpath), true);
+                        }
+                    }
+                    catch
+                    {
+                        //на случай когда в базе есть - а физически изображений не существует
+                    } 
+                    #endregion
+                }
+                else
+                {
+                    userMassege.info = "Произошла ошибка";
+                }        
+            }            
             userMassege.buttons = new ErrorMassegeBtn[]{
+                new ErrorMassegeBtn { url = StartUrl + Request.Url.Query, text = "Вернуться в список" },
                 new ErrorMassegeBtn { url = "#", text = "ок", action = "false" }
             };
-
             model.ErrorInfo = userMassege;
-
-            return RedirectToAction("Index");
+            //return RedirectToAction("Index");
+            return View("Item", model);
         }
 
         
