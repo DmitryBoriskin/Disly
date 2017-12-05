@@ -9,7 +9,7 @@ using System.Web;
 namespace cms.dbase
 {
     /// <summary>
-    /// Репозиторий для работы с новостями
+    /// Репозиторий для работы с фотоальбомами
     /// </summary>
     public partial class cmsRepository : abstract_cmsRepository
     {
@@ -18,7 +18,7 @@ namespace cms.dbase
             using (var db = new CMSdb(_context))
             {
                 if (!string.IsNullOrEmpty(filter.Domain))
-                {   
+                {
                     var query = db.content_photoalbums.Where(w => w.f_site == filter.Domain);
                     if (filter.SearchText != null) {
                         query = query.Where(w => (w.c_title.Contains(filter.SearchText)));
@@ -26,20 +26,20 @@ namespace cms.dbase
                     if (filter.Disabled != null) {
                         query = query.Where(w => w.c_disabled == filter.Disabled);
                     }
-                    query = query.OrderBy(o => o.d_date);
+                    query = query.OrderByDescending(o => o.d_date);
                     int itemCount = query.Count();
                     if (query.Any())
                     {
-                        var photoalbumsList = query
-                                        .Skip(filter.Size * (filter.Page - 1))
-                                        .Take(filter.Size)
-                                        .Select(s => new PhotoAlbum
-                                        {
+                    var photoalbumsList = query
+                                            .Skip(filter.Size * (filter.Page - 1))
+                                            .Take(filter.Size)
+                                            .Select(s => new PhotoAlbum
+                                            {
                                             Id = s.id,
                                             Title = s.c_title,
                                             Date = s.d_date,
                                             PreviewImage = new Photo() { Url = s.c_preview }
-                                        });
+                                            });
                         return new PhotoAlbumList
                         {
                             Data = photoalbumsList.ToArray(),
@@ -51,7 +51,7 @@ namespace cms.dbase
                                 page_count = (itemCount % filter.Size > 0) ? (itemCount / filter.Size) + 1 : itemCount / filter.Size
                             }
                         };
-                    }                      
+                }
                 }
                 return null;
             }
@@ -114,7 +114,7 @@ namespace cms.dbase
                             c_preview = (ins.PreviewImage != null) ? ins.PreviewImage.Url : null                         
                         };
 
-                        db.Insert(cdPhotoAlbum);                        
+                        db.Insert(cdPhotoAlbum);
 
                         var log = new LogModel()
                         {
@@ -208,18 +208,26 @@ namespace cms.dbase
                                          .Where(w => w.f_album==AlbumId)                        
                                          .Select(s => s.n_sort);
                     int maxSort = queryMaxSort.Any() ? queryMaxSort.Max() + 1 : 0;
+                if (insert != null)
+                {
+                    if(insert.Length>0)
                     foreach (PhotoModel item in insert)
                     {
-                        maxSort++;
-                        db.content_photoss                          
-                          .Value(v => v.f_album, AlbumId)
-                          .Value(v => v.c_title, item.Title)
-                          .Value(v => v.d_date, item.Date)
-                          .Value(v => v.c_preview, item.PreviewImage.Url)
-                          .Value(v => v.c_photo, item.PhotoImage.Url)
-                          .Value(v => v.n_sort, maxSort)
-                          .Insert();
+                        if (item != null)
+                        {
+                            maxSort++;
+                            db.content_photoss
+                              .Value(v => v.f_album, AlbumId)
+                              .Value(v => v.c_title, item.Title)
+                              .Value(v => v.d_date, item.Date)
+                              .Value(v => v.c_preview, item.PreviewImage.Url)
+                              .Value(v => v.c_photo, item.PhotoImage.Url)
+                              .Value(v => v.n_sort, maxSort)
+                              .Insert();
+                        }                        
                     }
+                }
+                    
                     return true;
                 //}
                 //catch { return false; }
@@ -268,7 +276,7 @@ namespace cms.dbase
 
                 }
                 return null;
-            }
+        }
         }
         public override bool delPhotoItem(Guid id)
         {
@@ -295,7 +303,7 @@ namespace cms.dbase
                     return false;
                 }                    
 
-            }
-        }
+    }
+}
     }
 }
