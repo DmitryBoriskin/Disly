@@ -35,7 +35,7 @@ namespace Disly.Controllers
         {
             var filter = getFilter();
             filter.Disabled = false;
-
+            filter.Type = FeedbackType.appeal.ToString();
             model.List = _repository.getFeedbacksList(filter);
 
             model.Child = (model.CurrentPage != null) ? _repository.getSiteMapChild(model.CurrentPage.Id) : null;
@@ -82,8 +82,8 @@ namespace Disly.Controllers
             ViewBag.KeyWords = PageKeyw;
             #endregion
 
-            ViewBag.ByEmail = true;
             ViewBag.IsAgree = false;
+            ViewBag.Anonymous = false;
             ViewBag.captchaKey = Settings.CaptchaKey;
 
             return View(_ViewName, model);
@@ -112,9 +112,6 @@ namespace Disly.Controllers
             ViewBag.Description = PageDesc;
             ViewBag.KeyWords = PageKeyw;
             #endregion
-
-            ViewBag.ByEmail = true;
-            ViewBag.captchaKey = Settings.CaptchaKey;
 
             var newId = Guid.NewGuid();
             string PrivateKey = Settings.SecretKey;
@@ -205,6 +202,7 @@ namespace Disly.Controllers
 
                     var errorText = letter.SendMail();
                     #endregion
+
                     ViewBag.FormStatus = "send";
                 }
             }
@@ -217,8 +215,10 @@ namespace Disly.Controllers
                 ViewBag.Theme = bindData.Theme;
                 ViewBag.Text = bindData.Text;
             }
-            ViewBag.ByEmail = true;
+
             ViewBag.IsAgree = false;
+            ViewBag.Anonymous = false;
+            ViewBag.captchaKey = Settings.CaptchaKey;
 
             return View(_ViewName, model);
         }

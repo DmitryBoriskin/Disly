@@ -1885,6 +1885,7 @@ namespace cms.dbase
                 var query = db.content_feedbackss
                     .Where(w => w.f_site == _domain)
                     .Where(w => w.b_disabled == filtr.Disabled)
+                    .Where(w => w.c_type == filtr.Type)
                     .OrderByDescending(o => o.d_date);
 
                 if (query.Any())
@@ -1992,7 +1993,8 @@ namespace cms.dbase
                             b_new = feedback.IsNew,
                             b_disabled = feedback.Disabled,
                             f_site = _domain,
-                            c_code = feedback.AnswererCode
+                            c_code = feedback.AnswererCode,
+                            b_anonymous = feedback.Anonymous
                         };
                         db.Insert(cdFeedback);
                         tran.Commit();

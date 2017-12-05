@@ -69,26 +69,32 @@
                         <textarea class="form-control" id="feedback-text-area" name="Text" rows="7" maxlength="2048" required>@ViewBag.Text</textarea>
                     </div>
 
-                        <div class="form-group">
-                            <label for="feedback-file-input">Прикрепить файл</label>
-                            <div>
-                                <label class="custom-file">
-                                    <input type="file" id="feedback-file-input" name="FileToUpload" max-size="10485760" class="custom-file-input" accept="image/jpg,image/jpeg,image/png,application/pdf,application/msword,application/excel" />
-                                    <span class="custom-file-control"></span>
-                                </label>
-                            </div>
-                        </div>
-
-                        <div class="checkbox">
-                            <label>
-                                <input type="checkbox" id="feedback-isAgree-chkbx" name="IsAgree" @(ViewBag.IsAgree ? "checked" : null) value="True" />
-                                Я согласен на обработку своих персональных данных в соответствии с Федеральным законом №152-ФЗ от 27.07.2006 г. «О персональных данных»
+                    <div class="form-group">
+                        <label for="feedback-file-input">Прикрепить файл</label>
+                        <div>
+                            <label class="custom-file">
+                                <input type="file" id="feedback-file-input" name="FileToUpload" max-size="10485760" class="custom-file-input" accept="image/jpg,image/jpeg,image/png,application/pdf,application/msword,application/excel" />
+                                <span class="custom-file-control"></span>
                             </label>
                         </div>
-                        <div class="g-recaptcha" data-sitekey="@ViewBag.CaptchaKey"></div>
-                        <div id="fb"></div>
-                        <br>
-                        <button id="feedback-send-btn" type="submit" name="action" value="send-btn" class="btn" @(ViewBag.IsAgree ? "" : "disabled")>ОТПРАВИТЬ</button>
+                    </div>
+
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" id="feedback-anonymous-chkbx" name="Anonymous" @(ViewBag.Anonymous ? "checked" : null) value="True" />
+                            Анонимно (Ваше имя не будет отображено на сайте)
+                        </label>
+                    </div>
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" id="feedback-isAgree-chkbx" name="IsAgree" @(ViewBag.IsAgree ? "checked" : null) value="True" />
+                            Я согласен на обработку своих персональных данных в соответствии с Федеральным законом №152-ФЗ от 27.07.2006 г. «О персональных данных»
+                        </label>
+                    </div>
+                    <div class="g-recaptcha" data-sitekey="@ViewBag.CaptchaKey"></div>
+                    <div id="fb"></div>
+                    <br>
+                    <button id="feedback-send-btn" type="submit" name="action" value="send-btn" class="btn" @(ViewBag.IsAgree ? "" : "disabled")>ОТПРАВИТЬ</button>
                 }
             </div>
         </div>
