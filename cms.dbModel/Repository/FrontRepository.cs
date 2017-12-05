@@ -9,6 +9,7 @@ namespace cms.dbModel
         public abstract string getSiteId(string domainUrl);
         public abstract string getView(string siteSection); //string siteId,
         public abstract SitesModel getSiteInfo(); //string domain
+        public abstract UsersModel[] getSiteAdmins();
         public abstract SiteMapModel[] getSiteMapList(); //string domain
         public abstract SiteMapModel[] getSiteMapListShort(); //string domain
         public abstract string[] getSiteMapGroupMenu(Guid id);

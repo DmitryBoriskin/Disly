@@ -31,7 +31,7 @@
                             {
                                 <div class="alert alert-warning">
                                     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                                    Сообщение не отправлено. Введите каптчу.
+                                    Сообщение не отправлено. Заполните все обязательные поля и введите каптчу.
                                 </div>
                             }
                             break;
@@ -68,11 +68,11 @@
                     <input type="hidden" name="AnswererCode" value="@Model.Item.AnswererCode" />
                     <div class="form-group">
                         <label for="feedback-answer-area">Текст ответа</label>
-                        <textarea class="form-control" id="feedback-answer-area" name="Answer" rows="7" maxlength="2048" required>@(!string.IsNullOrEmpty(ViewBag.Answer) ? ViewBag.Text : Model.Item.Answer)</textarea>
+                        <textarea class="form-control" id="feedback-answer-area" name="Answer" rows="7" maxlength="2048" required>@(!string.IsNullOrEmpty(ViewBag.Answer) ? ViewBag.Answer : Model.Item.Answer)</textarea>
                     </div>
                     <div class="form-group">
                         <label for="feedback-answerer-input">Отвечает</label>
-                        <input type="text" id="feedback-answerer-input" name="Answerer" value="@(!string.IsNullOrEmpty(ViewBag.Answerer)?ViewBag.Text: Model.Item.Answerer)" class="form-control" maxlength="256" placeholder="специалист такой-то" required />
+                        <input type="text" id="feedback-answerer-input" name="Answerer" value="@(!string.IsNullOrEmpty(ViewBag.Answerer)?ViewBag.Answerer: Model.Item.Answerer)" class="form-control" maxlength="256" placeholder="специалист такой-то" required />
                     </div>
 
                     <div class="checkbox">
