@@ -125,12 +125,19 @@ namespace Disly.Areas.Admin.Controllers
             ErrorMassege userMessage = new ErrorMassege();
             userMessage.title = "Информация";
 
-            string savePath = Settings.UserFiles + Domain + Settings.PhotoDir + bindData.Album.Date.ToString("yyyy") + "_" + bindData.Album.Date.ToString("MM") + "/" + bindData.Album.Date.ToString("dd") + "/" + id;
-
+            string savePath = Settings.UserFiles + Domain + Settings.PhotoDir + bindData.Album.Date.ToString("yyyy") + "_" + bindData.Album.Date.ToString("MM") + "/" + bindData.Album.Date.ToString("dd") + "/" + id + "/";
+            bindData.Album.Path = savePath;
             if (ModelState.IsValid)
             {
                 //превью
                 #region Сохранение изображения
+                if (upload == null && uploadPhoto != null)
+                {
+                    if (uploadPhoto.Count() > 0)
+                    {
+                        upload = uploadPhoto.ToArray()[0];
+                    }
+                }
                 var width = 0;
                 var height = 0;
                 var defaultPreviewSizes = new string[] { "540", "360" };                                
@@ -160,9 +167,10 @@ namespace Disly.Areas.Admin.Controllers
                     {
                         Name = id.ToString() + fileExtension,
                         Size = Files.FileAnliz.SizeFromUpload(upload),
-                        Url = Files.SaveImageResizeRename(upload, savePath, id.ToString(), width, height)
+                        Url = Files.SaveImageResizeRename(upload, savePath, "logo", width, height)
                     };
                 }
+                
                 #endregion
 
 
@@ -342,9 +350,9 @@ namespace Disly.Areas.Admin.Controllers
                     catch
                     {
                         //на случай когда в базе есть - а физически изображений не существует
-                    } 
-                    #endregion
-                }
+                    }
+                #endregion
+            }
                 else
                 {
                     userMassege.info = "Произошла ошибка";
@@ -369,6 +377,7 @@ namespace Disly.Areas.Admin.Controllers
             {
                 string photoPath = photo.PhotoImage.Url.ToString();
                 string previewPath = photo.PreviewImage.Url.ToString();
+                string hdPath = previewPath.Replace("prev_","hd_");
                 if (_cmsRepository.delPhotoItem(Guid.Parse(id)))
                 {
                     try
@@ -377,6 +386,7 @@ namespace Disly.Areas.Admin.Controllers
                         {
                             System.IO.File.Delete(Server.MapPath(photoPath));
                             System.IO.File.Delete(Server.MapPath(previewPath));
+                            System.IO.File.Delete(Server.MapPath(hdPath));
                             return "true";
                         }
                         else return "Не удалось удалить фотографию.";
@@ -388,6 +398,7 @@ namespace Disly.Areas.Admin.Controllers
                         {
                             System.IO.File.Delete(Server.MapPath(photoPath));
                             System.IO.File.Delete(Server.MapPath(previewPath));
+                            System.IO.File.Delete(Server.MapPath(hdPath));
                             return "true";
                         }
                         else return "Не удалось удалить фотографию.";

@@ -64,6 +64,7 @@ namespace cms.dbase
                            .Where(w => w.id == id)
                            .Select(s => new PhotoAlbum {
                                Id=s.id,
+                               Path=s.c_path,
                                Title=s.c_title,
                                Date=s.d_date,
                                PreviewImage = new Photo() { Url = s.c_preview },
