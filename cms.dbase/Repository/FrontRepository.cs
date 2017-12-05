@@ -138,6 +138,29 @@ namespace cms.dbase
         }
 
         /// <summary>
+        /// Получение информации по сайту
+        /// </summary>
+        /// <returns></returns>
+        public override UsersModel[] getSiteAdmins()
+        {
+            string domain = _domain;
+            using (var db = new CMSdb(_context))
+            {
+                var query = db.cms_userss.Where(w => w.f_group == "admin");
+                if (query.Any())
+                {
+                    var data = query.Select(s => new UsersModel
+                    {
+                        Id = s.id,
+                        FIO = s.c_surname + " " + s.c_name + " " + s.c_patronymic,
+                        EMail = s.c_email
+                    }).ToArray();
+                }
+            }
+            return null;
+        }
+
+        /// <summary>
         /// Получим список элементов карты сайта для контроллера
         /// </summary>
         /// <returns></returns>
@@ -314,6 +337,7 @@ namespace cms.dbase
 
                 if (data.Any())
                     return data.First();
+
 
                 return null;
             }

@@ -18,30 +18,28 @@ namespace cms.dbase
             using (var db = new CMSdb(_context))
             {
                 if (!string.IsNullOrEmpty(filter.Domain))
-                {
-                    var contentType = ContentType.PHOTO.ToString().ToLower();
-                    var photoalbums=db.content_content_links.Where(w=>w.f_content_type== contentType)
-                                      .Join(db.cms_sitess.Where(o => o.c_alias == filter.Domain),
-                                            e => e.f_link,
-                                            o => o.f_content,
-                                            (e, o) => e.f_content
-                                            );
-                    if (!photoalbums.Any()) return null;
-                    var query = db.content_photoalbums.Where(w => photoalbums.Contains(w.id)).AsQueryable();
-                    query= query.OrderBy(o => o.d_date);
+                {   
+                    var query = db.content_photoalbums.Where(w => w.f_site == filter.Domain);
+                    if (filter.SearchText != null) {
+                        query = query.Where(w => (w.c_title.Contains(filter.SearchText)));
+                    }
+                    if (filter.Disabled != null) {
+                        query = query.Where(w => w.c_disabled == filter.Disabled);
+                    }
+                    query = query.OrderBy(o => o.d_date);
                     int itemCount = query.Count();
-                    var photoalbumsList = query
-                                            .Skip(filter.Size * (filter.Page - 1))
-                                            .Take(filter.Size)
-                                            .Select(s => new PhotoAlbum
-                                            {
-                                                Id=s.id,
-                                                Title=s.c_title,
-                                                Date=s.d_date,
-                                                PreviewImage=new Photo() { Url=s.c_preview}
-                                            });
-
-                    if (photoalbumsList.Any())
+                    if (query.Any())
+                    {
+                        var photoalbumsList = query
+                                        .Skip(filter.Size * (filter.Page - 1))
+                                        .Take(filter.Size)
+                                        .Select(s => new PhotoAlbum
+                                        {
+                                            Id = s.id,
+                                            Title = s.c_title,
+                                            Date = s.d_date,
+                                            PreviewImage = new Photo() { Url = s.c_preview }
+                                        });
                         return new PhotoAlbumList
                         {
                             Data = photoalbumsList.ToArray(),
@@ -53,6 +51,7 @@ namespace cms.dbase
                                 page_count = (itemCount % filter.Size > 0) ? (itemCount / filter.Size) + 1 : itemCount / filter.Size
                             }
                         };
+                    }                      
                 }
                 return null;
             }
@@ -61,20 +60,27 @@ namespace cms.dbase
         {
             using (var db = new CMSdb(_context))
             {
-                var data = db.content_photoalbums
+                var query = db.content_photoalbums
                            .Where(w => w.id == id)
                            .Select(s => new PhotoAlbum {
                                Id=s.id,
                                Title=s.c_title,
                                Date=s.d_date,
                                PreviewImage = new Photo() { Url = s.c_preview },
-                               Text=s.c_text,
-                               ContentLink = (Guid)s.f_content_origin,
-                               ContentLinkType = s.c_content_type_origin,
+                               Text=s.c_text
                            });
-                if (data.Any())
+                if (query.Any())
                 {
-                    return data.Single();
+                    var data = query.Single();
+                    data.Photos = db.content_photoss
+                                   .Where(w => w.f_album == id)
+                                   .OrderBy(o=>o.n_sort)
+                                   .Select(s=>new PhotoModel() {
+                                       PreviewImage=new Photo { Url=s.c_preview},
+                                       Id=s.id,
+                                       Title=s.c_title
+                                   }).ToArray();
+                    return data;
                 }
                 return null;
             }
@@ -98,25 +104,15 @@ namespace cms.dbase
                         cdPhotoAlbum = new content_photoalbum
                         {
                             id = ins.Id,
+                            f_site=_domain,
+                            c_path=ins.Path,
                             c_title = ins.Title,                            
                             c_text = ins.Text,
                             d_date = ins.Date,
                             c_preview = (ins.PreviewImage != null) ? ins.PreviewImage.Url : null                         
                         };
 
-                        // добавляем принадлежность к сущности(ссылку на организацию/событие/персону)
-                        var cdPhotoAlbumLink = new content_content_link
-                        {
-                            id = Guid.NewGuid(),
-                            f_content = ins.Id,
-                            f_content_type = ContentType.MATERIAL.ToString().ToLower(),
-                            f_link = ins.ContentLink,
-                            f_link_type = ins.ContentLinkType,
-                            b_origin = true
-                        };
-
-                        db.Insert(cdPhotoAlbum);
-                        db.Insert(cdPhotoAlbumLink);
+                        db.Insert(cdPhotoAlbum);                        
 
                         var log = new LogModel()
                         {
@@ -197,6 +193,61 @@ namespace cms.dbase
                 }
                 return false;
             }
+        }
+
+
+        public override bool insertPhotos(Guid AlbumId, PhotoModel[] insert)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                //try
+                //{
+                    var queryMaxSort = db.content_photoss
+                                         .Where(w => w.f_album==AlbumId)                        
+                                         .Select(s => s.n_sort);
+                    int maxSort = queryMaxSort.Any() ? queryMaxSort.Max() + 1 : 0;
+                    foreach (PhotoModel item in insert)
+                    {
+                        maxSort++;
+                        db.content_photoss                          
+                          .Value(v => v.f_album, AlbumId)
+                          .Value(v => v.c_title, item.Title)
+                          .Value(v => v.d_date, item.Date)
+                          .Value(v => v.c_preview, item.PreviewImage.Url)
+                          .Value(v => v.c_photo, item.PhotoImage.Url)
+                          .Value(v => v.n_sort, maxSort)
+                          .Insert();
+                    }
+                    return true;
+                //}
+                //catch { return false; }
+            }
+        }
+        public override bool sortingPhotos(Guid id, int num)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var data = db.content_photoss.Where(w => w.id == id).Select(s => new PhotoModel { AlbumId = s.f_album, Sort= s.n_sort }).First();
+                var AlbumId = data.AlbumId;
+
+                if (num > data.Sort)
+                {
+                    db.content_photoss.Where(w => w.f_album == AlbumId && w.n_sort > data.Sort && w.n_sort <= num)
+                        .Set(p => p.n_sort, p => p.n_sort - 1)
+                        .Update();
+                }
+                else
+                {
+                    db.content_photoss.Where(w => w.f_album == AlbumId && w.n_sort < data.Sort && w.n_sort >= num)
+                        .Set(p => p.n_sort, p => p.n_sort + 1)
+                        .Update();
+                }
+                db.content_photoss
+                    .Where(w => w.id == id)
+                    .Set(s => s.n_sort, num)
+                    .Update();
+            }
+            return true;
         }
 
 

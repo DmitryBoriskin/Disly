@@ -1,5 +1,6 @@
 ﻿using cms.dbModel.entity;
 using System;
+using System.ComponentModel.DataAnnotations;
 using System.Web;
 using System.Web.Mvc;
 
@@ -34,10 +35,12 @@ namespace Disly.Models
         /// <summary>
         /// Отправитель
         /// </summary>
+        [Required]
         public string SenderName { get; set; }
         /// <summary>
         /// Email отправителя
         /// </summary>
+        [Required]
         public string SenderEmail { get; set; }
         /// <summary>
         /// Доп контакты отправителя
@@ -46,32 +49,21 @@ namespace Disly.Models
         /// <summary>
         /// Тема сообщения
         /// </summary>
+        [Required]
         public string Theme { get; set; }
         /// <summary>
         /// текст вопроса
         /// </summary>
+        [Required]
         public string Text { get; set; }
         /// <summary>
         /// Загруженный файл
         /// </summary>
         public HttpPostedFileBase FileToUpload { get; set; }
         /// <summary>
-        /// 
-        /// </summary>
-        public string FileUploaded { get; set; }
-        /// <summary>
         /// Согласен на обработку данных
         /// </summary>
         public bool IsAgree { get; set; }
-
-        ///// <summary>
-        ///// Отправлять по Email
-        ///// </summary>
-        //public bool ByEmail { get; set; }
-        ///// <summary>
-        ///// Адрес, на который необходимо отправлять ответ
-        ///// </summary>
-        //public string PostAddress { get; set; }
     }
 
     public class FeedbackAnswerFormViewModel
@@ -79,18 +71,22 @@ namespace Disly.Models
         /// <summary>
         /// id сообщения на которое отвечаем
         /// </summary>
+        [Required]
         public Guid Id { get; set; }
         /// <summary>
         /// проверочный код
         /// </summary>
+        [Required]
         public Guid AnswererCode { get; set; }
         /// <summary>
         /// отвечает(кто)
         /// </summary>
+        [Required]
         public string Answerer { get; set; }
         /// <summary>
         /// текст ответа
         /// </summary>
+        [Required]
         public string Answer { get; set; }
         /// <summary>
         /// Опубликовать на сайте

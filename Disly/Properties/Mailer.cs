@@ -9,10 +9,8 @@ using cms.dbase;
 using System.Text.RegularExpressions;
 
 /// <summary>
-/// 
+/// Сервис отправки писем
 /// </summary>
-
-
 public class Mailer
 {
 

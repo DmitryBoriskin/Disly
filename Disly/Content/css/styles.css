@@ -1037,7 +1037,75 @@ a.button.icon-cancel{
     display: block;
 }
 
+
+
+/* Photoalbums */
+.photoalbum {
+    list-style-type: none;
+    padding-left: 0;
+    margin: 15px 0;
+}
+
+    .photoalbum li {
+        position: relative;
+        padding:0;
+        width: 120px;
+        height: 120px;
+        margin: 2px;
+        background-color: #f5f8fa;
+        display: inline-block;
+        vertical-align: top;
+        box-sizing: content-box;
+    }
+
+        .photoalbum li .delPhoto {
+            display: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            background: rgba(0,0,0,0.6);
+            border: 0;
+            border-radius: 50%;
+            -webkit-appearance: none;
+            position: absolute;
+            left: 45px;
+            top: 45px;
+        }
+
+        .photoalbum li:hover .delPhoto {
+            display: block;
+        }
+
+        .photoalbum li .delPhoto:before {
+            content: '\eb85';
+            font-family: 'fontello';
+            font-size: 16px;
+            color: #eee;
+        }
+ul.photoalbum.Sortable.ui-sortable {
+    border: 2px dashed #006bb3 !important;
+}
+.photoalbum.sortable.ui-sortable .ui-sortable-handle {
+    cursor: move;
+}
+div.ListItem img.photo-preview {
+    width: initial;
+    height: initial;
+}
+
+.gallery_prev {
+    width: 130px;
+}
+
+    .gallery_prev img {
+        width: 100%;
+    }
+/* end Photoalbums */
+
+
+
 /*Orgs*/
+
+
 
 
 

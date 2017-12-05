@@ -255,5 +255,7 @@ namespace cms.dbModel
         public abstract bool insPhotoAlbum(Guid id, PhotoAlbum ins);
         public abstract bool updPhotoAlbum(Guid id, PhotoAlbum upd);
         public abstract bool delPhotoAlbum(Guid id);
+        public abstract bool insertPhotos(Guid AlbumId, PhotoModel[] insert);
+        public abstract bool sortingPhotos(Guid id, int num);
     }
 }

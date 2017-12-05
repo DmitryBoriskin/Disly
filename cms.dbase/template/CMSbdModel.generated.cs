@@ -739,16 +739,16 @@ namespace cms.dbase.models
 		#region Associations
 
 		/// <summary>
-		/// FK_content_banners_cms_sites
-		/// </summary>
-		[Association(ThisKey="f_site", OtherKey="c_alias", CanBeNull=false, KeyName="FK_content_banners_cms_sites", BackReferenceName="contentbannerscmssitess")]
-		public cms_sites contentbannerscmssites { get; set; }
-
-		/// <summary>
 		/// FK_content_banners_content_banner_sections
 		/// </summary>
 		[Association(ThisKey="f_section", OtherKey="id", CanBeNull=false, KeyName="FK_content_banners_content_banner_sections", BackReferenceName="contentbannerscontentbannersectionss")]
 		public content_banner_sections contentbannerscontentbannersections { get; set; }
+
+		/// <summary>
+		/// FK_content_banners_cms_sites
+		/// </summary>
+		[Association(ThisKey="f_site", OtherKey="c_alias", CanBeNull=false, KeyName="FK_content_banners_cms_sites", BackReferenceName="contentbannerscmssitess")]
+		public cms_sites contentbannerscmssites { get; set; }
 
 		#endregion
 	}
@@ -1414,13 +1414,14 @@ namespace cms.dbase.models
 	[Table(Schema="dbo", Name="content_photoalbum")]
 	public partial class content_photoalbum
 	{
-		[PrimaryKey, NotNull    ] public Guid     id                    { get; set; } // uniqueidentifier
-		[Column,     NotNull    ] public string   c_title               { get; set; } // varchar(512)
-		[Column,        Nullable] public string   c_preview             { get; set; } // varchar(512)
-		[Column,        Nullable] public string   c_text                { get; set; } // varchar(max)
-		[Column,     NotNull    ] public DateTime d_date                { get; set; } // datetime
-		[Column,     NotNull    ] public Guid     f_content_origin      { get; set; } // uniqueidentifier
-		[Column,     NotNull    ] public string   c_content_type_origin { get; set; } // varchar(64)
+		[PrimaryKey, NotNull    ] public Guid     id         { get; set; } // uniqueidentifier
+		[Column,     NotNull    ] public string   c_title    { get; set; } // varchar(512)
+		[Column,        Nullable] public string   c_preview  { get; set; } // varchar(512)
+		[Column,        Nullable] public string   c_text     { get; set; } // varchar(max)
+		[Column,     NotNull    ] public DateTime d_date     { get; set; } // datetime
+		[Column,     NotNull    ] public string   f_site     { get; set; } // varchar(64)
+		[Column,        Nullable] public string   c_path     { get; set; } // varchar(1024)
+		[Column,     NotNull    ] public bool     c_disabled { get; set; } // bit
 
 		#region Associations
 
@@ -1997,6 +1998,7 @@ namespace cms.dbase.models
 		[Column,        Nullable] public DateTime? d_birthdate  { get; set; } // datetime2(7)
 		[Column,        Nullable] public DateTime? d_modify     { get; set; } // datetime2(7)
 		[Column,        Nullable] public string    xml_info     { get; set; } // nvarchar(max)
+		[Column,        Nullable] public string    c_photo      { get; set; } // varchar(max)
 
 		#region Associations
 

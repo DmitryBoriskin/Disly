@@ -33,6 +33,7 @@ namespace cms.dbModel.entity
         public string Title { get; set; }
         public Photo PreviewImage { get; set; }
         public string Text { get; set; }
+        public string Path { get; set; }
         public bool Disabled { get; set; }
         public DateTime Date { get; set; }
         public PhotoModel[] Photos { get; set; }
@@ -61,6 +62,7 @@ namespace cms.dbModel.entity
         /// Дата
         /// </summary>        
         public DateTime Date { get; set; }
+        public int Sort { get; set; }
     }
 
 
