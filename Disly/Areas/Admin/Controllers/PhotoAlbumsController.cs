@@ -125,13 +125,51 @@ namespace Disly.Areas.Admin.Controllers
             ErrorMassege userMessage = new ErrorMassege();
             userMessage.title = "Информация";
 
+            string savePath = Settings.UserFiles + Domain + Settings.PhotoDir + bindData.Album.Date.ToString("yyyy") + "_" + bindData.Album.Date.ToString("MM") + "/" + bindData.Album.Date.ToString("dd") + "/" + id;
+
             if (ModelState.IsValid)
             {
-                
+                //превью
+                #region Сохранение изображения
+                var width = 0;
+                var height = 0;
+                var defaultPreviewSizes = new string[] { "540", "360" };                                
+                if (upload != null && upload.ContentLength > 0)
+                {
+                    string fileExtension = upload.FileName.Substring(upload.FileName.LastIndexOf(".")).ToLower();
+
+                    var validExtension = (!string.IsNullOrEmpty(Settings.PicTypes)) ? Settings.PicTypes.Split(',') : "jpg,jpeg,png,gif".Split(',');
+                    if (!validExtension.Contains(fileExtension.Replace(".", "")))
+                    {
+                        model.ErrorInfo = new ErrorMassege()
+                        {
+                            title = "Ошибка",
+                            info = "Вы не можете загружать файлы данного формата",
+                            buttons = new ErrorMassegeBtn[]
+                            {
+                             new ErrorMassegeBtn { url = "#", text = "ок", action = "false", style="primary" }
+                            }
+                        };
+                        return View("Item", model);
+                    }
+
+                    var sizes = (!string.IsNullOrEmpty(Settings.MaterialPreviewImgSize)) ? Settings.MaterialPreviewImgSize.Split(',') : defaultPreviewSizes;
+                    int.TryParse(sizes[0], out width);
+                    int.TryParse(sizes[1], out height);
+                    bindData.Album.PreviewImage = new Photo()
+                    {
+                        Name = id.ToString() + fileExtension,
+                        Size = Files.FileAnliz.SizeFromUpload(upload),
+                        Url = Files.SaveImageResizeRename(upload, savePath, id.ToString(), width, height)
+                    };
+                }
+                #endregion
+
+
                 var getAlbum = _cmsRepository.getPhotoAlbumItem(id);
                 bindData.Album.Id = id;
-
                 var status = false;//если trueдобавляем в фотоальбом фотографии иначе - не добавляем
+                
                 //Определяем Insert или Update
                 if (getAlbum != null)
                     if (_cmsRepository.updPhotoAlbum(id, bindData.Album))
@@ -143,6 +181,9 @@ namespace Disly.Areas.Admin.Controllers
                     {userMessage.info = "Произошла ошибка";}
                 else
                 {
+                    //превью альбома
+                    
+
                     if (_cmsRepository.insPhotoAlbum(id, bindData.Album))
                     {
                         userMessage.info = "Запись добавлена";
@@ -152,8 +193,7 @@ namespace Disly.Areas.Admin.Controllers
                 }
                 if (status)
                 {
-                    #region save-photos
-                    string savePath = Settings.UserFiles + Domain + Settings.PhotoDir + bindData.Album.Date.ToString("yyyy") + "_" + bindData.Album.Date.ToString("MM") + "/" + bindData.Album.Date.ToString("dd") + "/" + id;
+                    #region save-photos                    
                     int counter = 0;
                     string serverPath = savePath;
 

@@ -397,6 +397,9 @@ namespace Disly.Areas.Admin.Controllers
                 case "documents":
                     Result = _cmsRepository.permit_Documents(id, permit);
                     break;
+                case "photos":
+                    Result = _cmsRepository.sortingPhotos(id, permit);
+                    break;
             }
             return Content(Result.ToString());
         }

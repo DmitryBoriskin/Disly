@@ -26,11 +26,13 @@
             </div>
 
             @if (Model.Album != null && Model.Album.Photos != null)
-            {
-                <div class="bubble_but">
-                    <a class="Button BtnSort" id="sorting_photo" title="Добавляет возможность сортировки элементов списка">Сортировать</a>
-                </div>
-                <ul class="photoalbum" data-service="/Admin/Services/ChangePermitPhoto" data-album="@Model.Album.Id">
+            {     
+                <div class="row">
+                    <div class="col-sm-7"><h3 class="nesting_title">Фотогорафии</h3></div>
+                    <div class="col-sm-5"><a class="button icon-sort pull-right" id="sorting_photo" data-action = "noPreloader-accept" title="Добавляет возможность сортировки элементов списка">Сортировать</a></div>
+                </div>               
+
+                <ul class="photoalbum" data-service="/Admin/Services/ChangePermit?group=photos" data-album="@Model.Album.Id">
                     @foreach (PhotoModel photo in Model.Album.Photos)
                     {
                         <li>

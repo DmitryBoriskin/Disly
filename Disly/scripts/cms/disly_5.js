@@ -138,6 +138,18 @@ $(document).ready(function () {
     });
 
 
+    $('#sorting_photo').click(function () {
+        if ($('.photoalbum').hasClass('Sortable')) {
+            location.reload();
+        }
+        else {
+            $('.photoalbum').addClass('Sortable');
+            $('.Sortable').each(function () { sortingPhotoInit($(this)); });        
+        }
+
+        
+    });
+
 
 
     // Изменение приоритета
@@ -536,6 +548,35 @@ function setCursor() {
     else if ($('.content input[required]').val() === '') $('.content input[required]:first').focus();
     else if ($('.content input:not([type=file]):not([data-focus=False])').length > 0) $('.content input:not([type=file]):not([data-focus=False]):first').focus();
 }
+
+
+
+function sortingPhotoInit(Object) {
+    Object.sortable({
+        axis: "x, y",
+        start: function () { $(this).addClass('Active'); },
+        stop: function (event, ui) {
+            $(this).removeClass('Active');
+            var _Album = $('.photoalbum').data('album');
+            var _ServiceUrl = $(this).attr('data-service');
+            var _SortableItem = ui.item;
+            var _Id = _SortableItem.find('div').attr('data-id');
+            var _Num = $(this).find('.ui-sortable-handle').index(_SortableItem) + 1;
+            //var _section = _SortableItem.attr('data-section');
+
+            _ServiceUrl = _ServiceUrl;
+
+            $.ajax({
+                type: 'POST',
+                url: _ServiceUrl,
+                data: { album: _Album, id: _Id, permit: _Num },
+                error: function () { Content = '<div>Error!</div>'; },
+                success: function (data) { }
+            });
+        }
+    }).disableSelection();
+}
+
 
 // TinyMCE
 function InitTinyMCE(id, _width, _height, directory) {

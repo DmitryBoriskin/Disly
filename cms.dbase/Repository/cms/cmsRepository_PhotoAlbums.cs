@@ -28,18 +28,18 @@ namespace cms.dbase
                     }
                     query = query.OrderBy(o => o.d_date);
                     int itemCount = query.Count();
-                    var photoalbumsList = query
-                                            .Skip(filter.Size * (filter.Page - 1))
-                                            .Take(filter.Size)
-                                            .Select(s => new PhotoAlbum
-                                            {
-                                                Id=s.id,
-                                                Title=s.c_title,
-                                                Date=s.d_date,
-                                                PreviewImage=new Photo() { Url=s.c_preview}
-                                            });
-
-                    if (photoalbumsList.Any())
+                    if (query.Any())
+                    {
+                        var photoalbumsList = query
+                                        .Skip(filter.Size * (filter.Page - 1))
+                                        .Take(filter.Size)
+                                        .Select(s => new PhotoAlbum
+                                        {
+                                            Id = s.id,
+                                            Title = s.c_title,
+                                            Date = s.d_date,
+                                            PreviewImage = new Photo() { Url = s.c_preview }
+                                        });
                         return new PhotoAlbumList
                         {
                             Data = photoalbumsList.ToArray(),
@@ -51,6 +51,7 @@ namespace cms.dbase
                                 page_count = (itemCount % filter.Size > 0) ? (itemCount / filter.Size) + 1 : itemCount / filter.Size
                             }
                         };
+                    }                      
                 }
                 return null;
             }
@@ -73,12 +74,13 @@ namespace cms.dbase
                     var data = query.Single();
                     data.Photos = db.content_photoss
                                    .Where(w => w.f_album == id)
+                                   .OrderBy(o=>o.n_sort)
                                    .Select(s=>new PhotoModel() {
                                        PreviewImage=new Photo { Url=s.c_preview},
                                        Id=s.id,
                                        Title=s.c_title
                                    }).ToArray();
-                    return query.Single();
+                    return data;
                 }
                 return null;
             }
@@ -221,6 +223,33 @@ namespace cms.dbase
                 //catch { return false; }
             }
         }
+        public override bool sortingPhotos(Guid id, int num)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var data = db.content_photoss.Where(w => w.id == id).Select(s => new PhotoModel { AlbumId = s.f_album, Sort= s.n_sort }).First();
+                var AlbumId = data.AlbumId;
+
+                if (num > data.Sort)
+                {
+                    db.content_photoss.Where(w => w.f_album == AlbumId && w.n_sort > data.Sort && w.n_sort <= num)
+                        .Set(p => p.n_sort, p => p.n_sort - 1)
+                        .Update();
+                }
+                else
+                {
+                    db.content_photoss.Where(w => w.f_album == AlbumId && w.n_sort < data.Sort && w.n_sort >= num)
+                        .Set(p => p.n_sort, p => p.n_sort + 1)
+                        .Update();
+                }
+                db.content_photoss
+                    .Where(w => w.id == id)
+                    .Set(s => s.n_sort, num)
+                    .Update();
+            }
+            return true;
+        }
+
 
     }
 }
