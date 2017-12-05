@@ -1414,13 +1414,14 @@ namespace cms.dbase.models
 	[Table(Schema="dbo", Name="content_photoalbum")]
 	public partial class content_photoalbum
 	{
-		[PrimaryKey, NotNull    ] public Guid     id        { get; set; } // uniqueidentifier
-		[Column,     NotNull    ] public string   c_title   { get; set; } // varchar(512)
-		[Column,        Nullable] public string   c_preview { get; set; } // varchar(512)
-		[Column,        Nullable] public string   c_text    { get; set; } // varchar(max)
-		[Column,     NotNull    ] public DateTime d_date    { get; set; } // datetime
-		[Column,     NotNull    ] public string   f_site    { get; set; } // varchar(64)
-		[Column,        Nullable] public string   c_path    { get; set; } // varchar(1024)
+		[PrimaryKey, NotNull    ] public Guid     id         { get; set; } // uniqueidentifier
+		[Column,     NotNull    ] public string   c_title    { get; set; } // varchar(512)
+		[Column,        Nullable] public string   c_preview  { get; set; } // varchar(512)
+		[Column,        Nullable] public string   c_text     { get; set; } // varchar(max)
+		[Column,     NotNull    ] public DateTime d_date     { get; set; } // datetime
+		[Column,     NotNull    ] public string   f_site     { get; set; } // varchar(64)
+		[Column,        Nullable] public string   c_path     { get; set; } // varchar(1024)
+		[Column,     NotNull    ] public bool     c_disabled { get; set; } // bit
 
 		#region Associations
 

@@ -61,6 +61,12 @@ namespace Disly.Areas.Admin.Controllers
         public ActionResult Item(Guid id)
         {
             model.Album = _cmsRepository.getPhotoAlbumItem(id);
+            if (model.Album == null)
+            {
+                model.Album = new PhotoAlbum();
+                model.Album.Date = DateTime.Now;
+
+            }
             return View("Item", model);
         }
 
@@ -116,23 +122,28 @@ namespace Disly.Areas.Admin.Controllers
 
             if (ModelState.IsValid)
             {
+                
                 var getAlbum = _cmsRepository.getPhotoAlbumItem(id);
-
                 bindData.Album.Id = id;
-                bindData.Album.ContentLink = SiteInfo.Id;
+
+                var status = false;//если trueдобавляем в фотоальбом фотографии иначе - не добавляем
                 //Определяем Insert или Update
                 if (getAlbum != null)
                     if (_cmsRepository.updPhotoAlbum(id, bindData.Album))
                     {
+                        status = true;
                         userMessage.info = "Запись обновлена";
                     }
                     else
-                    {
-                        userMessage.info = "Произошла ошибка";
-                    }
+                    {userMessage.info = "Произошла ошибка";}
                 else
                 {
-                    userMessage.info = "Запись добавлена";
+                    if (_cmsRepository.insPhotoAlbum(id, bindData.Album))
+                    {
+                        userMessage.info = "Запись добавлена";
+                        status = true;
+                    }
+                    else{userMessage.info = "Произошла ошибка";}
                 }
                 userMessage.buttons = new ErrorMassegeBtn[]{
                      new ErrorMassegeBtn { url = StartUrl + Request.Url.Query, text = "Вернуться в список" },
@@ -142,7 +153,6 @@ namespace Disly.Areas.Admin.Controllers
             else
             {
                 userMessage.info = "Ошибка в заполнении формы. Поля в которых допушены ошибки - помечены цветом.";
-
                 userMessage.buttons = new ErrorMassegeBtn[]{
                      new ErrorMassegeBtn { url = "#", text = "ок", action = "false" }
                  };

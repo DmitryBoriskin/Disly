@@ -23,6 +23,9 @@ namespace cms.dbase
                     if (filter.SearchText != null) {
                         query = query.Where(w => (w.c_title.Contains(filter.SearchText)));
                     }
+                    if (filter.Disabled != null) {
+                        query = query.Where(w => w.c_disabled == filter.Disabled);
+                    }
                     query = query.OrderBy(o => o.d_date);
                     int itemCount = query.Count();
                     var photoalbumsList = query
@@ -56,7 +59,7 @@ namespace cms.dbase
         {
             using (var db = new CMSdb(_context))
             {
-                var data = db.content_photoalbums
+                var query = db.content_photoalbums
                            .Where(w => w.id == id)
                            .Select(s => new PhotoAlbum {
                                Id=s.id,
@@ -65,9 +68,17 @@ namespace cms.dbase
                                PreviewImage = new Photo() { Url = s.c_preview },
                                Text=s.c_text
                            });
-                if (data.Any())
+                if (query.Any())
                 {
-                    return data.Single();
+                    var data = query.Single();
+                    data.Photos = db.content_photoss
+                                   .Where(w => w.f_album == id)
+                                   .Select(s=>new PhotoModel() {
+                                       PreviewImage=new Photo { Url=s.c_preview},
+                                       Id=s.id,
+                                       Title=s.c_title
+                                   }).ToArray();
+                    return query.Single();
                 }
                 return null;
             }
@@ -91,25 +102,15 @@ namespace cms.dbase
                         cdPhotoAlbum = new content_photoalbum
                         {
                             id = ins.Id,
+                            f_site=_domain,
+                            c_path=ins.Path,
                             c_title = ins.Title,                            
                             c_text = ins.Text,
                             d_date = ins.Date,
                             c_preview = (ins.PreviewImage != null) ? ins.PreviewImage.Url : null                         
                         };
 
-                        // добавляем принадлежность к сущности(ссылку на организацию/событие/персону)
-                        var cdPhotoAlbumLink = new content_content_link
-                        {
-                            id = Guid.NewGuid(),
-                            f_content = ins.Id,
-                            f_content_type = ContentType.MATERIAL.ToString().ToLower(),
-                            f_link = ins.ContentLink,
-                            f_link_type = ins.ContentLinkType,
-                            b_origin = true
-                        };
-
-                        db.Insert(cdPhotoAlbum);
-                        db.Insert(cdPhotoAlbumLink);
+                        db.Insert(cdPhotoAlbum);                        
 
                         var log = new LogModel()
                         {
