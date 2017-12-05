@@ -27,5 +27,10 @@ namespace Disly.Areas.Admin.Models
         /// Список сотрудников по специализации
         /// </summary>
         public IEnumerable<EmployeeModel> EmployeeList { get; set; }
+
+        /// <summary>
+        /// Список всех врачей
+        /// </summary>
+        public IEnumerable<EmployeeModel> AllDoctors { get; set; }
     }
 }

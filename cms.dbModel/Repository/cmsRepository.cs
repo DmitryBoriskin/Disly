@@ -222,6 +222,7 @@ namespace cms.dbModel
         public abstract MainSpecialistList getMainSpecialistList(FilterParams filter);
         public abstract MainSpecialistModel getMainSpecialistItem(Guid id);
         public abstract EmployeeModel[] getEmployeeList(int[] specialisations);
+        public abstract EmployeeModel[] getEmployeeList();
         public abstract bool createMainSpecialist(MainSpecialistModel item);
         public abstract bool updateMainSpecialist(MainSpecialistModel item);
         public abstract bool deleteMainSpecialist(Guid id);

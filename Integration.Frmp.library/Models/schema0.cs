@@ -52,6 +52,8 @@ public partial class Employee {
     private string sNILSField;
     
     private string iNNField;
+
+    private string pictureField;
     
     private AddressEntity[] addressesField;
     
@@ -234,7 +236,20 @@ public partial class Employee {
             this.iNNField = value;
         }
     }
-    
+
+    /// <remarks/>
+    public string picture
+    {
+        get
+        {
+            return this.pictureField;
+        }
+        set
+        {
+            this.pictureField = value;
+        }
+    }
+
     /// <remarks/>
     public AddressEntity[] Addresses {
         get {

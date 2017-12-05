@@ -178,6 +178,18 @@ $(document).ready(function () {
         });
     }
 
+    $('#sorting_photo').click(function () {
+        if ($('.photoalbum').hasClass('Sortable')) {
+            location.reload();
+        }
+        else {
+            $('.photoalbum').addClass('Sortable');
+            $('.Sortable').each(function () { sortingPhotoInit($(this)); });        
+        }
+
+        
+    });
+
 
 
     // Изменение приоритета
@@ -363,7 +375,7 @@ $(document).ready(function () {
                 $People.find('select').removeAttr('required');
                 $Event.find('select').removeAttr('required');
                 break;
-            case 'people':
+            case 'spec':
                 $People.show();
                 $Org.removeClass('invalid');
                 $People.addClass('invalid');
@@ -398,7 +410,7 @@ $(document).ready(function () {
     if ($('#site_type').length > 0) {
         var $Type = $('#site_type');
         var $Org = $('#site_org');
-        var $People = $('#site_people');
+        var $People = $('#site_spec');
         var $Event = $('#site_event');
         var $ContentId = $('#Item_ContentId');
 

@@ -22,6 +22,11 @@ namespace Integration.Frmp.library
         public string DirName { get; set; }
 
         /// <summary>
+        /// Путь для сохранения изображений
+        /// </summary>
+        public string SaveImgPath { get; set; }
+
+        /// <summary>
         /// Название файла
         /// </summary>
         public string FileName { get; set; }
@@ -35,5 +40,6 @@ namespace Integration.Frmp.library
         /// Максимальная допустимая дата рождения сотрудника
         /// </summary>
         public DateTime MaxDate { get; set; }
+
     }
 }
