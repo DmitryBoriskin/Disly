@@ -177,6 +177,7 @@
     <Content Include="Content\img\asoft_logo.png" />
     <Content Include="Content\img\calendar-logo.png" />
     <Content Include="Content\img\doctor.png" />
+    <Content Include="Content\img\favicon.ico" />
     <Content Include="Content\img\foot_logo.png" />
     <Content Include="Content\img\gosuslugi.png" />
     <Content Include="Content\img\logo.png" />
@@ -868,6 +869,7 @@
     <Content Include="Views\Feedback\AnswerForm.cshtml" />
     <Content Include="Views\EventsFront\Index.cshtml" />
     <Content Include="Views\EventsFront\Item.cshtml" />
+    <Content Include="Views\Structure\part\boss_list.cshtml" />
     <Content Include="Views\MedicalServices\part\nav.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>

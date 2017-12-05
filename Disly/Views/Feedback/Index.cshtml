@@ -31,7 +31,14 @@
                                     <div id="feedback_@item.Id" class="feedback_item">
                                         <div class="feedback-item-date"><span>@item.Date.ToString("dd.MM.yyyy")</span></div>
                                         <div class="feedback-item-title" href="/">@shortTitle</div>
-                                        <div class="feedback-item-sender">@item.SenderName</div>
+                                        @if (item.Anonymous)
+                                        {
+                                            <div class="feedback-item-sender">Аноним</div>
+                                        }
+                                        else
+                                        {
+                                            <div class="feedback-item-sender">@item.SenderName</div>
+                                        }
                                         @if (item.Answer != null)
                                         {
                                             <div class="collapse feedback-item_info" id="collapseExample_@item.Id">
@@ -39,7 +46,7 @@
                                                 <div class="feedback-item-answerer">@item.Answerer</div>
                                             </div>
                                             <a class="feedback-item-more" role="button" data-toggle="collapse" href="#collapseExample_@item.Id" aria-expanded="false" aria-controls="collapseExample_@item.Id"></a>
-                                        }                                        
+                                        }
                                     </div>
                                 }
                             }
@@ -62,7 +69,6 @@
                                     <input type="text" class="filtr_data form-control" name="searchtext" id="search_news" value="@ViewBag.Filter.SearchText" />
                                 </div>
                             </div>
-
 
                             <div class="form-group col-sm-6 col-md-6 data_start_wr">
                                 <label class="label_filtr" for="data_start">Дата начала</label>

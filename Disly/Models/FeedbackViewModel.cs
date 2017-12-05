@@ -47,6 +47,10 @@ namespace Disly.Models
         /// </summary>
         public string SenderContacts { get; set; }
         /// <summary>
+        /// Отправить анонимно
+        /// </summary>
+        public bool Anonymous { get; set; }
+        /// <summary>
         /// Тема сообщения
         /// </summary>
         [Required]

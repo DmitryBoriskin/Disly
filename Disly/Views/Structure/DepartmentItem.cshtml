@@ -32,21 +32,7 @@
         </div>
         <div class="col-md-3 col-md-push-1">
             <div class="boss pull-right">
-                @if (Model.DepartmentItem.Boss != null)
-                {
-                    <a href="/doctors/@Model.DepartmentItem.Boss.Id" class="boss_img_wrap">
-                        @if (Model.DepartmentItem.Boss.Photo != null)
-                        {
-                            <img src="@Model.DepartmentItem.Boss.Photo" title="@Model.DepartmentItem.Boss.FIO"/>
-                        }
-                        else
-                        {
-                            <img src="~/Content/img/no_avatar.png" />
-                        }                        
-                    </a>
-                    <a class="boss_fio" href="/doctors/@Model.DepartmentItem.Boss.Id">@Model.DepartmentItem.Boss.FIO</a>                    
-                    <div class="boss_post">@Model.DepartmentItem.Boss.Post</div>
-                }                
+                @Html.Partial("part/boss_list") 
                 <a class="link_all" href="/doctors/?group=@Model.DepartmentItem.Id">все сотрудники</a>
             </div>
         </div>

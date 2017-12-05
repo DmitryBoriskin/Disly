@@ -1,0 +1,46 @@
+﻿@model StructureViewModel
+@if (Model.DepartmentItem.Boss != null)
+{
+    foreach (var boss in Model.DepartmentItem.Boss)
+    {
+        <a href="/doctors/@boss.Id" class="boss_img_wrap">
+            @if (boss.Photo != null)
+            {
+                <img src="@boss.Photo" title="@boss.FIO" />
+            }
+            else
+            {
+                <img src="~/Content/img/no_avatar.png" />
+            }
+        </a>
+                        <a class="boss_fio" href="/doctors/@boss.Id">@boss.FIO</a>
+        if (!String.IsNullOrEmpty(boss.Post))
+        {
+            <div class="boss_post">@boss.Post</div>
+        }
+
+    }
+}
+
+@if (Model.DepartmentItem.Sister != null)
+{
+    foreach (var boss in Model.DepartmentItem.Sister)
+    {
+        <a href="/doctors/@boss.Id" class="boss_img_wrap">
+            @if (boss.Photo != null)
+            {
+                <img src="@boss.Photo" title="@boss.FIO" />
+            }
+            else
+            {
+                <img src="~/Content/img/no_avatar.png" />
+            }
+        </a>
+                        <a class="boss_fio" href="/doctors/@boss.Id">@boss.FIO</a>
+        if (!String.IsNullOrEmpty(boss.Post))
+        {
+            <div class="boss_post">@boss.Post</div>
+        }
+
+    }
+} 
