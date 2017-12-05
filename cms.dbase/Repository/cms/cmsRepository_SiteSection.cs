@@ -26,7 +26,7 @@ namespace cms.dbase
                                 .Select(s => new SiteSectionModel() {
                                     Id=s.id,
                                     Title=s.c_title,
-                                    Alias=s.f_pege_type
+                                    Alias=s.f_page_type
                                 })
                                 .Skip(filtr.Size * (filtr.Page - 1))
                                 .Take(filtr.Size);
@@ -57,7 +57,7 @@ namespace cms.dbase
                            .Select(s => new SiteSectionModel {
                                Id=s.id,
                                Title=s.c_title,
-                               Alias=s.f_pege_type,
+                               Alias=s.f_page_type,
                                Url=s.c_url
                            });
                 if (data.Any()) return data.Single();
@@ -134,7 +134,7 @@ namespace cms.dbase
                             throw new Exception("Запись с таким Id не найдена");
 
                         cdSiteSection.c_title = upd.Title;
-                        cdSiteSection.f_pege_type = upd.Alias;
+                        cdSiteSection.f_page_type = upd.Alias;
                         cdSiteSection.c_url = upd.Url;
 
                         db.Update(cdSiteSection);
@@ -193,7 +193,7 @@ namespace cms.dbase
                             f_site="main",
                             id = sitesection.Id,
                             c_title = sitesection.Title,
-                            f_pege_type = sitesection.Alias,
+                            f_page_type = sitesection.Alias,
                             c_url= sitesection.Url
                         };
                         db.Insert(cdSiteSection);

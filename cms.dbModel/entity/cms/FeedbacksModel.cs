@@ -3,6 +3,27 @@ using System.ComponentModel.DataAnnotations;
 
 namespace cms.dbModel.entity
 {
+
+    public enum FeedbackType
+    {
+        /// <summary>
+        /// не определено
+        /// </summary>
+        undefined = 0,
+        /// <summary>
+        /// Вопрос по обратной связи
+        /// </summary>
+        appeal = 1,
+        /// <summary>
+        /// Отзыв
+        /// </summary>
+        review = 2,
+        /// <summary>
+        /// Часто задаваемые вопросы
+        /// </summary>
+        faq = 3
+    }
+
     /// <summary>
     /// Список отзывов с пейджером
     /// </summary>
@@ -41,6 +62,11 @@ namespace cms.dbModel.entity
         public string Text { get; set; }
 
         /// <summary>
+        /// Тип сообщения из обратной связи
+        /// </summary>
+        public FeedbackType Fbtype { get; set; }
+
+        /// <summary>
         /// Дата
         /// </summary>
         [Display(Name = "Дата")]
@@ -61,6 +87,11 @@ namespace cms.dbModel.entity
         /// контакты отправителя nvarchar(1024)
         /// </summary>
         public string SenderContacts { get; set; }
+
+        /// <summary>
+        /// Отправить анонимно
+        /// </summary>
+        public bool Anonymous { get; set; }
 
         /// <summary>
         /// ответ varchar(4096)
