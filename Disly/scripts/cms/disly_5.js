@@ -137,7 +137,7 @@ $(document).ready(function () {
         $(this).mask($(this).attr('data-mask'));
     });
 
-
+    //сортировка фотографий галлери
     $('#sorting_photo').click(function () {
         if ($('.photoalbum').hasClass('Sortable')) {
             location.reload();
@@ -145,10 +145,38 @@ $(document).ready(function () {
         else {
             $('.photoalbum').addClass('Sortable');
             $('.Sortable').each(function () { sortingPhotoInit($(this)); });        
-        }
-
-        
+        }        
     });
+    //удаление фотогрфии из галлереи
+    if ($('.photoalbum').length > 0) {
+        // Центрирование фотографий по вертикали в фотоальбоме
+        var photoImg = $('.photoalbum').find('img');
+        photoImg.each(function () {
+            var margin = ($(this).parent().height() - $(this).height()) / 2;
+            $(this).css('margin', margin + 'px 0');
+        });
+
+        // Удаление фотографий из альбома
+        $('.delPhoto').click(function () {
+            var elem = $(this);
+            var id = $(this).attr('data-id');
+            $.ajax({
+                type: "POST",
+                url: '/admin/photoalbums/DeletePhoto/' + id,
+                contentType: false,
+                processData: false,
+                data: false,
+                success: function (result) {
+                    if (result == "true") {
+                        elem.parent().remove()
+                    }
+                    else {
+                        if (result !== '') alert(result);
+                    }
+                }
+            });
+        });
+    }
 
 
 

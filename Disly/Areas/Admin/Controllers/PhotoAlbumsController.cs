@@ -359,7 +359,50 @@ namespace Disly.Areas.Admin.Controllers
             return View("Item", model);
         }
 
-        
+
+        // Удаление одной фотографии из фотоальбома
+        [HttpPost]
+        public string DeletePhoto(string id)
+        {
+            PhotoModel photo = _cmsRepository.getPhotoItem(Guid.Parse(id));
+            if (photo != null)
+            {
+                string photoPath = photo.PhotoImage.Url.ToString();
+                string previewPath = photo.PreviewImage.Url.ToString();
+                if (_cmsRepository.delPhotoItem(Guid.Parse(id)))
+                {
+                    try
+                    {
+                        if (System.IO.File.Exists(Server.MapPath(photoPath)))
+                        {
+                            System.IO.File.Delete(Server.MapPath(photoPath));
+                            System.IO.File.Delete(Server.MapPath(previewPath));
+                            return "true";
+                        }
+                        else return "Не удалось удалить фотографию.";
+                    }
+                    catch (IOException)
+                    {
+                        Thread.Sleep(0);
+                        if (System.IO.File.Exists(Server.MapPath(photoPath)))
+                        {
+                            System.IO.File.Delete(Server.MapPath(photoPath));
+                            System.IO.File.Delete(Server.MapPath(previewPath));
+                            return "true";
+                        }
+                        else return "Не удалось удалить фотографию.";
+                    }
+                }
+                else return "Не удалось удалить фотографию.";
+
+
+            }
+            return "Не удалось удалить фотографию.";
+
+            
+
+            //return (_repository.deletePhoto(Guid.Parse(id))) ? "" : "Не удалось удалить фотографию.";
+        }
 
     }
 }

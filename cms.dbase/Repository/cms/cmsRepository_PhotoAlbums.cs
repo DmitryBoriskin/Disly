@@ -85,6 +85,7 @@ namespace cms.dbase
                 return null;
             }
         }
+        
         public override bool insPhotoAlbum(Guid id, PhotoAlbum ins)
         {
             try
@@ -250,6 +251,50 @@ namespace cms.dbase
             return true;
         }
 
+        public override PhotoModel getPhotoItem(Guid id)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var query = db.content_photoss.Where(w => w.id == id);
+                if (query.Any())
+                {
+                    return query.Select(s => new PhotoModel
+                    {
+                        Id = s.id,
+                        PhotoImage = new Photo { Url = s.c_photo },
+                        PreviewImage = new Photo { Url = s.c_preview }
+                    }).SingleOrDefault();
 
+                }
+                return null;
+            }
+        }
+        public override bool delPhotoItem(Guid id)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                using (var tran = db.BeginTransaction())
+                {
+
+                    var data = db.content_photoss.Where(w=>w.id==id);
+                    if (data.Any())
+                    {
+                        Guid AlbumId = data.Single().f_album;
+                        int ThisSort = data.Single().n_sort;
+                        // удаление фотографии
+                        data.Delete();
+                        //корректировка порядка
+                        db.content_photoss
+                            .Where(w => (w.f_album == AlbumId && w.n_sort > ThisSort))
+                            .Set(u => u.n_sort, u => u.n_sort - 1)
+                            .Update();
+                        tran.Commit();
+                        return true;
+                    }
+                    return false;
+                }                    
+
+            }
+        }
     }
 }
