@@ -3,6 +3,7 @@ using cms.dbModel.entity;
 using Disly.Models;
 using System;
 using System.IO;
+using System.Linq;
 using System.Web.Mvc;
 
 namespace Disly.Controllers
@@ -58,7 +59,10 @@ namespace Disly.Controllers
             #endregion
             return View(_ViewName, model);
         }
-
+        /// <summary>
+        /// Форма отправки обращения
+        /// </summary>
+        /// <returns></returns>
         public ActionResult Form()
         {
             model.Child = (model.CurrentPage != null && model.CurrentPage.ParentId.HasValue)
@@ -84,7 +88,11 @@ namespace Disly.Controllers
 
             return View(_ViewName, model);
         }
-
+        /// <summary>
+        /// Отправка обращения
+        /// </summary>
+        /// <param name="bindData"></param>
+        /// <returns></returns>
         [HttpPost]
         [MultiButton(MatchFormKey = "action", MatchFormValue = "send-btn")]
         public ActionResult Form(FeedbackFormViewModel bindData)
@@ -109,7 +117,11 @@ namespace Disly.Controllers
             ViewBag.captchaKey = Settings.CaptchaKey;
 
             var newId = Guid.NewGuid();
-            if (ModelState.IsValid)
+            string PrivateKey = Settings.SecretKey;
+            string EncodedResponse = Request["g-Recaptcha-Response"];
+            bool IsCaptchaValid = (ReCaptchaClass.Validate(PrivateKey, EncodedResponse) == "True" ? true : false);
+
+            if (ModelState.IsValid && IsCaptchaValid)
             {
                 var newMessage = new FeedbackModel()
                 {
@@ -139,7 +151,7 @@ namespace Disly.Controllers
                     }
 
                     var feedback = _repository.getFeedbackItem(newId);
-                    var code = (feedback!= null && feedback.AnswererCode != null)? feedback.AnswererCode: Guid.NewGuid();
+                    var code = (feedback != null && feedback.AnswererCode != null) ? feedback.AnswererCode : Guid.NewGuid();
 
                     #region отправка сообщение на e-mail.ru
 
@@ -183,15 +195,13 @@ namespace Disly.Controllers
                     letter.Theme = "Сайт " + Domain + ": Обратная связь";
                     letter.Text = msgText;
                     letter.Attachments = savedFileName;
-                    letter.MailTo = "s-kuzmina@it-serv.ru"; //"internet@it-serv.ru";
-                    //if (organization == null)
-                    //{
-                    //    Letter.MailTo = Model.SitesItemInfo.C_Email;
-                    //}
-                    //else
-                    //{
-                    //    Letter.MailTo = organization.Email;
-                    //}
+                    letter.MailTo = Settings.mailTo; //"s-kuzmina@it-serv.ru";
+
+                    var admins = _repository.getSiteAdmins();
+                    if (admins != null)
+                    {
+                        letter.MailTo = string.Join(";", admins.Select(s => s.EMail.ToString()));
+                    }
 
                     var errorText = letter.SendMail();
                     #endregion
@@ -214,7 +224,7 @@ namespace Disly.Controllers
         }
 
         /// <summary>
-        /// Форма для отправки сообщения
+        /// Форма для отправки ответа на обращение
         /// </summary>
         /// <param name="id"></param>
         /// <param name="code"></param>
@@ -235,12 +245,8 @@ namespace Disly.Controllers
             ViewBag.KeyWords = PageKeyw;
             #endregion
 
-            ViewBag.ByEmail = false;
-            ViewBag.Publish = false;
-            ViewBag.captchaKey = Settings.CaptchaKey;
-
             var feedbackItem = _repository.getFeedbackItem(id);
-            if(feedbackItem == null || (feedbackItem!= null && feedbackItem.AnswererCode.HasValue && feedbackItem.AnswererCode.Value != code))
+            if (feedbackItem == null || (feedbackItem != null && feedbackItem.AnswererCode.HasValue && feedbackItem.AnswererCode.Value != code))
             {
                 var errorModel = new ErrorViewModel()
                 {
@@ -252,10 +258,19 @@ namespace Disly.Controllers
                 return View("~/Views/Error/Index.cshtml", errorModel);
             }
 
+            ViewBag.ByEmail = false;
+            ViewBag.Publish = false;
+            ViewBag.captchaKey = Settings.CaptchaKey;
+
             model.Item = feedbackItem;
             return View(_ViewName, model);
         }
 
+        /// <summary>
+        /// Отправка ответа на обращение
+        /// </summary>
+        /// <param name="bindData"></param>
+        /// <returns></returns>
         [HttpPost]
         [MultiButton(MatchFormKey = "action", MatchFormValue = "answer-btn")]
         public ActionResult AnswerForm(FeedbackAnswerFormViewModel bindData)
@@ -281,7 +296,11 @@ namespace Disly.Controllers
             if (feedbackItem == null || (feedbackItem != null && feedbackItem.AnswererCode.HasValue && feedbackItem.AnswererCode.Value != bindData.AnswererCode))
                 throw new Exception("Попытка отправить ответ на сообщение с неверным кодом!");
 
-            if (ModelState.IsValid)
+            string PrivateKey = Settings.SecretKey;
+            string EncodedResponse = Request["g-Recaptcha-Response"];
+            bool IsCaptchaValid = (ReCaptchaClass.Validate(PrivateKey, EncodedResponse) == "True" ? true : false);
+
+            if (ModelState.IsValid && IsCaptchaValid)
             {
                 feedbackItem.Answer = bindData.Answer;
                 feedbackItem.Answerer = bindData.Answerer;
@@ -290,6 +309,7 @@ namespace Disly.Controllers
                 var res = _repository.updateFeedbackItem(feedbackItem);
                 if (res)
                 {
+                    //Если стоит галочка отправить ответ по емайл
                     if (bindData.ByEmail)
                     {
                         #region отправка сообщение на e-mail.ru
@@ -337,7 +357,6 @@ namespace Disly.Controllers
                         var errorText = letter.SendMail();
                         #endregion
                     }
-
                     ViewBag.FormStatus = "send";
                 }
             }
