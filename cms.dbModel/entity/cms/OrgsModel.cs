@@ -345,7 +345,8 @@ namespace cms.dbModel.entity
         /// Сотрудники
         /// </summary>
         public People[] Peoples { get; set; }
-        public People Boss { get; set; }
+        public People[] Boss { get; set; }
+        public People[] Sister { get; set; }
     }
 
     /// <summary>

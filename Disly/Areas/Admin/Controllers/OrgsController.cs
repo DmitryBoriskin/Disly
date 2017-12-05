@@ -475,7 +475,7 @@ namespace Disly.Areas.Admin.Controllers
                            new List<SelectListItem>
                            {
                             new SelectListItem { Text = "Не выбрано", Value =""},
-                            new SelectListItem { Text = "Начальник отделения", Value ="boss"},
+                            new SelectListItem { Text = "Руководитель", Value ="boss"},
                             new SelectListItem { Text = "Старшая медсестра", Value = "sister" },
                            }, "Value", "Text"
                        );
@@ -663,7 +663,7 @@ namespace Disly.Areas.Admin.Controllers
                    new List<SelectListItem>
                    {
                         new SelectListItem { Text = "Не выбрано", Value =""},
-                        new SelectListItem { Text = "Начальник отделения", Value ="boss"},
+                        new SelectListItem { Text = "Руководитель", Value ="boss"},
                         new SelectListItem { Text = "Старшая медсестра", Value = "sister" },
                    }, "Value", "Text"
                );

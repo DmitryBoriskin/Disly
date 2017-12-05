@@ -1179,8 +1179,8 @@ namespace cms.dbase
                                  Id = s.id,
                                  FIO = s.c_surname + " " + s.c_name + " " + s.c_patronymic,
                                  IdLinkOrg = s.idOrgLink,
-                                 Post=s.c_post,
-                                 Status=s.c_status
+                                 Post= s.c_post,
+                                 Status = (s.c_status == "boss") ? "Руководитель" : (s.c_status == "sister") ? "Старшая медсестра" : null
                              });
                 if (data.Any()) return data.ToArray();
                 return null;

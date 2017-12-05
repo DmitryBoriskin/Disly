@@ -868,7 +868,7 @@ namespace cms.dbase
                     {
                         data.Phones = Phones.ToArray();
                     }
-                    var People = db.content_sv_people_departments.Where(w => w.f_department == Id)
+                    var People = db.content_sv_people_departments.Where(w => w.f_department == Id).OrderBy(o=>new {o.c_surname,o.c_name,o.c_patronymic })
                                     .Select(s => new People()
                                     {
                                         Id = s.id,
@@ -879,21 +879,9 @@ namespace cms.dbase
 
                     if (People.Any())
                     {
-                        data.Peoples = People.ToArray();
+                        data.Boss = People.Where(w => w.Status == "boss").ToArray();
+                        data.Sister = People.Where(w=>w.Status== "sister").ToArray();                        
                     }
-
-                    var Boss = db.content_peoples.Where(w => w.id == data.DirectorF)
-                                    .Select(s => new People()
-                                    {
-                                        Id = s.id,
-                                        FIO = s.c_surname + " " + s.c_name + " " + s.c_patronymic,
-                                        Post = data.DirecorPost
-                                    });
-                    if (Boss.Any())
-                    {
-                        data.Boss = Boss.First();
-                    }
-
                     return data;
                 }
                 return null;
@@ -948,17 +936,17 @@ namespace cms.dbase
                     }
 
                     var Boss = db.content_peoples.Where(w => w.id == data.DirectorF)
-                                    .Select(s => new People()
-                                    {
-                                        Id = s.id,
-                                        FIO = s.c_surname + " " + s.c_name + " " + s.c_patronymic,
-                                        Post = data.DirecorPost
-                                    });
+                                                 .Select(s => new People()
+                                                 {
+                                                     Id = s.id,
+                                                     FIO = s.c_surname + " " + s.c_name + " " + s.c_patronymic,
+                                                     Post = data.DirecorPost
+                                                 });
+
                     if (Boss.Any())
                     {
-                        data.Boss = Boss.Single();
+                        data.Boss = Boss.ToArray();
                     }
-
                     return data;
                 }
 
