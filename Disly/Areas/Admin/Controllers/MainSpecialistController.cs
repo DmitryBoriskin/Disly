@@ -74,7 +74,7 @@ namespace Disly.Areas.Admin.Controllers
             #endregion
 
             model.Item = _cmsRepository.getMainSpecialistItem(id);
-
+            
             if (model.Item != null)
             {
                 IEnumerable<int> specs;
@@ -91,6 +91,9 @@ namespace Disly.Areas.Admin.Controllers
                 // список сотрудников для данных специализаций
                 model.EmployeeList = _cmsRepository.getEmployeeList(specs.ToArray());
             }
+
+            // список всех сотрудников
+            model.AllDoctors = _cmsRepository.getEmployeeList();
 
             return View("Item", model);
         }

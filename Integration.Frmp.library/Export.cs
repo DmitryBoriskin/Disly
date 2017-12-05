@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using LinqToDB;
-using System.Xml.Linq;
 using Integration.Frmp.models;
-using AutoMapper;
 using System.Xml.Serialization;
 using Integration.Frmp.library.Models;
 using System.Text;
-using System.Xml;
+using System.Drawing;
+using System.Drawing.Imaging;
 
 namespace Integration.Frmp.library
 {
@@ -55,7 +54,7 @@ namespace Integration.Frmp.library
                     });
                     try
                     {
-                        ImportOrganization(orgs);
+                        //ImportOrganization(orgs);
                     }
                     catch (Exception e)
                     {
@@ -70,7 +69,7 @@ namespace Integration.Frmp.library
                         .ToArray();
                     try
                     {
-                        ImportPosts(posts);
+                        //ImportPosts(posts);
                     }
                     catch (Exception e)
                     {
@@ -107,7 +106,7 @@ namespace Integration.Frmp.library
 
                     try
                     {
-                        ImportEmployeePostsLinks(postsEmployee);
+                        //ImportEmployeePostsLinks(postsEmployee);
                     }
                     catch (Exception e)
                     {
@@ -116,7 +115,7 @@ namespace Integration.Frmp.library
 
                     try
                     {
-                        FinalizeIntegration();
+                        //FinalizeIntegration();
                     }
                     catch (Exception e)
                     {
@@ -257,6 +256,7 @@ namespace Integration.Frmp.library
                     string snilsToCheck = employees[i].SNILS; // СНИЛС для проверки
                     Guid orgOid = employees[i].UZ.ID; // идентификатор организации
                     //string orgOid = employees[i].UZ.ID.ToString(); // идентификатор организации
+                    string photo = null; // изображение
 
                     // проверка валидности СНИЛС
                     string snils = string.Empty;
@@ -264,6 +264,13 @@ namespace Integration.Frmp.library
                     if (CheckSnils(snilsToCheck))
                     {
                         snils = snilsToCheck.Replace("-", "");
+
+                        #region Сохранение изображений
+                        if (!string.IsNullOrWhiteSpace(employees[i].picture))
+                        {
+                            photo = ImageResizing(snils, employees[i].picture);
+                        }
+                        #endregion
 
                         // проверим существует ли запись с таким СНИЛС в таблице dbo.import_frmp_peoples
                         var query = db.ImportFrmpPeopless.Where(w => w.CSnils.Equals(snils));
@@ -282,24 +289,25 @@ namespace Integration.Frmp.library
                                 .Value(v => v.DBirthdate, birthDate)
                                 .Value(v => v.DModify, modifyDate)
                                 .Value(v => v.XmlInfo, stringXml)
+                                .Value(v => v.CPhoto, photo)
                                 .Insert();
                         }
 
-                        // записываем данные в таблицу dbo.import_frmp_orgs_peoples
-                        var queryLink = db.ImportFrmpOrgsPeopless
-                                .Where(w => w.FGuid.Equals(orgOid))
-                                .Where(w => w.FPeople.Equals(id));
+                        //// записываем данные в таблицу dbo.import_frmp_orgs_peoples
+                        //var queryLink = db.ImportFrmpOrgsPeopless
+                        //        .Where(w => w.FGuid.Equals(orgOid))
+                        //        .Where(w => w.FPeople.Equals(id));
 
-                        // проверим существует ли связь сотрудника с организацией
-                        bool isLinkExist = queryLink.Any();
-                        if (!isLinkExist)
-                        {
-                            db.ImportFrmpOrgsPeopless
-                                //.Value(v => v.FOid, orgOid)
-                                .Value(v => v.FGuid, orgOid)
-                                .Value(v => v.FPeople, id)
-                                .Insert();
-                        }
+                        //// проверим существует ли связь сотрудника с организацией
+                        //bool isLinkExist = queryLink.Any();
+                        //if (!isLinkExist)
+                        //{
+                        //    db.ImportFrmpOrgsPeopless
+                        //        //.Value(v => v.FOid, orgOid)
+                        //        .Value(v => v.FGuid, orgOid)
+                        //        .Value(v => v.FPeople, id)
+                        //        .Insert();
+                        //}
 
                         if (i > 0 && i % 1000 == 0)
                             SrvcLogger.Debug("{WORK}", string.Format("Импортированно {0} сотрудников из {1}", i, employees.Count()));
@@ -420,6 +428,73 @@ namespace Integration.Frmp.library
             }
 
             return false;
+        }
+
+        /// <summary>
+        /// Обработка bs64
+        /// </summary>
+        /// <param name="image"></param>
+        /// <returns></returns>
+        private static string FixBase64ForImage(string image)
+        {
+            StringBuilder sbText = new StringBuilder(image, image.Length);
+            sbText.Replace("\r\n", string.Empty);
+            sbText.Replace(" ", string.Empty);
+
+            return sbText.ToString();
+        }
+
+        /// <summary>
+        /// Кодировка
+        /// </summary>
+        /// <param name="mimeType"></param>
+        /// <returns></returns>
+        private static ImageCodecInfo GetEncoderInfo(String mimeType)
+        {
+            foreach (var enc in ImageCodecInfo.GetImageEncoders())
+                if (enc.MimeType.ToLower() == mimeType.ToLower())
+                    return enc;
+            return null;
+        }
+
+        /// <summary>
+        /// Сохраняем изображение
+        /// </summary>
+        /// <returns></returns>
+        private static string ImageResizing(string snils, string img)
+        {
+            ImageCodecInfo myImageCodecInfo = GetEncoderInfo("image/jpeg");
+            EncoderParameters myEncoderParameters = new EncoderParameters(1);
+            myEncoderParameters.Param[0] = new EncoderParameter(System.Drawing.Imaging.Encoder.Quality, 100L);
+
+            Byte[] bitmapData = Convert.FromBase64String(FixBase64ForImage(img));
+            MemoryStream streamBitmap = new MemoryStream(bitmapData);
+            Bitmap bitImage = new Bitmap((Bitmap)Image.FromStream(streamBitmap));
+
+            int width = 225; // ширина
+            int height = 225; // высота
+
+            bitImage = Imaging.Resize(bitImage, width, height, "top", "center");
+
+            string directoryPath = param.SaveImgPath + snils; // путь до директории
+
+            if (!Directory.Exists(directoryPath))
+            {
+                Directory.CreateDirectory(directoryPath);
+            }
+
+            string extension = ".jpg"; // расширение
+            string filePath = directoryPath + "\\" + snils + extension; // полный путь 
+
+            if (File.Exists(filePath))
+            {
+                File.Delete(filePath);
+            }
+
+            bitImage.Save(filePath, myImageCodecInfo, myEncoderParameters);
+            bitImage.Dispose();
+
+            return "/Userfiles/persons/" + snils + "/" + snils + extension;
         }
     }
 }

@@ -113,7 +113,7 @@ namespace Disly.Areas.Admin.Controllers
                     {
                         new SelectListItem { Text = "Не выбрано", Value =""},
                         new SelectListItem { Text = "Организация", Value ="org"},
-                        new SelectListItem { Text = "Врач", Value = "people" },
+                        new SelectListItem { Text = "Главный специалист", Value = "spec" },
                         new SelectListItem { Text = "Событие", Value = "event" }
                     }, "Value", "Text", OrgType
                 );
@@ -122,7 +122,7 @@ namespace Disly.Areas.Admin.Controllers
             var evfilter = FilterParams.Extend<EventFilter>(filter);
 
             model.OrgsList = new SelectList(_cmsRepository.getOrgs(orgfilter, null), "Id", "Title", ContentId);
-            model.PeopleList = new SelectList(_cmsRepository.getPersonList(filter).Data, "Id", "FIO", ContentId);
+            model.MainSpecialistList = new SelectList(_cmsRepository.getMainSpecialistList(filter).Data, "Id", "Name", ContentId);
             model.EventsList = new SelectList(_cmsRepository.getEventsList(evfilter).Data, "Id", "Title", ContentId);
             #endregion
             return View("Master", model);
@@ -183,28 +183,6 @@ namespace Disly.Areas.Admin.Controllers
 
             if (ModelState.IsValid)
             {
-                #region ///
-                //    //main_Sites
-                //    _repository.createSite(id, input.Site);
-
-                //    //main_SitesDomainList
-                //    SitesDomainModel sitedomain = new SitesDomainModel()
-                //    {
-                //        Id = Guid.NewGuid(),
-                //        SiteId = input.Site.C_Domain,
-                //        Domain = input.Site.C_Domain + "." + Request.Url.Authority.Substring(0, Request.Url.Authority.LastIndexOf(":"))
-                //    };
-                //    _repository.createSiteDomain(sitedomain);
-
-                //    //cms_UserSiteLink
-                //    UserSiteLink usersitelink = new UserSiteLink()
-                //    {
-                //        SiteId = input.Site.C_Domain,
-                //        UserId = input.User.Id
-                //    };
-                //    _repository.createUserSiteLink(usersitelink); 
-                #endregion
-
                 // дополнительные домены
                 List<string> domains = new List<string>();
                 domains.Add(back_model.Item.Alias + ".localhost");
@@ -283,14 +261,14 @@ namespace Disly.Areas.Admin.Controllers
                     {
                         new SelectListItem { Text = "Не выбрано", Value =""},
                         new SelectListItem { Text = "Организация", Value ="org"},
-                        new SelectListItem { Text = "Врач", Value = "people" },
+                        new SelectListItem { Text = "Главный специалист", Value = "spec" },
                         new SelectListItem { Text = "Событие", Value = "event" }
                     }, "Value", "Text", OrgType
                 );
             var orgfilter = FilterParams.Extend<OrgFilter>(filter);
             var evfilter = FilterParams.Extend<EventFilter>(filter);
             model.OrgsList = new SelectList(_cmsRepository.getOrgs(orgfilter, null), "Id", "Title", ContentId);
-            model.PeopleList = new SelectList(_cmsRepository.getPersonList(filter).Data, "Id", "FIO", ContentId);
+            model.MainSpecialistList = new SelectList(_cmsRepository.getMainSpecialistList(filter).Data, "Id", "Name", ContentId);
             model.EventsList = new SelectList(_cmsRepository.getEventsList(evfilter).Data, "Id", "Title", ContentId);
             #endregion
 

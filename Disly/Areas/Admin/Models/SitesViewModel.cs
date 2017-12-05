@@ -36,7 +36,7 @@ namespace Disly.Areas.Admin.Models
         /// <summary>
         /// Список людей
         /// </summary>
-        public SelectList PeopleList { get; set; }
+        public SelectList MainSpecialistList { get; set; }
 
         /// <summary>
         /// Список тем

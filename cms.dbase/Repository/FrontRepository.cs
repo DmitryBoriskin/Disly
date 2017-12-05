@@ -496,7 +496,7 @@ namespace cms.dbase
 
                     // берём последние 3 новости данной группы
                     if (query.Any())
-                        list.AddRange(query.Take(5));
+                        list.AddRange(query.Take(2));
                 }
 
                 if (list.Any())

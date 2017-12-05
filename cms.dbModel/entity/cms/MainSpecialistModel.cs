@@ -27,7 +27,12 @@ namespace cms.dbModel.entity.cms
         /// Специализация
         /// </summary>
         public int[] Specialisations { get; set; }
-        
+
+        /// <summary>
+        /// Идентификатор сайта
+        /// </summary>
+        public Guid? SiteId { get; set; }
+
         /// <summary>
         /// Главные специалисты
         /// </summary>
