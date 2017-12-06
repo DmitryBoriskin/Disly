@@ -2107,5 +2107,44 @@ namespace cms.dbase
                 return query.SingleOrDefault();
             }
         }
+
+
+
+
+        public override PhotoModel[] getPhotoList(Guid id)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                //var query = db.content_photoalbums
+                //           .Where(w => w.id == id)
+                //           .Select(s => new PhotoAlbum
+                //           {
+                //               Id = s.id,
+                //               Path = s.c_path,
+                //               Title = s.c_title,
+                //               Date = s.d_date,
+                //               PreviewImage = new Photo() { Url = s.c_preview },
+                //               Text = s.c_text
+                //           });
+
+
+                var query = db.content_photoss
+                               .Where(w => w.f_album == id);
+                if (query.Any())
+                {
+                                   var data=query.OrderBy(o => o.n_sort)
+                                   .Select(s => new PhotoModel()
+                                   {
+                                       PreviewImage = new Photo { Url = s.c_preview },
+                                       Id = s.id,
+                                       Title = s.c_title
+                                   }).ToArray();
+                    return data;
+                }
+                    
+              
+                return null;
+            }
+        }
     }
 }

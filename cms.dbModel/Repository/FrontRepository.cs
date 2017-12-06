@@ -80,5 +80,8 @@ namespace cms.dbModel
         // события
         public abstract EventsList getEvents(FilterParams filter);
         public abstract EventsModel getEvent(int num, string alias);
+
+        //фотоальбом
+        public abstract PhotoModel[] getPhotoList(Guid id);
     }
 }
