@@ -63,7 +63,7 @@ namespace Disly.Areas.Admin.Controllers
         {
             EventsModel[] events = null;
             OrgsModel[] orgs = null;
-            model.Item = _cmsRepository.getMaterial(Id, Domain);
+            model.Item = _cmsRepository.getMaterial(Id);
             if (model.Item == null)
             {
                 model.Item = new MaterialsModel()
@@ -73,13 +73,11 @@ namespace Disly.Areas.Admin.Controllers
                 };
             }
 
-            if (model.Item.PreviewImage != null)
+            if (model.Item.PreviewImage != null && model.Item.PreviewImage != null && !string.IsNullOrEmpty(model.Item.PreviewImage.Url))
             {
                 var photo = model.Item.PreviewImage;
-                if (!string.IsNullOrEmpty(photo.Url))
-                {
-                    model.Item.PreviewImage = Files.getInfoImage(photo.Url);
-                }
+                model.Item.PreviewImage = Files.getInfoImage(photo.Url);
+                model.Item.PreviewImage.Source = photo.Source;
             }
 
             //Заполняем для модели связи с другими объектами
@@ -157,7 +155,7 @@ namespace Disly.Areas.Admin.Controllers
             if (ModelState.IsValid)
             {
                 var res = false;
-                var getMaterial = _cmsRepository.getMaterial(Id, Domain);
+                var getMaterial = _cmsRepository.getMaterial(Id);
 
                 // добавление необходимых полей перед сохранением модели
                 bindData.Item.Id = Id;
@@ -177,7 +175,7 @@ namespace Disly.Areas.Admin.Controllers
                     var validExtension = (!string.IsNullOrEmpty(Settings.PicTypes)) ? Settings.PicTypes.Split(',') : "jpg,jpeg,png,gif".Split(',');
                     if(!validExtension.Contains(fileExtension.Replace(".","")))
                     {
-                        model.Item = _cmsRepository.getMaterial(Id, Domain);
+                        model.Item = _cmsRepository.getMaterial(Id);
 
                         model.ErrorInfo = new ErrorMassege()
                         {
@@ -198,7 +196,8 @@ namespace Disly.Areas.Admin.Controllers
                     {
                         Name = Id.ToString() + fileExtension,
                         Size = Files.FileAnliz.SizeFromUpload(upload),
-                        Url = Files.SaveImageResizeRename(upload, savePath, Id.ToString(), width, height)
+                        Url = Files.SaveImageResizeRename(upload, savePath, Id.ToString(), width, height),
+                        Source = bindData.Item.PreviewImage.Source
                     };
                 }
                 #endregion
@@ -241,10 +240,12 @@ namespace Disly.Areas.Admin.Controllers
                  };
             }
 
-            model.Item = _cmsRepository.getMaterial(Id, Domain);
+            model.Item = _cmsRepository.getMaterial(Id);
             if (model.Item != null && model.Item.PreviewImage != null && !string.IsNullOrEmpty(model.Item.PreviewImage.Url))
             {
+                var photo = model.Item.PreviewImage;
                 model.Item.PreviewImage = Files.getInfoImage(model.Item.PreviewImage.Url);
+                model.Item.PreviewImage.Source = photo.Source;
             }
             model.ErrorInfo = userMessage;
 
@@ -262,7 +263,7 @@ namespace Disly.Areas.Admin.Controllers
         [MultiButton(MatchFormKey = "action", MatchFormValue = "delete-btn")]
         public ActionResult Delete(Guid Id)
         {
-            var data = _cmsRepository.getMaterial(Id, Domain);
+            var data = _cmsRepository.getMaterial(Id);
             if(data != null)
             {
                 var image = (data.PreviewImage != null) ? data.PreviewImage.Url : null;
@@ -288,7 +289,7 @@ namespace Disly.Areas.Admin.Controllers
         [HttpGet]
         public ActionResult Orgs(Guid id)
         {
-            model.Item = _cmsRepository.getMaterial(id, Domain);
+            model.Item = _cmsRepository.getMaterial(id);
             model.OrgsByType = _cmsRepository.getOrgByType(id);
 
             // прочие организации, непривязанные к типам

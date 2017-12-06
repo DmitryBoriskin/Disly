@@ -116,7 +116,7 @@ namespace Disly.Areas.Admin.Controllers
             #endregion
 
             // идентификатор организации
-            orgId = _cmsRepository.getOrgLinkByDomain(Domain);
+            orgId = _cmsRepository.getOrgLinkByDomain();
 
             // идентификатор главного специалиста
             mainSpecialist = _cmsRepository.getMainSpecLinkByDomain(Domain);

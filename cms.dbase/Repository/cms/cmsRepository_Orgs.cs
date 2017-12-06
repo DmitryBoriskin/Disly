@@ -1847,13 +1847,13 @@ namespace cms.dbase
         /// </summary>
         /// <param name="domain">Домен</param>
         /// <returns></returns>
-        public override Guid? getOrgLinkByDomain(string domain)
+        public override Guid? getOrgLinkByDomain()
         {
             using (var db = new CMSdb(_context))
             {
                 var query = (from s in db.cms_sitess
                              join o in db.content_orgss on s.f_content equals o.id
-                             where s.c_alias.Equals(domain)
+                             where s.c_alias.Equals(_domain)
                              select o.id);
 
                 if (!query.Any()) return null;

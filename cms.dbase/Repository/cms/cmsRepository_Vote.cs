@@ -12,8 +12,8 @@ namespace cms.dbase
     /// Репозиторий для работы с новостями
     /// </summary>
     public partial class cmsRepository : abstract_cmsRepository
-    {      
-       
+    {
+
         public override VoteList getVoteList(FilterParams filter)
         {
             using (var db = new CMSdb(_context))
@@ -32,13 +32,14 @@ namespace cms.dbase
                     }
                     if (filter.Date != null)
                     {
-                        query = query.Where(w => w.d_date_end >= filter.Date || (w.d_date_end == null && w.d_date_start>=filter.Date));
+                        query = query.Where(w => w.d_date_end >= filter.Date || (w.d_date_end == null && w.d_date_start >= filter.Date));
                     }
-                    if (filter.DateEnd != null) {
-                        query = query.Where(w => w.d_date_start.Date <= filter.DateEnd );
+                    if (filter.DateEnd != null)
+                    {
+                        query = query.Where(w => w.d_date_start.Date <= filter.DateEnd);
                     }
 
-                    query = query.OrderBy(o=>o.d_date_start);
+                    query = query.OrderBy(o => o.d_date_start);
 
                     int itemCount = query.Count();
 
@@ -48,12 +49,12 @@ namespace cms.dbase
                             .Select(s => new VoteModel
                             {
                                 Id = s.id,
-                                DateStart=s.d_date_start,
-                                Header=s.c_header,
-                                Disabled=s.b_disabled
+                                DateStart = s.d_date_start,
+                                Header = s.c_header,
+                                Disabled = s.b_disabled
                             });
 
-                    if (voteList!=null)
+                    if (voteList != null)
                         return new VoteList
                         {
                             Data = voteList.ToArray(),
@@ -68,34 +69,36 @@ namespace cms.dbase
                 }
                 return null;
             }
-        }        
+        }
 
-        public override VoteModel getVoteItem(Guid id, string domain)
+        public override VoteModel getVoteItem(Guid id)
         {
             using (var db = new CMSdb(_context))
             {
-                var q = db.content_votes.Where(w => (w.id == id && w.f_site == domain))
-                                        .OrderBy(o=>o.d_date_start)
-                                        .Select(s=>new VoteModel {
-                                            Id=s.id,
-                                            Header=s.c_header,
-                                            DateStart=s.d_date_start,
-                                            DateEnd=s.d_date_end,
-                                            Text=s.c_text,
-                                            Type=s.b_type,
-                                            Disabled=s.b_disabled,
-                                            HisAnswer=s.b_his_answer                                            
+                var q = db.content_votes.Where(w => (w.id == id && w.f_site == _domain))
+                                        .OrderBy(o => o.d_date_start)
+                                        .Select(s => new VoteModel
+                                        {
+                                            Id = s.id,
+                                            Header = s.c_header,
+                                            DateStart = s.d_date_start,
+                                            DateEnd = s.d_date_end,
+                                            Text = s.c_text,
+                                            Type = s.b_type,
+                                            Disabled = s.b_disabled,
+                                            HisAnswer = s.b_his_answer
                                         });
                 if (q.Any())
                 {
                     var data = q.Single();
                     data.Answer = db.content_vote_answerss
                                   .Where(w => w.f_vote == data.Id)
-                                  .OrderBy(o=>o.n_sort)
-                                  .Select(a=>new VoteAnswer() {
-                                      id=a.id,
-                                      Sort=a.n_sort,
-                                      Variant=a.c_variant
+                                  .OrderBy(o => o.n_sort)
+                                  .Select(a => new VoteAnswer()
+                                  {
+                                      id = a.id,
+                                      Sort = a.n_sort,
+                                      Variant = a.c_variant
                                   }).ToArray();
                     return data;
                 }
@@ -104,13 +107,13 @@ namespace cms.dbase
         }
 
 
-        public override bool insVote(Guid id, VoteModel ins,string domain)
+        public override bool insVote(Guid id, VoteModel ins)
         {
             using (var db = new CMSdb(_context))
             {
                 db.content_votes
                   .Value(v => v.id, id)
-                  .Value(v => v.f_site, domain)
+                  .Value(v => v.f_site, _domain)
                   .Value(v => v.c_header, ins.Header)
                   .Value(v => v.c_text, ins.Text)
                   .Value(v => v.d_date_start, ins.DateStart)
@@ -150,7 +153,7 @@ namespace cms.dbase
                       .Set(s => s.d_date_end, ins.DateEnd)
                       .Update();
                     return true;
-                }                 
+                }
                 else return false;
             }
         }
@@ -175,9 +178,9 @@ namespace cms.dbase
             {
                 var data = db.content_votes.Where(w => w.id == idVote);
                 if (data.Any())
-                {                    
+                {
                     var queryMaxSort = db.content_vote_answerss
-                        .Where(w => w.f_vote==idVote)                            
+                        .Where(w => w.f_vote == idVote)
                         .Select(s => s.n_sort);
 
                     int maxSort = queryMaxSort.Any() ? queryMaxSort.Max() + 1 : 1;
@@ -208,9 +211,9 @@ namespace cms.dbase
                 var data = db.content_vote_answerss
                     .Where(w => w.f_vote.Equals(id))
                     .Select(s => new VoteAnswer
-                    {                        
+                    {
                         Sort = s.n_sort,
-                        VoteId=s.f_vote
+                        VoteId = s.f_vote
                     });
 
                 if (data.Any())
@@ -219,7 +222,7 @@ namespace cms.dbase
                     if (num > query.Sort)
                     {
                         db.content_vote_answerss
-                            .Where(w => w.f_vote.Equals(VoteId))                            
+                            .Where(w => w.f_vote.Equals(VoteId))
                             .Where(w => w.n_sort > query.Sort && w.n_sort <= num)
                             .Set(u => u.n_sort, u => u.n_sort - 1)
                             .Update();
@@ -261,10 +264,10 @@ namespace cms.dbase
                         data.Delete();
                         //корректировка приоритетов
                         db.content_vote_answerss
-                          .Where(w => (w.f_vote == VoteId && w.n_sort> sort))
-                          .Set(u=>u.n_sort,u=>u.n_sort-1)
+                          .Where(w => (w.f_vote == VoteId && w.n_sort > sort))
+                          .Set(u => u.n_sort, u => u.n_sort - 1)
                           .Update();
-                    }                    
+                    }
                     tran.Commit();
                 }
                 return true;

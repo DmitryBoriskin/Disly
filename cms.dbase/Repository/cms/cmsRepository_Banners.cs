@@ -17,7 +17,7 @@ namespace cms.dbase
         /// </summary>
         /// <param name="domain">Домен</param>
         /// <returns></returns>
-        public override BannersSectionModel[] getBannerSections(string domain)
+        public override BannersSectionModel[] getBannerSections()
         {
             using (var db = new CMSdb(_context))
             {
@@ -29,7 +29,7 @@ namespace cms.dbase
                         Title = s.c_title,
                         Sort = s.n_sort,
                         Disabled = s.b_disabled,
-                        CountBanners = getCountBannersBySectionAndDomain(s.id, domain),
+                        CountBanners = getCountBannersBySectionAndDomain(s.id),
                         Width = s.n_width,
                         Height = s.n_height
                     });
@@ -45,7 +45,7 @@ namespace cms.dbase
         /// <param name="domain">Домен</param>
         /// <param name="filter">Фильтр</param>
         /// <returns></returns>
-        public override BannersSectionModel getBannerSection(Guid id, string domain, FilterParams filter)
+        public override BannersSectionModel getBannerSection(Guid id, FilterParams filter)
         {
             using (var db = new CMSdb(_context))
             {
@@ -59,8 +59,8 @@ namespace cms.dbase
                         Disabled = s.b_disabled,
                         Width = s.n_width,
                         Height = s.n_height,
-                        CountBanners = getCountBannersBySectionAndDomain(s.id, domain),
-                        BannerList = getBanners(id, domain, filter)
+                        CountBanners = getCountBannersBySectionAndDomain(s.id),
+                        BannerList = getBanners(id, filter)
                     });
                 if (!query.Any()) return null;
                 else { return query.FirstOrDefault(); }
@@ -73,12 +73,12 @@ namespace cms.dbase
         /// <param name="section">Секция баннеров</param>
         /// <param name="domain">Домен</param>
         /// <returns></returns>
-        public override int getCountBannersBySectionAndDomain(Guid section, string domain)
+        public override int getCountBannersBySectionAndDomain(Guid section)
         {
             using (var db = new CMSdb(_context))
             {
                 return db.content_bannerss
-                    .Where(w => w.f_site == domain)
+                    .Where(w => w.f_site == _domain)
                     .Where(w => w.f_section == section)
                     .Count();
             }
@@ -91,12 +91,12 @@ namespace cms.dbase
         /// <param name="domain">Домен</param>
         /// <param name="filter">Фильтр</param>
         /// <returns></returns>
-        public override BannersListModel getBanners(Guid section, string domain, FilterParams filter)
+        public override BannersListModel getBanners(Guid section, FilterParams filter)
         {
             using (var db = new CMSdb(_context))
             {
                 var query = db.content_bannerss
-                    .Where(w => w.f_site == domain)
+                    .Where(w => w.f_site == _domain)
                     .Where(w => w.f_section == section);
 
                 if (query.Any() && filter != null)
@@ -339,7 +339,7 @@ namespace cms.dbase
         /// <param name="permit">Приоритет</param>
         /// <param name="domain">Домен</param>
         /// <returns></returns>
-        public override bool permit_Banners(Guid id, int permit, string domain)
+        public override bool permit_Banners(Guid id, int permit)
         {
             using (var db = new CMSdb(_context))
             {
@@ -357,7 +357,7 @@ namespace cms.dbase
                     if (permit > query.Sort)
                     {
                         db.content_bannerss
-                            .Where(w => w.f_site.Equals(domain))
+                            .Where(w => w.f_site.Equals(_domain))
                             .Where(w => w.f_section.Equals(query.Section))
                             .Where(w => w.n_sort > query.Sort && w.n_sort <= permit)
                             .Set(u => u.n_sort, u => u.n_sort - 1)
@@ -366,7 +366,7 @@ namespace cms.dbase
                     else
                     {
                         db.content_bannerss
-                            .Where(w => w.f_site.Equals(domain))
+                            .Where(w => w.f_site.Equals(_domain))
                             .Where(w => w.f_section.Equals(query.Section))
                             .Where(w => w.n_sort < query.Sort && w.n_sort >= permit)
                             .Set(u => u.n_sort, u => u.n_sort + 1)
