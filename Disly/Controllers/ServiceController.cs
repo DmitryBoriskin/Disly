@@ -1,4 +1,5 @@
-﻿using cms.dbModel.entity;
+﻿using cms.dbase;
+using cms.dbModel.entity;
 using Disly.Areas.Admin.Models;
 using Disly.Models;
 using System;
@@ -12,6 +13,8 @@ namespace Disly.Controllers
 {
     public class ServiceController : Controller
     {
+        protected FrontRepository _repository { get; private set; }
+
         public ActionResult Pager(Pager Model, string startUrl, string viewName = "Services/Pager")
         {
             ViewBag.PagerSize = string.IsNullOrEmpty(Request.QueryString["size"]) ? Model.size.ToString() : Request.QueryString["size"];
@@ -80,5 +83,12 @@ namespace Disly.Controllers
 
             return query;
         }
+
+        public ActionResult Photo(Guid id)
+        {
+            PhotoModel[] model = _repository.getPhotoList((Guid)id);
+            return View("/Views/Service/Photo.cshtml", model);
+        }
+
     }
 }

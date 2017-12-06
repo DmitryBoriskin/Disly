@@ -683,7 +683,7 @@ body {
     background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAAMCAMAAACOacfrAAAAHlBMVEX///////////////////////////////////////8V2MxSAAAACXRSTlMAETNEd4jM3e5GueSjAAAAPElEQVR42k3MMRLAIAwDQUWEGP//w5DxDaDqtpH8WWfOvOx4eoa3JIzWMMJbLcZborVU3XmhSyPyb3S1JnBUAVYH1Rn3AAAAAElFTkSuQmCC);
     content:'';width:13px;height:12px;display:inline-block;margin-left:10px;position:relative;top:1px;
 }
-.btn_print, .btn_share {
+.btn_print, .btn_share, .btn_reg {
     border: 1px solid #ccc;
     color: #222;
     display: inline-block;
@@ -695,8 +695,16 @@ body {
     margin-bottom: 10px;
     margin-right: 10px;
 }
+.btn_reg{
+    padding:8px;
+    font-family:PtSans;
+}
+.btn_reg.ti-info-alt:before{
+    font-family:"themify";
+}
     .btn_print:hover, .btn_print:active, .btn_print:focus,
-    .btn_share:hover, .btn_share:active, .btn_share:focus
+    .btn_share:hover, .btn_share:active, .btn_share:focus,
+    .btn_reg:hover, .btn_reg:active, .btn_reg:focus
     {
     text-decoration:none;
     outline:none;
@@ -708,6 +716,9 @@ body {
         font-family: 'themify';
         font-size: 16px;
         margin-right: 16px;
+    }
+    .btn_reg:before{
+        margin-right:16px;
     }
     .btn_share:before {
         content: '';

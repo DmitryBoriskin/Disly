@@ -14,7 +14,7 @@ namespace Disly.Controllers
         public const String Name = "Error";
         public const String ActionName_Custom = "Custom";
         private DoctorsViewModel model;
-        private OnlineRegistryRepository repoRegistry;
+        private OnlineRegistryRepository repoRegistry = new OnlineRegistryRepository("registryConnection");
 
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
@@ -24,8 +24,11 @@ namespace Disly.Controllers
                 SitesInfo = siteModel,
                 SiteMapArray = siteMapArray,
                 Breadcrumbs = breadcrumb,
-                BannerArray = bannerArray
+                BannerArray = bannerArray,
+                Oid = _repository.getOid()
             };
+
+            model.DoctorsRegistry = repoRegistry.getVDoctors(model.Oid);
         }
 
         /// <summary>
@@ -48,10 +51,6 @@ namespace Disly.Controllers
             model.PeoplePosts = _repository.getPeoplePosts();//Domain
 
             #region Редирект на регистрацию
-            model.Oid = _repository.getOid(Domain);
-            repoRegistry = new OnlineRegistryRepository("registryConnection");
-            model.DoctorsRegistry = repoRegistry.getVDoctors(model.Oid);
-            
             if (model.DoctorsList != null)
             {
                 foreach (var d in model.DoctorsList)
@@ -85,7 +84,7 @@ namespace Disly.Controllers
 
             return View(_ViewName, model);
         }
-        
+
         /// <summary>
         /// Сраница по умолчанию
         /// </summary>
@@ -102,6 +101,14 @@ namespace Disly.Controllers
 
             var filter = getFilter();
             model.DoctorsItem = _repository.getPeopleItem(id);
+
+            #region Запись на приём
+            model.DoctorsItem.IsRedirectUrl = model.DoctorsRegistry
+                    .Where(w => w.SNILS.Equals(model.DoctorsItem.SNILS))
+                    .Where(w => w.Url != null)
+                    .Select(s => s.Url)
+                    .Any();
+            #endregion
 
             // десериализация xml
             XmlSerializer serializer = new XmlSerializer(typeof(Employee));

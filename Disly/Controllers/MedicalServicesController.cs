@@ -38,14 +38,58 @@ namespace Disly.Controllers
         }
 
         // GET: PortalMedicalServices
-        public ActionResult Index()
+        public ActionResult Index(string type)
         {
             model.Breadcrumbs.Add(new Breadcrumbs
             {
                 Title = "Медицинские услуги",
-                Url = ""
+                Url = "/medicalservices"
             });
-            model.MedicalServices = _repository.getMedicalServices(Domain);
+            var sibling = _repository.getSiteMap("medicalservices");
+
+            var neededEls = _repository.getSiteMapSiblings(sibling.Path);
+            model.Nav = new List<MaterialsGroup>();
+            model.Nav.Add(new MaterialsGroup { Title = "Медицинские услуги" });
+
+            if (neededEls != null)
+            {
+                foreach (var n in neededEls)
+                {
+                    if (n.Equals("paid"))
+                    {
+                        model.Nav.Add(new MaterialsGroup { Title = "Платные услуги", Alias = "paid" });
+                    }
+                    if (n.Equals("dop"))
+                    {
+                        model.Nav.Add(new MaterialsGroup { Title = "Дополнительная информация", Alias = "dop" });
+                    }
+                }
+            }
+            
+            model.Type = type;
+            switch (type)
+            {
+                case "paid":
+                    model.Breadcrumbs.Add(new Breadcrumbs
+                    {
+                        Title = "Платные услуги",
+                        Url = ""
+                    });
+                    model.Info = _repository.getSiteMap(sibling.Path, type);
+                    break;
+                case "dop":
+                    model.Breadcrumbs.Add(new Breadcrumbs
+                    {
+                        Title = "Дополнительная информация",
+                        Url = ""
+                    });
+                    model.Info = _repository.getSiteMap(sibling.Path, type);
+                    break;
+                default:
+                    model.MedicalServices = _repository.getMedicalServices(Domain);
+                    break;
+            }
+
 
             return View(model);
         }

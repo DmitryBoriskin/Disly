@@ -17,10 +17,12 @@
                         @foreach (var item in Model.DoctorsList)
                         {
                             string link = "/" + ViewBag.ControllerName + "/" + item.Id;
+                            string photo = !string.IsNullOrWhiteSpace(item.Photo) ? item.Photo
+                                        : "/Content/img/nophoto.jpg";
                             <tr>
                                 <td>
                                     <a href="@link">
-                                        <img src="@item.Photo" class="img-circle img-person-list" alt="@item.FIO" />
+                                        <img src="@photo" class="img-circle img-person-list" alt="@item.FIO" />
                                     </a>
                                 </td>
                                 <td><a href="@link">@item.FIO</a></td>

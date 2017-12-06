@@ -11,7 +11,15 @@
                         <div>
                             @if (!string.IsNullOrEmpty(item.Title))
                             {
-                                <h3>@item.Title</h3>
+                                if (!item.Ovp)
+                                {
+                                    <h3><a href="/structure/@item.Num">@item.Title</a></h3>
+                                }
+                                else
+                                {
+                                    <h3><a href="/structure/@item.Num/@item.Departments.First().Id">@item.Title</a></h3>
+                                }
+
                             }
 
                             @if (!string.IsNullOrEmpty(item.Adress))

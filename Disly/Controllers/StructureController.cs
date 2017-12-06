@@ -88,8 +88,6 @@ namespace Disly.Controllers
                 {
                     model.DepartmentList = _repository.getDepartmentsList(model.StructureItem.Id);
                 }
-                
-                
             }
             
             
