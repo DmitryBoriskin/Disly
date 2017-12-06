@@ -6,6 +6,7 @@
 //---------------------------------------------------------------------------------------------------
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 
@@ -22,6 +23,7 @@ namespace cms.dbase.models
 	/// </summary>
 	public partial class registry : LinqToDB.Data.DataConnection
 	{
+		public ITable<Hierarhy>    Hierarhys    { get { return this.GetTable<Hierarhy>(); } }
 		public ITable<V_Doctors>   V_Doctorss   { get { return this.GetTable<V_Doctors>(); } }
 		public ITable<V_Hospitals> V_Hospitalss { get { return this.GetTable<V_Hospitals>(); } }
 
@@ -70,6 +72,38 @@ namespace cms.dbase.models
 		#endregion
 	}
 
+	[Table(Schema="dbo", Name="Hierarhy")]
+	public partial class Hierarhy
+	{
+		[PrimaryKey, Identity   ] public int       id               { get; set; } // int
+		[Column,        Nullable] public string    vkey             { get; set; } // varchar(500)
+		[Column,        Nullable] public byte?     node_level       { get; set; } // tinyint
+		[Column,        Nullable] public string    caption          { get; set; } // varchar(500)
+		[Column,        Nullable] public string    description      { get; set; } // varchar(255)
+		[Column,     NotNull    ] public byte      type             { get; set; } // tinyint
+		[Column,        Nullable] public byte?     sub_type         { get; set; } // tinyint
+		[Column,        Nullable] public DateTime? date             { get; set; } // datetime
+		[Column,        Nullable] public string    text             { get; set; } // text
+		[Column,        Nullable] public int?      prev             { get; set; } // int
+		[Column,        Nullable] public string    admins           { get; set; } // varchar(1024)
+		[Column,        Nullable] public string    uid              { get; set; } // varchar(50)
+		[Column,        Nullable] public int?      options          { get; set; } // int
+		[Column,        Nullable] public string    readers          { get; set; } // varchar(255)
+		[Column,        Nullable] public string    vpath            { get; set; } // varchar(500)
+		[Column,        Nullable] public string    item             { get; set; } // varchar(2048)
+		[Column,        Nullable] public Guid?     guid             { get; set; } // uniqueidentifier
+		[Column,        Nullable] public int?      F_JURL_ID        { get; set; } // int
+		[Column,        Nullable] public string    topic            { get; set; } // varchar(550)
+		[Column,        Nullable] public DateTime? D_TIME           { get; set; } // datetime
+		[Column,        Nullable] public string    C_MOD_USER       { get; set; } // varchar(50)
+		[Column,        Nullable] public string    C_MOD_IP         { get; set; } // varchar(50)
+		[Column,        Nullable] public DateTime? D_MOD_DATE       { get; set; } // datetime
+		[Column,        Nullable] public bool?     B_DEL            { get; set; } // bit
+		[Column,        Nullable] public Guid?     C_OPERATION_GUID { get; set; } // uniqueidentifier
+		[Column,        Nullable] public int?      F_LOG_ID         { get; set; } // int
+		[Column,        Nullable] public int?      F_Gallery        { get; set; } // int
+	}
+
 	// View
 	[Table(Schema="portal", Name="V_Doctors")]
 	public partial class V_Doctors
@@ -93,6 +127,15 @@ namespace cms.dbase.models
 		[Column,   Nullable] public string C_ShortName   { get; set; } // varchar(200)
 		[Column,   Nullable] public string C_RegistryURL { get; set; } // varchar(71)
 		[Column,   Nullable] public string C_OID         { get; set; } // varchar(128)
+	}
+
+	public static partial class TableExtensions
+	{
+		public static Hierarhy Find(this ITable<Hierarhy> table, int id)
+		{
+			return table.FirstOrDefault(t =>
+				t.id == id);
+		}
 	}
 }
  

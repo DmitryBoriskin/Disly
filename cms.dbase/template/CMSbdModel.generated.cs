@@ -353,16 +353,16 @@ namespace cms.dbase.models
 		#region Associations
 
 		/// <summary>
-		/// fk_menu_resolutions
-		/// </summary>
-		[Association(ThisKey="c_menu_id", OtherKey="id", CanBeNull=false, KeyName="fk_menu_resolutions", BackReferenceName="fkmenuresolutionss")]
-		public cms_menu fkmenuresolutions { get; set; }
-
-		/// <summary>
 		/// fk_user_resolutions
 		/// </summary>
 		[Association(ThisKey="c_user_id", OtherKey="id", CanBeNull=false, KeyName="fk_user_resolutions", BackReferenceName="fkuserresolutionss")]
 		public cms_users fkuserresolutions { get; set; }
+
+		/// <summary>
+		/// fk_menu_resolutions
+		/// </summary>
+		[Association(ThisKey="c_menu_id", OtherKey="id", CanBeNull=false, KeyName="fk_menu_resolutions", BackReferenceName="fkmenuresolutionss")]
+		public cms_menu fkmenuresolutions { get; set; }
 
 		#endregion
 	}
@@ -953,16 +953,16 @@ namespace cms.dbase.models
 		#region Associations
 
 		/// <summary>
-		/// FK_content_main_specialist_specialisations_link_content_employee_posts
-		/// </summary>
-		[Association(ThisKey="f_specialisation", OtherKey="id", CanBeNull=false, KeyName="FK_content_main_specialist_specialisations_link_content_employee_posts", BackReferenceName="contentmainspecialistspecialisationslinkcontentemployeepostss")]
-		public content_employee_posts contentmainspecialistspecialisationslinkcontentemployeeposts { get; set; }
-
-		/// <summary>
 		/// FK_content_main_specialist_specialisations_link_content_main_specialists
 		/// </summary>
 		[Association(ThisKey="f_main_specialist", OtherKey="id", CanBeNull=false, KeyName="FK_content_main_specialist_specialisations_link_content_main_specialists", BackReferenceName="contentmainspecialistspecialisationslinkcontentmainspecialistss")]
 		public content_main_specialists contentmainspecialistspecialisationslinkcontentmainspecialists { get; set; }
+
+		/// <summary>
+		/// FK_content_main_specialist_specialisations_link_content_employee_posts
+		/// </summary>
+		[Association(ThisKey="f_specialisation", OtherKey="id", CanBeNull=false, KeyName="FK_content_main_specialist_specialisations_link_content_employee_posts", BackReferenceName="contentmainspecialistspecialisationslinkcontentemployeepostss")]
+		public content_employee_posts contentmainspecialistspecialisationslinkcontentemployeeposts { get; set; }
 
 		#endregion
 	}
@@ -1293,16 +1293,16 @@ namespace cms.dbase.models
 		#region Associations
 
 		/// <summary>
-		/// FK_content_orgs_types_link_org_types
-		/// </summary>
-		[Association(ThisKey="f_type", OtherKey="id", CanBeNull=false, KeyName="FK_content_orgs_types_link_org_types", BackReferenceName="contentorgstypeslinkorgtypess")]
-		public content_orgs_types contentorgstypeslinkorgtypes { get; set; }
-
-		/// <summary>
 		/// FK_content_orgs_types_link_org
 		/// </summary>
 		[Association(ThisKey="f_org", OtherKey="id", CanBeNull=false, KeyName="FK_content_orgs_types_link_org", BackReferenceName="contentorgstypeslinkorgs")]
 		public content_orgs contentorgstypeslinkorg { get; set; }
+
+		/// <summary>
+		/// FK_content_orgs_types_link_org_types
+		/// </summary>
+		[Association(ThisKey="f_type", OtherKey="id", CanBeNull=false, KeyName="FK_content_orgs_types_link_org_types", BackReferenceName="contentorgstypeslinkorgtypess")]
+		public content_orgs_types contentorgstypeslinkorgtypes { get; set; }
 
 		#endregion
 	}
@@ -1373,16 +1373,16 @@ namespace cms.dbase.models
 		#region Associations
 
 		/// <summary>
-		/// FK_content_people_employee_posts_link_content_employee_posts
-		/// </summary>
-		[Association(ThisKey="f_post", OtherKey="id", CanBeNull=false, KeyName="FK_content_people_employee_posts_link_content_employee_posts", BackReferenceName="contentpeopleemployeepostslinkcontentemployeepostss")]
-		public content_employee_posts contentpeopleemployeepostslinkcontentemployeeposts { get; set; }
-
-		/// <summary>
 		/// FK_content_people_employee_posts_link_content_people
 		/// </summary>
 		[Association(ThisKey="f_people", OtherKey="id", CanBeNull=false, KeyName="FK_content_people_employee_posts_link_content_people", BackReferenceName="contentpeopleemployeepostslinkcontentpeoples")]
 		public content_people contentpeopleemployeepostslinkcontentpeople { get; set; }
+
+		/// <summary>
+		/// FK_content_people_employee_posts_link_content_employee_posts
+		/// </summary>
+		[Association(ThisKey="f_post", OtherKey="id", CanBeNull=false, KeyName="FK_content_people_employee_posts_link_content_employee_posts", BackReferenceName="contentpeopleemployeepostslinkcontentemployeepostss")]
+		public content_employee_posts contentpeopleemployeepostslinkcontentemployeeposts { get; set; }
 
 		#endregion
 	}
@@ -1493,6 +1493,7 @@ namespace cms.dbase.models
 		[Column,        Nullable] public Guid?  uui_parent      { get; set; } // uniqueidentifier
 		[Column,     NotNull    ] public bool   b_blocked       { get; set; } // bit
 		[Column,        Nullable] public string c_photo         { get; set; } // nvarchar(1024)
+		[Column,        Nullable] public int?   n_old_id        { get; set; } // int
 
 		#region Associations
 
@@ -1998,16 +1999,16 @@ namespace cms.dbase.models
 		#region Associations
 
 		/// <summary>
-		/// FK_import_frmp_people_posts_link_import_frmp_peoples
-		/// </summary>
-		[Association(ThisKey="f_people", OtherKey="id", CanBeNull=false, KeyName="FK_import_frmp_people_posts_link_import_frmp_peoples", BackReferenceName="importfrmppeoplepostslinkimportfrmppeopless")]
-		public import_frmp_peoples importfrmppeoplepostslinkimportfrmppeoples { get; set; }
-
-		/// <summary>
 		/// FK_import_frmp_people_posts_link_import_frmp_posts
 		/// </summary>
 		[Association(ThisKey="f_employee_post", OtherKey="id", CanBeNull=false, KeyName="FK_import_frmp_people_posts_link_import_frmp_posts", BackReferenceName="importfrmppeoplepostslinkimportfrmppostss")]
 		public import_frmp_posts importfrmppeoplepostslinkimportfrmpposts { get; set; }
+
+		/// <summary>
+		/// FK_import_frmp_people_posts_link_import_frmp_peoples
+		/// </summary>
+		[Association(ThisKey="f_people", OtherKey="id", CanBeNull=false, KeyName="FK_import_frmp_people_posts_link_import_frmp_peoples", BackReferenceName="importfrmppeoplepostslinkimportfrmppeopless")]
+		public import_frmp_peoples importfrmppeoplepostslinkimportfrmppeoples { get; set; }
 
 		#endregion
 	}
@@ -2458,3 +2459,4 @@ namespace cms.dbase.models
 		}
 	}
 }
+ 
