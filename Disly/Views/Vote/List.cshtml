@@ -6,13 +6,22 @@
         string date = item.DateStart.ToString("HH:mm | dd.MM.yyyy");
         date += item.DateEnd != null
             ? " — " + Convert.ToDateTime(item.DateEnd).ToString("HH:mm | dd.MM.yyyy") : string.Empty;
-        <h3>@item.Header</h3>
-        <div class="news-list_date">@date</div>
-        @Html.Raw(item.Text)
+        <h3>
+            @if (item.ShowStatistic)
+            {
+                <a href="#@item.Id" data-toggle="collapse">@item.Header</a>
+            }
+            else
+            {
+                @item.Header
+            }
+        </h3>
+
+            <div class="news-list_date">@date</div>
+            @Html.Raw(item.Text)
 
         if (item.ShowStatistic)
         {
-            <a href="#@item.Id" data-toggle="collapse">Результаты голосования »</a>
             <div id="@item.Id" class="collapse">
                 @foreach (var answer in item.Answer)
                 {
@@ -50,8 +59,5 @@
                 }
             </form>
         }
-        <br />
-        <hr />
-        <br />
     }
 }
