@@ -873,6 +873,7 @@
     <Content Include="Views\MedicalServices\part\nav.cshtml" />
     <Content Include="Views\Feedback\AppealList.cshtml" />
     <Content Include="Views\Feedback\ReviewList.cshtml" />
+    <Content Include="Views\Shared\part\childtabs.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
