@@ -14,20 +14,7 @@
                         <dd>@item.Value</dd>
                     }                    
                 </dl>
-            }
-            @*@if (Model.DepartmentItem.Peoples != null)
-            {
-                <table class="table">
-                    @foreach (var item in Model.DepartmentItem.Peoples)
-                    {
-                        <tr>
-                            <td><a href="/doctors/@item.Id">@item.FIO</a></td>
-                            <td>@item.Status</td>
-                            <td>@item.Post</td>
-                        </tr>
-                    }
-                </table>
-            }*@            
+            }                 
             <div>@Html.Raw(Model.DepartmentItem.Text)</div>
         </div>
         <div class="col-md-3 col-md-push-1">

@@ -29,14 +29,14 @@
         {
             //список
             @Html.Partial("services/breadcrumbs")
-                <h1>Струкутура</h1>
+            <h1>Структура</h1>
             if (Model.Structures != null)
             {
                     <div class="child">
                         @foreach (var item in Model.Structures)
-                    {
+                        {
                             <div class="child_link"><span>—</span><a href="/structure/@item.Num">@item.Title</a></div>
-                    }
+                        }
                     </div>
             }
         }
