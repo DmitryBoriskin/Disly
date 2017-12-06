@@ -1,4 +1,5 @@
 ﻿using cms.dbModel.entity;
+using System.Collections.Generic;
 
 namespace Disly.Models
 {
@@ -25,7 +26,7 @@ namespace Disly.Models
         /// <summary>
         /// Навигация
         /// </summary>
-        public MaterialsGroup[] Nav { get; set; }
+        public List<MaterialsGroup> Nav { get; set; }
 
         /// <summary>
         /// Информация

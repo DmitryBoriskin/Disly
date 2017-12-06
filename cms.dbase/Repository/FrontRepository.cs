@@ -373,6 +373,25 @@ namespace cms.dbase
         }
 
         /// <summary>
+        /// Получим сестринские эл-ты карты сайта по пути
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        public override string[] getSiteMapSiblings(string path)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var query = db.content_sitemaps
+                    .Where(w => w.f_site.Equals(_domain))
+                    .Where(w => w.c_path.Equals(path))
+                    .Select(s => s.c_alias);
+
+                if (!query.Any()) return null;
+                return query.ToArray();
+            }
+        }
+
+        /// <summary>
         /// Дочерние элементы
         /// </summary>
         /// <param name="ParentId"></param>
@@ -1020,94 +1039,6 @@ namespace cms.dbase
                     return data2.ToArray();
 
                 return null;
-
-                #region comment
-                //var query = db.cms_sitess
-                //            .Where(w => w.c_alias == domain)
-                //            .Join(db.content_people_org_links, e => e.f_content, o => o.f_org, (e, o) => o)
-                //            .Join(db.content_peoples, m => m.f_people, n => n.id, (m, n) => n);
-
-                //if (filter.SearchText != null)
-                //{
-                //    query = query.Where(w => (w.c_name.Contains(filter.SearchText) || w.c_surname.Contains(filter.SearchText) || w.c_patronymic.Contains(filter.SearchText)));
-                //}
-                //if (!String.IsNullOrEmpty(filter.Group))
-                //{
-                //    query = query
-                //            .Join(db.content_people_org_links, e => e.id, o => o.f_people, (o, e) => new { e, o })
-                //            .Join(db.content_people_department_links
-                //                .Where(w => string.IsNullOrWhiteSpace(filter.Group) || w.f_department == Guid.Parse(filter.Group))
-                //                , m => m.e.id, n => n.f_people, (m, n) => m.o);
-                //}
-
-                //#region временное решение
-                //int post = !string.IsNullOrWhiteSpace(filter.Type) ? Int32.Parse(filter.Type) : 0;
-                //if (post != 0)
-                //{
-                //    var queryWithPost = query
-                //    .Join(db.content_people_employee_posts_links, p => p.id, pepl => pepl.f_people, (p, pepl) => new { p, pepl.f_post })
-                //    .Join(db.content_employee_postss.Where(w => w.id.Equals(post)), pp => pp.f_post, ep => ep.id, (pp, ep) => new { pp, ep })
-                //    .Select(s => new
-                //    {
-                //        people = s.pp.p,
-                //        post = new PeoplePost
-                //        {
-                //            Id = s.ep.id,
-                //            Name = s.ep.c_name
-                //        }
-                //    });
-
-                //    if (queryWithPost.Any())
-                //    {
-                //        LinqToDB.Common.Configuration.Linq.AllowMultipleQuery = true;
-
-                //        var result = queryWithPost.Select(s => new People
-                //        {
-                //            Id = s.people.id,
-                //            FIO = s.people.c_surname + " " + s.people.c_name + " " + s.people.c_patronymic,
-                //            Photo = s.people.c_photo,
-                //            Posts = (from pep in db.content_people_employee_posts_links
-                //                     join ep in db.content_employee_postss on pep.f_post equals ep.id
-                //                     where pep.f_people.Equals(s.people.id)
-                //                     select new PeoplePost
-                //                     {
-                //                         Id = ep.id,
-                //                         Name = ep.c_name,
-                //                         Type = pep.n_type
-                //                     }).OrderBy(o => o.Type).ToArray()
-                //        });
-
-                //        return result.ToArray();
-                //    }
-                //    return null;
-                //}
-                //#endregion
-
-                //var query1 = query.OrderBy(o => o.c_surname);
-                //if (query1.Any())
-                //{
-                //    LinqToDB.Common.Configuration.Linq.AllowMultipleQuery = true;
-
-                //    var result = query1.Select(s => new People()
-                //    {
-                //        Id = s.id,
-                //        FIO = s.c_surname + " " + s.c_name + " " + s.c_patronymic,
-                //        Photo = s.c_photo,
-                //        Posts = (from pep in db.content_people_employee_posts_links
-                //                 join ep in db.content_employee_postss on pep.f_post equals ep.id
-                //                 where pep.f_people.Equals(s.id)
-                //                 select new PeoplePost
-                //                 {
-                //                     Id = ep.id,
-                //                     Name = ep.c_name,
-                //                     Type = pep.n_type
-                //                 }).OrderBy(o => o.Type).ToArray()
-                //    });
-
-                //    return result.ToArray();
-                //}
-                //return null;
-                #endregion
             }
         }
 
@@ -1120,16 +1051,36 @@ namespace cms.dbase
         {
             using (var db = new CMSdb(_context))
             {
-                var query = db.content_peoples
-                    .Where(w => w.id.Equals(id))
-                    .Select(s => new People
-                    {
-                        Id = s.id,
-                        FIO = s.c_surname + " " + s.c_name + " " + s.c_patronymic,
-                        XmlInfo = s.xml_info,
-                        Photo = s.c_photo
-                    });
-
+                var query = (from p in db.content_peoples
+                             join pol in db.content_people_org_links on p.id equals pol.f_people into pol2
+                             from pol in pol2.DefaultIfEmpty()
+                             join pdl in db.content_people_department_links on pol.id equals pdl.f_people into pdl2
+                             from pdl in pdl2.DefaultIfEmpty()
+                             join d in db.content_departmentss on pdl.f_department equals d.id into d2
+                             from d in d2.DefaultIfEmpty()
+                             join os in db.content_org_structures on d.f_structure equals os.id into os2
+                             from os in os2.DefaultIfEmpty()
+                             join msel in db.content_main_specialist_employees_links on p.id equals msel.f_employee into msel2
+                             from msel in msel2.DefaultIfEmpty()
+                             join s in db.cms_sitess on msel.f_main_specialist equals s.f_content into s2
+                             from s in s2.DefaultIfEmpty()
+                             join ms in db.content_main_specialistss on msel.f_main_specialist equals ms.id into ms2
+                             from ms in ms2.DefaultIfEmpty()
+                             where p.id.Equals(id)
+                             select new People
+                             {
+                                 Id = p.id,
+                                 SNILS = p.c_snils,
+                                 FIO = p.c_surname + " " + p.c_name + " " + p.c_patronymic,
+                                 XmlInfo = p.xml_info,
+                                 Photo = p.c_photo,
+                                 StructureId = os.num,
+                                 DepartmentId = d.id,
+                                 DepartmentTitle = d.c_title,
+                                 Domain = s.c_alias,
+                                 MainSpec = ms.c_name
+                             });
+                
                 if (query.Any())
                     return query.SingleOrDefault();
 
@@ -1455,14 +1406,14 @@ namespace cms.dbase
         /// </summary>
         /// <param name="domain">Домен</param>
         /// <returns></returns>
-        public override string getOid(string domain)
+        public override string getOid()
         {
             using (var db = new CMSdb(_context))
             {
                 return
                     (from s in db.cms_sitess
                      join o in db.content_orgss on s.f_content equals o.id
-                     where s.c_alias.Equals(domain)
+                     where s.c_alias.Equals(_domain)
                      select o.f_oid
                     ).SingleOrDefault();
             }

@@ -45,16 +45,28 @@ namespace Disly.Controllers
                 Title = "Медицинские услуги",
                 Url = "/medicalservices"
             });
-
-            model.Nav = new MaterialsGroup[]
-            {
-                new MaterialsGroup{Title = "Медицинские услуги"},
-                new MaterialsGroup{Title = "Платные услуги", Alias="paid"},
-                new MaterialsGroup{Title = "Дополнительная информация", Alias = "dop"}
-            };
-
-            model.Type = type;
             var sibling = _repository.getSiteMap("medicalservices");
+
+            var neededEls = _repository.getSiteMapSiblings(sibling.Path);
+            model.Nav = new List<MaterialsGroup>();
+            model.Nav.Add(new MaterialsGroup { Title = "Медицинские услуги" });
+
+            if (neededEls != null)
+            {
+                foreach (var n in neededEls)
+                {
+                    if (n.Equals("paid"))
+                    {
+                        model.Nav.Add(new MaterialsGroup { Title = "Платные услуги", Alias = "paid" });
+                    }
+                    if (n.Equals("dop"))
+                    {
+                        model.Nav.Add(new MaterialsGroup { Title = "Дополнительная информация", Alias = "dop" });
+                    }
+                }
+            }
+            
+            model.Type = type;
             switch (type)
             {
                 case "paid":

@@ -16,6 +16,7 @@ namespace cms.dbModel
 
         public abstract SiteMapModel getSiteMap(string path, string alias); //, string domain
         public abstract SiteMapModel getSiteMap(string frontSection);
+        public abstract string[] getSiteMapSiblings(string path);
         public abstract SiteMapModel[] getSiteMapChild(Guid ParentId);
         public abstract List<Breadcrumbs> getBreadCrumbCollection(string Url); //, string domain
 
@@ -44,7 +45,7 @@ namespace cms.dbModel
         public abstract PeoplePost[] getPeoplePosts();//string domain
 
         public abstract OrgsModel getOrgInfo(); //string domain
-        public abstract string getOid(string domain);
+        public abstract string getOid();
         public abstract OrgsAdministrative[] getAdministrative(string domain);
 
         //лпу
