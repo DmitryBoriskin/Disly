@@ -67,7 +67,8 @@ namespace cms.dbase
                         EventMaker = s.c_organizer,
                         PreviewImage = new Photo()
                         {
-                            Url = s.c_preview
+                            Url = s.c_preview,
+                            Source = s.c_preview_source,
                         },
                         Text = s.c_text,
                         Url = s.c_url,
@@ -123,7 +124,8 @@ namespace cms.dbase
                         EventMaker = s.c_organizer,
                         PreviewImage = new Photo()
                         {
-                            Url = s.c_preview
+                            Url = s.c_preview,
+                            Source = s.c_preview_source
                         },
                         Text = s.c_text,
                         Url = s.c_url,
@@ -227,6 +229,7 @@ namespace cms.dbase
                             c_place = eventData.Place,
                             c_organizer = eventData.EventMaker,
                             c_preview = (eventData.PreviewImage != null) ? eventData.PreviewImage.Url : null,
+                            c_preview_source = (eventData.PreviewImage != null) ? eventData.PreviewImage.Source : null,
                             c_desc = eventData.Desc,
                             c_keyw = eventData.KeyW,
                             b_annually = eventData.Annually,
@@ -309,7 +312,17 @@ namespace cms.dbase
                         cdEvent.c_text = eventData.Text;
                         cdEvent.c_place = eventData.Place;
                         cdEvent.c_organizer = eventData.EventMaker;
-                        cdEvent.c_preview = (eventData.PreviewImage != null) ? eventData.PreviewImage.Url : null;
+                        if (eventData.PreviewImage != null)
+                        {
+                            cdEvent.c_preview = eventData.PreviewImage.Url;
+                            cdEvent.c_preview_source = eventData.PreviewImage.Source;
+                        }
+                        else
+                        {
+                            cdEvent.c_preview = null;
+                            cdEvent.c_preview_source = null;
+                        }
+
                         cdEvent.c_desc = eventData.Desc;
                         cdEvent.c_keyw = eventData.KeyW;
                         cdEvent.b_annually = eventData.Annually;
@@ -347,7 +360,6 @@ namespace cms.dbase
                             IP = _ip,
                         };
                         insertLog(log);
-
 
                         tran.Commit();
                         return true;

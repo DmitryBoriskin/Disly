@@ -78,7 +78,7 @@ namespace cms.dbModel
         public abstract MaterialsGroup[] getMaterialGroups(Guid materialId);
 
         public abstract MaterialsList getMaterialsList(MaterialFilter filtr);
-        public abstract MaterialsModel getMaterial(Guid id, string domain);
+        public abstract MaterialsModel getMaterial(Guid id);
 
         public abstract bool insertCmsMaterial(MaterialsModel material);
         public abstract bool updateCmsMaterial(MaterialsModel material);
@@ -163,7 +163,7 @@ namespace cms.dbModel
         public abstract People[] getPersonsThisOrg(Guid idOrg);
         public abstract MedicalService[] getMedicalServices();
         public abstract Guid[] getOrgMedicalServicesLinks(Guid org);
-        public abstract Guid? getOrgLinkByDomain(string domain);
+        public abstract Guid? getOrgLinkByDomain();
         public abstract bool IsStructureAllowedToOrg(Guid structureId, Guid orgId);
         public abstract bool IsAdministrativeAllowedToOrg(Guid id, Guid orgId);
         public abstract bool IsDepartmentAllowedToOrg(Guid id, Guid orgId);
@@ -183,7 +183,7 @@ namespace cms.dbModel
         public abstract int getCountSiblings(Guid id);
         public abstract bool checkSiteMap(Guid id);
         public abstract bool createSiteMapItem(Guid id, SiteMapModel item);
-        public abstract bool updateSiteMapItem(Guid id, SiteMapModel item, string domain);
+        public abstract bool updateSiteMapItem(Guid id, SiteMapModel item);
         public abstract bool deleteSiteMapItem(Guid id);
 
         public abstract SiteMapMenu[] getSiteMapFrontSectionList();
@@ -195,19 +195,19 @@ namespace cms.dbModel
         public abstract SiteMapModel[] getSiteMapChildrens(Guid parent);
         public abstract BreadCrumbSiteMap[] getSiteMapBreadCrumbs(Guid? id);
         public abstract BreadCrumbSiteMap getSiteMapBreadCrumbItem(Guid id);
-        public abstract bool permit_SiteMap(Guid id, int permit, string domain, string menuSort);
+        public abstract bool permit_SiteMap(Guid id, int permit, string menuSort);
 
         // Баннеры
-        public abstract BannersSectionModel[] getBannerSections(string domain);
-        public abstract BannersSectionModel getBannerSection(Guid id, string domain, FilterParams filter);
-        public abstract int getCountBannersBySectionAndDomain(Guid section, string domain);
-        public abstract BannersListModel getBanners(Guid section, string domain, FilterParams filter);
+        public abstract BannersSectionModel[] getBannerSections();
+        public abstract BannersSectionModel getBannerSection(Guid id, FilterParams filter);
+        public abstract int getCountBannersBySectionAndDomain(Guid section);
+        public abstract BannersListModel getBanners(Guid section, FilterParams filter);
         public abstract BannersModel getBanner(Guid id);
         public abstract bool checkBannerExist(Guid id);
         public abstract bool createBanner(Guid id, BannersModel item);
         public abstract bool updateBanner(Guid id, BannersModel item);
         public abstract bool deleteBanner(Guid id);
-        public abstract bool permit_Banners(Guid id, int permit, string domain);
+        public abstract bool permit_Banners(Guid id, int permit);
 
         //Разделы сайта
         public abstract SiteSectionList getSiteSectionList(FilterParams filtr);
@@ -234,8 +234,8 @@ namespace cms.dbModel
 
         //Опросы
         public abstract VoteList getVoteList(FilterParams filtr);
-        public abstract VoteModel getVoteItem(Guid id, string domain);
-        public abstract bool insVote(Guid id, VoteModel ins, string domain);
+        public abstract VoteModel getVoteItem(Guid id);
+        public abstract bool insVote(Guid id, VoteModel ins);
         public abstract bool updVote(Guid id, VoteModel ins);
         public abstract bool delVote(Guid id);
         public abstract bool insAnswer(Guid idVote, string Variant);

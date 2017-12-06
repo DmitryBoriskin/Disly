@@ -74,13 +74,11 @@ namespace Disly.Areas.Admin.Controllers
                     Id = Id,
                     DateBegin = DateTime.Now
                 };
-            if (model.Item != null)
+            if (model.Item != null && model.Item.PreviewImage != null && !string.IsNullOrEmpty(model.Item.PreviewImage.Url))
             {
                 var photo = model.Item.PreviewImage;
-                if (photo != null && !string.IsNullOrEmpty(photo.Url))
-                {
-                    model.Item.PreviewImage = Files.getInfoImage(photo.Url);
-                }
+                model.Item.PreviewImage = Files.getInfoImage(photo.Url);
+                model.Item.PreviewImage.Source = photo.Source;
             }
 
             //Заполняем для модели связи с другими объектами
@@ -207,7 +205,8 @@ namespace Disly.Areas.Admin.Controllers
                     {
                         Name = Id.ToString() + fileExtension,
                         Size = Files.FileAnliz.SizeFromUpload(upload),
-                        Url = Files.SaveImageResizeRename(upload, savePath, Id.ToString(), width, height)
+                        Url = Files.SaveImageResizeRename(upload, savePath, Id.ToString(), width, height),
+                        Source = bindData.Item.PreviewImage.Source
                     };
                 }
                 #endregion
@@ -251,6 +250,14 @@ namespace Disly.Areas.Admin.Controllers
              }
 
             model.Item = _cmsRepository.getEvent(Id);
+
+            if (model.Item != null && model.Item.PreviewImage != null && !string.IsNullOrEmpty(model.Item.PreviewImage.Url))
+            {
+                var photo = model.Item.PreviewImage;
+                model.Item.PreviewImage = Files.getInfoImage(photo.Url);
+                model.Item.PreviewImage.Source = photo.Source;
+            }
+
             if (model.Item != null && model.Item.PreviewImage != null && !string.IsNullOrEmpty(model.Item.PreviewImage.Url))
             {
                 model.Item.PreviewImage = Files.getInfoImage(model.Item.PreviewImage.Url);
