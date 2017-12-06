@@ -1915,10 +1915,14 @@ namespace cms.dbase
                             Date = s.d_date,
                             SenderName = s.c_sender_name,
                             SenderEmail = s.c_sender_email,
+                            //SenderContacts,
                             Answer = s.c_answer,
                             Answerer = s.c_answerer,
+                            //AnswererCode
                             IsNew = s.b_new,
-                            Disabled = s.b_disabled
+                            Disabled = s.b_disabled,
+                            Anonymous = s.b_anonymous,
+                            //FbType
                         });
                     feedbacks = List.ToArray();
 
@@ -1961,7 +1965,9 @@ namespace cms.dbase
                         Answerer = s.c_answerer,
                         IsNew = s.b_new,
                         Disabled = s.b_disabled,
-                        AnswererCode = s.c_code
+                        AnswererCode = s.c_code,
+                        Anonymous = s.b_anonymous,
+                        FbType = (FeedbackType)Enum.Parse(typeof(FeedbackType), s.c_type)
                     });
 
                 if (data.Any())
@@ -2006,7 +2012,8 @@ namespace cms.dbase
                             b_disabled = feedback.Disabled,
                             f_site = _domain,
                             c_code = feedback.AnswererCode,
-                            b_anonymous = feedback.Anonymous
+                            b_anonymous = feedback.Anonymous,
+                            c_type = feedback.FbType.ToString()
                         };
                         db.Insert(cdFeedback);
                         tran.Commit();

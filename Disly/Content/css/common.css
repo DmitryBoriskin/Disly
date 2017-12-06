@@ -1097,6 +1097,8 @@ body {
 .feedback-item-title{}
 .feedback-item-sender{color:#999;}
 .feedback-item-sender:before{content:'—';}
+.feedback-item-answerer{color:#999;}
+.feedback-item-answerer:before{content:'—';}
 .feedback-item-more{color:#222;}
 .feedback-item-more[aria-expanded="false"]:before{content:'Читать »';}
 .feedback-item-more[aria-expanded="true"]:before{/*content:'Скрыть';*/display:none;}

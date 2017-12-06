@@ -869,6 +869,8 @@
     <Content Include="Views\Feedback\AnswerForm.cshtml" />
     <Content Include="Views\EventsFront\Index.cshtml" />
     <Content Include="Views\EventsFront\Item.cshtml" />
+    <Content Include="Views\Feedback\AppealList.cshtml" />
+    <Content Include="Views\Feedback\ReviewList.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

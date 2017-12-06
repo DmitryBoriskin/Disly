@@ -134,11 +134,22 @@ namespace cms.dbase
                             throw new Exception("Запись с таким Id не найдена");
 
                         cdSiteSection.c_title = upd.Title;
-                        cdSiteSection.f_page_type = upd.Alias;
                         cdSiteSection.c_url = upd.Url;
-
+                        //cdSiteSection.f_page_type = upd.Alias;
                         db.Update(cdSiteSection);
-                        
+
+                        if (cdSiteSection.f_page_type != upd.Alias)
+                        {
+                            var cdFontSection = db.front_sections
+                                .Where(s => s.c_alias == cdSiteSection.f_page_type);
+                            if (cdFontSection == null)
+                                throw new Exception("cmsRepository_SiteSection updateSiteSection: No such frontSection (" + cdSiteSection.f_page_type + ")!");
+
+                            var cdFontSectionItem = cdFontSection.SingleOrDefault();
+                            cdFontSectionItem.c_alias = upd.Alias;
+
+                            db.Update(cdFontSectionItem); //Тут должно сработать каскадное изменение во всех таблицах
+                        }
 
                         var log = new LogModel()
                         {

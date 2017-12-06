@@ -59,13 +59,19 @@
                         <label for="feedback-senderContacts-input">Дополнительные контакты</label>
                         <textarea class="form-control" id="feedback-senderContacts-input" name="SenderContacts" rows="3" maxlength="256">@ViewBag.SenderContacts</textarea>
                     </div>
-
                     <div class="form-group">
-                        <label for="feedback-theme-input">Тема обращения</label>
-                        <input type="text" id="feedback-theme-input" name="Theme" value="@ViewBag.Theme" class="form-control" rows="7" maxlength="256" required />
+                        <label for="feedback-type-select">Тип обращения</label>
+                        <select id="feedback-type-select" name="FbType" class="form-control">
+                            <option value="@FeedbackType.appeal.ToString()" @((ViewBag.FbType == FeedbackType.appeal)? "selected": null)>Вопрос</option>
+                            <option  value="@FeedbackType.review.ToString()" @((ViewBag.FbType == FeedbackType.review)? "selected": null)>Отзыв</option>
+                        </select>
                     </div>
                     <div class="form-group">
-                        <label for="feedback-text-area">Текст вопроса</label>
+                        <label for="feedback-theme-input">Тема обращения</label>
+                        <input type="text" id="feedback-theme-input" name="Theme" value="@ViewBag.Theme" class="form-control" maxlength="256"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="feedback-text-area">Текст обращения</label>
                         <textarea class="form-control" id="feedback-text-area" name="Text" rows="7" maxlength="2048" required>@ViewBag.Text</textarea>
                     </div>
 

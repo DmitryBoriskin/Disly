@@ -64,7 +64,7 @@ namespace cms.dbModel.entity
         /// <summary>
         /// Тип сообщения из обратной связи
         /// </summary>
-        public FeedbackType Fbtype { get; set; }
+        public FeedbackType FbType { get; set; }
 
         /// <summary>
         /// Дата

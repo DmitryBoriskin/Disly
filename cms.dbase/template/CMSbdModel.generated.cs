@@ -1473,7 +1473,7 @@ namespace cms.dbase.models
 	{
 		[PrimaryKey, NotNull    ] public Guid   id              { get; set; } // uniqueidentifier
 		[Column,     NotNull    ] public string f_site          { get; set; } // varchar(64)
-		[Column,     NotNull    ] public string f_front_section { get; set; } // varchar(16)
+		[Column,     NotNull    ] public string f_front_section { get; set; } // varchar(64)
 		[Column,     NotNull    ] public string c_path          { get; set; } // varchar(1024)
 		[Column,        Nullable] public string c_alias         { get; set; } // varchar(64)
 		[Column,        Nullable] public string c_title         { get; set; } // nvarchar(256)
@@ -1495,16 +1495,16 @@ namespace cms.dbase.models
 		#region Associations
 
 		/// <summary>
-		/// fk_content_sitemap_front_section
-		/// </summary>
-		[Association(ThisKey="f_front_section", OtherKey="c_alias", CanBeNull=false, KeyName="fk_content_sitemap_front_section", BackReferenceName="fkcontentsitemapfrontsections")]
-		public front_section fkcontentsitemapfrontsection { get; set; }
-
-		/// <summary>
 		/// fk_content_sitemap_from_sites
 		/// </summary>
 		[Association(ThisKey="f_site", OtherKey="c_alias", CanBeNull=false, KeyName="fk_content_sitemap_from_sites", BackReferenceName="fkcontentsitemapfromsitess")]
 		public cms_sites fkcontentsitemapfromsites { get; set; }
+
+		/// <summary>
+		/// fk_content_sitemap_front_section
+		/// </summary>
+		[Association(ThisKey="f_front_section", OtherKey="c_alias", CanBeNull=false, KeyName="fk_content_sitemap_front_section", BackReferenceName="fkcontentsitemapfrontsections")]
+		public front_section fkcontentsitemapfrontsection { get; set; }
 
 		/// <summary>
 		/// FK_content_documents_content_sitemap_BackReference
@@ -1818,7 +1818,7 @@ namespace cms.dbase.models
 		[PrimaryKey, NotNull] public Guid   id           { get; set; } // uniqueidentifier
 		[Column,     NotNull] public string c_name       { get; set; } // nvarchar(512)
 		[Column,     NotNull] public string f_size       { get; set; } // varchar(16)
-		[Column,     NotNull] public string f_type       { get; set; } // varchar(16)
+		[Column,     NotNull] public string f_type       { get; set; } // varchar(64)
 		[Column,     NotNull] public string c_alias      { get; set; } // nvarchar(16)
 		[Column,     NotNull] public string c_controller { get; set; } // nvarchar(32)
 		[Column,     NotNull] public string c_action     { get; set; } // nvarchar(32)
@@ -1872,7 +1872,7 @@ namespace cms.dbase.models
 	{
 		[Column,     NotNull] public Guid   id             { get; set; } // uniqueidentifier
 		[Column,     NotNull] public string c_name         { get; set; } // varchar(128)
-		[PrimaryKey, NotNull] public string c_alias        { get; set; } // varchar(16)
+		[PrimaryKey, NotNull] public string c_alias        { get; set; } // varchar(64)
 		[Column,     NotNull] public Guid   c_default_view { get; set; } // uniqueidentifier
 
 		#region Associations
@@ -1908,7 +1908,7 @@ namespace cms.dbase.models
 	public partial class front_site_section
 	{
 		[Column, NotNull] public string f_site          { get; set; } // varchar(64)
-		[Column, NotNull] public string f_front_section { get; set; } // varchar(16)
+		[Column, NotNull] public string f_front_section { get; set; } // varchar(64)
 		[Column, NotNull] public Guid   f_page_view     { get; set; } // uniqueidentifier
 
 		#region Associations
