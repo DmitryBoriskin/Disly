@@ -1,6 +1,8 @@
 ﻿using cms.dbase;
+using cms.dbModel.entity;
 using Disly.Models;
 using System;
+using System.Collections.Generic;
 using System.Web.Mvc;
 
 namespace Disly.Controllers
@@ -20,9 +22,16 @@ namespace Disly.Controllers
             {
                 SitesInfo = siteModel,
                 SiteMapArray = siteMapArray,
-                Breadcrumbs = breadcrumb,
-                BannerArray = bannerArray
+                BannerArray = bannerArray,
+                CurrentPage = _repository.getSiteMap("vote")
             };
+
+            model.Breadcrumbs = new List<Breadcrumbs>();
+            model.Breadcrumbs.Add(new Breadcrumbs
+            {
+                Title = "Обратная связь",
+                Url = "/feedback"
+            });
         }
 
         /// <summary>
@@ -38,7 +47,18 @@ namespace Disly.Controllers
             string _path = UrlPath.Substring(0, UrlPath.LastIndexOf("/") + 1);
             string _alias = UrlPath.Substring(UrlPath.LastIndexOf("/") + 1);
             #endregion
+
+            model.Breadcrumbs.Add(new Breadcrumbs
+            {
+                Title = "Голосование",
+                Url = ""
+            });
+
             model.List = _repository.getVote(_ip); //Domain,
+            model.Siblings = (model.CurrentPage != null) ? _repository.getSiteMapSiblingElements("/feedback/") : null;
+            model.Siblings.Add(model.CurrentPage);
+
+            model.Child = model.Siblings.ToArray();
 
             #region Создаем переменные (значения по умолчанию)            
             string _ViewName = (ViewName != String.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";

@@ -10,5 +10,6 @@ namespace Disly.Models
     {         
         public IEnumerable<VoteModel> List { get; set; }        
         public VoteModel Item { get; set; }
+        public List<SiteMapModel> Siblings { get; set; }
     }
 }

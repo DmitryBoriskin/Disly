@@ -392,6 +392,33 @@ namespace cms.dbase
         }
 
         /// <summary>
+        /// Получим сестринские эл-ты из карты сайта
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public override List<SiteMapModel> getSiteMapSiblingElements(string path)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var query = db.content_sitemaps
+                    .Where(w => w.f_site.Equals(_domain))
+                    .Where(w => w.c_path.Equals(path))
+                    .OrderBy(o => o.n_sort)
+                    .Select(s => new SiteMapModel
+                    {
+                        Title = s.c_title,
+                        Alias = s.c_alias,
+                        Path = s.c_path,
+                        FrontSection = s.f_front_section,
+                        Url = s.c_url
+                    });
+
+                if (!query.Any()) return null;
+                return query.ToList();
+            }
+        }
+
+        /// <summary>
         /// Дочерние элементы
         /// </summary>
         /// <param name="ParentId"></param>
