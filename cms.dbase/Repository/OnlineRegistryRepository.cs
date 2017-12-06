@@ -1,10 +1,9 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using cms.dbModel;
 using cms.dbModel.entity;
 using cms.dbase.models;
 using LinqToDB;
-using System.Collections.Generic;
+using System;
 
 namespace cms.dbase.Repository
 {
@@ -96,6 +95,28 @@ namespace cms.dbase.Repository
                         ShortName = s.C_ShortName,
                         Url = s.C_RegistryURL,
                         Oid = s.C_OID
+                    });
+
+                if (!query.Any()) return null;
+                return query.SingleOrDefault();
+            }
+        }
+
+        /// <summary>
+        /// Получим эл-т карты сайта старой БД
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public override dbModel.entity.Hierarhy getHierarhy(int id)
+        {
+            using (var db = new registry(_context))
+            {
+                var query = db.Hierarhys
+                    .Where(w => w.id.Equals(id))
+                    .Select(s => new dbModel.entity.Hierarhy
+                    {
+                        Caption = s.caption,
+                        Text = s.text
                     });
 
                 if (!query.Any()) return null;
