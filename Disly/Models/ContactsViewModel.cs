@@ -4,21 +4,35 @@ using System.Web.Mvc;
 namespace Disly.Models
 {
     /// <summary>
-    /// Модель для типовой страницы 
+    /// Модель для страницы контактов
     /// </summary>
     public class ContatcsViewModel : PageViewModel
-    {        
+    {   
+        /// <summary>
+        /// Организация
+        /// </summary>
         public OrgsModel OrgItem { get; set; }
+
+        /// <summary>
+        /// Список структур
+        /// </summary>
         public StructureModel[] Structures { get; set; }      
+
+        /// <summary>
+        /// Административный персонал
+        /// </summary>
         public OrgsAdministrative[] Administrativ { get; set; }
+
         /// <summary>
         /// тип информации показываемой на странице 
         /// </summary>
         public string Type { get; set; }
+
         /// <summary>
         /// Навигация
         /// </summary>
         public MaterialsGroup[] Nav { get; set; }
+
         /// <summary>
         /// Доболнительная информация из библиотеки
         /// </summary>
