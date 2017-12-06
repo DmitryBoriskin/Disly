@@ -240,16 +240,16 @@ namespace Disly.Areas.Admin.Controllers
                         siteMapItem.MenuGroups = back_model.Item.MenuGroups;
                         siteMapItem.Path = back_model.Item.Path;
 
-                        _cmsRepository.updateSiteMapItem(id, siteMapItem);
+                        _cmsRepository.updateSiteMapItem(id, siteMapItem, Domain);
                     }
                     else
                     {
-                        _cmsRepository.updateSiteMapItem(id, back_model.Item); //, AccountInfo.id, RequestUserInfo.IP
+                        _cmsRepository.updateSiteMapItem(id, back_model.Item, Domain); //, AccountInfo.id, RequestUserInfo.IP
                     }
 
                     userMessage.info = "Запись обновлена";
                 }
-                else
+                else 
                 {
                     _cmsRepository.createSiteMapItem(id, back_model.Item); //, AccountInfo.id, RequestUserInfo.IP
                     userMessage.info = "Запись добавлена";
