@@ -7,6 +7,7 @@ using System.Linq;
 using cms.dbModel.entity;
 using System.Web;
 using cms.dbase.Repository;
+using System.Text.RegularExpressions;
 
 namespace Disly.Areas.Admin.Controllers
 {
@@ -138,7 +139,13 @@ namespace Disly.Areas.Admin.Controllers
             #region Импорт со старой базы
             if (back_model.Item.OldId != null)
             {
-
+                var hierarhy = repoRegistry.getHierarhy((int)back_model.Item.OldId);
+                if (hierarhy != null)
+                {
+                    back_model.Item.Title = Regex.Replace(hierarhy.Caption, @"<[^>]*>", String.Empty);
+                    back_model.Item.Text = hierarhy.Text;
+                    back_model.Item.Url = hierarhy.Item;
+                }
             }
             #endregion
 
@@ -177,7 +184,6 @@ namespace Disly.Areas.Admin.Controllers
 
             if (ModelState.IsValid)
             {
-
                 #region Сохранение изображение
                 // путь для сохранения изображения
                 string savePath = Settings.UserFiles + Domain + Settings.SiteMapDir;

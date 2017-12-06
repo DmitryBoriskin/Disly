@@ -116,7 +116,8 @@ namespace cms.dbase.Repository
                     .Select(s => new dbModel.entity.Hierarhy
                     {
                         Caption = s.caption,
-                        Text = s.text
+                        Text = s.text,
+                        Item = s.item
                     });
 
                 if (!query.Any()) return null;

@@ -91,5 +91,10 @@
         /// Текст
         /// </summary>
         public string Text { get; set; }
+
+        /// <summary>
+        /// Ссылка
+        /// </summary>
+        public string Item { get; set; }
     }
 }
