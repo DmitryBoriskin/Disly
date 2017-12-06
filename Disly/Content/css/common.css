@@ -699,7 +699,8 @@ body {
     padding:8px;
     font-family:PtSans;
 }
-.btn_reg.ti-info-alt:before{
+.btn_reg.ti-info-alt:before,
+.btn_reg.ti-user:before{
     font-family:"themify";
 }
     .btn_print:hover, .btn_print:active, .btn_print:focus,

@@ -22,36 +22,35 @@
                             @if (!string.IsNullOrEmpty(Model.OrgItem.Address))
                             {
                                 <div class="contact_info_it">
-                                    <span>Адрес: </span>
+                                    <strong>Адрес: </strong>
                                     @Model.OrgItem.Address
-                                </div>
-                            }
-                            @if (!string.IsNullOrEmpty(Model.OrgItem.Phone))
-                            {
-                                <div class="contact_info_it">
-                                    <span>Телефон: </span>
-                                    @Model.OrgItem.Phone
                                 </div>
                             }
                             @if (!string.IsNullOrEmpty(Model.OrgItem.PhoneReception))
                             {
                                 <div class="contact_info_it">
-                                    <span>Телефон регистратуры:</span>
+                                    <strong>Телефон регистратуры:</strong>
                                     @Model.OrgItem.PhoneReception
                                 </div>
-
+                            }
+                            @if (!string.IsNullOrEmpty(Model.OrgItem.Phone))
+                            {
+                                <div class="contact_info_it">
+                                    <strong>Телефон: </strong>
+                                    @Model.OrgItem.Phone
+                                </div>
                             }
                             @if (!string.IsNullOrEmpty(Model.OrgItem.Fax))
                             {
                                 <div class="contact_info_it">
-                                    <span>Факс: </span>
+                                    <strong>Факс: </strong>
                                     @Model.OrgItem.Fax
                                 </div>
                             }
                             @if (!string.IsNullOrEmpty(Model.OrgItem.Email))
                             {
                                 <div class="contact_info_it">
-                                    <span>E-mail приёмной:</span>
+                                    <strong>E-mail приёмной:</strong>
                                     <a href="mailto:@Model.OrgItem.Email">@Model.OrgItem.Email</a>
                                 </div>
                             }

@@ -1208,7 +1208,7 @@ namespace cms.dbase
             {
                 var query = db.content_votes
                             .Where(w => w.f_site == domain && w.b_disabled == false)
-                            .OrderBy(o => o.d_date_start)
+                            .OrderByDescending(o => o.d_date_start)
                             .Select(s => new VoteModel()
                             {
                                 Id = s.id,
