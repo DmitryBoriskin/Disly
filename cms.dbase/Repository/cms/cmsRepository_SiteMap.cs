@@ -267,6 +267,7 @@ namespace cms.dbase
                             .Value(p => p.b_blocked, item.Blocked)
                             .Value(p => p.b_disabled_menu, item.DisabledMenu)
                             .Value(p => p.n_sort, maxSort)
+                            .Value(p => p.c_text, item.Text)
                             .Value(p => p.uui_parent, item.ParentId)
                             .Value(p => p.c_photo, item.Photo != null ? item.Photo.Url : null)
                             .Insert();
