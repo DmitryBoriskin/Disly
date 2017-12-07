@@ -93,10 +93,14 @@ namespace Disly.Areas.Admin.Controllers
 
             if (AccountInfo.Group.ToLower() != "developer" && AccountInfo.Group.ToLower() != "administrator")
             {
-                foreach (DomainList domain in AccountInfo.Domains)
+                if (AccountInfo.Domains != null)
                 {
-                    if (domain.SiteId == Domain) { IsRedirect++; }
+                    foreach (DomainList domain in AccountInfo.Domains)
+                    {
+                        if (domain.SiteId == Domain) { IsRedirect++; }
+                    }
                 }
+                
 
                 //перенаправляем на первый из своих доменов
                 if(IsRedirect==0)
