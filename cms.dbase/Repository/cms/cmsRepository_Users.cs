@@ -298,7 +298,7 @@ namespace cms.dbase
                         .Value(p => p.c_hash, Item.Hash)
                         .Value(p => p.c_contacts, Item.Contacts)
                         .Value(p => p.b_disabled, Item.Disabled)
-                       .Insert();
+                        .Insert();
 
                         // логирование
                         //insertLog(UserId, IP, "insert", id, String.Empty, "Users", Item.Surname + " " + Item.Name);
