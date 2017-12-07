@@ -2,7 +2,6 @@
 using Disly.Areas.Admin.Models;
 using Disly.Areas.Admin.Service;
 using System;
-using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
@@ -31,7 +30,13 @@ namespace Disly.Areas.Admin.Controllers
                 Settings = SettingsInfo,
                 UserResolution = UserResolutionInfo,
                 ControllerName = ControllerName,
-                ActionName = ActionName
+                ActionName = ActionName,
+                SiteType = new SiteMapMenu[] 
+                {
+                    new SiteMapMenu { Value = "org", Text = "Организации" },
+                    new SiteMapMenu { Value = "main", Text = "Портал" },
+                    new SiteMapMenu { Value = "spec", Text = "Специалисты" }
+                }
             };
 
             //Справочник всех доступных категорий
@@ -120,17 +125,19 @@ namespace Disly.Areas.Admin.Controllers
                 else
                     userMessage.info = "Произошла ошибка";
 
-                userMessage.buttons = new ErrorMassegeBtn[]{
+                userMessage.buttons = new ErrorMassegeBtn[]
+                {
                      new ErrorMassegeBtn { url = StartUrl + Request.Url.Query, text = "Вернуться в список" },
                      new ErrorMassegeBtn { url = "#", text = "ок", action = "false" }
-                 };
+                };
             }
             else
             {
                 userMessage.info = "Ошибка в заполнении формы. Поля в которых допушены ошибки - помечены цветом.";
-                userMessage.buttons = new ErrorMassegeBtn[]{
+                userMessage.buttons = new ErrorMassegeBtn[]
+                {
                      new ErrorMassegeBtn { url = "#", text = "ок", action = "false" }
-                 };
+                };
             }
             model.Item = _cmsRepository.getSiteSectionItem(Id);
             model.ErrorInfo = userMessage;
@@ -155,7 +162,8 @@ namespace Disly.Areas.Admin.Controllers
             ErrorMassege userMassege = new ErrorMassege();
             userMassege.title = "Информация";
             userMassege.info = "Запись Удалена";
-            userMassege.buttons = new ErrorMassegeBtn[]{
+            userMassege.buttons = new ErrorMassegeBtn[]
+            {
                 new ErrorMassegeBtn { url = "#", text = "ок", action = "false" }
             };
 
@@ -163,28 +171,5 @@ namespace Disly.Areas.Admin.Controllers
 
             return RedirectToAction("Index");
         }
-
-        ////Получение списка организаций по параметрам
-        //[HttpGet]
-        //public ActionResult Orgs(Guid id)
-        //{
-        //    model.Item = _cmsRepository.getMaterial(id, Domain);
-        //    model.OrgsByType = _cmsRepository.getOrgByType(id);
-
-        //    // прочие организации, непривязанные к типам
-        //    OrgType anotherOrgs = new OrgType
-        //    {
-        //        Id = Guid.Parse("4D30E508-5C56-43A0-9F25-EEFF026F95EF"),
-        //        Title = "Прочие организации",
-        //        Sort = model.OrgsByType.Select(s => s.Sort).Max() + 1,
-        //        Orgs = _cmsRepository.getOrgAttachedToTypes(id)
-        //    };
-
-        //    if (anotherOrgs.Orgs != null)
-        //        model.OrgsByType.Add(anotherOrgs);
-
-        //    return PartialView("Orgs", model);
-        //}
-
     }
 }

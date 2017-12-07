@@ -1,17 +1,25 @@
 ﻿using cms.dbModel.entity;
-using System.Collections.Generic;
 
 namespace Disly.Areas.Admin.Models
 {
     /// <summary>
-    /// Модель, описывающая новости в представлении
+    /// Модель, описывающая разделы
     /// </summary>
     public class SiteSectionViewModel : CoreViewModel
     {
         /// <summary>
-        /// Список новостей
+        /// Список разделов сайта
         /// </summary>
         public SiteSectionList List { get; set; }
+
+        /// <summary>
+        /// Эл-т разделов сайта
+        /// </summary>
         public SiteSectionModel Item { get; set; }
+
+        /// <summary>
+        /// Типы сайтов
+        /// </summary>
+        public SiteMapMenu[] SiteType { get; set; }
     }
 }

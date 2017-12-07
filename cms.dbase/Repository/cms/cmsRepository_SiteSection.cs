@@ -8,25 +8,31 @@ using LinqToDB;
 namespace cms.dbase
 {
     /// <summary>
-    /// Репозиторий для работы с новостями
+    /// Репозиторий для работы с разделами сайта
     /// </summary>
     public partial class cmsRepository : abstract_cmsRepository
     {
-
+        /// <summary>
+        /// Получаем список разделов сайта
+        /// </summary>
+        /// <param name="filtr">Фильтр</param>
+        /// <returns></returns>
         public override SiteSectionList getSiteSectionList(FilterParams filtr)
         {
             using (var db = new CMSdb(_context))
             {
                 var query = db.front_page_viewss.AsQueryable();
-                query = query.OrderBy(o => o.id);
+                query = query.OrderBy(o => o.f_site).ThenBy(o => o.id);
                 if (query.Any())
                 {
                     int ItemCount = query.Count();
                     var List = query
-                                .Select(s => new SiteSectionModel() {
-                                    Id=s.id,
-                                    Title=s.c_title,
-                                    Alias=s.f_page_type
+                                .Select(s => new SiteSectionModel()
+                                {
+                                    Id = s.id,
+                                    Title = s.c_title,
+                                    Alias = s.f_page_type,
+                                    SiteId = s.f_site
                                 })
                                 .Skip(filtr.Size * (filtr.Page - 1))
                                 .Take(filtr.Size);
@@ -48,24 +54,37 @@ namespace cms.dbase
                 return null;
             }
         }
+
+        /// <summary>
+        /// Получаем эл-т разделов сайта
+        /// </summary>
+        /// <param name="id">Идентификатор</param>
+        /// <returns></returns>
         public override SiteSectionModel getSiteSectionItem(Guid id)
         {
             using (var db = new CMSdb(_context))
             {
                 var data = db.front_page_viewss
                            .Where(w => w.id == id)
-                           .Select(s => new SiteSectionModel {
-                               Id=s.id,
-                               Title=s.c_title,
-                               Alias=s.f_page_type,
-                               Url=s.c_url
+                           .Select(s => new SiteSectionModel
+                           {
+                               Id = s.id,
+                               Title = s.c_title,
+                               Alias = s.f_page_type,
+                               Url = s.c_url,
+                               SiteId = s.f_site
                            });
                 if (data.Any()) return data.Single();
                 return null;
-                
+
             }
         }
 
+        /// <summary>
+        /// Удаляем раздел сайта
+        /// </summary>
+        /// <param name="id">Идентификатор</param>
+        /// <returns></returns>
         public override bool deleteSiteSection(Guid id)
         {
             try
@@ -84,7 +103,7 @@ namespace cms.dbase
 
                         db.front_site_sections.Where(w => w.f_page_view == id).Delete();
                         db.front_sections.Where(w => w.c_default_view == id).Delete();
-                        
+
                         var log = new LogModel()
                         {
                             Site = _domain,
@@ -111,13 +130,11 @@ namespace cms.dbase
                 return false;
             }
         }
-
-
-
+        
         /// <summary>
         /// Обновляем запись
         /// </summary>
-        /// <param name="upd">разед</param>
+        /// <param name="upd">раздел</param>
         /// <returns></returns>
         public override bool updateSiteSection(SiteSectionModel upd)
         {
@@ -135,7 +152,6 @@ namespace cms.dbase
 
                         cdSiteSection.c_title = upd.Title;
                         cdSiteSection.c_url = upd.Url;
-                        //cdSiteSection.f_page_type = upd.Alias;
                         db.Update(cdSiteSection);
 
                         if (cdSiteSection.f_page_type != upd.Alias)
@@ -174,86 +190,72 @@ namespace cms.dbase
                 return false;
             }
         }
-
-
-
-
+        
         /// <summary>
         /// Добавляем запись
         /// </summary>
-        /// <param name="sitesection">Новость</param>
+        /// <param name="sitesection">Раздел</param>
         /// <returns></returns>
         public override bool insertSiteSection(SiteSectionModel sitesection)
         {
-            //try
-            //{
-                using (var db = new CMSdb(_context))
+            using (var db = new CMSdb(_context))
+            {
+                using (var tran = db.BeginTransaction())
                 {
-                    using (var tran = db.BeginTransaction())
+                    front_page_views cdSiteSection = db.front_page_viewss
+                                            .Where(p => p.id == sitesection.Id)
+                                            .SingleOrDefault();
+                    if (cdSiteSection != null)
                     {
-                        front_page_views cdSiteSection = db.front_page_viewss
-                                                .Where(p => p.id == sitesection.Id)
-                                                .SingleOrDefault();
-                        if (cdSiteSection != null)
-                        {
-                            throw new Exception("Запись с таким Id уже существует");
-                        }
-                        
-                        cdSiteSection = new front_page_views
-                        {
-                            f_site="main",
-                            id = sitesection.Id,
-                            c_title = sitesection.Title,
-                            f_page_type = sitesection.Alias,
-                            c_url= sitesection.Url
-                        };
-                        db.Insert(cdSiteSection);
-
-
-                        //
-                        front_section cdSection = new front_section
-                        {
-                            id=Guid.NewGuid(),
-                            c_name = sitesection.Title,
-                            c_alias = sitesection.Alias,
-                            c_default_view= sitesection.Id
-                        };
-                        db.Insert(cdSection);
-
-                        //сделаем этот шаблон для всех существующих сайтов
-                        var allsites = db.cms_sitess.Select(s => s.c_alias).ToArray();
-                        foreach (var siteId in allsites)
-                        {
-                            db.front_site_sections
-                                .Value(v => v.f_site, siteId)
-                                .Value(v => v.f_front_section, sitesection.Alias)
-                                .Value(v => v.f_page_view, sitesection.Id)
-                                .Insert();
-                        }
-
-
-                        var log = new LogModel()
-                        {
-                            Site = _domain,
-                            Section = LogSection.SiteSection,
-                            Action = LogAction.insert,
-                            PageId = sitesection.Id,
-                            PageName = sitesection.Title,
-                            UserId = _currentUserId,
-                            IP = _ip,
-                        };
-                        insertLog(log);
-
-                        tran.Commit();
-                        return true;
+                        throw new Exception("Запись с таким Id уже существует");
                     }
+
+                    cdSiteSection = new front_page_views
+                    {
+                        f_site = sitesection.SiteId,
+                        id = sitesection.Id,
+                        c_title = sitesection.Title,
+                        f_page_type = sitesection.Alias,
+                        c_url = sitesection.Url
+                    };
+                    db.Insert(cdSiteSection);
+                    
+                    front_section cdSection = new front_section
+                    {
+                        id = Guid.NewGuid(),
+                        c_name = sitesection.Title,
+                        c_alias = sitesection.Alias,
+                        c_default_view = sitesection.Id
+                    };
+                    db.Insert(cdSection);
+
+                    //сделаем этот шаблон для всех существующих сайтов
+                    var allsites = db.cms_sitess.Select(s => s.c_alias).ToArray();
+                    foreach (var siteId in allsites)
+                    {
+                        db.front_site_sections
+                            .Value(v => v.f_site, siteId)
+                            .Value(v => v.f_front_section, sitesection.Alias)
+                            .Value(v => v.f_page_view, sitesection.Id)
+                            .Insert();
+                    }
+                    
+                    var log = new LogModel()
+                    {
+                        Site = _domain,
+                        Section = LogSection.SiteSection,
+                        Action = LogAction.insert,
+                        PageId = sitesection.Id,
+                        PageName = sitesection.Title,
+                        UserId = _currentUserId,
+                        IP = _ip,
+                    };
+                    insertLog(log);
+
+                    tran.Commit();
+                    return true;
                 }
-            //}
-            //catch (Exception ex)
-            //{
-            //    //write to log ex
-            //    return false;
-            //}
+            }
         }
 
     }

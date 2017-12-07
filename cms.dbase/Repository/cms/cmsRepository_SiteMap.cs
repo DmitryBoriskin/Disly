@@ -170,7 +170,7 @@ namespace cms.dbase
 
                 if (!data.Any())
                     return null;
-                else 
+                else
                     return data.FirstOrDefault();
             }
         }
@@ -467,15 +467,42 @@ namespace cms.dbase
         /// Получаем список типов страниц
         /// </summary>
         /// <returns></returns>
-        public override SiteMapMenu[] getSiteMapFrontSectionList()
+        public override SiteMapMenu[] getSiteMapFrontSectionList(string domain)
         {
             using (var db = new CMSdb(_context))
             {
-                var data = db.front_sections
+                const string ORG = "org";
+
+                var type = db.cms_sitess
+                    .Where(w => w.c_alias.Equals(domain))
+                    .Select(s => s.c_content_type).SingleOrDefault();
+
+                IQueryable<front_page_views> query;
+
+                if (type != ORG)
+                {
+                    query = db.front_page_viewss
+                        .Where(w => w.f_site.Equals(ORG) || w.f_site.Equals(type));
+                }
+                else
+                {
+                    if (domain.Equals("main"))
+                    {
+                        query = db.front_page_viewss
+                            .Where(w => w.f_site.Equals("main") || w.f_site.Equals(type));
+                    }
+                    else
+                    {
+                        query = db.front_page_viewss
+                            .Where(w => w.f_site.Equals(type));
+                    }
+                }
+
+                var data = query
                     .Select(s => new SiteMapMenu
                     {
-                        Text = s.c_name,
-                        Value = s.c_alias
+                        Text = s.c_title,
+                        Value = s.f_page_type
                     });
 
                 if (!data.Any()) { return null; }
@@ -592,7 +619,7 @@ namespace cms.dbase
                     if (query.Any())
                     {
                         var siteMapMenuItem = query.SingleOrDefault();
-                       
+
                         var log = new LogModel()
                         {
                             Site = _domain,
