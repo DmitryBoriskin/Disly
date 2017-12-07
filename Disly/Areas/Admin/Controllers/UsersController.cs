@@ -22,7 +22,7 @@ namespace Disly.Areas.Admin.Controllers
                 UserResolution = UserResolutionInfo,
                 ControllerName = ControllerName,
                 ActionName = ActionName,
-                GroupList = _cmsRepository.getUsersGroupList()
+                GroupList = _cmsRepository.getUsersGroupListAdmin()
             };
             
             #region Метатеги
@@ -53,8 +53,10 @@ namespace Disly.Areas.Admin.Controllers
         /// <returns></returns>
         public ActionResult Item(Guid Id)
         {
-            model.Item = _cmsRepository.getUser(Id);            
+            model.Item = _cmsRepository.getUser(Id);
+            //model.GroupList = model.GroupList.to;
 
+            var t = model.GroupList;
             return View("Item", model);
         }
 
@@ -121,10 +123,9 @@ namespace Disly.Areas.Admin.Controllers
                     string NewSalt = password.Salt;
                     string NewHash = password.Hash;
 
-                    back_model.Item.Salt = NewSalt;
                     back_model.Item.Hash = NewHash;
 
-                    _cmsRepository.createUser(Id, back_model.Item); //, AccountInfo.id, RequestUserInfo.IP
+                    _cmsRepository.createUserOnSite(Id, back_model.Item); //, AccountInfo.id, RequestUserInfo.IP
 
                     userMassege.info = "Запись добавлена";
                 }
@@ -171,7 +172,7 @@ namespace Disly.Areas.Admin.Controllers
             userMassege.title = "Информация";
             userMassege.info = "Запись Удалена";
             userMassege.buttons = new ErrorMassegeBtn[]{
-                new ErrorMassegeBtn { url = "#", text = "ок", action = "false" }
+                new ErrorMassegeBtn { url = StartUrl + Request.Url.Query, text = "ок", action = "false" }
             };
 
             model.Item = _cmsRepository.getUser(Id);

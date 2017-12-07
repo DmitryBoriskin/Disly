@@ -51,6 +51,7 @@ namespace cms.dbModel
         public abstract UsersList getUsersList(FilterParams filtr);
         public abstract UsersModel getUser(Guid id);
         public abstract bool createUser(Guid id, UsersModel Item);
+        public abstract bool createUserOnSite(Guid id, UsersModel Item);
         public abstract bool updateUser(Guid id, UsersModel Item);
         public abstract bool deleteUser(Guid id);
 
@@ -62,6 +63,7 @@ namespace cms.dbModel
         public abstract bool updateUserSiteLinks(UserSiteLinkModel link);
         //Все доступные группы на портале - справочник
         public abstract Catalog_list[] getUsersGroupList();
+        public abstract Catalog_list[] getUsersGroupListAdmin();
 
 
         //Группа пользователей
