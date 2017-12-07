@@ -10,6 +10,7 @@ public enum ContentType
     MATERIAL = 1,
     EVENT = 2,
     PHOTO = 3,
+    BANNER = 4
 }
 /// <summary>
 /// Типы объектов, которые могут иметь свои сайты(домены)
@@ -19,5 +20,6 @@ public enum ContentLinkType
     UNDEFINED = 0,
     EVENT = 1,
     ORG = 2,
-    SPEC = 3
+    SPEC = 3,
+    SITE = 4
 }

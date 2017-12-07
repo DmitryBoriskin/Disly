@@ -81,6 +81,7 @@ body {
 
 .head_logo {
     padding-right: 20px;
+    float: left;
 }
 
 .head_title {
@@ -113,6 +114,11 @@ body {
         color: #000 !important;
         text-decoration: none !important;
     }
+
+
+.bottom_left{float:left;}
+.bottom_left+.bottom_info{padding-left:60px;}
+
 
 .footer-right ul li a {
     margin-right: 10px;
@@ -681,8 +687,7 @@ body {
         width: 100%;
     }
 
-.event-item-module-opacity {
-    height: 50px;
+.event-item-module-opacity {    
     background: rgba(0, 0, 0, 0.3);
     position: absolute;
     width: 100%;
@@ -1173,7 +1178,7 @@ body {
     }
 
 .media_link {
-    margin-top: 58px;
+    margin-top: 61px;
 }
 
 .media_link_item {
@@ -1188,22 +1193,22 @@ body {
     font-family: PtSans;
     font-size: 20px;
         font-weight: bold;
-        margin-bottom: 8px;
+        margin-bottom: 10px;
     }
 
     .media_link_item + .media_link_item {
-        margin-top: 17px;
+        margin-top: 15px;
     }
 
 .media_link-present img {
-    max-width: 62px;
+    max-width: 81px;
     float: left;
     padding-right: 18px;
 }
 
 .media_link_item.media_link-yotube {
     padding-top: 24px;
-    padding-bottom: 23px;
+    padding-bottom: 26px;
 }
 
 .media_item_link {
@@ -1249,7 +1254,7 @@ body {
 }
 
 .media_item_circle .ico:before {
-    font-family: fontello;
+    font-family: themify;
     font-size: 22px;
 }
 
@@ -1258,11 +1263,13 @@ body {
 }
 
 .media_item_circle__photo .ico:before {
-    content: '\eef2';    
+    content: '\e633';
 }
 
 .media_item_circle__video .ico:before {
-    content: '\eff2';
+    content: '\e6ad';
+    font-size:26px;
+    position:relative;right:-2px;
 }
 
 .attachfile h2 {

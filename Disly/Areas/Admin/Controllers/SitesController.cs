@@ -42,8 +42,9 @@ namespace Disly.Areas.Admin.Controllers
 
             string return_url = ViewBag.urlQuery = HttpUtility.UrlDecode(Request.Url.Query);
 
-            FilterParams filter = getFilter();            
-            model.List = _cmsRepository.getSiteList(filter);
+            FilterParams filter = getFilter();
+            var sitefilter = FilterParams.Extend<SiteFilter>(filter);
+            model.List = _cmsRepository.getSiteList(sitefilter);
 
             return View(model);
         }
@@ -121,7 +122,7 @@ namespace Disly.Areas.Admin.Controllers
             var orgfilter = FilterParams.Extend<OrgFilter>(filter);
             var evfilter = FilterParams.Extend<EventFilter>(filter);
 
-            model.OrgsList = new SelectList(_cmsRepository.getOrgs(orgfilter, null), "Id", "Title", ContentId);
+            model.OrgsList = new SelectList(_cmsRepository.getOrgs(orgfilter), "Id", "Title", ContentId);
             model.MainSpecialistList = new SelectList(_cmsRepository.getMainSpecialistList(filter).Data, "Id", "Name", ContentId);
             model.EventsList = new SelectList(_cmsRepository.getEventsList(evfilter).Data, "Id", "Title", ContentId);
             #endregion
@@ -231,10 +232,8 @@ namespace Disly.Areas.Admin.Controllers
 
                 return View("Master", model);
             }
-
             model.Item = _cmsRepository.getSite(Id);
             model.ErrorInfo = userMassege;
-
 
             #region Данные из адресной строки(для случаев когда сайт создается со страницы того кому создается сайт)
             FilterParams filter = new FilterParams()
@@ -267,7 +266,7 @@ namespace Disly.Areas.Admin.Controllers
                 );
             var orgfilter = FilterParams.Extend<OrgFilter>(filter);
             var evfilter = FilterParams.Extend<EventFilter>(filter);
-            model.OrgsList = new SelectList(_cmsRepository.getOrgs(orgfilter, null), "Id", "Title", ContentId);
+            model.OrgsList = new SelectList(_cmsRepository.getOrgs(orgfilter), "Id", "Title", ContentId);
             model.MainSpecialistList = new SelectList(_cmsRepository.getMainSpecialistList(filter).Data, "Id", "Name", ContentId);
             model.EventsList = new SelectList(_cmsRepository.getEventsList(evfilter).Data, "Id", "Title", ContentId);
             #endregion

@@ -36,7 +36,7 @@ namespace cms.dbModel
         public abstract bool permit_cmsMenu(Guid id, int num);
 
         // Все сайты портала
-        public abstract SitesList getSiteList(FilterParams filtr);
+        public abstract SitesList getSiteList(SiteFilter filtr);
         public abstract SitesShortModel[] getSiteListWithCheckedForUser(SiteFilter filtr);
         public abstract bool check_Site(Guid id);
         public abstract bool insertSite(SitesModel ins);
@@ -51,6 +51,7 @@ namespace cms.dbModel
         public abstract UsersList getUsersList(FilterParams filtr);
         public abstract UsersModel getUser(Guid id);
         public abstract bool createUser(Guid id, UsersModel Item);
+        public abstract bool createUserOnSite(Guid id, UsersModel Item);
         public abstract bool updateUser(Guid id, UsersModel Item);
         public abstract bool deleteUser(Guid id);
 
@@ -62,6 +63,7 @@ namespace cms.dbModel
         public abstract bool updateUserSiteLinks(UserSiteLinkModel link);
         //Все доступные группы на портале - справочник
         public abstract Catalog_list[] getUsersGroupList();
+        public abstract Catalog_list[] getUsersGroupListAdmin();
 
 
         //Группа пользователей
@@ -111,7 +113,7 @@ namespace cms.dbModel
 
         //Orgs
         public abstract OrgsList getOrgsList(OrgFilter filtr);
-        public abstract OrgsModel[] getOrgs(OrgFilter filtr, Guid? except);
+        public abstract OrgsModel[] getOrgs(OrgFilter filtr);
         public abstract OrgsModel getOrgItem(Guid id);
 
         public abstract OrgsShortModel[] getOrgsListWhithChekedFor(OrgFilter filtr);
@@ -199,7 +201,7 @@ namespace cms.dbModel
 
         // Баннеры
         public abstract BannersSectionModel[] getBannerSections();
-        public abstract BannersSectionModel getBannerSection(Guid id, FilterParams filter);
+        public abstract BannersSectionModel getSectionBanners(Guid id, FilterParams filter);
         public abstract int getCountBannersBySectionAndDomain(Guid section);
         public abstract BannersListModel getBanners(Guid section, FilterParams filter);
         public abstract BannersModel getBanner(Guid id);

@@ -59,6 +59,10 @@ namespace cms.dbModel.entity
         /// </summary>
         public Photo PhotoImage { get; set; }
         /// <summary>
+        /// Фотография
+        /// </summary>
+        public string PhotoOriginal { get; set; }
+        /// <summary>
         /// Дата
         /// </summary>        
         public DateTime Date { get; set; }

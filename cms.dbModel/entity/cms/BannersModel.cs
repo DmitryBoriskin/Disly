@@ -70,6 +70,10 @@ namespace cms.dbModel.entity
         /// Алиас секции
         /// </summary>
         public string SectionAlias { get; set; }
+        /// <summary>
+        /// Ссылки на другие объекты портала
+        /// </summary>
+        public ObjectLinks Links { get; set; }
     }
 
     /// <summary>
