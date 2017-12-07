@@ -1,6 +1,5 @@
 ﻿using Disly.Areas.Admin.Models;
 using System;
-using System.Configuration;
 using System.Web.Mvc;
 using Disly.Areas.Admin.Service;
 using System.Linq;
@@ -305,9 +304,10 @@ namespace Disly.Areas.Admin.Controllers
             var p = _cmsRepository.getSiteMapItem(id);
 
             // получим родительский элемент для перехода
-            var _parent = (string.IsNullOrEmpty(Request.Form["Item_ParentId"]) && p != null) ? p.ParentId : Guid.Parse(Request.Form["Item_ParentId"]);
-
-            if (_parent != null)
+            Guid? _parent = (string.IsNullOrEmpty(Request.Form["Item_ParentId"]) && p != null) ? p.ParentId 
+                : (string.IsNullOrWhiteSpace(Request.Form["Item_ParentId"]) ? Guid.Empty : Guid.Parse(Request.Form["Item_ParentId"]));
+            
+            if (_parent != Guid.Empty)
             {
                 return RedirectToAction("Item", new { id = _parent });
             }
