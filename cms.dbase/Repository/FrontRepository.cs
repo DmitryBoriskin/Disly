@@ -2159,6 +2159,8 @@ namespace cms.dbase
                                    .Select(s => new PhotoModel()
                                    {
                                        PreviewImage = new Photo { Url = s.c_preview },
+                                       PhotoImage = new Photo { Url = s.c_photo },
+                                       PhotoOriginal =s.c_photo,
                                        Id = s.id,
                                        Title = s.c_title
                                    }).ToArray();

@@ -41,6 +41,12 @@ namespace Disly
                url: "Search/",
                defaults: new { controller = "Search", action = "Index" }
             );
+            // поиск
+            routes.MapRoute(
+               name: "Photolist",
+               url: "photolist/{id}",
+               defaults: new { controller = "Service", action = "Photolist", id = UrlParameter.Optional }
+            );
 
             // лпу
             routes.MapRoute(

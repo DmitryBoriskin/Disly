@@ -877,6 +877,7 @@
     <Content Include="Views\Feedback\ReviewList.cshtml" />
     <Content Include="Views\Shared\part\childtabs.cshtml" />
     <Content Include="Views\GeneralSpecialists\Index.cshtml" />
+    <Content Include="Views\Service\Photo.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -889,7 +890,6 @@
     <Folder Include="Userfiles\" />
     <Folder Include="Views\Core\" />
     <Folder Include="Views\Redirect\" />
-    <Folder Include="Views\Service\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\cms.dbase\cms.dbase.csproj">

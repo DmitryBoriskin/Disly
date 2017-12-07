@@ -11,9 +11,9 @@ using System.Web.Mvc;
 
 namespace Disly.Controllers
 {
-    public class ServiceController : Controller
+    public class ServiceController : RootController
     {
-        protected FrontRepository _repository { get; private set; }
+        //protected FrontRepository _repository { get; private set; }
 
         public ActionResult Pager(Pager Model, string startUrl, string viewName = "Services/Pager")
         {
@@ -62,31 +62,31 @@ namespace Disly.Controllers
 
             return View(viewName, viewModel);
         }
-        public string addFiltrParam(string query, string name, string val)
+        //public string addFiltrParam(string query, string name, string val)
+        //{
+        //    //string search_Param = @"\b" + name + @"=[\w]*[\b]*&?";
+        //    string search_Param = @"\b" + name + @"=(.*?)(&|$)";
+        //    string normal_Query = @"&$";
+
+        //    Regex delParam = new Regex(search_Param, RegexOptions.CultureInvariant);
+        //    Regex normalQuery = new Regex(normal_Query);
+        //    query = delParam.Replace(query, String.Empty);
+        //    query = normalQuery.Replace(query, String.Empty);
+
+        //    if (val != String.Empty)
+        //    {
+        //        if (query.IndexOf("?") > -1) query += "&" + name + "=" + val;
+        //        else query += "?" + name + "=" + val;
+        //    }
+
+        //    query = query.Replace("?&", "?").Replace("&&", "&");
+
+        //    return query;
+        //}
+
+        public ActionResult Photolist(Guid id)
         {
-            //string search_Param = @"\b" + name + @"=[\w]*[\b]*&?";
-            string search_Param = @"\b" + name + @"=(.*?)(&|$)";
-            string normal_Query = @"&$";
-
-            Regex delParam = new Regex(search_Param, RegexOptions.CultureInvariant);
-            Regex normalQuery = new Regex(normal_Query);
-            query = delParam.Replace(query, String.Empty);
-            query = normalQuery.Replace(query, String.Empty);
-
-            if (val != String.Empty)
-            {
-                if (query.IndexOf("?") > -1) query += "&" + name + "=" + val;
-                else query += "?" + name + "=" + val;
-            }
-
-            query = query.Replace("?&", "?").Replace("&&", "&");
-
-            return query;
-        }
-
-        public ActionResult Photo(Guid id)
-        {
-            PhotoModel[] model = _repository.getPhotoList((Guid)id);
+            PhotoModel[] model = _repository.getPhotoList(id);
             return View("/Views/Service/Photo.cshtml", model);
         }
 
