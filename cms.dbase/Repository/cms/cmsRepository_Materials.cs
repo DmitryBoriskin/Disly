@@ -149,7 +149,8 @@ namespace cms.dbase
                                 Disabled = s.b_disabled,
                                 Important = s.b_important,
                                 Locked = s.b_locked,
-                                CountSee = s.n_count_see
+                                CountSee = s.n_count_see,
+                                //Links  заполняем в контроллере
                             });
 
                     if (materialsList.Any())

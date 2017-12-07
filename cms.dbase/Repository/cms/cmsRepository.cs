@@ -136,41 +136,51 @@ namespace cms.dbase
         /// <returns></returns>
         public override SitesModel getSite(string domain)
         {
-            using (var db = new CMSdb(_context))
+            try
             {
-                var data = db.cms_sitess.Where(w => w.c_alias == domain)
-                    .Select(s => new SitesModel
-                    {
-                        Id = s.id,
-                        Title = s.c_name,
-                        LongTitle = s.c_name_long,
-                        Alias = s.c_alias,
-                        Adress = s.c_adress,
-                        Phone = s.c_phone,
-                        Fax = s.c_fax,
-                        Email = s.c_email,
-                        Site = s.c_url,
-                        Worktime = s.c_worktime,
-                        Logo = new Photo
+                using (var db = new CMSdb(_context))
+                {
+                    var data = db.cms_sitess.Where(w => w.c_alias == domain)
+                        .Select(s => new SitesModel
                         {
-                            Url = s.c_logo
-                        },
-                        ContentId = (Guid)s.f_content,
-                        Type = s.c_content_type,
-                        Facebook = s.c_facebook,
-                        Vk = s.c_vk,
-                        Instagramm = s.c_instagramm,
-                        Odnoklassniki = s.c_odnoklassniki,
-                        Twitter = s.c_twitter,
-                        Theme = s.c_theme,
-                        BackGroundImg = new Photo
-                        {
-                            Url = s.c_background_img
-                        }
-                    });
+                            Id = s.id,
+                            Title = s.c_name,
+                            LongTitle = s.c_name_long,
+                            Alias = s.c_alias,
+                            Adress = s.c_adress,
+                            Phone = s.c_phone,
+                            Fax = s.c_fax,
+                            Email = s.c_email,
+                            Site = s.c_url,
+                            Worktime = s.c_worktime,
+                            Logo = new Photo
+                            {
+                                Url = s.c_logo
+                            },
+                            ContentId = (Guid)s.f_content,
+                            Type = s.c_content_type,
+                            Facebook = s.c_facebook,
+                            Vk = s.c_vk,
+                            Instagramm = s.c_instagramm,
+                            Odnoklassniki = s.c_odnoklassniki,
+                            Twitter = s.c_twitter,
+                            Theme = s.c_theme,
+                            BackGroundImg = new Photo
+                            {
+                                Url = s.c_background_img
+                            }
+                        });
 
-                if (!data.Any()) { return null; }
-                else { return data.First(); }
+                    if (data.Any())
+                        return data.SingleOrDefault();
+
+                    return null;
+                }
+            }
+            catch(Exception ex)
+            {
+                //Log
+                return null;
             }
         }
 
@@ -662,15 +672,57 @@ namespace cms.dbase
 
         #region Site
         /// <summary>
+        /// Формирование sql-запрса на основании фильтра
+        /// </summary>
+        /// <param name="db"></param>
+        /// <param name="filtr"></param>
+        /// <returns></returns>
+        private IQueryable<cms_sites> queryBySiteFilter(CMSdb db, SiteFilter filtr)
+        {
+            if (filtr == null)
+                throw new Exception("cmsRepository > queryByEventFilter: Filter is null");
+
+            var query = db.cms_sitess.AsQueryable();
+
+
+            if (!string.IsNullOrEmpty(filtr.SearchText))
+            {
+                query = query.Where(w => w.c_name.Contains(filtr.SearchText));
+            }
+
+            if (filtr.RelId.HasValue && filtr.RelId.Value != Guid.Empty)
+            {
+                //В таблице ищем связи оранизация - контент (новость/событие)
+                var objctLinks = db.content_content_links
+                    .Where(s => s.f_content == filtr.RelId.Value)
+                    .Where(s => s.f_content_type == filtr.RelType.ToString().ToLower())
+                    .Where(s => s.f_link_type == ContentLinkType.SITE.ToString().ToLower());
+
+                if (!objctLinks.Any())
+                    query = query.Where(o => o.id == Guid.Empty); //Делаем заранее ложный запрос
+                else
+                {
+                    var objctsId = objctLinks.Select(o => o.f_link);
+                    query = query.Where(o => objctsId.Contains(o.id));
+                }
+            }
+
+
+            return query;
+        }
+
+        /// <summary>
         /// Список сайтов
         /// </summary>
         /// <param name="filtr"></param>
         /// <returns></returns>
-        public override SitesList getSiteList(FilterParams filtr)
+        public override SitesList getSiteList(SiteFilter filtr)
         {
             using (var db = new CMSdb(_context))
             {
-                var query = db.cms_sitess.Where(w => w.c_alias != String.Empty);
+                var query = queryBySiteFilter(db, filtr);
+
+
                 if (filtr.Disabled != null) //в данном случае используется для определения отключенных/включенных сайтов
                 {
                     if ((bool)filtr.Disabled)
@@ -683,7 +735,6 @@ namespace cms.dbase
                 {
                     query = query.Where(w => w.c_name.Contains(filtr.SearchText));
                 }
-
 
                 query = query.OrderBy(o => new { o.c_name });
 

@@ -26,14 +26,15 @@ namespace cms.dbModel.entity
         /// <summary>
         /// События
         /// </summary>
-        public Guid[] PersonsId { get; set; }
+        public Guid[] SitesId { get; set; }
         /// <summary>
-        /// События
+        /// Сайты
         /// </summary>
-        //public PersonsShort[] Persons { get; set; }
+        public SitesModel[] Sites { get; set;}
 
-
-        //К новостям ничего не привязывается
-
+        /// <summary>
+        /// Привязка к персоне/ главному специалисту
+        /// </summary>
+        public Guid[] PersonsId { get; set; }
     }
 }

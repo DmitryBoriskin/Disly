@@ -4,7 +4,7 @@
     {
         string _class = (Model.CurrentPage != null && item.Alias == Model.CurrentPage.Alias) ? "class=active" : "";
         
-        string _href = "/feedback/";
+        string _href = item.Path;
         _href += item.Alias;
         if (item.FrontSection.ToLower().Equals("vote"))
         {

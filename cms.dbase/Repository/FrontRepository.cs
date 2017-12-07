@@ -76,7 +76,7 @@ namespace cms.dbase
             using (var db = new CMSdb(_context))
             {
                 string ViewPath = "~/Error/404/";
-                
+
                 var query = (from s in db.front_site_sections
                              join v in db.front_page_viewss
                              on s.f_page_view equals v.id
@@ -84,7 +84,7 @@ namespace cms.dbase
                              select v.c_url);
                 if (query.Any())
                     ViewPath = query.SingleOrDefault();
-                
+
                 return ViewPath;
             }
         }
@@ -255,27 +255,73 @@ namespace cms.dbase
         /// <returns></returns>
         public override BannersModel[] getBanners()
         {
-            string domain = _domain;
+            //string domain = _domain;
+            //using (var db = new CMSdb(_context))
+            //{
+            //    var data = db.content_sv_banners_sections
+            //        .Where(w => w.f_site.Equals(domain))
+            //        .Where(w => !w.b_disabled)
+            //        .OrderBy(o => o.n_sort)
+            //        .Select(s => new BannersModel
+            //        {
+            //            Id = s.id,
+            //            Title = s.c_title,
+            //            Photo = new Photo { Url = s.c_photo },
+            //            Url = s.c_url,
+            //            Text = s.c_text,
+            //            Date = s.d_date,
+            //            Sort = s.n_sort,
+            //            SectionAlias = s.c_alias
+            //        });
+
+            //    if (data.Any())
+            //        return data.ToArray();
+
+            //    return null;
+            //     public override BannersListModel getBanners(Guid section, FilterParams filter)
+            //{
             using (var db = new CMSdb(_context))
             {
-                var data = db.content_sv_banners_sections
-                    .Where(w => w.f_site.Equals(domain))
-                    .Where(w => !w.b_disabled)
-                    .OrderBy(o => o.n_sort)
-                    .Select(s => new BannersModel
-                    {
-                        Id = s.id,
-                        Title = s.c_title,
-                        Photo = new Photo { Url = s.c_photo },
-                        Url = s.c_url,
-                        Text = s.c_text,
-                        Date = s.d_date,
-                        Sort = s.n_sort,
-                        SectionAlias = s.c_alias
-                    });
 
-                if (data.Any())
-                    return data.ToArray();
+                var site = getSiteInfo();
+                if (site == null)
+                    throw new Exception("CmsRepository_Banners > getBanners: domain (" + _domain + ") did not found");
+
+                var siteBanners = db.content_content_links
+                    .Where(s => s.f_content_type == ContentType.BANNER.ToString())
+                    .Where(s => s.f_link_type == ContentLinkType.SITE.ToString())
+                    .Where(s => s.f_link == site.Id);
+
+                if (siteBanners.Any())
+                {
+                    //Баннеры, принадлежащие сайту
+                    Guid[] bannersId = siteBanners.Select(b => b.f_content).ToArray();
+
+                    var query = db.content_bannerss
+                       //.Where(w => w.f_section == section)
+                       .Where(w => !w.b_disabled)
+                       .Where(w => bannersId.Contains(w.id));
+
+                    if (query.Any())
+                    {
+                        int itemCount = query.Count();
+                        var list = query
+                            .OrderBy(o => o.n_sort)
+                            .Select(s => new BannersModel()
+                            {
+                                Id = s.id,
+                                Title = s.c_title,
+                                Photo = new Photo { Url = s.c_photo },
+                                Url = s.c_url,
+                                Text = s.c_text,
+                                Date = s.d_date,
+                                Sort = s.n_sort,
+                                SectionAlias = s.contentbannerscontentbannersections.c_alias
+                            });
+
+                        return list.ToArray();
+                    }
+                }
 
                 return null;
             }
@@ -914,7 +960,7 @@ namespace cms.dbase
                     {
                         data.Phones = Phones.ToArray();
                     }
-                    var People = db.content_sv_people_departments.Where(w => w.f_department == Id).OrderBy(o=>new {o.c_surname,o.c_name,o.c_patronymic })
+                    var People = db.content_sv_people_departments.Where(w => w.f_department == Id).OrderBy(o => new { o.c_surname, o.c_name, o.c_patronymic })
                                     .Select(s => new People()
                                     {
                                         Id = s.id,
@@ -926,7 +972,7 @@ namespace cms.dbase
                     if (People.Any())
                     {
                         data.Boss = People.Where(w => w.Status == "boss").ToArray();
-                        data.Sister = People.Where(w=>w.Status== "sister").ToArray();                        
+                        data.Sister = People.Where(w => w.Status == "sister").ToArray();
                     }
                     return data;
                 }
@@ -1014,7 +1060,7 @@ namespace cms.dbase
                 Guid department = !string.IsNullOrWhiteSpace(filter.Group) // департамент
                     ? Guid.Parse(filter.Group) : Guid.Empty;
 
-                var search = !string.IsNullOrWhiteSpace(filter.SearchText) 
+                var search = !string.IsNullOrWhiteSpace(filter.SearchText)
                     ? filter.SearchText.ToLower().Split(' ') : null; // поиск по человеку
 
 
@@ -1107,7 +1153,7 @@ namespace cms.dbase
                                  Domain = s.c_alias,
                                  MainSpec = ms.c_name
                              });
-                
+
                 if (query.Any())
                     return query.SingleOrDefault();
 
@@ -1228,7 +1274,7 @@ namespace cms.dbase
         /// <param name="domain"></param>
         /// <param name="Ip"></param>
         /// <returns></returns>
-        public override IEnumerable<VoteModel> getVote( string Ip)
+        public override IEnumerable<VoteModel> getVote(string Ip)
         {
             string domain = _domain;
             using (var db = new CMSdb(_context))
@@ -1390,7 +1436,7 @@ namespace cms.dbase
                 }
             }
         }
-        
+
         /// <summary>
         /// Список админстративного персонала
         /// </summary>
@@ -1761,8 +1807,8 @@ namespace cms.dbase
                     ? filter.SearchText.ToLower().Split(' ') : null; // поиск по человеку
 
 
-                var people = (from  p in db.content_peoples
-                              select  p);
+                var people = (from p in db.content_peoples
+                              select p);
 
                 if (search != null)
                 {
@@ -2048,17 +2094,17 @@ namespace cms.dbase
                 var contentType = ContentType.EVENT.ToString().ToLower();
 
                 var eventIds = (from s in db.cms_sitess
-                             join cct in db.content_content_links on s.f_content equals cct.f_link
-                             join e in db.content_eventss on cct.f_content equals e.id
-                             where s.c_alias.Equals(domain) && cct.f_content_type.Equals(contentType)
-                             select e.id);
+                                join cct in db.content_content_links on s.f_content equals cct.f_link
+                                join e in db.content_eventss on cct.f_content equals e.id
+                                where s.c_alias.Equals(domain) && cct.f_content_type.Equals(contentType)
+                                select e.id);
 
                 if (!eventIds.Any()) return null;
 
                 var query = db.content_eventss
                     .Where(w => eventIds.Contains(w.id))
                     .Where(w => !w.b_disabled)
-                    .Where(w => (w.d_date >= now) || (w.d_date_end >= now) 
+                    .Where(w => (w.d_date >= now) || (w.d_date_end >= now)
                             || (w.b_annually && (w.d_date.DayOfYear >= now.DayOfYear || w.d_date_end.DayOfYear >= now.DayOfYear)));
 
                 if (!string.IsNullOrWhiteSpace(filter.SearchText))
@@ -2166,17 +2212,17 @@ namespace cms.dbase
                                .Where(w => w.f_album == id);
                 if (query.Any())
                 {
-                                   var data=query.OrderBy(o => o.n_sort)
-                                   .Select(s => new PhotoModel()
-                                   {
-                                       PreviewImage = new Photo { Url = s.c_preview },
-                                       Id = s.id,
-                                       Title = s.c_title
-                                   }).ToArray();
+                    var data = query.OrderBy(o => o.n_sort)
+                    .Select(s => new PhotoModel()
+                    {
+                        PreviewImage = new Photo { Url = s.c_preview },
+                        Id = s.id,
+                        Title = s.c_title
+                    }).ToArray();
                     return data;
                 }
-                    
-              
+
+
                 return null;
             }
         }

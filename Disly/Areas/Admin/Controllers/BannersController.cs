@@ -26,7 +26,7 @@ namespace Disly.Areas.Admin.Controllers
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             base.OnActionExecuting(filterContext);
-            
+
             model = new BannersViewModel
             {
                 Account = AccountInfo,
@@ -61,9 +61,9 @@ namespace Disly.Areas.Admin.Controllers
                 filter = getFilter(pageSize);
 
                 // наполняем модель списка баннеров
-                model.SectionItem = _cmsRepository.getBannerSection((Guid)id, filter);
+                model.SectionItem = _cmsRepository.getSectionBanners((Guid)id, filter);
             }
-            
+
             return View(model);
         }
 
@@ -85,6 +85,18 @@ namespace Disly.Areas.Admin.Controllers
                 {
                     model.Item.Photo = Files.getInfoImage(photo.Url);
                 }
+
+                //Заполняем для модели связи с другими объектами
+                filter = getFilter();
+                var sitefilter = FilterParams.Extend<SiteFilter>(filter);
+                sitefilter.RelId = id;
+                sitefilter.RelType = ContentType.BANNER;
+                var sitessList = _cmsRepository.getSiteList(sitefilter);
+
+                model.Item.Links = new ObjectLinks()
+                {
+                    Sites = (sitessList != null)? sitessList.Data : null
+                };
             }
 
             return View(model);
@@ -113,7 +125,7 @@ namespace Disly.Areas.Admin.Controllers
                 string savePath = Settings.UserFiles + Domain + Settings.BannersDir;
 
                 // секция
-                var _section = _cmsRepository.getBannerSection((Guid)back_model.Item.Section, null);
+                var _section = _cmsRepository.getSectionBanners((Guid)back_model.Item.Section, null);
                 int width = _section.Width; // ширина
                 int height = _section.Height; // высота
 
@@ -137,7 +149,7 @@ namespace Disly.Areas.Admin.Controllers
 
                         return View("Item", model);
                     }
-                    
+
                     Photo photoNew = new Photo()
                     {
                         Name = id.ToString() + fileExtension,
@@ -206,7 +218,7 @@ namespace Disly.Areas.Admin.Controllers
             }
             return Redirect(StartUrl + Request.Url.Query);
         }
-        
+
         /// <summary>
         /// Событие по кнопке "Удалить"
         /// </summary>
@@ -217,7 +229,7 @@ namespace Disly.Areas.Admin.Controllers
         public ActionResult Delete(Guid id)
         {
 
-           var data = model.Item = _cmsRepository.getBanner(id);
+            var data = model.Item = _cmsRepository.getBanner(id);
 
             // удаляем файл изображения и запись
             if (model.Item != null)

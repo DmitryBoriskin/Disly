@@ -45,13 +45,13 @@ namespace cms.dbase
         /// <param name="domain">Домен</param>
         /// <param name="filter">Фильтр</param>
         /// <returns></returns>
-        public override BannersSectionModel getBannerSection(Guid id, FilterParams filter)
+        public override BannersSectionModel getSectionBanners(Guid id, FilterParams filter)
         {
             using (var db = new CMSdb(_context))
             {
                 var query = db.content_banner_sectionss
                     .Where(w => w.id == id)
-                    .Select(s => new BannersSectionModel
+                    .Select(s => new BannersSectionModel()
                     {
                         Id = s.id,
                         Title = s.c_title,
@@ -59,8 +59,9 @@ namespace cms.dbase
                         Disabled = s.b_disabled,
                         Width = s.n_width,
                         Height = s.n_height,
-                        CountBanners = getCountBannersBySectionAndDomain(s.id),
-                        BannerList = getBanners(id, filter)
+                        BannerList = getBanners(id, filter),
+                        CountBanners = (getBanners(id, filter) != null)? getBanners(id, filter).Pager.items_count : 0 //getCountBannersBySectionAndDomain(s.id),
+
                     });
                 if (!query.Any()) return null;
                 else { return query.FirstOrDefault(); }
@@ -91,52 +92,121 @@ namespace cms.dbase
         /// <param name="domain">Домен</param>
         /// <param name="filter">Фильтр</param>
         /// <returns></returns>
+        //public override BannersListModel getBanners(Guid section, FilterParams filter)
+        //{
+        //    using (var db = new CMSdb(_context))
+        //    {
+        //        var query = db.content_bannerss
+        //            .Where(w => w.f_site == _domain)
+        //            .Where(w => w.f_section == section);
+
+        //        if (query.Any() && filter != null)
+        //        {
+        //            int itemCount = query.Count();
+        //            var list = query
+        //            .Select(s => new BannersModel
+        //            {
+        //                Id = s.id,
+        //                Site = s.f_site,
+        //                Title = s.c_title,
+        //                Url = s.c_url,
+        //                Text = s.c_text,
+        //                Date = s.d_date,
+        //                Sort = s.n_sort,
+        //                Disabled = s.b_disabled,
+        //                Section = s.f_section,
+        //                CountClick = s.n_count_click,
+        //                Photo = new Photo
+        //                {
+        //                    Url = s.c_photo
+        //                }
+        //            }).Skip(filter.Size * (filter.Page - 1)).Take(filter.Size);
+
+        //            var bannerList = list.OrderBy(o => o.Sort).ToArray();
+
+        //            return new BannersListModel
+        //            {
+        //                Data = bannerList,
+        //                Pager = new Pager
+        //                {
+        //                    page = filter.Page,
+        //                    size = filter.Size,
+        //                    items_count = itemCount,
+        //                    page_count = (itemCount % filter.Size > 0) ? (itemCount / filter.Size) + 1
+        //                        : itemCount / filter.Size
+        //                }
+        //            };
+        //        }
+        //        else { return null; }
+        //    }
+        //}
+
         public override BannersListModel getBanners(Guid section, FilterParams filter)
         {
             using (var db = new CMSdb(_context))
             {
-                var query = db.content_bannerss
-                    .Where(w => w.f_site == _domain)
-                    .Where(w => w.f_section == section);
+                if(filter == null)
+                    throw new Exception("CmsRepository_Banners > getBanners: filter is null");
 
-                if (query.Any() && filter != null)
+                var site = getSite(_domain);
+                if (site == null)
+                    throw new Exception("CmsRepository_Banners > getBanners: domain (" + _domain + ") did not found");
+
+                var siteBanners = db.content_content_links
+                    .Where(s => s.f_content_type == ContentType.BANNER.ToString())
+                    .Where(s => s.f_link_type == ContentLinkType.SITE.ToString())
+                    .Where(s => s.f_link == site.Id);
+                  
+                if(siteBanners.Any())
                 {
-                    int itemCount = query.Count();
-                    var list = query
-                    .Select(s => new BannersModel
-                    {
-                        Id = s.id,
-                        Site = s.f_site,
-                        Title = s.c_title,
-                        Url = s.c_url,
-                        Text = s.c_text,
-                        Date = s.d_date,
-                        Sort = s.n_sort,
-                        Disabled = s.b_disabled,
-                        Section = s.f_section,
-                        CountClick = s.n_count_click,
-                        Photo = new Photo
-                        {
-                            Url = s.c_photo
-                        }
-                    }).Skip(filter.Size * (filter.Page - 1)).Take(filter.Size);
+                    //Баннеры, принадлежащие сайту
+                    Guid[] bannersId = siteBanners.Select(b => b.f_content).ToArray();
 
-                    var bannerList = list.OrderBy(o => o.Sort).ToArray();
+                    var query = db.content_bannerss
+                       .Where(w => w.f_section == section)
+                       .Where(w => bannersId.Contains(w.id));
 
-                    return new BannersListModel
+                    if (query.Any())
                     {
-                        Data = bannerList,
-                        Pager = new Pager
+                        int itemCount = query.Count();
+                        var list = query
+                            .OrderBy(o => o.n_sort)
+                            .Skip(filter.Size * (filter.Page - 1))
+                            .Take(filter.Size)
+                            .Select(s => new BannersModel()
+                            {
+                                Id = s.id,
+                                Site = s.f_site,
+                                Title = s.c_title,
+                                Url = s.c_url,
+                                Text = s.c_text,
+                                Date = s.d_date,
+                                Sort = s.n_sort,
+                                Disabled = s.b_disabled,
+                                Section = s.f_section,
+                                CountClick = s.n_count_click,
+                                Photo = new Photo
+                                {
+                                    Url = s.c_photo
+                                }
+                            });
+
+                        return new BannersListModel
                         {
-                            page = filter.Page,
-                            size = filter.Size,
-                            items_count = itemCount,
-                            page_count = (itemCount % filter.Size > 0) ? (itemCount / filter.Size) + 1
-                                : itemCount / filter.Size
-                        }
-                    };
+                            Data = list.ToArray(),
+                            Pager = new Pager
+                            {
+                                page = filter.Page,
+                                size = filter.Size,
+                                items_count = itemCount,
+                                page_count = (itemCount % filter.Size > 0) ? (itemCount / filter.Size) + 1
+                                    : itemCount / filter.Size
+                            }
+                        };
+                    }
                 }
-                else { return null; }
+
+                return null;
             }
         }
 
@@ -166,7 +236,8 @@ namespace cms.dbase
                         Photo = new Photo
                         {
                             Url = s.c_photo
-                        }
+                        },
+                        //Links  заполняем в контроллере
                     });
                 if (!query.Any()) return null;
                 else { return query.FirstOrDefault(); }

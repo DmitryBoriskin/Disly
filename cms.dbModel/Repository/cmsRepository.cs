@@ -36,7 +36,7 @@ namespace cms.dbModel
         public abstract bool permit_cmsMenu(Guid id, int num);
 
         // Все сайты портала
-        public abstract SitesList getSiteList(FilterParams filtr);
+        public abstract SitesList getSiteList(SiteFilter filtr);
         public abstract SitesShortModel[] getSiteListWithCheckedForUser(SiteFilter filtr);
         public abstract bool check_Site(Guid id);
         public abstract bool insertSite(SitesModel ins);
@@ -111,7 +111,7 @@ namespace cms.dbModel
 
         //Orgs
         public abstract OrgsList getOrgsList(OrgFilter filtr);
-        public abstract OrgsModel[] getOrgs(OrgFilter filtr, Guid? except);
+        public abstract OrgsModel[] getOrgs(OrgFilter filtr);
         public abstract OrgsModel getOrgItem(Guid id);
 
         public abstract OrgsShortModel[] getOrgsListWhithChekedFor(OrgFilter filtr);
@@ -199,7 +199,7 @@ namespace cms.dbModel
 
         // Баннеры
         public abstract BannersSectionModel[] getBannerSections();
-        public abstract BannersSectionModel getBannerSection(Guid id, FilterParams filter);
+        public abstract BannersSectionModel getSectionBanners(Guid id, FilterParams filter);
         public abstract int getCountBannersBySectionAndDomain(Guid section);
         public abstract BannersListModel getBanners(Guid section, FilterParams filter);
         public abstract BannersModel getBanner(Guid id);

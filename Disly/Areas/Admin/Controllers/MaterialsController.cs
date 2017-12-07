@@ -90,7 +90,7 @@ namespace Disly.Areas.Admin.Controllers
             var orgfilter = FilterParams.Extend<OrgFilter>(filter);
             orgfilter.RelId = Id;
             orgfilter.RelType = ContentType.MATERIAL;
-            orgs = _cmsRepository.getOrgs(orgfilter, null);
+            orgs = _cmsRepository.getOrgs(orgfilter);
 
             model.Item.Links = new ObjectLinks()
             {
