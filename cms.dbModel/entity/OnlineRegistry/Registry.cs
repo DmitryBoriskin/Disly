@@ -76,4 +76,25 @@
         /// </summary>
         public string Oid { get; set; }
     }
+
+    /// <summary>
+    /// Старая карта сайта
+    /// </summary>
+    public class Hierarhy
+    {
+        /// <summary>
+        /// Заголовок
+        /// </summary>
+        public string Caption { get; set; }
+
+        /// <summary>
+        /// Текст
+        /// </summary>
+        public string Text { get; set; }
+
+        /// <summary>
+        /// Ссылка
+        /// </summary>
+        public string Item { get; set; }
+    }
 }

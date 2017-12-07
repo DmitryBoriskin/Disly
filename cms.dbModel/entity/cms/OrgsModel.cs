@@ -430,6 +430,31 @@ namespace cms.dbModel.entity
         /// Есть ли ссылка на регистрацию
         /// </summary>
         public bool IsRedirectUrl { get; set; }
+
+        /// <summary>
+        /// Идентификатор структуры
+        /// </summary>
+        public int? StructureId { get; set; }
+
+        /// <summary>
+        /// Идентификатор департамента
+        /// </summary>
+        public Guid? DepartmentId { get; set; }
+
+        /// <summary>
+        /// Название департамента
+        /// </summary>
+        public string DepartmentTitle { get; set; }
+
+        /// <summary>
+        /// Ссылка на сайт главного специалиста
+        /// </summary>
+        public string Domain { get; set; }
+
+        /// <summary>
+        /// Название главного специалиста
+        /// </summary>
+        public string MainSpec { get; set; }
     }
 
     /// <summary>

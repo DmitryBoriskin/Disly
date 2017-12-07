@@ -267,6 +267,7 @@ namespace cms.dbase
                             .Value(p => p.b_blocked, item.Blocked)
                             .Value(p => p.b_disabled_menu, item.DisabledMenu)
                             .Value(p => p.n_sort, maxSort)
+                            .Value(p => p.c_text, item.Text)
                             .Value(p => p.uui_parent, item.ParentId)
                             .Value(p => p.c_photo, item.Photo != null ? item.Photo.Url : null)
                             .Insert();
@@ -325,7 +326,7 @@ namespace cms.dbase
         /// <param name="userId">Идентификатор пользователя</param>
         /// <param name="IP">Ip-адрес</param>
         /// <returns></returns>
-        public override bool updateSiteMapItem(Guid id, SiteMapModel item, string domain)
+        public override bool updateSiteMapItem(Guid id, SiteMapModel item)
         {
             using (var db = new CMSdb(_context))
             {
@@ -379,7 +380,7 @@ namespace cms.dbase
                         #region группы меню
                         // группы меню
                         var menuOldQuery = db.content_sitemap_menutypess
-                            .Where(w => w.f_site.Equals(domain))
+                            .Where(w => w.f_site.Equals(_domain))
                             .Where(w => w.f_sitemap.Equals(id))
                             .Select(s => s.f_menutype);
 
@@ -793,7 +794,7 @@ namespace cms.dbase
         /// <param name="domain">Алиас сайта</param>
         /// <param name="menuSort">Сортировка в записи для типа меню</param>
         /// <returns></returns>
-        public override bool permit_SiteMap(Guid id, int permit, string domain, string menuSort)
+        public override bool permit_SiteMap(Guid id, int permit, string menuSort)
         {
             using (var db = new CMSdb(_context))
             {
@@ -812,7 +813,7 @@ namespace cms.dbase
                         if (permit > data.Sort)
                         {
                             db.content_sitemaps
-                                .Where(w => w.f_site.Equals(domain))
+                                .Where(w => w.f_site.Equals(_domain))
                                 .Where(w => w.c_path.Equals(data.Path))
                                 .Where(w => w.n_sort > data.Sort && w.n_sort <= permit)
                                 .Set(u => u.n_sort, u => u.n_sort - 1)
@@ -821,7 +822,7 @@ namespace cms.dbase
                         else
                         {
                             db.content_sitemaps
-                                .Where(w => w.f_site.Equals(domain))
+                                .Where(w => w.f_site.Equals(_domain))
                                 .Where(w => w.c_path.Equals(data.Path))
                                 .Where(w => w.n_sort < data.Sort && w.n_sort >= permit)
                                 .Set(u => u.n_sort, u => u.n_sort + 1)
@@ -847,7 +848,7 @@ namespace cms.dbase
                         if (permit > data.Sort)
                         {
                             db.content_sitemap_menutypess
-                                .Where(w => w.f_site.Equals(domain))
+                                .Where(w => w.f_site.Equals(_domain))
                                 .Where(w => w.f_menutype.Equals(m))
                                 .Where(w => w.n_sort > data.Sort && w.n_sort <= permit)
                                 .Set(u => u.n_sort, u => u.n_sort - 1)
@@ -856,7 +857,7 @@ namespace cms.dbase
                         else
                         {
                             db.content_sitemap_menutypess
-                                .Where(w => w.f_site.Equals(domain))
+                                .Where(w => w.f_site.Equals(_domain))
                                 .Where(w => w.f_menutype.Equals(m))
                                 .Where(w => w.n_sort < data.Sort && w.n_sort >= permit)
                                 .Set(u => u.n_sort, u => u.n_sort + 1)

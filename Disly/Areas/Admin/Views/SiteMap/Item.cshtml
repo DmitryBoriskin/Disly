@@ -167,6 +167,10 @@
                     @Html.ActionLink("Журнал изменений", "log", "services", new { @id = Model.Item.Id }, new { @id = "LogLists", @class = "button pop-up_frame icon-archive", @data_class = "LogList", @title = "Журнал изменений" })
                 </div>
             }
+            @if (Model.Item.Title == null)
+            {
+                @Html.TextBoxFor(m => m.Item.OldId, new { @title = "Идентификатор в старой БД" })
+            }
         </div>
     }
     else

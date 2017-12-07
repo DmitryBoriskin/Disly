@@ -25,5 +25,10 @@ namespace cms.dbModel.entity
         /// Ссылка на файл
         /// </summary>
         public string Url { get; set; }
+
+        /// <summary>
+        /// Ссылка на оригинал
+        /// </summary>
+        public string Source { get; set; }
     }
 }

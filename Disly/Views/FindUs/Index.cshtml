@@ -25,20 +25,21 @@
                             @if (!string.IsNullOrEmpty(item.Adress))
                             {
                                 <div>
-                                    <span>Адрес: </span>@item.Adress
+                                    <strong>Адрес: </strong>@item.Adress
                                 </div>
-                            }
-                            @if (!string.IsNullOrEmpty(item.Phone))
-                            {
-                                <div><span>Телефон приёмной: </span>@item.Phone</div>
                             }
                             @if (!string.IsNullOrEmpty(item.PhoneReception))
                             {
-                                <div><span>Телефон регистратуры: </span>@item.PhoneReception</div>
+                                <div><strong>Телефон регистратуры: </strong>@item.PhoneReception</div>
+                            }
+                            @if (!string.IsNullOrEmpty(item.Phone))
+                            {
+                                <div><strong>Телефон приёмной: </strong>@item.Phone</div>
                             }
                             @if (!string.IsNullOrEmpty(item.Email))
                             {
                                 <div>
+                                    <strong>Email: </strong>
                                     <a href="mailto:@item.Email">@item.Email</a>
                                 </div>
                             }

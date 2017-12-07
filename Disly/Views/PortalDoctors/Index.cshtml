@@ -15,6 +15,25 @@
                             @Model.Doctor.EmployeeInfo.UZ.Name
                         </div>
 
+                        @if (Model.Doctor.StructureId != null && Model.Doctor.DepartmentId != null)
+                        {
+                            string link = "/structure/" + Model.Doctor.StructureId + "/" + Model.Doctor.DepartmentId;
+                            <div>
+                                <strong>Отделение: </strong>
+                                <a href="@link">@Model.Doctor.DepartmentTitle</a>
+                            </div>
+                        }
+
+                        @if (!string.IsNullOrWhiteSpace(Model.Doctor.Domain))
+                        {
+                            string link = "http://" + Model.Doctor.Domain + ".med.cap.ru";
+                            <div>
+                                <strong>Главный специалист: </strong>
+                                <a href="@link" target="_blank">@Model.Doctor.MainSpec</a>
+                            </div>
+                        }
+
+
                         <div>
                             <strong>Занимаемая должность: </strong>
                             <ol>

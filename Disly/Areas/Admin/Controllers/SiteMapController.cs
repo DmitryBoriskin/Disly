@@ -1,11 +1,12 @@
 ﻿using Disly.Areas.Admin.Models;
 using System;
-using System.Configuration;
 using System.Web.Mvc;
 using Disly.Areas.Admin.Service;
 using System.Linq;
 using cms.dbModel.entity;
 using System.Web;
+using cms.dbase.Repository;
+using System.Text.RegularExpressions;
 
 namespace Disly.Areas.Admin.Controllers
 {
@@ -20,6 +21,9 @@ namespace Disly.Areas.Admin.Controllers
         // Кол-во элементов на странице
         int pageSize = 100;
         
+        // репозитория для старой базы
+        private OnlineRegistryRepository repoRegistry = new OnlineRegistryRepository("registryConnection");
+
         /// <summary>
         /// Обрабатывается до вызыва экшена
         /// </summary>
@@ -66,19 +70,18 @@ namespace Disly.Areas.Admin.Controllers
 
             return View(model);
         }
-        
+
         /// <summary>
         /// Едичная запись эл-та карты сайта
         /// </summary>
         /// <param name="id">Идентификатор карты сайта</param>
-        /// <param name="parent">Родительский идентификатор</param>
         /// <returns></returns>
         [HttpGet]
         public ActionResult Item(Guid id)
         {
             // текущий элемент карты сайта
             model.Item = _cmsRepository.getSiteMapItem(id);
-            if(model.Item == null)
+            if (model.Item == null)
             {
                 model.Item = new SiteMapModel()
                 {
@@ -88,20 +91,20 @@ namespace Disly.Areas.Admin.Controllers
             var mg = new MultiSelectList(model.MenuTypes, "value", "text", model.Item != null ? model.Item.MenuGroups : null);
             ViewBag.GroupMenu = mg;
 
-            var aviable = (model.MenuTypes != null)? 
-                        (model.MenuTypes.Where(p => p.available).Any())? 
-                                    model.MenuTypes.Where(p => p.available).ToArray() : new Catalog_list[] {} 
+            var aviable = (model.MenuTypes != null) ?
+                        (model.MenuTypes.Where(p => p.available).Any()) ?
+                                    model.MenuTypes.Where(p => p.available).ToArray() : new Catalog_list[] { }
                                         : new Catalog_list[] { };
             var mgAviable = new MultiSelectList(aviable, "value", "text", model.Item != null ? model.Item.MenuGroups : null);
             ViewBag.GroupMenuAviable = mgAviable;
-        
+
 
             if (model.Item != null)
                 model.Item.MenuGroups = null;
 
             if (!string.IsNullOrEmpty(Request.QueryString["parent"]))
             {
-                Guid? _parent = (string.IsNullOrEmpty(Request.QueryString["parent"]) && model.Item != null) ? model.Item.ParentId 
+                Guid? _parent = (string.IsNullOrEmpty(Request.QueryString["parent"]) && model.Item != null) ? model.Item.ParentId
                         : Guid.Parse(Request.QueryString["parent"]);
                 // хлебные крошки
                 model.BreadCrumbs = _cmsRepository.getSiteMapBreadCrumbs(_parent);
@@ -122,7 +125,6 @@ namespace Disly.Areas.Admin.Controllers
         /// POST-обработка эл-та карты сайта
         /// </summary>
         /// <param name="id">Идентификатор</param>
-        /// <param name="parent">Родительский идентификатор</param>
         /// <param name="back_model">Возвращаемая модель</param>
         /// <returns></returns>
         [HttpPost]
@@ -132,6 +134,19 @@ namespace Disly.Areas.Admin.Controllers
         {
             ErrorMassege userMessage = new ErrorMassege();
             userMessage.title = "Информация";
+            
+            #region Импорт со старой базы
+            if (back_model.Item.OldId != null)
+            {
+                var hierarhy = repoRegistry.getHierarhy((int)back_model.Item.OldId);
+                if (hierarhy != null)
+                {
+                    back_model.Item.Title = Regex.Replace(hierarhy.Caption, @"<[^>]*>", String.Empty);
+                    back_model.Item.Text = hierarhy.Text;
+                    back_model.Item.Url = hierarhy.Item;
+                }
+            }
+            #endregion
 
             #region Данные необходимые для сохранения
             back_model.Item.Id = id;
@@ -141,13 +156,13 @@ namespace Disly.Areas.Admin.Controllers
             }
             else
             {
-                back_model.Item.ParentId = back_model.Item.ParentId != null ? back_model.Item.ParentId :  Guid.Parse(Request.Form["Item_ParentId"]); // родительский id
+                back_model.Item.ParentId = back_model.Item.ParentId != null ? back_model.Item.ParentId : Guid.Parse(Request.Form["Item_ParentId"]); // родительский id
             }
 
             var p = back_model.Item.ParentId != null ? _cmsRepository.getSiteMapItem((Guid)back_model.Item.ParentId) : null;
-            
+
             back_model.Item.Path = p == null ? "/" : p.Path + p.Alias + "/";
-            
+
             back_model.Item.Site = Domain;
 
             if (String.IsNullOrEmpty(back_model.Item.Alias))
@@ -224,16 +239,16 @@ namespace Disly.Areas.Admin.Controllers
                         siteMapItem.MenuGroups = back_model.Item.MenuGroups;
                         siteMapItem.Path = back_model.Item.Path;
 
-                        _cmsRepository.updateSiteMapItem(id, siteMapItem, Domain);
+                        _cmsRepository.updateSiteMapItem(id, siteMapItem);
                     }
                     else
                     {
-                        _cmsRepository.updateSiteMapItem(id, back_model.Item, Domain); //, AccountInfo.id, RequestUserInfo.IP
+                        _cmsRepository.updateSiteMapItem(id, back_model.Item); //, AccountInfo.id, RequestUserInfo.IP
                     }
 
                     userMessage.info = "Запись обновлена";
                 }
-                else
+                else 
                 {
                     _cmsRepository.createSiteMapItem(id, back_model.Item); //, AccountInfo.id, RequestUserInfo.IP
                     userMessage.info = "Запись добавлена";
@@ -275,7 +290,7 @@ namespace Disly.Areas.Admin.Controllers
 
             return View(model);
         }
-        
+
         /// <summary>
         /// Обработчика кнопки "Назад"
         /// </summary>
@@ -287,11 +302,12 @@ namespace Disly.Areas.Admin.Controllers
         public ActionResult Cancel(Guid id)
         {
             var p = _cmsRepository.getSiteMapItem(id);
-            
-            // получим родительский элемент для перехода
-            var _parent = (string.IsNullOrEmpty(Request.Form["Item_ParentId"]) && p != null) ? p.ParentId : Guid.Parse(Request.Form["Item_ParentId"]);
 
-            if (_parent != null)
+            // получим родительский элемент для перехода
+            Guid? _parent = (string.IsNullOrEmpty(Request.Form["Item_ParentId"]) && p != null) ? p.ParentId 
+                : (string.IsNullOrWhiteSpace(Request.Form["Item_ParentId"]) ? Guid.Empty : Guid.Parse(Request.Form["Item_ParentId"]));
+            
+            if (_parent != Guid.Empty)
             {
                 return RedirectToAction("Item", new { id = _parent });
             }
@@ -319,7 +335,7 @@ namespace Disly.Areas.Admin.Controllers
             {
                 new ErrorMassegeBtn { url = "#", text = "ок", action = "false" }
             };
-            
+
             model.ErrorInfo = userMassege;
 
             if (model.Item.ParentId.Equals(null))

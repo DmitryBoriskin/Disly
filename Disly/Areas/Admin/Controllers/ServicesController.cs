@@ -374,7 +374,7 @@ namespace Disly.Areas.Admin.Controllers
                     Result = _cmsRepository.permit_cmsMenu(id, permit);
                     break;
                 case "sitemap":
-                    Result = _cmsRepository.permit_SiteMap(id, permit, Domain, menuSort);
+                    Result = _cmsRepository.permit_SiteMap(id, permit, menuSort);
                     break;
                 case "orgs":
                     Result = _cmsRepository.sortOrgs(id, permit);
@@ -386,7 +386,7 @@ namespace Disly.Areas.Admin.Controllers
                     Result = _cmsRepository.sortDepartament(id, permit);
                     break;
                 case "banners":
-                    Result = _cmsRepository.permit_Banners(id, permit, Domain);
+                    Result = _cmsRepository.permit_Banners(id, permit);
                     break;
                 case "vote_answer":
                     Result = _cmsRepository.permit_VoteAnswer(id,Guid.Parse(menuSort),permit);

@@ -59,6 +59,75 @@ namespace Disly.Controllers
             #endregion
             return View(_ViewName, model);
         }
+
+        /// <summary>
+        /// Список обращений
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult Appeallist()
+        {
+            var filter = getFilter();
+            filter.Disabled = false;
+            //Только вопросы
+            filter.Type = FeedbackType.appeal.ToString();
+            model.List = _repository.getFeedbacksList(filter);
+
+            model.Child = (model.CurrentPage != null && model.CurrentPage.ParentId.HasValue) ? _repository.getSiteMapChild(model.CurrentPage.ParentId.Value) : null;
+
+            ViewBag.Filter = filter;
+            ViewBag.NewsSearchArea = filter.SearchText;
+            ViewBag.NewsSearchDateStart = filter.Date;
+            ViewBag.NewsSearchDateFin = filter.DateEnd;
+
+            #region Создаем переменные (значения по умолчанию)
+            //string _ViewName = (ViewName != String.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";
+            
+            string PageTitle = "Обращения пользователей";
+            string PageDesc = "описание страницы";
+            string PageKeyw = "ключевые слова";
+            #endregion
+            #region Метатеги
+            ViewBag.Title = PageTitle;
+            ViewBag.Description = PageDesc;
+            ViewBag.KeyWords = PageKeyw;
+            #endregion
+            //return View(_ViewName, model);
+            return View(model);
+        }
+        /// <summary>
+        /// Список отзывов
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult Reviewlist()
+        {
+            var filter = getFilter();
+            filter.Disabled = false;
+            //Только отзывы
+            filter.Type = FeedbackType.review.ToString();
+            model.List = _repository.getFeedbacksList(filter);
+
+            model.Child = (model.CurrentPage != null && model.CurrentPage.ParentId.HasValue) ? _repository.getSiteMapChild(model.CurrentPage.ParentId.Value) : null;
+
+            ViewBag.Filter = filter;
+            ViewBag.NewsSearchArea = filter.SearchText;
+            ViewBag.NewsSearchDateStart = filter.Date;
+            ViewBag.NewsSearchDateFin = filter.DateEnd;
+
+            #region Создаем переменные (значения по умолчанию)
+            //string _ViewName = (ViewName != String.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";
+
+            string PageTitle = "Отзывы пользователей";
+            string PageDesc = "описание страницы";
+            string PageKeyw = "ключевые слова";
+            #endregion
+            #region Метатеги
+            ViewBag.Title = PageTitle;
+            ViewBag.Description = PageDesc;
+            ViewBag.KeyWords = PageKeyw;
+            #endregion
+            //return View(_ViewName, model);
+            return View(model);
+        }
         /// <summary>
         /// Форма отправки обращения
         /// </summary>
@@ -120,6 +189,7 @@ namespace Disly.Controllers
 
             if (ModelState.IsValid && IsCaptchaValid)
             {
+                var AnswererCode = Guid.NewGuid();
                 var newMessage = new FeedbackModel()
                 {
                     Id = newId,
@@ -129,9 +199,13 @@ namespace Disly.Controllers
                     SenderName = bindData.SenderName,
                     SenderEmail = bindData.SenderEmail,
                     SenderContacts = bindData.SenderContacts,
-                    Title = bindData.Theme,
+                    Title = !string.IsNullOrEmpty(bindData.Theme) 
+                            ? bindData.Theme : 
+                            (bindData.Text.Length > 126) ? bindData.Text.Substring(0, 126) + " ..." : bindData.Text,
                     Text = bindData.Text,
-                    AnswererCode = Guid.NewGuid()
+                    Anonymous = bindData.Anonymous,
+                    AnswererCode = AnswererCode,
+                    FbType = bindData.FbType
                 };
                 var res = _repository.insertFeedbackItem(newMessage);
                 if (res)
@@ -147,13 +221,10 @@ namespace Disly.Controllers
                         bindData.FileToUpload.SaveAs(savedFileName);
                     }
 
-                    var feedback = _repository.getFeedbackItem(newId);
-                    var code = (feedback != null && feedback.AnswererCode != null) ? feedback.AnswererCode : Guid.NewGuid();
-
                     #region отправка сообщение на e-mail.ru
-
                     // domen_ru/feedback/answerform?id=db4609c2-c5dc-4f4a-9d6a-542192ec7cb3&code=b6614768-fa5f-4a27-bd09-d07a3e6db1a9
-                    var answerLink = string.Format("www.{0}/feedback/answerform?id={1}&code={2}", Domain, newId, code);
+                    var url = (Settings.BaseURL == "localhost") ? Settings.BaseURL : string.Concat(Domain, Settings.BaseURL);
+                    var answerLink = string.Format("{0}/feedback/answerform?id={1}&code={2}", url, newId, AnswererCode);
 
                     var msgText = string.Format(
                         "<div style=\"background-color:#fcf8e3;padding:15px;border:1px solid #eee; border-radius:4px;\">"
@@ -192,7 +263,7 @@ namespace Disly.Controllers
                     letter.Theme = "Сайт " + Domain + ": Обратная связь";
                     letter.Text = msgText;
                     letter.Attachments = savedFileName;
-                    letter.MailTo = Settings.mailTo; //"s-kuzmina@it-serv.ru";
+                    letter.MailTo = "s-kuzmina@it-serv.ru"; // Settings.mailTo;
 
                     var admins = _repository.getSiteAdmins();
                     if (admins != null)
@@ -212,6 +283,7 @@ namespace Disly.Controllers
                 ViewBag.SenderName = bindData.SenderName;
                 ViewBag.SenderEmail = bindData.SenderEmail;
                 ViewBag.SenderContacts = bindData.SenderContacts;
+                ViewBag.FbType = bindData.FbType;
                 ViewBag.Theme = bindData.Theme;
                 ViewBag.Text = bindData.Text;
             }

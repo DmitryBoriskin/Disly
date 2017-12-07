@@ -61,12 +61,12 @@ namespace Disly.Areas.Admin.Controllers
         public ActionResult Item(Guid Id)
         {
             
-            model.Item = _cmsRepository.getVoteItem(Id, Domain);
+            model.Item = _cmsRepository.getVoteItem(Id);
             if (model.Item == null)
             {
                 model.Item = new VoteModel()
                 {
-                    DateStart= DateTime.Now                    
+                    DateStart= DateTime.Now
                 };
             }
 
@@ -126,7 +126,7 @@ namespace Disly.Areas.Admin.Controllers
 
             if (ModelState.IsValid)
             {                
-                var getVote = _cmsRepository.getVoteItem(Id, Domain);
+                var getVote = _cmsRepository.getVoteItem(Id);
 
                 //Определяем Insert или Update
                 if (getVote != null)
@@ -140,7 +140,7 @@ namespace Disly.Areas.Admin.Controllers
                 }
                 else
                 {
-                    if(_cmsRepository.insVote(Id, bindData.Item,Domain))
+                    if(_cmsRepository.insVote(Id, bindData.Item))
                     {
                         userMessage.info = "Запись создана";
                     }
@@ -149,7 +149,7 @@ namespace Disly.Areas.Admin.Controllers
                     
                 }
 
-                model.Item = _cmsRepository.getVoteItem(Id, Domain);
+                model.Item = _cmsRepository.getVoteItem(Id);
                 userMessage.buttons = new ErrorMassegeBtn[]{
                      new ErrorMassegeBtn { url = StartUrl + Request.Url.Query, text = "Вернуться в список" },
                      new ErrorMassegeBtn { url = "#", text = "ок", action = "false" }

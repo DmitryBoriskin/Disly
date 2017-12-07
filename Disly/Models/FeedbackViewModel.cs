@@ -53,7 +53,6 @@ namespace Disly.Models
         /// <summary>
         /// Тема сообщения
         /// </summary>
-        [Required]
         public string Theme { get; set; }
         /// <summary>
         /// текст вопроса
@@ -68,6 +67,10 @@ namespace Disly.Models
         /// Согласен на обработку данных
         /// </summary>
         public bool IsAgree { get; set; }
+        /// <summary>
+        /// Согласен на обработку данных
+        /// </summary>
+        public FeedbackType FbType { get; set; }
     }
 
     public class FeedbackAnswerFormViewModel
@@ -85,12 +88,10 @@ namespace Disly.Models
         /// <summary>
         /// отвечает(кто)
         /// </summary>
-        [Required]
         public string Answerer { get; set; }
         /// <summary>
         /// текст ответа
         /// </summary>
-        [Required]
         public string Answer { get; set; }
         /// <summary>
         /// Опубликовать на сайте

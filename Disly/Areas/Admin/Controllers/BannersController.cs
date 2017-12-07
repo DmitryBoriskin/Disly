@@ -53,7 +53,7 @@ namespace Disly.Areas.Admin.Controllers
             if (id == null)
             {
                 // Наполняем модель списком секций
-                model.Sections = _cmsRepository.getBannerSections(Domain);
+                model.Sections = _cmsRepository.getBannerSections();
             }
             else
             {
@@ -61,7 +61,7 @@ namespace Disly.Areas.Admin.Controllers
                 filter = getFilter(pageSize);
 
                 // наполняем модель списка баннеров
-                model.SectionItem = _cmsRepository.getBannerSection((Guid)id, Domain, filter);
+                model.SectionItem = _cmsRepository.getBannerSection((Guid)id, filter);
             }
             
             return View(model);
@@ -113,7 +113,7 @@ namespace Disly.Areas.Admin.Controllers
                 string savePath = Settings.UserFiles + Domain + Settings.BannersDir;
 
                 // секция
-                var _section = _cmsRepository.getBannerSection((Guid)back_model.Item.Section, Domain, null);
+                var _section = _cmsRepository.getBannerSection((Guid)back_model.Item.Section, null);
                 int width = _section.Width; // ширина
                 int height = _section.Height; // высота
 

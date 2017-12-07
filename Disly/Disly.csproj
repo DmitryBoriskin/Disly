@@ -871,6 +871,9 @@
     <Content Include="Views\EventsFront\Item.cshtml" />
     <Content Include="Views\Structure\part\boss_list.cshtml" />
     <Content Include="Views\MedicalServices\part\nav.cshtml" />
+    <Content Include="Views\Feedback\AppealList.cshtml" />
+    <Content Include="Views\Feedback\ReviewList.cshtml" />
+    <Content Include="Views\Shared\part\childtabs.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

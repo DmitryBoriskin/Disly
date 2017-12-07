@@ -50,7 +50,8 @@ namespace Disly.Controllers
             #endregion    
 
 
-            model.Nav = new MaterialsGroup[]{
+            model.Nav = new MaterialsGroup[]
+            {
                 new MaterialsGroup{Title="Контактная информация"},
                 new MaterialsGroup{Title="Администрация", Alias="administration"},
                 new MaterialsGroup{Title="Телефонный справочник", Alias="phone"},

@@ -65,7 +65,7 @@ namespace Disly.Areas.Admin.Controllers
             if (model.Item == null)
                 model.Item = new SiteSectionModel()
                 {
-                    Id = Id                    
+                    Id = Id
                 };
             return View("Item", model);
         }
@@ -96,7 +96,7 @@ namespace Disly.Areas.Admin.Controllers
                 var getSiteSection = _cmsRepository.getSiteSectionItem(Id);
 
                 // добавление необходимых полей перед сохранением модели
-                bindData.Item.Id = Id;                
+                bindData.Item.Id = Id;
 
                 if (String.IsNullOrEmpty(bindData.Item.Alias))
                 {
@@ -111,7 +111,7 @@ namespace Disly.Areas.Admin.Controllers
                 if (getSiteSection != null)
                     res = _cmsRepository.updateSiteSection(bindData.Item);
                 else
-                {                    
+                {
                     res = _cmsRepository.insertSiteSection(bindData.Item);
                 }
                 //Сообщение пользователю

@@ -116,6 +116,11 @@ namespace cms.dbModel.entity
         /// Изображение
         /// </summary>
         public Photo Photo { get; set; }
+
+        /// <summary>
+        /// Идентификатор в старой базе
+        /// </summary>
+        public int? OldId { get; set; }
     }
 
     /// <summary>

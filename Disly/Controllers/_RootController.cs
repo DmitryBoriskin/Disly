@@ -61,6 +61,8 @@ namespace Disly.Controllers
 
             ControllerName = filterContext.RouteData.Values["Controller"].ToString().ToLower();
             ActionName = filterContext.RouteData.Values["Action"].ToString().ToLower();
+
+#warning front_section не совпадает с именем контроллера ControllerName (feedback/reviewlist vs feedback)
             ViewName = _repository.getView(ControllerName); //Domain, 
 
             siteModel = _repository.getSiteInfo(); //Domain

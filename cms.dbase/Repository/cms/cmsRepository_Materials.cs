@@ -173,12 +173,13 @@ namespace cms.dbase
         /// Получим единичную запись новости
         /// </summary>
         /// <param name="id">Идентификатор</param>
-        /// <param name="substance">Сущность</param>
         /// <returns></returns>
-        public override MaterialsModel getMaterial(Guid id, string domain)
+        public override MaterialsModel getMaterial(Guid id)
         {
             using (var db = new CMSdb(_context))
             {
+                //Проверка на домен???
+
                 var data = db.content_materialss
                     .Where(w => w.id == id)
                     .Select(s => new MaterialsModel
@@ -188,7 +189,8 @@ namespace cms.dbase
                         Alias = s.c_alias,
                         PreviewImage = new Photo()
                         {
-                            Url = s.c_preview
+                            Url = s.c_preview,
+                            Source = s.c_preview_source
                         },
                         Text = s.c_text,
                         Url = s.c_url,
@@ -213,8 +215,10 @@ namespace cms.dbase
                                     }).ToArray()
                     });
 
-                if (!data.Any()) { return null; }
-                else { return data.First(); }
+                if (data.Any())
+                    return data.First();
+                else
+                    return null;
             }
         }
 
@@ -247,6 +251,7 @@ namespace cms.dbase
                             c_text = material.Text,
                             d_date = material.Date,
                             c_preview = (material.PreviewImage != null) ? material.PreviewImage.Url : null,
+                            c_preview_source = (material.PreviewImage != null) ? material.PreviewImage.Source : null,
                             c_url = material.Url,
                             c_url_name = material.UrlName,
                             c_desc = material.Desc,
@@ -324,7 +329,18 @@ namespace cms.dbase
                         cdMaterial.c_alias = material.Alias;
                         cdMaterial.c_text = material.Text;
                         cdMaterial.d_date = material.Date;
-                        cdMaterial.c_preview = (material.PreviewImage == null) ? cdMaterial.c_preview : material.PreviewImage.Url;
+
+                        if(material.PreviewImage != null)
+                        {
+                            cdMaterial.c_preview = material.PreviewImage.Url;
+                            cdMaterial.c_preview_source = material.PreviewImage.Source;
+                        }
+                        else
+                        {
+                            cdMaterial.c_preview = null;
+                            cdMaterial.c_preview_source = null;
+                        }
+
                         cdMaterial.c_url = material.Url;
                         cdMaterial.c_url_name = material.UrlName;
                         cdMaterial.c_desc = material.Desc;
@@ -335,33 +351,6 @@ namespace cms.dbase
                         cdMaterial.n_month = material.Date.Month;
                         cdMaterial.n_year = material.Date.Year;
                         cdMaterial.b_locked = material.Locked;
-
-                        // обновляем событие
-                        /* if (material.Event != null)
-                         {
-                             var e = db.content_materials_links
-                                 .Where(w => w.f_material.Equals(material.Id))
-                                 .Where(w => w.f_link_type.Equals("event"));
-
-                             if (e.Any())
-                             {
-                                 db.content_materials_links
-                                     .Where(w => w.f_material.Equals(material.Id))
-                                     .Where(w => w.f_link_type.Equals("event"))
-                                     .Set(u => u.f_link_id, material.Event)
-                                     .Set(u => u.f_group, material.Groups)
-                                     .Update();
-                             }
-                             else
-                             {
-                                 db.content_materials_links
-                                     .Value(u => u.f_material, material.Id)
-                                     .Value(u => u.f_link_id, material.Event)
-                                     .Value(u => u.f_link_type, "event")
-                                     .Value(u => u.f_group, material.Groups)
-                                     .Insert();
-                             }
-                         }*/
 
                         db.Update(cdMaterial);
                         db_updateMaterialGroups(db, material.Id, material.GroupsId);
@@ -471,6 +460,5 @@ namespace cms.dbase
                 else return data.ToArray();
             }
         }
-
     }
 }
