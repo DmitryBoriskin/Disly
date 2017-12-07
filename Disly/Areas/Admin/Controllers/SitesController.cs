@@ -231,10 +231,8 @@ namespace Disly.Areas.Admin.Controllers
 
                 return View("Master", model);
             }
-
             model.Item = _cmsRepository.getSite(Id);
             model.ErrorInfo = userMassege;
-
 
             #region Данные из адресной строки(для случаев когда сайт создается со страницы того кому создается сайт)
             FilterParams filter = new FilterParams()

@@ -81,6 +81,7 @@ body {
 
 .head_logo {
     padding-right: 20px;
+    float: left;
 }
 
 .head_title {
@@ -113,6 +114,11 @@ body {
         color: #000 !important;
         text-decoration: none !important;
     }
+
+
+.bottom_left{float:left;}
+.bottom_left+.bottom_info{padding-left:60px;}
+
 
 .footer-right ul li a {
     margin-right: 10px;
