@@ -133,8 +133,6 @@ namespace Disly.Controllers
 
                     break;
                 default:
-                    // хлебные крошки
-
                     // список организаций
                     model.OrgList = _repository.getOrgModels(id);
 

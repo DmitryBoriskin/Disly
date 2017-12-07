@@ -59,4 +59,25 @@ namespace cms.dbModel.entity.cms
         /// </summary>
         public Pager Pager { get; set; }
     }
+
+    /// <summary>
+    /// Главный специалист для внешней части
+    /// </summary>
+    public class MainSpecialistFrontModel
+    {
+        /// <summary>
+        /// Идентификатор
+        /// </summary>
+        public Guid Id { get; set; }
+
+        /// <summary>
+        /// Название
+        /// </summary>
+        public string Name { get; set; }
+
+        /// <summary>
+        /// Домен
+        /// </summary>
+        public string Domain { get; set; }
+    }
 }

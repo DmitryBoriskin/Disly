@@ -1,4 +1,5 @@
 ﻿using cms.dbModel.entity;
+using cms.dbModel.entity.cms;
 using System;
 using System.Collections.Generic;
 
@@ -84,5 +85,8 @@ namespace cms.dbModel
 
         //фотоальбом
         public abstract PhotoModel[] getPhotoList(Guid id);
+
+        // Главные специалисты
+        public abstract MainSpecialistFrontModel[] getMainSpecialistList();
     }
 }
