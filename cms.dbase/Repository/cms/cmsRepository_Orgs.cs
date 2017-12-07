@@ -20,8 +20,11 @@ namespace cms.dbase
         /// <param name="db"></param>
         /// <param name="filtr"></param>
         /// <returns></returns>
-        private IQueryable<content_orgs> QueryByOrgFilter(CMSdb db, OrgFilter filtr)
+        private IQueryable<content_orgs> queryByOrgFilter(CMSdb db, OrgFilter filtr)
         {
+            if (filtr == null)
+                throw new Exception("cmsRepository > queryByOrgFilter: Filter is null");
+
             var query = db.content_orgss
                                .OrderBy(o => o.n_sort)
                                .AsQueryable();
@@ -103,7 +106,7 @@ namespace cms.dbase
             using (var db = new CMSdb(_context))
             {
                 //Получаем сформированный запрос по фильтру
-                var query = QueryByOrgFilter(db, filtr);
+                var query = queryByOrgFilter(db, filtr);
 
                 var itemCount = query.Count();
 
@@ -135,19 +138,20 @@ namespace cms.dbase
         /// Получаем список организаций по фильтру
         /// </summary>
         /// <param name="filtr">Фильтр</param>
-        /// <returns></returns>         
-        public override OrgsModel[] getOrgs(OrgFilter filtr, Guid? except)
+        /// <returns></returns> 
+        public override OrgsModel[] getOrgs(OrgFilter filtr)
         {
             using (var db = new CMSdb(_context))
             {
                 //Получаем сформированный запрос по фильтру
-                var query = QueryByOrgFilter(db, filtr);
+                var query = queryByOrgFilter(db, filtr);
 
                 //data.OrderBy(o => o.n_sort); ХЗ почему эта строка нормально не сортирует
 
-                var data = query
-                    .Where(w => !w.id.Equals(except))
-                    .Select(s => new OrgsModel()
+                if (filtr.except.HasValue && filtr.except.Value != Guid.Empty)
+                    query = query.Where(w => w.id != filtr.except.Value);
+
+                var data = query.Select(s => new OrgsModel()
                 {
                     Id = s.id,
                     Title = s.c_title,
@@ -155,6 +159,7 @@ namespace cms.dbase
                     Address = s.c_adress,
                     Types = s.contentorgstypeslinkorgs.Select(t => t.f_type).ToArray()
                 });
+
                 if (data.Any())
                     return data.ToArray();
 

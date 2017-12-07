@@ -827,6 +827,7 @@
     <Content Include="Content\css\theme\blue.less" />
     <Content Include="Areas\Admin\Views\PhotoAlbums\Index.cshtml" />
     <Content Include="Areas\Admin\Views\PhotoAlbums\Item.cshtml" />
+    <Content Include="Areas\Admin\Views\Shared\Modal\Sites.cshtml" />
     <None Include="Content\plugins\datatables\i18n\ru.json" />
     <Content Include="Content\plugins\tinymce\langs\readme.md" />
     <Content Include="Content\plugins\tinymce\skins\lightgray\fonts\tinymce-small.eot" />

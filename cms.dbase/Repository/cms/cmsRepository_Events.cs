@@ -14,8 +14,11 @@ namespace cms.dbase
     {
 
         #region Events
-        private IQueryable<content_events> QueryByEventFilter(CMSdb db, EventFilter filtr)
+        private IQueryable<content_events> queryByEventFilter(CMSdb db, EventFilter filtr)
         {
+            if (filtr == null)
+                throw new Exception("cmsRepository > queryByEventFilter: Filter is null");
+
             var query = db.content_eventss
                               .AsQueryable();
 
@@ -80,7 +83,8 @@ namespace cms.dbase
                         Desc = s.c_desc,
                         Disabled = s.b_disabled,
                         SiteId = getSiteId(s.id),
-                        Locked = s.b_locked
+                        Locked = s.b_locked,
+                        //Links  заполняем в контроллере
                     });
                 if (!data.Any()) { return null; }
                 else { return data.First(); }
@@ -90,9 +94,9 @@ namespace cms.dbase
         {
             using (var db = new CMSdb(_context))
             {
-                var query = QueryByEventFilter(db, filtr);
+                var query = queryByEventFilter(db, filtr);
 
-                //Если указан домен, то выбираем записипринадлежащие ему, иначе все
+                //Если указан домен, то выбираем записи, принадлежащие ему
                 if (!string.IsNullOrEmpty(filtr.Domain))
                 {
                     var contentType = ContentType.EVENT.ToString().ToLower();

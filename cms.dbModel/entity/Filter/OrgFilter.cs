@@ -12,4 +12,9 @@ public class OrgFilter: FilterParams
     /// определяет в какой таблице связей искать связь с организацией
     /// </summary>
     public ContentType RelType { get; set; }
+
+    /// <summary>
+    /// Исключаем
+    /// </summary>
+    public Guid? except { get; set; }
 }
