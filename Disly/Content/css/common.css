@@ -17,11 +17,16 @@ body {
     font-size: 16px;
     height: 100%;
 }
+h1{font-size:30px;}
+h2{font-size:24px;font-weight:bold;}
+h3{font-size:18px;font-weight:bold;}
+h4{font-size:16px;text-transform:uppercase;font-weight:bold;}
+blockquote{margin-top:20px;}
 
 .cont_wrap {
     min-height: 100%;
-    position: relative;
-    padding-bottom: 435px;
+    position: relative;    
+    padding-bottom: 406px;
 }
 
 .bottom_block {
@@ -88,9 +93,9 @@ body {
     padding: 5px 0 5px;
 }
 
-.head_title h4 {
+.head_title span {
     font-family: 'PT Serif';
-    font-size: 22px;
+    font-size: 22px;    
 }
 
     .head .media-heading {
@@ -253,7 +258,8 @@ body {
 .bottom-linkimg a {
     text-decoration: none !important;
 }
-
+.row.bottom-linkimg{margin-left:-20px;margin-right:-10px;}
+.bottom-linkimg>.col-sm-2{padding-left:15px;padding-right:15px;}
 .bottom-linkimg-item {
     display: block;
     border-top: 1px dotted;
@@ -374,7 +380,7 @@ body {
 .footer-copyright {
     color: #999;
     font-size: 14px;
-    padding: 20px 0;
+    padding: 20px 0 0;
     border-top: 1px solid #ddd;
 }
 
@@ -461,6 +467,8 @@ body {
 
     .slider-message-block a {
         text-decoration: none !important;
+        display:block;min-height:50px;
+        background-color:#fff;
     }
 
 .slider-message {    
@@ -535,8 +543,8 @@ body {
 
 /* баннеры полезные ресурсы */
 .imglink-benefit-block {    
-    padding-top: 18px;
-    padding-bottom: 14px;
+    padding-top: 20px;
+    padding-bottom: 40px;
 }
 
 .module-title {
@@ -1166,7 +1174,7 @@ body {
 
 
 .module-media {
-    padding: 20px 20px 30px 0;
+    padding: 10px 20px 20px 0;
 }
 
     .module-media .module-title {
@@ -1178,7 +1186,7 @@ body {
     }
 
 .media_link {
-    margin-top: 61px;
+    margin-top: 51px;
 }
 
 .media_link_item {
@@ -1414,4 +1422,17 @@ body {
         position: relative;
         top: 20px;
         right: 30px;
+}
+.adminlist{width:100%;}
+.adminlist tr td{padding:20px 0 20px;border-bottom:1px solid #ddd;              
+}
+
+.adminlist_img_wr{margin-right:20px;}
+.adminlist_post {    color: #808080;    font-size: 14px;    line-height: 18px;}
+.adminlist_phone{}
+.adminlist_phone:before {
+    content: '\e8a0';
+    font-family: fontello;
+    color: #4d6bbc;
+    margin-right: 13px;
 }

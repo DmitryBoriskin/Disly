@@ -132,3 +132,6 @@
 .feedback-item-more:hover {
   color: #3973e6;
 }
+.adminlist_phone:before {
+  color: #3973e6;
+}
