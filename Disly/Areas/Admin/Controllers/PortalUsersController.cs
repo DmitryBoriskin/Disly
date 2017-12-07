@@ -170,8 +170,8 @@ namespace Disly.Areas.Admin.Controllers
             ErrorMassege userMassege = new ErrorMassege();
             userMassege.title = "Информация";
             userMassege.info = "Запись Удалена";
-            userMassege.buttons = new ErrorMassegeBtn[]{
-                new ErrorMassegeBtn { url = "#", text = "ок", action = "false" }
+            userMassege.buttons = new ErrorMassegeBtn[]{                
+                new ErrorMassegeBtn { url = StartUrl + Request.Url.Query, text = "ок", action = "false" }
             };
 
             model.Item = _cmsRepository.getUser(Id);

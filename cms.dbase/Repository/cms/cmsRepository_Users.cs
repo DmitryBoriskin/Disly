@@ -298,7 +298,124 @@ namespace cms.dbase
                         .Value(p => p.c_hash, Item.Hash)
                         .Value(p => p.c_contacts, Item.Contacts)
                         .Value(p => p.b_disabled, Item.Disabled)
-                       .Insert();
+                        .Insert();
+
+                        // логирование
+                        //insertLog(UserId, IP, "insert", id, String.Empty, "Users", Item.Surname + " " + Item.Name);
+                        var log = new LogModel()
+                        {
+                            Site = _domain,
+                            Section = LogSection.Users,
+                            Action = LogAction.insert,
+                            PageId = id,
+                            PageName = Item.Surname + " " + Item.Name,
+                            UserId = _currentUserId,
+                            IP = _ip,
+                        };
+                        insertLog(log);
+                        
+                        //цепление к сайтам если создается администратор портала или разработчик
+                        if(Item.Group== "administrator" || Item.Group.ToLower() == "developer")
+                        {
+                            string[] allsitesdomain = db.cms_sitess.Select(s => s.c_alias).ToArray();
+                            foreach (var singldomain in allsitesdomain)
+                            {
+                                db.cms_user_site_links
+                                  .Value(v => v.f_user, id)
+                                  .Value(v => v.f_site, singldomain)
+                                  .Insert();
+                            }
+                        }
+                        
+
+                        // Назначение прав по шаблону группы
+                        ResolutionsModel[] GroupResolution = db.cms_resolutions_templatess.
+                            Where(w => w.f_user_group == Item.Group).
+                            Select(s => new ResolutionsModel
+                            {
+                                MenuId = s.f_menu_id,
+                                Read = s.b_read,
+                                Write = s.b_write,
+                                Change = s.b_change,
+                                Delete = s.b_delete
+                            }).ToArray();
+
+                        foreach (ResolutionsModel m in GroupResolution)
+                        {
+                            db.cms_resolutionss
+                                .Value(v => v.c_user_id, id)
+                                .Value(v => v.c_menu_id, m.MenuId)
+                                .Value(v => v.b_read, m.Read)
+                                .Value(v => v.b_write, m.Write)
+                                .Value(v => v.b_change, m.Change)
+                                .Value(v => v.b_delete, m.Delete)
+                                .Insert();
+                        }
+                        // логирование
+                        //insertLog(UserId, IP, "change_resolutions", id, String.Empty, "Users", Item.Surname + " " + Item.Name);
+                        log = new LogModel()
+                        {
+                            Site = _domain,
+                            Section = LogSection.Users,
+                            Action = LogAction.change_resolutions,
+                            PageId = id,
+                            PageName = Item.Surname + " " + Item.Name,
+                            UserId = _currentUserId,
+                            IP = _ip,
+                        };
+                        insertLog(log);
+
+                        tran.Commit();
+                        return true;
+                    }
+                    return false;
+                }
+            }
+        }
+
+        /// <summary>
+        /// создатет пользователя и цепляет его к сайту
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="Item"></param>
+        /// <returns></returns>
+        public override bool createUserOnSite(Guid id, UsersModel Item)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                using (var tran = db.BeginTransaction())
+                {
+                    var data = db.cms_userss.Where(w => w.id == id);
+                    if (!data.Any())
+                    {
+                        db.cms_userss
+                        .Value(p => p.id, id)
+                        .Value(p => p.c_surname, Item.Surname)
+                        .Value(p => p.c_name, Item.Name)
+                        .Value(p => p.c_patronymic, Item.Patronymic)
+                        .Value(p => p.f_group, Item.Group)
+                        .Value(p => p.b_sex, Item.Sex)
+                        .Value(p => p.d_birthday, Item.Birthday)
+                        .Value(p => p.c_post, Item.Post)
+                        .Value(p => p.c_adres, Item.Adres)
+                        .Value(p => p.c_phone, Item.Phone)
+                        .Value(p => p.c_mobile, Item.Mobile)
+                        .Value(p => p.c_email, Item.EMail)
+                        .Value(p => p.c_salt, Item.Salt)
+                        .Value(p => p.c_hash, Item.Hash)
+                        .Value(p => p.c_contacts, Item.Contacts)
+                        .Value(p => p.b_disabled, Item.Disabled)
+                        .Insert();
+
+
+                        //прицепление пользователя к текущему сайту
+                        db.cms_user_site_links
+                          .Value(v => v.f_user, id)
+                          .Value(v => v.f_site, _domain)
+                          .Insert();
+
+
+
 
                         // логирование
                         //insertLog(UserId, IP, "insert", id, String.Empty, "Users", Item.Surname + " " + Item.Name);
@@ -358,6 +475,7 @@ namespace cms.dbase
                 }
             }
         }
+
         /// <summary>
         /// Редактирование пользователя
         /// </summary>
@@ -569,6 +687,26 @@ namespace cms.dbase
                         text = s.c_title,
                         value = s.c_alias
                     });
+
+                if (!data.Any()) { return null; }
+                else { return data.ToArray(); }
+            }
+        }
+        /// <summary>
+        /// список групп за исключением администратора портала и разработчиков
+        /// </summary>
+        /// <returns></returns>
+        public override Catalog_list[] getUsersGroupListAdmin()
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var data = db.cms_users_groups
+                            .Where(w=>(w.c_alias!= "administrator" && w.c_alias.ToLower()!= "developer"))
+                            .Select(s => new Catalog_list
+                            {
+                                text = s.c_title,
+                                value = s.c_alias
+                            });
 
                 if (!data.Any()) { return null; }
                 else { return data.ToArray(); }

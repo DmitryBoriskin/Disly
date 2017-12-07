@@ -5,6 +5,7 @@ using LinqToDB;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using cms.dbModel.entity.cms;
 
 namespace cms.dbase
 {
@@ -514,7 +515,7 @@ namespace cms.dbase
                 if (data.Any())
                     return data.ToArray();
 
-                return data.ToArray();
+                return null;
             }
         }
 
@@ -2188,42 +2189,51 @@ namespace cms.dbase
             }
         }
 
-
-
-
+        /// <summary>
+        /// Получаем список фотоматериалов
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public override PhotoModel[] getPhotoList(Guid id)
         {
             using (var db = new CMSdb(_context))
             {
-                //var query = db.content_photoalbums
-                //           .Where(w => w.id == id)
-                //           .Select(s => new PhotoAlbum
-                //           {
-                //               Id = s.id,
-                //               Path = s.c_path,
-                //               Title = s.c_title,
-                //               Date = s.d_date,
-                //               PreviewImage = new Photo() { Url = s.c_preview },
-                //               Text = s.c_text
-                //           });
-
-
-                var query = db.content_photoss
-                               .Where(w => w.f_album == id);
+                var query = db.content_photoss.Where(w => w.f_album == id);
                 if (query.Any())
                 {
-                    var data = query.OrderBy(o => o.n_sort)
-                    .Select(s => new PhotoModel()
-                    {
-                        PreviewImage = new Photo { Url = s.c_preview },
-                        Id = s.id,
-                        Title = s.c_title
-                    }).ToArray();
+                     var data=query.OrderBy(o => o.n_sort)
+                                   .Select(s => new PhotoModel()
+                                   {
+                                       PreviewImage = new Photo { Url = s.c_preview },
+                                       Id = s.id,
+                                       Title = s.c_title
+                                   }).ToArray();
                     return data;
                 }
-
-
                 return null;
+            }
+        }
+
+        /// <summary>
+        /// Получаем список главных специалистов
+        /// </summary>
+        /// <returns></returns>
+        public override MainSpecialistFrontModel[] getMainSpecialistList()
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var query = (from ms in db.content_main_specialistss
+                             join s in db.cms_sitess on ms.id equals s.f_content into s2
+                             from s in s2.DefaultIfEmpty()
+                             select new MainSpecialistFrontModel
+                             {
+                                 Id = ms.id,
+                                 Name = ms.c_name,
+                                 Domain = s.c_alias
+                             });
+
+                if (!query.Any()) return null;
+                return query.ToArray();
             }
         }
     }
