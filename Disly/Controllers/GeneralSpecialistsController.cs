@@ -7,7 +7,6 @@ namespace Disly.Controllers
 {
     public class GeneralSpecialistsController : RootController
     {
-
         private GeneralSpecialistViewModel model;
 
         protected override void OnActionExecuting(ActionExecutingContext filterContext)

@@ -469,7 +469,7 @@ namespace cms.dbase
                 if (data.Any())
                     return data.ToArray();
 
-                return data.ToArray();
+                return null;
             }
         }
 
