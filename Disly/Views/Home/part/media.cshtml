@@ -1,9 +1,9 @@
 ﻿@model HomePageViewModel
 @{ 
     var photo = (Model.Materials != null) ? Model.Materials.Where(w => w.GroupAlias.Equals("photo")) : null;
-    var photo_it = (photo != null) ? photo.SingleOrDefault() : null;
+    var photo_it = (photo != null && photo.Count() > 0) ? photo.FirstOrDefault() : null;
     var video = (Model.Materials != null) ? Model.Materials.Where(w => w.GroupAlias.Equals("video")) : null;
-    var video_it = (photo != null) ? video.SingleOrDefault() : null;
+    var video_it = (video != null) ? video.FirstOrDefault() : null;
 }
 <div class="module-main-page module-media">
     <div class="container">
