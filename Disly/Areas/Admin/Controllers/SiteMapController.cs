@@ -42,7 +42,7 @@ namespace Disly.Areas.Admin.Controllers
                 UserResolution = UserResolutionInfo,
                 ControllerName = ControllerName,
                 ActionName = ActionName,
-                FrontSectionList = _cmsRepository.getSiteMapFrontSectionList(),
+                FrontSectionList = _cmsRepository.getSiteMapFrontSectionList(Domain),
                 MenuTypes = _cmsRepository.getSiteMapMenuTypes()
             };
 

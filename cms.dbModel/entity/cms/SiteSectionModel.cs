@@ -19,21 +19,31 @@ namespace cms.dbModel.entity
         public Pager Pager { get; set; }
     }
 
-    
+    /// <summary>
+    /// Раздел сайта
+    /// </summary>
     public class SiteSectionModel
     {
         /// <summary>
         /// Идентификатор
         /// </summary>
         public Guid Id { get; set; }
+
         /// <summary>
         /// Название раздела
         /// </summary>
         public string Title { get; set; }
+
+        /// <summary>
+        /// Сайт
+        /// </summary>
+        public string SiteId { get; set; }
+
         /// <summary>
         /// Алиас который впоследствии будет совпадать с названием контроллера во внешней части
         /// </summary>
         public string Alias { get; set; }
+
         /// <summary>
         /// Ссылка на представление
         /// </summary>

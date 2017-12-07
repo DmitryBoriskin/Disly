@@ -186,7 +186,7 @@ namespace cms.dbModel
         public abstract bool updateSiteMapItem(Guid id, SiteMapModel item);
         public abstract bool deleteSiteMapItem(Guid id);
 
-        public abstract SiteMapMenu[] getSiteMapFrontSectionList();
+        public abstract SiteMapMenu[] getSiteMapFrontSectionList(string domain);
         public abstract SiteMapMenu getSiteMapMenu(Guid id);
         public abstract Catalog_list[] getSiteMapMenuTypes();
         public abstract bool createOrUpdateSiteMapMenu(SiteMapMenu item);
