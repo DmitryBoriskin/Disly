@@ -52,13 +52,13 @@
      */
     function offSetManager() {
 
-        var yOffset = 0;
+        var yOffset = 100;
         var currYOffSet = window.pageYOffset;
 
         if (yOffset < currYOffSet) {
             myNavBar.add();
         }
-        else if (currYOffSet == yOffset) {
+        else if (currYOffSet == 0) {
             myNavBar.remove();
         }
 
