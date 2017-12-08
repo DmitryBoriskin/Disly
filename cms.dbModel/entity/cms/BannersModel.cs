@@ -57,9 +57,14 @@ namespace cms.dbModel.entity
         public int Sort { get; set; }
 
         /// <summary>
-        /// Флаг запрещённости эл-та
+        /// Флаг запрещённости эл-та для отображения
         /// </summary>
         public bool Disabled { get; set; }
+
+        /// <summary>
+        /// Флаг запрещённости эл-та для редактирования
+        /// </summary>
+        public bool Locked { get; set; }
 
         /// <summary>
         /// Секция
