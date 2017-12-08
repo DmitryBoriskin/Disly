@@ -139,12 +139,11 @@ function SearchWork() {
     $('.searchform_close').click(function (e) {
         $('.searchform').toggleClass('show');
         e.preventDefault();
+        return false;
     });
     
     $('#search_focus').focusout(function () {
-        setTimeout(function () {
-            $('.searchform').toggleClass('show');
-        }, 400);        
+        $('.searchform').toggleClass('show');
     });
 
 
