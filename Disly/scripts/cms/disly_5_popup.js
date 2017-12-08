@@ -216,6 +216,73 @@
         }
     });
 
+    //Привязка баннеров к сайтам 
+    $("#modal-site-table .site-item-chkbx").on('ifToggled', function () {
+        var targetUrl = "/Admin/Sites/UpdateLinkToSite";
+        var _objctId = $(this).data("objectId");
+        var _objectType = $(this).data("objectType");
+        var _linkId = $(this).data("linkId");
+        var _linkType = $(this).data("linkType");
+        var _checked = $(this).is(':checked');
+
+        var el = $(this);
+        var elTooltip = $(this).closest(".site-item-row").find(".site-item-tooltip").first();
+        var _chkbxEvent = $(this).closest(".site-item-row").find(".site-item-html").first().html();
+        var _dateEvent = $(this).closest(".site-item-row").find(".site-item-date").first().html();
+
+        var listBlock = $("#model-linksToSite-ul", top.document);
+
+        try {
+            var params = {
+                ObjctId: _objctId,
+                ObjctType: _objectType,
+                LinkId: _linkId,
+                LinkType: _linkType,
+                Checked: _checked
+            };
+
+            var _data = JSON.stringify(params);
+
+            //ShowPreloader(content);
+
+            $.ajax({
+                url: targetUrl,
+                method: "POST",
+                async: true,
+                cache: false,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                data: JSON.stringify(params)
+            })
+                .done(function (response) {
+                    elTooltip.attr("title", "Сохранено");
+                    elTooltip.tooltip('show');
+                    if (_checked) {
+                        if (listBlock.find("site_" + _linkId).length === 0) {
+                            listBlock.append($("<li id='site_" + _linkId + "' class='icon-location-5'/>").html(_chkbxEvent));
+                        }
+                    }
+                    else {
+                        listBlock.find("#site_" + _linkId).remove();
+                    }
+                })
+                .fail(function (jqXHR, status) {
+                    console.log("Ошибка" + " " + status + " " + jqXHR);
+                    elTooltip.attr("title", "Ошибка сохранения");
+                    elTooltip.tooltip('show');
+                })
+                .always(function (response) {
+                    setTimeout(function () {
+                        elTooltip.tooltip('hide');
+                    }, 1000);
+                    //location.reload();
+                });
+        }
+        catch (ex) {
+            console.log(ex);
+        }
+    });
+
 })
 
 

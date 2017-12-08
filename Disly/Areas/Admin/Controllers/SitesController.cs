@@ -320,9 +320,46 @@ namespace Disly.Areas.Admin.Controllers
                 userMassege.buttons = new ErrorMassegeBtn[]{
                     new ErrorMassegeBtn { url = "#", text = "ок", action = "false" }
                 };
-            }                        
+            }
             model.ErrorInfo = userMassege;
             return View("item", model);
+        }
+
+     
+        //Получение списка сайтов по параметрам для отображения в модальном окне
+        [HttpGet]
+        public ActionResult SiteListModal(Guid objId, ContentType objType)
+        {
+            var filtr = new SiteFilter()
+            {
+                Domain = Domain,
+                RelId = objId,
+                RelType = objType,
+                Size = last_items
+            };
+
+            var model = new SitesModalViewModel()
+            {
+                ObjctId = objId,
+                ObjctType = objType,
+                SitesList = _cmsRepository.getSiteListWithCheckedForBanner(filtr)
+            };
+
+            return PartialView("Modal/Sites", model);
+        }
+
+        [HttpPost]
+        public ActionResult UpdateLinkToSite(ContentLinkModel data)
+        {
+            if (data != null)
+            {
+                var res = _cmsRepository.updateContentLink(data);
+                if (res)
+                    return Json("Success");
+            }
+
+            //return Response.Status = "OK";
+            return Json("An Error Has occourred"); //Ne
         }
 
     }

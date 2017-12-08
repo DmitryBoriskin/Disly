@@ -151,7 +151,7 @@ namespace Disly.Areas.Admin.Controllers
                 string savePath = Settings.UserFiles + Domain + Settings.BannersDir;
 
                 // секция
-                if (!back_model.Item.Section.HasValue)
+                if (!back_model.Item.Section.HasValue )
                     throw new Exception("BannerController: В back_model не определена секция");
 
                 var _section = _cmsRepository.getSectionItem(back_model.Item.Section.Value);

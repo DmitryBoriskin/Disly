@@ -84,50 +84,38 @@ namespace cms.dbase
                 if(filter == null)
                     throw new Exception("CmsRepository_Banners > getBanners: filter is null");
 
-                var siteId = currentSiteId();
+                var query = db.sv_sites_bannerss
+                    .Where(b => b.site_alias == _domain)
+                    .Where(b => b.banner_section == section);
 
-                var siteBanners = db.content_content_links
-                    .Where(s => s.f_content_type == ContentType.BANNER.ToString())
-                    .Where(s => s.f_link_type == ContentLinkType.SITE.ToString())
-                    .Where(s => s.f_link == siteId);
-                  
-                if(siteBanners.Any())
+                if(query.Any())
                 {
-                    //Баннеры, принадлежащие сайту
-                    Guid[] bannersId = siteBanners.Select(b => b.f_content).ToArray();
+                    int itemCount = query.Count();
 
-                    var query = db.content_bannerss
-                       .Where(w => w.f_section == section)
-                       .Where(w => bannersId.Contains(w.id));
-
-                    if (query.Any())
-                    {
-                        int itemCount = query.Count();
-
-                        var list = query
-                            .OrderBy(o => o.n_sort)
-                            .Skip(filter.Size * (filter.Page - 1))
-                            .Take(filter.Size)
-                            .Select(s => new BannersModel()
+                    var list = query
+                        .OrderBy(b => b.banner_sort)
+                        .Skip(filter.Size * (filter.Page - 1))
+                        .Take(filter.Size)
+                        .Select(s => new BannersModel()
+                        {
+                            Id = s.banner_id,
+                            Site = s.banner_origin_site,
+                            Title = s.banner_title,
+                            Url = s.banner_url,
+                            Text = s.banner_text,
+                            Date = s.banner_date,
+                            Sort = s.banner_sort,
+                            Disabled = s.banner_disabled,
+                            Section = s.banner_section,
+                            CountClick = s.banner_clicks,
+                            Photo = new Photo
                             {
-                                Id = s.id,
-                                Site = s.f_site,
-                                Title = s.c_title,
-                                Url = s.c_url,
-                                Text = s.c_text,
-                                Date = s.d_date,
-                                Sort = s.n_sort,
-                                Disabled = s.b_disabled,
-                                Section = s.f_section,
-                                CountClick = s.n_count_click,
-                                Photo = new Photo
-                                {
-                                    Url = s.c_photo
-                                },
-                                Locked = s.b_locked
-                            });
+                                Url = s.banner_image
+                            },
+                            Locked = s.banner_locked
+                        });
 
-                        return new BannersListModel
+                    return new BannersListModel
                         {
                             Data = list.ToArray(),
                             Pager = new Pager
@@ -140,7 +128,6 @@ namespace cms.dbase
                             }
                         };
                     }
-                }
 
                 return null;
             }
@@ -150,32 +137,18 @@ namespace cms.dbase
         /// Получаем кол-во баннеров для сайта и секции
         /// </summary>
         /// <param name="section">Секция баннеров</param>
-        /// <param name="domain">Домен</param>
         /// <returns></returns>
         public override int getCountBanners(Guid section)
         {
             using (var db = new CMSdb(_context))
             {
-                var siteId = currentSiteId();
+                var query = db.sv_sites_bannerss
+                    .Where(b => b.site_alias == _domain)
+                    .Where(b => b.banner_section == section);
 
-                var siteBanners = db.content_content_links
-                    .Where(s => s.f_content_type == ContentType.BANNER.ToString())
-                    .Where(s => s.f_link_type == ContentLinkType.SITE.ToString())
-                    .Where(s => s.f_link == siteId);
-
-                if (siteBanners.Any())
+                if (query.Any())
                 {
-                    //Баннеры, принадлежащие сайту
-                    Guid[] bannersId = siteBanners.Select(b => b.f_content).ToArray();
-
-                    var query = db.content_bannerss
-                       .Where(w => w.f_section == section)
-                       .Where(w => bannersId.Contains(w.id));
-
-                    if (query.Any())
-                    {
-                        return query.Count();
-                    }
+                    return query.Count();
                 }
 
                 return 0;
@@ -270,10 +243,11 @@ namespace cms.dbase
                         var siteId = currentSiteId();
                         var siteBanners = new content_content_link()
                         {
+                            id = Guid.NewGuid(),
                             f_content = id,
-                            f_content_type = ContentType.BANNER.ToString(),
+                            f_content_type = ContentType.BANNER.ToString().ToLower(),
                             f_link = siteId,
-                            f_link_type = ContentLinkType.SITE.ToString(),
+                            f_link_type = ContentLinkType.SITE.ToString().ToLower(),
                             b_origin = true
                         };
                         db.Insert(siteBanners);

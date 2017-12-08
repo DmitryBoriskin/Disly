@@ -31,26 +31,4 @@
         /// </summary>
         public OrgType[] OrgsTypes { get; set; }
     }
-
-    //Модель описывающая права группы на раздел сайта
-    public class O
-    {
-        /// <summary>
-        /// Алиас группы
-        /// </summary>
-        public string GroupAlias { get; set; }
-        /// <summary>
-        /// Тип раздела сайта, к которому настраивается доступ
-        /// </summary>
-        public Guid ContentId { get; set; }
-        /// <summary>
-        /// Тип действия
-        /// </summary>
-        public string Claim { get; set; }
-        /// <summary>
-        /// разрешено
-        /// </summary>
-        public bool Checked { get; set; }
-    }
-
 }

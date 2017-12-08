@@ -561,6 +561,7 @@
     <Compile Include="Areas\Admin\Models\BannersViewModel.cs" />
     <Compile Include="Areas\Admin\Models\cmsMenuViewModel.cs" />
     <Compile Include="Areas\Admin\Models\DocumentsViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\ModalViewModels\SitesModalViewModel.cs" />
     <Compile Include="Areas\Admin\Models\PhotoViewModel.cs" />
     <Compile Include="Areas\Admin\Models\PersonViewModel.cs" />
     <Compile Include="Areas\Admin\Models\SiteSectionViewModel.cs" />

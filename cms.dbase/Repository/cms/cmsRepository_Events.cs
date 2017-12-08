@@ -49,7 +49,6 @@ namespace cms.dbase
                 }
             }
 
-
             return query;
         }
 

@@ -61,6 +61,10 @@ namespace cms.dbModel.entity
         /// Идентификатор контента
         /// </summary>
         public Guid ContentId { get; set; }
+        /// <summary>
+        /// тип контента сайта, например сайт организации
+        /// </summary>
+        public ContentLinkType ContentType { get; set; }
 
         /// <summary>
         /// Адрес
@@ -190,11 +194,14 @@ namespace cms.dbModel.entity
         /// Список доменов
         /// </summary>
         public Domain[] DomainList { get; set; }
-        
         /// <summary>
         /// 
         /// </summary>
         public bool Checked { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool Origin { get; set; }
     }
 
     /// <summary>

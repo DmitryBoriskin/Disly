@@ -795,6 +795,37 @@ namespace cms.dbase
             }
         }
 
+        public override SitesShortModel[] getSiteListWithCheckedForBanner(SiteFilter filtr)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var query = db.cms_sitess.AsQueryable();
+
+                if (filtr.RelId.HasValue && filtr.RelId.Value != Guid.Empty)
+                {
+                    var List = query
+                    .OrderBy(o => new { o.c_name })
+                    .Take(filtr.Size)
+                    .Select(s => new SitesShortModel()
+                    {
+                        Id = s.id,
+                        Title = s.c_name,
+                        Alias = s.c_alias,
+                        SiteOff = s.b_site_off,
+                        Type = s.c_content_type,
+                        DomainList = getSiteDomains(s.c_alias),
+                        Checked = ContentLinkExists(filtr.RelId.Value, filtr.RelType, s.id, ContentLinkType.SITE),
+                        Origin = ContentLinkOrigin(filtr.RelId.Value, filtr.RelType, s.id, ContentLinkType.SITE)
+                    });
+
+                    if (List.Any())
+                        return List.ToArray();
+                }
+
+                return null;
+            }
+        }
+
         /// <summary>
         /// Список сайтов
         /// </summary>
@@ -931,23 +962,7 @@ namespace cms.dbase
                                     .Value(v => v.f_site, ins.Alias)
                                     .Value(v => v.n_sort, mS + 1)
                                     .Insert();
-
                             }
-                        }
-                        //баннеры
-                        var banners = db.content_bannerss.Where(w => w.f_site == "main").ToArray();
-                        foreach (var item in banners)
-                        {
-                            db.content_bannerss
-                                .Value(v => v.f_site, ins.Alias)
-                                .Value(v => v.c_title, item.c_title)
-                                .Value(v => v.c_photo, item.c_photo)
-                                .Value(v => v.c_url, item.c_url)
-                                .Value(v => v.c_text, item.c_text)
-                                .Value(v => v.d_date, DateTime.Now)
-                                .Value(v => v.n_sort, item.n_sort)
-                                .Value(v => v.f_section, item.f_section)
-                                .Insert();
                         }
                         #endregion
 

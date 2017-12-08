@@ -1,4 +1,4 @@
-﻿@model EventsModalViewModel
+﻿@model SitesModalViewModel
 @{
     Layout = "~/Areas/Admin/Views/Shared/_popUp.cshtml";
 }
@@ -7,38 +7,51 @@
     {
         <div class="col-lg-12 content">
             <div class="alert alert-info">
-                <p><span class="icon-info"></span> Выберите события, к которым необходимо привязать запись.</p>
+                <p><span class="icon-info"></span> Выберите сайты, к которым необходимо привязать запись.</p>
             </div>
         </div>
-
-        <div class="scrollbar modal-event-list">
-            @if (Model.EventsList != null && Model.EventsList.Count() > 0)
+        <div class="scrollbar modal-site-list">
+            @if (Model.SitesList != null && Model.SitesList.Count() > 0)
             {
-                <table class="table table-striped" cellspacing="0" width="100%" id="modal-event-table">
+                @*@Html.HiddenFor(m => m.UserId);*@
+
+                <table id="modal-site-table" class="table table-striped" cellspacing="0" width="100%">
                     <thead>
                         <tr>
-                            <th>Дата начала</th>
-                            <th width="25%">Событие</th>
-                            <th width="50%">Описание</th>
+                            <th>Название сайта</th>
+                            <th>Алиас</th>
+                            <th>Тип сайта</th>
+                            <th>url</th>
                             <th>Отметить</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var item in Model.EventsList)
+                        @foreach (var item in Model.SitesList)
                         {
-                            <tr class="event-item-row">
-                                <td class="date event-item-date">
-                                    @item.DateBegin.ToShortDateString()
-                                </td>
-                                <td class="event-item-html">
+                            <tr class="site-item-row">
+                                <td class="site-item-html">
                                     <a href="/admin/events/item/@item.Id" target="_blank"> @item.Title</a><br />
                                 </td>
+                                <td class="td-bold">
+                                    @item.Alias
+                                </td>
                                 <td>
-                                    @Html.Raw(item.Text.Substring(0, Math.Min(item.Text.Length, 150)))
+                                    @item.Type
+                                </td>
+                                <td>
+                                    @if (item.DomainList != null)
+                                    {
+                                        <ul>
+                                            @foreach (var domain in item.DomainList)
+                                            {
+                                                <li>@domain.DomainName</li>
+                                            }
+                                        </ul>
+                                    }
                                 </td>
                                 <td class="td-center">
-                                    <span class="event-item-tooltip" data-toggle="tooltip" data-placement="left" title="Сохранено"></span>
-                                    <input type="checkbox" class="event-item-chkbx iCheck" data-object-id="@Model.ObjctId" data-object-type="@Model.ObjctType" data-link-id="@item.Id" data-link-type="@ContentLinkType.EVENT.ToString()" data-init="false" @(item.Checked ? "checked" : null) />
+                                    <span class="site-item-tooltip" data-toggle="tooltip" data-placement="left" title="Сохранено"></span>
+                                    <input type="checkbox" class="site-item-chkbx iCheck" data-object-id="@Model.ObjctId" data-object-type="@Model.ObjctType" data-link-id="@item.Id" data-link-type="@ContentLinkType.SITE.ToString()" data-init="false" @(item.Checked ? "checked" : null) @(item.Origin ? "disabled" : null) />
                                 </td>
                             </tr>
                         }
@@ -50,13 +63,15 @@
     else
     {
         <div id="log-list_title">
-            <div class="alert alert-danger" role="alert">Список событий для этой записи пуст.</div>
+            <div class="alert alert-danger" role="alert">Список сайтов пуст или не доступен.</div>
         </div>
     }
 </div>
+
 <script>
     $(document).ready(function () {
-        $("#modal-event-table .iCheck").iCheck({
+
+        $("#modal-site-table .iCheck").iCheck({
             checkboxClass: 'icheckbox_square-blue',
             radioClass: 'icheckbox_square-blue'
             //increaseArea: '%' //optional
@@ -70,7 +85,7 @@
                 "url": "/Content/plugins/datatables/i18n/ru.json"
             }
         });
-        $('#modal-event-table').DataTable(
+        $('#modal-site-table').DataTable(
             {
                 searching: true,
                 ordering: true,
@@ -78,6 +93,7 @@
                     null,
                     null,
                     null,
+                    { "orderable": false },
                     { "searchable": false, "orderable": false }
 
                 ]
