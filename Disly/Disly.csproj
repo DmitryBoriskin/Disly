@@ -130,6 +130,7 @@
     <Content Include="Areas\Admin\Views\Feedbacks\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Feedbacks\Item.cshtml" />
     <Content Include="Content\css\common.css" />
+    <Content Include="Content\css\commonless.css" />
     <Content Include="Content\css\print.css" />
     <Content Include="Content\css\styles_popUp.css" />
     <Content Include="Content\css\styles.css" />
@@ -830,6 +831,7 @@
     <Content Include="Areas\Admin\Views\PhotoAlbums\Index.cshtml" />
     <Content Include="Areas\Admin\Views\PhotoAlbums\Item.cshtml" />
     <Content Include="Areas\Admin\Views\Shared\Modal\Sites.cshtml" />
+    <Content Include="Content\css\commonless.less" />
     <None Include="Content\plugins\datatables\i18n\ru.json" />
     <Content Include="Content\plugins\tinymce\langs\readme.md" />
     <Content Include="Content\plugins\tinymce\skins\lightgray\fonts\tinymce-small.eot" />

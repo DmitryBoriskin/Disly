@@ -9,6 +9,12 @@ var paths = {
     webroot: "./Content/"
 };
 //  регистрируем задачу по преобразованию styles.less в файл css
+gulp.task("comm", function () {
+    return gulp.src('content/css/commonless.less')
+        .pipe(less())
+        .pipe(gulp.dest(paths.webroot + 'css'))
+});
+
 gulp.task("blue", function () {
     return gulp.src('content/css/theme/blue.less')
                .pipe(less())
