@@ -76,7 +76,7 @@ blockquote{margin-top:20px;}
 
 /* шапка */
 .head {
-    padding: 15px 0;
+    padding: 0 0 15px;
     border-bottom: 1px solid #ccc;
 }
 
@@ -237,7 +237,7 @@ blockquote{margin-top:20px;}
     line-height: 46px;
     vertical-align: middle;
     padding: 0 5px;
-    background-color: #fff;
+    background-color: #fff!important;
 }
 
     .searchform_close:hover {
@@ -589,13 +589,14 @@ blockquote{margin-top:20px;}
 .imglink-title {
     line-height: 1.1;
 }
-
+.imglink-controlls{position:absolute;width:100%;}
 .imglink-controlls > a {
     font-size: 26px;
     position: relative;
     bottom: 105px;
     text-decoration: none;
 }
+.imglink-controlls > a:hover{cursor:pointer;}
 
 .ti-angle-left.prev {
     float: left;
@@ -1436,3 +1437,63 @@ blockquote{margin-top:20px;}
     color: #4d6bbc;
     margin-right: 13px;
 }
+
+
+#header{margin:0;}
+#header.navbar.navbar-fixed-top{position:inherit;}
+#header.navbar.navbar-fixed-top.fixed-theme{position:fixed;}
+#header.navbar.navbar-fixed-top.fixed-theme .head{height:0;padding:0;overflow:hidden;}
+.menu-mini-icons{display:none;}
+#header.navbar.navbar-fixed-top.fixed-theme .menu-mini-icons{display:block;}
+.navbar-brand{display:none;padding:8px;}
+.navbar-brand img{max-height:100%;}
+
+#header.navbar.navbar-fixed-top.fixed-theme .navbar-brand{display:block;z-index:20;}
+
+#navbar{position:relative;}
+.navbar-brand {
+    font-size: 24px;
+}
+
+.navbar-container {
+    /*padding: 20px 0 20px 0;*/
+    padding: 20px 0 0 0;
+}
+
+.navbar.navbar-fixed-top.fixed-theme {
+    background-color: rgba(255,255,255,.94);    
+    box-shadow: 0 0 5px rgba(0,0,0,.8);
+}
+
+.navbar-brand.fixed-theme {
+    font-size: 18px;
+}
+
+.navbar-container.fixed-theme {
+    padding: 0;
+}
+
+.navbar-brand.fixed-theme,
+.navbar-container.fixed-theme,
+.navbar.navbar-fixed-top.fixed-theme,
+.navbar-brand,
+.navbar-container {
+    transition: 0.8s;
+    -webkit-transition: 0.8s;
+}
+.mini-icons a:before{}
+
+#header .navbar-left a{
+    color:#333;
+    font-size:14px;
+    text-transform:uppercase;
+    font-weight:bold;
+}
+#header li a {
+    padding: 13px 15px 12px;
+}
+#header a:hover{background-color:transparent;}
+
+.menu-mini-icons a{color:#999;}
+.menu-mini-icons a:hover{background-color:transparent!important;}
+.menu-mini-icons li:last-child a{color:#333;font-weight:bold;}

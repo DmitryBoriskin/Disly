@@ -194,6 +194,7 @@
     <Content Include="Content\img\share-arrow.png" />
     <Content Include="Content\img\temporal.jpg" />
     <Content Include="Content\img\youtube-ico.png" />
+    <Content Include="Content\js\menu.js" />
     <Content Include="Content\js\script.js" />
     <Content Include="Content\plugins\bonsai\css\jquery.bonsai.css" />
     <Content Include="Content\plugins\bonsai\js\jquery.bonsai.js" />
@@ -879,6 +880,7 @@
     <Content Include="Views\Shared\part\childtabs.cshtml" />
     <Content Include="Views\GeneralSpecialists\Index.cshtml" />
     <Content Include="Views\Service\Photo.cshtml" />
+    <Content Include="Views\Shared\_Layout - Копировать.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

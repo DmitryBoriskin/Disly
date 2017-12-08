@@ -1,13 +1,4 @@
-﻿$(document).ready(function () {
-    //$('.carousel').carousel({
-    //    interval: 60000
-    //});
-
-    // эффект наведения в слайдере
-    //$('.slider-message').hover(function () {
-    //    $(this).toggleClass('active');
-    //});
-
+﻿$(document).ready(function () { 
     $('.select2').select2();
 
     $('input[data-type=date').datepicker({ onSelect: function (dateText, inst) { $(this).attr('value', dateText); } });
@@ -15,8 +6,6 @@
     $('input[data-mask]').each(function () {
         $(this).mask($(this).attr('data-mask'));
     });
-
-
 
     //раскрытие кнопки поиска
     if ($('.seacrh_button__hide').length > 0) {
@@ -81,6 +70,7 @@
     if ($('.searchform_dop').length > 0) {
         SearchDopWork()
     }
+
 });
 
 function SearchDopWork() {

@@ -3,6 +3,19 @@
     ViewBag.Version = "1.0.1";
     string currentYear = DateTime.Now.Year.ToString();
     string theme = Model.SitesInfo.Theme + ".css";
+
+
+    var mainMenu = Model.SiteMapArray
+                            .Where(w => w.MenuAlias.Equals("main"))
+                            .OrderBy(o => o.MenuSort)
+                            .Select(s => new
+                            {
+                                Path = s.Path,
+                                Alias = s.Alias,
+                                Title = s.Title,
+                                FrontSection = s.FrontSection,
+                                Url = s.Url
+                            });
 }
 
 <!DOCTYPE html>
@@ -32,6 +45,7 @@
     <script src="~/Content/plugins/select2/select2.min.js"></script>    
     <script src="~/Content/plugins/mobileGallery/js/jquery.swipebox.js"></script>    
     <script src="~/Content/js/script.js"></script>
+    <script src="~/Content/js/menu.js"></script>
 </head>
 
 <body>
@@ -41,108 +55,118 @@
         <!-- шапка -->
         <div class="container">
             <!-- название сайта -->
-            <div class="head">
-                <div class="row">
-                    <div class="col-md-8">
-                        <a href="/" class="head_link">
-                            @if (Model.SitesInfo.Logo.Url != null)
-                            {
-                                <div class="head_logo">
-                                    <img src="@Model.SitesInfo.Logo.Url" />
-                                </div>
-                            }
-                            <div class="head_title">
-                                @if (Model != null && Model.SitesInfo != null)
-                                {
-                                    <span>@Model.SitesInfo.LongTitle</span>
-                                }
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-md-4 right_section">
-                        <ul class="nav navbar-nav navbar-right">
-                            <li>
-                                <a href="/mapsite">
-                                    <span class="ti-layers-alt top-icon"></span>
-                                    Карта сайта
-                                </a>
-                            </li>
-                            <li>
-                                <a href="/press/rss">
-                                    <span class="ti-rss-alt top-icon"></span>
-                                    RSS
-                                </a>
-                            </li>
-                            <li>
-                                <a target="_blank" href="http://www.med.cap.ru/">
-                                    <span class="ti-new-window top-icon"></span>
-                                    Медицинский портал
-                                </a>
-                            </li>
-                        </ul>
-                        <div class="pull-right spec-version-link">
-                            <a href="/spec">
-                                <span class="spec-info">Aa</span>
-                                Для слабовидящих
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
+            
             <!-- конец названия сайта -->
             <!-- главное меню -->
-            <div class="main-menu_wr">
-                <div class="main-menu">
-                    <form class="searchform">
-                        <a class="searchform_close ti-close" href="#"></a>
-                        <button class="searchform_btn" type="submit">Найти</button>
-                        <div class="searchform_input_wr"><input id="search_focus" class="search-input" type="search" name="q" placeholder="Поиск по сайту"/></div>                                                
-                    </form>
-                    @if (Model != null && Model.SiteMapArray != null && Model.SiteMapArray.Count() > 0)
-                    {
-                        var mainMenu = Model.SiteMapArray
-                            .Where(w => w.MenuAlias.Equals("main"))
-                            .OrderBy(o => o.MenuSort)
-                            .Select(s => new
-                            {
-                                Path = s.Path,
-                                Alias = s.Alias,
-                                Title = s.Title,
-                                FrontSection = s.FrontSection,
-                                Url = s.Url
-                            });
-                        <ul class="nav navbar-nav navbar-left">
-                            @foreach (var item in mainMenu)
+            <nav id="header" class="navbar navbar-fixed-top">
+                <div id="header-container" class="container navbar-container">
+                    <div class="head">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <a href="/" class="head_link">
+                                    @if (Model.SitesInfo.Logo.Url != null)
+                                    {
+                                        <div class="head_logo">
+                                            <img src="@Model.SitesInfo.Logo.Url" />
+                                        </div>
+                                    }
+                                    <div class="head_title">
+                                        @if (Model != null && Model.SitesInfo != null)
+                                        {
+                                            <span>@Model.SitesInfo.LongTitle</span>
+                                        }
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="col-md-4 right_section">
+                                <ul class="nav navbar-nav navbar-right">
+                                    <li>
+                                        <a href="/mapsite">
+                                            <span class="ti-layers-alt top-icon"></span>
+                                            Карта сайта
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="/press/rss">
+                                            <span class="ti-rss-alt top-icon"></span>
+                                            RSS
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a target="_blank" href="http://www.med.cap.ru/">
+                                            <span class="ti-new-window top-icon"></span>
+                                            Медицинский портал
+                                        </a>
+                                    </li>
+                                </ul>
+                                <div class="pull-right spec-version-link">
+                                    <a href="/spec">
+                                        <span class="spec-info">Aa</span>
+                                        Для слабовидящих
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>      
+                        <a id="brand" class="navbar-brand" href="/">
+                            <img src="@Model.SitesInfo.Logo.Url" />
+                        </a>
+                    </div>
+                    <div id="navbar" class="collapse navbar-collapse">
+                        <form class="searchform">
+                            <a class="searchform_close ti-close" href="#"></a>
+                            <button class="searchform_btn" type="submit">Найти</button>
+                            <div class="searchform_input_wr"><input id="search_focus" class="search-input" type="search" name="q" placeholder="Поиск по сайту" /></div>
+                        </form>
+                        @if (mainMenu != null)
                         {
-                            string fullPath = "/";
-
-                            if (!string.IsNullOrEmpty(item.Url))
-                            {
-                                fullPath = item.Url;
-                            }
-                            else if (item.FrontSection.ToLower().Equals("page"))
-                            {
-                                fullPath = item.Path + item.Alias;
-                            }
-                            else
-                            {
-                                fullPath = "/" + item.FrontSection;
-                            }
-
-                            <li>
-                                <a href="@fullPath">@item.Title</a>
-                            </li>
-                            }
-                        </ul>
-                    }
-                    <ul class="nav navbar-nav navbar-right">                        
-                        <li>
-                            <a href="#" class="searchform_show seacrh_button__hide icon-search"></a>
-                        </li>                        
-                    </ul>
-                </div>
-            </div>
+                            <ul class="nav navbar-nav navbar-left">
+                                @foreach (var item in mainMenu)
+                                {
+                                    string fullPath = "/";
+                                    if (!string.IsNullOrEmpty(item.Url))
+                                    {
+                                        fullPath = item.Url;
+                                    }
+                                    else if (item.FrontSection.ToLower().Equals("page"))
+                                    {
+                                        fullPath = item.Path + item.Alias;
+                                    }
+                                    else
+                                    {
+                                        fullPath = "/" + item.FrontSection;
+                                    }
+                                    string _class = (Request.Path == fullPath) ? "class=active" : "";
+                                    <li @_class>
+                                        <a href="@fullPath">@item.Title</a>
+                                    </li>
+                                }                                
+                            </ul>
+                            <ul class="nav navbar-nav navbar-right">
+                                <li>
+                                    <a href="#" class="searchform_show seacrh_button__hide icon-search"></a>
+                                </li>
+                            </ul>
+                            <ul class="nav navbar-nav navbar-right menu-mini-icons">
+                                <li><a href="/mapsite"><span class="ti-layers-alt top-icon"></span></a></li>
+                                <li><a href="/press/rss"><span class="ti-rss-alt top-icon"></span></a></li>
+                                <li><a href="http://www.med.cap.ru/" target="_blank"><span class="ti-new-window top-icon"></span></a></li>
+                                <li><a href="/spec" title="версия для слабовидящих"><span class="spec-info">Aa</span></a></li>
+                            </ul>
+                        }                        
+                    </div><!-- /.nav-collapse -->
+                </div><!-- /.container -->
+            </nav><!-- /.navbar -->
+          
 
             <!-- конец главного меню -->
         </div>
@@ -285,5 +309,6 @@
     <script type="text/javascript">
         var SiteId = "@Model.SitesInfo.Alias";
     </script>
+
 </body>
 </html>

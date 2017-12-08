@@ -1,4 +1,4 @@
-.head_title h4 {
+.head_title span {
   color: #1f4799;
 }
 .bottom_menu a:hover,
@@ -18,7 +18,11 @@
 .slider-text-block {
   background-color: #3973e6;
 }
-.main-menu li > a:hover {
+.menu-mini-icons a:hover,
+#header .navbar-left a:hover {
+  color: #3973e6 !important;
+}
+.searchform_show {
   color: #3973e6;
 }
 .seacrh_button:before {
