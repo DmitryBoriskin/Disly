@@ -1123,30 +1123,34 @@ blockquote{margin-top:20px;}
     margin-left: 10px;
 }
 
+.contact_info_dep{
+    margin:0 0 23px;position:relative;
+}
+.contact_info_dep:before{
+    content:'—';
+    position:absolute;left:-20px;top:0;
+}
+
 .filals-list {
-    margin: 20px 0;
+    margin: 0 0 20px;
 }
 
 .filals-list_it {
-    padding: 6px 0 20px;
+    padding: 6px 0 0;
+    margin: 0 0 12px;
+    border-bottom: 1px solid #e6e6e6;
 }
-
-    .filals-list_it a {
-        text-decoration: underline;
-        color: #4d6bbc;
-    }
 
 .filals-list_it_title {
     margin-bottom: 10px;
     font-size: 20px;
+    font-weight:bold;font-size:18px;
+    line-height:23px;
 }
 
-.department_name {
-    font-size: 17px;
-    margin-top: 10px;
+.department_name {    
 }
-
-
+.department_name a{margin-bottom:6px;display:block;}
 /*vote*/
 .vote_stat_load_wr {
     width: 100%;
@@ -1425,11 +1429,13 @@ blockquote{margin-top:20px;}
         right: 30px;
 }
 .adminlist{width:100%;}
-.adminlist tr td{padding:20px 0 20px;border-bottom:1px solid #ddd;              
-}
+.adminlist tr td{padding:36px 0 4px;border-bottom:1px solid #ddd;vertical-align:top;}
+.adminlist tr td p{margin-bottom:1px;}
 
-.adminlist_img_wr{margin-right:20px;}
-.adminlist_post {    color: #808080;    font-size: 14px;    line-height: 18px;}
+
+.adminlist_img_wr{margin-right:20px;position:relative;top:-14px;}
+.adminlist_name{font-size:18px;font-weight:bold;}
+.adminlist_post {color: #808080;    font-size: 14px;    line-height: 18px;padding-top:3px;}
 .adminlist_phone{}
 .adminlist_phone:before {
     content: '\e8a0';
@@ -1461,7 +1467,7 @@ blockquote{margin-top:20px;}
 }
 
 .navbar.navbar-fixed-top.fixed-theme {
-    background-color: rgba(255,255,255,.94);    
+    background-color: #fff;    
     box-shadow: 0 0 5px rgba(0,0,0,.8);
 }
 
