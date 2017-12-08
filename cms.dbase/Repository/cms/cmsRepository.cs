@@ -73,22 +73,50 @@ namespace cms.dbase
         #endregion
 
         /// <summary>
-        /// Получаем id сайта по доменному имени
+        /// Получаем alias сайта по доменному адресу
         /// </summary>
         /// <returns></returns>
-        public override string getSiteId(string Domain)
+        public override string getSiteId(string DomainUrl)
         {
-            using (var db = new CMSdb(_context))
+            try
             {
-                string SiteId = String.Empty;
-
-                var data = db.cms_sites_domainss.Where(w => w.c_domain == Domain).FirstOrDefault();
-                if (data != null)
+             using (var db = new CMSdb(_context))
                 {
-                    SiteId = data.f_site;
-                }
+                    var data = db.cms_sites_domainss
+                                    .Where(w => w.c_domain == DomainUrl);
 
-                return SiteId;
+                    var site = data.Single();
+                    return site.f_site;
+                }
+            }
+            catch (Exception ex)
+            {
+                //log ex
+                throw new Exception("cmsRepository > getSiteId: It is not possible to determine the site by url (" + DomainUrl + ") " + ex);
+            }
+        }
+
+        /// <summary>
+        /// Получаем guid текущего сайта
+        /// </summary>
+        /// <returns></returns>
+        public override Guid currentSiteId()
+        {
+            try
+            {
+                using (var db = new CMSdb(_context))
+                {
+                    var data = db.cms_sitess
+                                    .Where(w => w.c_alias == _domain);
+
+                    var site = data.Single();
+                    return site.id;
+                }
+            }
+            catch(Exception ex)
+            {
+                //log ex
+                throw new Exception("cmsRepository > currentSiteId: It is not possible to determine the site by _domain (" + _domain + ") " + ex);
             }
         }
 
@@ -130,9 +158,9 @@ namespace cms.dbase
         }
 
         /// <summary>
-        /// Получаем сайт по домену
+        /// Получаем сайт по домену, 
         /// </summary>
-        /// <param name="domain">Домен</param>
+        /// <param name="domain"></param>
         /// <returns></returns>
         public override SitesModel getSite(string domain)
         {

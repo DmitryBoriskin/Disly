@@ -1,73 +1,99 @@
 ﻿@model BannersViewModel
-@{ 
+@{
     string fileName = (Model.Item != null && Model.Item.Photo != null) ? Model.Item.Photo.Name : string.Empty;
     string fileSize = (Model.Item != null && Model.Item.Photo != null) ? Model.Item.Photo.Size : string.Empty;
     string fileUrl = (Model.Item != null && Model.Item.Photo != null) ? Model.Item.Photo.Url : string.Empty;
     string section = Request.Params["section"] != null ? Request.Params["section"] : Model.Item.Section.ToString();
 }
+@if (Model.Item != null && Model.Item.Id != Guid.Empty)
+{
+    if ((!Model.Item.Locked && Model.Item.Site == Model.DomainName) || Model.Account.Group.ToLower().Equals("developer") || Model.Account.Group.ToLower().Equals("administrator"))
+    {
+        <div class="content">
+            <h1>@ViewBag.Title</h1>
+            @Html.TextBoxFor(m => m.Item.Title, new { @title = "Название", @required = "" })
+            @Html.TextBox("upload", null, new { type = "file", title = "Изображение", data_name = fileName, data_size = fileSize, data_url = fileUrl, accept = ".jpg,.jpeg,.png,.gif" })
+            @Html.TextBoxFor(m => m.Item.Photo.Url, new { type = "hidden", value = fileUrl })
 
-<div class="content">
-    <h1>@ViewBag.Title</h1>
-    @Html.TextBoxFor(m => m.Item.Title, new { @title = "Название", @required = "" })
-    @Html.TextBox("upload", null, new { type = "file", title = "Изображение", data_name = fileName, data_size = fileSize, data_url = fileUrl, accept = ".jpg,.jpeg,.png,.gif" })
-    @Html.TextBoxFor(m => m.Item.Photo.Url, new { type = "hidden", value = fileUrl })
+            @Html.TextAreaFor(m => m.Item.Text, new { type = "editor", title = "Текст", height = "300" })
+            @Html.TextBoxFor(m => m.Item.Url, new { type = "text", title = "Ссылка", placeholder = "http://", MaxLength = "128" })
+            @Html.Hidden("Item_Section", section)
 
-    @Html.TextAreaFor(m => m.Item.Text, new { type = "editor", title = "Текст", height = "300" })
-    @Html.TextBoxFor(m => m.Item.Url, new { type = "text", title = "Ссылка", placeholder = "http://", MaxLength = "128" })
-    @Html.Hidden("Item_Section", section)
-
-    @*
-        Если новость существует в базе, то у нее гарантированно есть alias
-        Нельзя добавить связи к несуществующей записи.
-    *@
-    @if (Model.Item.Section.HasValue)
-        {
-            if ((Model.Account.Group.ToLower().Equals("developer") || Model.Account.Group.ToLower().Equals("administrator")))
+            @*
+                Если баннер сохранен в базе, то у нее гарантированно есть Section
+                Нельзя добавить связи к несуществующей записи.
+            *@
+            @if (Model.Item != null && Model.Item.Section.HasValue)
             {
-
-            <div class="group-block open topIndent-20" title="Привязка к сайтам">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <ul id="model-linksToOrgs-ul">
-                            @if (Model.Item.Links != null && Model.Item.Links.Sites != null)
+                if ((Model.Account.Group.ToLower().Equals("developer") || Model.Account.Group.ToLower().Equals("administrator"))) //@if (@*item.Locked ||*@ item.Site != Model.DomainName)
+                {
+                    <div class="group-block open topIndent-20" title="Привязка к сайтам">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <ul id="model-linksToOrgs-ul">
+                                    @if (Model.Item != null && Model.Item.Links != null && Model.Item.Links.Sites != null)
                             {
                                 foreach (var site in Model.Item.Links.Sites)
                                 {
-                                    <li id="org_@site.Id" class="icon-location-5">
-                                        <a href="@site.Adress" target="_blank"> @site.Title</a>
-                                    </li>
-                                }
-                            }
-                        </ul>
-                    </div>
+                                            <li id="org_@site.Id" class="icon-location-5">
+                                                <a href="@site.Adress" target="_blank"> @site.Title</a>
+                                            </li>
+                                        }
+                                    }
+                                </ul>
+                            </div>
 
-                    <div class="col-lg-offset-9 col-lg-3">
-                        @*Для объекта типа "Материалы" ищем список организаций (поэтому передаем тип объекта и id)*@
-                        @Html.ActionLink("Привязать", "siteListModal", "sites", new { @objId = Model.Item.Id, @objType = ContentType.MATERIAL }, new { @id = "LogLists", @class = "button pop-up_frame icon-location-5", @data_class = "LogList", @title = "Организации для размещения" })
+                            <div class="col-lg-offset-9 col-lg-3">
+                                @Html.ActionLink("Привязать", "siteListModal", "sites", new { @objId = Model.Item.Id, @objType = ContentType.MATERIAL }, new { @id = "LogLists", @class = "button pop-up_frame icon-location-5", @data_class = "LogList", @title = "Организации для размещения" })
+                            </div>
+                        </div>
                     </div>
+                }
+            }
+            else
+            {
+                <div class="alert alert-info topIndent-20">
+                    <p><span class="icon-info"></span> Привязка к другим объектам доступна только после сохранения записи.</p>
                 </div>
-            </div>
-        }
+            }
+        </div>
     }
     else
     {
-        <div class="col-lg-12 content">
-            <div class="alert alert-info">
-                <p><span class="icon-info"></span> Привязка к другим объектам доступна только после сохранения записи.</p>
+        <div class="content">
+            <div class="alert alert-danger">
+                <strong>У вас недостаточно прав!</strong>
+                <p>Возможно запись была заблокирована администратором портала.</p>
             </div>
         </div>
     }
-</div>
+}
+else
+{
+    <div class="content">
+        <div class="alert alert-danger">
+            <strong>Ошибка!</strong>
+            <p>Не действительный Id записи.</p>
+        </div>
+    </div>
+}
 
 <div class="dop_info-block">
     <div class="dop-caption">Настройки</div>
     @Html.TextBoxFor(m => m.Item.Date, new { required = "", data_type = "datetime", title = "Дата публикации", value = ViewBag.Date })
     @Html.CheckBoxFor(m => m.Item.Disabled, new { type = "checkbox", title = "Запретить просмотр", data_toggle = "toggle", data_on = "запретить просмотр", data_onstyle = "danger", data_off = "показывать на сайте", data_offstyle = "success", data_width = "248" })
 
+    @if (Model.Account.Group.ToLower().Equals("developer") || Model.Account.Group.ToLower().Equals("administrator"))
+    {
+        @Html.CheckBoxFor(m => m.Item.Locked, new { type = "checkbox", title = "Запретить редактирование", data_toggle = "toggle", data_on = "запретить редактирование", data_onstyle = "danger", data_off = "разрешить редактирование", data_offstyle = "success", data_width = "248" })
+    }
+
     @if (Model.Item != null)
     {
-        @Html.ActionLink("Журнал изменений", "log", "services", new { @id = Model.Item.Id }, new { @id = "LogLists", @class = "button pop-up_frame icon-archive", @data_class = "LogList", @title = "Журнал изменений" })
-        <br /><div class="alert alert-info">Количество переходов: <strong>@Model.Item.CountClick</strong></div>
+        <div class="topIndent-20">
+            @Html.ActionLink("Журнал изменений", "log", "services", new { @id = Model.Item.Id }, new { @id = "LogLists", @class = "button pop-up_frame icon-archive", @data_class = "LogList", @title = "Журнал изменений" })
+        </div>
+        <div class="topIndent-20 alert alert-info">Количество переходов: <strong>@Model.Item.CountClick</strong></div>
     }
 </div>
 

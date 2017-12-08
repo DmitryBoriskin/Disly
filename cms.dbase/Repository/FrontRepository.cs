@@ -256,34 +256,8 @@ namespace cms.dbase
         /// <returns></returns>
         public override BannersModel[] getBanners()
         {
-            //string domain = _domain;
-            //using (var db = new CMSdb(_context))
-            //{
-            //    var data = db.content_sv_banners_sections
-            //        .Where(w => w.f_site.Equals(domain))
-            //        .Where(w => !w.b_disabled)
-            //        .OrderBy(o => o.n_sort)
-            //        .Select(s => new BannersModel
-            //        {
-            //            Id = s.id,
-            //            Title = s.c_title,
-            //            Photo = new Photo { Url = s.c_photo },
-            //            Url = s.c_url,
-            //            Text = s.c_text,
-            //            Date = s.d_date,
-            //            Sort = s.n_sort,
-            //            SectionAlias = s.c_alias
-            //        });
-
-            //    if (data.Any())
-            //        return data.ToArray();
-
-            //    return null;
-            //     public override BannersListModel getBanners(Guid section, FilterParams filter)
-            //{
             using (var db = new CMSdb(_context))
             {
-
                 var site = getSiteInfo();
                 if (site == null)
                     throw new Exception("CmsRepository_Banners > getBanners: domain (" + _domain + ") did not found");

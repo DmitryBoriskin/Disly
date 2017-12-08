@@ -79,6 +79,10 @@
                                     </div>
                                     <div class="col-md-9">
                                         <div class="li-desc">
+                                            @if (item.Locked || item.Site != Model.DomainName)
+                                            {
+                                                <span class="icon-lock" title="Заблокировано администратором портала"></span>
+                                            }
                                             <a href="/admin/banners/item/@item.Id" class="li-caption">@item.Title</a><br />
                                             <span>Дата публикации: </span>@item.Date.ToString("dd MMMM yyyy")<br />
                                             <span>Текст: </span>@text<br />
