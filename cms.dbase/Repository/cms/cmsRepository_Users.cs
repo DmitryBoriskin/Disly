@@ -622,54 +622,67 @@ namespace cms.dbase
         /// <summary>
         /// Прикрепление пользователям доступных сайтов
         /// </summary>
-        /// <param name="link"></param>
+        /// <param name="data"></param>
         /// <returns></returns>
-        public override bool updateUserSiteLinks(UserSiteLinkModel link)
+        public override bool updateUserSiteLinks(ContentLinkModel data)
         {
-            using (var db = new CMSdb(_context))
+            try
             {
-                using (var tran = db.BeginTransaction())
+                using (var db = new CMSdb(_context))
                 {
-                    //Удаляем все записи привязанные к этому пользователю
-                    var res = db.cms_user_site_links
-                        .Where(s => s.f_user == link.UserId)
-                        .Delete();
-
-                    if (link.SitesId != null && link.SitesId.Count() > 0)
+                    using (var tran = db.BeginTransaction())
                     {
-                        foreach (var siteId in link.SitesId)
-                        {
-                            var getSite = db.cms_sitess.Where(s => s.id == siteId);
-                            if (getSite.Any())
-                            {
-                                var alias = getSite.SingleOrDefault().c_alias;
+                        var getSite = db.cms_sitess.Where(s => s.id == data.LinkId);
+                        var alias = getSite.SingleOrDefault().c_alias;
 
+                        //Если существует
+                        var linkExist = db.cms_user_site_links
+                            .Where(l => l.f_user == data.ObjctId)
+                            .Where(l => l.f_site == alias);
+                             
+                        if (linkExist.Any())
+                        {
+                            if(!data.Checked)
+                            {
+                                linkExist.Delete();
+                            }
+                        }
+                        else
+                        {
+                            if (data.Checked)
+                            {
                                 var cdUserSiteLink = new cms_user_site_link()
                                 {
                                     id = Guid.NewGuid(),
-                                    f_user = link.UserId,
+                                    f_user = data.ObjctId,
                                     f_site = alias
                                 };
                                 db.Insert(cdUserSiteLink);
-
-                                var log = new LogModel()
-                                {
-                                    Site = _domain,
-                                    Section = LogSection.Users,
-                                    Action = LogAction.change_resolutions,
-                                    PageId = link.UserId,
-                                    PageName = alias,
-                                    UserId = _currentUserId,
-                                    IP = _ip,
-                                };
-                                insertLog(log);
                             }
                         }
-                    }
 
-                    tran.Commit();
-                    return true;
+                        var log = new LogModel()
+                        {
+                            Site = _domain,
+                            Section = LogSection.Users,
+                            Action = LogAction.change_resolutions,
+                            PageId = data.ObjctId,
+                            PageName = alias,
+                            UserId = _currentUserId,
+                            IP = _ip,
+                        };
+                        insertLog(log);
+                        
+                        tran.Commit();
+                        return true;
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                //log ex
+                //throw new Exception("cmsRepository_USers > updateUserSiteLinks: userId = "+ data.ObjctId + " site "+ data.LinkId + " \n" + ex);
+                return false;
             }
         }
 

@@ -501,7 +501,7 @@ namespace cms.dbase
                     string _path = Url.Substring(0, _lastIndex + 1).ToString();
                     string _alias = Url.Substring(_lastIndex + 1).ToString();
                     if (_alias == String.Empty) _alias = " ";
-
+#warning SingleOrDefault() в базе не стоит ограничение на уникальность (ошибка найдены более 2-чх записей)
                     var item_data = db.content_sitemaps
                                     .Where(w => w.f_site == domain && w.c_path == _path && w.c_alias == _alias).Take(1)
                                     .Select(s => new Breadcrumbs

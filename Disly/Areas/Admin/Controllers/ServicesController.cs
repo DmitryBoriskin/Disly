@@ -126,7 +126,7 @@ namespace Disly.Areas.Admin.Controllers
         #endregion
 
         #region Список доступных сайтов
-        public ActionResult SiteLinks(Guid id)
+        public ActionResult UserSiteListModal(Guid id)
         {
             PortalUsersViewModel userInfo = new PortalUsersViewModel()
             {
@@ -147,21 +147,19 @@ namespace Disly.Areas.Admin.Controllers
 
             return PartialView("UserSites", model);
         }
+
         [HttpPost]
-        [MultiButton(MatchFormKey = "action", MatchFormValue = "save-org-btn")]
-        public ActionResult SiteLinks(UserSiteLinkModel linkData)
+        public ActionResult UpdateUserLinkToSite(ContentLinkModel linkData)
         {
             if(linkData != null)
             {
-                if (ModelState.IsValid)
-                {
-                    var res = _cmsRepository.updateUserSiteLinks(linkData);
-                    if (res)
-                        return PartialView("Modal/Success");
-                }
+                var res = _cmsRepository.updateUserSiteLinks(linkData);
+                if (res)
+                    return Json("Success");
+
             }
-            
-            return PartialView("Modal/Error");
+            //return Response.Status = "OK";
+            return Json("An Error Has occourred"); //Ne
         }
         #endregion
 
