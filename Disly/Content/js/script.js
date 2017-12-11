@@ -79,6 +79,11 @@
 
 });
 
+function PhGall() {
+    $(".swipebox").swipebox();
+}
+
+
 function SearchDopWork() {
     $('.searchform_show_dop').click(function (e) {
         $('.searchform_dop').toggleClass('show');

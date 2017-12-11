@@ -14,7 +14,9 @@
             result += "<ul>";
             foreach (var item in children.ToArray())
             {
-                string link = item.Path + item.Alias;
+                string link = item.FrontSection.Equals("page") 
+                    ? item.Path + item.Alias : "/" + item.FrontSection;
+
                 result += "<li><a href=\"" + link + "\">" + item.Title + "</a></li>";
 
                 result += getChildren(item.Path, item.Alias);
@@ -35,7 +37,9 @@
         <ul>
             @foreach (var item in Model.List.Where(w => w.Path.Equals("/")))
             {
-                string link = item.Path + item.Alias;
+                string link = item.FrontSection.Equals("page")
+                    ? item.Path + item.Alias : "/" + item.FrontSection;
+
                 string rs = getChildren(item.Path, item.Alias);
 
                 <li>

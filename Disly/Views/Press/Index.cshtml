@@ -6,21 +6,21 @@
                 @Html.Partial("services/breadcrumbs")
                 <h1>@ViewBag.Title</h1>
                 @if (!String.IsNullOrEmpty(ViewBag.Alias))
-            {
+                {
                     @Html.Partial("part/Item")
-            }
-            else
-            {
+                }
+                else
+                {
                     <ul class="nav nav-pills tabs">
                         @{
-                        string _allactiv = (String.IsNullOrEmpty(ViewBag.CurrentCategory)) ? "class=active" : "";
+                            string _allactiv = (String.IsNullOrEmpty(ViewBag.CurrentCategory)) ? "class=active" : "";
                         }
                         <li @_allactiv><a href="/press">Все</a></li>
                         @foreach (var item in Model.Group)
-                    {
-                        string _class = (item.Alias == ViewBag.CurrentCategory) ? "class=active" : "";
+                        {
+                            string _class = (item.Alias == ViewBag.CurrentCategory) ? "class=active" : "";
                             <li @_class><a href="/press/@item.Alias">@item.Title</a></li>
-                    }
+                        }
                     </ul>
 
                     <br /><br />
@@ -28,21 +28,21 @@
                         <div class="col-md-8">
                             <div class="news_list">
                                 @if (Model.List != null)
-                            {
-                                if (Model.List.Data != null)
                                 {
-                                    foreach (var item in Model.List.Data)
+                                    if (Model.List.Data != null)
                                     {
+                                        foreach (var item in Model.List.Data)
+                                        {
                                             <div class="col-md-12">
                                                 <div class="item_news">
                                                     <div class="news-list_date"><span>@item.Date.ToString("HH:mm | dd.MM.yyyy")</span></div>
                                                     <a class="news-list_title" href="/press/@item.Year/@item.Month/@item.Day/@item.Alias">@item.Title</a>
                                                 </div>
                                             </div>
+                                        }
                                     }
+                                    Html.RenderAction("Pager", "Service", new { @Model = Model.List.Pager });
                                 }
-                                Html.RenderAction("Pager", "Service", new { @Model = Model.List.Pager });
-                            }
                             </div>
                         </div>
                         <div class="col-md-1"></div>
@@ -83,7 +83,7 @@
                             </form>
                         </div>
                     </div>
-                        }
+                            }
             </div>
         </div>
     </div>
