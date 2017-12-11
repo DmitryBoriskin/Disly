@@ -195,7 +195,8 @@ namespace cms.dbase
                     {
                         Title = s.c_title,
                         Path = s.c_path,
-                        Alias = s.c_alias
+                        Alias = s.c_alias,
+                        FrontSection = s.f_front_section
                     });
 
                 if (query.Any())

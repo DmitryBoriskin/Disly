@@ -16,6 +16,13 @@ namespace Disly
                defaults: new { controller = "Error", action = "Custom", code = UrlParameter.Optional }
             );
 
+            // Редирект со старых сайтов
+            routes.MapRoute(
+               name: "RedirectFromOld",
+               url: "*.aspx",
+               defaults: new { controller = "RedirectFromOld", action = "Index", code = UrlParameter.Optional }
+            );
+
             // Главная страница
             routes.MapRoute(
                name: "Index",
