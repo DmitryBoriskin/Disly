@@ -20,7 +20,7 @@ namespace Disly.Areas.Admin.Controllers
 
         // Кол-во элементов на странице
         int pageSize = 100;
-        
+
         // репозитория для старой базы
         private OnlineRegistryRepository repoRegistry = new OnlineRegistryRepository("registryConnection");
 
@@ -163,6 +163,21 @@ namespace Disly.Areas.Admin.Controllers
 
             back_model.Item.Path = p == null ? "/" : p.Path + p.Alias + "/";
 
+            if (_cmsRepository.existSiteMap(back_model.Item.Path, back_model.Item.Alias))
+            {
+                model.ErrorInfo = new ErrorMassege()
+                {
+                    title = "Ошибка",
+                    info = "Страница с таким путём и алиасом уже существует",
+                    buttons = new ErrorMassegeBtn[]
+                    {
+                        new ErrorMassegeBtn { url = "#", text = "ок", action = "false", style="primary" }
+                    }
+                };
+
+                return View("Item", model);
+            }
+
             back_model.Item.Site = Domain;
 
             if (String.IsNullOrEmpty(back_model.Item.Alias))
@@ -248,7 +263,7 @@ namespace Disly.Areas.Admin.Controllers
 
                     userMessage.info = "Запись обновлена";
                 }
-                else 
+                else
                 {
                     _cmsRepository.createSiteMapItem(id, back_model.Item); //, AccountInfo.id, RequestUserInfo.IP
                     userMessage.info = "Запись добавлена";
@@ -304,9 +319,9 @@ namespace Disly.Areas.Admin.Controllers
             var p = _cmsRepository.getSiteMapItem(id);
 
             // получим родительский элемент для перехода
-            Guid? _parent = (string.IsNullOrEmpty(Request.Form["Item_ParentId"]) && p != null) ? p.ParentId 
+            Guid? _parent = (string.IsNullOrEmpty(Request.Form["Item_ParentId"]) && p != null) ? p.ParentId
                 : (string.IsNullOrWhiteSpace(Request.Form["Item_ParentId"]) ? Guid.Empty : Guid.Parse(Request.Form["Item_ParentId"]));
-            
+
             if (_parent != Guid.Empty && _parent != null)
             {
                 return RedirectToAction("Item", new { id = _parent });

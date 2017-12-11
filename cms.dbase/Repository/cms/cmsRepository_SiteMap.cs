@@ -229,6 +229,25 @@ namespace cms.dbase
         }
 
         /// <summary>
+        /// Проверяем существование элемента карты сайта
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="alias"></param>
+        /// <returns></returns>
+        public override bool existSiteMap(string path, string alias)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var query = db.content_sitemaps
+                    .Where(w => w.f_site.Equals(_domain))
+                    .Where(w => w.c_path.ToLower().Equals(path.ToLower()))
+                    .Where(w => w.c_alias.ToLower().Equals(alias.ToLower()));
+
+                return query.Any();
+            }
+        }
+
+        /// <summary>
         /// Создаём новый раздел в карте сайта
         /// </summary>
         /// <param name="id">Идентификатор записи</param>
