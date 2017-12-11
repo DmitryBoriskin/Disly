@@ -1,5 +1,31 @@
 ﻿@model MapSiteViewModel
 
+@functions{
+    private string getChildren(string path, string alias)
+    {
+        var children = Model.List
+            .Where(w => w.Path.Equals(path + alias + "/"))
+            .OrderBy(o => o.Sort)
+            .Select(s => s);
+
+        if (children.Any())
+        {
+            string result = null;
+            result += "<ul>";
+            foreach (var item in children.ToArray())
+            {
+                string link = item.Path + item.Alias;
+                result += "<li><a href=\"" + link + "\">" + item.Title + "</a></li>";
+
+                result += getChildren(item.Path, item.Alias);
+            }
+            result += "</ul>";
+            return result;
+        }
+        return null;
+    }
+}
+
 <div class="container">
     @Html.Partial("services/breadcrumbs")
     <h1>Карта сайта</h1>
@@ -10,9 +36,14 @@
             @foreach (var item in Model.List.Where(w => w.Path.Equals("/")))
             {
                 string link = item.Path + item.Alias;
+                string rs = getChildren(item.Path, item.Alias);
 
                 <li>
                     <a href="@link">@item.Title</a>
+                    @if (rs != null)
+                    {
+                        @Html.Raw(rs)
+                    }
                 </li>
             }
         </ul>
