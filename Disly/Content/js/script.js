@@ -1,4 +1,4 @@
-﻿$(document).ready(function () { 
+﻿$(document).ready(function () {
     $('.select2').select2();
 
     $('input[data-type=date').datepicker({ onSelect: function (dateText, inst) { $(this).attr('value', dateText); } });
@@ -62,7 +62,7 @@
             var desc = $(this).attr('data-desc');
             var zoom = $(this).attr('data-zoom');
             var height = $(this).attr('data-height');
-            Coords(x, y, title, desc, zoom, height,id);
+            Coords(x, y, title, desc, zoom, height, id);
         });
     }
 
@@ -72,6 +72,19 @@
     }
 
 });
+
+//function loadMapSiteChildrens(Object) {
+//    var el = Object.attr("data-alias");
+//    //console.log(el);
+    
+//    loadPage(location.href);
+
+//    function loadPage(url) {
+//        Object.closest.find('.childrens_sitemap').load(url + '.childrens_sitemap > *', function () {
+
+//        });
+//    }
+//}
 
 function SearchDopWork() {
     $('.searchform_show_dop').click(function (e) {
@@ -143,7 +156,7 @@ function SearchWork() {
     });
     
     $('#search_focus').focusout(function () {
-        $('.searchform').toggleClass('show');
+            $('.searchform').toggleClass('show');
     });
 
 
@@ -280,7 +293,7 @@ function Coords(x, y, title, desc, zoom, height) {
 }
 
 
-function Coords(x, y, title, desc, zoom, height,id) {
+function Coords(x, y, title, desc, zoom, height, id) {
     ymaps.ready(function () {
         if (title == '') { title = "Название организации"; }
         if (desc == '') { desc = "Описание организации"; }

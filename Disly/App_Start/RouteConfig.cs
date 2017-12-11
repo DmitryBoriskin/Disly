@@ -32,7 +32,7 @@ namespace Disly
             // карта сайта
             routes.MapRoute(
                name: "MapSite",
-               url: "MapSite/",
+               url: "MapSite/{action}",
                defaults: new { controller = "MapSite", action = "Index" }
             );
             // поиск
