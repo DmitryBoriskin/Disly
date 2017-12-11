@@ -1,4 +1,10 @@
-.head_title h4 {
+a {
+  color: #3973e6;
+}
+a:hover {
+  color: #1f4799;
+}
+.head_title span {
   color: #1f4799;
 }
 .bottom_menu a:hover,
@@ -18,7 +24,11 @@
 .slider-text-block {
   background-color: #3973e6;
 }
-.main-menu li > a:hover {
+.menu-mini-icons a:hover,
+#header .navbar-left a:hover {
+  color: #3973e6 !important;
+}
+.searchform_show {
   color: #3973e6;
 }
 .seacrh_button:before {
@@ -130,5 +140,8 @@
   background-color: #1f4799;
 }
 .feedback-item-more:hover {
+  color: #3973e6;
+}
+.adminlist_phone:before {
   color: #3973e6;
 }

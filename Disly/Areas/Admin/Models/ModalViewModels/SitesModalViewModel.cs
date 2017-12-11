@@ -6,7 +6,7 @@
  
  namespace Disly.Areas.Admin.Models
  {
-     public class OrgsModalViewModel : CoreViewModel
+     public class SitesModalViewModel : CoreViewModel
      {
         /// <summary>
         /// Id Новости или События
@@ -18,17 +18,12 @@
         public ContentType ObjctType { get; set; }
 
         /// <summary>
-        /// Выбранные организации, к которым привязываем новость, чтобы биндить данные
+        /// Выбранные события, к которым привязываем новость
         /// </summary>
-        public Guid[] OrgsId { get; set; }
-
+        public Guid[] EventsId { get; set; }
         /// <summary>
-        /// Список организаций
+        /// справочник последних N событий, с выбранными событиями
         /// </summary>
-        public OrgsShortModel[] OrgsList { get; set; }
-        /// <summary>
-        /// Справочник всех типов организаций
-        /// </summary>
-        public OrgType[] OrgsTypes { get; set; }
+        public SitesShortModel[] SitesList { get; set; }
     }
 }

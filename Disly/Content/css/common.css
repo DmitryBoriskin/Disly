@@ -17,11 +17,16 @@ body {
     font-size: 16px;
     height: 100%;
 }
+h1{font-size:30px;}
+h2{font-size:24px;font-weight:bold;}
+h3{font-size:18px;font-weight:bold;}
+h4{font-size:16px;text-transform:uppercase;font-weight:bold;}
+blockquote{margin-top:20px;}
 
 .cont_wrap {
     min-height: 100%;
-    position: relative;
-    padding-bottom: 435px;
+    position: relative;    
+    padding-bottom: 406px;
 }
 
 .bottom_block {
@@ -71,7 +76,7 @@ body {
 
 /* шапка */
 .head {
-    padding: 15px 0;
+    padding: 0 0 15px;
     border-bottom: 1px solid #ccc;
 }
 
@@ -88,9 +93,9 @@ body {
     padding: 5px 0 5px;
 }
 
-.head_title h4 {
+.head_title span {
     font-family: 'PT Serif';
-    font-size: 22px;
+    font-size: 22px;    
 }
 
     .head .media-heading {
@@ -232,7 +237,7 @@ body {
     line-height: 46px;
     vertical-align: middle;
     padding: 0 5px;
-    background-color: #fff;
+    background-color: #fff!important;
 }
 
     .searchform_close:hover {
@@ -253,7 +258,8 @@ body {
 .bottom-linkimg a {
     text-decoration: none !important;
 }
-
+.row.bottom-linkimg{margin-left:-20px;margin-right:-10px;}
+.bottom-linkimg>.col-sm-2{padding-left:15px;padding-right:15px;}
 .bottom-linkimg-item {
     display: block;
     border-top: 1px dotted;
@@ -374,7 +380,7 @@ body {
 .footer-copyright {
     color: #999;
     font-size: 14px;
-    padding: 20px 0;
+    padding: 20px 0 0;
     border-top: 1px solid #ddd;
 }
 
@@ -461,6 +467,8 @@ body {
 
     .slider-message-block a {
         text-decoration: none !important;
+        display:block;min-height:50px;
+        background-color:#fff;
     }
 
 .slider-message {    
@@ -535,8 +543,8 @@ body {
 
 /* баннеры полезные ресурсы */
 .imglink-benefit-block {    
-    padding-top: 18px;
-    padding-bottom: 14px;
+    padding-top: 20px;
+    padding-bottom: 40px;
 }
 
 .module-title {
@@ -581,13 +589,14 @@ body {
 .imglink-title {
     line-height: 1.1;
 }
-
+.imglink-controlls{position:absolute;width:100%;}
 .imglink-controlls > a {
     font-size: 26px;
     position: relative;
     bottom: 105px;
     text-decoration: none;
 }
+.imglink-controlls > a:hover{cursor:pointer;}
 
 .ti-angle-left.prev {
     float: left;
@@ -1114,30 +1123,34 @@ body {
     margin-left: 10px;
 }
 
+.contact_info_dep{
+    margin:0 0 23px;position:relative;
+}
+.contact_info_dep:before{
+    content:'—';
+    position:absolute;left:-20px;top:0;
+}
+
 .filals-list {
-    margin: 20px 0;
+    margin: 0 0 20px;
 }
 
 .filals-list_it {
-    padding: 6px 0 20px;
+    padding: 6px 0 0;
+    margin: 0 0 12px;
+    border-bottom: 1px solid #e6e6e6;
 }
-
-    .filals-list_it a {
-        text-decoration: underline;
-        color: #4d6bbc;
-    }
 
 .filals-list_it_title {
     margin-bottom: 10px;
     font-size: 20px;
+    font-weight:bold;font-size:18px;
+    line-height:23px;
 }
 
-.department_name {
-    font-size: 17px;
-    margin-top: 10px;
+.department_name {    
 }
-
-
+.department_name a{margin-bottom:6px;display:block;}
 /*vote*/
 .vote_stat_load_wr {
     width: 100%;
@@ -1166,7 +1179,7 @@ body {
 
 
 .module-media {
-    padding: 20px 20px 30px 0;
+    padding: 10px 20px 20px 0;
 }
 
     .module-media .module-title {
@@ -1178,7 +1191,7 @@ body {
     }
 
 .media_link {
-    margin-top: 61px;
+    margin-top: 51px;
 }
 
 .media_link_item {
@@ -1415,3 +1428,105 @@ body {
         top: 20px;
         right: 30px;
 }
+.adminlist{width:100%;}
+.adminlist tr td{padding:36px 0 4px;border-bottom:1px solid #ddd;vertical-align:top;min-height:121px;}
+.adminlist tr td p{margin-bottom:1px;}
+
+
+.adminlist_img_wr{margin-right:20px;position:relative;top:-14px;    min-height: 80px;    display: block;}
+.adminlist_name{font-size:18px;font-weight:bold;}
+.adminlist_post {color: #808080;    font-size: 14px;    line-height: 18px;padding-top:3px;}
+.adminlist_phone{}
+.adminlist_phone:before {    content: '\e8a0';    font-family: fontello;    color: #4d6bbc;    margin-right: 13px;}
+
+#header{margin:0;}
+#header.navbar.navbar-fixed-top{position:inherit;}
+#header.navbar.navbar-fixed-top.fixed-theme{position:fixed;}
+#header.navbar.navbar-fixed-top.fixed-theme .head{height:0;padding:0;overflow:hidden;}
+.menu-mini-icons{display:none;}
+#header.navbar.navbar-fixed-top.fixed-theme .menu-mini-icons{display:block;}
+.navbar-brand{display:none;padding:8px;}
+.navbar-brand img{max-height:100%;}
+
+#header.navbar.navbar-fixed-top.fixed-theme .navbar-brand{display:block;z-index:20;}
+
+#navbar{position:relative;}
+.navbar-brand {
+    font-size: 24px;
+}
+
+.navbar-container {
+    /*padding: 20px 0 20px 0;*/
+    padding: 20px 0 0 0;
+}
+
+.navbar.navbar-fixed-top.fixed-theme {
+    background-color: #fff;    
+    box-shadow: 0 0 5px rgba(0,0,0,.8);
+}
+
+.navbar-brand.fixed-theme {
+    font-size: 18px;
+}
+
+.navbar-container.fixed-theme {
+    padding: 0;
+}
+
+.navbar-brand.fixed-theme,
+.navbar-container.fixed-theme,
+.navbar.navbar-fixed-top.fixed-theme,
+.navbar-brand,
+.navbar-container {
+    transition: 0.8s;
+    -webkit-transition: 0.8s;
+}
+.mini-icons a:before{}
+
+#header .navbar-left a{
+    color:#333;
+    font-size:14px;
+    text-transform:uppercase;
+    font-weight:bold;
+}
+#header li a {
+    padding: 13px 15px 12px;
+}
+#header a:hover{background-color:transparent;}
+
+
+.menu-mini-icons a{color:#999;}
+.menu-mini-icons a:hover{background-color:transparent!important;}
+.menu-mini-icons li:last-child a{color:#333;font-weight:bold;}
+
+.row-15{margin-left:-15px;margin-right:-15px;}
+.row15-col{padding-left:15px;padding-right:15px;}
+
+.icons-bar {
+    display: block;
+    width: 23px;
+    height: 1px;
+    background-color: #cccccc;
+    border-radius: 1px;
+    transform-origin: 50% 50%;
+    transition: opacity 0.25s ease-in-out, background 0.25s ease-in-out, -webkit-transform 0.25s ease-in-out;
+    transition: transform 0.25s ease-in-out, opacity 0.25s ease-in-out, background 0.25s ease-in-out;
+    transition: transform 0.25s ease-in-out, opacity 0.25s ease-in-out, background 0.25s ease-in-out, -webkit-transform 0.25s ease-in-out;
+}
+.icons-bar:not(:last-child){margin-bottom:2px;}
+
+.navbar-toggle[aria-expanded=false] {}
+.navbar-toggle[aria-expanded=false] .icons-bar{}
+
+.navbar-toggle {
+}
+
+.findus_list{margin:24px 0 0;}
+.findus_item {
+    border-bottom: 1px solid #e6e6e6;
+    padding-bottom:14px;
+    margin-bottom:20px;
+
+}
+.findus_title a{font-size:18px;font-weight:bold;}
+.findus_info div{line-height:24px;}

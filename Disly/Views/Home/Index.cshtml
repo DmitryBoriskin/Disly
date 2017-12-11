@@ -55,10 +55,10 @@
 <div>
     <div class="top-slider-wrapper" @backgroundSlider>
         <div class="container">
-            <div class="row">
+            <div class="row row-15">
                 @if (slider != null && slider.Count() > 0)
                 {
-                    <div class="col-sm-12 col-md-9">
+                    <div class="col-sm-12 col-md-9 row15-col">
                         <div id="myCarousel" class="carousel slide slider" data-ride="carousel">
                             <!-- Wrapper for slides -->
                             <div class="carousel-inner top-slider top-slider-shadow">
@@ -102,7 +102,7 @@
                         </div>
                     </div>
                 }
-                <div class="col-sm-12 col-md-3 text-right">
+                <div class="col-sm-12 col-md-3  row15-col text-right">
                     <div class="slider-message-block">
                         <a target="_blank" href="/RedirectRegistry/Hospitals/@Model.Oid">
                             <div class="slider-message slider-message-1">

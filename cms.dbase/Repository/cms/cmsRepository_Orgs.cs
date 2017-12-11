@@ -79,7 +79,7 @@ namespace cms.dbase
             }
         }
 
-        private bool ContentLinkorigin(Guid contentId, ContentType contentType, Guid linkId, ContentLinkType linkType)
+        private bool ContentLinkOrigin(Guid contentId, ContentType contentType, Guid linkId, ContentLinkType linkType)
         {
             using (var db = new CMSdb(_context))
             {
@@ -193,7 +193,7 @@ namespace cms.dbase
                             Types = (s.contentorgstypeslinkorgs.Select(t => t.f_type).Any()) ?
                                 s.contentorgstypeslinkorgs.Select(t => t.f_type).ToArray() : null,
                             Checked = ContentLinkExists(filtr.RelId.Value, filtr.RelType, s.id, ContentLinkType.ORG),
-                            Origin = ContentLinkorigin(filtr.RelId.Value, filtr.RelType, s.id, ContentLinkType.ORG)
+                            Origin = ContentLinkOrigin(filtr.RelId.Value, filtr.RelType, s.id, ContentLinkType.ORG)
                         });
 
                     if (data.Any())

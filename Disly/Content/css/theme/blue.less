@@ -5,8 +5,11 @@
 @light2: #ebedf2;
 @contrast: #e55639;
 @bottom-shadow: 0px 30px 36px -20px rgba(0,0,0,0.5);
-
-.head_title h4 {
+a{color:@def2;}
+a:hover{
+    color: @def1;
+}
+.head_title span {
     color: @def1
 }
 .bottom_menu a:hover,
@@ -22,10 +25,11 @@
 .slider-text-block {
     background-color: @def2;
 }
-
-.main-menu li > a:hover {
-    color: @def2;
+.menu-mini-icons a:hover,
+#header .navbar-left a:hover {
+    color: @def2!important;
 }
+.searchform_show{color:@def2;}
 
 .seacrh_button:before {
     color: @def2;
@@ -157,3 +161,5 @@
 .searchform_dop button{background-color:@def2;}
 .searchform_dop button:hover{background-color:@def1;}
 .feedback-item-more:hover{color:@def2;}
+
+.adminlist_phone:before{color:@def2;}

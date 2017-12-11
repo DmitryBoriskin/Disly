@@ -118,6 +118,7 @@ namespace cms.dbase
                             Url = s.c_logo
                         },
                         ContentId = (Guid)s.f_content,
+                        ContentType = (ContentLinkType)Enum.Parse(typeof(ContentLinkType), s.c_content_type, true),
                         Type = s.c_content_type,
                         Facebook = s.c_facebook,
                         Vk = s.c_vk,
@@ -259,73 +260,36 @@ namespace cms.dbase
         /// <returns></returns>
         public override BannersModel[] getBanners()
         {
-            //string domain = _domain;
-            //using (var db = new CMSdb(_context))
-            //{
-            //    var data = db.content_sv_banners_sections
-            //        .Where(w => w.f_site.Equals(domain))
-            //        .Where(w => !w.b_disabled)
-            //        .OrderBy(o => o.n_sort)
-            //        .Select(s => new BannersModel
-            //        {
-            //            Id = s.id,
-            //            Title = s.c_title,
-            //            Photo = new Photo { Url = s.c_photo },
-            //            Url = s.c_url,
-            //            Text = s.c_text,
-            //            Date = s.d_date,
-            //            Sort = s.n_sort,
-            //            SectionAlias = s.c_alias
-            //        });
-
-            //    if (data.Any())
-            //        return data.ToArray();
-
-            //    return null;
-            //     public override BannersListModel getBanners(Guid section, FilterParams filter)
-            //{
             using (var db = new CMSdb(_context))
             {
+                var query = db.sv_sites_bannerss
+                    .Where(b => b.site_alias == _domain)
+                    //.Where(b => b.f_section == section)
+                    .Where(b => b.banner_disabled == false);
 
-                var site = getSiteInfo();
-                if (site == null)
-                    throw new Exception("CmsRepository_Banners > getBanners: domain (" + _domain + ") did not found");
-
-                var siteBanners = db.content_content_links
-                    .Where(s => s.f_content_type == ContentType.BANNER.ToString())
-                    .Where(s => s.f_link_type == ContentLinkType.SITE.ToString())
-                    .Where(s => s.f_link == site.Id);
-
-                if (siteBanners.Any())
+                if (query.Any())
                 {
-                    //Баннеры, принадлежащие сайту
-                    Guid[] bannersId = siteBanners.Select(b => b.f_content).ToArray();
+                    int itemCount = query.Count();
 
-                    var query = db.content_bannerss
-                       //.Where(w => w.f_section == section)
-                       .Where(w => !w.b_disabled)
-                       .Where(w => bannersId.Contains(w.id));
-
-                    if (query.Any())
-                    {
-                        int itemCount = query.Count();
-                        var list = query
-                            .OrderBy(o => o.n_sort)
-                            .Select(s => new BannersModel()
+                    var list = query
+                        .OrderBy(b => b.banner_sort)
+                        .Select(s => new BannersModel()
+                        {
+                            Id = s.banner_id,
+                            Title = s.banner_title,
+                            Url = s.banner_url,
+                            Text = s.banner_text,
+                            Date = s.banner_date,
+                            Sort = s.banner_sort,
+                            SectionAlias = s.section_alias,
+                            Photo = new Photo
                             {
-                                Id = s.id,
-                                Title = s.c_title,
-                                Photo = new Photo { Url = s.c_photo },
-                                Url = s.c_url,
-                                Text = s.c_text,
-                                Date = s.d_date,
-                                Sort = s.n_sort,
-                                SectionAlias = s.contentbannerscontentbannersections.c_alias
-                            });
+                                Url = s.banner_image
+                            }
+                        });
 
                         return list.ToArray();
                     }
-                }
 
                 return null;
             }

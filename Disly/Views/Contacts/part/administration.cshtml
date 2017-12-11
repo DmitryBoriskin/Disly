@@ -1,12 +1,7 @@
 ﻿@model ContatcsViewModel
 @if (Model.Administrativ != null)
 {
-    <table class="table">
-        <tr>
-            <th>Изображение</th>
-            <th>Ф.И.О./Телефон</th>
-            <th>&nbsp;</th>
-        </tr>
+    <table class="adminlist">        
         @foreach (var item in Model.Administrativ)
         {
             string fio = item.Surname + " " + item.Name + " " + item.Patronymic;
@@ -15,28 +10,35 @@
                 <td>
                     @if (item.PeopleF != null)
                     {
-                        <a target="_blank" href="/doctors/@item.PeopleF">
+                        <a class="adminlist_img_wr" target="_blank" href="/doctors/@item.PeopleF">
                             <img class="img-circle img-person-list" src="@item.Photo.Url" />
                         </a>
                     }
                     else
                     {
-                        <img class="img-circle img-person-list" src="@item.Photo.Url" />
+                        <a class="adminlist_img_wr">
+                            <img class="img-circle img-person-list" src="@item.Photo.Url" />
+                        </a>                        
                     }
                 </td>
                 <td>
                     @if (item.PeopleF != null)
                     {
-                        <a href="/doctors/@item.PeopleF">@fio</a>
+                        <a class="adminlist_name" href="/doctors/@item.PeopleF">@fio</a>
                     }
                     else
                     {
-                        @fio
+                        <span class="adminlist_name">@fio</span>
                     }
-                    <br>@item.Post
-                    <p>@item.Phone</p>
+                    <div class="adminlist_post">@item.Post</div>
                 </td>
-                <td style="width:50%;">@Html.Raw(item.Text)</td>
+                <td>                    
+                    @if (item.Phone != null)
+                    {
+                        <div class="adminlist_phone">@item.Phone</div>
+                    }                    
+                </td>
+                <td style="width:35%;">@Html.Raw(item.Text)</td>
             </tr>
         }
     </table>

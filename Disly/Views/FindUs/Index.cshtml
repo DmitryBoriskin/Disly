@@ -2,68 +2,73 @@
 <div class="type-page">
     <div class="container">
         <h1>Как нас найти</h1>
-        @if (Model.Structures != null)
-        {
-            foreach (var item in Model.Structures)
+        <div class="findus_list">
+            @if (Model.Structures != null)
             {
-                <div class="row">
-                    <div class="col-md-8">
-                        <div>
-                            @if (!string.IsNullOrEmpty(item.Title))
-                            {
-                                if (!item.Ovp)
-                                {
-                                    <h3><a href="/structure/@item.Num">@item.Title</a></h3>
-                                }
-                                else
-                                {
-                                    <h3><a href="/structure/@item.Num/@item.Departments.First().Id">@item.Title</a></h3>
-                                }
-
-                            }
-
-                            @if (!string.IsNullOrEmpty(item.Adress))
-                            {
-                                <div>
-                                    <strong>Адрес: </strong>@item.Adress
+                foreach (var item in Model.Structures)
+                {
+                    <div class="findus_item">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="findus_title">
+                                    @if (!string.IsNullOrEmpty(item.Title))
+                                    {
+                                        if (!item.Ovp)
+                                        {
+                                            <a href="/structure/@item.Num">@item.Title&nbsp;›</a>
+                                        }
+                                        else
+                                        {
+                                            <a href="/structure/@item.Num/@item.Departments.First().Id">@item.Title&nbsp;›</a>
+                                        }
+                                    }
                                 </div>
-                            }
-                            @if (!string.IsNullOrEmpty(item.PhoneReception))
-                            {
-                                <div><strong>Телефон регистратуры: </strong>@item.PhoneReception</div>
-                            }
-                            @if (!string.IsNullOrEmpty(item.Phone))
-                            {
-                                <div><strong>Телефон приёмной: </strong>@item.Phone</div>
-                            }
-                            @if (!string.IsNullOrEmpty(item.Email))
-                            {
-                                <div>
-                                    <strong>Email: </strong>
-                                    <a href="mailto:@item.Email">@item.Email</a>
+                            </div>
+                            <div class="col-md-5">
+                                <div class="findus_info">
+                                    @if (!string.IsNullOrEmpty(item.Adress))
+                                    {
+                                        <div>
+                                            <strong>Адрес: </strong>@item.Adress
+                                        </div>
+                                    }
+                                    @if (!string.IsNullOrEmpty(item.PhoneReception))
+                                    {
+                                        <div><strong>Телефон регистратуры: </strong>@item.PhoneReception</div>
+                                    }
+                                    @if (!string.IsNullOrEmpty(item.Phone))
+                                    {
+                                        <div><strong>Телефон приёмной: </strong>@item.Phone</div>
+                                    }
+                                    @if (!string.IsNullOrEmpty(item.Email))
+                                    {
+                                        <div>
+                                            <strong>Email: </strong>
+                                            <a href="mailto:@item.Email">@item.Email</a>
+                                        </div>
+                                    }
+                                    @if (!string.IsNullOrEmpty(item.Routes))
+                                    {
+                                        <div>
+                                            <p>&nbsp;</p>
+                                            <p><b>Как добраться:</b></p>
+                                            @Html.Raw(item.Routes)
+                                        </div>
+                                    }
                                 </div>
-                            }
-                            @if (!string.IsNullOrEmpty(item.Routes))
-                            {
+                            </div>
+                            <div class="col-md-4">
                                 <div>
-                                    <p>&nbsp;</p>
-                                    <p><b>Как добраться:</b></p>
-                                    @Html.Raw(item.Routes)
+                                    <div class="contact_info_it">
+                                        <div id="map-@item.Id" class="buildmap" data-zoom="13" style="width: 100%; height: 250px;" data-height="300" data-x="@item.GeopointX.ToString().Replace(",", ".")" data-y="@item.GeopointY.ToString().Replace(",", ".")" data-title="@Model.OrgItem.Title"></div>
+                                    </div>
                                 </div>
-                            }
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div>
-                            <div class="contact_info_it">
-                                <div id="map-@item.Id" class="buildmap" data-zoom="13" style="width: 100%; height: 250px;" data-height="300" data-x="@item.GeopointX.ToString().Replace(",", ".")" data-y="@item.GeopointY.ToString().Replace(",", ".")" data-title="@Model.OrgItem.Title"></div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <hr />
-                <br />
+                }
             }
-        }
+        </div>
+        
     </div>
 </div>

@@ -1,13 +1,4 @@
 ﻿$(document).ready(function () {
-    //$('.carousel').carousel({
-    //    interval: 60000
-    //});
-
-    // эффект наведения в слайдере
-    //$('.slider-message').hover(function () {
-    //    $(this).toggleClass('active');
-    //});
-
     $('.select2').select2();
 
     $('input[data-type=date').datepicker({ onSelect: function (dateText, inst) { $(this).attr('value', dateText); } });
@@ -15,8 +6,6 @@
     $('input[data-mask]').each(function () {
         $(this).mask($(this).attr('data-mask'));
     });
-
-
 
     //раскрытие кнопки поиска
     if ($('.seacrh_button__hide').length > 0) {
@@ -46,7 +35,7 @@
 
     //Фильтр по новостям
     //$('.filtr_news').submit(function (e) {
-
+        
     //    var start = $('#data_start').val();
     //    var end = $('#data_fin').val();
     //    var search = $('#search_news').val();        
@@ -82,19 +71,6 @@
         SearchDopWork()
     }
 
-    // карта сайта
-    //$('.open_sitemap').on('click', function () {
-    //    var obj = $(this);
-    //    var _path = obj.attr('data-path');
-    //    var _alias = obj.attr('data-alias');
-
-    //    $.ajax({
-    //        url: '/mapsite/childrens',
-    //        type: 'POST',
-    //        success: function (result) { loadMapSiteChildrens(obj); },
-    //        data: { path: _path, alias: _alias }
-    //    });
-    //});
 });
 
 //function loadMapSiteChildrens(Object) {
@@ -176,12 +152,11 @@ function SearchWork() {
     $('.searchform_close').click(function (e) {
         $('.searchform').toggleClass('show');
         e.preventDefault();
+        return false;
     });
-
+    
     $('#search_focus').focusout(function () {
-        setTimeout(function () {
             $('.searchform').toggleClass('show');
-        }, 400);
     });
 
 
@@ -195,8 +170,8 @@ function SearchWork() {
         }
         e.preventDefault();
     });
-
-
+    
+    
     $(".searchform_btn").keydown(function (event) {
         if (event.keyCode == 13) {
             CommitSearch();
@@ -213,7 +188,7 @@ function SearchWork() {
     function CommitSearch() {
         var SerachInp = $('.search-input').val();
         var EndUrl = "%20url%3Ahttp%3A%2F%2F" + SiteId + ".med.cap.ru*&web=0";
-        var SearchText = SerachInp.replace(" ", "%20") + EndUrl;
+        var SearchText = SerachInp.replace(" ", "%20") + EndUrl;        
         var Link = "/Search?searchid=2297106&text=" + SearchText + "&searchtext=" + SerachInp.replace(" ", "%20");
         if (SearchText != "") {
             document.location.href = Link;
@@ -225,7 +200,7 @@ function SearchWork() {
         e.preventDefault();
     });
     $('.search-form-bottom .bottom-search').click(function (e) {
-        CommitSearchBottom();
+        CommitSearchBottom();        
         e.preventDefault();
     });
 
@@ -235,7 +210,7 @@ function SearchWork() {
         var EndUrl = "%20url%3Ahttp%3A%2F%2F" + SiteId + "med.cap.ru*&web=0";
         var SearchText = SerachInp.replace(" ", "%20") + EndUrl;
         var Link = "/Search?searchid=2297106&text=" + SearchText;
-        document.location.href = Link;
+        document.location.href = Link;        
     }
 }
 
@@ -335,8 +310,8 @@ function Coords(x, y, title, desc, zoom, height, id) {
             balloonContentHeader: title,
             balloonContentBody: desc,
             hintContent: title
-        }, {
-            hasBalloon: false
+        }, {                
+                hasBalloon: false
         });
 
         ContactMap.geoObjects.add(myPlacemark);

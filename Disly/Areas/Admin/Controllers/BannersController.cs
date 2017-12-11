@@ -29,6 +29,7 @@ namespace Disly.Areas.Admin.Controllers
 
             model = new BannersViewModel
             {
+                DomainName = Domain,
                 Account = AccountInfo,
                 Settings = SettingsInfo,
                 UserResolution = UserResolutionInfo,
@@ -50,18 +51,33 @@ namespace Disly.Areas.Admin.Controllers
         [HttpGet]
         public ActionResult Index(Guid? id)
         {
-            if (id == null)
+            if (!id.HasValue)
             {
                 // Наполняем модель списком секций
-                model.Sections = _cmsRepository.getBannerSections();
+                var sections = _cmsRepository.getSections();
+                if (sections != null)
+                {
+                    foreach (var section in sections)
+                    {
+                        section.CountBanners = _cmsRepository.getCountBanners(section.Id);
+                    }
+                }
+                model.Sections = sections;
             }
             else
             {
                 // наполняем фильтр
                 filter = getFilter(pageSize);
 
-                // наполняем модель списка баннеров
-                model.SectionItem = _cmsRepository.getSectionBanners((Guid)id, filter);
+                var sectionItem = _cmsRepository.getSectionItem(id.Value);
+                if(sectionItem != null)
+                {
+                    // наполняем модель списка баннеров
+                    var bannersList = _cmsRepository.getBanners(id.Value, filter);
+                    sectionItem.BannerList = bannersList;
+                    sectionItem.CountBanners = (bannersList != null) ? bannersList.Pager.items_count : 0;
+                }
+                model.SectionItem = sectionItem;
             }
 
             return View(model);
@@ -75,15 +91,24 @@ namespace Disly.Areas.Admin.Controllers
         [HttpGet]
         public ActionResult Item(Guid id)
         {
-            model.Item = _cmsRepository.getBanner(id);
+
+            var banner = _cmsRepository.getBannerItem(id);
+            if (banner == null)
+                model.Item = new BannersModel()
+                {
+                    Id = id,
+                    Site = Domain
+                };
+            else
+                model.Item = banner;
+
 
             // файл изображения
             if (model.Item != null)
             {
-                var photo = model.Item.Photo;
-                if (!string.IsNullOrEmpty(photo.Url))
+                if (model.Item.Photo != null && !string.IsNullOrEmpty(model.Item.Photo.Url))
                 {
-                    model.Item.Photo = Files.getInfoImage(photo.Url);
+                    model.Item.Photo = Files.getInfoImage(model.Item.Photo.Url);
                 }
 
                 //Заполняем для модели связи с другими объектами
@@ -98,6 +123,7 @@ namespace Disly.Areas.Admin.Controllers
                     Sites = (sitessList != null)? sitessList.Data : null
                 };
             }
+            
 
             return View(model);
         }
@@ -125,7 +151,10 @@ namespace Disly.Areas.Admin.Controllers
                 string savePath = Settings.UserFiles + Domain + Settings.BannersDir;
 
                 // секция
-                var _section = _cmsRepository.getSectionBanners((Guid)back_model.Item.Section, null);
+                if (!back_model.Item.Section.HasValue )
+                    throw new Exception("BannerController: В back_model не определена секция");
+
+                var _section = _cmsRepository.getSectionItem(back_model.Item.Section.Value);
                 int width = _section.Width; // ширина
                 int height = _section.Height; // высота
 
@@ -136,7 +165,7 @@ namespace Disly.Areas.Admin.Controllers
                     var validExtension = (!string.IsNullOrEmpty(Settings.PicTypes)) ? Settings.PicTypes.Split(',') : "jpg,jpeg,png,gif".Split(',');
                     if (!validExtension.Contains(fileExtension.Replace(".", "")))
                     {
-                        model.Item = _cmsRepository.getBanner(id);
+                        model.Item = _cmsRepository.getBannerItem(id);
                         model.ErrorInfo = new ErrorMassege()
                         {
                             title = "Ошибка",
@@ -188,7 +217,7 @@ namespace Disly.Areas.Admin.Controllers
                 };
             }
 
-            model.Item = _cmsRepository.getBanner(id);
+            model.Item = _cmsRepository.getBannerItem(id);
 
             if (model.Item != null && model.Item.Photo != null && !string.IsNullOrEmpty(model.Item.Photo.Url))
             {
@@ -208,7 +237,7 @@ namespace Disly.Areas.Admin.Controllers
         [MultiButton(MatchFormKey = "action", MatchFormValue = "cancel-btn")]
         public ActionResult Cancel(Guid id, Guid? section)
         {
-            model.Item = _cmsRepository.getBanner(id);
+            model.Item = _cmsRepository.getBannerItem(id);
             var _section = model.Item != null ? model.Item.Section : Guid.Parse(Request.Form["Item_Section"]);
             //var _section = (section.Equals(null) && model.Item != null) ? model.Item.Section : section;
 
@@ -229,13 +258,13 @@ namespace Disly.Areas.Admin.Controllers
         public ActionResult Delete(Guid id)
         {
 
-            var data = model.Item = _cmsRepository.getBanner(id);
+            var data = model.Item = _cmsRepository.getBannerItem(id);
 
             // удаляем файл изображения и запись
             if (model.Item != null)
             {
                 var image = (data.Photo != null) ? data.Photo.Url : null;
-                var res = _cmsRepository.deleteBanner(id); //, AccountInfo.id, RequestUserInfo.IP
+                var res = _cmsRepository.deleteBanner(id);
                 if (res && !string.IsNullOrEmpty(image))
                     Files.deleteImage(image);
             }

@@ -7,7 +7,8 @@ namespace cms.dbModel
 {
     public abstract class abstract_cmsRepository
     {
-        public abstract string getSiteId(string Domain);
+        public abstract string getSiteId(string DomainUrl);
+        public abstract Guid currentSiteId();
 
         public abstract SitesModel getSite(Guid? Id);
         public abstract SitesModel getSite(string domain);
@@ -38,6 +39,8 @@ namespace cms.dbModel
         // Все сайты портала
         public abstract SitesList getSiteList(SiteFilter filtr);
         public abstract SitesShortModel[] getSiteListWithCheckedForUser(SiteFilter filtr);
+        public abstract SitesShortModel[] getSiteListWithCheckedForBanner(SiteFilter filtr);
+
         public abstract bool check_Site(Guid id);
         public abstract bool insertSite(SitesModel ins);
         public abstract bool updateSite(Guid id, SitesModel ins);
@@ -200,11 +203,11 @@ namespace cms.dbModel
         public abstract bool permit_SiteMap(Guid id, int permit, string menuSort);
 
         // Баннеры
-        public abstract BannersSectionModel[] getBannerSections();
-        public abstract BannersSectionModel getSectionBanners(Guid id, FilterParams filter);
-        public abstract int getCountBannersBySectionAndDomain(Guid section);
+        public abstract BannersSectionModel[] getSections();
+        public abstract BannersSectionModel getSectionItem(Guid id);
+        public abstract int getCountBanners(Guid section);
         public abstract BannersListModel getBanners(Guid section, FilterParams filter);
-        public abstract BannersModel getBanner(Guid id);
+        public abstract BannersModel getBannerItem(Guid id);
         public abstract bool checkBannerExist(Guid id);
         public abstract bool createBanner(Guid id, BannersModel item);
         public abstract bool updateBanner(Guid id, BannersModel item);

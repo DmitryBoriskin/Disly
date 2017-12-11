@@ -130,6 +130,7 @@
     <Content Include="Areas\Admin\Views\Feedbacks\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Feedbacks\Item.cshtml" />
     <Content Include="Content\css\common.css" />
+    <Content Include="Content\css\commonless.css" />
     <Content Include="Content\css\print.css" />
     <Content Include="Content\css\styles_popUp.css" />
     <Content Include="Content\css\styles.css" />
@@ -194,6 +195,7 @@
     <Content Include="Content\img\share-arrow.png" />
     <Content Include="Content\img\temporal.jpg" />
     <Content Include="Content\img\youtube-ico.png" />
+    <Content Include="Content\js\menu.js" />
     <Content Include="Content\js\script.js" />
     <Content Include="Content\plugins\bonsai\css\jquery.bonsai.css" />
     <Content Include="Content\plugins\bonsai\js\jquery.bonsai.js" />
@@ -560,6 +562,7 @@
     <Compile Include="Areas\Admin\Models\BannersViewModel.cs" />
     <Compile Include="Areas\Admin\Models\cmsMenuViewModel.cs" />
     <Compile Include="Areas\Admin\Models\DocumentsViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\ModalViewModels\SitesModalViewModel.cs" />
     <Compile Include="Areas\Admin\Models\PhotoViewModel.cs" />
     <Compile Include="Areas\Admin\Models\PersonViewModel.cs" />
     <Compile Include="Areas\Admin\Models\SiteSectionViewModel.cs" />
@@ -828,6 +831,7 @@
     <Content Include="Areas\Admin\Views\PhotoAlbums\Index.cshtml" />
     <Content Include="Areas\Admin\Views\PhotoAlbums\Item.cshtml" />
     <Content Include="Areas\Admin\Views\Shared\Modal\Sites.cshtml" />
+    <Content Include="Content\css\commonless.less" />
     <None Include="Content\plugins\datatables\i18n\ru.json" />
     <Content Include="Content\plugins\tinymce\langs\readme.md" />
     <Content Include="Content\plugins\tinymce\skins\lightgray\fonts\tinymce-small.eot" />
