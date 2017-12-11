@@ -80,6 +80,61 @@
         }
     });
 
+    //Привязка пользователей к сайтам 
+    $("#modal-userSite-table .userSite-item-chkbx").on('ifToggled', function () {
+        var targetUrl = "/Admin/Services/UpdateUserLinkToSite";
+        var _objctId = $(this).data("objectId");
+        var _objectType = $(this).data("objectType");
+        var _linkId = $(this).data("linkId");
+        var _linkType = $(this).data("linkType");
+        var _checked = $(this).is(':checked');
+
+        var el = $(this);
+        var elTooltip = $(this).closest(".userSite-item-row").find(".userSite-item-tooltip").first();
+
+        try {
+            var params = {
+                ObjctId: _objctId,
+                ObjctType: _objectType,
+                LinkId: _linkId,
+                LinkType: _linkType,
+                Checked: _checked
+            };
+
+            var _data = JSON.stringify(params);
+
+            //ShowPreloader(content);
+
+            $.ajax({
+                url: targetUrl,
+                method: "POST",
+                async: true,
+                cache: false,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                data: JSON.stringify(params)
+            })
+                .done(function (response) {
+                    elTooltip.attr("title", "Сохранено");
+                    elTooltip.tooltip('show');
+                })
+                .fail(function (jqXHR, status) {
+                    console.log("Ошибка" + " " + status + " " + jqXHR);
+                    elTooltip.attr("title", "Ошибка сохранения");
+                    elTooltip.tooltip('show');
+                })
+                .always(function (response) {
+                    setTimeout(function () {
+                        elTooltip.tooltip('hide');
+                    }, 1000);
+                    //location.reload();
+                });
+        }
+        catch (ex) {
+            console.log(ex);
+        }
+    });
+
     //Привязка к организациям
     $(".org-byType-tree .orgType-item-chkbx").on('ifToggled', function () {
         var targetUrl = "/Admin/Orgs/UpdateLinkToOrg";
@@ -227,8 +282,7 @@
 
         var el = $(this);
         var elTooltip = $(this).closest(".site-item-row").find(".site-item-tooltip").first();
-        var _chkbxEvent = $(this).closest(".site-item-row").find(".site-item-html").first().html();
-        var _dateEvent = $(this).closest(".site-item-row").find(".site-item-date").first().html();
+        var _chkbxHtml = $(this).closest(".site-item-row").find(".site-item-html").first().html();
 
         var listBlock = $("#model-linksToSite-ul", top.document);
 
@@ -259,7 +313,7 @@
                     elTooltip.tooltip('show');
                     if (_checked) {
                         if (listBlock.find("site_" + _linkId).length === 0) {
-                            listBlock.append($("<li id='site_" + _linkId + "' class='icon-location-5'/>").html(_chkbxEvent));
+                            listBlock.append($("<li id='site_" + _linkId + "' class='icon-location-5'/>").html(_chkbxHtml));
                         }
                     }
                     else {

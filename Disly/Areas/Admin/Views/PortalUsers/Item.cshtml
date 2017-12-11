@@ -59,7 +59,7 @@
             @Html.ActionLink("Изменить пароль", "ChangePass", "services", new { @id = Model.Item.Id }, new { @id = "ChengePass", @class = "button pop-up_frame icon-key-1", @data_class = "ChengePass", @title = "Изменить пароль" })
             <hr />
             @*@Html.ActionLink("Настройки доступа", "Resolutions", "services", new { @id = Model.Item.Id }, new { @id = "Resolutions", @class = "button pop-up_frame icon-cog-alt", @data_class = "Resolutions" })*@
-            @Html.ActionLink("Список доступных сайтов", "SiteLinks", "services", new { @id = Model.Item.Id }, new { @id = "SiteLinks", @class = "button pop-up_frame icon-link", @data_class = "SiteLinks", @title = "Список сайтов" })
+            @Html.ActionLink("Список доступных сайтов", "UserSiteListModal", "services", new { @id = Model.Item.Id }, new { @id = "SiteLinks", @class = "button pop-up_frame icon-link", @data_class = "SiteLinks", @title = "Список сайтов" })
             <hr />
             @Html.ActionLink("Журнал изменений", "log", "services", new { @id = Model.Item.Id }, new { @id = "LogLists", @class = "button pop-up_frame icon-archive", @data_class = "LogList", @title = "Журнал изменений" })
             @Html.ActionLink("Активность пользователя", "log", "services", new { @id = Model.Item.Id }, new { @id = "LogLists", @class = "button pop-up_frame icon-archive", @data_class = "LogList", @title = "Журнал изменений" })

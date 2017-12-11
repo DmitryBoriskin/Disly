@@ -282,16 +282,24 @@ namespace Disly.Areas.Admin.Controllers
         [MultiButton(MatchFormKey = "action", MatchFormValue = "add-new-domain")]
         public ActionResult AddDomain()
         {
-            Guid id=Guid.Parse(Request["Item.Id"]);
-            var SiteId = _cmsRepository.getSite(id).Alias;
-            string Domain=Request["new_domain"];
-            _cmsRepository.insertDomain(SiteId, Domain); //, AccountInfo.id, RequestUserInfo.IP
+            try {
+                Guid id = Guid.Parse(Request["Item.Id"]);
+                var SiteId = _cmsRepository.getSite(id).Alias;
+                string Domain = Request["new_domain"];
+                _cmsRepository.insertDomain(SiteId, Domain);
+            }
+            catch(Exception ex)
+            {
+                throw new Exception("SitesController > AddDomain: " + ex);
+            }
+           
             return Redirect(((System.Web.HttpRequestWrapper)Request).RawUrl);
         }
+
         [HttpPost]
         public ActionResult DelDomain(Guid id)
         {
-            _cmsRepository.deleteDomain(id); //, AccountInfo.id, RequestUserInfo.IP
+            _cmsRepository.deleteDomain(id);
             return null;
         }
         [HttpPost]
@@ -307,7 +315,7 @@ namespace Disly.Areas.Admin.Controllers
         {            
             ErrorMassege userMassege = new ErrorMassege();
             userMassege.title = "Информация";
-            if(_cmsRepository.deleteSite(Id)) ////——————УДАЛЕНИЕ DELETE , AccountInfo.id, RequestUserInfo.IP
+            if(_cmsRepository.deleteSite(Id))
             {
                 userMassege.info = "Запись Удалена";
                 userMassege.buttons = new ErrorMassegeBtn[]{
