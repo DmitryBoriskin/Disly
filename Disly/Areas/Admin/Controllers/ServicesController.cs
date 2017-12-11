@@ -409,7 +409,10 @@ namespace Disly.Areas.Admin.Controllers
             if (Request.Files.Count > 0)
             {
                 HttpPostedFileBase file = Request.Files[0];
-                dir = (String.IsNullOrEmpty(dir)) ? Settings.UserFiles + Domain + "/temp/";
+                if (String.IsNullOrEmpty(dir))
+                {
+                    dir = Settings.UserFiles + Domain + "/temp/";
+                }
                 if (!Directory.Exists(dir)) { Directory.CreateDirectory(Server.MapPath(dir)); }
                 string savePath = dir + file.FileName;
                 file.SaveAs(Server.MapPath(savePath));

@@ -68,8 +68,7 @@ namespace Disly.Controllers
             string PageDesc = "описание страницы";
             string PageKeyw = "ключевые слова";
             #endregion
-
-
+            
             #region Метатеги
             ViewBag.Title = PageTitle;
             ViewBag.Description = PageDesc;
@@ -104,10 +103,11 @@ namespace Disly.Controllers
             return View(_ViewName, model);
         }
 
+        
+
         public ActionResult Rss()
         {
             Response.ContentType = "text/xml";
-
             var filter = getFilter();
             filter.Disabled = false;
             filter.Size = 30;
