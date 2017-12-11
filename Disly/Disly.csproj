@@ -892,6 +892,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Content\temp\" />
     <Folder Include="Userfiles\" />
     <Folder Include="Views\Core\" />
     <Folder Include="Views\Redirect\" />

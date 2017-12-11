@@ -4,20 +4,18 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8" />
-    <link href="~/Content/plugins/mobileGallery/swipebox.css" rel="stylesheet" type="text/css" />
+    <meta charset="utf-8" />    
     <title>@ViewBag.Title </title>
 </head>
 <body>
     <div class="gallery__list">
         @foreach (var item in Model)
         {
-            item.PhotoHd = (File.Exists(Server.MapPath(item.PhotoHd))) ? item.PhotoHd : item.Photo;
-            <a class="swipebox" title="@item.AlbomTitle" href="@item.PhotoHd" data-original="@item.Photo" data-preview="@item.Preview" target="_parent"></a>
+            item.PhotoImage = (File.Exists(Server.MapPath(item.PhotoImage.Url))) ? item.PhotoImage : item.Photo;
+            <a class="swipebox" title="@item.Title" href="@item.PhotoImage.Url" data-original="@item.PhotoOriginal" data-preview="@item.PreviewImage.Url" target="_parent"></a>
         }
-    </div>
-    <a href="/admin/services/showphotogallery" class="remove_on_front">Назад</a>
-    <script src="~/Scripts/jquery.js"></script>
+    </div>        
+    <script src="~/Content/plugins/jquery/jquery.js"></script>
     <script type="text/javascript">
         $(document).ready(function () {
             var frameUrl = window.location.pathname;

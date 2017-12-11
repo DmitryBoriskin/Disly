@@ -52,14 +52,8 @@
 
 <body>
     <div class="cont_wrap">
-
-
-        <!-- шапка -->
-        <div class="container">
-            <!-- название сайта -->
-            
-            <!-- конец названия сайта -->
-            <!-- главное меню -->
+        
+        <div class="container">            
             <nav id="header" class="navbar navbar-fixed-top">
                 <div id="header-container" class="container navbar-container">
                     <div class="head">
@@ -72,40 +66,17 @@
                                             <img src="@Model.SitesInfo.Logo.Url" />
                                         </div>
                                     }
-                                    <div class="head_title">
-                                        @if (Model != null && Model.SitesInfo != null)
-                                        {
-                                            <span>@Model.SitesInfo.LongTitle</span>
-                                        }
-                                    </div>
+                                    <div class="head_title"><span>@Model.SitesInfo.LongTitle</span></div>
                                 </a>
                             </div>
                             <div class="col-md-4 right_section">
                                 <ul class="nav navbar-nav navbar-right">
-                                    <li>
-                                        <a href="/mapsite">
-                                            <span class="ti-layers-alt top-icon"></span>
-                                            Карта сайта
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="/press/rss">
-                                            <span class="ti-rss-alt top-icon"></span>
-                                            RSS
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a target="_blank" href="http://www.med.cap.ru/">
-                                            <span class="ti-new-window top-icon"></span>
-                                            Медицинский портал
-                                        </a>
-                                    </li>
+                                    <li><a href="/mapsite"><span class="ti-layers-alt top-icon"></span>Карта сайта</a></li>
+                                    <li><a href="/press/rss"><span class="ti-rss-alt top-icon"></span>RSS</a></li>
+                                    <li><a target="_blank" href="http://www.med.cap.ru/"><span class="ti-new-window top-icon"></span>Медицинский портал</a></li>
                                 </ul>
                                 <div class="pull-right spec-version-link">
-                                    <a href="/spec">
-                                        <span class="spec-info">Aa</span>
-                                        Для слабовидящих
-                                    </a>
+                                    <a href="/spec"><span class="spec-info">Aa</span>Для слабовидящих</a>
                                 </div>
                             </div>
                         </div>
@@ -165,48 +136,42 @@
                                 <li><a href="/spec" title="версия для слабовидящих"><span class="spec-info">Aa</span></a></li>
                             </ul>
                         }                        
-                    </div><!-- /.nav-collapse -->
-                </div><!-- /.container -->
-            </nav><!-- /.navbar -->
-          
-
-            <!-- конец главного меню -->
+                    </div>
+                </div>
+            </nav>
         </div>
-        <!-- конец шапки -->
-        <!-- контентная часть -->
+        
         @RenderBody()
-        <!-- конец контентной части -->
+        
         <div class="bottom_block">
-            <div class="container">
-                <!-- нижние баннеры -->
+            <div class="container">                
                 @if (Model != null && Model.BannerArray != null && Model.BannerArray.Count() > 0)
-        {
-            var bannerBottom = Model.BannerArray
-                        .Where(w => w.SectionAlias.Equals("text"))
-                        .OrderBy(o => o.Sort)
-                        .Select(s => new
-                        {
-                            Id = s.Id,
-                            Title = s.Title,
-                            Url = s.Photo.Url,
-                            Text = s.Text
-                        });
+                {
+                    var bannerBottom = Model.BannerArray
+                                .Where(w => w.SectionAlias.Equals("text"))
+                                .OrderBy(o => o.Sort)
+                                .Select(s => new
+                                {
+                                    Id = s.Id,
+                                    Title = s.Title,
+                                    Url = s.Photo.Url,
+                                    Text = s.Text
+                                });
 
                     <div class="row bottom-linkimg">
                         <div class="col-sm-2">
                             <div class="bottom-linkimg_head">Официальные сетевые ресурсы</div>
                         </div>
                         @foreach (var item in bannerBottom)
-                {
-                    string redirectLink = "/redirect/link/" + item.Id;
+                        {
+                            string redirectLink = "/redirect/link/" + item.Id;
                             <div class="col-sm-2">
                                 <a href="@redirectLink" class="bottom-linkimg-item">@item.Title</a>
                             </div>
-                }
+                        }
                     </div>
-        }
-                <!-- конец нижних баннеров -->
-                <!-- подвал -->
+                }
+                
                 <div class="footer">
                     <div class="row">
                         <div class="col-md-8">
@@ -222,7 +187,7 @@
                             }
 
                                 @if (Model != null && Model.SitesInfo != null)
-                        {
+                                {
                                     <div class="bottom_info">
                                         <div class="bottom_info_title">@Model.SitesInfo.LongTitle</div>
                                         <div class="small_address">
@@ -237,7 +202,7 @@
                                             <img src="~/Content/img/metrica2.png" />
                                         </div>
                                     </div>
-                        }
+                                }
                             </div>
                         </div>
                         <div class="col-md-4">
@@ -260,28 +225,28 @@
                         <div class="col-md-12 metrica-block">
                             <div class="float-right social_network_list">
                                 @if (Model != null && Model.SitesInfo != null)
-                       {
-                            if (!string.IsNullOrEmpty(Model.SitesInfo.Facebook))
-                            {
+                                {
+                                    if (!string.IsNullOrEmpty(Model.SitesInfo.Facebook))
+                                    {
                                         <a href="@Model.SitesInfo.Facebook" class="icon-facebook-4"></a>
-                            }
-                            if (!string.IsNullOrEmpty(Model.SitesInfo.Vk))
-                            {
+                                    }
+                                    if (!string.IsNullOrEmpty(Model.SitesInfo.Vk))
+                                    {
                                         <a href="@Model.SitesInfo.Vk" class="icon-vk"></a>
-                            }
-                            if (!string.IsNullOrEmpty(Model.SitesInfo.Instagramm))
-                            {
+                                    }
+                                    if (!string.IsNullOrEmpty(Model.SitesInfo.Instagramm))
+                                    {
                                         <a href="@Model.SitesInfo.Instagramm" class="icon-instagramm"></a>
-                            }
-                            if (!string.IsNullOrEmpty(Model.SitesInfo.Odnoklassniki))
-                            {
+                                    }
+                                    if (!string.IsNullOrEmpty(Model.SitesInfo.Odnoklassniki))
+                                    {
                                         <a href="@Model.SitesInfo.Odnoklassniki" class="icon-odnoklassniki"></a>
-                            }
-                            if (!string.IsNullOrEmpty(Model.SitesInfo.Twitter))
-                            {
+                                    }
+                                    if (!string.IsNullOrEmpty(Model.SitesInfo.Twitter))
+                                    {
                                         <a href="@Model.SitesInfo.Twitter" class="icon-twitter"></a>
-                            }
-                       }
+                                    }
+                                }
                             </div>
                         </div>
                     </div>
@@ -303,8 +268,7 @@
                             </a>
                         </div>
                     </div>
-                </div>
-                <!-- конец подвала -->
+                </div>                
             </div>
         </div>
     </div>

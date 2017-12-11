@@ -10,7 +10,7 @@ namespace cms.dbModel
         public abstract string getSiteId(string DomainUrl);
         public abstract Guid currentSiteId();
 
-        public abstract SitesModel getSite(Guid? Id);
+        public abstract SitesModel getSite(Guid Id);
         public abstract SitesModel getSite(string domain);
 
         // !!!! Далее для всех методов не нужно передавать  Guid user, string ip пользователя, изменившего запись
@@ -63,7 +63,7 @@ namespace cms.dbModel
         public abstract bool check_user(string email);
         public abstract void check_usergroup(Guid id, string group);
         public abstract void changePassword(Guid id, string Salt, string Hash);
-        public abstract bool updateUserSiteLinks(UserSiteLinkModel link);
+        public abstract bool updateUserSiteLinks(ContentLinkModel link);
         //Все доступные группы на портале - справочник
         public abstract Catalog_list[] getUsersGroupList();
         public abstract Catalog_list[] getUsersGroupListAdmin();

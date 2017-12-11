@@ -13,8 +13,6 @@
         <div class="scrollbar modal-site-list">
             @if (Model.SitesList != null && Model.SitesList.Count() > 0)
             {
-                @*@Html.HiddenFor(m => m.UserId);*@
-
                 <table id="modal-site-table" class="table table-striped" cellspacing="0" width="100%">
                     <thead>
                         <tr>
@@ -30,7 +28,7 @@
                         {
                             <tr class="site-item-row">
                                 <td class="site-item-html">
-                                    <a href="/admin/events/item/@item.Id" target="_blank"> @item.Title</a><br />
+                                    <a> @item.Title</a><br />
                                 </td>
                                 <td class="td-bold">
                                     @item.Alias

@@ -353,7 +353,7 @@ namespace cms.dbModel.entity
         /// <summary>
         /// Список идентификаторов сайтов
         /// </summary>
-        public Guid[] SitesId { get; set; }
+        public Guid SitesId { get; set; }
 
         /// <summary>
         /// Сайты
