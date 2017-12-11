@@ -698,7 +698,7 @@ function InitTinyMCE_new(id, _width, _height, directory) {
         height: _height,
 
         automatic_uploads: true,
-        images_upload_url: 'http://' + window.location.hostname + (location.port ? ':' + location.port : '') + '/Admin/Services/GetFile/',
+        images_upload_url: 'http://' + window.location.hostname + (location.port ? ':' + location.port : '') + '/Admin/Services/GetFile/?dir=' + directory,
         file_picker_callback: function (cb, value, meta) {
             var input = document.createElement('input');
             input.setAttribute('type', 'file');

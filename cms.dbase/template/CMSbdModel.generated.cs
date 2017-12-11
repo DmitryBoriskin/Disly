@@ -1653,6 +1653,7 @@ namespace cms.dbase.models
 		[Column,    Nullable] public string    c_status     { get; set; } // varchar(128)
 		[Column,    Nullable] public string    c_post       { get; set; } // varchar(128)
 		[Column, NotNull    ] public Guid      idOrgLink    { get; set; } // uniqueidentifier
+		[Column, NotNull    ] public Guid      f_people     { get; set; } // uniqueidentifier
 	}
 
 	// View

@@ -1,6 +1,10 @@
 ﻿$(document).ready(function () { 
     $('.select2').select2();
 
+
+
+
+
     $('input[data-type=date').datepicker({ onSelect: function (dateText, inst) { $(this).attr('value', dateText); } });
 
     $('input[data-mask]').each(function () {
@@ -13,9 +17,11 @@
     }
 
     //original photo
-    if ($('.show_original').length > 0) {
+    if ($('.show_original,.swipebox').length > 0) {
         $('.show_original').swipebox();
+        $(".swipebox").swipebox();
     }
+    
 
 
 
@@ -72,6 +78,12 @@
     }
 
 });
+
+
+function PhGall() {
+    $(".swipebox").swipebox();
+}
+
 
 function SearchDopWork() {
     $('.searchform_show_dop').click(function (e) {

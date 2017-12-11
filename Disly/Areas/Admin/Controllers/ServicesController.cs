@@ -405,29 +405,29 @@ namespace Disly.Areas.Admin.Controllers
         }
         
         [HttpPost]
-        public ActionResult GetFile()
+        public ActionResult GetFile(string dir)
         {
             Response.ContentType = "application/json";
-
             if (Request.Files.Count > 0)
             {
                 HttpPostedFileBase file = Request.Files[0];
-                //file.SaveAs(Server.MapPath("/Content/temp/" + file.FileName));
+                dir = (String.IsNullOrEmpty(dir)) ? Settings.UserFiles + Domain + "/temp/";
+                if (!Directory.Exists(dir)) { Directory.CreateDirectory(Server.MapPath(dir)); }
+                string savePath = dir + file.FileName;
+                file.SaveAs(Server.MapPath(savePath));
+                //using (Image image = Image.FromStream(file.InputStream))
+                //{
+                //    using (MemoryStream m = new MemoryStream())
+                //    {
+                //        image.Save(m, image.RawFormat);
+                //        byte[] imageBytes = m.ToArray();
 
-                using (Image image = Image.FromStream(file.InputStream))
-                {
-                    using (MemoryStream m = new MemoryStream())
-                    {
-                        image.Save(m, image.RawFormat);
-                        byte[] imageBytes = m.ToArray();
-
-                        // Convert byte[] to Base64 String
-                        string base64String = "data:image/png;base64," + Convert.ToBase64String(imageBytes);
-                        return Content("{ \"location\": \"" + base64String + "\" }");
-                    }
-                }
-
-                //return Content("{ \"location\": \"/Content/temp/" + file.FileName + "\" }");
+                //        // Convert byte[] to Base64 String
+                //        string base64String = "data:image/png;base64," + Convert.ToBase64String(imageBytes);
+                //        return Content("{ \"location\": \"" + base64String + "\" }");
+                //    }
+                //}
+                return Content("{ \"location\": \"" + savePath + "\" }");
             }
 
             return Content("");
