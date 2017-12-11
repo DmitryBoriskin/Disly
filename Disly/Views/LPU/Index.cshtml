@@ -121,22 +121,12 @@
                             <div class="col-md-2">
                                 @if (item.Leader != null && item.Leader.id != Guid.Empty)
                                 {
-                                    <a target="_blank" href="/doctors/@item.Leader.id">
-                                        @if (item.Leader.Photo != null && !string.IsNullOrWhiteSpace(item.Leader.Photo.Url))
-                                        {
-                                            <img class="img-circle img-person-list" src="@item.Leader.Photo.Url" alt="@item.Leader.Surname" />
-                                        }
+                                    <img class="img-circle img-person-list" src="@item.Leader.Photo.Url" alt="@item.Leader.Surname" />
+                                    <div class="org_item_post">@item.Leader.Post</div>
+                                    <a target="_blank" href="/doctors/@item.Leader.id">@item.Leader.Surname @item.Leader.Name @item.Leader.Patronymic</a>
 
-                                        @if (!string.IsNullOrWhiteSpace(item.Leader.Post))
-                                        {
-                                            <div><strong>@item.Leader.Post</strong></div>
-                                        }
 
-                                        @if (!string.IsNullOrWhiteSpace(item.Leader.Surname))
-                                        {
-                                            <div>@item.Leader.Surname @item.Leader.Name @item.Leader.Patronymic</div>
-                                        }
-                                    </a>
+
                                 }
                             </div>
                         </div>

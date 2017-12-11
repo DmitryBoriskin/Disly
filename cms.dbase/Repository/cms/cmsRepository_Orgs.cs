@@ -1181,7 +1181,7 @@ namespace cms.dbase
                              .Where(w => w.f_department == idDepart)
                              .Select(s => new People()
                              {
-                                 Id = s.id,
+                                 Id = s.f_people,
                                  FIO = s.c_surname + " " + s.c_name + " " + s.c_patronymic,
                                  IdLinkOrg = s.idOrgLink,
                                  Post= s.c_post,
@@ -1435,9 +1435,10 @@ namespace cms.dbase
                 if (data.Any())
                 {
                     data.Delete();
+                    return true;
                 }
             }
-            return true;
+            return false;
         }
 
         /// <summary>

@@ -73,6 +73,30 @@ namespace cms.dbase
         #endregion
 
         /// <summary>
+        /// Получаем guid текущего сайта
+        /// </summary>
+        /// <returns></returns>
+        public override Guid currentSiteId()
+        {
+            try
+            {
+                using (var db = new CMSdb(_context))
+                {
+                    var data = db.cms_sitess
+                                    .Where(w => w.c_alias == _domain);
+
+                    var site = data.Single();
+                    return site.id;
+                }
+            }
+            catch (Exception ex)
+            {
+                //log ex
+                throw new Exception("cmsRepository > currentSiteId: It is not possible to determine the site by _domain (" + _domain + ") " + ex);
+            }
+        }
+
+        /// <summary>
         /// Получаем alias сайта по доменному адресу
         /// </summary>
         /// <returns></returns>
@@ -97,63 +121,48 @@ namespace cms.dbase
         }
 
         /// <summary>
-        /// Получаем guid текущего сайта
+        /// Данные сайта по id
         /// </summary>
+        /// <param name="Id"></param>
         /// <returns></returns>
-        public override Guid currentSiteId()
+        public override SitesModel getSite(Guid Id)
         {
             try
             {
                 using (var db = new CMSdb(_context))
                 {
-                    var data = db.cms_sitess
-                                    .Where(w => w.c_alias == _domain);
+                    var data = db.cms_sitess.Where(w => w.id == Id)
+                        .Select(s => new SitesModel
+                        {
+                            Id = s.id,
+                            Title = s.c_name,
+                            LongTitle = s.c_name_long,
+                            Alias = s.c_alias,
+                            Adress = s.c_adress,
+                            Phone = s.c_phone,
+                            Fax = s.c_fax,
+                            Email = s.c_email,
+                            Site = s.c_url,
+                            Worktime = s.c_worktime,
+                            Logo = new Photo
+                            {
+                                Url = s.c_logo
+                            },
+                            DomainList = getSiteDomains(s.c_alias),
+                            ContentId = (Guid)s.f_content,
+                            Type = s.c_content_type,
+                            SiteOff = s.b_site_off
+                        });
 
-                    var site = data.Single();
-                    return site.id;
+                    if (data.Any())
+                        return data.SingleOrDefault();
+
+                    return null;
                 }
             }
             catch(Exception ex)
             {
-                //log ex
-                throw new Exception("cmsRepository > currentSiteId: It is not possible to determine the site by _domain (" + _domain + ") " + ex);
-            }
-        }
-
-        /// <summary>
-        /// Данные сайта по id или доменному имени
-        /// </summary>
-        /// <param name="Id"></param>
-        /// <returns></returns>
-        public override SitesModel getSite(Guid? Id)
-        {
-            using (var db = new CMSdb(_context))
-            {
-                var data = db.cms_sitess.Where(w => w.id == Id)
-                    .Select(s => new SitesModel
-                    {
-                        Id = s.id,
-                        Title = s.c_name,
-                        LongTitle = s.c_name_long,
-                        Alias = s.c_alias,
-                        Adress = s.c_adress,
-                        Phone = s.c_phone,
-                        Fax = s.c_fax,
-                        Email = s.c_email,
-                        Site = s.c_url,
-                        Worktime = s.c_worktime,
-                        Logo = new Photo
-                        {
-                            Url = s.c_logo
-                        },
-                        DomainList = getSiteDomains(s.c_alias),
-                        ContentId = (Guid)s.f_content,
-                        Type = s.c_content_type,
-                        SiteOff = s.b_site_off
-                    });
-
-                if (!data.Any()) { return null; }
-                else { return data.First(); }
+                throw new Exception("cmsRepository > getSiteId: It is not possible to determine the site by id (" + Id + ") " + ex);
             }
         }
 

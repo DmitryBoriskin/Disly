@@ -1,58 +1,64 @@
-﻿@{
+﻿@model UserSiteLinkModel
+@{
     Layout = "~/Areas/Admin/Views/Shared/_popUp.cshtml";
 }
-@model UserSiteLinkModel
-@using (Html.BeginForm())
-{
-    <div class="buttons">
-        <button type="submit" name="action" value="save-org-btn" class="btn btn-primary icon-create">СОХРАНИТЬ</button>
-    </div>
-    if (Model != null && Model.Sites != null)
-    {
-        @Html.HiddenFor(m => m.UserId);
-        <div class="scrollbar modal-site-list">
 
-            <table class="table table-striped" cellspacing="0" width="100%" id="modal-sites-table">
-                <thead>
-                    <tr>
-                        <th>Название сайта</th>
-                        <th>Алиас</th>
-                        <th>Тип сайта</th>
-                        <th>url</th>
-                        <th>Отметить</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Model.Sites)
-                    {
+<div>
+    @if (Model != null)
+    {
+        <div class="col-lg-12 content">
+            <div class="alert alert-info">
+                <p><span class="icon-info"></span> Выберите сайты, к которым необходимо привязать запись.</p>
+            </div>
+        </div>
+        <div class="scrollbar modal-site-list">
+            @if (Model.Sites != null && Model.Sites.Count() > 0)
+            {
+                <table id="modal-userSite-table" class="table table-striped" cellspacing="0" width="100%">
+                    <thead>
                         <tr>
-                            <td>
-                                @item.Title
-                            </td>
-                            <td class="td-bold">
-                                @item.Alias
-                            </td>
-                            <td>
-                                @item.Type
-                            </td>
-                            <td>
-                                @if (item.DomainList != null)
-                                {
-                                    <ul>
-                                        @foreach (var domain in item.DomainList)
-                                        {
-                                            <li>@domain.DomainName</li>
-                                        }
-                                    </ul>
-                                }
-                            </td>
-                            <td class="td-center">
-                                <input type="checkbox" name="SitesId" class="td-center iCheck" value="@item.Id" data-init="false" @(item.Checked ? "checked" : null) />
-                            </td>
+                            <th>Название сайта</th>
+                            <th>Алиас</th>
+                            <th>Тип сайта</th>
+                            <th>url</th>
+                            <th>Отметить</th>
                         </tr>
-                    }
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+
+                        @foreach (var item in Model.Sites)
+                    {
+                            <tr class="userSite-item-row">
+                                <td class="site-item-html">
+                                    <a>@item.Title</a>
+                                </td>
+                                <td class="td-bold">
+                                    @item.Alias
+                                </td>
+                                <td>
+                                    @item.Type
+                                </td>
+                                <td>
+                                    @if (item.DomainList != null)
+                                    {
+                                        <ul>
+                                            @foreach (var domain in item.DomainList)
+                                            {
+                                                <li>@domain.DomainName</li>
+                                            }
+                                        </ul>
+                                    }
+                                </td>
+                                <td class="td-center">
+                                    <span class="userSite-item-tooltip" data-toggle="tooltip" data-placement="left" title="Сохранено"></span>
+                                    <input type="checkbox" class="userSite-item-chkbx iCheck" data-object-id="@Model.UserId" data-object-type="user" data-link-id="@item.Id" data-link-type="site" data-init="false" @(item.Checked ? "checked" : null) />
+                                </td>
+                            </tr>
+                        }
+
+                    </tbody>
+                </table>
+            }
         </div>
 
     }
@@ -62,41 +68,40 @@
             <div class="alert alert-danger" role="alert">Список сайтов пуст или не доступен.</div>
         </div>
     }
+</div>
 
 
 
+<script>
+    $(document).ready(function () {
 
-    <script>
-        $(document).ready(function () {
-
-            $("#modal-sites-table .iCheck").iCheck({
-                checkboxClass: 'icheckbox_square-blue',
-                radioClass: 'icheckbox_square-blue'
-                //increaseArea: '%' //optional
-            });
-            $.extend($.fn.dataTable.defaults, {
-                searching: false,
-                ordering: false,
-                scrollY: false,//"200px",
-                //info: false,
-                language: {
-                    "url": "/Content/plugins/datatables/i18n/ru.json"
-                }
-            });
-            $('#modal-sites-table').DataTable(
-                {
-                    searching: true,
-                    ordering: true,
-                    columns: [
-                        null,
-                        null,
-                        null,
-                        { "orderable": false },
-                        { "searchable": false, "orderable": false }
-
-                    ]
-                    //paging: false
-                });
+        $("#modal-userSite-table .iCheck").iCheck({
+            checkboxClass: 'icheckbox_square-blue',
+            radioClass: 'icheckbox_square-blue'
+            //increaseArea: '%' //optional
         });
-    </script>
-}
+        $.extend($.fn.dataTable.defaults, {
+            searching: false,
+            ordering: false,
+            scrollY: false,//"200px",
+            //info: false,
+            language: {
+                "url": "/Content/plugins/datatables/i18n/ru.json"
+            }
+        });
+        $('#modal-userSite-table').DataTable(
+            {
+                searching: true,
+                ordering: true,
+                columns: [
+                    null,
+                    null,
+                    null,
+                    { "orderable": false },
+                    { "searchable": false, "orderable": false }
+
+                ]
+                //paging: false
+            });
+    });
+</script>
