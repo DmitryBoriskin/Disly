@@ -1,4 +1,4 @@
-﻿$(document).ready(function () { 
+﻿$(document).ready(function () {
     $('.select2').select2();
 
 
@@ -68,7 +68,7 @@
             var desc = $(this).attr('data-desc');
             var zoom = $(this).attr('data-zoom');
             var height = $(this).attr('data-height');
-            Coords(x, y, title, desc, zoom, height,id);
+            Coords(x, y, title, desc, zoom, height, id);
         });
     }
 
@@ -78,12 +78,6 @@
     }
 
 });
-
-
-function PhGall() {
-    $(".swipebox").swipebox();
-}
-
 
 function SearchDopWork() {
     $('.searchform_show_dop').click(function (e) {
@@ -155,7 +149,7 @@ function SearchWork() {
     });
     
     $('#search_focus').focusout(function () {
-        $('.searchform').toggleClass('show');
+            $('.searchform').toggleClass('show');
     });
 
 
@@ -292,7 +286,7 @@ function Coords(x, y, title, desc, zoom, height) {
 }
 
 
-function Coords(x, y, title, desc, zoom, height,id) {
+function Coords(x, y, title, desc, zoom, height, id) {
     ymaps.ready(function () {
         if (title == '') { title = "Название организации"; }
         if (desc == '') { desc = "Описание организации"; }

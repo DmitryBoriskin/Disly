@@ -12,7 +12,7 @@ namespace cms.dbModel
         public abstract SitesModel getSiteInfo(); //string domain
         public abstract UsersModel[] getSiteAdmins();
         public abstract SiteMapModel[] getSiteMapList(); //string domain
-        public abstract SiteMapModel[] getSiteMapListShort(); //string domain
+        public abstract SiteMapModel[] getSiteMapListShort(string path); //string domain
         public abstract string[] getSiteMapGroupMenu(Guid id);
 
         public abstract SiteMapModel getSiteMap(string path, string alias); //, string domain

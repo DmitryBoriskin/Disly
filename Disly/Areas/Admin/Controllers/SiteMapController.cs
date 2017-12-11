@@ -307,7 +307,7 @@ namespace Disly.Areas.Admin.Controllers
             Guid? _parent = (string.IsNullOrEmpty(Request.Form["Item_ParentId"]) && p != null) ? p.ParentId 
                 : (string.IsNullOrWhiteSpace(Request.Form["Item_ParentId"]) ? Guid.Empty : Guid.Parse(Request.Form["Item_ParentId"]));
             
-            if (_parent != Guid.Empty)
+            if (_parent != Guid.Empty && _parent != null)
             {
                 return RedirectToAction("Item", new { id = _parent });
             }

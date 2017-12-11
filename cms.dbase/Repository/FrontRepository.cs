@@ -166,7 +166,7 @@ namespace cms.dbase
         /// Получим список элементов карты сайта для контроллера
         /// </summary>
         /// <returns></returns>
-        public override SiteMapModel[] getSiteMapListShort()
+        public override SiteMapModel[] getSiteMapListShort(string path)
         {
             string domain = _domain;
             using (var db = new CMSdb(_context))
@@ -174,6 +174,9 @@ namespace cms.dbase
                 var query = db.content_sitemaps
                     .Where(w => w.f_site.Equals(domain))
                     .Where(w => !w.b_disabled)
+                    .Where(w => string.IsNullOrWhiteSpace(path) || w.c_path.Equals(path))
+                    .OrderBy(o => o.c_path)
+                    .ThenBy(o => o.n_sort)
                     .Select(s => new SiteMapModel
                     {
                         Title = s.c_title,
