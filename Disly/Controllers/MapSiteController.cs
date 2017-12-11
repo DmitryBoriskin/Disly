@@ -36,6 +36,11 @@ namespace Disly.Controllers
         // GET: MapSite
         public ActionResult Index()
         {
+            model.Breadcrumbs.Add(new Breadcrumbs
+            {
+                Title = "Карта сайта",
+                Url = ""
+            });
             model.List = _repository.getSiteMapListShort(null); //Domain
             return View(model);
         }
