@@ -103,7 +103,36 @@ namespace Disly.Controllers
             return View(_ViewName, model);
         }
 
-        
+        public ActionResult RssSettings()
+        {
+            ViewBag.Category = (RouteData.Values["category"] != null) ? RouteData.Values["category"] : String.Empty;
+            var filter = getFilter();
+            filter.Disabled = false;
+            model.List = _repository.getMaterialsList(filter);
+
+            ViewBag.Filter = filter;
+            ViewBag.NewsSearchArea = filter.SearchText;
+            ViewBag.NewsSearchDateStart = filter.Date;
+            ViewBag.NewsSearchDateFin = filter.DateEnd;
+
+            ViewBag.SiteUrl = _repository.getDomainSite();
+
+            #region Создаем переменные (значения по умолчанию)            
+            string _ViewName = (ViewName != String.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";
+
+            string PageTitle = "Новости";
+            string PageDesc = "описание страницы";
+            string PageKeyw = "ключевые слова";
+            #endregion            
+            #region Метатеги
+            ViewBag.Title = PageTitle;
+            ViewBag.Description = PageDesc;
+            ViewBag.KeyWords = PageKeyw;
+            #endregion
+            return View(model);
+        }
+
+
 
         public ActionResult Rss()
         {
@@ -113,6 +142,7 @@ namespace Disly.Controllers
             filter.Size = 30;
             model.List = _repository.getMaterialsList(filter);
             ViewBag.LastDatePublish = model.List.Data[0].Date;
+            ViewBag.Domain = Domain;
 
 
 

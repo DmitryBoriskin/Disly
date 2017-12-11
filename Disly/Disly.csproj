@@ -594,7 +594,6 @@
     <Compile Include="Controllers\GeneralSpecialistsController.cs" />
     <Compile Include="Controllers\LPUController.cs" />
     <Compile Include="Controllers\MapSiteController.cs" />
-    <Compile Include="Controllers\RssController.cs" />
     <Compile Include="Controllers\SearchController.cs" />
     <Compile Include="Controllers\PortalDoctorsController.cs" />
     <Compile Include="Controllers\MedicalServicesController.cs" />
@@ -884,7 +883,7 @@
     <Content Include="Views\Shared\part\childtabs.cshtml" />
     <Content Include="Views\GeneralSpecialists\Index.cshtml" />
     <Content Include="Views\Service\Photo.cshtml" />
-    <Content Include="Views\Rss\Index.cshtml" />
+    <Content Include="Views\Press\RssSettings.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -122,7 +122,7 @@
       <publishTime>11/12/2017 13:13:58</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Services/ChangePass.cshtml">
-      <publishTime>09/27/2017 09:21:44</publishTime>
+      <publishTime>12/11/2017 15:57:45</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Services/GetFile.cshtml">
       <publishTime>09/28/2017 10:45:20</publishTime>
@@ -251,25 +251,25 @@
       <publishTime>09/27/2017 09:21:45</publishTime>
     </File>
     <File Include="bin/cms.dbase.dll">
-      <publishTime>11/12/2017 13:35:17</publishTime>
+      <publishTime>11/12/2017 15:54:52</publishTime>
     </File>
     <File Include="bin/cms.dbase.dll.config">
       <publishTime>09/27/2017 09:21:45</publishTime>
     </File>
     <File Include="bin/cms.dbase.pdb">
-      <publishTime>11/12/2017 13:35:17</publishTime>
+      <publishTime>11/12/2017 15:54:52</publishTime>
     </File>
     <File Include="bin/cms.dbModel.dll">
-      <publishTime>11/12/2017 13:35:16</publishTime>
+      <publishTime>11/12/2017 15:54:50</publishTime>
     </File>
     <File Include="bin/cms.dbModel.pdb">
-      <publishTime>11/12/2017 13:35:16</publishTime>
+      <publishTime>11/12/2017 15:54:50</publishTime>
     </File>
     <File Include="bin/Disly.dll">
-      <publishTime>11/12/2017 13:35:17</publishTime>
+      <publishTime>11/12/2017 15:54:52</publishTime>
     </File>
     <File Include="bin/Disly.pdb">
-      <publishTime>11/12/2017 13:35:17</publishTime>
+      <publishTime>11/12/2017 15:54:52</publishTime>
     </File>
     <File Include="bin/EntityFramework.dll">
       <publishTime>09/27/2017 09:21:45</publishTime>
@@ -338,7 +338,7 @@
       <publishTime>09/27/2017 09:21:47</publishTime>
     </File>
     <File Include="Content/css/common.css">
-      <publishTime>11/12/2017 11:45:37</publishTime>
+      <publishTime>11/12/2017 14:52:39</publishTime>
     </File>
     <File Include="Content/css/commonless.css">
       <publishTime>11/12/2017 13:12:25</publishTime>
@@ -875,7 +875,7 @@
       <publishTime>11/12/2017 13:12:25</publishTime>
     </File>
     <File Include="Content/js/script.js">
-      <publishTime>12/11/2017 13:45:03</publishTime>
+      <publishTime>11/12/2017 15:45:20</publishTime>
     </File>
     <File Include="Content/plugins/bonsai/css/jquery.bonsai.css">
       <publishTime>08/11/2017 16:47:41</publishTime>
@@ -2030,13 +2030,16 @@
       <publishTime>07/12/2017 09:06:36</publishTime>
     </File>
     <File Include="Views/Press/Index.cshtml">
-      <publishTime>11/30/2017 08:40:58</publishTime>
+      <publishTime>11/12/2017 14:13:13</publishTime>
     </File>
     <File Include="Views/Press/part/Item.cshtml">
       <publishTime>11/29/2017 15:24:31</publishTime>
     </File>
     <File Include="Views/Press/Rss.cshtml">
       <publishTime>11/20/2017 10:34:47</publishTime>
+    </File>
+    <File Include="Views/Press/RssSettings.cshtml">
+      <publishTime>11/12/2017 15:28:47</publishTime>
     </File>
     <File Include="Views/Search/Index.cshtml">
       <publishTime>05/12/2017 08:45:21</publishTime>
