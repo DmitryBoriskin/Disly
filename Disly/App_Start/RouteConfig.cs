@@ -16,6 +16,13 @@ namespace Disly
                defaults: new { controller = "Error", action = "Custom", code = UrlParameter.Optional }
             );
 
+            // Редирект со старых сайтов
+            routes.MapRoute(
+               name: "RedirectFromOld",
+               url: "*.aspx",
+               defaults: new { controller = "RedirectFromOld", action = "Index", code = UrlParameter.Optional }
+            );
+
             // Главная страница
             routes.MapRoute(
                name: "Index",
@@ -176,6 +183,12 @@ namespace Disly
                name: "PressCentrRss",
                url: "Press/Rss",
                defaults: new { controller = "Press", action = "Rss", alias = UrlParameter.Optional }
+            );
+
+            routes.MapRoute(
+               name: "PressCentrRssSettings",
+               url: "press/RssSettings",
+               defaults: new { controller = "Press", action = "RssSettings", alias = UrlParameter.Optional }
             );
             routes.MapRoute(
                name: "PressCentrCategory",

@@ -57,6 +57,30 @@
     //    e.preventDefault();
     //});
 
+    //rss link spot
+    $('.rss_param').change(function () {
+        var _group = $('#rss_param_group');
+        var _start = $('#rss_param_group');
+        var _end = $('#rss_param_group');
+        var _rsslink = $('#rss_param_link');
+        var new_rsslink;
+        if (_group.val() != '') {
+            new_rsslink = new_rsslink + "/" + _group.val();
+        }
+        new_rsslink += "/press/rss?";
+        if (_start.val() != '') {
+            new_rsslink = new_rsslink + "date=" + _start.val();
+        }        
+        //date
+        if (_end.val() != '') {
+            new_rsslink = "&dateend=" + _end.val()
+        }
+        var new_rsslink = _rsslink.attr('data-domain'); 
+
+        _rsslink.attr('href', "http://" + _rsslink.attr('data-domain') + ".med.cap.ru" + new_rsslink);
+        _rsslink.text(_rsslink.attr('data-domain') + ".med.cap.ru" + new_rsslink);
+    });
+
 
     //coords
     if ($('.buildmap').length > 0) {
@@ -78,6 +102,11 @@
     }
 
 });
+
+function PhGall() {
+    $(".swipebox").swipebox();
+}
+
 
 function SearchDopWork() {
     $('.searchform_show_dop').click(function (e) {

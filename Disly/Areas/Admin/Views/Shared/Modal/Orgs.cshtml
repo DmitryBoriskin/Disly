@@ -19,7 +19,7 @@
                             @foreach (var orgtype in Model.OrgsTypes)
                             {
                                 <li>
-                                    <a href="#">@orgtype.Title</a>
+                                    <a href="#">@orgtype.Title</a> <a class="org-type-check-all"><small>Выбрать все</small></a>
 
                                     @if (Model.OrgsList != null)
                                     {
@@ -110,6 +110,11 @@
         $(".org-byType-tree a").on("click", function (e) {
             e.preventDefault();
             $(this).parent().find("ul").toggleClass("hidden");
+        });
+
+        $(".org-type-check-all").on("click", function (e) {
+            e.preventDefault();
+            $(this).find("[type=checkbox]").iCheck("check");
         });
 
 

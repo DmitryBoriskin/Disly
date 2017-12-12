@@ -536,6 +536,7 @@
     <Compile Include="Areas\Admin\Controllers\BannersController.cs" />
     <Compile Include="Areas\Admin\Controllers\cmsMenuController.cs" />
     <Compile Include="Areas\Admin\Controllers\DocumentsController .cs" />
+    <Compile Include="Areas\Admin\Controllers\RedirectFromOldController.cs" />
     <Compile Include="Areas\Admin\Controllers\PhotoAlbumsController.cs" />
     <Compile Include="Areas\Admin\Controllers\VoteController.cs" />
     <Compile Include="Areas\Admin\Controllers\SiteSectionController.cs" />
@@ -883,6 +884,7 @@
     <Content Include="Views\Shared\part\childtabs.cshtml" />
     <Content Include="Views\GeneralSpecialists\Index.cshtml" />
     <Content Include="Views\Service\Photo.cshtml" />
+    <Content Include="Views\Press\RssSettings.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
