@@ -138,10 +138,13 @@ namespace Disly.Controllers
         {
             Response.ContentType = "text/xml";
             var filter = getFilter();
-            filter.Disabled = false;
-            filter.Size = 30;
-            model.List = _repository.getMaterialsList(filter);            
-            ViewBag.Domain = Domain;            
+            filter.Disabled = false;            
+            model.List = _repository.getMaterialsList(filter);
+            if (model.List != null)
+            {
+                ViewBag.LastDatePublish = model.List.Data[0].Date;
+            }            
+            ViewBag.Domain = _repository.getDomainSite();            
             string _ViewName = (ViewName != String.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";            
             return View("rss", model);
         }
