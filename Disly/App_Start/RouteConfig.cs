@@ -149,15 +149,16 @@ namespace Disly
 
             // события
             routes.MapRoute(
-               name: "EventsItem",
-               url: "Events/{num}/{alias}",
-               defaults: new { controller = "EventsFront", action = "Item", alias = UrlParameter.Optional }
-            );
-            routes.MapRoute(
                name: "Events",
                url: "Events/{action}",
                defaults: new { controller = "EventsFront", action = "Index" }
             );
+            routes.MapRoute(
+               name: "EventsItem",
+               url: "Events/{num}/{alias}",
+               defaults: new { controller = "EventsFront", action = "Item", alias = UrlParameter.Optional }
+            );
+                      
 
             // Контакты
             routes.MapRoute(

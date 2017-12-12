@@ -853,7 +853,7 @@ select.form-control {
         top: 1px;
 }
 
-.btn_print, .btn_share, .btn_reg {
+.btn_border,.btn_print, .btn_share, .btn_reg {
     border: 1px solid #ccc;
     color: #222;
     display: inline-block;
@@ -874,7 +874,7 @@ select.form-control {
 .btn_reg.ti-user:before{
     font-family:"themify";
 }
-
+    .btn_border:hover, .btn_border:active, .btn_border:focus,
     .btn_print:hover, .btn_print:active, .btn_print:focus,
     .btn_share:hover, .btn_share:active, .btn_share:focus,
     .btn_reg:hover, .btn_reg:active, .btn_reg:focus {

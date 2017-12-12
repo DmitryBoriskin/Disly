@@ -2069,8 +2069,7 @@ namespace cms.dbase
         /// <returns></returns>
         public override EventsList getEvents(FilterParams filter)
         {
-            string domain = _domain;
-            DateTime now = DateTime.Now;
+            string domain = _domain;            
 
             using (var db = new CMSdb(_context))
             {
@@ -2086,9 +2085,19 @@ namespace cms.dbase
 
                 var query = db.content_eventss
                     .Where(w => eventIds.Contains(w.id))
-                    .Where(w => !w.b_disabled)
-                    .Where(w => (w.d_date >= now) || (w.d_date_end >= now)
-                            || (w.b_annually && (w.d_date.DayOfYear >= now.DayOfYear || w.d_date_end.DayOfYear >= now.DayOfYear)));
+                    .Where(w => !w.b_disabled);
+
+                if (filter.Date != null)
+                {
+                    query = query.Where(w => (w.d_date >= filter.Date) || (w.d_date_end >= filter.Date)
+                             || (w.b_annually && (w.d_date.DayOfYear >= ((DateTime)filter.Date).DayOfYear || w.d_date_end.DayOfYear >= ((DateTime)filter.Date).DayOfYear)));
+                }
+                if (filter.DateEnd!= null)
+                {
+                    query = query.Where(w => (w.d_date <= filter.DateEnd) || (w.d_date_end <= filter.DateEnd)
+                             || (w.b_annually && (w.d_date.DayOfYear <= ((DateTime)filter.DateEnd).DayOfYear || w.d_date_end.DayOfYear <= ((DateTime)filter.DateEnd).DayOfYear)));
+                }
+                
 
                 if (!string.IsNullOrWhiteSpace(filter.SearchText))
                 {
