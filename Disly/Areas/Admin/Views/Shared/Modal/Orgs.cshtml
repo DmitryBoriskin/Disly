@@ -18,8 +18,8 @@
                         <ul class="org-byType-tree">
                             @foreach (var orgtype in Model.OrgsTypes)
                             {
-                                <li>
-                                    <a href="#">@orgtype.Title</a> <a class="org-type-check-all"><small>Выбрать все</small></a>
+                                <li class="org-type-item">
+                                    <span class="org-type-item-active-el">@orgtype.Title</span>
 
                                     @if (Model.OrgsList != null)
                                     {
@@ -28,11 +28,12 @@
                                             var list = Model.OrgsList.Where(t => t.Types == null);
                                             if (list.Any())
                                             {
+                                                <span class="org-type-check-all" data-state="half-checked">все</span>
                                                 <ul>
                                                     @foreach (var item in list)
                                                     {
                                                         <li>
-                                                            <div class="orgType-item">
+                                                            <div class="orgType-item checkbox">
                                                                 <label>
                                                                     <span class="orgType-item-tooltip" data-toggle="tooltip" data-placement="right" title="Сохранено"></span>
                                                                     <input type="checkbox" class="orgType-item-chkbx iCheck" data-object-id="@Model.ObjctId" data-object-type="@Model.ObjctType" data-link-id="@item.Id" data-link-type="@ContentLinkType.ORG.ToString()" data-init="false" @(item.Checked ? "checked" : null) @(item.Origin? "disabled":null)/>
@@ -51,6 +52,7 @@
                                             var list = Model.OrgsList.Where(t => t.Types != null && t.Types.Contains(orgtype.Id));
                                             if (list.Any())
                                             {
+                                                <span class="org-type-check-all" data-state="half-checked">все</span>
                                                 <ul>
                                                     @foreach (var item in list)
                                                     {
@@ -58,7 +60,7 @@
                                                             <div class="orgType-item checkbox">
                                                                 <label>
                                                                     <span class="orgType-item-tooltip" data-toggle="tooltip" data-placement="top" title="Сохранено"></span>
-                                                                    <input type="checkbox" name="OrgsId" class="orgType-item-chkbx iCheck" data-object-id="@Model.ObjctId" data-object-type="@Model.ObjctType" data-link-id="@item.Id" data-link-type="@ContentLinkType.ORG.ToString()" data-init="false" @(item.Checked ? "checked" : null) @(item.Origin? "disabled":null)/>
+                                                                    <input type="checkbox" class="orgType-item-chkbx iCheck" data-object-id="@Model.ObjctId" data-object-type="@Model.ObjctType" data-link-id="@item.Id" data-link-type="@ContentLinkType.ORG.ToString()" data-init="false" @(item.Checked ? "checked" : null) @(item.Origin? "disabled":null)/>
                                                                     <span class="orgType-item-html">
                                                                         <a href="/Admin/orgs/item/@item.Id/" target="_blank">@item.Title</a>
                                                                     </span>
@@ -107,16 +109,32 @@
             }
         });
 
-        $(".org-byType-tree a").on("click", function (e) {
+        $(".org-type-item-active-el").on("click", function (e) {
             e.preventDefault();
-            $(this).parent().find("ul").toggleClass("hidden");
+            $(this).closest(".org-type-item").find("ul").toggleClass("hidden");
         });
 
         $(".org-type-check-all").on("click", function (e) {
-            e.preventDefault();
-            $(this).find("[type=checkbox]").iCheck("check");
+          
+            var state = $(this).data("state");
+            var item = $(this).closest(".org-type-item");
+
+            if (state === "half-checked" || state === "full-unchecked")
+            {
+                console.log(state);
+                item.find("[type=checkbox]").not(":disabled")
+                    .each(function () {
+                        $(this).iCheck("check");
+                    })
+                $(this).data("state", "full-checked");
+            }
+            else {
+                item.find("[type=checkbox]").not(":disabled")
+                    .each(function () {
+                        $(this).iCheck("uncheck");
+                        $(this).data("state", "full-unchecked");
+                    });
+            }
         });
-
-
     });
 </script>

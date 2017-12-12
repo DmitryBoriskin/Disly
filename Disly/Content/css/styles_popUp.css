@@ -316,10 +316,22 @@ a.button  {
 .modal-org-list a, .modal-event-list a{
     font-size: 1.1em;
 }
+.org-type-check-all[data-state='half-checked']{
+    margin-left:10px;
+    padding:1px 5px;
+    background-color:#eee;
+    border:1px solid #d2d2d2;
+    border-radius:4px;
+    cursor:pointer;
+}
 
+.org-byType-tree {
+    font-size:14px;
+}
 .org-byType-tree li{
     list-style:none;
     margin:5px 0;
+    cursor:pointer;
 }
 .org-byType-tree ul{
     padding-left:0;
@@ -380,4 +392,5 @@ th{
 .topIndent-20{
     margin-top:20px;
 }
+
 

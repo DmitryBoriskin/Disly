@@ -32,6 +32,123 @@ namespace cms.dbase
             _domain = (!string.IsNullOrEmpty(DomainUrl)) ? getSiteId(DomainUrl) : "";
             LinqToDB.Common.Configuration.Linq.AllowMultipleQuery = true;
         }
+        #region redirect methods
+        public override SitesModel getSiteInfoByOldId(int Id)
+        {
+            string domain = _domain;
+            using (var db = new CMSdb(_context))
+            {
+                var data = db.cms_sitess
+                    .Where(w => w.c_alias.Equals(domain))
+                    .Select(s => new SitesModel
+                    {
+                        Id = s.id,
+                        Title = s.c_name,
+                        LongTitle = s.c_name_long,
+                        Alias = s.c_alias,
+                        Adress = s.c_adress,
+                        Phone = s.c_phone,
+                        Fax = s.c_fax,
+                        Email = s.c_email,
+                        Site = s.c_url,
+                        Worktime = s.c_worktime,
+                        Logo = new Photo
+                        {
+                            Url = s.c_logo
+                        },
+                        ContentId = (Guid)s.f_content,
+                        ContentType = (ContentLinkType)Enum.Parse(typeof(ContentLinkType), s.c_content_type, true),
+                        Type = s.c_content_type,
+                        Facebook = s.c_facebook,
+                        Vk = s.c_vk,
+                        Instagramm = s.c_instagramm,
+                        Odnoklassniki = s.c_odnoklassniki,
+                        Twitter = s.c_twitter,
+                        Theme = s.c_theme,
+                        BackGroundImg = new Photo
+                        {
+                            Url = s.c_background_img
+                        }
+                    });
+
+                if (data.Any())
+                    return data.SingleOrDefault();
+
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Элемент карты сайта по старому линку с ид
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public override SiteMapModel getSiteMapByOldId(int id)
+        {
+            string domain = _domain;
+            using (var db = new CMSdb(_context))
+            {
+                var query = db.content_sitemaps.Where(w => w.n_old_id == id);
+                var data = query.Select(s => new SiteMapModel
+                {
+                    Title = s.c_title,
+                    Text = s.c_text,
+                    Alias = s.c_alias,
+                    Path = s.c_path,
+                    Id = s.id,
+                    FrontSection = s.f_front_section,
+                    ParentId = s.uui_parent
+                });
+
+                if (data.Any())
+                    return data.SingleOrDefault();
+
+                return null;
+            }
+        }
+        /// <summary>
+        /// Новость по старому линку с ид
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public override MaterialsModel getMaterialsByOldId(int id)
+        {
+            string domain = _domain;
+            using (var db = new CMSdb(_context))
+            {
+                var query = db.content_materialss
+                            .Where(w => w.n_old_id == id);
+
+                if (query.Any())
+                {
+                    var material = query.Select(s => new MaterialsModel
+                    {
+                        Id = s.id,
+                        Title = s.c_title,
+                        Text = s.c_text,
+                        Alias = s.c_alias,
+                        Date = s.d_date,
+                        Year = s.n_year,
+                        Month = s.n_month,
+                        Day = s.n_day,
+                        PreviewImage = new Photo
+                        {
+                            Url = s.c_preview
+                        }
+                    }).SingleOrDefault();
+
+                    db.content_materialss
+                        .Where(w => w.id.Equals(material.Id))
+                        .Set(u => u.n_count_see, u => u.n_count_see + 1)
+                        .Update();
+
+                    return material;
+                }
+
+                return null;
+            }
+        }
+        #endregion
 
         /// <summary>
         /// Получение идентификатора сайта

@@ -15,6 +15,11 @@ namespace cms.dbModel
         public abstract SiteMapModel[] getSiteMapListShort(string path); //string domain
         public abstract string[] getSiteMapGroupMenu(Guid id);
 
+        //Redirect from old portal methods
+        public abstract SitesModel getSiteInfoByOldId(int id);
+        public abstract SiteMapModel getSiteMapByOldId(int id);
+        public abstract MaterialsModel getMaterialsByOldId(int id);
+
         public abstract SiteMapModel getSiteMap(string path, string alias); //, string domain
         public abstract SiteMapModel getSiteMap(string frontSection);
         public abstract string[] getSiteMapSiblings(string path);

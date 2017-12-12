@@ -15,19 +15,19 @@ namespace Disly
                url: "Error/{*code}",
                defaults: new { controller = "Error", action = "Custom", code = UrlParameter.Optional }
             );
-
-            // Редирект со старых сайтов
-            routes.MapRoute(
-               name: "RedirectFromOld",
-               url: "*.aspx",
-               defaults: new { controller = "RedirectFromOld", action = "Index", code = UrlParameter.Optional }
-            );
-
+            
             // Главная страница
             routes.MapRoute(
                name: "Index",
                url: "",
                defaults: new { controller = "Home", action = "Index" }
+            );
+
+            //Редирект со старых сайтов
+            routes.MapRoute(
+               name: "RedirectFromOld",
+               url: "{action}.aspx",
+               defaults: new { controller = "RedirectFromOld", action = "Index" }
             );
 
             routes.MapRoute(
@@ -239,8 +239,11 @@ namespace Disly
             routes.MapRoute(
                 name: "default",
                 url: "{controller}/{action}/{id}",
-                defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
+                defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }//,
+                //constraints: new { path = @"\d{6}" }
             );
+
+            
         }
     }
 }

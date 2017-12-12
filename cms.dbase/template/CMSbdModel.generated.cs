@@ -992,6 +992,7 @@ namespace cms.dbase.models
 		[Column,     NotNull    ] public bool     b_locked              { get; set; } // bit
 		[Column,     NotNull    ] public int      n_count_see           { get; set; } // int
 		[Column,        Nullable] public string   c_preview_source      { get; set; } // varchar(128)
+		[Column,        Nullable] public int?     n_old_id              { get; set; } // int
 
 		#region Associations
 

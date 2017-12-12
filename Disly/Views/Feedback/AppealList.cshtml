@@ -3,6 +3,8 @@
 @using System.Text.RegularExpressions;
 @{
     int maxChars = 126;
+    var newItemBtnLink = (Model.CurrentPage != null) 
+        ? string.Format("{0}/{1}?type=appeal", Model.CurrentPage.Path, Model.CurrentPage.Alias) : "";
 }
 <div class="container">
     <div class="row">
@@ -14,6 +16,7 @@
 
             <div class="row padding-top-30">
                 <div class="col-md-8">
+                    <div class="text-right"><a class="btn sub btn-primary" href="@newItemBtnLink">Задать вопрос</a></div>
                     <div class="feedback_list">
                         @if (Model.List != null)
                         {
@@ -89,7 +92,7 @@
 
                             <div class="col-sm-12 control-filter">
                                 <a class="btn btn-default pull-right" href="/@ViewBag.ControllerName">Очистить</a>
-                                <button class="btn sub btn-primary" type="submit">ПРИМЕНИТЬ</button>
+                                <button class="btn sub btn-primary" type="submit">Применить</button>
                             </div>
                         </div>
                     </form>
