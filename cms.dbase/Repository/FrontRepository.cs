@@ -256,6 +256,20 @@ namespace cms.dbase
             }
         }
 
+
+        public override string getDomainSite()
+        {
+            using (var db = new CMSdb(_context))
+            {
+                string siteId = _domain;
+                var data = db.cms_sites_domainss.Where(w=>w.f_site== siteId);
+                if (data.Any())
+                {
+                    return data.OrderBy(o => o.num).Select(s => s.c_domain).FirstOrDefault();
+                }
+                return null;
+            }
+        }
         /// <summary>
         /// Получение информации по сайту
         /// </summary>

@@ -244,6 +244,9 @@ blockquote{margin-top:20px;}
     .searchform_close:hover {
         text-decoration: none;
     }
+select.form-control {
+    border-radius: 0;
+}
 /* нижние баннеры */
 .bottom-linkimg {
     padding-bottom: 39px;
@@ -732,7 +735,7 @@ blockquote{margin-top:20px;}
 }
 
 .img-person-list {
-    max-width: 80px;
+    width: 80px;
 }
 /*  */
 .breadcrumb {

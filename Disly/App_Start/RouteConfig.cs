@@ -187,8 +187,8 @@ namespace Disly
 
             routes.MapRoute(
                name: "PressCentrRssSettings",
-               url: "Rss",
-               defaults: new { controller = "Press", action = "Index", alias = UrlParameter.Optional }
+               url: "press/RssSettings",
+               defaults: new { controller = "Press", action = "RssSettings", alias = UrlParameter.Optional }
             );
             routes.MapRoute(
                name: "PressCentrCategory",
