@@ -22,7 +22,7 @@
             <div class="form-group">
                 <label class="label_filtr" for="data_start">Дата начала</label>
                 <div class='input-group date' id="date-begin">
-                    <input id="rss_param_start" type='text' class="form-control rss_param" name="date" data-type="date" data-mask="99.99.9999" placeholder="дд.мм.гггг" value="@ViewBag.Filter.Date" />
+                    <input id="rss_param_start" type='text' class="form-control rss_param rss_date" name="date" data-type="date" data-mask="99.99.9999" placeholder="дд.мм.гггг" value="@ViewBag.Filter.Date" />
                 </div>
             </div>
         </div>
@@ -30,7 +30,15 @@
             <div class="form-group">
                 <label class="label_filtr" for="data_fin">Дата конца</label>
                 <div class='input-group date' id="date-end">
-                    <input id="rss_param_end" type='text' class="form-control rss_param" name="dateend" data-type="date" data-mask="99.99.9999" placeholder="дд.мм.гггг" value="@ViewBag.Filter.DateEnd" />
+                    <input id="rss_param_end" type='text' class="form-control rss_param rss_date" name="dateend" data-type="date" data-mask="99.99.9999" placeholder="дд.мм.гггг" value="@ViewBag.Filter.DateEnd" />
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="form-group">
+                <label class="label_filtr" for="data_fin">Количество</label>
+                <div class='input-group date' id="date-end">
+                    <input id="rss_param_size" type='number' class="form-control rss_param" name="size" value="@ViewBag.Filter.Size" />
                 </div>
             </div>
         </div>

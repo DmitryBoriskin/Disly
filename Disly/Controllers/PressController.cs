@@ -120,7 +120,7 @@ namespace Disly.Controllers
             #region Создаем переменные (значения по умолчанию)            
             string _ViewName = (ViewName != String.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";
 
-            string PageTitle = "Новости";
+            string PageTitle = "Rss ленты";
             string PageDesc = "описание страницы";
             string PageKeyw = "ключевые слова";
             #endregion            
@@ -140,13 +140,8 @@ namespace Disly.Controllers
             var filter = getFilter();
             filter.Disabled = false;
             filter.Size = 30;
-            model.List = _repository.getMaterialsList(filter);
-            ViewBag.LastDatePublish = model.List.Data[0].Date;
-            ViewBag.Domain = Domain;
-
-
-
-
+            model.List = _repository.getMaterialsList(filter);            
+            ViewBag.Domain = Domain;            
             string _ViewName = (ViewName != String.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";            
             return View("rss", model);
         }
