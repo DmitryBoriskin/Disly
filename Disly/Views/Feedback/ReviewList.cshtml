@@ -4,7 +4,7 @@
 @{
     int maxChars = 126;
     var newItemBtnLink = (Model.CurrentPage != null)
-       ? string.Format("{0}/{1}?type=review", Model.CurrentPage.Path, Model.CurrentPage.Alias) : "";
+       ? string.Format("{0}form?type=review", Model.CurrentPage.Path) : "";
 }
 <div class="container">
     <div class="row">

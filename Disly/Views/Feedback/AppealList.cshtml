@@ -3,8 +3,8 @@
 @using System.Text.RegularExpressions;
 @{
     int maxChars = 126;
-    var newItemBtnLink = (Model.CurrentPage != null) 
-        ? string.Format("{0}/{1}?type=appeal", Model.CurrentPage.Path, Model.CurrentPage.Alias) : "";
+    var newItemBtnLink = (Model.CurrentPage != null)
+      ? string.Format("{0}form?type=appeal", Model.CurrentPage.Path) : "";
 }
 <div class="container">
     <div class="row">

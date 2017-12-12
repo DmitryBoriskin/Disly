@@ -155,6 +155,15 @@ namespace Disly.Controllers
             ViewBag.Anonymous = false;
             ViewBag.captchaKey = Settings.CaptchaKey;
 
+            if (!string.IsNullOrEmpty(getFilter().Type))
+            {
+                var fbType = FeedbackType.appeal;
+                var res = Enum.TryParse(getFilter().Type, out fbType);
+
+                if(res)
+                    ViewBag.FbType = fbType;
+            }
+
             return View(_ViewName, model);
         }
         /// <summary>
