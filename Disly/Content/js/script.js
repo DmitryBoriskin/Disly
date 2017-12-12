@@ -62,16 +62,10 @@
         setInterval(function () { SpotRssLink();}, 1500);
         $('.rss_param').change(function () { SpotRssLink()});
         $('.rss_param').bind("change", function () { SpotRssLink() });  
-
-
         $('.rss_param.rss_date').datepicker().on('changeDate', function () { SpotRssLink() });
         $('.rss_param.rss_date').change(function () {
             SpotRssLink();
         });
-        //$('.rss_param').click(function () {
-        //    SpotRssLink();
-        //});   
-
         function SpotRssLink() {
             var _group = $('#rss_param_group').val();
             var _start = $('#rss_param_start').val();
@@ -93,11 +87,9 @@
             if (_size != '') {
                 new_rsslink = new_rsslink + "&size=" + _size;
             }
-
             _rsslink.attr('href', "http://" + _rsslink.attr('data-domain') + new_rsslink);
-            _rsslink.text(_rsslink.attr('data-domain') + new_rsslink);
+            _rsslink.text("http://" +_rsslink.attr('data-domain') + new_rsslink);
         }
-
     }
 
 

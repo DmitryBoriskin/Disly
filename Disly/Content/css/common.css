@@ -735,7 +735,7 @@ select.form-control {
 }
 
 .img-person-list {
-    max-width: 80px;
+    width: 80px;
 }
 /*  */
 .breadcrumb {
