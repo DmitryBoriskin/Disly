@@ -1,0 +1,66 @@
+﻿@model EventViewModel
+<div class="type-page">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                @Html.Partial("services/breadcrumbs")
+                <h1>@ViewBag.Title</h1>
+                @if (!String.IsNullOrEmpty(ViewBag.Alias))
+                {
+                    @Html.Partial("part/Item")
+                }
+                else
+                {
+                    <br /><br />
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="news_list">
+                                @if (Model.List != null)
+                                {
+                                    if (Model.List.Data != null)
+                                    {
+                                        foreach (var item in Model.List.Data)
+                                        {
+                                            string date = item.DateBegin.ToString("dd.MM.yyyy")
+                                                + (item.DateEnd != null ? " — " + Convert.ToDateTime(item.DateEnd).ToString("dd.MM.yyyy") : string.Empty);
+
+                                            <div class="col-md-12">
+                                                <div class="item_news">
+                                                    <div class="news-list_date"><span>@date</span></div>
+                                                    <a class="news-list_title" href="/events/@item.Num/@item.Alias">@item.Title</a>
+                                                </div>
+                                            </div>
+                                        }
+                                    }
+                                    Html.RenderAction("Pager", "Service", new { @Model = Model.List.Pager });
+                                }
+                            </div>
+                        </div>
+                        <div class="col-md-1"></div>
+                        <div class="col-md-3">
+                            <form role="form" class="filtr_news" action="/events/">
+                                <div class="row">
+
+                                    <div class="col-sm-12">
+                                        <div class="form-group search_news">
+                                            <label class="label_filtr" for="search_news">Ключевые слова</label>
+                                            <input type="text" class="filtr_data form-control" name="searchtext" id="search_news" value="@ViewBag.Filter.SearchText" />
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-12 control-filter">
+                                        <a class="btn btn-default pull-right" href="/events">Очистить</a>
+                                        <button class="btn sub btn-primary" type="submit">ПРИМЕНИТЬ</button>
+                                    </div>
+
+                                </div>
+                            </form>
+                            <br />
+                            <a class="btn_border" href="/events/">События</a><br />
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

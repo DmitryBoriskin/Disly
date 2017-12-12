@@ -1,5 +1,6 @@
 ﻿using cms.dbModel.entity;
 using Disly.Models;
+using System;
 using System.Collections.Generic;
 using System.Web.Mvc;
 
@@ -43,6 +44,7 @@ namespace Disly.Controllers
         public ActionResult Index()
         {
             var filter = getFilter();
+            filter.Date = DateTime.Now;
             model.List = _repository.getEvents(filter);
 
             ViewBag.Filter = filter;
@@ -66,6 +68,22 @@ namespace Disly.Controllers
                 });
             }
             return View("Item", model);
+        }
+        public ActionResult Archive()
+        {
+
+            var filter = getFilter();
+            filter.DateEnd = DateTime.Now;
+            model.List = _repository.getEvents(filter);
+
+            ViewBag.Filter = filter;
+            ViewBag.NewsSearchArea = filter.SearchText;
+            ViewBag.NewsSearchDateStart = filter.Date;
+            ViewBag.NewsSearchDateFin = filter.DateEnd;
+
+
+            ViewBag.Title = "Архив событий";
+            return View(model);
         }
     }
 }

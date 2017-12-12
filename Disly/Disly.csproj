@@ -885,6 +885,7 @@
     <Content Include="Views\GeneralSpecialists\Index.cshtml" />
     <Content Include="Views\Service\Photo.cshtml" />
     <Content Include="Views\Press\RssSettings.cshtml" />
+    <Content Include="Views\EventsFront\Archive.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
