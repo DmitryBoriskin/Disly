@@ -163,7 +163,7 @@ namespace Disly.Areas.Admin.Controllers
 
             back_model.Item.Path = p == null ? "/" : p.Path + p.Alias + "/";
 
-            if (_cmsRepository.existSiteMap(back_model.Item.Path, back_model.Item.Alias))
+            if (_cmsRepository.existSiteMap(back_model.Item.Path, back_model.Item.Alias, back_model.Item.Id))// && back_model.Item.OldId!=null
             {
                 model.ErrorInfo = new ErrorMassege()
                 {

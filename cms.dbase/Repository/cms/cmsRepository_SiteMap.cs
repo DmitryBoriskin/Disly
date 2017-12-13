@@ -233,15 +233,18 @@ namespace cms.dbase
         /// </summary>
         /// <param name="path"></param>
         /// <param name="alias"></param>
+        /// <param name="id"></param>
         /// <returns></returns>
-        public override bool existSiteMap(string path, string alias)
+        public override bool existSiteMap(string path, string alias, Guid Id)
         {
             using (var db = new CMSdb(_context))
             {
                 var query = db.content_sitemaps
                     .Where(w => w.f_site.Equals(_domain))
                     .Where(w => w.c_path.ToLower().Equals(path.ToLower()))
-                    .Where(w => w.c_alias.ToLower().Equals(alias.ToLower()));
+                    .Where(w => w.c_alias.ToLower().Equals(alias.ToLower()))
+                    .Where(w=>w.id!=Id);
+                    
 
                 return query.Any();
             }

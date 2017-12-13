@@ -983,6 +983,8 @@ namespace Disly.Areas.Admin.Controllers
             }
 
             #region сотрудники для выпадающего списка
+
+            model.AdministrativItem = _cmsRepository.getAdministrativ(Id);
             if (model.AdministrativItem != null)
             {
                 var _peopList = _cmsRepository.getPersonsThisOrg(model.AdministrativItem.OrgId);

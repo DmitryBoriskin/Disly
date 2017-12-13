@@ -687,7 +687,6 @@
     <Content Include="Areas\Admin\Views\cmsMenu\Index.cshtml" />
     <Content Include="Areas\Admin\Views\cmsMenu\Item.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\Home\Modern.cshtml" />
     <Content Include="Areas\Admin\Views\Services\ChangePass.cshtml" />
     <Content Include="Areas\Admin\Views\Services\Log.cshtml" />
     <Content Include="Areas\Admin\Views\Services\UserResolutions.cshtml" />
