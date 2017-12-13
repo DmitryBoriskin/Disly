@@ -337,6 +337,7 @@ function Coords(x, y, title, desc, zoom, height, id) {
             controls: ['zoomControl']
             //controls: ['zoomControl', 'searchControl', 'typeSelector', 'fullscreenControl', 'routeButtonControl']
         });
+        ContactMap.behaviors.disable("scrollZoom");
         ContactMap.controls.add('zoomControl', { top: 5 });
 
         myPlacemark = new ymaps.Placemark([x, y], {

@@ -74,20 +74,24 @@ namespace Disly.Areas.Admin.Controllers
                 }
 
                 #region Изображени под слайдером
-                string SavePath = Settings.UserFiles + Domain + "/logo/";
-                int idx = uploadBack.FileName.LastIndexOf('.');
-                string Title = uploadBack.FileName.Substring(0, idx);
-                string TransTitle = Transliteration.Translit(Title);
-                string FileName = TransTitle + Path.GetExtension(uploadBack.FileName);
-
-
-                string FullName = SavePath + FileName;
-                if (!Directory.Exists(Server.MapPath(SavePath)))
+                if(uploadBack != null && uploadBack.ContentLength > 0)
                 {
-                    Directory.CreateDirectory(Server.MapPath(SavePath));
-                }                
-                uploadBack.SaveAs(Server.MapPath(Path.Combine(SavePath, FileName)));
-                backModel.Item.BackGroundImg = new Photo { Url= FullName };
+                    string SavePath = Settings.UserFiles + Domain + "/logo/";
+                    int idx = uploadBack.FileName.LastIndexOf('.');
+                    string Title = uploadBack.FileName.Substring(0, idx);
+                    string TransTitle = Transliteration.Translit(Title);
+                    string FileName = TransTitle + Path.GetExtension(uploadBack.FileName);
+
+
+                    string FullName = SavePath + FileName;
+                    if (!Directory.Exists(Server.MapPath(SavePath)))
+                    {
+                        Directory.CreateDirectory(Server.MapPath(SavePath));
+                    }
+                    uploadBack.SaveAs(Server.MapPath(Path.Combine(SavePath, FileName)));
+                    backModel.Item.BackGroundImg = new Photo { Url = FullName };
+                }
+                
                 #endregion
 
 
