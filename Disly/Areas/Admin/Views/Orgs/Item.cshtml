@@ -195,12 +195,12 @@
             
             @if (Model.Item != null)
             {
-                if (Model.Item.SiteId != null)
+                if (!String.IsNullOrEmpty(Model.Item.SiteGuid))
                 {
                     <br />
                     <div class="alert alert-info">
                         <strong>Сайт данной организации создан!</strong><br>
-                        <a href="/admin/sites/item/@Model.Item.SiteId" target="_blank">Редактировать сайт</a>
+                        <a href="/admin/sites/item/@Model.Item.SiteGuid" target="_blank">Редактировать сайт</a>
                     </div>
                 }
                 else
