@@ -26,7 +26,7 @@ namespace Disly.Controllers
 
         protected SitesModel siteModel;
         protected SiteMapModel[] siteMapArray;
-        protected BannersModel[] bannerArray;        
+        protected BannersModel[] bannerArray;
         protected List<Breadcrumbs> breadcrumb;
         protected SiteMapModel currentPage;
 

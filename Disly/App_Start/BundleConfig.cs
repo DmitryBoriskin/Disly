@@ -41,7 +41,7 @@ namespace Disly
             bundles.Add(new StyleBundle("~/bundles/jq_plugins/css").Include(
               "~/Content/plugins/select2/css/select2.css",
               "~/Content/plugins/select2/css/select2_custom.css",
-              "~/Content/plugins/icheck/skins/all.css",
+              "~/Content/plugins/icheck/skins/square/_all.css",
               "~/Content/plugins/datatables/datatables.min.css",
               "~/Content/plugins/datatables/dataTables.bootstrap.min.css"
               ));
