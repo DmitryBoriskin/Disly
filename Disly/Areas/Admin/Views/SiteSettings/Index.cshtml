@@ -15,13 +15,13 @@
     @Html.TextBoxFor(m => m.Item.Title, new { @title = "Название", @required = "" })
     @Html.TextBoxFor(m => m.Item.LongTitle, new { @title = "Полное название" })
     <div class="group-block open" title="Пользовательские скрипты">
-        @Html.TextAreaFor(m => m.Item.Scripts, new { @type = "editor", @height = "300" })
+        @Html.TextAreaFor(m => m.Item.Scripts, new { @type = "text", @height = "300" ,@rows="15"})
     </div>
     @Html.HiddenFor(m => m.Item.Id)
 </div>
 
 <div class="dop_info-block">
-    @Html.TextBoxFor(m => m.Item.Alias, new { @title = "Домен" })
+    @Html.HiddenFor(m => m.Item.Alias)
     @Html.DropDownListFor(m => m.Item.Theme, new SelectList(Model.Themes, "Value", "Text", "blue"), new { @title = "Выбор тем", @class = "selectpicker" })
     @Html.TextBoxFor(m => m.Item.Site, new { @title = "Ссылка" })
 

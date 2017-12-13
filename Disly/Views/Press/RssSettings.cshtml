@@ -18,7 +18,7 @@
                 </div>
             }
         </div>
-        <div class="col-md-2">
+        @*<div class="col-md-2">
             <div class="form-group">
                 <label class="label_filtr" for="data_start">Дата начала</label>
                 <div class='input-group date' id="date-begin">
@@ -33,7 +33,7 @@
                     <input id="rss_param_end" type='text' class="form-control rss_param rss_date" name="dateend" data-type="date" data-mask="99.99.9999" placeholder="дд.мм.гггг" value="@ViewBag.Filter.DateEnd" />
                 </div>
             </div>
-        </div>
+        </div>*@
         <div class="col-md-2">
             <div class="form-group">
                 <label class="label_filtr" for="data_fin">Количество</label>
@@ -44,7 +44,7 @@
         </div>
 
         <div class="col-md-12">
-            Ссылка на RSS: <a id="rss_param_link" data-domain="@ViewBag.SiteUrl" href="http://@ViewBag.SiteUrl/press/rss" target="_blank">@ViewBag.SiteUrl/press/rss</a>
+            Ссылка на RSS: <a id="rss_param_link" data-domain="@ViewBag.SiteUrl" href="http://@ViewBag.SiteUrl/press/rss" target="_blank">http://@ViewBag.SiteUrl/press/rss</a>
         </div>
 
         

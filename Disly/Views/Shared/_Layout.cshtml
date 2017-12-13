@@ -274,9 +274,10 @@
             </div>
         </div>
     </div>
+
     <script type="text/javascript">
         var SiteId = "@Model.SitesInfo.Alias";
     </script>
-
+    @Html.Raw(Model.SitesInfo.Scripts)
 </body>
 </html>

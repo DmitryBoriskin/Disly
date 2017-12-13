@@ -218,6 +218,10 @@ namespace cms.dbase
                 var getTypes = getOrgTypesList(new OrgTypeFilter { OrgId = id });
                 if (getTypes != null)
                     types = getTypes.Select(t => t.Id).ToArray();
+                
+                
+                String siteGuid = db.cms_sitess.Where(w => w.f_content == id).Select(s => s.id).SingleOrDefault().ToString();
+                
 
                 var services = getOrgMedicalServicesLinks(id);
 
@@ -244,6 +248,7 @@ namespace cms.dbase
                         Types = types,
                         Services = services,
                         DepartmentAffiliation = s.f_department_affiliation,
+                        SiteGuid = siteGuid,
                         Logo = new Photo
                         {
                             Url = s.c_logo
