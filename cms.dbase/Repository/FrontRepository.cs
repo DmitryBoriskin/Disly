@@ -237,6 +237,7 @@ namespace cms.dbase
                         ContentId = (Guid)s.f_content,
                         ContentType = (ContentLinkType)Enum.Parse(typeof(ContentLinkType), s.c_content_type, true),
                         Type = s.c_content_type,
+                        Scripts=s.c_scripts,
                         Facebook = s.c_facebook,
                         Vk = s.c_vk,
                         Instagramm = s.c_instagramm,

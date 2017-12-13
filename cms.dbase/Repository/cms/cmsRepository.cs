@@ -196,6 +196,7 @@ namespace cms.dbase
                             },
                             ContentId = (Guid)s.f_content,
                             Type = s.c_content_type,
+                            Scripts=s.c_scripts,
                             Facebook = s.c_facebook,
                             Vk = s.c_vk,
                             Instagramm = s.c_instagramm,
@@ -242,6 +243,7 @@ namespace cms.dbase
                             .Set(u => u.c_name, item.Title)
                             .Set(u => u.c_name_long, item.LongTitle)
                             .Set(u => u.c_alias, item.Alias)
+                            .Set(u => u.c_scripts, item.Scripts)
                             .Set(u => u.c_facebook, item.Facebook)
                             .Set(u => u.c_vk, item.Vk)
                             .Set(u => u.c_instagramm, item.Instagramm)

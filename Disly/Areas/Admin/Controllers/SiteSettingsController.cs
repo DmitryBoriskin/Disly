@@ -53,8 +53,8 @@ namespace Disly.Areas.Admin.Controllers
         [MultiButton(MatchFormKey = "action", MatchFormValue = "save-btn")]
         public ActionResult Index(SitesViewModel backModel, HttpPostedFileBase upload, HttpPostedFileBase uploadBack)
         {
-            ErrorMassege userMessage = new ErrorMassege();
-            userMessage.title = "Информация";
+            ErrorMassege userMassege = new ErrorMassege();
+            userMassege.title = "Информация";
 
             var old = _cmsRepository.getSite(Domain);
 
@@ -84,18 +84,23 @@ namespace Disly.Areas.Admin.Controllers
                 #endregion
 
                 _cmsRepository.updateSiteInfo(backModel.Item);
-                userMessage.info = "Запись обновлена";
+                userMassege.info = "Запись обновлена";
+                userMassege.buttons = new ErrorMassegeBtn[]
+            {
+                    new ErrorMassegeBtn { url = "#", text = "ок", action = "false" }
+            };
             }
             else
-            {
-                userMessage.info = "Ошибка в заполнении формы. Поля в которых допушены ошибки - помечены цветом.";
+            {               
 
-                userMessage.buttons = new ErrorMassegeBtn[]
+                userMassege.info = "Ошибка в заполнении формы. Поля в которых допушены ошибки - помечены цветом.";
+
+                userMassege.buttons = new ErrorMassegeBtn[]
                 {
                     new ErrorMassegeBtn { url = "#", text = "ок", action = "false" }
                 };
             }
-
+            model.ErrorInfo = userMassege;
             model.Item = _cmsRepository.getSite(Domain);
             return View(model);
         }
