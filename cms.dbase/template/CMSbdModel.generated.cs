@@ -2086,6 +2086,17 @@ namespace cms.dbase.models
 
 	public static partial class CMSdbStoredProcedures
 	{
+		#region dublicate_content_sitemap
+
+		public static int dublicate_content_sitemap(this DataConnection dataConnection, string @domain, string @new_domain)
+		{
+			return dataConnection.ExecuteProc("[dbo].[dublicate_content_sitemap]",
+				new DataParameter("@domain",     @domain,     DataType.VarChar),
+				new DataParameter("@new_domain", @new_domain, DataType.VarChar));
+		}
+
+		#endregion
+
 		#region import_frmp_employees
 
 		public static int import_frmp_employees(this DataConnection dataConnection)
