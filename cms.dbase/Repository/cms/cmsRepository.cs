@@ -196,6 +196,7 @@ namespace cms.dbase
                             },
                             ContentId = (Guid)s.f_content,
                             Type = s.c_content_type,
+                            Scripts=s.c_scripts,
                             Facebook = s.c_facebook,
                             Vk = s.c_vk,
                             Instagramm = s.c_instagramm,
@@ -242,6 +243,7 @@ namespace cms.dbase
                             .Set(u => u.c_name, item.Title)
                             .Set(u => u.c_name_long, item.LongTitle)
                             .Set(u => u.c_alias, item.Alias)
+                            .Set(u => u.c_scripts, item.Scripts)
                             .Set(u => u.c_facebook, item.Facebook)
                             .Set(u => u.c_vk, item.Vk)
                             .Set(u => u.c_instagramm, item.Instagramm)
@@ -903,8 +905,10 @@ namespace cms.dbase
                           .Value(v => v.id, ins.Id)
                           .Value(v => v.c_alias, ins.Alias)
                           .Value(v => v.c_name, ins.Title)
+                          .Value(v => v.c_name_long, ins.Title)
                           .Value(v => v.c_content_type, ins.Type)
                           .Value(v => v.f_content, ins.ContentId)
+                          .Value(v => v.c_theme, "blue")
                           .Insert();
 
                         //добавление шаблонов к новому сайту
@@ -936,43 +940,51 @@ namespace cms.dbase
 
                         #region Значение по умолчанию
                         //карта сайта и меню
-                        var sitemap_val = db.content_sitemaps.Where(w => w.f_site == "main").ToArray();
-                        foreach (var sm_item in sitemap_val)
-                        {
-                            Guid SitemapItemGuid = Guid.NewGuid();
-                            db.content_sitemaps
-                                .Value(v => v.id, SitemapItemGuid)
-                                .Value(v => v.f_site, ins.Alias)
-                                .Value(v => v.f_front_section, sm_item.f_front_section)
-                                .Value(v => v.c_path, sm_item.c_path)
-                                .Value(v => v.c_alias, sm_item.c_alias)
-                                .Value(v => v.c_title, sm_item.c_title)
-                                .Value(v => v.n_sort, sm_item.n_sort)
-                                .Value(v => v.b_disabled, false)
-                                .Value(v => v.b_blocked, false)
-                                .Value(v => v.b_disabled_menu, false)
-                                .Insert();
+                        string domain_source = "vurnary-crb";
 
-                            var MenuGroup = db.content_sitemap_menutypess.Where(w => w.f_sitemap == sm_item.id).ToArray();
+                        db.dublicate_content_sitemap(domain_source, ins.Alias);
+                        
+                        var sitemap_val = db.content_sitemaps.Where(w => w.f_site == domain_source && w.uui_parent==null).ToArray();
+
+
+                        //foreach (var sm_item in sitemap_val)
+                        //{
+                        //    Guid ParentGuid= Guid.NewGuid();
+                        //    Guid SitemapItemGuid = Guid.NewGuid();
+
+                        //    db.content_sitemaps
+                        //        .Value(v => v.id, SitemapItemGuid)
+                        //        .Value(v => v.f_site, ins.Alias)
+                        //        .Value(v => v.f_front_section, sm_item.f_front_section)
+                        //        .Value(v => v.c_path, sm_item.c_path)
+                        //        .Value(v => v.c_alias, sm_item.c_alias)
+                        //        .Value(v => v.c_title, sm_item.c_title)
+                        //        .Value(v => v.n_sort, sm_item.n_sort)
+                        //        .Value(v => v.b_disabled, false)
+                        //        .Value(v => v.b_blocked, false)
+                        //        .Value(v => v.b_disabled_menu, false)
+                        //        .Insert();
+
+                        //    var MenuGroup = db.content_sitemap_menutypess.Where(w => w.f_sitemap == sm_item.id).ToArray();
                             
-                            foreach (var menugroup_item in MenuGroup)
-                            {
-                                // сортировка
-                                var maxSort = db.content_sitemap_menutypess
-                                    .Where(w => w.f_site.Equals(ins.Alias))
-                                    .Where(w => w.f_menutype.Equals(menugroup_item.f_menutype))
-                                    .Select(s => s.n_sort);
+                        //    foreach (var menugroup_item in MenuGroup)
+                        //    {
+                        //        // сортировка
+                        //        var maxSort = db.content_sitemap_menutypess
+                        //            .Where(w => w.f_site.Equals(ins.Alias))
+                        //            .Where(w => w.f_menutype.Equals(menugroup_item.f_menutype))
+                        //            .Select(s => s.n_sort);
 
-                                int mS = maxSort.Any() ? maxSort.Max() : 0;
+                        //        int mS = maxSort.Any() ? maxSort.Max() : 0;
 
-                                db.content_sitemap_menutypess
-                                    .Value(v => v.f_sitemap, SitemapItemGuid)
-                                    .Value(v => v.f_menutype, menugroup_item.f_menutype)
-                                    .Value(v => v.f_site, ins.Alias)
-                                    .Value(v => v.n_sort, mS + 1)
-                                    .Insert();
-                            }
-                        }
+                        //        db.content_sitemap_menutypess
+                        //            .Value(v => v.f_sitemap, SitemapItemGuid)
+                        //            .Value(v => v.f_menutype, menugroup_item.f_menutype)
+                        //            .Value(v => v.f_site, ins.Alias)
+                        //            .Value(v => v.n_sort, mS + 1)
+                        //            .Insert();
+                        //    }
+                        //}
                         #endregion
 
                         #region Доменные имена

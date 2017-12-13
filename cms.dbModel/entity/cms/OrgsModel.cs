@@ -118,6 +118,11 @@ namespace cms.dbModel.entity
         /// Домен
         /// </summary>
         public string SiteId { get; set; }
+        /// <summary>
+        /// идентифкатор сайта
+        /// </summary>
+        public string SiteGuid { get; set; }
+
 
         /// <summary>
         /// Идентификатор в ФРМП

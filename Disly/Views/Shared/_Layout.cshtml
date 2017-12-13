@@ -4,18 +4,20 @@
     string currentYear = DateTime.Now.Year.ToString();
     string theme = Model.SitesInfo.Theme + ".css";
 
-
-    var mainMenu = Model.SiteMapArray
-                            .Where(w => w.MenuAlias.Equals("main"))
-                            .OrderBy(o => o.MenuSort)
-                            .Select(s => new
-                            {
-                                Path = s.Path,
-                                Alias = s.Alias,
-                                Title = s.Title,
-                                FrontSection = s.FrontSection,
-                                Url = s.Url
-                            });
+    var mainMenu = (Model.SiteMapArray != null)?
+                    Model.SiteMapArray
+                              .Where(w => w.MenuAlias.Equals("main"))
+                              .OrderBy(o => o.MenuSort)
+                              .Select(s => new
+                              {
+                                  Path = s.Path,
+                                  Alias = s.Alias,
+                                  Title = s.Title,
+                                  FrontSection = s.FrontSection,
+                                  Url = s.Url
+                              }).ToArray()
+                      : null;
+    
 }
 
 <!DOCTYPE html>
@@ -272,9 +274,10 @@
             </div>
         </div>
     </div>
+
     <script type="text/javascript">
         var SiteId = "@Model.SitesInfo.Alias";
     </script>
-
+    @Html.Raw(Model.SitesInfo.Scripts)
 </body>
 </html>

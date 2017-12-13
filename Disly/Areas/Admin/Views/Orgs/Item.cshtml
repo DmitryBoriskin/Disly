@@ -131,12 +131,12 @@
                         </div>
                         <div class="col-sm-7">
                             @if (Model.SectionResolution.Write)
-                        {
-                                <a class="button icon-create green pull-right" href="/admin/orgs/structure/@Guid.NewGuid()?orgid=@Model.Item.Id">Добавить</a>
-                                <a class="button icon-create green pull-right" href="/admin/orgs/ovp/@Guid.NewGuid()?orgid=@Model.Item.Id">Добавить ОВП/ФАП</a>
+                            {
+                                <a class="button icon-create green pull-right" href="/admin/orgs/structure/@Guid.NewGuid()?orgid=@Model.Item.Id">Добавить больницу</a>
+                                <a class="button icon-create green pull-right" href="/admin/orgs/ovp/@Guid.NewGuid()?orgid=@Model.Item.Id">Добавить отделение/ФАП</a>
                             }
                             @if (Model.SectionResolution.Change)
-                        {
+                            {
                                 <a class="button icon-sort pull-right" style="max-width:150px;" data-action="noPreloader-accept" id="sorting_element" title="Добавляет возможность сортировки элементов списка">Сортировать</a>
                             }
                         </div>
@@ -171,9 +171,6 @@
                                     }
                                 }
                             </tbody>
-
-
-
                         </table>
                     </div>
                 </div>
@@ -195,12 +192,12 @@
             
             @if (Model.Item != null)
             {
-                if (Model.Item.SiteId != null)
+                if (!String.IsNullOrEmpty(Model.Item.SiteGuid))
                 {
                     <br />
                     <div class="alert alert-info">
                         <strong>Сайт данной организации создан!</strong><br>
-                        <a href="/admin/sites/item/@Model.Item.SiteId" target="_blank">Редактировать сайт</a>
+                        <a href="/admin/sites/item/@Model.Item.SiteGuid" target="_blank">Редактировать сайт</a>
                     </div>
                 }
                 else
