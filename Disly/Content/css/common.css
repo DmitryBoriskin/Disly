@@ -1079,6 +1079,9 @@ select.form-control {
 .boss {
     padding: 0 0 0 20px;
 }
+.boos_item {
+    margin-bottom: 42px;
+}
 
     .boss img {
         width: 100%;
@@ -1567,3 +1570,11 @@ iframe.photo-gallery{display:none;}
     
 }
 #swipebox-original:before{font-family:fontello;content:'\ea6d';color:#fff;font-size:21px;position:relative;left:14px;}
+
+
+.structur_phons {    
+    padding:10px 0 20px;    
+}
+.person_right{
+    padding:0 0 0 53px;
+}
