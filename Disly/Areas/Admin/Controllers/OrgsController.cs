@@ -880,12 +880,12 @@ namespace Disly.Areas.Admin.Controllers
             #endregion
 
             ViewBag.Title = "Административный персонал";
-            var OrgId = Request.Params["orgid"];
+            string _OrgId = Request.Params["orgid"];
             //информация о персоне
             model.AdministrativItem = _cmsRepository.getAdministrativ(Id);
-
+            Guid OrgId = (model.AdministrativItem != null) ? model.AdministrativItem.OrgId : Guid.Parse(_OrgId);
             #region сотрудники для выпадающего списка
-            var _peopList = _cmsRepository.getPersonsThisOrg(model.AdministrativItem.OrgId);
+            var _peopList = _cmsRepository.getPersonsThisOrg(OrgId);
             if (_peopList != null)
             {
                 model.PeopleList = new SelectList(_peopList, "Id", "FIO");
@@ -983,11 +983,15 @@ namespace Disly.Areas.Admin.Controllers
             }
 
             #region сотрудники для выпадающего списка
-            var _peopList = _cmsRepository.getPersonsThisOrg(model.AdministrativItem.OrgId);
-            if (_peopList != null)
+            if (model.AdministrativItem != null)
             {
-                model.PeopleList = new SelectList(_peopList, "Id", "FIO");
+                var _peopList = _cmsRepository.getPersonsThisOrg(model.AdministrativItem.OrgId);
+                if (_peopList != null)
+                {
+                    model.PeopleList = new SelectList(_peopList, "Id", "FIO");
+                }
             }
+            
             #endregion
 
             model.BreadCrumbOrg = _cmsRepository.getBreadCrumbOrgs(Id, ViewBag.ActionName);

@@ -189,6 +189,7 @@
     <Content Include="Content\img\nophoto.jpg" />
     <Content Include="Content\img\no_avatar.png" />
     <Content Include="Content\img\obr-project.png" />
+    <Content Include="Content\img\portal_bg.jpg" />
     <Content Include="Content\img\preloader_planet.svg" />
     <Content Include="Content\img\preloader.svg" />
     <Content Include="Content\img\present-ico.png" />
@@ -806,6 +807,7 @@
     <Content Include="Areas\Admin\Views\PhotoAlbums\Item.cshtml" />
     <Content Include="Areas\Admin\Views\Shared\Modal\Sites.cshtml" />
     <Content Include="Content\css\commonless.less" />
+    <Content Include="Content\css\theme\green.less" />
     <None Include="Content\plugins\datatables\i18n\ru.json" />
     <Content Include="Content\plugins\tinymce\langs\readme.md" />
     <Content Include="Content\plugins\tinymce\skins\lightgray\fonts\tinymce-small.eot" />
