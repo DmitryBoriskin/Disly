@@ -3,6 +3,7 @@ using cms.dbModel.entity;
 using Disly.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Web.Mvc;
 
 namespace Disly.Controllers
@@ -56,7 +57,9 @@ namespace Disly.Controllers
 
             model.List = _repository.getVote(_ip); //Domain,
             model.Siblings = (model.CurrentPage != null) ? _repository.getSiteMapSiblingElements("/feedback/") : null;
-            model.Siblings.Add(model.CurrentPage);
+
+            if(model.Siblings != null && !model.Siblings.Select(p=>p.Id).Contains(model.CurrentPage.Id))
+                model.Siblings.Add(model.CurrentPage);
 
             model.Child = model.Siblings.ToArray();
 

@@ -324,7 +324,7 @@ namespace Disly.Areas.Admin.Controllers
             ViewBag.GroupMenuAviable = mgAviable;
 
 
-            //model.Item.MenuGroups = null;
+            model.Item.MenuGroups = null;
             model.ErrorInfo = userMessage;
 
             return View(model);

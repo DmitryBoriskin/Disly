@@ -144,6 +144,11 @@ namespace cms.dbModel.entity
         /// Полное имя
         /// </summary>
         public string FullName { get { return Surname + " " + Name + " " + Patronymic; } }
+        
+        /// <summary>
+        /// Уровень доступа группы, к которой он относится
+        /// </summary>
+        public int Lvl { get; set; }
     }
     
     /// <summary>
