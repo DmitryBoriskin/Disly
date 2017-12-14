@@ -102,27 +102,36 @@ namespace Disly.Controllers
             var filter = getFilter();
             model.DoctorsItem = _repository.getPeopleItem(id);
 
-            #region Запись на приём
-            model.DoctorsItem.IsRedirectUrl = model.DoctorsRegistry
-                    .Where(w => w.SNILS.Equals(model.DoctorsItem.SNILS))
-                    .Where(w => w.Url != null)
-                    .Select(s => s.Url)
-                    .Any();
-            #endregion
-
-            // десериализация xml
-            XmlSerializer serializer = new XmlSerializer(typeof(Employee));
-
-            using (TextReader reader = new StringReader(model.DoctorsItem.XmlInfo))
+            if(model.DoctorsItem != null)
             {
-                var result = (Employee)serializer.Deserialize(reader);
-                model.DoctorsItem.EmployeeInfo = result;
+
+                #region Запись на приём
+                if (string.IsNullOrEmpty(model.DoctorsItem.SNILS))
+                    model.DoctorsItem.IsRedirectUrl = model.DoctorsRegistry
+                            .Where(w => w.SNILS.Equals(model.DoctorsItem.SNILS))
+                            .Where(w => w.Url != null)
+                            .Select(s => s.Url)
+                            .Any();
+                #endregion
+
+                // десериализация xml
+                XmlSerializer serializer = new XmlSerializer(typeof(Employee));
+
+                using (TextReader reader = new StringReader(model.DoctorsItem.XmlInfo))
+                {
+                    var result = (Employee)serializer.Deserialize(reader);
+                    model.DoctorsItem.EmployeeInfo = result;
+                }
+
             }
+
 
             #region Создаем переменные (значения по умолчанию)
             PageViewModel Model = new PageViewModel();
             string _ViewName = (ViewName != String.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";
-            string PageTitle = model.DoctorsItem.FIO;
+            string PageTitle = "Доктор не найден";
+            if(model.DoctorsItem != null)
+                PageTitle = model.DoctorsItem.FIO;
             string PageDesc = "описание страницы";
             string PageKeyw = "ключевые слова";
             #endregion                   

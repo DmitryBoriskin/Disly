@@ -80,15 +80,6 @@
             radioClass: 'icheckbox_square-blue'
             //increaseArea: '%' //optional
         });
-        $.extend($.fn.dataTable.defaults, {
-            searching: false,
-            ordering: false,
-            scrollY: false,//"200px",
-            //info: false,
-            language: {
-                "url": "/Content/plugins/datatables/i18n/ru.json"
-            }
-        });
         $('#modal-userSite-table').DataTable(
             {
                 searching: true,
@@ -99,9 +90,30 @@
                     null,
                     { "orderable": false },
                     { "searchable": false, "orderable": false }
-
-                ]
+                ],
                 //paging: false
+                language: {
+                    "processing": "Подождите...",
+                    "search": "Поиск:",
+                    "lengthMenu": "Показать _MENU_ записей",
+                    "info": "Записи с _START_ по _END_ из _TOTAL_ ",
+                    "infoEmpty": "Записи с 0 по 0 из 0",
+                    "infoFiltered": "(отфильтровано из _MAX_ записей)",
+                    "infoPostFix": "",
+                    "loadingRecords": "Загрузка записей...",
+                    "zeroRecords": "Записи отсутствуют.",
+                    "emptyTable": "В таблице отсутствуют данные",
+                    "paginate": {
+                        "first": "<<",
+                        "previous": "<",
+                        "next": ">",
+                        "last": ">>"
+                    },
+                    "aria": {
+                        "sortAscending": ": активировать для сортировки столбца по возрастанию",
+                        "sortDescending": ": активировать для сортировки столбца по убыванию"
+                    }
+                }
             });
     });
 </script>

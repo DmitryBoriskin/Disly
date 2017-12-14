@@ -16,7 +16,7 @@
 
             <div class="row padding-top-30">
                 <div class="col-md-8">
-                    <div class="text-right"><a class="btn sub btn-primary" href="@newItemBtnLink">Задать вопрос</a></div>
+                    <div class="text-left"><a class="btn sub btn-primary" href="@newItemBtnLink">Задать вопрос</a><br /><br /></div>
                     <div class="feedback_list">
                         @if (Model.List != null)
                         {
@@ -59,7 +59,7 @@
                         }
                         else
                         {
-                            <div class="col-md-12">Нет сообщений</div>
+                            <div class="col-md-12 topIndent-20"><br />На данный момент еще не задано ни одного вопроса. Вы можете быть первым!</div>
                         }
                     </div>
                 </div>

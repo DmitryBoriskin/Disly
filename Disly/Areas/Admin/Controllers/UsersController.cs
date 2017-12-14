@@ -1,6 +1,7 @@
 ﻿using cms.dbModel.entity;
 using Disly.Areas.Admin.Models;
 using System;
+using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
@@ -41,8 +42,14 @@ namespace Disly.Areas.Admin.Controllers
             // Наполняем фильтр значениями
             filter = getFilter(page_size);
             filter.Domain = Domain;
+
             // Наполняем модель данными
-            model.List = _cmsRepository.getUsersList(filter);
+            var getUserslist = _cmsRepository.getUsersList(filter).Data;
+            if(getUserslist != null)
+                getUserslist = getUserslist.Where(u => u.Lvl < 100)
+                    .Select(p => p).ToArray();
+
+            //model.List = getUserslist;
 
             return View(model);
         }

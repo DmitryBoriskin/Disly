@@ -743,11 +743,11 @@ select.form-control {
     background-color: #fff;
 }
 
-    .breadcrumb > li a {
-        text-decoration: underline;
-        font-size: 12px;
-        color: #4d6bbc;
-    }
+.breadcrumb > li a {
+    text-decoration: underline;
+    font-size: 12px;
+    color: #4d6bbc;
+}
 
 .child {
     border-bottom: 1px solid #e6e6e6;
@@ -1444,11 +1444,12 @@ select.form-control {
 .adminlist tr td p{margin-bottom:1px;}
 
 
-.adminlist_img_wr{margin-right:20px;position:relative;top:-14px;    min-height: 80px;    display: block;}
+.adminlist_img_td{width: 110px;}
+.adminlist_img_wr{margin-right:20px;position:relative;top:-14px; min-height: 80px; display: block;}
 .adminlist_name{font-size:18px;font-weight:bold;}
-.adminlist_post {color: #808080;    font-size: 14px;    line-height: 18px;padding-top:3px;}
+.adminlist_post {color: #808080; font-size: 14px; line-height: 18px;padding-top:3px;}
 .adminlist_phone{}
-.adminlist_phone:before {    content: '\e8a0';    font-family: fontello;    color: #4d6bbc;    margin-right: 13px;}
+.adminlist_phone:before {content: '\e8a0'; font-family: fontello; color: #4d6bbc; margin-right: 13px;}
 
 #header{margin:0;}
 #header.navbar.navbar-fixed-top{position:inherit;}

@@ -2,14 +2,13 @@
 <script src='https://www.google.com/recaptcha/api.js'></script>
 
 <div class="container">
+    @Html.Partial("services/breadcrumbs")
+    <h1>@ViewBag.Title</h1>
+
+    @Html.Partial("part/childtabs", Model)
     <div class="row">
-        <div class="col-md-12">
-            @Html.Partial("services/breadcrumbs")
-            <h1>@ViewBag.Title</h1>
-
-            @Html.Partial("part/childtabs", Model)
-
-            @*<h2>Задайте вопрос</h2>*@
+        <div class="col-md-8">
+             @*<h2>Задайте вопрос</h2>*@
             @if (ViewBag.FormStatus != null)
             {
                 string status = ViewBag.FormStatus;

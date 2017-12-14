@@ -82,54 +82,6 @@
                     }
                 </tbody>
             </table>
-
-            @*<div class="col-xs-12">
-                    <div id="UserGroupresolutions">
-                        <div id="PagesListTitle">
-                            <div class="HeadItem">
-                                <div class="CB_Block HeadBlock">
-                                    Удаление
-                                </div><div class="CB_Block HeadBlock">
-                                    Изменение
-                                </div><div class="CB_Block HeadBlock">
-                                    Создание
-                                </div><div class="CB_Block HeadBlock">
-                                    Просмотр
-                                </div><div class="PageName HeadBlock">
-                                    Раздел CMS
-                                </div>
-                            </div>
-                        </div>
-                        <div id="PagesList" class="Scrollbar">
-                            @foreach (var resolut in Model.GroupResolutions)
-                            {
-                                <div class="TableItem">
-                                    <div class="CB_Block">
-                                        <span data-user="@resolut.UserId" data-url="@resolut.MenuId" data-action="delete">
-                                            <input type="checkbox" data-init="false" class="iCheck" checked="@resolut.Delete" }>
-                                        </span>
-                                    </div>
-                                    <div class="CB_Block">
-                                        <span data-user="@resolut.UserId" data-url="@resolut.MenuId" data-action="change">
-                                            <input type="checkbox" data-init="false" class="iCheck" checked="@resolut.Change" }>
-                                        </span>
-                                    </div>
-                                    <div class="CB_Block">
-                                        <span data-user="@resolut.UserId" data-url="@resolut.MenuId" data-action="write">
-                                            <input type="checkbox" data-init="false" class="iCheck" checked="@resolut.Write" }>
-                                        </span>
-                                    </div>
-                                    <div class="CB_Block">
-                                        <span data-user="@resolut.UserId" data-url="@resolut.MenuId" data-action="read">
-                                            <input type="checkbox" data-init="false" class="iCheck" checked="@resolut.Read" }>
-                                        </span>
-                                    </div>
-                                    <div class="PageName HeadBlock">@resolut.Title</div>
-                                </div>
-                            }
-                        </div>
-                    </div>
-                </div>*@
         }
     </div>
 }
@@ -141,15 +93,6 @@
             radioClass: 'icheckbox_square-blue'
             //increaseArea: '%' //optional
         });
-        $.extend($.fn.dataTable.defaults, {
-            searching: false,
-            ordering: false,
-            scrollY: false,//"200px",
-            //info: false,
-            language: {
-                "url": "/Content/plugins/datatables/i18n/ru.json"
-            }
-        });
         $('#modal-userGroupResolutions-table').DataTable(
             {
                 searching: true,
@@ -160,8 +103,30 @@
                     { "searchable": false, "orderable": false },
                     { "searchable": false, "orderable": false },
                     { "searchable": false, "orderable": false }
-                ]
-                //paging: false
+                ],
+                //paging: false,
+                language: {
+                        "processing": "Подождите...",
+                        "search": "Поиск:",
+                        "lengthMenu": "Показать _MENU_ записей",
+                        "info": "Записи с _START_ по _END_ из _TOTAL_ ",
+                        "infoEmpty": "Записи с 0 по 0 из 0",
+                        "infoFiltered": "(отфильтровано из _MAX_ записей)",
+                        "infoPostFix": "",
+                        "loadingRecords": "Загрузка записей...",
+                        "zeroRecords": "Записи отсутствуют.",
+                        "emptyTable": "В таблице отсутствуют данные",
+                        "paginate": {
+                            "first": "<<",
+                            "previous": "<",
+                            "next": ">",
+                            "last": ">>"
+                        },
+                        "aria": {
+                            "sortAscending": ": активировать для сортировки столбца по возрастанию",
+                            "sortDescending": ": активировать для сортировки столбца по убыванию"
+                        }
+                }
             });
     });
 </script>

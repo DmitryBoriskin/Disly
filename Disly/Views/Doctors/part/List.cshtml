@@ -3,7 +3,51 @@
 <h1>Врачи</h1>
 <div class="row">
     <div class="col-md-8">
-        <div class="row">
+        @if(Model.DoctorsList != null && Model.DoctorsList.Count() > 0)
+        {
+        <table class="adminlist">
+
+            @foreach (var item in Model.DoctorsList)
+            {
+                string link = "/" + ViewBag.ControllerName + "/" + item.Id;
+                string photo = !string.IsNullOrWhiteSpace(item.Photo) ? item.Photo
+                            : "/Content/img/nophoto.jpg";
+                <tr>
+                    <td class="adminlist_img_td"> 
+                        <a class="adminlist_img_wr" target="_blank" href="@link">
+                            <img class="img-circle img-person-list" alt="@item.FIO" src="@photo" />
+                        </a>
+                    </td>
+                    <td>
+                        <a class="adminlist_name" href="@link">@item.FIO</a>
+
+                        @if (item.Posts != null)
+                        {
+                            string posts = string.Empty;
+                            foreach (var p in item.Posts)
+                            {
+                                <div class="adminlist_post">
+                                    @p.Name
+                                </div>
+                            }
+                        }
+                    </td>
+                    <td>
+                        @if (item.IsRedirectUrl)
+                        {
+                            <a target="_blank" href="/RedirectRegistry/Doctors/@item.Id/?oid=@Model.Oid">Расписание</a>
+                        }
+                        else
+                        {
+                            <p>По графику</p>
+                        }
+                    </td>
+                </tr>
+            }
+        </table>
+        }
+
+        @*<div class="row">
             <div class="col-xs-12">
                 @if (Model.DoctorsList != null)
                 {
@@ -52,7 +96,7 @@
                     </table>
                 }
             </div>
-        </div>
+        </div>*@
     </div>
     <div class="col-md-1"></div>
     <div class="col-md-3">
@@ -119,6 +163,3 @@
     </div>
 
 </div>
-
-
-

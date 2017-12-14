@@ -207,8 +207,8 @@ namespace cms.dbase
                             EMail = s.c_email,
                             Group = s.f_group,
                             GroupName = s.fkusersgroup.c_title,
-                            Disabled = s.b_disabled
-
+                            Disabled = s.b_disabled,
+                            Lvl = s.fkusersgroup.n_level
                         });
 
                     UsersModel[] usersInfo = List.ToArray();
