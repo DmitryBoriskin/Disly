@@ -1,4 +1,10 @@
-.head_title h4 {
+a {
+  color: #009999;
+}
+a:hover {
+  color: #007373;
+}
+.head_title span {
   color: #007373;
 }
 .bottom_menu a:hover,
@@ -12,10 +18,17 @@
 .media-heading {
   color: #007373;
 }
+.slider-message {
+  color: #e67339;
+}
 .slider-text-block {
   background-color: #009999;
 }
-.main-menu li > a:hover {
+.menu-mini-icons a:hover,
+#header .navbar-left a:hover {
+  color: #009999 !important;
+}
+.searchform_show {
   color: #009999;
 }
 .seacrh_button:before {
@@ -128,4 +141,13 @@
 }
 .feedback-item-more:hover {
   color: #009999;
+}
+.adminlist_phone:before {
+  color: #009999;
+}
+.child_sitemap:before {
+  background-color: #009999;
+}
+.child_sitemap_link span:before {
+  color: #e67339;
 }

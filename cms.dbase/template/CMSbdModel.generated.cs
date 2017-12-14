@@ -658,6 +658,7 @@ namespace cms.dbase.models
 		[Column,     NotNull] public Guid   id      { get; set; } // uniqueidentifier
 		[Column,     NotNull] public string c_title { get; set; } // varchar(128)
 		[PrimaryKey, NotNull] public string c_alias { get; set; } // varchar(32)
+		[Column,     NotNull] public int    n_level { get; set; } // int
 
 		#region Associations
 

@@ -553,11 +553,13 @@ namespace cms.dbase
                     .OrderBy(o => o.n_sort)
                     .Select(s => new SiteMapModel
                     {
+                        Id = s.id,
                         Title = s.c_title,
                         Alias = s.c_alias,
                         Path = s.c_path,
                         FrontSection = s.f_front_section,
-                        Url = s.c_url
+                        Url = s.c_url,
+                        ParentId = s.uui_parent
                     });
 
                 if (!query.Any()) return null;
@@ -1557,6 +1559,7 @@ namespace cms.dbase
                             .OrderBy(o => o.n_sort)
                             .Select(s => new OrgsAdministrative()
                             {
+                                id = s.id,
                                 Surname = s.c_surname,
                                 Name = s.c_name,
                                 Patronymic = s.c_patronymic,

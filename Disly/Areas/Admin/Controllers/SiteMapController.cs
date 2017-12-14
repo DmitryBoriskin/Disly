@@ -163,7 +163,7 @@ namespace Disly.Areas.Admin.Controllers
 
             back_model.Item.Path = p == null ? "/" : p.Path + p.Alias + "/";
 
-            if (_cmsRepository.existSiteMap(back_model.Item.Path, back_model.Item.Alias))
+            if (_cmsRepository.existSiteMap(back_model.Item.Path, back_model.Item.Alias, back_model.Item.Id))// && back_model.Item.OldId!=null
             {
                 model.ErrorInfo = new ErrorMassege()
                 {
@@ -195,98 +195,111 @@ namespace Disly.Areas.Admin.Controllers
             // список дочерних элементов
             model.Childrens = _cmsRepository.getSiteMapChildrens(id);
             #endregion
-
-            if (ModelState.IsValid)
+            //определяем занятость входного url
+            if (back_model.Item.ParentId == null||_cmsRepository.ckeckSiteMapAlias(back_model.Item.Alias, (Guid)back_model.Item.ParentId))
             {
-                #region Сохранение изображение
-                // путь для сохранения изображения
-                string savePath = Settings.UserFiles + Domain + Settings.SiteMapDir;
 
-                int width = 264;
-                int height = 70;
 
-                if (upload != null && upload.ContentLength > 0)
+                if (ModelState.IsValid)
                 {
-                    string fileExtension = upload.FileName.Substring(upload.FileName.LastIndexOf(".")).ToLower();
+                    #region Сохранение изображение
+                    // путь для сохранения изображения
+                    string savePath = Settings.UserFiles + Domain + Settings.SiteMapDir;
 
-                    var validExtension = (!string.IsNullOrEmpty(Settings.PicTypes)) ? Settings.PicTypes.Split(',') : "jpg,jpeg,png,gif".Split(',');
-                    if (!validExtension.Contains(fileExtension.Replace(".", "")))
+                    int width = 264;
+                    int height = 70;
+
+                    if (upload != null && upload.ContentLength > 0)
                     {
-                        model.Item = _cmsRepository.getSiteMapItem(id);
+                        string fileExtension = upload.FileName.Substring(upload.FileName.LastIndexOf(".")).ToLower();
 
-                        model.ErrorInfo = new ErrorMassege()
+                        var validExtension = (!string.IsNullOrEmpty(Settings.PicTypes)) ? Settings.PicTypes.Split(',') : "jpg,jpeg,png,gif".Split(',');
+                        if (!validExtension.Contains(fileExtension.Replace(".", "")))
                         {
-                            title = "Ошибка",
-                            info = "Вы не можете загружать файлы данного формата",
-                            buttons = new ErrorMassegeBtn[]
+                            model.Item = _cmsRepository.getSiteMapItem(id);
+
+                            model.ErrorInfo = new ErrorMassege()
                             {
+                                title = "Ошибка",
+                                info = "Вы не можете загружать файлы данного формата",
+                                buttons = new ErrorMassegeBtn[]
+                                {
                                 new ErrorMassegeBtn { url = "#", text = "ок", action = "false", style="primary" }
-                            }
+                                }
+                            };
+
+                            return View("Item", model);
+                        }
+
+                        Photo photoNew = new Photo()
+                        {
+                            Name = id.ToString() + fileExtension,
+                            Size = Files.FileAnliz.SizeFromUpload(upload),
+                            Url = Files.SaveImageResizeRename(upload, savePath, id.ToString(), width, height)
                         };
 
-                        return View("Item", model);
+                        back_model.Item.Photo = photoNew;
                     }
+                    #endregion
 
-                    Photo photoNew = new Photo()
+                    if (_cmsRepository.checkSiteMap(id))
                     {
-                        Name = id.ToString() + fileExtension,
-                        Size = Files.FileAnliz.SizeFromUpload(upload),
-                        Url = Files.SaveImageResizeRename(upload, savePath, id.ToString(), width, height)
-                    };
+                        //Если запись заблокирована от редактирования некоторых полей
+                        var siteMapItem = _cmsRepository.getSiteMapItem(id);
+                        if (siteMapItem.Blocked && !model.Account.Group.ToLower().Equals("developer") && !model.Account.Group.ToLower().Equals("administrator"))
+                        {
+                            siteMapItem.Disabled = back_model.Item.Disabled;
+                            siteMapItem.DisabledMenu = back_model.Item.DisabledMenu;
+                            siteMapItem.Keyw = back_model.Item.Keyw;
+                            siteMapItem.Desc = back_model.Item.Desc;
+                            siteMapItem.Text = back_model.Item.Text;
+                            siteMapItem.Url = back_model.Item.Url;
+                            siteMapItem.ParentId = back_model.Item.ParentId;
+                            siteMapItem.MenuGroups = back_model.Item.MenuGroups;
+                            siteMapItem.Path = back_model.Item.Path;
 
-                    back_model.Item.Photo = photoNew;
-                }
-                #endregion
+                            _cmsRepository.updateSiteMapItem(id, siteMapItem);
+                        }
+                        else
+                        {
+                            _cmsRepository.updateSiteMapItem(id, back_model.Item); //, AccountInfo.id, RequestUserInfo.IP
+                        }
 
-                if (_cmsRepository.checkSiteMap(id))
-                {
-                    //Если запись заблокирована от редактирования некоторых полей
-                    var siteMapItem = _cmsRepository.getSiteMapItem(id);
-                    if (siteMapItem.Blocked && !model.Account.Group.ToLower().Equals("developer") && !model.Account.Group.ToLower().Equals("administrator"))
-                    {
-                        siteMapItem.Disabled = back_model.Item.Disabled;
-                        siteMapItem.DisabledMenu = back_model.Item.DisabledMenu;
-                        siteMapItem.Keyw = back_model.Item.Keyw;
-                        siteMapItem.Desc = back_model.Item.Desc;
-                        siteMapItem.Text = back_model.Item.Text;
-                        siteMapItem.Url = back_model.Item.Url;
-                        siteMapItem.ParentId = back_model.Item.ParentId;
-                        siteMapItem.MenuGroups = back_model.Item.MenuGroups;
-                        siteMapItem.Path = back_model.Item.Path;
-
-                        _cmsRepository.updateSiteMapItem(id, siteMapItem);
+                        userMessage.info = "Запись обновлена";
                     }
                     else
                     {
-                        _cmsRepository.updateSiteMapItem(id, back_model.Item); //, AccountInfo.id, RequestUserInfo.IP
+                        _cmsRepository.createSiteMapItem(id, back_model.Item); //, AccountInfo.id, RequestUserInfo.IP
+                        userMessage.info = "Запись добавлена";
                     }
 
-                    userMessage.info = "Запись обновлена";
+                    string backUrl = back_model.Item.ParentId != null ? "item/" + back_model.Item.ParentId : string.Empty;
+
+                    userMessage.buttons = new ErrorMassegeBtn[]
+                    {
+                     new ErrorMassegeBtn { url = StartUrl + backUrl, text = "Вернуться в список" },
+                     new ErrorMassegeBtn { url = "#", text = "ок", action = "false" }
+                    };
                 }
                 else
                 {
-                    _cmsRepository.createSiteMapItem(id, back_model.Item); //, AccountInfo.id, RequestUserInfo.IP
-                    userMessage.info = "Запись добавлена";
+                    userMessage.info = "Ошибка в заполнении формы. Поля в которых допушены ошибки - помечены цветом.";
+
+                    userMessage.buttons = new ErrorMassegeBtn[]
+                    {
+                    new ErrorMassegeBtn { url = "#", text = "ок", action = "false" }
+                    };
                 }
-
-                string backUrl = back_model.Item.ParentId != null ? "item/" + back_model.Item.ParentId : string.Empty;
-
-                userMessage.buttons = new ErrorMassegeBtn[]
-                {
-                     new ErrorMassegeBtn { url = StartUrl + backUrl, text = "Вернуться в список" },
-                     new ErrorMassegeBtn { url = "#", text = "ок", action = "false" }
-                };
             }
             else
             {
-                userMessage.info = "Ошибка в заполнении формы. Поля в которых допушены ошибки - помечены цветом.";
+                userMessage.info = "Элемент с таким алиасом на этом уровне уже существует";
 
                 userMessage.buttons = new ErrorMassegeBtn[]
                 {
                     new ErrorMassegeBtn { url = "#", text = "ок", action = "false" }
                 };
             }
-
             model.Item = _cmsRepository.getSiteMapItem(id);
 
             var mg = new MultiSelectList(model.MenuTypes, "value", "text", model.Item != null ? model.Item.MenuGroups : null);

@@ -227,21 +227,45 @@ namespace cms.dbase
                 return result;
             }
         }
+        /// <summary>
+        /// Определяет есть ли на этом уровне элемент с таким алиасом
+        /// </summary>
+        /// <param name="alias"></param>
+        /// <param name="ParentId"></param>
+        /// <returns></returns>
+        public override bool ckeckSiteMapAlias(string alias, Guid ParentId)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                int _count=0;
+                _count = db.content_sitemaps
+                              .Where(w => w.id == ParentId && w.c_alias == alias)
+                              .Count();
+                if (_count > 0)
+                {
+                    return true;
+                }
+                return false;
+            }
+        }
 
         /// <summary>
         /// Проверяем существование элемента карты сайта
         /// </summary>
         /// <param name="path"></param>
         /// <param name="alias"></param>
+        /// <param name="id"></param>
         /// <returns></returns>
-        public override bool existSiteMap(string path, string alias)
+        public override bool existSiteMap(string path, string alias, Guid Id)
         {
             using (var db = new CMSdb(_context))
             {
                 var query = db.content_sitemaps
                     .Where(w => w.f_site.Equals(_domain))
                     .Where(w => w.c_path.ToLower().Equals(path.ToLower()))
-                    .Where(w => w.c_alias.ToLower().Equals(alias.ToLower()));
+                    .Where(w => w.c_alias.ToLower().Equals(alias.ToLower()))
+                    .Where(w=>w.id!=Id);
+                    
 
                 return query.Any();
             }

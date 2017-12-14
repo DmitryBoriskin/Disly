@@ -4,42 +4,57 @@
 <div class="structur">
     <div class="row">        
         <div class="col-md-8">
-            @if (Model.DepartmentItem.Phones != null)
-            {
-                <dl class="dl-horizontal">
-                    @if (Model.StructureItem.Adress != null)
+            <div class="structur_phons">
+                <table class="table table-condensed">
+                    
+                        @if (Model.StructureItem.Adress != null)
+                        {
+                            <tr>
+                                <td>Адрес</td>
+                                <td>@Model.StructureItem.Adress</td>
+                            </tr>
+                        }
+                        @if (Model.StructureItem.Phone != null)
+                        {
+                            <tr>
+                                <td>Телефон приемной</td>
+                                <td>@Model.StructureItem.Phone</td>
+                            </tr>
+                        }
+                        @if (Model.StructureItem.PhoneReception != null)
+                        {
+                            <tr>
+                                <td>Телефон регистраутры</td>
+                                <td>@Model.StructureItem.PhoneReception</td>
+                            </tr>
+                        }
+                        @if (Model.StructureItem.Fax != null)
+                        {
+                            <tr>
+                                <td>Факс</td>
+                                <td>@Model.StructureItem.Fax</td>
+                            </tr>
+                        }
+                        @if (Model.StructureItem.Email != null)
+                        {
+                            <tr>
+                                <td>E-mail приемной</td>
+                                <td><a href="mailto:@Model.StructureItem.Email">@Model.StructureItem.Email</a></td>
+                            </tr>
+                        } 
+                    @if (Model.DepartmentItem.Phones != null)
                     {
-                        <dt>Адрес</dt>
-                        <dd>@Model.StructureItem.Adress</dd>
+                        foreach (var item in Model.DepartmentItem.Phones)
+                        {
+                            <tr>
+                                <td>@item.Label</td>
+                                <td>@item.Value</td>
+                            </tr>
+                        }
                     }
-                    @if (Model.StructureItem.Phone != null)
-                    {
-                        <dt>Телефон приемной</dt>
-                        <dd>@Model.StructureItem.Phone</dd>
-                    }
-                    @if (Model.StructureItem.PhoneReception != null)
-                    {
-                        <dt>Телефон регистраутры</dt>
-                        <dd>@Model.StructureItem.PhoneReception</dd>
-                    }
-                    @if (Model.StructureItem.Fax != null)
-                    {
-                        <dt>Факс</dt>
-                        <dd>@Model.StructureItem.Fax</dd>
-                    }
-                    @if (Model.StructureItem.Email != null)
-                    {
-                        <dt>E-mail приемной</dt>
-                        <dd><a href="mailto:@Model.StructureItem.Email">@Model.StructureItem.Email</a></dd>
-                    }
-                    @foreach (var item in Model.DepartmentItem.Phones)
-                    {
-                        <dt>@item.Label</dt>
-                        <dd>@item.Value</dd>
-                    }                    
-                </dl>
-                
-            }
+                </table>
+            </div>
+           
             @if (Model.DepartmentItem.Peoples != null)
             {
                 <table class="table">
@@ -60,8 +75,10 @@
         </div>
         <div class="col-md-3 col-md-push-1">
             <div class="boss">
-                @Html.Partial("part/boss_list")            
-                <a class="link_all" href="/doctors/?group=@Model.DepartmentItem.Id">все сотрудники</a>                
+                <div class="person_right">
+                    @Html.Partial("part/boss_list")
+                    <a class="link_all" href="/doctors/?group=@Model.DepartmentItem.Id">все сотрудники</a>
+                </div>                
                 <div id="coords" class="buildmap" style="width: 100%; height: 250px;" data-zoom="11" data-height="300" data-x="@Model.StructureItem.GeopointX.ToString().Replace(",", ".")" data-y="@Model.StructureItem.GeopointY.ToString().Replace(",", ".")" data-title="@Model.StructureItem.Title"></div>
             </div>
         </div>

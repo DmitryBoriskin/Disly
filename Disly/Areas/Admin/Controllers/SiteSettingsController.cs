@@ -37,7 +37,8 @@ namespace Disly.Areas.Admin.Controllers
             model.Themes = new SelectList(new List<SelectListItem>
                 {
                     new SelectListItem { Text = "Бирюзовая", Value = "turquoise" },
-                    new SelectListItem { Text = "Синяя", Value = "blue" }
+                    new SelectListItem { Text = "Синяя", Value = "blue" },
+                    new SelectListItem { Text = "Зеленая", Value = "green" }
                 }, "Value", "Text");
         }
 
