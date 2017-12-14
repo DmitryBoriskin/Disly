@@ -145,3 +145,9 @@ a:hover {
 .adminlist_phone:before {
   color: #3973e6;
 }
+.child_sitemap:before {
+  background-color: #3973e6;
+}
+.child_sitemap_link span:before {
+  color: #e55639;
+}
