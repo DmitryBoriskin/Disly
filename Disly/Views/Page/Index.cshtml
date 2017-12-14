@@ -6,12 +6,32 @@
         {
             <h1>@Model.Item.Title</h1>
         }
-        @Html.Partial("part/childlist")
-    
-        @if (Model.Item != null)
+        <div class="row">
+
+        </div>
+        
+        @if (Model.Child != null)
         {
-            @Html.Raw(Model.Item.Text)
+            <div class="col-md-8">
+                @if (Model.Item != null)
+                {
+                    @Html.Raw(Model.Item.Text)
+                }
+            </div>
+            <div class="col-md-3 col-md-push-1">
+                @Html.Partial("part/childlist_sitemap")
+            </div>
         }
+        else
+        {
+            <div class="col-md-12">
+                @if (Model.Item != null)
+                {
+                    @Html.Raw(Model.Item.Text)
+                }
+            </div>
+        }
+
         @if (Model.Documents != null)
         {
             <div class="attachfile">
@@ -36,5 +56,4 @@
             </div>
         }
     </div>
-
 </div>

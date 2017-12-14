@@ -3,7 +3,7 @@
     string fileName = (Model.AdministrativItem != null && Model.AdministrativItem.Photo != null) ? Model.AdministrativItem.Photo.Name : string.Empty;
     string fileSize = (Model.AdministrativItem != null && Model.AdministrativItem.Photo != null) ? Model.AdministrativItem.Photo.Size : string.Empty;
     string fileUrl = (Model.AdministrativItem != null && Model.AdministrativItem.Photo != null) ? Model.AdministrativItem.Photo.Url : string.Empty;
-    string orgid = Request.Params["orgid"] != null ? Request.Params["orgid"] : ViewBag.OrgId;
+    string orgid = Request.Params["orgid"] != null ? Request.Params["orgid"] : ViewBag.OrgId.ToString();
     
     SelectList PeopleList = null;                 
     if (Model.PeopleList != null)

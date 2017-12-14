@@ -2,6 +2,7 @@
 using Disly.Areas.Admin.Models;
 using Disly.Areas.Admin.Service;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -36,7 +37,8 @@ namespace Disly.Areas.Admin.Controllers
             model.Themes = new SelectList(new List<SelectListItem>
                 {
                     new SelectListItem { Text = "Бирюзовая", Value = "turquoise" },
-                    new SelectListItem { Text = "Синяя", Value = "blue" }
+                    new SelectListItem { Text = "Синяя", Value = "blue" },
+                    new SelectListItem { Text = "Зеленая", Value = "green" }
                 }, "Value", "Text");
         }
 
@@ -71,16 +73,29 @@ namespace Disly.Areas.Admin.Controllers
 
                     backModel.Item.Logo = photo;
                 }
-                
-                if (uploadBack != null && uploadBack.ContentLength > 0)
-                {
-                    var photo = imageWorker(uploadBack, 2);
-                    if (photo == null)
-                        return View("Item", model);
 
-                    backModel.Item.BackGroundImg = photo;
+                #region Изображени под слайдером
+                if(uploadBack != null && uploadBack.ContentLength > 0)
+                {
+                    string SavePath = Settings.UserFiles + Domain + "/logo/";
+                    int idx = uploadBack.FileName.LastIndexOf('.');
+                    string Title = uploadBack.FileName.Substring(0, idx);
+                    string TransTitle = Transliteration.Translit(Title);
+                    string FileName = TransTitle + Path.GetExtension(uploadBack.FileName);
+
+
+                    string FullName = SavePath + FileName;
+                    if (!Directory.Exists(Server.MapPath(SavePath)))
+                    {
+                        Directory.CreateDirectory(Server.MapPath(SavePath));
+                    }
+                    uploadBack.SaveAs(Server.MapPath(Path.Combine(SavePath, FileName)));
+                    backModel.Item.BackGroundImg = new Photo { Url = FullName };
                 }
                 
+                #endregion
+
+
                 #endregion
 
                 _cmsRepository.updateSiteInfo(backModel.Item);

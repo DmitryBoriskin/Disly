@@ -141,6 +141,7 @@
     <Content Include="Content\css\styles_login.css" />
     <Content Include="Content\css\styles_old.css" />
     <Content Include="Content\css\theme\blue.css" />
+    <Content Include="Content\css\theme\green.css" />
     <Content Include="Content\css\theme\turquoise.css" />
     <Content Include="Content\decor\chuvashia\bg.png" />
     <Content Include="Content\decor\chuvashia\chuvashia-logo.png" />
@@ -193,6 +194,7 @@
     <Content Include="Content\img\nophoto.jpg" />
     <Content Include="Content\img\no_avatar.png" />
     <Content Include="Content\img\obr-project.png" />
+    <Content Include="Content\img\portal_bg.jpg" />
     <Content Include="Content\img\preloader_planet.svg" />
     <Content Include="Content\img\preloader.svg" />
     <Content Include="Content\img\present-ico.png" />
@@ -201,19 +203,6 @@
     <Content Include="Content\img\youtube-ico.png" />
     <Content Include="Content\js\menu.js" />
     <Content Include="Content\js\script.js" />
-    <Content Include="Content\plugins\bonsai\css\jquery.bonsai.css" />
-    <Content Include="Content\plugins\bonsai\js\jquery.bonsai.js" />
-    <Content Include="Content\plugins\bonsai\js\jquery.qubit.js" />
-    <Content Include="Content\plugins\bootstrap-4.0.0\css\bootstrap-grid.css" />
-    <Content Include="Content\plugins\bootstrap-4.0.0\css\bootstrap-grid.min.css" />
-    <Content Include="Content\plugins\bootstrap-4.0.0\css\bootstrap-reboot.css" />
-    <Content Include="Content\plugins\bootstrap-4.0.0\css\bootstrap-reboot.min.css" />
-    <Content Include="Content\plugins\bootstrap-4.0.0\css\bootstrap.css" />
-    <Content Include="Content\plugins\bootstrap-4.0.0\css\bootstrap.min.css" />
-    <Content Include="Content\plugins\bootstrap-4.0.0\js\bootstrap.bundle.js" />
-    <Content Include="Content\plugins\bootstrap-4.0.0\js\bootstrap.bundle.min.js" />
-    <Content Include="Content\plugins\bootstrap-4.0.0\js\bootstrap.js" />
-    <Content Include="Content\plugins\bootstrap-4.0.0\js\bootstrap.min.js" />
     <Content Include="Content\plugins\bootstrap\css\bootstrap-theme.css" />
     <Content Include="Content\plugins\bootstrap\css\bootstrap-theme.min.css" />
     <Content Include="Content\plugins\bootstrap\css\bootstrap.css" />
@@ -222,7 +211,6 @@
     <Content Include="Content\plugins\bootstrap\css\bootstrap-select.css" />
     <Content Include="Content\plugins\bootstrap\js\bootstrap-select.js" />
     <Content Include="Content\plugins\bootstrap\js\bootstrap-toggle.js" />
-    <Content Include="Content\plugins\bootstrap\js\bootstrap-toggle.min.js" />
     <Content Include="Content\plugins\bootstrap\js\bootstrap.js" />
     <Content Include="Content\plugins\bootstrap\js\bootstrap.min.js" />
     <Content Include="Content\plugins\datatables\dataTables.bootstrap.min.css" />
@@ -703,7 +691,6 @@
     <Content Include="Areas\Admin\Views\cmsMenu\Index.cshtml" />
     <Content Include="Areas\Admin\Views\cmsMenu\Item.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\Home\Modern.cshtml" />
     <Content Include="Areas\Admin\Views\Services\ChangePass.cshtml" />
     <Content Include="Areas\Admin\Views\Services\Log.cshtml" />
     <Content Include="Areas\Admin\Views\Services\UserResolutions.cshtml" />
@@ -781,16 +768,6 @@
     <Content Include="Content\fonts\PtSerif\ptf76f-webfont.woff" />
     <Content Include="Content\fonts\PtSerif\ptf76f-webfont.woff2" />
     <Content Include="Areas\Admin\Views\SiteSettings\Index.cshtml" />
-    <Content Include="Content\plugins\bootstrap-4.0.0\css\bootstrap-grid.css.map" />
-    <Content Include="Content\plugins\bootstrap-4.0.0\css\bootstrap-grid.min.css.map" />
-    <Content Include="Content\plugins\bootstrap-4.0.0\css\bootstrap-reboot.css.map" />
-    <Content Include="Content\plugins\bootstrap-4.0.0\css\bootstrap-reboot.min.css.map" />
-    <Content Include="Content\plugins\bootstrap-4.0.0\css\bootstrap.css.map" />
-    <Content Include="Content\plugins\bootstrap-4.0.0\css\bootstrap.min.css.map" />
-    <Content Include="Content\plugins\bootstrap-4.0.0\js\bootstrap.bundle.js.map" />
-    <Content Include="Content\plugins\bootstrap-4.0.0\js\bootstrap.bundle.min.js.map" />
-    <Content Include="Content\plugins\bootstrap-4.0.0\js\bootstrap.js.map" />
-    <Content Include="Content\plugins\bootstrap-4.0.0\js\bootstrap.min.js.map" />
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
@@ -812,9 +789,6 @@
     <Content Include="Areas\Admin\Views\Vote\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Vote\Item.cshtml" />
     <Content Include="Areas\Admin\Views\Orgs\Administrativ.cshtml" />
-    <None Include=".bin\git.cmd" />
-    <None Include=".bin\node.cmd" />
-    <None Include=".bin\npm.cmd" />
     <Content Include="Content\fonts\OpenSans\opensans-bold-webfont.ttf" />
     <Content Include="Content\fonts\OpenSans\opensans-bold-webfont.woff" />
     <Content Include="Content\fonts\OpenSans\opensans-bold-webfont.woff2" />
@@ -837,6 +811,7 @@
     <Content Include="Areas\Admin\Views\PhotoAlbums\Item.cshtml" />
     <Content Include="Areas\Admin\Views\Shared\Modal\Sites.cshtml" />
     <Content Include="Content\css\commonless.less" />
+    <Content Include="Content\css\theme\green.less" />
     <None Include="Content\plugins\datatables\i18n\ru.json" />
     <Content Include="Content\plugins\tinymce\langs\readme.md" />
     <Content Include="Content\plugins\tinymce\skins\lightgray\fonts\tinymce-small.eot" />
@@ -890,6 +865,7 @@
     <Content Include="Views\Service\Photo.cshtml" />
     <Content Include="Views\Press\RssSettings.cshtml" />
     <Content Include="Views\EventsFront\Archive.cshtml" />
+    <Content Include="Views\Shared\part\childlist_sitemap.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

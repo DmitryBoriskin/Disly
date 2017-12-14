@@ -25,3 +25,8 @@ gulp.task("turquoise", function () {
         .pipe(less())
         .pipe(gulp.dest(paths.webroot + 'css/theme'))
 });
+gulp.task("green", function () {
+    return gulp.src('content/css/theme/green.less')
+        .pipe(less())
+        .pipe(gulp.dest(paths.webroot + 'css/theme'))
+});
