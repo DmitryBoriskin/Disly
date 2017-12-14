@@ -53,7 +53,7 @@ namespace Disly.Controllers
             ViewBag.Description = PageDesc;
             ViewBag.KeyWords = PageKeyw;
             #endregion
-            return View(_ViewName,model);            
+            return View(_ViewName,model);
         }
     }
 }
