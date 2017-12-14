@@ -91,17 +91,16 @@ namespace Disly.Areas.Admin.Controllers
         [HttpGet]
         public ActionResult Item(Guid id)
         {
-
             var banner = _cmsRepository.getBannerItem(id);
             if (banner == null)
                 model.Item = new BannersModel()
                 {
                     Id = id,
-                    Site = Domain
+                    Site = Domain,
+                    Date = DateTime.Now
                 };
             else
                 model.Item = banner;
-
 
             // файл изображения
             if (model.Item != null)
@@ -146,6 +145,7 @@ namespace Disly.Areas.Admin.Controllers
 
             if (ModelState.IsValid)
             {
+                back_model.Item.Id = id;
                 #region Сохранение изображения
                 // путь для сохранения изображения
                 string savePath = Settings.UserFiles + Domain + Settings.BannersDir;

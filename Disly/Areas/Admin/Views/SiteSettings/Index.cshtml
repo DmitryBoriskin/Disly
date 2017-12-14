@@ -12,9 +12,10 @@
 
 <div class="content">
     <h1>@ViewBag.Title</h1>
-    @Html.TextBoxFor(m => m.Item.Title, new { @title = "Название", @required = "" })
-    @Html.TextBoxFor(m => m.Item.LongTitle, new { @title = "Полное название" })
-    <div class="group-block open" title="Пользовательские скрипты">
+    @Html.TextBoxFor(m => m.Item.LongTitle, new { @title = "Название" })
+    @Html.TextBoxFor(m => m.Item.Title, new { @title = "Краткое название", @required = "" })
+   
+    <div class="group-block open topIndent-20" title="Пользовательские скрипты">
         @Html.TextAreaFor(m => m.Item.Scripts, new { @type = "text", @height = "300" ,@rows="15"})
     </div>
     @Html.HiddenFor(m => m.Item.Id)
