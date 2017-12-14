@@ -634,25 +634,35 @@ namespace cms.dbase
                 int _len = Url.Count();
                 int _lastIndex = Url.LastIndexOf("/");
                 List<Breadcrumbs> data = new List<Breadcrumbs>();
+
                 while (_lastIndex > -1)
                 {
                     string _path = Url.Substring(0, _lastIndex + 1).ToString();
                     string _alias = Url.Substring(_lastIndex + 1).ToString();
                     if (_alias == String.Empty) _alias = " ";
-#warning SingleOrDefault() в базе не стоит ограничение на уникальность (ошибка найдены более 2-чх записей)
-                    var item_data = db.content_sitemaps
-                                    .Where(w => w.f_site == domain && w.c_path == _path && w.c_alias == _alias).Take(1)
-                                    .Select(s => new Breadcrumbs
-                                    {
-                                        Title = s.c_title,
-                                        Url = s.c_path + s.c_alias
-                                    }).SingleOrDefault();
 
-                    if (item_data != null)
-                    {
-                        data.Add(item_data);
-                    }
-
+                    var getContentSitemaps = db.content_sitemaps
+                                .Where(w => w.f_site == domain)
+                                .Where(w => w.c_path == _path)
+                                .Where(w => w.c_alias == _alias)
+                                //.Take(1)
+                                .Select(w => new Breadcrumbs
+                                {
+                                    Title = w.c_title,
+                                    Url = w.c_path + w.c_alias
+                                });
+                    if(getContentSitemaps.Any())
+                        try
+                        {
+                            var itemContentSitemap = getContentSitemaps.SingleOrDefault();
+                            if(itemContentSitemap != null)
+                                data.Add(itemContentSitemap);
+                        }
+                        catch(Exception ex)
+                        {
+                            throw new Exception("FrontRepository > getBreadCrumbCollection: Found more than one record " + ex);
+                        }
+                    Url = Url.Substring(0, _lastIndex);
                     _len = Url.Count();
                     _lastIndex = Url.LastIndexOf("/");
 

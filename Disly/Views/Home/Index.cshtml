@@ -43,7 +43,7 @@
 
     var announcements = (Model.Materials != null) ? Model.Materials.Where(w => w.GroupAlias.Equals("announcement")) : null;
     var news = (Model.Materials != null) ? Model.Materials.Where(w => w.GroupAlias.Equals("news")) : null;
-    var events = (Model.Materials != null) ? Model.Materials.Where(w => w.GroupAlias.Equals("events")) : null;
+    var events = (Model.Materials != null) ? Model.Materials.Where(w => w.GroupAlias.Equals("actual")) : null;
     int i = 0;
 
     string backgroundSlider = Model.SitesInfo.BackGroundImg != null
