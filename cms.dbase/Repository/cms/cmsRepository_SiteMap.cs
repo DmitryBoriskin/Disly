@@ -233,19 +233,19 @@ namespace cms.dbase
         /// <param name="alias"></param>
         /// <param name="ParentId"></param>
         /// <returns></returns>
-        public override bool ckeckSiteMapAlias(string alias, Guid ParentId)
+        public override bool ckeckSiteMapAlias(string alias, string ParentId, Guid ThisGuid)
         {
             using (var db = new CMSdb(_context))
             {
-                int _count=0;
-                _count = db.content_sitemaps
-                              .Where(w => w.id == ParentId && w.c_alias == alias)
-                              .Count();
+                int _count=0;                
+                var query = db.content_sitemaps.Where(w => w.c_alias == alias && w.id!=ThisGuid);
+                query = (String.IsNullOrEmpty(ParentId)) ? query.Where(w => w.uui_parent == null) : query.Where(w => w.uui_parent == Guid.Parse(ParentId));
+                _count= query.Count();
                 if (_count > 0)
                 {
-                    return true;
-                }
-                return false;
+                    return false;
+                }                
+                return true;
             }
         }
 
@@ -430,8 +430,38 @@ namespace cms.dbase
                         if (menuOldQuery.Any())
                         {
                             var menuOld = menuOldQuery.ToArray();
+
                             if (item.MenuGroups != null)
                             {
+                                //удаляем значения
+                                var CurrenMenuGroup = item.MenuGroups.Select(s => Guid.Parse(s)).ToArray();
+                                foreach (var d in menuOld)
+                                {
+                                    if (!CurrenMenuGroup.Contains(d))
+                                    {
+                                        #region удаляем элемент из группы
+                                        //удаляем 
+                                        db.content_sitemap_menutypess
+                                          .Where(w => (w.f_sitemap == id && w.f_menutype == d))
+                                          .Delete();
+
+                                        //смещаем приоритеты в группах
+                                        int current_sort = db.content_sitemap_menutypess
+                                                             .Where(w => w.f_site==_domain)
+                                                             .Where(w => w.f_sitemap==id)
+                                                             .Where(w => w.f_menutype == d)
+                                                             .Select(s => s.n_sort).Single();
+
+                                        var q1 = db.content_sitemap_menutypess
+                                          .Where(w => w.f_site == _domain && w.f_menutype == d && w.n_sort >= current_sort);
+                                          q1.Set(p => p.n_sort, p => p.n_sort - 1)
+                                          .Update();
+
+                                        #endregion
+                                    }
+                                }
+
+                                //добавляем значения
                                 foreach (var m in item.MenuGroups)
                                 {
                                     Guid menuId = Guid.Parse(m);
@@ -451,16 +481,48 @@ namespace cms.dbase
                                             .Value(p => p.n_sort, maxSort + 1)
                                             .Insert();
                                     }
+                                    #region //
+                                    //else
+                                    //{
+                                    //    //если в группе был и остается то нничего не делаем
+                                    //    if (item.MenuGroups.Contains(menuId.ToString())){
+
+                                    //    }
+                                    //    else
+                                    //    {
+                                    //        #region удаляем элемент из группы
+                                    //        //смещаем приоритеты в группах
+                                    //        int current_sort = db.content_sitemap_menutypess
+                                    //                                .Where(w => w.f_site.Equals(_domain))
+                                    //                                .Where(w => w.f_sitemap.Equals(id))
+                                    //                                .Where(w => w.f_menutype == menuId)
+                                    //                                .Select(s => s.n_sort).Single();
+
+                                    //        db.content_sitemap_menutypess
+                                    //          .Where(w => w.f_site == _domain && w.f_menutype == menuId && w.n_sort > current_sort)
+                                    //          .Set(p => p.n_sort, p => p.n_sort - 1)
+                                    //          .Update();
+
+                                    //        //удаляем 
+                                    //        db.content_sitemap_menutypess
+                                    //          .Where(w => (w.f_sitemap == id && w.f_menutype == menuId))
+                                    //          .Delete(); 
+                                    //        #endregion
+                                    //    }                                        
+                                    //}
+                                    #endregion
                                 }
                             }
                             else
                             {
+                                //элемент удаляется из всех групп меню
                                 db.content_sitemap_menutypess
                                     .Where(w => w.f_sitemap.Equals(id)).Delete();
                             }
                         }
                         else
                         {
+                            //случай когда до этого элемент карты не принадлежал ник  одной группе
                             if (item.MenuGroups != null)
                             {
                                 foreach (var m in item.MenuGroups)
@@ -715,58 +777,129 @@ namespace cms.dbase
                     listToUpdate.Set(u => u.n_sort, u => u.n_sort - 1).Update();
 
                     // Удаляем дочерние эл-ты 
-                    string pathToDrop = itemToDelete.Path + itemToDelete.Alias;
+                    deleteSiteMapItemCascad(id);
 
-                    var listToDelete = db.content_sitemaps
-                        .Where(w => w.id.Equals(id) || w.c_path.Contains(pathToDrop));
+                    //удаляем  текущий элемент
+                    db.content_sitemaps.Where(w => w.id == id).Delete();
+                    #region удаляем связи с группой меню
+                    var menuTypesBigger = db.content_sitemap_menutypess
+                                            .Where(w => w.f_site.Equals(_domain))
+                                            .Where(w => w.f_sitemap.Equals(id))
+                                            .Select(s => new { s.f_menutype, s.n_sort });
 
-                    if (listToDelete.Any())
+                    if (menuTypesBigger.Any())
                     {
-                        foreach (var item in listToDelete.ToArray())
+                        foreach (var mt in menuTypesBigger.ToArray())
                         {
-                            // удаляем связи с группой меню
-                            var menuTypesBigger = db.content_sitemap_menutypess
-                                .Where(w => w.f_site.Equals(item.f_site))
-                                .Where(w => w.f_sitemap.Equals(item.id))
-                                .Select(s => new { s.f_menutype, s.n_sort });
-
-                            if (menuTypesBigger.Any())
-                            {
-                                foreach (var mt in menuTypesBigger.ToArray())
-                                {
-                                    db.content_sitemap_menutypess
-                                        .Where(w => w.f_site.Equals(item.f_site))
-                                        .Where(w => w.f_menutype.Equals(mt.f_menutype))
-                                        .Where(w => w.n_sort > mt.n_sort)
-                                        .Set(s => s.n_sort, s => s.n_sort - 1)
-                                        .Update();
-                                }
-                            }
-
-                            var itemD = db.content_sitemaps
-                                .Where(w => w.id == item.id)
-                                .SingleOrDefault();
-
-                            db.Delete(itemD);
-
-                            // Логирование
-                            var log = new LogModel()
-                            {
-                                Site = _domain,
-                                Section = LogSection.SiteMap,
-                                Action = LogAction.delete,
-                                PageId = id,
-                                PageName = item.c_title,
-                                UserId = _currentUserId,
-                                IP = _ip,
-                            };
-                            insertLog(log);
+                            db.content_sitemap_menutypess
+                                .Where(w => w.f_site.Equals(_domain))
+                                .Where(w => w.f_menutype.Equals(mt.f_menutype))
+                                .Where(w => w.n_sort > mt.n_sort)
+                                .Set(s => s.n_sort, s => s.n_sort - 1)
+                                .Update();
                         }
                     }
+                    #endregion
+
+                    #region //
+
+                    //var pParentIdToDrop = itemToDelete.Id;
+
+                    //var listToDelete = db.content_sitemaps
+                    //    .Where(w => w.id.Equals(id) || w.uui_parent == pParentIdToDrop);
+
+                    //if (listToDelete.Any())
+                    //{
+                    //    foreach (var item in listToDelete.ToArray())
+                    //    {
+                    //        // удаляем связи с группой меню
+                    //        var menuTypesBigger = db.content_sitemap_menutypess
+                    //            .Where(w => w.f_site.Equals(item.f_site))
+                    //            .Where(w => w.f_sitemap.Equals(item.id))
+                    //            .Select(s => new { s.f_menutype, s.n_sort });
+
+                    //        if (menuTypesBigger.Any())
+                    //        {
+                    //            foreach (var mt in menuTypesBigger.ToArray())
+                    //            {
+                    //                db.content_sitemap_menutypess
+                    //                    .Where(w => w.f_site.Equals(item.f_site))
+                    //                    .Where(w => w.f_menutype.Equals(mt.f_menutype))
+                    //                    .Where(w => w.n_sort > mt.n_sort)
+                    //                    .Set(s => s.n_sort, s => s.n_sort - 1)
+                    //                    .Update();
+                    //            }
+                    //        }
+
+                    //        var itemD = db.content_sitemaps
+                    //            .Where(w => w.id == item.id)
+                    //            .SingleOrDefault();
+
+                    //        db.Delete(itemD);
+
+                    //        // Логирование
+                    //        var log = new LogModel()
+                    //        {
+                    //            Site = _domain,
+                    //            Section = LogSection.SiteMap,
+                    //            Action = LogAction.delete,
+                    //            PageId = id,
+                    //            PageName = item.c_title,
+                    //            UserId = _currentUserId,
+                    //            IP = _ip,
+                    //        };
+                    //        insertLog(log);
+                    //    }
+                    //} 
+                    #endregion
 
                     tran.Commit();
                     return true;
                 }
+            }
+        }
+
+        /// <summary>
+        /// каскадное удаление веток карты сайта
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public override bool deleteSiteMapItemCascad(Guid id) {
+            using (var db = new CMSdb(_context))
+            {
+                var childlist = db.content_sitemaps.Where(w => w.uui_parent == id);
+                var childlistarray = childlist.Select(s => s.id);
+                if (childlistarray.Any())
+                {
+                    foreach (var item in childlistarray.ToArray())
+                    {
+                        deleteSiteMapItemCascad(item);
+
+                        #region удаляем связи с группой меню
+                        var menuTypesBigger = db.content_sitemap_menutypess
+                                                .Where(w => w.f_site.Equals(_domain))
+                                                .Where(w => w.f_sitemap.Equals(item))
+                                                .Select(s => new { s.f_menutype, s.n_sort });
+
+                        if (menuTypesBigger.Any())
+                        {
+                            foreach (var mt in menuTypesBigger.ToArray())
+                            {
+                                db.content_sitemap_menutypess
+                                    .Where(w => w.f_site.Equals(_domain))
+                                    .Where(w => w.f_menutype.Equals(mt.f_menutype))
+                                    .Where(w => w.n_sort > mt.n_sort)
+                                    .Set(s => s.n_sort, s => s.n_sort - 1)
+                                    .Update();
+                            }
+                        }
+                        #endregion
+                    }
+                    childlist.Delete();
+                }
+
+                return true;
+
             }
         }
 

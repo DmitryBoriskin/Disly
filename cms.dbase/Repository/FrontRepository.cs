@@ -651,7 +651,6 @@ namespace cms.dbase
                         data.Add(item_data);
                     }
 
-                    Url = Url.Substring(0, _lastIndex);
                     _len = Url.Count();
                     _lastIndex = Url.LastIndexOf("/");
 

@@ -187,11 +187,12 @@ namespace cms.dbModel
         public abstract string[] getSiteMapGroupMenu(Guid id);
         public abstract int getCountSiblings(Guid id);
         public abstract bool checkSiteMap(Guid id);
-        public abstract bool ckeckSiteMapAlias(string alias, Guid ParentId);
+        public abstract bool ckeckSiteMapAlias(string alias, string ParentId, Guid ThisGuid);
         public abstract bool existSiteMap(string path, string alias, Guid id);
         public abstract bool createSiteMapItem(Guid id, SiteMapModel item);
         public abstract bool updateSiteMapItem(Guid id, SiteMapModel item);
         public abstract bool deleteSiteMapItem(Guid id);
+        public abstract bool deleteSiteMapItemCascad(Guid id);
 
         public abstract SiteMapMenu[] getSiteMapFrontSectionList(string domain);
         public abstract SiteMapMenu getSiteMapMenu(Guid id);
