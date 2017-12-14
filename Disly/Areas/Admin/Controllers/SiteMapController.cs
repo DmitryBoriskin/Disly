@@ -163,21 +163,7 @@ namespace Disly.Areas.Admin.Controllers
 
             back_model.Item.Path = p == null ? "/" : p.Path + p.Alias + "/";
 
-            if (_cmsRepository.existSiteMap(back_model.Item.Path, back_model.Item.Alias, back_model.Item.Id))// && back_model.Item.OldId!=null
-            {
-                model.ErrorInfo = new ErrorMassege()
-                {
-                    title = "Ошибка",
-                    info = "Страница с таким путём и алиасом уже существует",
-                    buttons = new ErrorMassegeBtn[]
-                    {
-                        new ErrorMassegeBtn { url = "#", text = "ок", action = "false", style="primary" }
-                    }
-                };
-
-                return View("Item", model);
-            }
-
+          
             back_model.Item.Site = Domain;
 
             if (String.IsNullOrEmpty(back_model.Item.Alias))
@@ -189,6 +175,28 @@ namespace Disly.Areas.Admin.Controllers
                 back_model.Item.Alias = Transliteration.Translit(back_model.Item.Alias);
             }
 
+
+            if (_cmsRepository.existSiteMap(back_model.Item.Path, back_model.Item.Alias, back_model.Item.Id))// && back_model.Item.OldId!=null
+            {
+                model.ErrorInfo = new ErrorMassege()
+                {
+                    title = "Ошибка",
+                    info = "Такой алиас на данном уровне уже существует, введите иное значение в поле Алиас",
+                    buttons = new ErrorMassegeBtn[]
+                    {
+                        new ErrorMassegeBtn { url = "#", text = "ок", action = "false", style="primary" }
+                    }
+                };
+                model.Item = back_model.Item;
+                // хлебные крошки
+                model.BreadCrumbs = _cmsRepository.getSiteMapBreadCrumbs(back_model.Item.ParentId);
+                model.Item.ParentId = back_model.Item.ParentId;                
+                var _mg = new MultiSelectList(model.MenuTypes, "value", "text", model.Item != null ? model.Item.MenuGroups : null);
+                ViewBag.GroupMenu = _mg;
+                return View("Item", model);
+            }
+
+
             // хлебные крошки
             model.BreadCrumbs = _cmsRepository.getSiteMapBreadCrumbs(back_model.Item.ParentId);
 
@@ -196,10 +204,8 @@ namespace Disly.Areas.Admin.Controllers
             model.Childrens = _cmsRepository.getSiteMapChildrens(id);
             #endregion
             //определяем занятость входного url
-            if (back_model.Item.ParentId == null||_cmsRepository.ckeckSiteMapAlias(back_model.Item.Alias, (Guid)back_model.Item.ParentId))
+            if (_cmsRepository.ckeckSiteMapAlias(back_model.Item.Alias, back_model.Item.ParentId.ToString(), id))
             {
-
-
                 if (ModelState.IsValid)
                 {
                     #region Сохранение изображение
@@ -273,12 +279,14 @@ namespace Disly.Areas.Admin.Controllers
                         userMessage.info = "Запись добавлена";
                     }
 
+
+
                     string backUrl = back_model.Item.ParentId != null ? "item/" + back_model.Item.ParentId : string.Empty;
 
                     userMessage.buttons = new ErrorMassegeBtn[]
                     {
                      new ErrorMassegeBtn { url = StartUrl + backUrl, text = "Вернуться в список" },
-                     new ErrorMassegeBtn { url = "#", text = "ок", action = "false" }
+                     new ErrorMassegeBtn { url = "/Admin/sitemap/item/"+id, text = "ок" }
                     };
                 }
                 else
@@ -309,12 +317,14 @@ namespace Disly.Areas.Admin.Controllers
                         (model.MenuTypes.Where(t => t.available).Any()) ?
                                     model.MenuTypes.Where(t => t.available).ToArray() : new Catalog_list[] { }
                                         : new Catalog_list[] { };
+
+
+
             var mgAviable = new MultiSelectList(aviable, "value", "text", model.Item != null ? model.Item.MenuGroups : null);
             ViewBag.GroupMenuAviable = mgAviable;
 
 
-            if (model.Item != null)
-                model.Item.MenuGroups = null;
+            model.Item.MenuGroups = null;
             model.ErrorInfo = userMessage;
 
             return View(model);
