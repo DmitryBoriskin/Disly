@@ -888,7 +888,7 @@ namespace Disly.Areas.Admin.Controllers
             var _peopList = _cmsRepository.getPersonsThisOrg(OrgId);
             if (_peopList != null)
             {
-                model.PeopleList = new SelectList(_peopList, "Id", "FIO");
+                model.PeopleList = new SelectList(_peopList, "Id", "FIO",model.AdministrativItem.PeopleF);
             }
             #endregion
             if (OrgId == null)

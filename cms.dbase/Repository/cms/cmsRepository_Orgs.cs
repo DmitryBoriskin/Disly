@@ -1610,7 +1610,7 @@ namespace cms.dbase
                               .Select(s => new OrgsAdministrative
                               {
                                   id = s.id,
-                                  Surname = s.c_surname,
+                                  Surname = s.c_surname,                                  
                                   Name = s.c_name,
                                   Patronymic = s.c_patronymic,
                                   Phone = s.c_phone,
@@ -1806,8 +1806,9 @@ namespace cms.dbase
                                            .Select(s => new People
                                            {
                                                FIO = s.fkcontentpeopleorglink.c_surname + " " + s.fkcontentpeopleorglink.c_name + " " + s.fkcontentpeopleorglink.c_patronymic,
-                                               Id = s.id,
-                                               IdLinkOrg = s.f_people
+                                               Id = s.fkcontentpeopleorglink.id
+                                               //Id = s.id,
+                                               //IdLinkOrg = s.f_people
                                            }).ToArray();
                 return PeopleList.Any() ? PeopleList : null;
             }
