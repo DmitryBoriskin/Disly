@@ -440,21 +440,21 @@ namespace cms.dbase
                                     if (!CurrenMenuGroup.Contains(d))
                                     {
                                         #region удаляем элемент из группы
+                                        //смещаем приоритеты в группах
+                                        int current_sort = db.content_sitemap_menutypess
+                                                             .Where(w => w.f_site == _domain)
+                                                             .Where(w => w.f_sitemap == id)
+                                                             .Where(w => w.f_menutype == d)
+                                                             .Select(s => s.n_sort).Single();
+
                                         //удаляем 
                                         db.content_sitemap_menutypess
                                           .Where(w => (w.f_sitemap == id && w.f_menutype == d))
                                           .Delete();
 
-                                        //смещаем приоритеты в группах
-                                        int current_sort = db.content_sitemap_menutypess
-                                                             .Where(w => w.f_site==_domain)
-                                                             .Where(w => w.f_sitemap==id)
-                                                             .Where(w => w.f_menutype == d)
-                                                             .Select(s => s.n_sort).Single();
-
-                                        var q1 = db.content_sitemap_menutypess
-                                          .Where(w => w.f_site == _domain && w.f_menutype == d && w.n_sort >= current_sort);
-                                          q1.Set(p => p.n_sort, p => p.n_sort - 1)
+                                        db.content_sitemap_menutypess
+                                          .Where(w => w.f_site == _domain && w.f_menutype == d && w.n_sort >= current_sort)
+                                          .Set(p => p.n_sort, p => p.n_sort - 1)
                                           .Update();
 
                                         #endregion
@@ -515,6 +515,24 @@ namespace cms.dbase
                             }
                             else
                             {
+                                //смещаем все приоритеты
+                                var menu_type = db.content_sitemap_menutypess.Where(w => w.f_sitemap == id).Select(s=>s.f_menutype).ToArray();
+                                foreach (var mt in menu_type)
+                                {
+
+                                    int current_sort = db.content_sitemap_menutypess
+                                                        .Where(w => w.f_site == _domain)
+                                                        .Where(w => w.f_sitemap == id)
+                                                        .Where(w => w.f_menutype == mt)
+                                                        .Select(s => s.n_sort).Single();
+
+                                    db.content_sitemap_menutypess
+                                          .Where(w => w.f_site == _domain && w.f_menutype == mt && w.n_sort >= current_sort)
+                                          .Set(p => p.n_sort, p => p.n_sort - 1)
+                                          .Update();
+
+                                }
+
                                 //элемент удаляется из всех групп меню
                                 db.content_sitemap_menutypess
                                     .Where(w => w.f_sitemap.Equals(id)).Delete();
@@ -522,7 +540,7 @@ namespace cms.dbase
                         }
                         else
                         {
-                            //случай когда до этого элемент карты не принадлежал ник  одной группе
+                            //случай когда до этого элемент карты не принадлежал ни к  одной группе
                             if (item.MenuGroups != null)
                             {
                                 foreach (var m in item.MenuGroups)
