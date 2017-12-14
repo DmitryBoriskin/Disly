@@ -404,8 +404,8 @@ namespace Disly.Areas.Admin.Controllers
         {
             ErrorMassege userMassage = new ErrorMassege();
             userMassage.title = "Информация";
-            Guid ParentOrgId = _cmsRepository.getAdministrativ(id).OrgId;
-            if (_cmsRepository.delAdministrativ(id))
+            Guid ParentOrgId = _cmsRepository.getStructure(id).OrgId;
+            if (_cmsRepository.deleteStructure(id))
             {
                 userMassage.info = "Запись Удалена";
                 userMassage.buttons = new ErrorMassegeBtn[]{
@@ -423,6 +423,32 @@ namespace Disly.Areas.Admin.Controllers
             model.ErrorInfo = userMassage;
             return View("structure", model);
         }
+        //[HttpPost]
+        //[ValidateInput(false)]
+        //[MultiButton(MatchFormKey = "action", MatchFormValue = "delete-adminiatrativ-btn")]
+        //public ActionResult AdministrativDelete(Guid id)
+        //{
+        //    ErrorMassege userMassage = new ErrorMassege();
+        //    userMassage.title = "Информация";
+        //    Guid ParentOrgId = _cmsRepository.getAdministrativ(id).OrgId;
+        //    if (_cmsRepository.delAdministrativ(id))
+        //    {
+        //        userMassage.info = "Запись Удалена";
+        //        userMassage.buttons = new ErrorMassegeBtn[]{
+        //            new ErrorMassegeBtn { url = "#", text = "ок", action = "false" },
+        //            new ErrorMassegeBtn { url = "/admin/orgs/item/"+ParentOrgId, text = "Вернуться в организацию"}
+        //        };
+        //    }
+        //    else
+        //    {
+        //        userMassage.info = "Произошла ошибка";
+        //        userMassage.buttons = new ErrorMassegeBtn[]{
+        //            new ErrorMassegeBtn { url = "#", text = "ок", action = "false" }
+        //        };
+        //    }
+        //    model.ErrorInfo = userMassage;
+        //    return View("structure", model);
+        //}
 
 
         #region Ovp
@@ -888,7 +914,8 @@ namespace Disly.Areas.Admin.Controllers
             var _peopList = _cmsRepository.getPersonsThisOrg(OrgId);
             if (_peopList != null)
             {
-                model.PeopleList = new SelectList(_peopList, "Id", "FIO",model.AdministrativItem.PeopleF);
+
+                model.PeopleList =(model.AdministrativItem!=null)? new SelectList(_peopList, "Id", "FIO",model.AdministrativItem.PeopleF): new SelectList(_peopList, "Id", "FIO");
             }
             #endregion
             if (OrgId == null)
@@ -1031,7 +1058,7 @@ namespace Disly.Areas.Admin.Controllers
                 userMassage.info = "Запись Удалена";
                 userMassage.buttons = new ErrorMassegeBtn[]{
                     new ErrorMassegeBtn { url = "#", text = "ок", action = "false" },
-                    new ErrorMassegeBtn { url = "/admin/item/"+ParentOrgId, text = "Вернуться в список"}
+                    new ErrorMassegeBtn { url = "/admin/orgs/item/"+ParentOrgId, text = "Вернуться в список"}
                 };
             }
             else
