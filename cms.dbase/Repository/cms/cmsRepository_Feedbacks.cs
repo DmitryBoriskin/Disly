@@ -78,7 +78,8 @@ namespace cms.dbase
                         Answer = s.c_answer,
                         Answerer = s.c_answerer,
                         IsNew = s.b_new,
-                        Disabled = s.b_disabled
+                        Disabled = s.b_disabled,
+                        FbType = (FeedbackType)Enum.Parse(typeof(FeedbackType), s.c_type)
                     });
 
 
@@ -115,7 +116,8 @@ namespace cms.dbase
                         c_answerer = feedback.Answerer,
                         b_new = feedback.IsNew,
                         b_disabled = feedback.Disabled,
-                        f_site = _domain
+                        f_site = _domain,
+                        c_type = feedback.FbType.ToString()
                     };
 
                     using (var tran = db.BeginTransaction())

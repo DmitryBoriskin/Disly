@@ -226,9 +226,10 @@ namespace Disly.Areas.Admin.Controllers
                 else
                     userMessage.info = "Произошла ошибка";
 
+                string currentUrl = Request.Url.PathAndQuery;
                 userMessage.buttons = new ErrorMassegeBtn[]{
                      new ErrorMassegeBtn { url = StartUrl + Request.Url.Query, text = "Вернуться в список" },
-                     new ErrorMassegeBtn { url = "#", text = "ок", action = "false" }
+                     new ErrorMassegeBtn { url = currentUrl, text = "ок" }
                  };
             }
             else
