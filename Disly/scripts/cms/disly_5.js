@@ -168,6 +168,7 @@ $(document).ready(function () {
                 contentType: false,
                 processData: false,
                 data: false,
+                error: function () { elem.parent().remove() },
                 success: function (result) {
                     if (result == "true") {
                         elem.parent().remove()
@@ -178,7 +179,7 @@ $(document).ready(function () {
                 }
             });
 
-            elem.parent().remove();
+            
         });
     }
 
