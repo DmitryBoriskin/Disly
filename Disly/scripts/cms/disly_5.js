@@ -3,12 +3,6 @@ var change = 0;
 
 $(document).ready(function () {
     $modal = $('.modal');
-
-    $modal.modal({
-        backdrop: 'static',
-        keyboard: false
-    });
-
     $modalTitle = $('.modal .modal-title');
     $modalBody = $('.modal .modal-body');
     $modalFooter = $('.modal .modal-footer');
