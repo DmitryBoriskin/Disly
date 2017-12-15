@@ -161,6 +161,7 @@ $(document).ready(function () {
         $('.delPhoto').click(function () {
             var elem = $(this);
             var id = $(this).attr('data-id');
+
             $.ajax({
                 type: "POST",
                 url: '/admin/photoalbums/DeletePhoto/' + id,
@@ -176,6 +177,8 @@ $(document).ready(function () {
                     }
                 }
             });
+
+            elem.parent().remove();
         });
     }
 
