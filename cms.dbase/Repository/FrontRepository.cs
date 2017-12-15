@@ -1126,32 +1126,22 @@ namespace cms.dbase
                     {
                         data.Phones = Phones.ToArray();
                     }
-                    var People = db.content_sv_people_departments.Where(w => w.f_department == Id)
-                                    .Select(s => new People()
-                                    {
-                                        Id = s.id,
-                                        FIO = s.c_surname + " " + s.c_name + " " + s.c_patronymic,
-                                        Post = s.c_post,
-                                        Status = s.c_status
-                                    });
+                
+
+                    var People = db.content_sv_people_departments.Where(w => w.f_department == Id).OrderBy(o => new { o.c_surname, o.c_name, o.c_patronymic })
+                                .Select(s => new People()
+                                {
+                                    Id = s.id,
+                                    FIO = s.c_surname + " " + s.c_name + " " + s.c_patronymic,
+                                    Post = s.c_post,
+                                    Status = s.c_status,
+                                    Photo = s.c_photo
+                                });
 
                     if (People.Any())
                     {
-                        data.Peoples = People.ToArray();
-                    }
-
-                    var Boss = db.content_peoples.Where(w => w.id == data.DirectorF)
-                                                 .Select(s => new People()
-                                                 {
-                                                     Id = s.id,
-                                                     FIO = s.c_surname + " " + s.c_name + " " + s.c_patronymic,
-                                                     Post = data.DirecorPost,
-                                                     Photo=s.c_photo
-                                                 });
-
-                    if (Boss.Any())
-                    {
-                        data.Boss = Boss.ToArray();
+                        data.Boss = People.Where(w => w.Status == "boss").ToArray();
+                        data.Sister = People.Where(w => w.Status == "sister").ToArray();
                     }
                     return data;
                 }
