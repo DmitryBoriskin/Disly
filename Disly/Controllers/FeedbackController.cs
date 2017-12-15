@@ -266,13 +266,13 @@ namespace Disly.Controllers
                         bindData.Text,
                         answerLink
                         );
-
-                    Mailer letter = new Mailer();
-                    letter.isSsl = true;
-                    letter.Theme = "Сайт " + Domain + ": Обратная связь";
-                    letter.Text = msgText;
-                    letter.Attachments = savedFileName;
-                    letter.MailTo = "s-kuzmina@it-serv.ru"; // Settings.mailTo;
+                    
+                        Mailer letter = new Mailer();
+                        letter.isSsl = true;
+                        letter.Theme = "Сайт " + Domain + ": Обратная связь";
+                        letter.Text = msgText;
+                        letter.Attachments = savedFileName;
+                        letter.MailTo = Settings.mailTo;
 
                     var admins = _repository.getSiteAdmins();
                     if (admins != null)
@@ -301,7 +301,8 @@ namespace Disly.Controllers
             ViewBag.Anonymous = false;
             ViewBag.captchaKey = Settings.CaptchaKey;
 
-            return View(_ViewName, model);
+            //return View(_ViewName, model);
+            return RedirectToAction("Form");
         }
 
         /// <summary>

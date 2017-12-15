@@ -213,24 +213,37 @@ namespace Disly.Areas.Admin.Controllers
 
                 //Определяем Insert или Update
                 if (getMaterial != null)
+                {
+                    userMessage.info = "Запись обновлена";
                     res = _cmsRepository.updateCmsMaterial(bindData.Item);
+                }
+                   
                 else
                 {
+                    userMessage.info = "Запись добавлена";
                     bindData.Item.ContentLink = SiteInfo.ContentId;
                     bindData.Item.ContentLinkType = SiteInfo.Type;
                     res = _cmsRepository.insertCmsMaterial(bindData.Item);
                 }
                 //Сообщение пользователю
                 if (res)
-                    userMessage.info = "Запись обновлена";
-                else
-                    userMessage.info = "Произошла ошибка";
+                {
+                    string currentUrl = Request.Url.PathAndQuery;
 
-                string currentUrl = Request.Url.PathAndQuery;
-                userMessage.buttons = new ErrorMassegeBtn[]{
+                    userMessage.buttons = new ErrorMassegeBtn[]{
                      new ErrorMassegeBtn { url = StartUrl + Request.Url.Query, text = "Вернуться в список" },
                      new ErrorMassegeBtn { url = currentUrl, text = "ок" }
                  };
+                }
+                else
+                {
+                    userMessage.info = "Произошла ошибка";
+
+                    userMessage.buttons = new ErrorMassegeBtn[]{
+                     new ErrorMassegeBtn { url = StartUrl + Request.Url.Query, text = "Вернуться в список" },
+                     new ErrorMassegeBtn { url = "#", text = "ок", action = "false"  }
+                 };
+                }
             }
             else
             {
@@ -264,24 +277,39 @@ namespace Disly.Areas.Admin.Controllers
         [MultiButton(MatchFormKey = "action", MatchFormValue = "delete-btn")]
         public ActionResult Delete(Guid Id)
         {
+            // записываем информацию о результатах
+            ErrorMassege userMessage = new ErrorMassege();
+            userMessage.title = "Информация";
+            //В случае ошибки
+            userMessage.info = "Ошибка, Запись не удалена";
+            userMessage.buttons = new ErrorMassegeBtn[]{
+                new ErrorMassegeBtn { url = "#", text = "ок", action = "false" }
+            };
+
             var data = _cmsRepository.getMaterial(Id);
             if(data != null)
             {
                 var image = (data.PreviewImage != null) ? data.PreviewImage.Url : null;
                 var res = _cmsRepository.deleteCmsMaterial(Id);
-                if (res && !string.IsNullOrEmpty(image))
-                    Files.deleteImage(image);
+                if (res)
+                {
+                    if (!string.IsNullOrEmpty(image))
+                        Files.deleteImage(image);
+
+                    // записываем информацию о результатах
+                    userMessage.title = "Информация";
+                    userMessage.info = "Запись Удалена";
+                    var tolist = "/Admin/Materials/";
+                    userMessage.buttons = new ErrorMassegeBtn[]
+                    {
+                        new ErrorMassegeBtn { url = tolist, text = "Перейти в список" }
+                    };
+                    model.ErrorInfo = userMessage;
+                    //return RedirectToAction("Index", new { id = model.Item.Section });
+                }
             }
 
-            // записываем информацию о результатах
-            ErrorMassege userMassege = new ErrorMassege();
-            userMassege.title = "Информация";
-            userMassege.info = "Запись Удалена";
-            userMassege.buttons = new ErrorMassegeBtn[]{
-                new ErrorMassegeBtn { url = "#", text = "ок", action = "false" }
-            };
-
-            model.ErrorInfo = userMassege;
+            model.ErrorInfo = userMessage;
 
             return RedirectToAction("Index");
         }

@@ -214,10 +214,10 @@ namespace Disly.Areas.Admin.Controllers
                 // записываем информацию о результатах
                 userMessage.title = "Информация";
                 userMessage.info = "Запись Удалена";
-                var section = "/Admin/feedbacks/";
+                var tolist = "/Admin/feedbacks/";
                 userMessage.buttons = new ErrorMassegeBtn[]
                 {
-                        new ErrorMassegeBtn { url = section, text = "Перейти в список" }
+                        new ErrorMassegeBtn { url = tolist, text = "Перейти в список" }
                 };
                 model.ErrorInfo = userMessage;
                 //return RedirectToAction("Index", new { id = model.Item.Section });

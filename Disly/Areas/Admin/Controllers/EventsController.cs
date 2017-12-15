@@ -162,18 +162,18 @@ namespace Disly.Areas.Admin.Controllers
          {
              ErrorMassege userMessage = new ErrorMassege();
              userMessage.title = "Информация";
- 
-             if (ModelState.IsValid)
-             {
-                 var res = false;
-                 var getEvent = _cmsRepository.getEvent(Id);
- 
-                 bindData.Item.Id = Id;
+
+            if (ModelState.IsValid)
+            {
+                var res = false;
+                var getEvent = _cmsRepository.getEvent(Id);
+
+                bindData.Item.Id = Id;
 
                 #region Сохранение изображения
                 var width = 0;
                 var height = 0;
-                var defaultPreviewSizes  = new string[] { "540","360" };
+                var defaultPreviewSizes = new string[] { "540", "360" };
 
                 // путь для сохранения изображения //Preview image
                 string savePath = Settings.UserFiles + Domain + Settings.EventsDir;
@@ -201,7 +201,7 @@ namespace Disly.Areas.Admin.Controllers
                     var sizes = (!string.IsNullOrEmpty(Settings.MaterialPreviewImgSize)) ? Settings.MaterialPreviewImgSize.Split(',') : defaultPreviewSizes;
                     int.TryParse(sizes[0], out width);
                     int.TryParse(sizes[1], out height);
-                    bindData.Item.PreviewImage = new Photo() 
+                    bindData.Item.PreviewImage = new Photo()
                     {
                         Name = Id.ToString() + fileExtension,
                         Size = Files.FileAnliz.SizeFromUpload(upload),
@@ -222,33 +222,45 @@ namespace Disly.Areas.Admin.Controllers
 
                 //Определяем Insert или Update
                 if (getEvent != null)
+                {
+                    userMessage.info = "Запись обновлена";
                     res = _cmsRepository.updateCmsEvent(bindData.Item);
+                }
                 else
                 {
+                    userMessage.info = "Запись добавлена";
                     bindData.Item.ContentLink = SiteInfo.ContentId;
                     bindData.Item.ContentLinkType = SiteInfo.Type;
                     res = _cmsRepository.insertCmsEvent(bindData.Item);
                 }
-                 //Сообщение пользователю
-                 if (res)
-                     userMessage.info = "Запись обновлена";
-                 else
-                     userMessage.info = "Произошла ошибка";
+                //Сообщение пользователю
+                if (res)
+                {
+                    string currentUrl = Request.Url.PathAndQuery;
+                    userMessage.buttons = new ErrorMassegeBtn[]
+                    {
+                         new ErrorMassegeBtn { url = StartUrl + Request.Url.Query, text = "Вернуться в список" },
+                         new ErrorMassegeBtn { url = currentUrl, text = "ок"}
+                    };
+                }
+                else
+                {
+                    userMessage.info = "Произошла ошибка";
+                    userMessage.buttons = new ErrorMassegeBtn[]
+                    {
+                         new ErrorMassegeBtn { url = StartUrl + Request.Url.Query, text = "Вернуться в список" },
+                         new ErrorMassegeBtn {  url = "#", text = "ок", action = "false"}
+                    };
+                }
+            }
+            else
+            {
+                userMessage.info = "Ошибка в заполнении формы. Поля в которых допушены ошибки - помечены цветом.";
 
-                string currentUrl = Request.Url.PathAndQuery;
                 userMessage.buttons = new ErrorMassegeBtn[]{
-                     new ErrorMassegeBtn { url = StartUrl + Request.Url.Query, text = "Вернуться в список" },
-                     new ErrorMassegeBtn { url = currentUrl, text = "ок"}
-                 };
-             }
-             else
-             {
-                 userMessage.info = "Ошибка в заполнении формы. Поля в которых допушены ошибки - помечены цветом.";
- 
-                 userMessage.buttons = new ErrorMassegeBtn[]{
                      new ErrorMassegeBtn { url = "#", text = "ок", action = "false" }
                  };
-             }
+            }
 
             model.Item = _cmsRepository.getEvent(Id);
 
@@ -279,27 +291,43 @@ namespace Disly.Areas.Admin.Controllers
          [MultiButton(MatchFormKey = "action", MatchFormValue = "delete-btn")]
          public ActionResult Delete(Guid Id)
          {
+            // записываем информацию о результатах
+            ErrorMassege userMessage = new ErrorMassege();
+            userMessage.title = "Информация";
+            //В случае ошибки
+            userMessage.info = "Ошибка, Запись не удалена";
+            userMessage.buttons = new ErrorMassegeBtn[]{
+                new ErrorMassegeBtn { url = "#", text = "ок", action = "false" }
+            };
+
             var data = _cmsRepository.getEvent(Id);
             if (data != null)
             {
                 var image = (data.PreviewImage != null) ? data.PreviewImage.Url : null;
                 var res = _cmsRepository.deleteCmsEvent(Id);
-                if (res && !string.IsNullOrEmpty(image))
-                    Files.deleteImage(image);
+
+                if (res)
+                {
+                    if (!string.IsNullOrEmpty(image))
+                        Files.deleteImage(image);
+
+                    // записываем информацию о результатах
+                    userMessage.title = "Информация";
+                    userMessage.info = "Запись Удалена";
+                    var tolist = "/Admin/Events/";
+                    userMessage.buttons = new ErrorMassegeBtn[]
+                    {
+                        new ErrorMassegeBtn { url = tolist, text = "Перейти в список" }
+                    };
+                    model.ErrorInfo = userMessage;
+                    //return RedirectToAction("Index", new { id = model.Item.Section });
+                }
             }
- 
-             // записываем информацию о результатах
-             ErrorMassege userMassege = new ErrorMassege();
-             userMassege.title = "Информация";
-             userMassege.info = "Запись Удалена";
-             userMassege.buttons = new ErrorMassegeBtn[]{
-                 new ErrorMassegeBtn { url = "#", text = "ок", action = "false" }
-             };
- 
-             model.ErrorInfo = userMassege;
- 
-             return View("Item", model);
-         }
+
+            model.ErrorInfo = userMessage;
+
+            return RedirectToAction("Index");
+        }
 
         //Получение списка организаций по параметрам для отображения в модальном окне
         [HttpGet]
