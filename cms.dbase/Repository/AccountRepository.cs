@@ -71,7 +71,8 @@ namespace cms.dbase
                         Surname = s.c_surname,
                         Name = s.c_name,
                         Patronymic = s.c_patronymic,
-                        Disabled = s.b_disabled
+                        Disabled = s.b_disabled,
+                        GroupLvl = s.fkusersgroup.n_level
 
                     });
                 if (!data.Any()) { return null; }
