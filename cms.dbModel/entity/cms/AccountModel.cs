@@ -34,7 +34,12 @@ namespace cms.dbModel.entity
         /// <summary>
         /// Группа
         /// </summary>
-        public string Group { get; set; }        
+        public string Group { get; set; }
+
+        /// <summary>
+        /// ранг Группа
+        /// </summary>
+        public int GroupLvl { get; set; }
 
         /// <summary>
         /// Фамилия

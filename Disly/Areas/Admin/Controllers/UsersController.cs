@@ -44,12 +44,15 @@ namespace Disly.Areas.Admin.Controllers
             filter.Domain = Domain;
 
             // Наполняем модель данными
-            var getUserslist = _cmsRepository.getUsersList(filter).Data;
-            if(getUserslist != null)
-                getUserslist = getUserslist.Where(u => u.Lvl < 100)
+            var getUserslist = _cmsRepository.getUsersList(filter);
+            if(getUserslist != null && getUserslist.Data != null)
+            {
+                getUserslist.Data = getUserslist.Data.Where(u => u.Lvl <= AccountInfo.GroupLvl)
                     .Select(p => p).ToArray();
+            }
+                
 
-            //model.List = getUserslist;
+            model.List = getUserslist;
 
             return View(model);
         }
