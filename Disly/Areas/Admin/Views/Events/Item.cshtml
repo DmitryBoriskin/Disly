@@ -157,11 +157,12 @@
                     }
                 }
 
-                @Html.ActionLink("Прикрепленные документы", "log", "services", new { @id = Model.Item.Id }, new { @id = "LogLists", @class = "button pop-up_frame icon-archive", @data_class = "LogList", @title = "Прикрепленные документы" })
-                @if (Model.Item != null)
-                {
-                    @Html.ActionLink("Журнал изменений", "log", "services", new { @id = Model.Item.Id }, new { @id = "LogLists", @class = "button pop-up_frame icon-archive", @data_class = "LogList", @title = "Журнал изменений" })
-                }
+                @*@Html.ActionLink("Документы", "index", "documents", new { @id = Model.Item.Id }, new { @id = "LogLists", @class = "button pop-up_frame icon-attach", @data_class = "LogList", @title = "Документы" })*@
+                @Html.ActionLink("Журнал изменений", "log", "services", new { @id = Model.Item.Id }, new { @id = "LogLists", @class = "button pop-up_frame icon-archive", @data_class = "LogList", @title = "Журнал изменений" })
+                
+                <br />
+                @*<div class="alert alert-info">Кол-во просмотров: <strong>@Model.Item.CountSee</strong></div>*@
+
             </div>
 
     }
