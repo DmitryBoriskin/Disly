@@ -149,12 +149,13 @@ $(document).ready(function () {
     });
     //удаление фотогрфии из галлереи
     if ($('.photoalbum').length > 0) {
+
         // Центрирование фотографий по вертикали в фотоальбоме
-        var photoImg = $('.photoalbum').find('img');
-        photoImg.each(function () {
-            var margin = ($(this).parent().height() - $(this).height()) / 2;
-            $(this).css('margin', margin + 'px 0');
-        });
+        //var photoImg = $('.photoalbum').find('img');
+        //photoImg.each(function () {
+        //    var margin = ($(this).parent().height() - $(this).height()) / 2;
+        //    $(this).css('margin', margin + 'px 0');
+        //});
 
         // Удаление фотографий из альбома
         $('.delPhoto').click(function () {
