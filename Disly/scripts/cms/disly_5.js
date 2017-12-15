@@ -178,20 +178,6 @@ $(document).ready(function () {
         });
     }
 
-    $('#sorting_photo').click(function () {
-        if ($('.photoalbum').hasClass('Sortable')) {
-            location.reload();
-        }
-        else {
-            $('.photoalbum').addClass('Sortable');
-            $('.Sortable').each(function () { sortingPhotoInit($(this)); });        
-        }
-
-        
-    });
-
-
-
     // Изменение приоритета
     if ($(".sortable").length > 0) $('.sortable').each(function () {
         Sorting_init($(this));
