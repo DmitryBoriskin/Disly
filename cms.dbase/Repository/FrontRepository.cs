@@ -1078,7 +1078,8 @@ namespace cms.dbase
                                         Id = s.id,
                                         FIO = s.c_surname + " " + s.c_name + " " + s.c_patronymic,
                                         Post = s.c_post,
-                                        Status = s.c_status
+                                        Status = s.c_status,
+                                        Photo=s.c_photo
                                     });
 
                     if (People.Any())
@@ -1144,7 +1145,8 @@ namespace cms.dbase
                                                  {
                                                      Id = s.id,
                                                      FIO = s.c_surname + " " + s.c_name + " " + s.c_patronymic,
-                                                     Post = data.DirecorPost
+                                                     Post = data.DirecorPost,
+                                                     Photo=s.c_photo
                                                  });
 
                     if (Boss.Any())
