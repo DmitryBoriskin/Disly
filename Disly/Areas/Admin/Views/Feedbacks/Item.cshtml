@@ -19,31 +19,36 @@
             <div class="col-lg-12">@Html.TextBoxFor(m => m.Item.Title, new { required = "required", type = "text", maxlength = "256", title = "Заголовок" })</div>
         </div>
         @*<div class="row">
-            <div class="col-lg-12">
-                @Html.TextBoxFor(m => m.Item.Preview, new { type = "file", title = "Картинка для предпросмотра", data_name = "", data_size = "", data_url = "", data_help = "размер фотографии должен быть не менне 400 точек по ширине и пропорции картинки - 4х3" })
-            </div>
-        </div>*@
+                <div class="col-lg-12">
+                    @Html.TextBoxFor(m => m.Item.Preview, new { type = "file", title = "Картинка для предпросмотра", data_name = "", data_size = "", data_url = "", data_help = "размер фотографии должен быть не менне 400 точек по ширине и пропорции картинки - 4х3" })
+                </div>
+            </div>*@
         <div class="row">
             <div class="col-lg-12">
-                @Html.TextAreaFor(m => m.Item.Text, new { type = "textarea", title = "Текст вопроса", rows="5", maxlength="2048" })
+                @Html.TextAreaFor(m => m.Item.Text, new { type = "textarea", title = "Текст вопроса", rows = "5", maxlength = "2048" })
             </div>
         </div>
         <div class="row">
             <div class="col-lg-12">
                 @Html.TextBoxFor(m => m.Item.Answerer, new { type = "text", title = "Отвечает", placeholder = "", maxlength = "256" })
-                @Html.TextAreaFor(m => m.Item.Answer, new { type = "editor", title = "Текст ответа", placeholder = "", height="300", maxlength = "4096" })
+                @Html.TextAreaFor(m => m.Item.Answer, new { type = "editor", title = "Текст ответа", placeholder = "", height = "300", maxlength = "4096" })
             </div>
         </div>
     </div>
 
     <div class="dop_info-block">
         <div class="dop-caption">Настройки</div>
-        @Html.TextBoxFor(m => m.Item.Date, new { type="text", required = "required", data_type = "datetime", title = "Дата"})
+        @Html.TextBoxFor(m => m.Item.Date, new { type = "text", required = "required", data_type = "datetime", title = "Дата" })
+        <select name="Item.FbType" class="form-control topIndent-20">
+            <option value="@FeedbackType.appeal.ToString()" @((Model != null && Model.Item != null && Model.Item.FbType == FeedbackType.appeal) ? "selected" : null)>Вопрос</option>
+            <option value="@FeedbackType.review.ToString()" @((Model != null && Model.Item != null && Model.Item.FbType == FeedbackType.review) ? "selected" : null)>Отзыв</option>
+        </select>
+
         @*@Html.DropDownListFor(m => m.Item.Type, new SelectList(section[0].Items, "Alias", "Title", 0), new { @class = "uc_input", @title = section[0].Title, @required = "" })
             @Html.DropDownListFor(m => m.Item.Category, new SelectList(section[1].Items, "Alias", "Title", 0), new { @class = "uc_input", @title = section[1].Title, @required = "" })*@
 
         @*@Html.CheckBoxFor(m => m.Item.IsNew, new { type = "checkbox", title = "Не прочитано", data_toggle = "toggle", data_on = "не прочитано", data_onstyle = "danger", data_off = "прочитано", data_offstyle = "success", data_width = "248" })*@
-        
+
         @Html.CheckBoxFor(m => m.Item.Disabled, new { type = "checkbox", title = "Запретить просмотр", data_toggle = "toggle", data_on = "запретить просмотр", data_onstyle = "danger", data_off = "показывать на сайте", data_offstyle = "success", data_width = "248" })
         @if (Model.Item != null)
         {
