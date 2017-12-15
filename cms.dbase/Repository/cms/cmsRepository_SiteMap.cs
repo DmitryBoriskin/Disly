@@ -238,16 +238,16 @@ namespace cms.dbase
             using (var db = new CMSdb(_context))
             {
                 int _count=0;                
-                var query = db.content_sitemaps.Where(w => w.c_alias == alias && w.id!=ThisGuid);
+                var query = db.content_sitemaps.Where(w => w.c_alias == alias && w.id!=ThisGuid && w.f_site==_domain);
                 query = (String.IsNullOrEmpty(ParentId)) 
                     ? query.Where(w => w.uui_parent == null) 
                     : query.Where(w => w.uui_parent == Guid.Parse(ParentId));
                 _count= query.Count();
                 if (_count > 0)
                 {
-                    return false;
+                    return true;
                 }                
-                return true;
+                return false;
             }
         }
 
