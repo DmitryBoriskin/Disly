@@ -470,7 +470,7 @@ namespace cms.dbase
             string domain = _domain;
             using (var db = new CMSdb(_context))
             {
-                var query = db.content_sitemaps.Where(w => w.c_path == path && w.c_alias == alias && w.f_site == domain);
+                var query = db.content_sitemaps.Where(w => w.c_path == path && w.c_alias == alias && w.f_site == domain && w.b_disabled==false);
                 var data = query.Select(s => new SiteMapModel
                 {
                     Title = s.c_title,
@@ -578,6 +578,7 @@ namespace cms.dbase
             {
                 var data = db.content_sitemaps
                                  .Where(w => w.uui_parent.Equals(ParentId))
+                                 .Where(w=>w.b_disabled_menu==false)
                                  .OrderBy(o => o.n_sort)
                                  .Select(c => new SiteMapModel
                                  {
