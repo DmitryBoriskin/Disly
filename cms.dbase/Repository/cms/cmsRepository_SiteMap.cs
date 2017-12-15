@@ -239,7 +239,9 @@ namespace cms.dbase
             {
                 int _count=0;                
                 var query = db.content_sitemaps.Where(w => w.c_alias == alias && w.id!=ThisGuid);
-                query = (String.IsNullOrEmpty(ParentId)) ? query.Where(w => w.uui_parent == null) : query.Where(w => w.uui_parent == Guid.Parse(ParentId));
+                query = (String.IsNullOrEmpty(ParentId)) 
+                    ? query.Where(w => w.uui_parent == null) 
+                    : query.Where(w => w.uui_parent == Guid.Parse(ParentId));
                 _count= query.Count();
                 if (_count > 0)
                 {

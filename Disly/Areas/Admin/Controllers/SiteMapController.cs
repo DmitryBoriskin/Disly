@@ -204,7 +204,7 @@ namespace Disly.Areas.Admin.Controllers
             model.Childrens = _cmsRepository.getSiteMapChildrens(id);
             #endregion
             //определяем занятость входного url
-            if (_cmsRepository.ckeckSiteMapAlias(back_model.Item.Alias, back_model.Item.ParentId.ToString(), id))
+            if (!_cmsRepository.ckeckSiteMapAlias(back_model.Item.Alias, back_model.Item.ParentId.ToString(), id))
             {
                 if (ModelState.IsValid)
                 {

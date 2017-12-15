@@ -192,7 +192,7 @@
             
             @if (Model.Item != null)
             {
-                if (!String.IsNullOrEmpty(Model.Item.SiteGuid))
+                if (Model.Item.SiteGuid!= String.Empty)
                 {
                     <br />
                     <div class="alert alert-info">

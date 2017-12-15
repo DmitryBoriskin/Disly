@@ -940,7 +940,7 @@ namespace cms.dbase
 
                         #region Значение по умолчанию
                         //карта сайта и меню
-                        string domain_source = "vurnary-crb";
+                        string domain_source = "rkod";
 
                         db.dublicate_content_sitemap(domain_source, ins.Alias);
                         
