@@ -471,7 +471,7 @@ namespace Disly.Areas.Admin.Controllers
             }
             #endregion
 
-            ViewBag.Title = "ОВП/ОФП";
+            ViewBag.Title = "Отделение/ФАП";
             var OrgId = Request.Params["orgid"];
             model.StructureItem = _cmsRepository.getStructure(id);
 
