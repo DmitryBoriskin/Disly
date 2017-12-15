@@ -1,9 +1,9 @@
-body {
-  background-image: url(/Content/img/portal_bg.jpg);
-  background-position: top center;
-  background-size: cover;
-  background-attachment: fixed;
-}
+/*body{
+    background-image:url(/Content/img/portal_bg.jpg);
+    background-position:top center;
+    background-size:cover;
+    background-attachment:fixed;
+}*/
 a {
   color: #3973e6;
 }
@@ -150,4 +150,10 @@ a:hover {
 }
 .adminlist_phone:before {
   color: #3973e6;
+}
+.child_sitemap:before {
+  background-color: #3973e6;
+}
+.child_sitemap_link span:before {
+  color: #e55639;
 }
