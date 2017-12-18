@@ -548,6 +548,8 @@ namespace cms.dbase
             using (var db = new CMSdb(_context))
             {
                 var query = db.content_sitemaps
+                    .Where(w => w.b_disabled == false)
+                    .Where(w => w.b_disabled_menu == false)
                     .Where(w => w.f_site.Equals(_domain))
                     .Where(w => w.c_path.Equals(path))
                     .OrderBy(o => o.n_sort)
