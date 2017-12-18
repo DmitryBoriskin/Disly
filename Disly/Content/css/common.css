@@ -1245,10 +1245,6 @@ select.form-control {
     margin-right: 5px;
     top: 3px;
 }
-.vote_item_wr input[type="checkbox"]:checked + span {
-
-}
-
 .vote_item_wr input[type="checkbox"]:checked + span:after
 {
     content: '\ea14';
