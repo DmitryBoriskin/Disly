@@ -1192,13 +1192,87 @@ select.form-control {
 }
 
 .vote_stat_load {
-    height: 20px;
+    height: 3px;
     text-align: right;
     line-height: 21px;
     color: white;
     background-color: #2196F3;
 }
+.vote_item_wr label{line-height:21px;}
+.vote_item_wr input[type="radio"]{display:none;}
+.vote_item_wr input[type="radio"]+span {
+    -webkit-appearance: none;
+    background-color: #fafafa;
+    border: 1px solid #cacece;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05), inset 0px -15px 10px -12px rgba(0,0,0,0.05);
+    padding: 9px;
+    border-radius: 50px;
+    display: inline-block;
+    position: relative;
+    margin-right:5px;
+    top: 3px;
+}
+.vote_item_wr input[type="radio"]:checked + span {
+    background-color: #e9ecee;
+    color: #99a1a7;
+    border: 1px solid #adb8c0;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05), inset 0px -15px 10px -12px rgba(0,0,0,0.05), inset 15px 10px -12px rgba(255,255,255,0.1), inset 0px 0px 10px rgba(0,0,0,0.1);
+}
 
+
+
+.vote_item_wr input[type="checkbox"] {
+    display: none;
+}
+.vote_item_wr input[type="checkbox"]+span {
+    background-color: #fafafa;
+    border: 1px solid #cacece;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05), inset 0px -15px 10px -12px rgba(0,0,0,0.05);
+    padding: 9px;
+    border-radius: 3px;
+    display: inline-block;
+    position: relative;
+    margin-right: 5px;
+    top: 3px;
+}
+.vote_item_wr input[type="checkbox"]:checked + span {
+
+}
+
+.vote_item_wr input[type="checkbox"]:checked + span:after
+{
+    content: '\ea14';
+    font-size: 14px;
+    position: absolute;
+    font-family: fontello;
+    top: -1px;
+    left: 5px;
+    color:#fff;    
+}
+
+
+
+
+.vote_item_wr input[type="radio"]:checked + span:after{
+    content: ' ';
+    width: 12px;
+    height: 12px;
+    border-radius: 50px;
+    position: absolute;
+    top: 3px;
+    background: #99a1a7;
+    box-shadow: inset 0px 0px 10px rgba(0,0,0,0.3);
+    text-shadow: 0px;
+    left: 3px;
+    font-size: 32px;
+}
+.vote_stat {
+    padding-left: 20px;
+    margin-bottom: 13px;
+}
+.vote_stat_text small{display:block;font-size:12px;color:#999;padding:1px 0 4px;}
+.vote_item_wr .news-list_date{margin:0 0 8px;}
+.vote_item_wr h3{margin-bottom:0px;}
 /* ЛПУ */
 .org_item {
     padding-top: 22px;
