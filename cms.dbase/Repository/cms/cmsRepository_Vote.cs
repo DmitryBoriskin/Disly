@@ -119,8 +119,7 @@ namespace cms.dbase
                   .Value(v => v.d_date_start, ins.DateStart)
                   .Value(v => v.d_date_end, ins.DateEnd)
                   .Insert();
-                // логирование
-                //insertLog(userId, IP, "insert", id, String.Empty, "Banners", item.Title);
+                // логирование                
                 var log = new LogModel()
                 {
                     Site = _domain,
@@ -133,7 +132,7 @@ namespace cms.dbase
                 };
                 insertLog(log);
 
-                return false;
+                return true;
             }
         }
         public override bool updVote(Guid id, VoteModel ins)
@@ -209,7 +208,7 @@ namespace cms.dbase
             {
                 //текущее значение элемента чей приоритет меняется
                 var data = db.content_vote_answerss
-                    .Where(w => w.f_vote.Equals(id))
+                    .Where(w => w.id.Equals(id))
                     .Select(s => new VoteAnswer
                     {
                         Sort = s.n_sort,
