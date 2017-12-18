@@ -28,6 +28,7 @@ fieldset {
     margin: 0;
     border: 1px solid #eeeeee;
     min-width: 0;
+    margin-bottom:60px;
 }
 .cont_wrap {
     min-height: 100%;

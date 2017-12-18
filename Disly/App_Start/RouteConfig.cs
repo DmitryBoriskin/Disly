@@ -216,13 +216,16 @@ namespace Disly
                defaults: new { controller = "Documents", action = "Index", path = UrlParameter.Optional }
             );
 
+
             //Обратная связь
             routes.MapRoute(
              name: "Feedback",
              url: "Feedback/{*action}",
-             defaults: new { controller = "Feedback", action = "Index", path = UrlParameter.Optional }
+             defaults: new { controller = "Feedback", action = "Index", path = UrlParameter.Optional },
+             constraints: new { controller = "Feedback", action = "^Appeallist$|^Reviewlist$|^SendForm$|^AnswerForm$" } //Restriction for controller and action
              );
-            
+
+
             // Типовая страница (карта сайта)
             routes.MapRoute(
                name: "Page",
@@ -230,7 +233,7 @@ namespace Disly
                defaults: new { controller = "Page", action = "Index", path = UrlParameter.Optional }
                //constraints: new { path = @"\d{6}" }
             );
-            
+
             routes.MapRoute(
                 name: "Service",
                 url: "Service/{action}/{*id}",
