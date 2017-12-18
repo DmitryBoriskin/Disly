@@ -11,63 +11,63 @@ using System.Web;
 using System.Web.Mvc;
 
 namespace Disly.Areas.Admin.Controllers
- {
-     public class EventsController : CoreController
-     {
-         EventsViewModel model;
-         FilterParams filter;
-         
-         protected override void OnActionExecuting(ActionExecutingContext filterContext)
-         {
-             base.OnActionExecuting(filterContext);
- 
-             ViewBag.ControllerName = (String) RouteData.Values["controller"];
-             ViewBag.ActionName = RouteData.Values["action"].ToString().ToLower();
- 
-             ViewBag.HttpKeys = Request.QueryString.AllKeys;
-             ViewBag.Query = Request.QueryString;
- 
-             filter = getFilter();
- 
-              model = new EventsViewModel()
-             {
-                 Account = AccountInfo,
-                 Settings = SettingsInfo,
-                 UserResolution = UserResolutionInfo,
-                 ControllerName = ControllerName,
-                 ActionName = ActionName
-              };
- 
-             #region Метатеги
-             ViewBag.Title = UserResolutionInfo.Title;
-             ViewBag.Description = "";
-             ViewBag.KeyWords = "";
-             #endregion
-         }
- 
- 
-         /// <summary>
-         /// GET: Список событий
-         /// </summary>
-         /// <param name="category"></param>
-         /// <param name="type"></param>
-         /// <returns></returns>
-         public ActionResult Index(string category, string type)
-         {
+{
+    public class EventsController : CoreController
+    {
+        EventsViewModel model;
+        FilterParams filter;
+
+        protected override void OnActionExecuting(ActionExecutingContext filterContext)
+        {
+            base.OnActionExecuting(filterContext);
+
+            ViewBag.ControllerName = (String)RouteData.Values["controller"];
+            ViewBag.ActionName = RouteData.Values["action"].ToString().ToLower();
+
+            ViewBag.HttpKeys = Request.QueryString.AllKeys;
+            ViewBag.Query = Request.QueryString;
+
+            filter = getFilter();
+
+            model = new EventsViewModel()
+            {
+                Account = AccountInfo,
+                Settings = SettingsInfo,
+                UserResolution = UserResolutionInfo,
+                ControllerName = ControllerName,
+                ActionName = ActionName
+            };
+
+            #region Метатеги
+            ViewBag.Title = UserResolutionInfo.Title;
+            ViewBag.Description = "";
+            ViewBag.KeyWords = "";
+            #endregion
+        }
+
+
+        /// <summary>
+        /// GET: Список событий
+        /// </summary>
+        /// <param name="category"></param>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public ActionResult Index(string category, string type)
+        {
             // Наполняем модель данными
             var evfilter = FilterParams.Extend<EventFilter>(filter);
             model.List = _cmsRepository.getEventsList(evfilter);
- 
+
             return View(model);
-         }
- 
-         /// <summary>
-         /// GET: Форма редактирования/добавления события
-         /// </summary>
-         /// <returns></returns>
-         public ActionResult Item(Guid Id)
-         {
-             model.Item = _cmsRepository.getEvent(Id);
+        }
+
+        /// <summary>
+        /// GET: Форма редактирования/добавления события
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult Item(Guid Id)
+        {
+            model.Item = _cmsRepository.getEvent(Id);
             if (model.Item == null)
                 model.Item = new EventsModel()
                 {
@@ -94,74 +94,74 @@ namespace Disly.Areas.Admin.Controllers
 
             model.Item.Links = new ObjectLinks()
             {
-                Events = (eventsList != null)? eventsList.Data : null,
+                Events = (eventsList != null) ? eventsList.Data : null,
                 Orgs = orgs,
                 //Persons = null
             };
 
             return View("Item", model);
-         }
- 
- 
-         /// <summary>
-         /// Формируем строку фильтра
-         /// </summary>
-         /// <param name="title_serch">Поиск по названию</param>
-         /// <returns></returns>
-         [HttpPost]
-         [MultiButton(MatchFormKey = "action", MatchFormValue = "search-btn")]
-         public ActionResult Search(string filter, bool enabeld, string size)
-         {
-             string query = HttpUtility.UrlDecode(Request.Url.Query);
-             query = addFiltrParam(query, "filter", filter);
-             if (enabeld) query = addFiltrParam(query, "enabeld", String.Empty);
-             else query = addFiltrParam(query, "enabeld", enabeld.ToString().ToLower());
- 
-             query = addFiltrParam(query, "page", String.Empty);
-             query = addFiltrParam(query, "size", size);
- 
-             return Redirect(StartUrl + query);
-         }
- 
-         /// <summary>
-         /// Очищаем фильтр
-         /// </summary>
-         /// <returns></returns>
-         [HttpPost]
-         [MultiButton(MatchFormKey = "action", MatchFormValue = "clear-btn")]
-         public ActionResult ClearFiltr()
-         {
-             return Redirect(StartUrl);
-         }
-         
-         /// <summary>
-         /// Создание новой записи
-         /// </summary>
-         /// <returns></returns>
-         [HttpPost]
-         [MultiButton(MatchFormKey = "action", MatchFormValue = "insert-btn")]
-         public ActionResult Insert()
-         {
-             //  При создании записи сбрасываем номер страницы
-             string query = HttpUtility.UrlDecode(Request.Url.Query);
-             query = addFiltrParam(query, "page", String.Empty);
- 
-             return Redirect(StartUrl + "Item/" + Guid.NewGuid() + "/" + query);
-         }
- 
-         /// <summary>
-         /// Сохранение изменений в записи
-         /// </summary>
-         /// <param name="Id"></param>
-         /// <param name="bindData"></param>
-         /// <returns></returns>
-         [HttpPost]
-         [ValidateInput(false)]
-         [MultiButton(MatchFormKey = "action", MatchFormValue = "save-btn")]
-         public ActionResult Save(Guid Id, EventsViewModel bindData, HttpPostedFileBase upload)
-         {
-             ErrorMassege userMessage = new ErrorMassege();
-             userMessage.title = "Информация";
+        }
+
+
+        /// <summary>
+        /// Формируем строку фильтра
+        /// </summary>
+        /// <param name="title_serch">Поиск по названию</param>
+        /// <returns></returns>
+        [HttpPost]
+        [MultiButton(MatchFormKey = "action", MatchFormValue = "search-btn")]
+        public ActionResult Search(string filter, bool enabeld, string size)
+        {
+            string query = HttpUtility.UrlDecode(Request.Url.Query);
+            query = addFiltrParam(query, "filter", filter);
+            if (enabeld) query = addFiltrParam(query, "enabeld", String.Empty);
+            else query = addFiltrParam(query, "enabeld", enabeld.ToString().ToLower());
+
+            query = addFiltrParam(query, "page", String.Empty);
+            query = addFiltrParam(query, "size", size);
+
+            return Redirect(StartUrl + query);
+        }
+
+        /// <summary>
+        /// Очищаем фильтр
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        [MultiButton(MatchFormKey = "action", MatchFormValue = "clear-btn")]
+        public ActionResult ClearFiltr()
+        {
+            return Redirect(StartUrl);
+        }
+
+        /// <summary>
+        /// Создание новой записи
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        [MultiButton(MatchFormKey = "action", MatchFormValue = "insert-btn")]
+        public ActionResult Insert()
+        {
+            //  При создании записи сбрасываем номер страницы
+            string query = HttpUtility.UrlDecode(Request.Url.Query);
+            query = addFiltrParam(query, "page", String.Empty);
+
+            return Redirect(StartUrl + "Item/" + Guid.NewGuid() + "/" + query);
+        }
+
+        /// <summary>
+        /// Сохранение изменений в записи
+        /// </summary>
+        /// <param name="Id"></param>
+        /// <param name="bindData"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [ValidateInput(false)]
+        [MultiButton(MatchFormKey = "action", MatchFormValue = "save-btn")]
+        public ActionResult Save(Guid Id, EventsViewModel bindData, HttpPostedFileBase upload)
+        {
+            ErrorMessage userMessage = new ErrorMessage();
+            userMessage.title = "Информация";
 
             if (ModelState.IsValid)
             {
@@ -185,7 +185,7 @@ namespace Disly.Areas.Admin.Controllers
                     if (!validExtension.Contains(fileExtension.Replace(".", "")))
                     {
                         model.Item = _cmsRepository.getEvent(Id);
-                        model.ErrorInfo = new ErrorMassege()
+                        model.ErrorInfo = new ErrorMessage()
                         {
                             title = "Ошибка",
                             info = "Вы не можете загружать файлы данного формата",
@@ -276,23 +276,23 @@ namespace Disly.Areas.Admin.Controllers
                 model.Item.PreviewImage = Files.getInfoImage(model.Item.PreviewImage.Url);
             }
             model.ErrorInfo = userMessage;
- 
-             return View("Item", model);
-         }
- 
-         [HttpPost]
-         [MultiButton(MatchFormKey = "action", MatchFormValue = "cancel-btn")]
-         public ActionResult Cancel()
-         {
-             return Redirect(StartUrl + Request.Url.Query);
-         }
- 
-         [HttpPost]
-         [MultiButton(MatchFormKey = "action", MatchFormValue = "delete-btn")]
-         public ActionResult Delete(Guid Id)
-         {
+
+            return View("Item", model);
+        }
+
+        [HttpPost]
+        [MultiButton(MatchFormKey = "action", MatchFormValue = "cancel-btn")]
+        public ActionResult Cancel()
+        {
+            return Redirect(StartUrl + Request.Url.Query);
+        }
+
+        [HttpPost]
+        [MultiButton(MatchFormKey = "action", MatchFormValue = "delete-btn")]
+        public ActionResult Delete(Guid Id)
+        {
             // записываем информацию о результатах
-            ErrorMassege userMessage = new ErrorMassege();
+            ErrorMessage userMessage = new ErrorMessage();
             userMessage.title = "Информация";
             //В случае ошибки
             userMessage.info = "Ошибка, Запись не удалена";
@@ -300,10 +300,10 @@ namespace Disly.Areas.Admin.Controllers
                 new ErrorMassegeBtn { url = "#", text = "ок", action = "false" }
             };
 
-            var data = _cmsRepository.getEvent(Id);
-            if (data != null)
+            model.Item = _cmsRepository.getEvent(Id);
+            if (model.Item != null)
             {
-                var image = (data.PreviewImage != null) ? data.PreviewImage.Url : null;
+                var image = (model.Item.PreviewImage != null) ? model.Item.PreviewImage.Url : null;
                 var res = _cmsRepository.deleteCmsEvent(Id);
 
                 if (res)
@@ -313,20 +313,18 @@ namespace Disly.Areas.Admin.Controllers
 
                     // записываем информацию о результатах
                     userMessage.title = "Информация";
-                    userMessage.info = "Запись Удалена";
-                    var tolist = "/Admin/Events/";
+                    userMessage.info = "Запись удалена";
+
                     userMessage.buttons = new ErrorMassegeBtn[]
                     {
-                        new ErrorMassegeBtn { url = tolist, text = "Перейти в список" }
+                        new ErrorMassegeBtn { url = StartUrl, text = "ок" }
                     };
-                    model.ErrorInfo = userMessage;
-                    //return RedirectToAction("Index", new { id = model.Item.Section });
                 }
             }
 
             model.ErrorInfo = userMessage;
 
-            return RedirectToAction("Index");
+            return View(model);
         }
 
         //Получение списка организаций по параметрам для отображения в модальном окне
@@ -373,4 +371,4 @@ namespace Disly.Areas.Admin.Controllers
             return Json("An Error Has occourred"); //Ne
         }
     }
- }
+}

@@ -145,7 +145,7 @@ namespace Disly.Areas.Admin.Controllers
         [MultiButton(MatchFormKey = "action", MatchFormValue = "save-btn")]
         public ActionResult Save(Guid id, OrgsViewModel back_model, HttpPostedFileBase upload)
         {
-            ErrorMassege userMessege = new ErrorMassege();
+            ErrorMessage userMessege = new ErrorMessage();
             userMessege.title = "Информация";
             model.Item = _cmsRepository.getOrgItem(id);
             #region координаты
@@ -184,7 +184,7 @@ namespace Disly.Areas.Admin.Controllers
                     var validExtension = (!string.IsNullOrEmpty(Settings.PicTypes)) ? Settings.PicTypes.Split(',') : "jpg,jpeg,png,gif".Split(',');
                     if (!validExtension.Contains(fileExtension.Replace(".", "")))
                     {
-                        model.ErrorInfo = new ErrorMassege()
+                        model.ErrorInfo = new ErrorMessage()
                         {
                             title = "Ошибка",
                             info = "Вы не можете загружать файлы данного формата",
@@ -269,7 +269,7 @@ namespace Disly.Areas.Admin.Controllers
         [MultiButton(MatchFormKey = "action", MatchFormValue = "delete-btn")]
         public ActionResult Delete(Guid id)
         {
-            ErrorMassege userMassage = new ErrorMassege();
+            ErrorMessage userMassage = new ErrorMessage();
             userMassage.title = "Информация";
             if (_cmsRepository.deleteOrg(id)) //, AccountInfo.id, RequestUserInfo.IP
             {
@@ -330,7 +330,7 @@ namespace Disly.Areas.Admin.Controllers
         [MultiButton(MatchFormKey = "action", MatchFormValue = "save-structure-btn")]
         public ActionResult StructureSave(Guid id, OrgsViewModel back_model)
         {
-            ErrorMassege userMessage = new ErrorMassege();
+            ErrorMessage userMessage = new ErrorMessage();
             userMessage.title = "Информация";
             model.StructureItem = _cmsRepository.getStructure(id);
             if (ModelState.IsValid)
@@ -402,7 +402,7 @@ namespace Disly.Areas.Admin.Controllers
         [MultiButton(MatchFormKey = "action", MatchFormValue = "delete-structure-btn")]
         public ActionResult StructureDelete(Guid id)
         {
-            ErrorMassege userMassage = new ErrorMassege();
+            ErrorMessage userMassage = new ErrorMessage();
             userMassage.title = "Информация";
             Guid ParentOrgId = _cmsRepository.getStructure(id).OrgId;
             if (_cmsRepository.deleteStructure(id))
@@ -523,7 +523,7 @@ namespace Disly.Areas.Admin.Controllers
         [MultiButton(MatchFormKey = "action", MatchFormValue = "save-ovp-btn")]
         public ActionResult SaveOvp(Guid id, OrgsViewModel back_model)
         {
-            ErrorMassege userMessage = new ErrorMassege();
+            ErrorMessage userMessage = new ErrorMessage();
             userMessage.title = "Информация";
             model.StructureItem = _cmsRepository.getStructure(id);
             #region координаты
@@ -711,7 +711,7 @@ namespace Disly.Areas.Admin.Controllers
         [MultiButton(MatchFormKey = "action", MatchFormValue = "save-department-btn")]
         public ActionResult DepartmentSave(Guid id, OrgsViewModel back_model)
         {
-            ErrorMassege userMessage = new ErrorMassege();
+            ErrorMessage userMessage = new ErrorMessage();
             userMessage.title = "Информация";
             model.DepartmentItem = _cmsRepository.getDepartamentItem(id);
             if (ModelState.IsValid)
@@ -758,7 +758,7 @@ namespace Disly.Areas.Admin.Controllers
         [MultiButton(MatchFormKey = "action", MatchFormValue = "delete-department-btn")]
         public ActionResult DepartmentDelete(Guid id)
         {
-            ErrorMassege userMassage = new ErrorMassege();
+            ErrorMessage userMassage = new ErrorMessage();
             userMassage.title = "Информация";
             Guid IdParentStruct = _cmsRepository.getDepartamentItem(id).StructureF;
             if (_cmsRepository.delDepartament(id)) //, AccountInfo.id, RequestUserInfo.IP
@@ -915,7 +915,7 @@ namespace Disly.Areas.Admin.Controllers
             if (_peopList != null)
             {
 
-                model.PeopleList =(model.AdministrativItem!=null)? new SelectList(_peopList, "Id", "FIO",model.AdministrativItem.PeopleF): new SelectList(_peopList, "Id", "FIO");
+                model.PeopleList = (model.AdministrativItem != null) ? new SelectList(_peopList, "Id", "FIO", model.AdministrativItem.PeopleF) : new SelectList(_peopList, "Id", "FIO");
             }
             #endregion
             if (OrgId == null)
@@ -930,7 +930,7 @@ namespace Disly.Areas.Admin.Controllers
         [MultiButton(MatchFormKey = "action", MatchFormValue = "save-adminiatrativ-btn")]
         public ActionResult Administrativ(Guid Id, OrgsViewModel back_model, HttpPostedFileBase upload)
         {
-            ErrorMassege userMassege = new ErrorMassege
+            ErrorMessage userMassege = new ErrorMessage
             {
                 title = "Информация"
             };
@@ -954,7 +954,7 @@ namespace Disly.Areas.Admin.Controllers
                     var validExtension = (!string.IsNullOrEmpty(Settings.PicTypes)) ? Settings.PicTypes.Split(',') : "jpg,jpeg,png,gif".Split(',');
                     if (!validExtension.Contains(fileExtension.Replace(".", "")))
                     {
-                        model.ErrorInfo = new ErrorMassege()
+                        model.ErrorInfo = new ErrorMessage()
                         {
                             title = "Ошибка",
                             info = "Вы не можете загружать файлы данного формата",
@@ -1020,7 +1020,7 @@ namespace Disly.Areas.Admin.Controllers
                     model.PeopleList = new SelectList(_peopList, "Id", "FIO");
                 }
             }
-            
+
             #endregion
 
             model.BreadCrumbOrg = _cmsRepository.getBreadCrumbOrgs(Id, ViewBag.ActionName);
@@ -1050,7 +1050,7 @@ namespace Disly.Areas.Admin.Controllers
         [MultiButton(MatchFormKey = "action", MatchFormValue = "delete-adminiatrativ-btn")]
         public ActionResult DeleteAdministrative(Guid id)
         {
-            ErrorMassege userMassage = new ErrorMassege();
+            ErrorMessage userMassage = new ErrorMessage();
             userMassage.title = "Информация";
             Guid ParentOrgId = _cmsRepository.getAdministrativ(id).OrgId;
             if (_cmsRepository.delAdministrativ(id)) //, AccountInfo.id, RequestUserInfo.IP

@@ -70,7 +70,7 @@ namespace Disly.Areas.Admin.Controllers
                 filter = getFilter(pageSize);
 
                 var sectionItem = _cmsRepository.getSectionItem(id.Value);
-                if(sectionItem != null)
+                if (sectionItem != null)
                 {
                     // наполняем модель списка баннеров
                     var bannersList = _cmsRepository.getBanners(id.Value, filter);
@@ -100,7 +100,7 @@ namespace Disly.Areas.Admin.Controllers
                     throw new Exception("BannerController: Невозможно создать баннер, секция не определена");
 
                 var getSection = _cmsRepository.getSections();
-                if(getSection == null || (getSection != null && !getSection.Any(p => p.Id == section)))
+                if (getSection == null || (getSection != null && !getSection.Any(p => p.Id == section)))
                     throw new Exception("BannerController: Невозможно создать баннер, секция не определена");
 
                 model.Item = new BannersModel()
@@ -108,7 +108,7 @@ namespace Disly.Areas.Admin.Controllers
                     Id = id,
                     Site = Domain,
                     Date = DateTime.Now,
-                 };
+                };
                 ViewBag.Section = section.ToString();
             }
             else
@@ -131,7 +131,7 @@ namespace Disly.Areas.Admin.Controllers
 
                 model.Item.Links = new ObjectLinks()
                 {
-                    Sites = (sitessList != null)? sitessList.Data : null
+                    Sites = (sitessList != null) ? sitessList.Data : null
                 };
             }
 
@@ -146,7 +146,7 @@ namespace Disly.Areas.Admin.Controllers
         [MultiButton(MatchFormKey = "action", MatchFormValue = "save-btn")]
         public ActionResult Item(Guid id, BannersViewModel back_model, HttpPostedFileBase upload)
         {
-            ErrorMassege userMessage = new ErrorMassege();
+            ErrorMessage userMessage = new ErrorMessage();
             userMessage.title = "Информация";
 
             #region Данные, необходимые для сохранения
@@ -162,7 +162,7 @@ namespace Disly.Areas.Admin.Controllers
                 string savePath = Settings.UserFiles + Domain + Settings.BannersDir;
 
                 // секция
-                if (!back_model.Item.Section.HasValue )
+                if (!back_model.Item.Section.HasValue)
                     throw new Exception("BannerController: В back_model не определена секция");
 
                 var _section = _cmsRepository.getSectionItem(back_model.Item.Section.Value);
@@ -177,7 +177,7 @@ namespace Disly.Areas.Admin.Controllers
                     if (!validExtension.Contains(fileExtension.Replace(".", "")))
                     {
                         model.Item = _cmsRepository.getBannerItem(id);
-                        model.ErrorInfo = new ErrorMassege()
+                        model.ErrorInfo = new ErrorMessage()
                         {
                             title = "Ошибка",
                             info = "Вы не можете загружать файлы данного формата",
@@ -223,7 +223,7 @@ namespace Disly.Areas.Admin.Controllers
                     };
 
                 }
-                 else
+                else
                 {
                     userMessage.info = "Произошла ошибка";
                     userMessage.buttons = new ErrorMassegeBtn[]{
@@ -285,7 +285,7 @@ namespace Disly.Areas.Admin.Controllers
         public ActionResult Delete(Guid id)
         {
             // записываем информацию о результатах
-            ErrorMassege userMessage = new ErrorMassege();
+            ErrorMessage userMessage = new ErrorMessage();
             userMessage.title = "Информация";
             //В случае ошибки
             userMessage.info = "Ошибка, Запись не удалена";
@@ -315,11 +315,10 @@ namespace Disly.Areas.Admin.Controllers
                     {
                         new ErrorMassegeBtn { url = section, text = "Перейти в список" }
                     };
-                    model.ErrorInfo = userMessage;
                     //return RedirectToAction("Index", new { id = model.Item.Section });
                 }
             }
-           
+
             model.ErrorInfo = userMessage;
 
             return View(model);

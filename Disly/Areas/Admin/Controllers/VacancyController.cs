@@ -129,7 +129,7 @@ namespace Disly.Areas.Admin.Controllers
         [MultiButton(MatchFormKey = "action", MatchFormValue = "save-btn")]
         public ActionResult Save(Guid Id, VacanciesViewModel bindData)
         {
-            ErrorMassege userMessage = new ErrorMassege();
+            ErrorMessage userMessage = new ErrorMessage();
             userMessage.title = "Информация";
 
             if (ModelState.IsValid)
@@ -140,20 +140,34 @@ namespace Disly.Areas.Admin.Controllers
                 bindData.Item.Id = Id;
                 //Определяем Insert или Update
                 if (getFeedback != null)
+                {
                     res = _cmsRepository.updateCmsVacancy(bindData.Item);
+                    userMessage.info = "Запись обновлена";
+                }
                 else
+                {
                     res = _cmsRepository.insertCmsVacancy(bindData.Item);
+                    userMessage.info = "Запись добавлена";
+                }
                 //Сообщение пользователю
                 if (res)
-                    userMessage.info = "Запись обновлена";
-                else
-                    userMessage.info = "Произошла ошибка";
-
-                string currentUrl = Request.Url.PathAndQuery;
-                userMessage.buttons = new ErrorMassegeBtn[]{
-                     new ErrorMassegeBtn { url = StartUrl + Request.Url.Query, text = "Вернуться в список" },
+                {
+                    string currentUrl = Request.Url.PathAndQuery;
+                    userMessage.buttons = new ErrorMassegeBtn[]
+                    {
+                     new ErrorMassegeBtn { url = StartUrl, text = "Вернуться в список" },
                      new ErrorMassegeBtn { url = currentUrl, text = "ок"}
-                 };
+                    };
+                }
+                else
+                {
+                    userMessage.info = "Произошла ошибка";
+                    userMessage.buttons = new ErrorMassegeBtn[]
+                    {
+                     new ErrorMassegeBtn { url = StartUrl, text = "Вернуться в список" },
+                     new ErrorMassegeBtn { url = "#", text = "ок", action = "false"}
+                    };
+                }
             }
             else
             {
@@ -181,19 +195,43 @@ namespace Disly.Areas.Admin.Controllers
         [MultiButton(MatchFormKey = "action", MatchFormValue = "delete-btn")]
         public ActionResult Delete(Guid Id)
         {
-           // var res = _cmsRepository.deleteCmsFeedback(Id);
-
             // записываем информацию о результатах
-            ErrorMassege userMassege = new ErrorMassege();
-            userMassege.title = "Информация";
-            userMassege.info = "Запись Удалена";
-            userMassege.buttons = new ErrorMassegeBtn[]{
-                 new ErrorMassegeBtn { url = "#", text = "ок", action = "false" }
-             };
+            ErrorMessage userMessage = new ErrorMessage();
+            userMessage.title = "Информация";
+            //В случае ошибки
+            userMessage.info = "Ошибка, Запись не удалена";
+            userMessage.buttons = new ErrorMassegeBtn[]{
+                new ErrorMassegeBtn { url = "#", text = "ок", action = "false" }
+            };
 
-            model.ErrorInfo = userMassege;
+            model.Item = _cmsRepository.getVacancy(Id);
+            if (model.Item != null)
+            {
+                var res = _cmsRepository.deleteCmsVacancy(Id);
+                if (res)
+                {
+                    // записываем информацию о результатах
+                    userMessage.title = "Информация";
+                    userMessage.info = "Запись удалена";
 
-            return View("Item", model);
+                    userMessage.buttons = new ErrorMassegeBtn[]
+                    {
+                        new ErrorMassegeBtn { url = StartUrl, text = "ок" }
+                    };
+                    model.ErrorInfo = userMessage;
+                    model.Item = new VacancyModel()
+                    {
+                        Id = Id,
+                        Date = DateTime.Now
+                    };
+                    return View(model);
+                }
+            }
+
+            model.ErrorInfo = userMessage;
+
+            return View(model);
+
         }
     }
 }

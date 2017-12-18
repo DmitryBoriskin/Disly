@@ -131,7 +131,7 @@ namespace Disly.Areas.Admin.Controllers
         [MultiButton(MatchFormKey = "action", MatchFormValue = "save-btn")]
         public ActionResult Save(Guid Id, FeedbacksViewModel bindData)
         {
-            ErrorMassege userMessage = new ErrorMassege();
+            ErrorMessage userMessage = new ErrorMessage();
             userMessage.title = "Информация";
 
             if (ModelState.IsValid)
@@ -181,11 +181,11 @@ namespace Disly.Areas.Admin.Controllers
                  };
             }
 
-                //model.Item = _cmsRepository.getFeedback(Id);
-                model.ErrorInfo = userMessage;
+            //model.Item = _cmsRepository.getFeedback(Id);
+            model.ErrorInfo = userMessage;
 
-                return View("Item", model);
-            }
+            return View("Item", model);
+        }
 
         [HttpPost]
         [MultiButton(MatchFormKey = "action", MatchFormValue = "cancel-btn")]
@@ -199,7 +199,7 @@ namespace Disly.Areas.Admin.Controllers
         public ActionResult Delete(Guid Id)
         {
             // записываем информацию о результатах
-            ErrorMassege userMessage = new ErrorMassege();
+            ErrorMessage userMessage = new ErrorMessage();
             userMessage.title = "Информация";
             //В случае ошибки
             userMessage.info = "Ошибка, Запись не удалена";
@@ -213,13 +213,12 @@ namespace Disly.Areas.Admin.Controllers
             {
                 // записываем информацию о результатах
                 userMessage.title = "Информация";
-                userMessage.info = "Запись Удалена";
-                var tolist = "/Admin/feedbacks/";
+                userMessage.info = "Запись удалена";
+
                 userMessage.buttons = new ErrorMassegeBtn[]
                 {
-                        new ErrorMassegeBtn { url = tolist, text = "Перейти в список" }
+                        new ErrorMassegeBtn { url = StartUrl, text = "Перейти в список" }
                 };
-                model.ErrorInfo = userMessage;
                 //return RedirectToAction("Index", new { id = model.Item.Section });
             }
 

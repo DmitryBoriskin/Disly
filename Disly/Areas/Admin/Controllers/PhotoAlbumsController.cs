@@ -54,7 +54,7 @@ namespace Disly.Areas.Admin.Controllers
 
         // GET: Materials
         public ActionResult Index(string category, string type)
-        {            
+        {
             model.List = _cmsRepository.getPhotoAlbum(filter);
             return View(model);
         }
@@ -122,7 +122,7 @@ namespace Disly.Areas.Admin.Controllers
         [MultiButton(MatchFormKey = "action", MatchFormValue = "save-btn")]
         public ActionResult Save(Guid id, PhotoViewModel bindData, HttpPostedFileBase upload, IEnumerable<HttpPostedFileBase> uploadPhoto)
         {
-            ErrorMassege userMessage = new ErrorMassege();
+            ErrorMessage userMessage = new ErrorMessage();
             userMessage.title = "Информация";
 
             string savePath = Settings.UserFiles + Domain + Settings.PhotoDir + bindData.Album.Date.ToString("yyyy") + "_" + bindData.Album.Date.ToString("MM") + "/" + bindData.Album.Date.ToString("dd") + "/" + id + "/";
@@ -140,7 +140,7 @@ namespace Disly.Areas.Admin.Controllers
                 }
                 var width = 0;
                 var height = 0;
-                var defaultPreviewSizes = new string[] { "540", "360" };                                
+                var defaultPreviewSizes = new string[] { "540", "360" };
                 if (upload != null && upload.ContentLength > 0)
                 {
                     string fileExtension = upload.FileName.Substring(upload.FileName.LastIndexOf(".")).ToLower();
@@ -148,7 +148,7 @@ namespace Disly.Areas.Admin.Controllers
                     var validExtension = (!string.IsNullOrEmpty(Settings.PicTypes)) ? Settings.PicTypes.Split(',') : "jpg,jpeg,png,gif".Split(',');
                     if (!validExtension.Contains(fileExtension.Replace(".", "")))
                     {
-                        model.ErrorInfo = new ErrorMassege()
+                        model.ErrorInfo = new ErrorMessage()
                         {
                             title = "Ошибка",
                             info = "Вы не можете загружать файлы данного формата",
@@ -170,14 +170,14 @@ namespace Disly.Areas.Admin.Controllers
                         Url = Files.SaveImageResizeRename(upload, savePath, "logo", width, height)
                     };
                 }
-                
+
                 #endregion
 
 
                 var getAlbum = _cmsRepository.getPhotoAlbumItem(id);
                 bindData.Album.Id = id;
                 var status = false;//если trueдобавляем в фотоальбом фотографии иначе - не добавляем
-                
+
                 //Определяем Insert или Update
                 if (getAlbum != null)
                     if (_cmsRepository.updPhotoAlbum(id, bindData.Album))
@@ -186,18 +186,18 @@ namespace Disly.Areas.Admin.Controllers
                         userMessage.info = "Запись обновлена";
                     }
                     else
-                    {userMessage.info = "Произошла ошибка";}
+                    { userMessage.info = "Произошла ошибка"; }
                 else
                 {
                     //превью альбома
-                    
+
 
                     if (_cmsRepository.insPhotoAlbum(id, bindData.Album))
                     {
                         userMessage.info = "Запись добавлена";
                         status = true;
                     }
-                    else{userMessage.info = "Произошла ошибка";}
+                    else { userMessage.info = "Произошла ошибка"; }
                 }
                 if (status)
                 {
@@ -213,59 +213,59 @@ namespace Disly.Areas.Admin.Controllers
                         {
                             //try
                             //{
-                                if (!allowedExtensions.Contains(Path.GetExtension(photos.FileName.ToLower())))
-                                {
-                                    Exception ex = new Exception("неверный формат файла \"" + Path.GetFileName(photos.FileName) + "\". Доступные расширения: .jpg, .jpeg, .png, .gif");
-                                    throw ex;
-                                }
-                                if (!Directory.Exists(Server.MapPath(serverPath))) { DirectoryInfo di = Directory.CreateDirectory(Server.MapPath(serverPath)); }
+                            if (!allowedExtensions.Contains(Path.GetExtension(photos.FileName.ToLower())))
+                            {
+                                Exception ex = new Exception("неверный формат файла \"" + Path.GetFileName(photos.FileName) + "\". Доступные расширения: .jpg, .jpeg, .png, .gif");
+                                throw ex;
+                            }
+                            if (!Directory.Exists(Server.MapPath(serverPath))) { DirectoryInfo di = Directory.CreateDirectory(Server.MapPath(serverPath)); }
 
-                                double filesCount = Directory.EnumerateFiles(Server.MapPath(serverPath)).Count();
-                                double newFilenameInt = Math.Ceiling(filesCount / 2) + 1;
-                                string newFilename = newFilenameInt.ToString() + ".jpg";
+                            double filesCount = Directory.EnumerateFiles(Server.MapPath(serverPath)).Count();
+                            double newFilenameInt = Math.Ceiling(filesCount / 2) + 1;
+                            string newFilename = newFilenameInt.ToString() + ".jpg";
 
-                                while (System.IO.File.Exists(Server.MapPath(Path.Combine(serverPath, newFilename))))
-                                {
-                                    newFilenameInt++;
-                                    newFilename = newFilenameInt.ToString() + ".jpg";
-                                }
+                            while (System.IO.File.Exists(Server.MapPath(Path.Combine(serverPath, newFilename))))
+                            {
+                                newFilenameInt++;
+                                newFilename = newFilenameInt.ToString() + ".jpg";
+                            }
 
-                                //сохраняем оригинал
-                                photos.SaveAs(Server.MapPath(Path.Combine(serverPath, newFilename)));
+                            //сохраняем оригинал
+                            photos.SaveAs(Server.MapPath(Path.Combine(serverPath, newFilename)));
 
-                                ImageCodecInfo myImageCodecInfo = GetEncoderInfo("image/jpeg");
-                                EncoderParameters myEncoderParameters = new EncoderParameters(1);
-                                myEncoderParameters.Param[0] = new EncoderParameter(Encoder.Quality, 100L); //cжатие 90
-
-
-                                Bitmap _File = (Bitmap)Bitmap.FromStream(photos.InputStream);
-                                //оригинал
-                                Bitmap _FileOrigin = Imaging.Resize(_File, 4000, "width");
-                                _FileOrigin.Save(Server.MapPath(serverPath + "/" + newFilename), myImageCodecInfo, myEncoderParameters);
-
-                                //сохраняем full hd
-                                Bitmap _FileHd = Imaging.Resize(_File, 2000, "width");
-                                _FileHd.Save(Server.MapPath(serverPath + "/hd_" + newFilename), myImageCodecInfo, myEncoderParameters);
-
-                                //сохраняем превью
-                                Bitmap _FilePrev = Imaging.Resize(_File, 120, 120, "center", "center");
-                                _FilePrev.Save(Server.MapPath(serverPath + "/prev_" + newFilename), myImageCodecInfo, myEncoderParameters);
+                            ImageCodecInfo myImageCodecInfo = GetEncoderInfo("image/jpeg");
+                            EncoderParameters myEncoderParameters = new EncoderParameters(1);
+                            myEncoderParameters.Param[0] = new EncoderParameter(Encoder.Quality, 100L); //cжатие 90
 
 
-                                photoList[counter] = new PhotoModel()
-                                {
-                                    Id = Guid.NewGuid(),
-                                    AlbumId = id,
-                                    Title = Path.GetFileName(photos.FileName),
-                                    Date = DateTime.Now,
-                                    PreviewImage =new Photo {Url= serverPath + "/prev_" + newFilename },
-                                    PhotoImage =new Photo {Url= serverPath + "/" + newFilename } 
-                                };
-                                counter++;
+                            Bitmap _File = (Bitmap)Bitmap.FromStream(photos.InputStream);
+                            //оригинал
+                            Bitmap _FileOrigin = Imaging.Resize(_File, 4000, "width");
+                            _FileOrigin.Save(Server.MapPath(serverPath + "/" + newFilename), myImageCodecInfo, myEncoderParameters);
 
-                                //записываем обложку фотоальбома
-                                
-                                
+                            //сохраняем full hd
+                            Bitmap _FileHd = Imaging.Resize(_File, 2000, "width");
+                            _FileHd.Save(Server.MapPath(serverPath + "/hd_" + newFilename), myImageCodecInfo, myEncoderParameters);
+
+                            //сохраняем превью
+                            Bitmap _FilePrev = Imaging.Resize(_File, 120, 120, "center", "center");
+                            _FilePrev.Save(Server.MapPath(serverPath + "/prev_" + newFilename), myImageCodecInfo, myEncoderParameters);
+
+
+                            photoList[counter] = new PhotoModel()
+                            {
+                                Id = Guid.NewGuid(),
+                                AlbumId = id,
+                                Title = Path.GetFileName(photos.FileName),
+                                Date = DateTime.Now,
+                                PreviewImage = new Photo { Url = serverPath + "/prev_" + newFilename },
+                                PhotoImage = new Photo { Url = serverPath + "/" + newFilename }
+                            };
+                            counter++;
+
+                            //записываем обложку фотоальбома
+
+
                             //}
                             //catch (Exception ex)
                             //{
@@ -323,11 +323,11 @@ namespace Disly.Areas.Admin.Controllers
         {
 
             // записываем информацию о результатах
-            ErrorMassege userMassege = new ErrorMassege();
+            ErrorMessage userMassege = new ErrorMessage();
             userMassege.title = "Информация";
 
             var data = _cmsRepository.getPhotoAlbumItem(Id);
-            if(data != null)
+            if (data != null)
             {
                 var delpath = data.Path;
 
@@ -351,13 +351,13 @@ namespace Disly.Areas.Admin.Controllers
                     {
                         //на случай когда в базе есть - а физически изображений не существует
                     }
-                #endregion
-            }
+                    #endregion
+                }
                 else
                 {
                     userMassege.info = "Произошла ошибка";
-                }        
-            }            
+                }
+            }
             userMassege.buttons = new ErrorMassegeBtn[]{
                 new ErrorMassegeBtn { url = StartUrl + Request.Url.Query, text = "Вернуться в список" },
                 new ErrorMassegeBtn { url = "#", text = "ок", action = "false" }
@@ -377,7 +377,7 @@ namespace Disly.Areas.Admin.Controllers
             {
                 string photoPath = photo.PhotoImage.Url.ToString();
                 string previewPath = photo.PreviewImage.Url.ToString();
-                string hdPath = previewPath.Replace("prev_","hd_");
+                string hdPath = previewPath.Replace("prev_", "hd_");
                 if (_cmsRepository.delPhotoItem(Guid.Parse(id)))
                 {
                     try
@@ -410,7 +410,7 @@ namespace Disly.Areas.Admin.Controllers
             }
             return "Не удалось удалить фотографию.";
 
-            
+
 
             //return (_repository.deletePhoto(Guid.Parse(id))) ? "" : "Не удалось удалить фотографию.";
         }

@@ -149,7 +149,7 @@ namespace Disly.Areas.Admin.Controllers
         [MultiButton(MatchFormKey = "action", MatchFormValue = "save-btn")]
         public ActionResult Save(Guid Id, MaterialsViewModel bindData, HttpPostedFileBase upload)
         {
-            ErrorMassege userMessage = new ErrorMassege();
+            ErrorMessage userMessage = new ErrorMessage();
             userMessage.title = "Информация";
 
             if (ModelState.IsValid)
@@ -173,11 +173,11 @@ namespace Disly.Areas.Admin.Controllers
                     string fileExtension = upload.FileName.Substring(upload.FileName.LastIndexOf(".")).ToLower();
 
                     var validExtension = (!string.IsNullOrEmpty(Settings.PicTypes)) ? Settings.PicTypes.Split(',') : "jpg,jpeg,png,gif".Split(',');
-                    if(!validExtension.Contains(fileExtension.Replace(".","")))
+                    if (!validExtension.Contains(fileExtension.Replace(".", "")))
                     {
                         model.Item = _cmsRepository.getMaterial(Id);
 
-                        model.ErrorInfo = new ErrorMassege()
+                        model.ErrorInfo = new ErrorMessage()
                         {
                             title = "Ошибка",
                             info = "Вы не можете загружать файлы данного формата",
@@ -217,7 +217,7 @@ namespace Disly.Areas.Admin.Controllers
                     userMessage.info = "Запись обновлена";
                     res = _cmsRepository.updateCmsMaterial(bindData.Item);
                 }
-                   
+
                 else
                 {
                     userMessage.info = "Запись добавлена";
@@ -278,7 +278,7 @@ namespace Disly.Areas.Admin.Controllers
         public ActionResult Delete(Guid Id)
         {
             // записываем информацию о результатах
-            ErrorMassege userMessage = new ErrorMassege();
+            ErrorMessage userMessage = new ErrorMessage();
             userMessage.title = "Информация";
             //В случае ошибки
             userMessage.info = "Ошибка, Запись не удалена";
@@ -286,10 +286,10 @@ namespace Disly.Areas.Admin.Controllers
                 new ErrorMassegeBtn { url = "#", text = "ок", action = "false" }
             };
 
-            var data = _cmsRepository.getMaterial(Id);
-            if(data != null)
+            model.Item = _cmsRepository.getMaterial(Id);
+            if (model.Item != null)
             {
-                var image = (data.PreviewImage != null) ? data.PreviewImage.Url : null;
+                var image = (model.Item.PreviewImage != null) ? model.Item.PreviewImage.Url : null;
                 var res = _cmsRepository.deleteCmsMaterial(Id);
                 if (res)
                 {
@@ -298,20 +298,17 @@ namespace Disly.Areas.Admin.Controllers
 
                     // записываем информацию о результатах
                     userMessage.title = "Информация";
-                    userMessage.info = "Запись Удалена";
-                    var tolist = "/Admin/Materials/";
+                    userMessage.info = "Запись удалена";
                     userMessage.buttons = new ErrorMassegeBtn[]
-                    {
-                        new ErrorMassegeBtn { url = tolist, text = "Перейти в список" }
-                    };
-                    model.ErrorInfo = userMessage;
-                    //return RedirectToAction("Index", new { id = model.Item.Section });
+                     {
+                        new ErrorMassegeBtn { url = StartUrl, text = "ок" }
+                     };
                 }
             }
-
             model.ErrorInfo = userMessage;
 
-            return RedirectToAction("Index");
+            return View(model);
+            //return RedirectToAction("Index");
         }
 
         //Получение списка организаций по параметрам

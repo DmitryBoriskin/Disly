@@ -91,6 +91,11 @@ namespace Disly.Controllers
             ViewBag.Description = PageDesc;
             ViewBag.KeyWords = PageKeyw;
             #endregion
+            ViewBag.IsAgree = false;
+            ViewBag.Anonymous = false;
+            ViewBag.captchaKey = Settings.CaptchaKey;
+            ViewBag.FbType = FeedbackType.appeal;
+
             //return View(_ViewName, model);
             return View(model);
         }
@@ -125,6 +130,10 @@ namespace Disly.Controllers
             ViewBag.Description = PageDesc;
             ViewBag.KeyWords = PageKeyw;
             #endregion
+            ViewBag.IsAgree = false;
+            ViewBag.Anonymous = false;
+            ViewBag.captchaKey = Settings.CaptchaKey;
+            ViewBag.FbType = FeedbackType.review;
             //return View(_ViewName, model);
             return View(model);
         }
@@ -302,7 +311,10 @@ namespace Disly.Controllers
             ViewBag.captchaKey = Settings.CaptchaKey;
 
             //return View(_ViewName, model);
-            return RedirectToAction("Form");
+            if (bindData.FbType == FeedbackType.review)
+                return RedirectToAction("Reviewlist");
+
+            return RedirectToAction("Appeallist");
         }
 
         /// <summary>
@@ -453,7 +465,12 @@ namespace Disly.Controllers
             ViewBag.IsAgree = false;
 
             model.Item = feedbackItem;
-            return View(_ViewName, model);
+
+            if(feedbackItem.FbType == FeedbackType.review)
+                return RedirectToAction("Reviewlist");
+
+            return RedirectToAction("Appeallist");
+            //return View(_ViewName, model);
         }
     }
 }
