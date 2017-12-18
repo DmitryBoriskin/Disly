@@ -516,7 +516,9 @@ select.form-control {
 .sitemap-plates-block {
     margin-bottom: 15px;
 }
-
+a.sitemap-plate.sitemap-plate-image {
+    padding: 0;
+}
 .sitemap-plate {
     padding: 10px 15px 15px;
     height: 70px;
@@ -1682,3 +1684,11 @@ iframe.photo-gallery{display:none;}
 .person_right{
     padding:0 0 0 53px;
 }
+
+.vacnacy-list{margin:30px 0 0;}
+.vacnacy_item {
+    border-bottom: 1px solid #e6e6e6;
+    padding:0 0 20px;
+    margin:0 0 20px ;
+}
+.vacnacy_item_date{font-size:12px;color:#999;}
