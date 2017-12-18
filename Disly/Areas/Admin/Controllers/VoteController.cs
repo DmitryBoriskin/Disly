@@ -60,17 +60,12 @@ namespace Disly.Areas.Admin.Controllers
         /// <returns></returns>
         public ActionResult Item(Guid Id)
         {
-
+            ViewBag.VoteId = Id.ToString();
             model.Item = _cmsRepository.getVoteItem(Id);
             if (model.Item == null)
             {
-                model.Item = new VoteModel()
-                {
-                    DateStart = DateTime.Now
-                };
+                ViewBag.DateStart = DateTime.Today;
             }
-
-
             return View("Item", model);
         }
 
@@ -124,6 +119,10 @@ namespace Disly.Areas.Admin.Controllers
             ErrorMessage userMessage = new ErrorMessage();
             userMessage.title = "Информация";
 
+            bindData.Item.Id = Id;
+
+
+
             if (ModelState.IsValid)
             {
                 var getVote = _cmsRepository.getVoteItem(Id);
@@ -152,7 +151,7 @@ namespace Disly.Areas.Admin.Controllers
                 model.Item = _cmsRepository.getVoteItem(Id);
                 userMessage.buttons = new ErrorMassegeBtn[]{
                      new ErrorMassegeBtn { url = StartUrl + Request.Url.Query, text = "Вернуться в список" },
-                     new ErrorMassegeBtn { url = "#", text = "ок", action = "false" }
+                     new ErrorMassegeBtn { url = "/admin/vote/item/"+Id, text = "ок",}
                  };
             }
             else
@@ -188,7 +187,7 @@ namespace Disly.Areas.Admin.Controllers
                 userMassege.info = "Произошла ошибка";
 
             userMassege.buttons = new ErrorMassegeBtn[]{
-                new ErrorMassegeBtn { url = StartUrl + Request.Url.Query, text = "ок", action = "false" }
+                new ErrorMassegeBtn { url = StartUrl + Request.Url.Query, text = "ок"}
             };
 
             model.ErrorInfo = userMassege;
@@ -202,7 +201,7 @@ namespace Disly.Areas.Admin.Controllers
         [MultiButton(MatchFormKey = "action", MatchFormValue = "add-new-answer")]
         public ActionResult AddAnswer()
         {
-            string IdVote = Request["Item.Id"];
+            string IdVote = Request["Item_VoteId"];
             string Variant = Request["s_answer"];
             _cmsRepository.insAnswer(Guid.Parse(IdVote), Variant);
 

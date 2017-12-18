@@ -134,6 +134,7 @@ namespace Disly.Areas.Admin.Controllers
                     string NewHash = password.Hash;
 
                     back_model.Item.Hash = NewHash;
+                    back_model.Item.Salt = NewSalt;
 
                     _cmsRepository.createUserOnSite(Id, back_model.Item); //, AccountInfo.id, RequestUserInfo.IP
 
