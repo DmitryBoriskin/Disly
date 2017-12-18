@@ -294,27 +294,30 @@ namespace Disly.Areas.Admin.Controllers
         // GET: Admin/Orgs/structure/{Guid}
         public ActionResult Structure(Guid id)
         {
-            #region администратор сайта
-            if (model.Account.Group.ToLower() == "admin")
-            {
-                if (orgId != null)
-                {
-                    if (!_cmsRepository.IsStructureAllowedToOrg(id, (Guid)orgId))
-                    {
-                        return RedirectToAction("Item", new { id = orgId });
-                    }
-                }
-                else
-                {
-                    return RedirectToAction("Index", "Main");
-                }
-            }
-            #endregion
+          
 
             ViewBag.Title = "Структурное подразделение";
             model.StructureItem = _cmsRepository.getStructure(id);//+ список подразделений      
             if (model.StructureItem != null)
             {
+                #region администратор сайта
+                if (model.Account.Group.ToLower() == "admin")
+                {
+                    if (orgId != null)
+                    {
+                        if (!_cmsRepository.IsStructureAllowedToOrg(id, (Guid)orgId))
+                        {
+                            return RedirectToAction("Item", new { id = orgId });
+                        }
+                    }
+                    else
+                    {
+                        return RedirectToAction("Index", "Main");
+                    }
+                }
+                #endregion
+
+
                 #region координаты
                 ViewBag.Titlecoord = model.StructureItem.Title;
                 ViewBag.Xcoord = model.StructureItem.GeopointX;
@@ -454,29 +457,29 @@ namespace Disly.Areas.Admin.Controllers
         #region Ovp
         public ActionResult Ovp(Guid id)
         {
-            #region администратор сайта
-            if (model.Account.Group.ToLower() == "admin")
-            {
-                if (orgId != null)
-                {
-                    if (!_cmsRepository.IsStructureAllowedToOrg(id, (Guid)orgId))
-                    {
-                        return RedirectToAction("Item", new { id = orgId });
-                    }
-                }
-                else
-                {
-                    return RedirectToAction("Index", "Main");
-                }
-            }
-            #endregion
-
             ViewBag.Title = "Отделение/ФАП";
             var OrgId = Request.Params["orgid"];
             model.StructureItem = _cmsRepository.getStructure(id);
 
             if (model.StructureItem != null)
             {
+                #region администратор сайта
+                if (model.Account.Group.ToLower() == "admin")
+                {
+                    if (orgId != null)
+                    {
+                        if (!_cmsRepository.IsStructureAllowedToOrg(id, (Guid)orgId))
+                        {
+                            return RedirectToAction("Item", new { id = orgId });
+                        }
+                    }
+                    else
+                    {
+                        return RedirectToAction("Index", "Main");
+                    }
+                }
+                #endregion
+                
                 if (!model.StructureItem.Ovp)
                 {
                     return Redirect("/admin/orgs/structure/" + id);//если струкутра с таким id уже существует и не является типом OVP
