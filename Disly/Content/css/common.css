@@ -841,8 +841,12 @@ select.form-control {
 .tabs li a:active,
 .tabs li.active a, 
 .tabs li.active a:hover,
-    .tabs li.active a:focus .tabs li.active a:active {
+.tabs li.active a:focus .tabs li.active a:active {
         background-color: #fff;
+}
+
+.tabs li.active a:focus{
+    background-color: #fff!important;    
 }
 
 .dop-block_info {
