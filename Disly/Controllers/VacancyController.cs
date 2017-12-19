@@ -40,8 +40,7 @@ namespace Disly.Controllers
         /// <returns></returns>
         public ActionResult Index()
         {
-            var filter = getFilter();
-            filter.Size = 1;
+            var filter = getFilter();            
             model.List = _repository.getVacancy(filter);
             ViewBag.Filter = filter;
             ViewBag.NewsSearchArea = filter.SearchText;
@@ -67,6 +66,7 @@ namespace Disly.Controllers
             model.Item=_repository.getVacancyItem(id);
             if (model.Item != null)
             {
+                #region хлебные крошки
                 if (model.Breadcrumbs != null)
                 {
                     model.Breadcrumbs.Add(new Breadcrumbs()
@@ -74,13 +74,13 @@ namespace Disly.Controllers
                         Title = model.Item.Profession,
                         Url = "/" + ControllerName + "/" + id
                     });
-                }
+                } 
+                #endregion
             }
             else
             {
                 return new HttpNotFoundResult();
             }
-
 
             #region Создаем переменные (значения по умолчанию)
             PageViewModel Model = new PageViewModel();
