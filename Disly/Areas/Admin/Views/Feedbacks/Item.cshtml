@@ -69,7 +69,10 @@ else
     }
     @if (Model.Item != null && Model.UserResolution.Delete)
     {
-        <button type="submit" name="action" value="delete-btn" class="button icon-delete">Удалить</button>
+        if (!string.IsNullOrEmpty(Model.Item.SenderEmail) || !string.IsNullOrEmpty(Model.Item.SenderName) || !string.IsNullOrEmpty(Model.Item.Text))
+        {
+            <button type="submit" name="action" value="delete-btn" class="button icon-delete">Удалить</button>
+        }
     }
     <button type="submit" name="action" value="cancel-btn" class="button icon-cancel">Закрыть</button>
 </div>
