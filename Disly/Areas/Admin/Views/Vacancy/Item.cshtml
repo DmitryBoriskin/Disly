@@ -21,26 +21,26 @@
             <div class="col-lg-12">@Html.TextAreaFor(m => m.Item.Desc, new { type = "editor", title = "Должностные обязанности", height = "300", maxlength = "2048" })</div>
         </div>
         @*<div class="row">
-            <div class="col-lg-12">
-                @Html.TextBoxFor(m => m.Item.Preview, new { type = "file", title = "Картинка для предпросмотра", data_name = "", data_size = "", data_url = "", data_help = "размер фотографии должен быть не менне 400 точек по ширине и пропорции картинки - 4х3" })
-            </div>
-        </div>*@
+                <div class="col-lg-12">
+                    @Html.TextBoxFor(m => m.Item.Preview, new { type = "file", title = "Картинка для предпросмотра", data_name = "", data_size = "", data_url = "", data_help = "размер фотографии должен быть не менне 400 точек по ширине и пропорции картинки - 4х3" })
+                </div>
+            </div>*@
         <div class="row">
             <div class="col-lg-12">
-                @Html.TextAreaFor(m => m.Item.Experience, new { type = "editor", title = "Требования", height = "300", maxlength ="2048" })
+                @Html.TextAreaFor(m => m.Item.Experience, new { type = "editor", title = "Требования", height = "300", maxlength = "2048" })
             </div>
         </div>
         <div class="row">
             <div class="col-lg-12">
-               
-                @Html.TextAreaFor(m => m.Item.Сonditions, new { type = "editor", title = "Условия", placeholder = "", height="300", maxlength = "4096" })
+
+                @Html.TextAreaFor(m => m.Item.Сonditions, new { type = "editor", title = "Условия", placeholder = "", height = "300", maxlength = "4096" })
             </div>
         </div>
     </div>
 
     <div class="dop_info-block">
         <div class="dop-caption">Настройки</div>
-        @Html.TextBoxFor(m => m.Item.Date, new { type="text", required = "required", data_type = "datetime", title = "Дата"})
+        @Html.TextBoxFor(m => m.Item.Date, new { type = "text", required = "required", data_type = "datetime", title = "Дата" })
         @*@Html.DropDownListFor(m => m.Item.Type, new SelectList(section[0].Items, "Alias", "Title", 0), new { @class = "uc_input", @title = section[0].Title, @required = "" })
             @Html.DropDownListFor(m => m.Item.Category, new SelectList(section[1].Items, "Alias", "Title", 0), new { @class = "uc_input", @title = section[1].Title, @required = "" })*@
 
@@ -66,7 +66,10 @@ else
     }
     @if (Model.Item != null && Model.UserResolution.Delete)
     {
-        <button type="submit" name="action" value="delete-btn" class="button icon-delete">Удалить</button>
+        if (!string.IsNullOrEmpty(Model.Item.Post) || !string.IsNullOrEmpty(Model.Item.Profession))
+        {
+        <button type="submit" name="action" value="delete-btn" data-action="delete" class="button icon-delete">Удалить</button>
+        }
     }
-    <button type="submit" name="action" value="cancel-btn" class="button icon-cancel">Закрыть</button>
+    <button type="submit" name="action" value="cancel-btn" data-action="cancel" class="button icon-cancel">Закрыть</button>
 </div>

@@ -14,7 +14,7 @@
                     @if (item.DateEnd != null)
                     {
                         <span>Дата завершения</span> @Convert.ToDateTime(item.DateEnd).ToString("dd.MM.yyyy")
-                    }                    
+                    }
                 </div>
             }
             Html.RenderAction("Pager", "Templates", new { @Model = Model.List.Pager });
@@ -37,7 +37,7 @@
     <div class="buttons">
         @if (Model.UserResolution.Write)
         {
-            <button type="submit" name="action" value="insert-btn" class="button icon-create">Создать</button>            
+            <button type="submit" name="action" value="insert-btn" class="button icon-create">Создать</button>
         }
     </div>
 }

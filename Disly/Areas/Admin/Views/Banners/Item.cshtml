@@ -106,7 +106,7 @@ else
     }
     @if (Model.Item != null && Model.UserResolution.Delete)
     {
-        if (Model.Item != null && Model.Item.Section.HasValue)
+        if (Model.Item.Section.HasValue)
         {
             <button type="submit" name="action" data-action="delete" value="delete-btn" class="button icon-delete">Удалить</button>
         }
