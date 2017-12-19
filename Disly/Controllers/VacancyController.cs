@@ -30,6 +30,8 @@ namespace Disly.Controllers
                 Title = "Вакансии",
                 Url = "/" + ControllerName + "/"
             });
+
+
         }
 
         /// <summary>
@@ -38,9 +40,11 @@ namespace Disly.Controllers
         /// <returns></returns>
         public ActionResult Index()
         {
-            var filter = getFilter();            
+            var filter = getFilter();
+            filter.Size = 1;
             model.List = _repository.getVacancy(filter);
-
+            ViewBag.Filter = filter;
+            ViewBag.NewsSearchArea = filter.SearchText;
 
             #region Создаем переменные (значения по умолчанию)
             PageViewModel Model = new PageViewModel();

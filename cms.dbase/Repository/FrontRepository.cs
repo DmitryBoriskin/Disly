@@ -2367,6 +2367,7 @@ namespace cms.dbase
                 {
                     query = query.Where(w => w.d_date >= filter.Date);
                 }
+                query = query.OrderBy(o => o.d_date);
                 if (!string.IsNullOrWhiteSpace(filter.SearchText))
                 {
                     query = query.Where(w => 
@@ -2378,8 +2379,8 @@ namespace cms.dbase
                 }
                 
                 var vacancyList = query
-                            //.Skip(filter.Size * (filter.Page - 1))
-                            //.Take(filter.Size)
+                            .Skip(filter.Size * (filter.Page - 1))
+                            .Take(filter.Size)
                             .Select(s => new VacancyModel {
                                 Id=s.id,
                                 Profession=s.c_profession,
