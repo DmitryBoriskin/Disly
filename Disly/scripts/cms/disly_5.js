@@ -43,6 +43,8 @@ $(document).ready(function () {
                         Confirm('Уведомление', 'Вы хотите удалить эту запись?', $(this));
                         break;
                     case "cancel":
+                        $('form input[required]').removeAttr('required');
+                        $('form select[required]').removeAttr('required');
                         if (change !== 0) {
                             Confirm('Уведомление', 'Выйти без изменений?', $(this));
                         }
