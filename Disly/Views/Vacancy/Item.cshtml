@@ -1,7 +1,69 @@
-﻿
-@{
-    ViewBag.Title = "Item";
-}
-
-<h2>Item</h2>
-
+﻿@model VacancyViewModel
+<div class="type-page">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                @Html.Partial("services/breadcrumbs")
+                <h1>@ViewBag.Title</h1>
+                <div class="row">
+                    <div class="col-md-3 col-md-push-9">
+                        <div class="dop-block">
+                            @if (Model.Item.Temporarily)
+                            {
+                                <div class="dop-block_info">
+                                    <label></label>
+                                    <div>Вакансия на замещение должности</div>
+                                </div>
+                            }
+                            @if (Model.Item.Date != null)
+                            {
+                                <div class="dop-block_info">
+                                    <label>Дата публикации</label>
+                                    <div>@Model.Item.Date.ToString("dd.MM.yyyy")</div>
+                                </div>
+                            }
+                            @if (Model.Item.Salary != null)
+                            {
+                                <div class="dop-block_info">
+                                    <label>Зарплата</label>
+                                    <div>@Model.Item.Salary</div>
+                                </div>
+                            }
+                            <a class="btn_print" onClick="window.print()">Распечатать</a><br />
+                            <a class="btn_share" title="Поделиться" href="../../../../#">Поделиться</a>
+                        </div>
+                    </div>
+                    <div class="col-md-8 col-md-pull-3">
+                        <div class="row">
+                            <div class="col-md-12">
+                                @if (Model.Item.Desc != null)
+                                {
+                                    <div class="vacancy-single-desc">
+                                        <h4>Должностные обязанности</h4>
+                                        @Html.Raw(Model.Item.Desc)
+                                    </div>
+                                }
+                                @if (Model.Item.Experience != null)
+                                {
+                                    <div class="vacancy-single-desc">
+                                        <h4>Требования</h4>
+                                        @Html.Raw(Model.Item.Experience)
+                                    </div>
+                                }
+                                @if (Model.Item.Сonditions != null)
+                                {
+                                    <div class="vacancy-single-desc">
+                                        <h4>Условия</h4>
+                                        @Html.Raw(Model.Item.Сonditions)
+                                    </div>
+                                }
+                                
+                            </div>                            
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

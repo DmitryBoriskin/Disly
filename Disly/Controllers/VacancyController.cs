@@ -1,4 +1,5 @@
 ﻿using cms.dbase;
+using cms.dbModel.entity;
 using Disly.Models;
 using System;
 using System.Web.Mvc;
@@ -23,6 +24,12 @@ namespace Disly.Controllers
                 Breadcrumbs= breadcrumb,
                 BannerArray = bannerArray
             };
+
+            model.Breadcrumbs.Add(new Breadcrumbs()
+            {
+                Title = "Вакансии",
+                Url = "/" + ControllerName + "/"
+            });
         }
 
         /// <summary>
@@ -54,12 +61,27 @@ namespace Disly.Controllers
         public ActionResult Item(Guid id)
         {
             model.Item=_repository.getVacancyItem(id);
+            if (model.Item != null)
+            {
+                if (model.Breadcrumbs != null)
+                {
+                    model.Breadcrumbs.Add(new Breadcrumbs()
+                    {
+                        Title = model.Item.Profession,
+                        Url = "/" + ControllerName + "/" + id
+                    });
+                }
+            }
+            else
+            {
+                return new HttpNotFoundResult();
+            }
 
 
             #region Создаем переменные (значения по умолчанию)
             PageViewModel Model = new PageViewModel();
             string _ViewName = (ViewName != String.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";
-            string PageTitle = "Вакансии";//(model.Item != null)? model.Item.Title: null;
+            string PageTitle = (model.Item != null)? model.Item.Profession+" — "+ model.Item.Post: "Вакансия";
             string PageDesc = "описание страницы";
             string PageKeyw = "ключевые слова";
             #endregion

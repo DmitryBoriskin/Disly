@@ -45,7 +45,7 @@
             @Html.DropDownListFor(m => m.Item.Category, new SelectList(section[1].Items, "Alias", "Title", 0), new { @class = "uc_input", @title = section[1].Title, @required = "" })*@
 
         @*@Html.CheckBoxFor(m => m.Item.IsNew, new { type = "checkbox", title = "Не прочитано", data_toggle = "toggle", data_on = "не прочитано", data_onstyle = "danger", data_off = "прочитано", data_offstyle = "success", data_width = "248" })*@
-        @Html.CheckBoxFor(m => m.Item.Disabled, new { type = "checkbox", title = "Замещение", data_toggle = "toggle", data_on = "замещение", data_onstyle = "danger", data_off = "не замещение", data_offstyle = "success", data_width = "248" })
+        @Html.CheckBoxFor(m => m.Item.Temporarily, new { type = "checkbox", title = "Замещение", data_toggle = "toggle", data_on = "замещение", data_onstyle = "danger", data_off = "не замещение", data_offstyle = "success", data_width = "248" })
         @Html.CheckBoxFor(m => m.Item.Disabled, new { type = "checkbox", title = "Запретить просмотр", data_toggle = "toggle", data_on = "запретить просмотр", data_onstyle = "danger", data_off = "показывать на сайте", data_offstyle = "success", data_width = "248" })
         @if (Model.Item != null)
                 {

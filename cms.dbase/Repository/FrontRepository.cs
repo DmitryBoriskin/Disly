@@ -678,7 +678,7 @@ namespace cms.dbase
                     return data;
                 }
 
-                return null;
+                return data;
             }
         }
 
@@ -2362,7 +2362,7 @@ namespace cms.dbase
             using (var db = new CMSdb(_context))
             {
                 var query = db.content_vacanciess.AsQueryable();
-                    query= query.Where(w =>(w.f_site == _domain));
+                    query= query.Where(w =>(w.f_site == _domain && w.b_disabled==false));
                 if (filter.Date != null)
                 {
                     query = query.Where(w => w.d_date >= filter.Date);
@@ -2413,7 +2413,7 @@ namespace cms.dbase
         {
             using (var db = new CMSdb(_context))
             {
-                var query = db.content_vacanciess.Where(w => w.id == id);
+                var query = db.content_vacanciess.Where(w => (w.id == id && w.b_disabled==false));
                 if (query.Any())
                 {
                     var data = query.Select(s => new VacancyModel() {
@@ -2421,6 +2421,9 @@ namespace cms.dbase
                         Profession = s.c_profession,
                         Post = s.c_post,
                         Desc = s.c_desc,
+                        Experience=s.с_experience,
+                        Сonditions=s.с_conditions,
+                        Temporarily=s.b_temporarily,
                         Date = s.d_date,
                         Salary = s.c_salary
                     }).Single();

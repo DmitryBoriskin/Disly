@@ -49,6 +49,12 @@ namespace Disly
                defaults: new { controller = "vacancy", action = "Index" },
                namespaces: new string[] { "Disly.Controllers" }
             );
+            routes.MapRoute(
+               name: "vacancyItem",
+               url: "vacancy/{id}",
+               defaults: new { controller = "vacancy", action = "Item" },
+               namespaces: new string[] { "Disly.Controllers" }
+            );
             // поиск
             routes.MapRoute(
                name: "Search",
