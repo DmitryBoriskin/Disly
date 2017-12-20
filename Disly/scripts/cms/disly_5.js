@@ -29,11 +29,63 @@ $(document).ready(function () {
     // Полоса прокрутки
     $('.scrollbar').mCustomScrollbar();
 
+    $("[type='button']").on("click", function () {
+        var action = $(this).data("action");
+        var link = $(this).data("link");
+        if (action === "cancel") {
+            if (change !== 0) {
+                // Confirm('Уведомление', 'Выйти без изменений?', $(this));
+                //ModalConfirm('Уведомление', 'Выйти без изменений?');
+                $(location).attr("href", link);
+            }
+            else {
+                $(location).attr("href", link);
+            }
+        }
+        if (action === "delete") {
+            try {
+                //ShowPreloader(content);
+                var form = $("form").first();
+                var targetUrl = form.attr("action");
 
-    // События Кнопок
-    $('input[type=submit], .button').bind({
+                var formData = new FormData();
+                formData.append("action", "delete-btn");
+
+                $.ajax({
+                    url: targetUrl,
+                    method: "POST",
+                    async: true,
+                    cache: false,
+                    processData: false,
+                    contentType: false,
+                    data: formData
+                })
+                    .done(function (response) {
+                        //elTooltip.attr("title", "Сохранено");
+                        //elTooltip.tooltip('show');
+                    })
+                    .fail(function (jqXHR, status) {
+                        console.log("Ошибка" + " " + status + " " + jqXHR);
+                        //elTooltip.attr("title", "Ошибка сохранения");
+                        
+                    })
+                    .always(function (response) {
+                        //setTimeout(function () {
+                        //    elTooltip.tooltip('hide');
+                        //}, 1000);
+                        $(location).attr("href", link);
+                    });
+            }
+            catch (ex) {
+                console.log(ex);
+            }
+        }
+    });
+
+     //События Кнопок
+    $('input[type=submit], .button').not("[type='button']").bind({
         mousedown: function () {
-            //логика всплывающих окон            
+            //логика всплывающих окон
             var Action = $(this).attr('data-action');
             if (Action !== undefined) {
                 switch (Action) {
@@ -43,6 +95,8 @@ $(document).ready(function () {
                         Confirm('Уведомление', 'Вы хотите удалить эту запись?', $(this));
                         break;
                     case "cancel":
+                        $('form input[required]').removeAttr('required');
+                        $('form select[required]').removeAttr('required');
                         if (change !== 0) {
                             Confirm('Уведомление', 'Выйти без изменений?', $(this));
                         }
@@ -84,16 +138,16 @@ $(document).ready(function () {
             }
         }
     });
-    // показываем preloader при клике на ссылку
-    //$('a').click(function () {
-    //    var $load_bg = $("<div/>", { "class": "load_page" });
-    //    $load_bg.bind({
-    //        mousedown: function () { return false; },
-    //        selectstart: function () { return false; }
-    //    });
+     //показываем preloader при клике на ссылку
+    $('a').click(function () {
+        var $load_bg = $("<div/>", { "class": "load_page" });
+        $load_bg.bind({
+            mousedown: function () { return false; },
+            selectstart: function () { return false; }
+        });
 
-    //    $('body').append($load_bg);
-    //});
+        $('body').append($load_bg);
+    });
 
     // Панель авторизации пользователя    
     $('.account-info').click(function () {
@@ -428,7 +482,7 @@ function requiredTest() {
         $('button[data-primary]').animate({ opacity: "0.3" }, 300).attr('disabled', '');
     else
         $('button[data-primary]').animate({ opacity: "1" }, 300).removeAttr('disabled');
-}
+};
 
 // Показываем страницу, убираем preloader
 function load_page() {
@@ -444,7 +498,7 @@ function clear_modal() {
     $modalTitle.empty();
     $modalBody.empty();
     $modalFooter.empty();
-}
+};
 
 
 
@@ -457,7 +511,7 @@ function Confirm(Title, Body, Object) {
     $BtnOk.click(function () {
         $('form input[required]').removeAttr('required');
         Object.trigger('click');
-    })
+    });
 
     var $BtnNo = $('<button/>', { 'id': 'modal-btn-no', 'class': 'btn btn-default' }).append('Нет');
     $BtnNo.click(function () {
@@ -469,13 +523,35 @@ function Confirm(Title, Body, Object) {
     $modalFooter.append($BtnOk).append($BtnNo);
 
     $modal.modal('toggle');
-}
+};
+// Всплывающие окна
+//function ModalConfirm(Title, Body, callback) {
+//    clear_modal();
+
+//    var $BtnOk = $('<button/>', { 'id': 'modal-btn-ok', 'class': 'btn btn-danger' }).append('Да');
+//    $BtnOk.click(function () {
+//        $('form input[required]').removeAttr('required');
+//        return callback;
+//    });
+
+//    var $BtnNo = $('<button/>', { 'id': 'modal-btn-no', 'class': 'btn btn-default' }).append('Нет');
+//    $BtnNo.click(function () {
+//        $('.modal').modal('toggle');
+//    });
+
+//    $modalTitle.append(Title);
+//    $modalBody.append('<p>' + Body + '</p>');
+//    $modalFooter.append($BtnOk).append($BtnNo);
+
+//    $modal.modal('toggle');
+//    return false;
+//};
 
 // Всплывающие окна с активным контентом
 function PopUpFrame(Object) {
     clear_modal();
 
-    $frale = $('<iframe/>', { 'class': 'modal_frame', 'frameborder': '0', 'height': '20', 'src': Object.attr("href"), 'sandbox':'allow-same-origin allow-scripts allow-forms', 'scrolling':'no', 'style': 'overflow: hidden; width:100%;' });
+    $frale = $('<iframe/>', { 'class': 'modal_frame', 'frameborder': '0', 'height': '20', 'src': Object.attr("href"), 'sandbox': 'allow-same-origin allow-scripts allow-forms', 'scrolling': 'no', 'style': 'overflow: hidden; width:100%;' });
 
     $modal.find('.modal-dialog').addClass(' modal-lg'),
     $modalTitle.append(Object.attr("title"));
@@ -521,7 +597,7 @@ function PopUpFrame(Object) {
         });
         //location.reload();
     })
-}
+};
 
 // Сортировка
 function Sorting_init(Object) {
@@ -548,7 +624,7 @@ function Sorting_init(Object) {
             });
         }
     }).disableSelection();
-}
+};
 
 // Инициализация раскрывающегося блока
 function GroupBlock_init() {
@@ -571,14 +647,14 @@ function GroupBlock_init() {
 
         $(this).prepend($BlockTitle);
     });
-}
+};
 
 // устанавливаем курсор
 function setCursor() {
     if ($('.content input.input-validation-error').length > 0) $('.content input.input-validation-error:first').focus();
     else if ($('.content input[required]').val() === '') $('.content input[required]:first').focus();
     else if ($('.content input:not([type=file]):not([data-focus=False])').length > 0) $('.content input:not([type=file]):not([data-focus=False]):first').focus();
-}
+};
 
 
 
@@ -606,7 +682,7 @@ function sortingPhotoInit(Object) {
             });
         }
     }).disableSelection();
-}
+};
 
 
 // TinyMCE
@@ -640,7 +716,7 @@ function InitTinyMCE(id, _width, _height, directory) {
             if (win.getImageData) win.getImageData();
         }
     });
-}
+};
 // TinyMCE (Урезанная версия)
 function InitLiteTinyMCE(id, _width, _height) {
     tinymce.init({
@@ -662,7 +738,7 @@ function InitLiteTinyMCE(id, _width, _height) {
         height: _height,
         menubar: false
     });
-}
+};
 
 
 // TinyMCE новая версия
@@ -711,6 +787,14 @@ function InitTinyMCE_new(id, _width, _height, directory) {
             };
 
             input.click();
+        },
+        //Svetlana Kuzmina
+        setup: function (editor) {
+            editor.on('change', function (e) {
+                //console.log('change event', e);
+                change = 1;
+                requiredTest();
+            });
         }
 
         //,file_picker_callback: function (field_name, url, type, win) {
@@ -721,7 +805,7 @@ function InitTinyMCE_new(id, _width, _height, directory) {
         //    if (win.getImageData) win.getImageData();
         //}
     });
-}
+};
 
 
 
@@ -779,7 +863,7 @@ function Coords(x, y, title, desc, zoom) {
     //    var xMap = coords[0].toPrecision(6);
     //    var yMap = coords[1].toPrecision(6);
     //});
-}
+};
 
 
 function CoordPoint(xMap, yMap) {
@@ -790,4 +874,4 @@ function CoordPoint(xMap, yMap) {
         pointY.val(String(yMap).replace(/[.]/g, ","))
 
     });
-}
+};

@@ -114,16 +114,16 @@ namespace Disly.Areas.Admin.Controllers
 
                 //Определяем Insert или Update
                 if (getSiteSection != null)
+                {
                     res = _cmsRepository.updateSiteSection(bindData.Item);
+                    userMessage.info = "Запись обновлена";
+                }                    
                 else
                 {
                     res = _cmsRepository.insertSiteSection(bindData.Item);
-                }
-                //Сообщение пользователю
-                if (res)
-                    userMessage.info = "Запись обновлена";
-                else
-                    userMessage.info = "Произошла ошибка";
+                    userMessage.info = "Запись добавлена";
+                }                
+                if (!res)userMessage.info = "Произошла ошибка";
 
                 userMessage.buttons = new ErrorMassegeBtn[]
                 {

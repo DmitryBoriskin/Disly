@@ -531,6 +531,7 @@
     <Compile Include="Areas\Admin\Controllers\BannersController.cs" />
     <Compile Include="Areas\Admin\Controllers\cmsMenuController.cs" />
     <Compile Include="Areas\Admin\Controllers\DocumentsController .cs" />
+    <Compile Include="Controllers\VacancyController.cs" />
     <Compile Include="Controllers\RedirectFromOldController.cs" />
     <Compile Include="Areas\Admin\Controllers\PhotoAlbumsController.cs" />
     <Compile Include="Areas\Admin\Controllers\VoteController.cs" />
@@ -617,6 +618,7 @@
     <Compile Include="Models\MedicalServicesViewModel.cs" />
     <Compile Include="Models\RedirectRegistryViewModel.cs" />
     <Compile Include="Models\StructureViewModel.cs" />
+    <Compile Include="Models\VacancyViewModel.cs" />
     <Compile Include="Models\VoteViewModel.cs" />
     <Compile Include="Models\TypePageViewModel.cs" />
     <Compile Include="Models\NewsViewModel.cs" />
@@ -869,6 +871,8 @@
     <Content Include="Views\Press\RssSettings.cshtml" />
     <Content Include="Views\EventsFront\Archive.cshtml" />
     <Content Include="Views\Shared\part\childlist_sitemap.cshtml" />
+    <Content Include="Views\Vacancy\Index.cshtml" />
+    <Content Include="Views\Vacancy\Item.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

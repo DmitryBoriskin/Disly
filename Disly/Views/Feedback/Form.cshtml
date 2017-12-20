@@ -10,7 +10,7 @@
 
     <div class="row">
         <div class="col-md-8">
-            <fieldset>
+            
                 @*<h2>Задайте вопрос</h2>*@
                 @if (ViewBag.FormStatus != null)
             {
@@ -46,17 +46,18 @@
                         }
                     </div>
                 }
+            <fieldset>
                 <div id="reviewss-from" class="select_choice">
-                    @using (Html.BeginForm("Form", "Feedback", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                    @using (Html.BeginForm("SendForm", "Feedback", FormMethod.Post, new { enctype = "multipart/form-data" }))
                     {
                         <div class="form-group">
                             <label for="feedback-senderName-input">Ф.И.О.</label>
                             <input type="text" id="feedback-senderName-input" name="SenderName" value="@ViewBag.SenderName" class="form-control" maxlength="256" required />
                         </div>
-                            <div class="form-group">
-                                <label for="feedback-senderEmail-input">Электронная почта</label>
-                                <input type="email" id="feedback-senderEmail-input" name="SenderEmail" value="@ViewBag.SenderEmail" class="form-control" maxlength="50" required />
-                            </div>
+                        <div class="form-group">
+                            <label for="feedback-senderEmail-input">Электронная почта</label>
+                            <input type="email" id="feedback-senderEmail-input" name="SenderEmail" value="@ViewBag.SenderEmail" class="form-control" maxlength="50" required />
+                        </div>
                             <div class="form-group">
                                 <label for="feedback-senderContacts-input">Дополнительные контакты</label>
                                 <textarea class="form-control" id="feedback-senderContacts-input" name="SenderContacts" rows="3" maxlength="256">@ViewBag.SenderContacts</textarea>
@@ -102,7 +103,7 @@
                             <div class="g-recaptcha" data-sitekey="@ViewBag.CaptchaKey"></div>
                             <div id="fb"></div>
                             <br>
-                            <button id="feedback-send-btn" type="submit" name="action" value="send-btn" class="btn" @(ViewBag.IsAgree ? "" : "disabled")>ОТПРАВИТЬ</button>
+                            <button id="feedback-send-btn" type="submit" name="action" value="send-btn" class="btn sub btn-primary" @(ViewBag.IsAgree ? "" : "disabled")>Отправить</button>
                     }
                 </div>
             </fieldset>

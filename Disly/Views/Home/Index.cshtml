@@ -298,7 +298,7 @@
                     <div class="col-sm-3">
                         @if (!string.IsNullOrWhiteSpace(item.Photo.Url))
                         {
-                            <a href="@fullPath" title="@item.Title">
+                            <a href="@fullPath" class="sitemap-plate sitemap-plate-image" title="@item.Title">
                                 <img src="@item.Photo.Url" alt="@item.Title" />
                             </a>
                         }

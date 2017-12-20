@@ -160,7 +160,7 @@ namespace cms.dbase
             try
             {
                 if (string.IsNullOrEmpty(domain))
-                    throw new Exception("FrontRepository: getSideId Domain is empty!");
+                    throw new Exception("FrontRepository: getSiteId Domain is empty!");
 
                 using (var db = new CMSdb(_context))
                 {
@@ -174,12 +174,12 @@ namespace cms.dbase
                         return _domain.f_site;
                     }
 
-                    throw new Exception("FrontRepository: getSideId Domain '" + domain + "' was not found!");
+                    throw new Exception("FrontRepository: getSiteId Domain '" + domain + "' was not found!");
                 }
             }
             catch (Exception ex)
             {
-                throw new Exception("FrontRepository: getSideId Domain '" + domain + "' непредвиденная ошибка!" + ex.Message);
+                throw new Exception("FrontRepository: getSiteId Domain '" + domain + "' непредвиденная ошибка!" + ex.Message);
             }
         }
 
@@ -548,6 +548,8 @@ namespace cms.dbase
             using (var db = new CMSdb(_context))
             {
                 var query = db.content_sitemaps
+                    .Where(w => w.b_disabled == false)
+                    .Where(w => w.b_disabled_menu == false)
                     .Where(w => w.f_site.Equals(_domain))
                     .Where(w => w.c_path.Equals(path))
                     .OrderBy(o => o.n_sort)
@@ -676,7 +678,7 @@ namespace cms.dbase
                     return data;
                 }
 
-                return null;
+                return data;
             }
         }
 
@@ -2352,6 +2354,84 @@ namespace cms.dbase
 
                 if (!query.Any()) return null;
                 return query.ToArray();
+            }
+        }
+
+        public override VacanciesList getVacancy(FilterParams filter)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var query = db.content_vacanciess.AsQueryable();
+                    query= query.Where(w =>(w.f_site == _domain && w.b_disabled==false));
+                if (filter.Date != null)
+                {
+                    query = query.Where(w => w.d_date >= filter.Date);
+                }
+                query = query.OrderBy(o => o.d_date);
+                if (!string.IsNullOrWhiteSpace(filter.SearchText))
+                {
+                    query = query.Where(w => 
+                                            (
+                                            w.c_profession.Contains(filter.SearchText) || 
+                                            w.c_post.Contains(filter.SearchText) || 
+                                            w.c_desc.Contains(filter.SearchText)
+                                          ));
+                }
+                
+                var vacancyList = query
+                            .Skip(filter.Size * (filter.Page - 1))
+                            .Take(filter.Size)
+                            .Select(s => new VacancyModel {
+                                Id=s.id,
+                                Profession=s.c_profession,
+                                Post=s.c_post,
+                                Desc=s.c_desc,
+                                Date=s.d_date,
+                                Salary=s.c_salary
+                            });
+
+                if (vacancyList.Any())
+                {
+                    int itemCount = query.Count();
+                    return new VacanciesList
+                    {
+                        Data = vacancyList.ToArray(),
+                        Pager = new Pager
+                        {
+                            page = filter.Page,
+                            size = filter.Size,
+                            items_count = itemCount,
+                            page_count = (itemCount % filter.Size > 0) ? (itemCount / filter.Size) + 1 : itemCount / filter.Size
+                        }
+                    };
+                }
+                return null;
+
+            }
+        }
+
+        public override VacancyModel getVacancyItem(Guid id)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var query = db.content_vacanciess.Where(w => (w.id == id && w.b_disabled==false));
+                if (query.Any())
+                {
+                    var data = query.Select(s => new VacancyModel() {
+                        Id = s.id,
+                        Profession = s.c_profession,
+                        Post = s.c_post,
+                        Desc = s.c_desc,
+                        Experience=s.с_experience,
+                        Сonditions=s.с_conditions,
+                        Temporarily=s.b_temporarily,
+                        Date = s.d_date,
+                        Salary = s.c_salary
+                    }).Single();
+                    return data;
+                }
+                return null;
+
             }
         }
     }
