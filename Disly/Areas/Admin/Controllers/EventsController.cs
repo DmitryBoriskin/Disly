@@ -99,6 +99,8 @@ namespace Disly.Areas.Admin.Controllers
                 //Persons = null
             };
 
+            ViewBag.Backlink = StartUrl + Request.Url.Query;
+
             return View("Item", model);
         }
 
@@ -280,6 +282,7 @@ namespace Disly.Areas.Admin.Controllers
             return View("Item", model);
         }
 
+        //Удалить!!!
         [HttpPost]
         [MultiButton(MatchFormKey = "action", MatchFormValue = "cancel-btn")]
         public ActionResult Cancel()
@@ -304,8 +307,8 @@ namespace Disly.Areas.Admin.Controllers
             if (model.Item != null)
             {
                 var image = (model.Item.PreviewImage != null) ? model.Item.PreviewImage.Url : null;
-                var res = _cmsRepository.deleteCmsEvent(Id);
-
+                //var res = _cmsRepository.deleteCmsEvent(Id);
+                var res = true;
                 if (res)
                 {
                     if (!string.IsNullOrEmpty(image))
