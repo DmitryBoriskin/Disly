@@ -10,6 +10,7 @@ using System.Linq;
 using System.Threading;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Script.Serialization;
 
 namespace Disly.Areas.Admin.Controllers
 {
@@ -415,5 +416,19 @@ namespace Disly.Areas.Admin.Controllers
             //return (_repository.deletePhoto(Guid.Parse(id))) ? "" : "Не удалось удалить фотографию.";
         }
 
+        /// <summary>
+        /// Получаем альбомы в формате JSON
+        /// </summary>
+        /// <returns></returns>
+        public JsonResult Api(int page = 1, int size = 30)
+        {
+            filter.Page = page;
+            filter.Size = size;
+
+            model.List = _cmsRepository.getPhotoAlbum(filter);
+
+            var json = Json(model.List, JsonRequestBehavior.AllowGet);
+            return json;
+        }
     }
 }
