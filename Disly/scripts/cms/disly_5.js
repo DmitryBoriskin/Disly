@@ -36,6 +36,7 @@ $(document).ready(function () {
             if (change !== 0) {
                 // Confirm('Уведомление', 'Выйти без изменений?', $(this));
                 //ModalConfirm('Уведомление', 'Выйти без изменений?');
+                $(location).attr("href", link);
             }
             else {
                 $(location).attr("href", link);
