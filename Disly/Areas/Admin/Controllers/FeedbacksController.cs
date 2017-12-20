@@ -67,7 +67,8 @@ namespace Disly.Areas.Admin.Controllers
             if (model.Item == null)
                 model.Item = new FeedbackModel()
                 {
-                    Date = DateTime.Now
+                    Date = DateTime.Now,
+                    Disabled = true
                 };
             return View("Item", model);
         }
@@ -130,7 +131,7 @@ namespace Disly.Areas.Admin.Controllers
         [MultiButton(MatchFormKey = "action", MatchFormValue = "save-btn")]
         public ActionResult Save(Guid Id, FeedbacksViewModel bindData)
         {
-            ErrorMassege userMessage = new ErrorMassege();
+            ErrorMessage userMessage = new ErrorMessage();
             userMessage.title = "Информация";
 
             if (ModelState.IsValid)
@@ -141,19 +142,35 @@ namespace Disly.Areas.Admin.Controllers
                 bindData.Item.Id = Id;
                 //Определяем Insert или Update
                 if (getFeedback != null)
+                {
+                    userMessage.info = "Запись обновлена";
                     res = _cmsRepository.updateCmsFeedback(bindData.Item);
+                }
+
                 else
+                {
+                    userMessage.info = "Запись добавлена";
                     res = _cmsRepository.insertCmsFeedback(bindData.Item);
+                }
                 //Сообщение пользователю
                 if (res)
-                    userMessage.info = "Запись обновлена";
-                else
-                    userMessage.info = "Произошла ошибка";
-
-                userMessage.buttons = new ErrorMassegeBtn[]{
+                {
+                    string currentUrl = Request.Url.PathAndQuery;
+                    userMessage.buttons = new ErrorMassegeBtn[]
+                    {
                      new ErrorMassegeBtn { url = StartUrl + Request.Url.Query, text = "Вернуться в список" },
-                     new ErrorMassegeBtn { url = "#", text = "ок", action = "false" }
+                     new ErrorMassegeBtn { url = currentUrl, text = "ок" }
                  };
+                }
+                else
+                {
+                    userMessage.info = "Произошла ошибка";
+                    userMessage.buttons = new ErrorMassegeBtn[]
+                    {
+                     new ErrorMassegeBtn { url = StartUrl + Request.Url.Query, text = "Вернуться в список" },
+                     new ErrorMassegeBtn { url = "#", text = "ок", action = "false"  }
+                    };
+                }
             }
             else
             {
@@ -181,23 +198,33 @@ namespace Disly.Areas.Admin.Controllers
         [MultiButton(MatchFormKey = "action", MatchFormValue = "delete-btn")]
         public ActionResult Delete(Guid Id)
         {
+            // записываем информацию о результатах
+            ErrorMessage userMessage = new ErrorMessage();
+            userMessage.title = "Информация";
+            //В случае ошибки
+            userMessage.info = "Ошибка, Запись не удалена";
+            userMessage.buttons = new ErrorMassegeBtn[]{
+                new ErrorMassegeBtn { url = "#", text = "ок", action = "false" }
+            };
+
             var res = _cmsRepository.deleteCmsFeedback(Id);
 
             if (res)
             {
                 // записываем информацию о результатах
-                ErrorMassege userMessage = new ErrorMassege();
                 userMessage.title = "Информация";
-                userMessage.info = "Запись Удалена";
+                userMessage.info = "Запись удалена";
+
                 userMessage.buttons = new ErrorMassegeBtn[]
                 {
-                    new ErrorMassegeBtn { url = "#", text = "ок", action = "false" }
+                        new ErrorMassegeBtn { url = StartUrl, text = "Перейти в список" }
                 };
-
-                model.ErrorInfo = userMessage;
+                //return RedirectToAction("Index", new { id = model.Item.Section });
             }
 
-            return View("Item", model);
+            model.ErrorInfo = userMessage;
+
+            return View(model);
         }
     }
 }

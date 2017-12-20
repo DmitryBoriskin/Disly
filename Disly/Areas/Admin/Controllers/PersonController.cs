@@ -15,7 +15,7 @@ namespace Disly.Areas.Admin.Controllers
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             base.OnActionExecuting(filterContext);
-            
+
             model = new PersonViewModel()
             {
                 Account = AccountInfo,
@@ -25,7 +25,7 @@ namespace Disly.Areas.Admin.Controllers
                 ActionName = ActionName,
                 EmployeePosts = _cmsRepository.getEmployeePosts()
             };
-            
+
             #region Метатеги
             ViewBag.Title = UserResolutionInfo.Title;
             ViewBag.Description = "";
@@ -46,7 +46,7 @@ namespace Disly.Areas.Admin.Controllers
 
             return View(model);
         }
-                
+
         /// <summary>
         /// Форма редактирования записи
         /// </summary>
@@ -74,10 +74,10 @@ namespace Disly.Areas.Admin.Controllers
             query = addFiltrParam(query, "group", group);
             query = addFiltrParam(query, "page", String.Empty);
             query = addFiltrParam(query, "size", size);
-            
+
             return Redirect(StartUrl + query);
         }
-        
+
         /// <summary>
         /// Очищаем фильтр
         /// </summary>
@@ -105,7 +105,7 @@ namespace Disly.Areas.Admin.Controllers
         [MultiButton(MatchFormKey = "action", MatchFormValue = "save-btn")]
         public ActionResult Save(Guid id, PersonViewModel back_model, HttpPostedFileBase upload)
         {
-            ErrorMassege userMassege = new ErrorMassege
+            ErrorMessage userMassege = new ErrorMessage
             {
                 title = "Информация"
             };
@@ -125,7 +125,7 @@ namespace Disly.Areas.Admin.Controllers
                     var validExtension = (!string.IsNullOrEmpty(Settings.PicTypes)) ? Settings.PicTypes.Split(',') : "jpg,jpeg,png,gif".Split(',');
                     if (!validExtension.Contains(fileExtension.Replace(".", "")))
                     {
-                        model.ErrorInfo = new ErrorMassege()
+                        model.ErrorInfo = new ErrorMessage()
                         {
                             title = "Ошибка",
                             info = "Вы не можете загружать файлы данного формата",
@@ -171,7 +171,7 @@ namespace Disly.Areas.Admin.Controllers
                     new ErrorMassegeBtn { url = "#", text = "ок", action = "false" }
                 };
             }
-            
+
             model.Item = _cmsRepository.getEmployee(id);
             model.ErrorInfo = userMassege;
 

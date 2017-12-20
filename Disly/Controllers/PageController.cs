@@ -49,6 +49,10 @@ namespace Disly.Controllers
                 model.Child = _repository.getSiteMapChild(model.Item.Id);
                 model.Documents = _repository.getAttachDocuments(model.Item.Id);
             }
+            else
+            {
+                return new HttpNotFoundResult();
+            }
 
             #region Создаем переменные (значения по умолчанию)
             PageViewModel Model = new PageViewModel();

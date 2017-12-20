@@ -1119,3 +1119,9 @@ div.ListItem img.photo-preview {
 }
 
 .answer_delete:before {    content: '\ec5b';    font-family: fontello;    color: red;}
+
+
+.mce-i-gallery:before{
+    font-family:fontello;
+    content:'\ea10';
+}

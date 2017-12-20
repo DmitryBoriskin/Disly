@@ -9,9 +9,9 @@ namespace Disly.Areas.Admin.Controllers
 {
     public class SitesController : CoreController
     {
-        SitesViewModel model;        
+        SitesViewModel model;
         string filter = String.Empty;
-        bool enabeld = true;        
+        bool enabeld = true;
 
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
@@ -48,7 +48,7 @@ namespace Disly.Areas.Admin.Controllers
 
             return View(model);
         }
-                
+
         /// <summary>
         /// Форма редактирования записи
         /// </summary>
@@ -58,12 +58,12 @@ namespace Disly.Areas.Admin.Controllers
             model.Item = _cmsRepository.getSite(Id);
 
             //тип контента и источник контента
-            
+
             switch (model.Item.Type)
             {
                 case "org":
-                    var data =_cmsRepository.getOrgItem(model.Item.ContentId);
-                    ViewBag.ContentLink="/admin/orgs/item/"+ data.Id;
+                    var data = _cmsRepository.getOrgItem(model.Item.ContentId);
+                    ViewBag.ContentLink = "/admin/orgs/item/" + data.Id;
                     ViewBag.ContentType = "организации";
                     ViewBag.ContentTitle = data.Title;
                     break;
@@ -82,7 +82,7 @@ namespace Disly.Areas.Admin.Controllers
             }
             return View("Item", model);
         }
-                
+
         /// <summary>
         /// Форма редактирования записи
         /// </summary>
@@ -102,11 +102,11 @@ namespace Disly.Areas.Admin.Controllers
             {
                 ViewBag.OrgType = OrgType;
             }
-            else{ }
+            else { }
             if (!String.IsNullOrEmpty(ContentId))
             {
-                ViewBag.ContentId = Guid.Parse(ContentId);                                
-            }            
+                ViewBag.ContentId = Guid.Parse(ContentId);
+            }
             #endregion
             #region данные для выпадающих списков
             model.TypeList = new SelectList(
@@ -175,7 +175,7 @@ namespace Disly.Areas.Admin.Controllers
         [MultiButton(MatchFormKey = "action", MatchFormValue = "save-btn")]
         public ActionResult Save(Guid Id, SitesViewModel back_model)
         {
-            ErrorMassege userMassege = new ErrorMassege();
+            ErrorMessage userMassege = new ErrorMessage();
             userMassege.title = "Информация";
             if (!_cmsRepository.check_Site(Id) && back_model.Item.ContentId == null)
             {
@@ -202,7 +202,7 @@ namespace Disly.Areas.Admin.Controllers
                 }
 
                 if (_cmsRepository.check_Site(Id))
-                {                    
+                {
                     _cmsRepository.updateSite(Id, back_model.Item); //, AccountInfo.id, RequestUserInfo.IP
                     userMassege.info = "Запись обновлена";
                 }
@@ -282,17 +282,18 @@ namespace Disly.Areas.Admin.Controllers
         [MultiButton(MatchFormKey = "action", MatchFormValue = "add-new-domain")]
         public ActionResult AddDomain()
         {
-            try {
+            try
+            {
                 Guid id = Guid.Parse(Request["Item.Id"]);
                 var SiteId = _cmsRepository.getSite(id).Alias;
                 string Domain = Request["new_domain"];
                 _cmsRepository.insertDomain(SiteId, Domain);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw new Exception("SitesController > AddDomain: " + ex);
             }
-           
+
             return Redirect(((System.Web.HttpRequestWrapper)Request).RawUrl);
         }
 
@@ -312,10 +313,10 @@ namespace Disly.Areas.Admin.Controllers
         [HttpPost]
         [MultiButton(MatchFormKey = "action", MatchFormValue = "delete-btn")]
         public ActionResult Delete(Guid Id)
-        {            
-            ErrorMassege userMassege = new ErrorMassege();
+        {
+            ErrorMessage userMassege = new ErrorMessage();
             userMassege.title = "Информация";
-            if(_cmsRepository.deleteSite(Id))
+            if (_cmsRepository.deleteSite(Id))
             {
                 userMassege.info = "Запись Удалена";
                 userMassege.buttons = new ErrorMassegeBtn[]{
@@ -333,7 +334,7 @@ namespace Disly.Areas.Admin.Controllers
             return View("item", model);
         }
 
-     
+
         //Получение списка сайтов по параметрам для отображения в модальном окне
         [HttpGet]
         public ActionResult SiteListModal(Guid objId, ContentType objType)

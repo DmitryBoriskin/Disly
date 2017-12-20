@@ -151,3 +151,7 @@ a:hover {
 .child_sitemap_link span:before {
   color: #e55639;
 }
+.vote_item_wr input[type="checkbox"]:checked + span,
+.vote_item_wr input[type="radio"]:checked + span:after {
+  background-color: #3973e6;
+}

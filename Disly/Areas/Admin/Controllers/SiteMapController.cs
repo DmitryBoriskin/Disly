@@ -132,9 +132,9 @@ namespace Disly.Areas.Admin.Controllers
         [MultiButton(MatchFormKey = "action", MatchFormValue = "save-btn")]
         public ActionResult Item(Guid id, SiteMapViewModel back_model, HttpPostedFileBase upload)
         {
-            ErrorMassege userMessage = new ErrorMassege();
+            ErrorMessage userMessage = new ErrorMessage();
             userMessage.title = "Информация";
-            
+
             #region Импорт со старой базы
             if (back_model.Item.OldId != null)
             {
@@ -163,7 +163,7 @@ namespace Disly.Areas.Admin.Controllers
 
             back_model.Item.Path = p == null ? "/" : p.Path + p.Alias + "/";
 
-          
+
             back_model.Item.Site = Domain;
 
             if (String.IsNullOrEmpty(back_model.Item.Alias))
@@ -178,7 +178,7 @@ namespace Disly.Areas.Admin.Controllers
 
             if (_cmsRepository.existSiteMap(back_model.Item.Path, back_model.Item.Alias, back_model.Item.Id))// && back_model.Item.OldId!=null
             {
-                model.ErrorInfo = new ErrorMassege()
+                model.ErrorInfo = new ErrorMessage()
                 {
                     title = "Ошибка",
                     info = "Такой алиас на данном уровне уже существует, введите иное значение в поле Алиас",
@@ -190,7 +190,7 @@ namespace Disly.Areas.Admin.Controllers
                 model.Item = back_model.Item;
                 // хлебные крошки
                 model.BreadCrumbs = _cmsRepository.getSiteMapBreadCrumbs(back_model.Item.ParentId);
-                model.Item.ParentId = back_model.Item.ParentId;                
+                model.Item.ParentId = back_model.Item.ParentId;
                 var _mg = new MultiSelectList(model.MenuTypes, "value", "text", model.Item != null ? model.Item.MenuGroups : null);
                 ViewBag.GroupMenu = _mg;
                 return View("Item", model);
@@ -224,7 +224,7 @@ namespace Disly.Areas.Admin.Controllers
                         {
                             model.Item = _cmsRepository.getSiteMapItem(id);
 
-                            model.ErrorInfo = new ErrorMassege()
+                            model.ErrorInfo = new ErrorMessage()
                             {
                                 title = "Ошибка",
                                 info = "Вы не можете загружать файлы данного формата",
@@ -367,7 +367,7 @@ namespace Disly.Areas.Admin.Controllers
             _cmsRepository.deleteSiteMapItem(id); //, AccountInfo.id, RequestUserInfo.IP
 
             // записываем информацию о результатах
-            ErrorMassege userMassege = new ErrorMassege();
+            ErrorMessage userMassege = new ErrorMessage();
             userMassege.title = "Информация";
             userMassege.info = "Запись Удалена";
             userMassege.buttons = new ErrorMassegeBtn[]

@@ -14,39 +14,33 @@
 
                 string disabled = (Item.Disabled) ? "disabled" : "";
 
-                <div class="row list-item @disabled">
-                    <div class="col-lg-1">
-                        <div class="li-date">
-                            @Convert.ToDateTime(Item.Date).ToString("dd.MM.yyyy")
-                        </div>
-                    </div>
-                    <div class="col-lg-11">
-                        <div class="li-title">
-                            <a title="@Item." class="li-caption" href="/admin/vacancy/item/@Item.Id/@ViewBag.urlQuery">
-                                @if (!string.IsNullOrEmpty(Item.Profession))
-                                {
-                                    @Item.Profession
-                                    if (!string.IsNullOrEmpty(Item.Post))
-                                    { <span>,</span>}
-                                }
-                                @if (!string.IsNullOrEmpty(Item.Post))
-                                {
-                                    @Item.Post
-                                }
-                            </a><br />
-                            @if (!string.IsNullOrEmpty(Item.Desc) && Item.Desc.Length > maxChars)
+                <div class="list-item @disabled">
+                    <div class="li-desc">
+                        <a title="@Item." class="li-caption" href="/admin/vacancy/item/@Item.Id/@ViewBag.urlQuery">
+                            @if (!string.IsNullOrEmpty(Item.Profession))
                             {
-                                @Html.Raw(Item.Desc.Substring(0, maxChars))
-                                <span> ...</span>
+                                @Item.Profession
+                                if (!string.IsNullOrEmpty(Item.Post))
+                                { <span>,</span>}
                             }
-                            else
+                            @if (!string.IsNullOrEmpty(Item.Post))
                             {
-                                @Html.Raw(Item.Desc)
+                                @Item.Post
                             }
-                        </div>
-                        <div class="li-desc li-divider">
-                            @Item.Salary &middot; Больница №1
-                        </div>
+                        </a>
+                        <br />
+                        <span>Дата: </span> @Convert.ToDateTime(Item.Date).ToString("dd.MM.yyyy")
+                        <br />
+                        <span>Описание</span>
+                        @if (!string.IsNullOrEmpty(Item.Desc) && Item.Desc.Length > maxChars)
+                        {
+                            @Html.Raw(Item.Desc.Substring(0, maxChars))
+                            <span> ...</span>
+                        }
+                        else
+                        {
+                            @Html.Raw(Item.Desc)
+                        }
                     </div>
                 </div>
             }

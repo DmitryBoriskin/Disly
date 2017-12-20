@@ -12,7 +12,7 @@ namespace Disly.Areas.Admin.Models
         public ResolutionsModel UserResolution { get; set; }
         public cmsLogModel Log { get; set; }
 
-        public ErrorMassege ErrorInfo { get; set; }
+        public ErrorMessage ErrorInfo { get; set; }
 
         /// <summary>
         /// Название контроллера
@@ -26,7 +26,7 @@ namespace Disly.Areas.Admin.Models
     }
 
     // Ошибки
-    public class ErrorMassege
+    public class ErrorMessage
     {
         public string title { get; set; }
         public string info { get; set; }

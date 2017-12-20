@@ -1,12 +1,13 @@
 ﻿@model BannersViewModel
-@{
+
+@if (Model.Item != null && Model.Item.Id != Guid.Empty)
+{
     string fileName = (Model.Item != null && Model.Item.Photo != null) ? Model.Item.Photo.Name : string.Empty;
     string fileSize = (Model.Item != null && Model.Item.Photo != null) ? Model.Item.Photo.Size : string.Empty;
     string fileUrl = (Model.Item != null && Model.Item.Photo != null) ? Model.Item.Photo.Url : string.Empty;
-    string section = Request.Params["section"] != null ? Request.Params["section"] : Model.Item.Section.ToString();
-}
-@if (Model.Item != null && Model.Item.Id != Guid.Empty)
-{
+    //string section = Request.Params["section"] != null ? Request.Params["section"] : Model.Item.Section.ToString(); Потенциально опасный код
+    string section = (Model.Item != null && Model.Item.Section.HasValue) ? Model.Item.Section.ToString() : ViewBag.Section;
+
     if ((!Model.Item.Locked && Model.Item.Site == Model.DomainName) || Model.Account.Group.ToLower().Equals("developer") || Model.Account.Group.ToLower().Equals("administrator"))
     {
         <div class="content">
@@ -17,7 +18,7 @@
 
             @Html.TextAreaFor(m => m.Item.Text, new { type = "editor", title = "Текст", height = "300" })
             @Html.TextBoxFor(m => m.Item.Url, new { type = "text", title = "Ссылка", placeholder = "http://", MaxLength = "128" })
-            @Html.Hidden("Item_Section", section)
+            @Html.Hidden("Item.Section", section)
 
             @*
                 Если баннер сохранен в базе, то у нее гарантированно есть Section
@@ -40,7 +41,7 @@
                                             </li>
                                         }
                                     }
-                                    
+
                                 </ul>
                             </div>
 
@@ -105,7 +106,10 @@ else
     }
     @if (Model.Item != null && Model.UserResolution.Delete)
     {
-        <button type="submit" name="action" data-action="delete" value="delete-btn" class="button icon-delete">Удалить</button>
+        if (Model.Item.Section.HasValue)
+        {
+            <button type="submit" name="action" data-action="delete" value="delete-btn" class="button icon-delete">Удалить</button>
+        }
     }
     <button type="submit" name="action" data-action="cancel" value="cancel-btn" class="button icon-cancel">Назад</button>
 </div>

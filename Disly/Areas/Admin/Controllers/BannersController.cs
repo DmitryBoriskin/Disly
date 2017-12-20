@@ -70,7 +70,7 @@ namespace Disly.Areas.Admin.Controllers
                 filter = getFilter(pageSize);
 
                 var sectionItem = _cmsRepository.getSectionItem(id.Value);
-                if(sectionItem != null)
+                if (sectionItem != null)
                 {
                     // наполняем модель списка баннеров
                     var bannersList = _cmsRepository.getBanners(id.Value, filter);
@@ -93,12 +93,24 @@ namespace Disly.Areas.Admin.Controllers
         {
             var banner = _cmsRepository.getBannerItem(id);
             if (banner == null)
+            {
+                var section = Guid.NewGuid();
+
+                if (string.IsNullOrEmpty(Request.Params["section"]) || !Guid.TryParse(Request.Params["section"], out section))
+                    throw new Exception("BannerController: Невозможно создать баннер, секция не определена");
+
+                var getSection = _cmsRepository.getSections();
+                if (getSection == null || (getSection != null && !getSection.Any(p => p.Id == section)))
+                    throw new Exception("BannerController: Невозможно создать баннер, секция не определена");
+
                 model.Item = new BannersModel()
                 {
                     Id = id,
                     Site = Domain,
-                    Date = DateTime.Now
+                    Date = DateTime.Now,
                 };
+                ViewBag.Section = section.ToString();
+            }
             else
                 model.Item = banner;
 
@@ -119,10 +131,9 @@ namespace Disly.Areas.Admin.Controllers
 
                 model.Item.Links = new ObjectLinks()
                 {
-                    Sites = (sitessList != null)? sitessList.Data : null
+                    Sites = (sitessList != null) ? sitessList.Data : null
                 };
             }
-            
 
             return View(model);
         }
@@ -135,7 +146,7 @@ namespace Disly.Areas.Admin.Controllers
         [MultiButton(MatchFormKey = "action", MatchFormValue = "save-btn")]
         public ActionResult Item(Guid id, BannersViewModel back_model, HttpPostedFileBase upload)
         {
-            ErrorMassege userMessage = new ErrorMassege();
+            ErrorMessage userMessage = new ErrorMessage();
             userMessage.title = "Информация";
 
             #region Данные, необходимые для сохранения
@@ -151,7 +162,7 @@ namespace Disly.Areas.Admin.Controllers
                 string savePath = Settings.UserFiles + Domain + Settings.BannersDir;
 
                 // секция
-                if (!back_model.Item.Section.HasValue )
+                if (!back_model.Item.Section.HasValue)
                     throw new Exception("BannerController: В back_model не определена секция");
 
                 var _section = _cmsRepository.getSectionItem(back_model.Item.Section.Value);
@@ -166,12 +177,13 @@ namespace Disly.Areas.Admin.Controllers
                     if (!validExtension.Contains(fileExtension.Replace(".", "")))
                     {
                         model.Item = _cmsRepository.getBannerItem(id);
-                        model.ErrorInfo = new ErrorMassege()
+                        model.ErrorInfo = new ErrorMessage()
                         {
                             title = "Ошибка",
                             info = "Вы не можете загружать файлы данного формата",
                             buttons = new ErrorMassegeBtn[]
                             {
+                                //Без перезагрузки, просто отменяем
                                 new ErrorMassegeBtn { url = "#", text = "ок", action = "false", style="primary" }
                             }
                         };
@@ -189,40 +201,55 @@ namespace Disly.Areas.Admin.Controllers
                     back_model.Item.Photo = photoNew;
                 }
                 #endregion
-
+                var res = false;
                 if (!_cmsRepository.checkBannerExist(id))
                 {
-                    _cmsRepository.createBanner(id, back_model.Item); //AccountInfo.id, RequestUserInfo.IP
                     userMessage.info = "Запись добавлена";
+                    res = _cmsRepository.createBanner(id, back_model.Item);
                 }
                 else
                 {
-                    _cmsRepository.updateBanner(id, back_model.Item); //AccountInfo.id, RequestUserInfo.IP
                     userMessage.info = "Запись обновлена";
+                    res = _cmsRepository.updateBanner(id, back_model.Item);
                 }
 
                 string backUrl = back_model.Item.Section != null ? "index/" + back_model.Item.Section : string.Empty;
-
-                userMessage.buttons = new ErrorMassegeBtn[]{
+                if (res)
+                {
+                    string currentUrl = Request.Url.PathAndQuery;
+                    userMessage.buttons = new ErrorMassegeBtn[]{
                      new ErrorMassegeBtn { url = StartUrl + backUrl, text = "Вернуться в список" },
-                     new ErrorMassegeBtn { url = "#", text = "ок", action = "false" }
-                 };
+                     new ErrorMassegeBtn { url = currentUrl, text = "ок"}
+                    };
+
+                }
+                else
+                {
+                    userMessage.info = "Произошла ошибка";
+                    userMessage.buttons = new ErrorMassegeBtn[]{
+                     new ErrorMassegeBtn { url = StartUrl + backUrl, text = "Вернуться в список" },
+                     new ErrorMassegeBtn { url = "#", text = "ок", action = "false"}
+                    };
+                }
+
             }
             else
             {
                 userMessage.info = "Ошибка в заполнении формы. Поля в которых допушены ошибки - помечены цветом.";
-
                 userMessage.buttons = new ErrorMassegeBtn[]{
+                    //Без перезагрузки action = "false" 
                     new ErrorMassegeBtn { url = "#", text = "ок", action = "false" }
                 };
             }
 
             model.Item = _cmsRepository.getBannerItem(id);
+            model.ErrorInfo = userMessage;
 
             if (model.Item != null && model.Item.Photo != null && !string.IsNullOrEmpty(model.Item.Photo.Url))
             {
                 model.Item.Photo = Files.getInfoImage(model.Item.Photo.Url);
             }
+
 
             return View(model);
         }
@@ -257,6 +284,15 @@ namespace Disly.Areas.Admin.Controllers
         [MultiButton(MatchFormKey = "action", MatchFormValue = "delete-btn")]
         public ActionResult Delete(Guid id)
         {
+            // записываем информацию о результатах
+            ErrorMessage userMessage = new ErrorMessage();
+            userMessage.title = "Информация";
+            //В случае ошибки
+            userMessage.info = "Ошибка, Запись не удалена";
+            userMessage.buttons = new ErrorMassegeBtn[]{
+                new ErrorMassegeBtn { url = "#", text = "ок", action = "false" }
+            };
+
 
             var data = model.Item = _cmsRepository.getBannerItem(id);
 
@@ -265,21 +301,27 @@ namespace Disly.Areas.Admin.Controllers
             {
                 var image = (data.Photo != null) ? data.Photo.Url : null;
                 var res = _cmsRepository.deleteBanner(id);
-                if (res && !string.IsNullOrEmpty(image))
-                    Files.deleteImage(image);
+                if (res)
+                {
+                    if (!string.IsNullOrEmpty(image))
+                        Files.deleteImage(image);
+
+                    // записываем информацию о результатах
+                    userMessage.title = "Информация";
+                    userMessage.info = "Запись удалена";
+
+                    var section = (model.Item.Section.HasValue) ? "/admin/banners/index/" + model.Item.Section.Value.ToString() : "/admin/banners/";
+                    userMessage.buttons = new ErrorMassegeBtn[]
+                    {
+                        new ErrorMassegeBtn { url = section, text = "Перейти в список" }
+                    };
+                    //return RedirectToAction("Index", new { id = model.Item.Section });
+                }
             }
 
-            // записываем информацию о результатах
-            ErrorMassege userMassege = new ErrorMassege();
-            userMassege.title = "Информация";
-            userMassege.info = "Запись Удалена";
-            userMassege.buttons = new ErrorMassegeBtn[]{
-                new ErrorMassegeBtn { url = "#", text = "ок", action = "false" }
-            };
+            model.ErrorInfo = userMessage;
 
-            model.ErrorInfo = userMassege;
-
-            return RedirectToAction("Index", new { id = model.Item.Section });
+            return View(model);
         }
     }
 }

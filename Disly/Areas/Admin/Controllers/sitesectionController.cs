@@ -31,7 +31,7 @@ namespace Disly.Areas.Admin.Controllers
                 UserResolution = UserResolutionInfo,
                 ControllerName = ControllerName,
                 ActionName = ActionName,
-                SiteType = new SiteMapMenu[] 
+                SiteType = new SiteMapMenu[]
                 {
                     new SiteMapMenu { Value = "org", Text = "Организации" },
                     new SiteMapMenu { Value = "main", Text = "Портал" },
@@ -92,7 +92,7 @@ namespace Disly.Areas.Admin.Controllers
         [MultiButton(MatchFormKey = "action", MatchFormValue = "save-btn")]
         public ActionResult Save(Guid Id, SiteSectionViewModel bindData)
         {
-            ErrorMassege userMessage = new ErrorMassege();
+            ErrorMessage userMessage = new ErrorMessage();
             userMessage.title = "Информация";
 
             if (ModelState.IsValid)
@@ -114,16 +114,16 @@ namespace Disly.Areas.Admin.Controllers
 
                 //Определяем Insert или Update
                 if (getSiteSection != null)
+                {
                     res = _cmsRepository.updateSiteSection(bindData.Item);
+                    userMessage.info = "Запись обновлена";
+                }                    
                 else
                 {
                     res = _cmsRepository.insertSiteSection(bindData.Item);
-                }
-                //Сообщение пользователю
-                if (res)
-                    userMessage.info = "Запись обновлена";
-                else
-                    userMessage.info = "Произошла ошибка";
+                    userMessage.info = "Запись добавлена";
+                }                
+                if (!res)userMessage.info = "Произошла ошибка";
 
                 userMessage.buttons = new ErrorMassegeBtn[]
                 {
@@ -159,7 +159,7 @@ namespace Disly.Areas.Admin.Controllers
             var res = _cmsRepository.deleteSiteSection(Id);
 
             // записываем информацию о результатах
-            ErrorMassege userMassege = new ErrorMassege();
+            ErrorMessage userMassege = new ErrorMessage();
             userMassege.title = "Информация";
             userMassege.info = "Запись Удалена";
             userMassege.buttons = new ErrorMassegeBtn[]

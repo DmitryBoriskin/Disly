@@ -10,11 +10,11 @@
                 string disabled = (item.Disabled) ? "disabled" : "";
                 <div class="list-item @disabled">
                     <a href="/admin/vote/item/@item.Id/@ViewBag.urlQuery" title="@item.Header" class="li-caption">@item.Header</a><br />
-                    <span>Дата начала</span>@Convert.ToDateTime(item.DateStart).ToString("dd.MM.yyyy")<br />
+                    <span>Дата начала</span> @Convert.ToDateTime(item.DateStart).ToString("dd.MM.yyyy")<br />
                     @if (item.DateEnd != null)
                     {
                         <span>Дата завершения</span> @Convert.ToDateTime(item.DateEnd).ToString("dd.MM.yyyy")
-                    }                    
+                    }
                 </div>
             }
             Html.RenderAction("Pager", "Templates", new { @Model = Model.List.Pager });
@@ -37,7 +37,7 @@
     <div class="buttons">
         @if (Model.UserResolution.Write)
         {
-            <button type="submit" name="action" value="insert-btn" class="button icon-create">Создать</button>            
+            <button type="submit" name="action" value="insert-btn" class="button icon-create">Создать</button>
         }
     </div>
 }

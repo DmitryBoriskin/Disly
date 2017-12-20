@@ -42,7 +42,7 @@ namespace Disly.Controllers
 
             model.Structures = _repository.getStructures(); //Domain
             //если в списке только одна структура — редиректим на него
-            if (model.Structures.Length ==1)
+            if (model.Structures!=null && model.Structures.Length ==1)
             {
                 return Redirect(ControllerName + "/" + model.Structures[0].Num);
             }

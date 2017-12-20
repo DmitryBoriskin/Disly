@@ -22,7 +22,7 @@ namespace Disly.Areas.Admin.Controllers
                 ControllerName = ControllerName,
                 ActionName = ActionName
             };
-            
+
             #region Метатеги
             ViewBag.Title = "Структура CMS";
             ViewBag.Description = "";
@@ -66,7 +66,7 @@ namespace Disly.Areas.Admin.Controllers
         [MultiButton(MatchFormKey = "action", MatchFormValue = "save-btn")]
         public ActionResult Save(Guid Id, cmsMenuViewModel back_model)
         {
-            ErrorMassege userMassege = new ErrorMassege();
+            ErrorMessage userMassege = new ErrorMessage();
             userMassege.title = "Информация";
 
             if (ModelState.IsValid)
@@ -120,7 +120,7 @@ namespace Disly.Areas.Admin.Controllers
             _cmsRepository.deleteCmsMenu(Id);
 
             // записываем информацию о результатах
-            ErrorMassege userMassege = new ErrorMassege();
+            ErrorMessage userMassege = new ErrorMessage();
             userMassege.title = "Информация";
             userMassege.info = "Запись Удалена";
             userMassege.buttons = new ErrorMassegeBtn[]{

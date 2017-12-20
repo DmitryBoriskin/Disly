@@ -149,7 +149,7 @@ namespace Disly.Areas.Admin.Controllers
         [MultiButton(MatchFormKey = "action", MatchFormValue = "save-btn")]
         public ActionResult Save(Guid Id, MaterialsViewModel bindData, HttpPostedFileBase upload)
         {
-            ErrorMassege userMessage = new ErrorMassege();
+            ErrorMessage userMessage = new ErrorMessage();
             userMessage.title = "Информация";
 
             if (ModelState.IsValid)
@@ -173,11 +173,11 @@ namespace Disly.Areas.Admin.Controllers
                     string fileExtension = upload.FileName.Substring(upload.FileName.LastIndexOf(".")).ToLower();
 
                     var validExtension = (!string.IsNullOrEmpty(Settings.PicTypes)) ? Settings.PicTypes.Split(',') : "jpg,jpeg,png,gif".Split(',');
-                    if(!validExtension.Contains(fileExtension.Replace(".","")))
+                    if (!validExtension.Contains(fileExtension.Replace(".", "")))
                     {
                         model.Item = _cmsRepository.getMaterial(Id);
 
-                        model.ErrorInfo = new ErrorMassege()
+                        model.ErrorInfo = new ErrorMessage()
                         {
                             title = "Ошибка",
                             info = "Вы не можете загружать файлы данного формата",
@@ -213,23 +213,37 @@ namespace Disly.Areas.Admin.Controllers
 
                 //Определяем Insert или Update
                 if (getMaterial != null)
+                {
+                    userMessage.info = "Запись обновлена";
                     res = _cmsRepository.updateCmsMaterial(bindData.Item);
+                }
+
                 else
                 {
+                    userMessage.info = "Запись добавлена";
                     bindData.Item.ContentLink = SiteInfo.ContentId;
                     bindData.Item.ContentLinkType = SiteInfo.Type;
                     res = _cmsRepository.insertCmsMaterial(bindData.Item);
                 }
                 //Сообщение пользователю
                 if (res)
-                    userMessage.info = "Запись обновлена";
+                {
+                    string currentUrl = Request.Url.PathAndQuery;
+
+                    userMessage.buttons = new ErrorMassegeBtn[]{
+                     new ErrorMassegeBtn { url = StartUrl + Request.Url.Query, text = "Вернуться в список" },
+                     new ErrorMassegeBtn { url = currentUrl, text = "ок" }
+                 };
+                }
                 else
+                {
                     userMessage.info = "Произошла ошибка";
 
-                userMessage.buttons = new ErrorMassegeBtn[]{
+                    userMessage.buttons = new ErrorMassegeBtn[]{
                      new ErrorMassegeBtn { url = StartUrl + Request.Url.Query, text = "Вернуться в список" },
-                     new ErrorMassegeBtn { url = "#", text = "ок", action = "false" }
+                     new ErrorMassegeBtn { url = "#", text = "ок", action = "false"  }
                  };
+                }
             }
             else
             {
@@ -263,26 +277,38 @@ namespace Disly.Areas.Admin.Controllers
         [MultiButton(MatchFormKey = "action", MatchFormValue = "delete-btn")]
         public ActionResult Delete(Guid Id)
         {
-            var data = _cmsRepository.getMaterial(Id);
-            if(data != null)
-            {
-                var image = (data.PreviewImage != null) ? data.PreviewImage.Url : null;
-                var res = _cmsRepository.deleteCmsMaterial(Id);
-                if (res && !string.IsNullOrEmpty(image))
-                    Files.deleteImage(image);
-            }
-
             // записываем информацию о результатах
-            ErrorMassege userMassege = new ErrorMassege();
-            userMassege.title = "Информация";
-            userMassege.info = "Запись Удалена";
-            userMassege.buttons = new ErrorMassegeBtn[]{
+            ErrorMessage userMessage = new ErrorMessage();
+            userMessage.title = "Информация";
+            //В случае ошибки
+            userMessage.info = "Ошибка, Запись не удалена";
+            userMessage.buttons = new ErrorMassegeBtn[]{
                 new ErrorMassegeBtn { url = "#", text = "ок", action = "false" }
             };
 
-            model.ErrorInfo = userMassege;
+            model.Item = _cmsRepository.getMaterial(Id);
+            if (model.Item != null)
+            {
+                var image = (model.Item.PreviewImage != null) ? model.Item.PreviewImage.Url : null;
+                var res = _cmsRepository.deleteCmsMaterial(Id);
+                if (res)
+                {
+                    if (!string.IsNullOrEmpty(image))
+                        Files.deleteImage(image);
 
-            return RedirectToAction("Index");
+                    // записываем информацию о результатах
+                    userMessage.title = "Информация";
+                    userMessage.info = "Запись удалена";
+                    userMessage.buttons = new ErrorMassegeBtn[]
+                     {
+                        new ErrorMassegeBtn { url = StartUrl, text = "ок" }
+                     };
+                }
+            }
+            model.ErrorInfo = userMessage;
+
+            return View(model);
+            //return RedirectToAction("Index");
         }
 
         //Получение списка организаций по параметрам

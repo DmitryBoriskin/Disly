@@ -171,7 +171,8 @@ namespace cms.dbase
                 if (!string.IsNullOrEmpty(filtr.Domain))
                 {
 
-                    query = query.Where(s => s.fklinkusertosites.Any(t => t.f_site == filtr.Domain));
+                    query = query.Where(s => s.fklinkusertosites.Any(t => t.f_site == filtr.Domain))
+                                 .Where(s => (s.f_group.ToLower()!= "developer" && s.f_group.ToLower() != "administrator"));
                 }
 
                 if (filtr.Disabled.HasValue)

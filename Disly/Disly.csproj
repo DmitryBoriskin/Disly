@@ -135,6 +135,7 @@
     <Content Include="Areas\Admin\Views\Feedbacks\Item.cshtml" />
     <Content Include="Content\css\common.css" />
     <Content Include="Content\css\commonless.css" />
+    <Content Include="Content\css\iframe_tinymce.css" />
     <Content Include="Content\css\print.css" />
     <Content Include="Content\css\styles_popUp.css" />
     <Content Include="Content\css\styles.css" />
@@ -387,6 +388,7 @@
     <Content Include="Content\plugins\tinymce\plugins\emoticons\plugin.min.js" />
     <Content Include="Content\plugins\tinymce\plugins\fullpage\plugin.min.js" />
     <Content Include="Content\plugins\tinymce\plugins\fullscreen\plugin.min.js" />
+    <Content Include="Content\plugins\tinymce\plugins\gallery\plugin.min.js" />
     <Content Include="Content\plugins\tinymce\plugins\help\img\logo.png" />
     <Content Include="Content\plugins\tinymce\plugins\help\plugin.min.js" />
     <Content Include="Content\plugins\tinymce\plugins\hr\plugin.min.js" />
@@ -422,6 +424,7 @@
     <Content Include="Content\plugins\tinymce\skins\lightgray\fonts\tinymce-small.svg" />
     <Content Include="Content\plugins\tinymce\skins\lightgray\fonts\tinymce.svg" />
     <Content Include="Content\plugins\tinymce\skins\lightgray\img\anchor.gif" />
+    <Content Include="Content\plugins\tinymce\skins\lightgray\img\gallery_bg.png" />
     <Content Include="Content\plugins\tinymce\skins\lightgray\img\loader.gif" />
     <Content Include="Content\plugins\tinymce\skins\lightgray\img\object.gif" />
     <Content Include="Content\plugins\tinymce\skins\lightgray\img\trans.gif" />
@@ -528,6 +531,7 @@
     <Compile Include="Areas\Admin\Controllers\BannersController.cs" />
     <Compile Include="Areas\Admin\Controllers\cmsMenuController.cs" />
     <Compile Include="Areas\Admin\Controllers\DocumentsController .cs" />
+    <Compile Include="Controllers\VacancyController.cs" />
     <Compile Include="Controllers\RedirectFromOldController.cs" />
     <Compile Include="Areas\Admin\Controllers\PhotoAlbumsController.cs" />
     <Compile Include="Areas\Admin\Controllers\VoteController.cs" />
@@ -614,6 +618,7 @@
     <Compile Include="Models\MedicalServicesViewModel.cs" />
     <Compile Include="Models\RedirectRegistryViewModel.cs" />
     <Compile Include="Models\StructureViewModel.cs" />
+    <Compile Include="Models\VacancyViewModel.cs" />
     <Compile Include="Models\VoteViewModel.cs" />
     <Compile Include="Models\TypePageViewModel.cs" />
     <Compile Include="Models\NewsViewModel.cs" />
@@ -866,6 +871,8 @@
     <Content Include="Views\Press\RssSettings.cshtml" />
     <Content Include="Views\EventsFront\Archive.cshtml" />
     <Content Include="Views\Shared\part\childlist_sitemap.cshtml" />
+    <Content Include="Views\Vacancy\Index.cshtml" />
+    <Content Include="Views\Vacancy\Item.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

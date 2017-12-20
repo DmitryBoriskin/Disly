@@ -33,31 +33,7 @@ namespace Disly.Controllers
         /// <returns></returns>
         public ActionResult Index()
         {
-            var filter = getFilter();
-            filter.Disabled = false;
-            filter.Type = FeedbackType.appeal.ToString();
-            model.List = _repository.getFeedbacksList(filter);
-
-            model.Child = (model.CurrentPage != null) ? _repository.getSiteMapChild(model.CurrentPage.Id) : null;
-
-            ViewBag.Filter = filter;
-            ViewBag.NewsSearchArea = filter.SearchText;
-            ViewBag.NewsSearchDateStart = filter.Date;
-            ViewBag.NewsSearchDateFin = filter.DateEnd;
-
-            #region Создаем переменные (значения по умолчанию)
-            string _ViewName = (ViewName != String.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";
-
-            string PageTitle = "Обратная связь";
-            string PageDesc = "описание страницы";
-            string PageKeyw = "ключевые слова";
-            #endregion
-            #region Метатеги
-            ViewBag.Title = PageTitle;
-            ViewBag.Description = PageDesc;
-            ViewBag.KeyWords = PageKeyw;
-            #endregion
-            return View(_ViewName, model);
+            return RedirectToAction("Appeallist");
         }
 
         /// <summary>
@@ -91,9 +67,15 @@ namespace Disly.Controllers
             ViewBag.Description = PageDesc;
             ViewBag.KeyWords = PageKeyw;
             #endregion
+            ViewBag.IsAgree = false;
+            ViewBag.Anonymous = false;
+            ViewBag.captchaKey = Settings.CaptchaKey;
+            ViewBag.FbType = FeedbackType.appeal;
+
             //return View(_ViewName, model);
             return View(model);
         }
+        
         /// <summary>
         /// Список отзывов
         /// </summary>
@@ -125,47 +107,53 @@ namespace Disly.Controllers
             ViewBag.Description = PageDesc;
             ViewBag.KeyWords = PageKeyw;
             #endregion
+            ViewBag.IsAgree = false;
+            ViewBag.Anonymous = false;
+            ViewBag.captchaKey = Settings.CaptchaKey;
+            ViewBag.FbType = FeedbackType.review;
             //return View(_ViewName, model);
             return View(model);
         }
+        
         /// <summary>
         /// Форма отправки обращения
         /// </summary>
         /// <returns></returns>
-        public ActionResult Form()
-        {
-            model.Child = (model.CurrentPage != null && model.CurrentPage.ParentId.HasValue)
-                   ? _repository.getSiteMapChild(model.CurrentPage.ParentId.Value) : null;
+        //public ActionResult Form()
+        //{
+        //    model.Child = (model.CurrentPage != null && model.CurrentPage.ParentId.HasValue)
+        //           ? _repository.getSiteMapChild(model.CurrentPage.ParentId.Value) : null;
 
-            #region Создаем переменные (значения по умолчанию)
-            string _ViewName = (ViewName != String.Empty) ? "Form" : "~/Views/Error/CustomError.cshtml";
+        //    #region Создаем переменные (значения по умолчанию)
+        //    string _ViewName = (ViewName != String.Empty) ? "Form" : "~/Views/Error/CustomError.cshtml";
 
-            string PageTitle = "Форма обратной связи";
-            string PageDesc = "описание страницы";
-            string PageKeyw = "ключевые слова";
-            #endregion
+        //    string PageTitle = "Форма обратной связи";
+        //    string PageDesc = "описание страницы";
+        //    string PageKeyw = "ключевые слова";
+        //    #endregion
 
-            #region Метатеги
-            ViewBag.Title = PageTitle;
-            ViewBag.Description = PageDesc;
-            ViewBag.KeyWords = PageKeyw;
-            #endregion
+        //    #region Метатеги
+        //    ViewBag.Title = PageTitle;
+        //    ViewBag.Description = PageDesc;
+        //    ViewBag.KeyWords = PageKeyw;
+        //    #endregion
 
-            ViewBag.IsAgree = false;
-            ViewBag.Anonymous = false;
-            ViewBag.captchaKey = Settings.CaptchaKey;
+        //    ViewBag.IsAgree = false;
+        //    ViewBag.Anonymous = false;
+        //    ViewBag.captchaKey = Settings.CaptchaKey;
 
-            if (!string.IsNullOrEmpty(getFilter().Type))
-            {
-                var fbType = FeedbackType.appeal;
-                var res = Enum.TryParse(getFilter().Type, out fbType);
+        //    if (!string.IsNullOrEmpty(getFilter().Type))
+        //    {
+        //        var fbType = FeedbackType.appeal;
+        //        var res = Enum.TryParse(getFilter().Type, out fbType);
 
-                if(res)
-                    ViewBag.FbType = fbType;
-            }
+        //        if(res)
+        //            ViewBag.FbType = fbType;
+        //    }
 
-            return View(_ViewName, model);
-        }
+        //    return View(_ViewName, model);
+        //}
+        
         /// <summary>
         /// Отправка обращения
         /// </summary>
@@ -173,7 +161,7 @@ namespace Disly.Controllers
         /// <returns></returns>
         [HttpPost]
         [MultiButton(MatchFormKey = "action", MatchFormValue = "send-btn")]
-        public ActionResult Form(FeedbackFormViewModel bindData)
+        public ActionResult SendForm(FeedbackFormViewModel bindData)
         {
             model.Child = (model.CurrentPage != null) ? _repository.getSiteMapChild(model.CurrentPage.Id) : null;
 
@@ -266,13 +254,13 @@ namespace Disly.Controllers
                         bindData.Text,
                         answerLink
                         );
-
-                    Mailer letter = new Mailer();
-                    letter.isSsl = true;
-                    letter.Theme = "Сайт " + Domain + ": Обратная связь";
-                    letter.Text = msgText;
-                    letter.Attachments = savedFileName;
-                    letter.MailTo = "s-kuzmina@it-serv.ru"; // Settings.mailTo;
+                    
+                        Mailer letter = new Mailer();
+                        letter.isSsl = true;
+                        letter.Theme = "Сайт " + Domain + ": Обратная связь";
+                        letter.Text = msgText;
+                        letter.Attachments = savedFileName;
+                        letter.MailTo = Settings.mailTo;
 
                     var admins = _repository.getSiteAdmins();
                     if (admins != null)
@@ -301,7 +289,11 @@ namespace Disly.Controllers
             ViewBag.Anonymous = false;
             ViewBag.captchaKey = Settings.CaptchaKey;
 
-            return View(_ViewName, model);
+            //return View(_ViewName, model);
+            if (bindData.FbType == FeedbackType.review)
+                return RedirectToAction("Reviewlist");
+
+            return RedirectToAction("Appeallist");
         }
 
         /// <summary>
@@ -452,7 +444,12 @@ namespace Disly.Controllers
             ViewBag.IsAgree = false;
 
             model.Item = feedbackItem;
-            return View(_ViewName, model);
+
+            if(feedbackItem.FbType == FeedbackType.review)
+                return RedirectToAction("Reviewlist");
+
+            return RedirectToAction("Appeallist");
+            //return View(_ViewName, model);
         }
     }
 }

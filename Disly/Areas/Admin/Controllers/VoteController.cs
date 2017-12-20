@@ -49,7 +49,7 @@ namespace Disly.Areas.Admin.Controllers
         public ActionResult Index(string category, string type)
         {
             // Наполняем фильтр значениями
-            var filter = getFilter();            
+            var filter = getFilter();
             model.List = _cmsRepository.getVoteList(filter);
             return View(model);
         }
@@ -60,17 +60,12 @@ namespace Disly.Areas.Admin.Controllers
         /// <returns></returns>
         public ActionResult Item(Guid Id)
         {
-            
+            ViewBag.VoteId = Id.ToString();
             model.Item = _cmsRepository.getVoteItem(Id);
             if (model.Item == null)
             {
-                model.Item = new VoteModel()
-                {
-                    DateStart= DateTime.Now
-                };
+                ViewBag.DateStart = DateTime.Today;
             }
-
-
             return View("Item", model);
         }
 
@@ -121,38 +116,42 @@ namespace Disly.Areas.Admin.Controllers
         [MultiButton(MatchFormKey = "action", MatchFormValue = "save-btn")]
         public ActionResult Save(Guid Id, VoteViewModel bindData)
         {
-            ErrorMassege userMessage = new ErrorMassege();
+            ErrorMessage userMessage = new ErrorMessage();
             userMessage.title = "Информация";
 
+            bindData.Item.Id = Id;
+
+
+
             if (ModelState.IsValid)
-            {                
+            {
                 var getVote = _cmsRepository.getVoteItem(Id);
 
                 //Определяем Insert или Update
                 if (getVote != null)
                 {
-                    if(_cmsRepository.updVote(Id, bindData.Item))
+                    if (_cmsRepository.updVote(Id, bindData.Item))
                     {
                         userMessage.info = "Запись обновлена";
                     }
                     else
-                        userMessage.info = "Произошла ошибка";                    
+                        userMessage.info = "Произошла ошибка";
                 }
                 else
                 {
-                    if(_cmsRepository.insVote(Id, bindData.Item))
+                    if (_cmsRepository.insVote(Id, bindData.Item))
                     {
                         userMessage.info = "Запись создана";
                     }
-                    else                    
+                    else
                         userMessage.info = "Произошла ошибка";
-                    
+
                 }
 
                 model.Item = _cmsRepository.getVoteItem(Id);
                 userMessage.buttons = new ErrorMassegeBtn[]{
                      new ErrorMassegeBtn { url = StartUrl + Request.Url.Query, text = "Вернуться в список" },
-                     new ErrorMassegeBtn { url = "#", text = "ок", action = "false" }
+                     new ErrorMassegeBtn { url = "/admin/vote/item/"+Id, text = "ок",}
                  };
             }
             else
@@ -161,7 +160,7 @@ namespace Disly.Areas.Admin.Controllers
                 userMessage.buttons = new ErrorMassegeBtn[]{
                      new ErrorMassegeBtn { url = "#", text = "ок", action = "false" }
                 };
-            }            
+            }
             model.ErrorInfo = userMessage;
             return View("Item", model);
         }
@@ -178,16 +177,17 @@ namespace Disly.Areas.Admin.Controllers
         public ActionResult Delete(Guid Id)
         {
             // записываем информацию о результатах
-            ErrorMassege userMassege = new ErrorMassege {
+            ErrorMessage userMassege = new ErrorMessage
+            {
                 title = "Информация"
-            };            
+            };
             if (_cmsRepository.delVote(Id))
                 userMassege.info = "Запись Удалена";
             else
                 userMassege.info = "Произошла ошибка";
 
             userMassege.buttons = new ErrorMassegeBtn[]{
-                new ErrorMassegeBtn { url = StartUrl + Request.Url.Query, text = "ок", action = "false" }
+                new ErrorMassegeBtn { url = StartUrl + Request.Url.Query, text = "ок"}
             };
 
             model.ErrorInfo = userMassege;
@@ -201,10 +201,10 @@ namespace Disly.Areas.Admin.Controllers
         [MultiButton(MatchFormKey = "action", MatchFormValue = "add-new-answer")]
         public ActionResult AddAnswer()
         {
-            string IdVote = Request["Item.Id"];
+            string IdVote = Request["Item_VoteId"];
             string Variant = Request["s_answer"];
             _cmsRepository.insAnswer(Guid.Parse(IdVote), Variant);
-            
+
             return Redirect(((System.Web.HttpRequestWrapper)Request).RawUrl);
         }
         /// <summary>

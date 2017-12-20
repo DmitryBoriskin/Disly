@@ -14,7 +14,7 @@ namespace Disly.Areas.Admin.Controllers
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             base.OnActionExecuting(filterContext);
-            
+
             model = new PortalUsersViewModel()
             {
                 Account = AccountInfo,
@@ -24,7 +24,7 @@ namespace Disly.Areas.Admin.Controllers
                 ActionName = ActionName,
                 GroupList = _cmsRepository.getUsersGroupList()
             };
-            
+
             #region Метатеги
             ViewBag.Title = UserResolutionInfo.Title;
             ViewBag.Description = "";
@@ -46,14 +46,14 @@ namespace Disly.Areas.Admin.Controllers
 
             return View(model);
         }
-                
+
         /// <summary>
         /// Форма редактирования записи
         /// </summary>
         /// <returns></returns>
         public ActionResult Item(Guid Id)
         {
-            model.Item = _cmsRepository.getUser(Id);            
+            model.Item = _cmsRepository.getUser(Id);
 
             return View("Item", model);
         }
@@ -73,10 +73,10 @@ namespace Disly.Areas.Admin.Controllers
             query = addFiltrParam(query, "disabled", disabled.ToString().ToLower());
             query = addFiltrParam(query, "page", String.Empty);
             query = addFiltrParam(query, "size", size);
-            
+
             return Redirect(StartUrl + query);
         }
-        
+
         /// <summary>
         /// Очищаем фильтр
         /// </summary>
@@ -104,7 +104,7 @@ namespace Disly.Areas.Admin.Controllers
         [MultiButton(MatchFormKey = "action", MatchFormValue = "save-btn")]
         public ActionResult Save(Guid Id, PortalUsersViewModel back_model)
         {
-            ErrorMassege userMassege = new ErrorMassege();
+            ErrorMessage userMassege = new ErrorMessage();
             userMassege.title = "Информация";
 
             if (ModelState.IsValid)
@@ -167,10 +167,10 @@ namespace Disly.Areas.Admin.Controllers
             _cmsRepository.deleteUser(Id); //, AccountInfo.id, RequestUserInfo.IP
 
             // записываем информацию о результатах
-            ErrorMassege userMassege = new ErrorMassege();
+            ErrorMessage userMassege = new ErrorMessage();
             userMassege.title = "Информация";
             userMassege.info = "Запись Удалена";
-            userMassege.buttons = new ErrorMassegeBtn[]{                
+            userMassege.buttons = new ErrorMassegeBtn[]{
                 new ErrorMassegeBtn { url = StartUrl + Request.Url.Query, text = "ок", action = "false" }
             };
 

@@ -20,7 +20,7 @@ namespace Disly.Areas.Admin.Controllers
         {
             string Link = Request.Url.PathAndQuery.ToLower();
             string nowValue = Request.QueryString[Alias];
-            
+
             for (int i = 0; i < Items.Length; i++)
             {
                 Items[i].link = addFiltrParam(Link, Alias.ToLower(), Items[i].value.ToLower());

@@ -1,0 +1,46 @@
+﻿@model VacancyViewModel
+<div class="type-page">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                @Html.Partial("services/breadcrumbs")
+                <h1>@ViewBag.Title</h1>
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="vacnacy-list">
+                            @if (Model.List.Data != null)
+                            {
+                                foreach (var item in Model.List.Data)
+                                {
+                                    <div class="vacnacy_item">
+                                        <div class="vacnacy_item_date">@item.Date.ToString("dd.MM.yyyy")</div>
+                                        <a href="/vacancy/@item.Id">@item.Profession — @item.Post</a>                                        
+                                    </div>
+                                }
+                                Html.RenderAction("Pager", "Service", new { @Model = Model.List.Pager });
+                            }
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-md-push-1">
+                        <form role="form" class="filtr_news" action="/@ViewBag.ControllerName">
+                            <div class="row">
+                                
+                                <div class="col-sm-12">
+                                    <div class="form-group search_news">
+                                        <label class="label_filtr" for="search_news">Ключевые слова</label>
+                                        <input type="text" class="filtr_data form-control" name="searchtext" id="search_news" value="@ViewBag.Filter.SearchText" />
+                                    </div>
+                                </div>
+                                <div class="col-sm-12 control-filter">
+                                    <a class="btn btn-default pull-right" href="/@ViewBag.ControllerName">Очистить</a>
+                                    <button class="btn sub btn-primary" type="submit">Применить</button>
+                                </div>
+
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

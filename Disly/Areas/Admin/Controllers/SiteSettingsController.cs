@@ -55,7 +55,7 @@ namespace Disly.Areas.Admin.Controllers
         [MultiButton(MatchFormKey = "action", MatchFormValue = "save-btn")]
         public ActionResult Index(SitesViewModel backModel, HttpPostedFileBase upload, HttpPostedFileBase uploadBack)
         {
-            ErrorMassege userMassege = new ErrorMassege();
+            ErrorMessage userMassege = new ErrorMessage();
             userMassege.title = "Информация";
 
             var old = _cmsRepository.getSite(Domain);
@@ -63,7 +63,7 @@ namespace Disly.Areas.Admin.Controllers
             if (ModelState.IsValid)
             {
                 #region Сохранение изображений
-                
+
                 if (upload != null && upload.ContentLength > 0)
                 {
 
@@ -75,7 +75,7 @@ namespace Disly.Areas.Admin.Controllers
                 }
 
                 #region Изображени под слайдером
-                if(uploadBack != null && uploadBack.ContentLength > 0)
+                if (uploadBack != null && uploadBack.ContentLength > 0)
                 {
                     string SavePath = Settings.UserFiles + Domain + "/logo/";
                     int idx = uploadBack.FileName.LastIndexOf('.');
@@ -92,7 +92,7 @@ namespace Disly.Areas.Admin.Controllers
                     uploadBack.SaveAs(Server.MapPath(Path.Combine(SavePath, FileName)));
                     backModel.Item.BackGroundImg = new Photo { Url = FullName };
                 }
-                
+
                 #endregion
 
 
@@ -106,7 +106,7 @@ namespace Disly.Areas.Admin.Controllers
             };
             }
             else
-            {               
+            {
 
                 userMassege.info = "Ошибка в заполнении формы. Поля в которых допушены ошибки - помечены цветом.";
 

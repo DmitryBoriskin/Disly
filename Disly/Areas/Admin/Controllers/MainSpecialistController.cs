@@ -74,7 +74,7 @@ namespace Disly.Areas.Admin.Controllers
             #endregion
 
             model.Item = _cmsRepository.getMainSpecialistItem(id);
-            
+
             if (model.Item != null)
             {
                 IEnumerable<int> specs;
@@ -103,7 +103,7 @@ namespace Disly.Areas.Admin.Controllers
         [MultiButton(MatchFormKey = "action", MatchFormValue = "save-btn")]
         public ActionResult Save(Guid id, MainSpecialistViewModel binData)
         {
-            ErrorMassege userMessage = new ErrorMassege();
+            ErrorMessage userMessage = new ErrorMessage();
             userMessage.title = "Информация";
 
             bool result = false;
@@ -187,7 +187,7 @@ namespace Disly.Areas.Admin.Controllers
             var result = _cmsRepository.deleteMainSpecialist(id);
 
             // записываем информацию о результатах
-            ErrorMassege userMassege = new ErrorMassege();
+            ErrorMessage userMassege = new ErrorMessage();
             userMassege.title = "Информация";
             userMassege.info = "Запись Удалена";
             userMassege.buttons = new ErrorMassegeBtn[]

@@ -83,27 +83,27 @@
                         </div>
                     </div>
 
-                        <div class="group-block open topIndent-20" title="Привязка к событиям">
-                            <div class="row">
-                                <div class="col-lg-12">
-                                    <ul id="model-linksToEvent-ul">
-                                        @if (Model.Item.Links != null && Model.Item.Links.Events != null)
+                    <div class="group-block open topIndent-20" title="Привязка к событиям">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <ul id="model-linksToEvent-ul">
+                                    @if (Model.Item.Links != null && Model.Item.Links.Events != null)
+                                    {
+                                        foreach (var evnt in Model.Item.Links.Events)
                                         {
-                                            foreach (var evnt in Model.Item.Links.Events)
-                                            {
-                                                <li id="evnt_@evnt.Id" class="icon-calendar">
-                                                    @evnt.DateBegin.ToShortDateString() <a href="/Admin/events/item/@evnt.Id/" target="_blank"> @evnt.Title</a>
-                                                </li>
-                                            }
+                                            <li id="evnt_@evnt.Id" class="icon-calendar">
+                                                @evnt.DateBegin.ToShortDateString() <a href="/Admin/events/item/@evnt.Id/" target="_blank"> @evnt.Title</a>
+                                            </li>
                                         }
-                                    </ul>
-                                </div>
-                                <div class="col-lg-offset-9 col-lg-3">
-                                    @*Для объекта типа "Материалы" ищем список n последних событий (поэтому передаем тип объекта и id)*@
-                                    @Html.ActionLink("Привязать", "eventsListModal", "events", new { @objId = Model.Item.Id, @objType = ContentType.MATERIAL }, new { @id = "LogLists", @class = "button pop-up_frame icon-location-5", @data_class = "LogList", @title = "Организации для размещения" })
-                                </div>
+                                    }
+                                </ul>
+                            </div>
+                            <div class="col-lg-offset-9 col-lg-3">
+                                @*Для объекта типа "Материалы" ищем список n последних событий (поэтому передаем тип объекта и id)*@
+                                @Html.ActionLink("Привязать", "eventsListModal", "events", new { @objId = Model.Item.Id, @objType = ContentType.MATERIAL }, new { @id = "LogLists", @class = "button pop-up_frame icon-location-5", @data_class = "LogList", @title = "Организации для размещения" })
                             </div>
                         </div>
+                    </div>
                 }
             }
             else
@@ -149,7 +149,7 @@
 
             <br />
             <div class="alert alert-info">Кол-во просмотров: <strong>@Model.Item.CountSee</strong></div>
-            
+
         </div>
     }
     else
@@ -179,7 +179,10 @@ else
     }
     @if (Model.Item != null && Model.UserResolution.Delete)
     {
+        if (!string.IsNullOrEmpty(Model.Item.Alias))
+        {
         <button type="submit" name="action" data-action="delete" value="delete-btn" class="button icon-delete">Удалить</button>
+        }
     }
     <button type="submit" name="action" data-action="cancel" value="cancel-btn" class="button icon-cancel">Закрыть</button>
 </div>
