@@ -36,7 +36,7 @@
                                             <div class="col-md-12">
                                                 <div class="item_news">
                                                     <div class="news-list_date"><span>@item.Date.ToString("HH:mm | dd.MM.yyyy")</span></div>
-                                                    <a class="news-list_title" href="/press/@item.Year/@item.Month/@item.Day/@item.Alias">@item.Title</a>
+                                                    <a class="news-list_title" href="/press/@item.Year/@item.Month/@item.Day/@item.Alias">@Html.Raw(item.Title)</a>
                                                 </div>
                                             </div>
                                         }
