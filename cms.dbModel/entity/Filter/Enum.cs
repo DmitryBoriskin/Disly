@@ -10,7 +10,8 @@ public enum ContentType
     MATERIAL = 1,
     EVENT = 2,
     PHOTO = 3,
-    BANNER = 4
+    BANNER = 4,
+    ANKETA = 5
 }
 /// <summary>
 /// Типы объектов, которые могут иметь свои сайты(домены)

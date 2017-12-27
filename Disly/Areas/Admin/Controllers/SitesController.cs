@@ -284,9 +284,11 @@ namespace Disly.Areas.Admin.Controllers
         {
             try
             {
+
                 Guid id = Guid.Parse(Request["Item.Id"]);
                 var SiteId = _cmsRepository.getSite(id).Alias;
                 string Domain = Request["new_domain"];
+
                 _cmsRepository.insertDomain(SiteId, Domain);
             }
             catch (Exception ex)

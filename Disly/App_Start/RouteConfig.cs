@@ -229,7 +229,6 @@ namespace Disly
                defaults: new { controller = "Documents", action = "Index", path = UrlParameter.Optional }
             );
 
-
             //Обратная связь
             routes.MapRoute(
              name: "Feedback",
@@ -237,6 +236,13 @@ namespace Disly
              defaults: new { controller = "Feedback", action = "Index", path = UrlParameter.Optional },
              constraints: new { controller = "Feedback", action = "^Appeallist$|^Reviewlist$|^SendForm$|^AnswerForm$" } //Restriction for controller and action
              );
+
+            // Анкета
+            routes.MapRoute(
+               name: "Anketa",
+               url: "Feedback/Anketa/{*action}",
+               defaults: new { controller = "Worksheet", action = "Index", path = UrlParameter.Optional }
+            );
 
 
             // Типовая страница (карта сайта)
