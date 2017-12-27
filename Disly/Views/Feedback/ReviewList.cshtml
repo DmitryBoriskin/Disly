@@ -26,7 +26,7 @@
                             {
                                 foreach (var item in Model.List.Data)
                                 {
-                                    var title = Regex.Replace(item.Title, @"<[^>]*>", "");
+                                    var title = !string.IsNullOrWhiteSpace(item.Title) ? Regex.Replace(item.Title, @"<[^>]*>", "") : null;
                                     var teaser = item.Text.Length > maxChars ? item.Text.Substring(0, maxChars) + " ..." : item.Text;
 
                                     <div id="feedback_@item.Id" class="feedback_item">
