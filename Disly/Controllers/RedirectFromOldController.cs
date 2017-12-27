@@ -61,19 +61,32 @@ namespace Disly.Controllers
             return Redirect(redirectUrl);
         }
 
-        public ActionResult News()
+        public ActionResult News(int? id, int? pg)
         {
-            var pageIdstr = Request.Params["id"];
-
-            int pageId;
-            if (int.TryParse(pageIdstr, out pageId))
+            MaterialsModel material = null;
+            if (id.HasValue)
             {
-                var material = _repository.getMaterialsByOldId(pageId);
-                if (material != null)
-                {
-                    redirectUrl = string.Format("http://{0}/{1}/{2}/{3}/{4}/{5}", Domain, "press", material.Year, material.Month, material.Day, material.Alias);
-                }
+                //Ссылки типа: http://www.rkod.med.cap.ru/pg_11/id_918558/News.aspx , http://www.rkod.med.cap.ru/id_918558/News.aspx
+                material = _repository.getMaterialsByOldId(id.Value);
             }
+
+            var pageIdstr = Request.Params["id"];
+            int newsid = 0;
+            if (!string.IsNullOrEmpty(pageIdstr) && int.TryParse(pageIdstr, out newsid))
+            {
+                //Ссылки типа: http://www.med.cap.ru/News.aspx?id=918579
+                material = _repository.getMaterialsByOldId(newsid);
+            }
+
+            if (material != null)
+            {
+                redirectUrl = string.Format("http://{0}/{1}/{2}/{3}/{4}/{5}", Domain, "press", material.Year, material.Month, material.Day, material.Alias);
+            }
+            else
+            {
+                redirectUrl = string.Format("http://{0}/{1}", Domain, "press");
+            }
+
             return Redirect(redirectUrl);
         }
 

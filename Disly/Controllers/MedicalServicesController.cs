@@ -19,6 +19,7 @@ namespace Disly.Controllers
             model = new MedicalServicesViewModel
             {
                 SitesInfo = siteModel,
+                CurrentPage = currentPage,
                 SiteMapArray = siteMapArray,
                 BannerArray = bannerArray,
                 Breadcrumbs = new List<Breadcrumbs>()
@@ -84,7 +85,7 @@ namespace Disly.Controllers
                         Title = "Дополнительная информация",
                         Url = ""
                     });
-                    model.Info = _repository.getSiteMap(sibling.Path, "medicinskie-uslugi");
+                    model.Info = _repository.getSiteMap(sibling.Path, sibling.Alias);
                     break;
                 default:
                     model.MedicalServices = _repository.getMedicalServices(Domain);

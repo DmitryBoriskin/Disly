@@ -25,10 +25,22 @@ namespace Disly
 
             //Редирект со старых сайтов
             routes.MapRoute(
+              name: "RedirectFromOld1",
+              url: "pg_{pg}/id_{id}/{action}.aspx",
+              defaults: new { controller = "RedirectFromOld", action = "Index", id = UrlParameter.Optional, pg = UrlParameter.Optional }
+           );
+            routes.MapRoute(
+             name: "RedirectFromOld2",
+             url: "id_{id}/{action}.aspx",
+             defaults: new { controller = "RedirectFromOld", action = "Index", id = UrlParameter.Optional }
+          );
+
+            routes.MapRoute(
                name: "RedirectFromOld",
                url: "{action}.aspx",
                defaults: new { controller = "RedirectFromOld", action = "Index" }
             );
+
 
             routes.MapRoute(
                 name: "Registry",
