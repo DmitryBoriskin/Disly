@@ -1,57 +1,35 @@
-@dark: #454d4d;
-@def1: #007373;
-@def2: #009999;
-@light1: #cce0e0;
-@light2: #ebf2f2;
-@contrast: #e67339;
+@dark: #45454d;
+@def1: #1f1f99;
+@def2: #5050e6;
+@light1: #cccce0;
+@light2: #ebebf2;
+@contrast: #e63956;
 @bottom-shadow: 0px 30px 36px -20px rgba(0,0,0,0.5);
-/*body{
-    background-image:url(/Content/img/portal_bg.jpg);
-    background-position:top center;
-    background-size:cover;
-    background-attachment:fixed;
-}*/
-a {
-    color: @def2;
-}
-
-a:hover {
+a{color:@def2;}
+a:hover{
     color: @def1;
 }
-
 .head_title span {
     color: @def1
 }
-
-.bottom_menu a:hover,
-.right_section a:hover {
-    color: @def2;
-
-    &:before {
-        color: #ccc;
-    }
+.bottom_menu a:hover,                
+.right_section a:hover{
+    color:@def2;
+    &:before{color:#ccc;}
 }
 
 .media-heading {
     color: @def1;
 }
-
-.slider-message {
-    color: @contrast;
-}
-
+.slider-message {color:@contrast;}
 .slider-text-block {
     background-color: @def2;
 }
-
 .menu-mini-icons a:hover,
 #header .navbar-left a:hover {
-    color: @def2 !important;
+    color: @def2!important;
 }
-
-.searchform_show {
-    color: @def2;
-}
+.searchform_show{color:@def2;}
 
 .seacrh_button:before {
     color: @def2;
@@ -177,37 +155,17 @@ a:hover {
     color: @def2;
 }
 
-.searchform button {
-    background-color: @def2;
-}
+.searchform button{background-color:@def2;}
+.searchform button:hover{background-color:@def1;}
 
-.searchform button:hover {
-    background-color: @def1;
-}
+.searchform_dop button{background-color:@def2;}
+.searchform_dop button:hover{background-color:@def1;}
+.feedback-item-more:hover{color:@def2;}
 
-.searchform_dop button {
-    background-color: @def2;
-}
-
-.searchform_dop button:hover {
-    background-color: @def1;
-}
-
-.feedback-item-more:hover {
-    color: @def2;
-}
-
-.adminlist_phone:before {
-    color: @def2;
-}
-
+.adminlist_phone:before{color:@def2;}
 .child_sitemap:before {
     background-color: @def2;
 }
-
-.child_sitemap_link span:before {
-    color: @contrast;
-}
-.vote_item_wr input[type="radio"]:checked + span:after {
-    background-color: @def2;
-}
+.child_sitemap_link span:before{color:@contrast;}
+.vote_item_wr input[type="checkbox"]:checked+span,
+.vote_item_wr input[type="radio"]:checked + span:after{background-color:@def2;}

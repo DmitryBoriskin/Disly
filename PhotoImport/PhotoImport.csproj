@@ -94,7 +94,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="bin\Imaging.dll" />
-    <Content Include="bin\Imaging.pdb" />
     <Content Include="LinqToDB.Templates\CopyMe.SqlServer.tt.txt" />
     <Content Include="Template\CMSbdModel.tt">
       <Generator>TextTemplatingFileGenerator</Generator>

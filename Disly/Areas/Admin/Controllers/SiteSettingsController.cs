@@ -38,6 +38,7 @@ namespace Disly.Areas.Admin.Controllers
                 {
                     new SelectListItem { Text = "Бирюзовая", Value = "turquoise" },
                     new SelectListItem { Text = "Синяя", Value = "blue" },
+                    new SelectListItem { Text = "Фиолетовая", Value = "purple" },
                     new SelectListItem { Text = "Зеленая", Value = "green" }
                 }, "Value", "Text");
         }
@@ -102,7 +103,7 @@ namespace Disly.Areas.Admin.Controllers
                 userMassege.info = "Запись обновлена";
                 userMassege.buttons = new ErrorMassegeBtn[]
             {
-                    new ErrorMassegeBtn { url = "#", text = "ок", action = "false" }
+                    new ErrorMassegeBtn { url = "/Admin/sitesettings", text = "ок"}
             };
             }
             else
