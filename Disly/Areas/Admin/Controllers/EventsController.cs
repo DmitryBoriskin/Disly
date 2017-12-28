@@ -307,8 +307,8 @@ namespace Disly.Areas.Admin.Controllers
             if (model.Item != null)
             {
                 var image = (model.Item.PreviewImage != null) ? model.Item.PreviewImage.Url : null;
-                //var res = _cmsRepository.deleteCmsEvent(Id);
-                var res = true;
+                var res = _cmsRepository.deleteCmsEvent(Id);
+               
                 if (res)
                 {
                     if (!string.IsNullOrEmpty(image))

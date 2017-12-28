@@ -101,6 +101,15 @@ namespace cms.dbModel
         public abstract bool insertCmsEvent(EventsModel eventData);
         public abstract bool deleteCmsEvent(Guid id);
 
+        // Anketa
+
+        public abstract AnketasList getAnketasList(AnketaFilter filtr);
+        //public abstract AnketaModel[] getLastAnketaListWithCheckedFor(AnketaFilter filtr);
+        public abstract AnketaModel getAnketaItem(Guid id);
+
+        public abstract bool updateCmsAnketa(AnketaModel eventData);
+        public abstract bool insertCmsAnketa(AnketaModel eventData);
+        public abstract bool deleteCmsAnketa(Guid id);
 
         // Персоны
         public abstract UsersList getPersonList(FilterParams filtr);

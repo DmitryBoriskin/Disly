@@ -54,8 +54,19 @@
 
         if (this.options.type == 'date' || this.options.type == 'datetime')
         {
-            var $InputTime = $('<input style="width:70px;" class="form-control" placeholder="00:00">')
-            $InputTime.attr('value', this.$element.attr('value').replace(/(\d+).(\d+).(\d+) (\d+):(\d+):(\d+)/, '$4:$5'));
+            var $InputTime = $('<input style="width:70px;" class="form-control" placeholder="00:00">');
+            var timeValh = this.$element.attr('value').replace(/(\d+).(\d+).(\d+) (\d+):(\d+):(\d+)/, '$4');
+            var timeValm = this.$element.attr('value').replace(/(\d+).(\d+).(\d+) (\d+):(\d+):(\d+)/, '$5');
+
+            if (timeValh.length < 2)
+            {
+                timeValh = "0" + timeValh;
+            }
+            if (timeValm.length < 2) {
+                timeValm = "0" + timeValm;
+            }
+
+            $InputTime.attr('value', timeValh + ":" + timeValm);
             $InputTime.mask('Hh:Mm', {
                 'translation': {
                     H: { pattern: /[0-2]/ },

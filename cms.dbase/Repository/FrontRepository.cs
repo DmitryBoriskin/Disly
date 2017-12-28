@@ -2204,6 +2204,44 @@ namespace cms.dbase
         }
 
         /// <summary>
+        /// Анкета
+        /// </summary>
+        /// <param name="filter"></param>
+        /// <returns></returns>
+        public override AnketaModel getLastWorksheetItem()
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var query = db.content_anketass.AsQueryable();
+
+                query = query.Where(s => s.b_disabled == false)
+                    .Where(s => s.d_date <= DateTime.Now);
+
+                // Сделать привязку
+                var data = query
+                    .OrderByDescending(s => s.d_date)
+                    .Select(s => new AnketaModel
+                    {
+                        Id = s.id,
+                        Count = s.n_count,
+                        Title = s.c_title,
+                        Alias = s.c_alias,
+                        Text = s.c_text,
+                        Url = s.c_url,
+                        DateBegin = s.d_date,
+                        DateEnd = s.d_date_end,
+                        Disabled = s.b_disabled,
+                        //Links  заполняем в контроллере
+                    });
+                if (data.Any())
+                    return data.First();
+
+                else
+                    return null;
+            }
+        }
+
+        /// <summary>
         /// Получаем список событий
         /// </summary>
         /// <param name="filter"></param>

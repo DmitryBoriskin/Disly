@@ -1153,10 +1153,18 @@ namespace cms.dbase
         /// <returns></returns>
         public override bool insertDomain(String SiteId, string NewDomain)
         {
+            if (string.IsNullOrEmpty(NewDomain))
+                return false;
+
             using (var db = new CMSdb(_context))
             {
                 using (var tran = db.BeginTransaction())
                 {
+                    NewDomain = NewDomain.Trim().ToLower();
+
+                    if (NewDomain == "localhost")
+                        db.cms_sites_domainss.Where(w => w.c_domain == NewDomain).Delete();
+
                     var data = db.cms_sites_domainss.Where(w => w.c_domain == NewDomain);
                     if (!data.Any())
                     {
@@ -1201,7 +1209,13 @@ namespace cms.dbase
                     var data = db.cms_sites_domainss.Where(w => w.id == id);
                     if (data.Any())
                     {
+
                         string domainName = data.Select(s => s.c_domain).SingleOrDefault();
+                        if (!string.IsNullOrEmpty(domainName) && domainName.Trim().ToLower() == "localhost")
+                        {
+                            return false;
+                        }
+
                         data.Delete();
 
                         //логирование

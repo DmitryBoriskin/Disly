@@ -74,7 +74,7 @@ namespace cms.dbModel.entity
         /// Дата начала события
         /// </summary>
         [Display(Name = "Дата начала события")]
-        [Required(ErrorMessage = "Поле «Название» не должно быть пустым.")]
+        [Required(ErrorMessage = "Поле «Дата» не должно быть пустым.")]
         public DateTime DateBegin { get; set; }
         
         /// <summary>

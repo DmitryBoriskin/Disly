@@ -29,61 +29,61 @@ $(document).ready(function () {
     // Полоса прокрутки
     $('.scrollbar').mCustomScrollbar();
 
-    $("[type='button']").on("click", function () {
-        var action = $(this).data("action");
-        var link = $(this).data("link");
-        if (action === "cancel") {
-            if (change !== 0) {
-                // Confirm('Уведомление', 'Выйти без изменений?', $(this));
-                //ModalConfirm('Уведомление', 'Выйти без изменений?');
-                $(location).attr("href", link);
-            }
-            else {
-                $(location).attr("href", link);
-            }
-        }
-        if (action === "delete") {
-            try {
-                //ShowPreloader(content);
-                var form = $("form").first();
-                var targetUrl = form.attr("action");
+    //$("[type='button']").on("click", function () {
+    //    var action = $(this).data("action");
+    //    var link = $(this).data("link");
+    //    if (action === "cancel") {
+    //        if (change !== 0) {
+    //            // Confirm('Уведомление', 'Выйти без изменений?', $(this));
+    //            //ModalConfirm('Уведомление', 'Выйти без изменений?');
+    //            $(location).attr("href", link);
+    //        }
+    //        else {
+    //            $(location).attr("href", link);
+    //        }
+    //    }
+    //    if (action === "delete") {
+    //        try {
+    //            //ShowPreloader(content);
+    //            var form = $("form").first();
+    //            var targetUrl = form.attr("action");
 
-                var formData = new FormData();
-                formData.append("action", "delete-btn");
+    //            var formData = new FormData();
+    //            formData.append("action", "delete-btn");
 
-                $.ajax({
-                    url: targetUrl,
-                    method: "POST",
-                    async: true,
-                    cache: false,
-                    processData: false,
-                    contentType: false,
-                    data: formData
-                })
-                    .done(function (response) {
-                        //elTooltip.attr("title", "Сохранено");
-                        //elTooltip.tooltip('show');
-                    })
-                    .fail(function (jqXHR, status) {
-                        console.log("Ошибка" + " " + status + " " + jqXHR);
-                        //elTooltip.attr("title", "Ошибка сохранения");
+    //            $.ajax({
+    //                url: targetUrl,
+    //                method: "POST",
+    //                async: true,
+    //                cache: false,
+    //                processData: false,
+    //                contentType: false,
+    //                data: formData
+    //            })
+    //                .done(function (response) {
+    //                    //elTooltip.attr("title", "Сохранено");
+    //                    //elTooltip.tooltip('show');
+    //                })
+    //                .fail(function (jqXHR, status) {
+    //                    console.log("Ошибка" + " " + status + " " + jqXHR);
+    //                    //elTooltip.attr("title", "Ошибка сохранения");
                         
-                    })
-                    .always(function (response) {
-                        //setTimeout(function () {
-                        //    elTooltip.tooltip('hide');
-                        //}, 1000);
-                        $(location).attr("href", link);
-                    });
-            }
-            catch (ex) {
-                console.log(ex);
-            }
-        }
-    });
+    //                })
+    //                .always(function (response) {
+    //                    //setTimeout(function () {
+    //                    //    elTooltip.tooltip('hide');
+    //                    //}, 1000);
+    //                    $(location).attr("href", link);
+    //                });
+    //        }
+    //        catch (ex) {
+    //            console.log(ex);
+    //        }
+    //    }
+    //});
 
      //События Кнопок
-    $('input[type=submit], .button').not("[type='button']").bind({
+    $('input[type=submit], .button').bind({
         mousedown: function () {
             //логика всплывающих окон
             var Action = $(this).attr('data-action');
@@ -290,7 +290,21 @@ $(document).ready(function () {
     //удаление домена
     $('.del_domain').click(function (e) {
         e.preventDefault();
+        $(".load_page").remove();
+
         var idDomain = $(this).attr("data-id");
+        var idDomainName = $(this).data("domainName").trim();
+
+        if (idDomainName === "localhost") {
+            $("#domain_localhost").data("content", "Нельзя удалить значение: localhost! Если необходимо переназначить, добавьте нужному сайту этот домен. Система сделает это автоматически.")
+            .popover('show');
+
+            setTimeout(function () {
+                $("#domain_localhost").popover('hide');
+            }, 3000);
+            return false;
+        }
+
         var $Container = $(this).parent().parent();
         $.ajax({
             type: "POST",
@@ -301,7 +315,10 @@ $(document).ready(function () {
             success: function (data) {
                 $Container.remove();
             }
+            
         });
+
+        
     });
 
     //удаление варианта ответа
@@ -874,4 +891,5 @@ function CoordPoint(xMap, yMap) {
         pointY.val(String(yMap).replace(/[.]/g, ","))
 
     });
+
 };

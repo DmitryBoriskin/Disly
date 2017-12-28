@@ -33,13 +33,16 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var item in Model.Item.DomainList)
+                       @foreach (var item in Model.Item.DomainList)
                         {
                                 <tr>
                                     <td>@item.DomainName</td>
-                                    <td class="text-right"><a class="del_domain" data-id="@item.id" data-url="/admin/orgs/DelPhoneDepart"></a></td>
+                                    <td class="text-right">
+                                        <span id="domain_@(item.DomainName)" data-container="body" data-toggle="popover" data-placement="left" data-content=""></span>
+                                        <a class="del_domain" data-id="@item.id" data-domain-name="@item.DomainName" data-url="/admin/orgs/DelPhoneDepart" data-init="false"></a>
+                                    </td>
                                 </tr>
-                            }
+                        }
                         </tbody>
                     </table>
                 }
