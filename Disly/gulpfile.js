@@ -20,6 +20,11 @@ gulp.task("blue", function () {
                .pipe(less())
                .pipe(gulp.dest(paths.webroot + 'css/theme'))
 });
+gulp.task("purple", function () {
+    return gulp.src('content/css/theme/purple.less')
+        .pipe(less())
+        .pipe(gulp.dest(paths.webroot + 'css/theme'))
+});
 gulp.task("turquoise", function () {
     return gulp.src('content/css/theme/turquoise.less')
         .pipe(less())

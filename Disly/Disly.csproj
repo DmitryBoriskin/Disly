@@ -143,6 +143,7 @@
     <Content Include="Content\css\styles_old.css" />
     <Content Include="Content\css\theme\blue.css" />
     <Content Include="Content\css\theme\green.css" />
+    <Content Include="Content\css\theme\purple.css" />
     <Content Include="Content\css\theme\turquoise.css" />
     <Content Include="Content\decor\chuvashia\bg.png" />
     <Content Include="Content\decor\chuvashia\chuvashia-logo.png" />
@@ -823,6 +824,7 @@
     <Content Include="Content\css\theme\green.less" />
     <Content Include="Areas\Admin\Views\Anketa\Item.cshtml" />
     <Content Include="Areas\Admin\Views\Anketa\Index.cshtml" />
+    <Content Include="Content\css\theme\purple.less" />
     <None Include="Content\plugins\datatables\i18n\ru.json" />
     <Content Include="Content\plugins\tinymce\langs\readme.md" />
     <Content Include="Content\plugins\tinymce\skins\lightgray\fonts\tinymce-small.eot" />

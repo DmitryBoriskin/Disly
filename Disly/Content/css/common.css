@@ -710,6 +710,7 @@ a.sitemap-plate.sitemap-plate-image {
 
     .event-item-module img {
         width: 100%;
+        min-height: 200px;
     }
 
 .event-item-module-opacity {    
