@@ -425,9 +425,25 @@ namespace Disly.Areas.Admin.Controllers
             filter.Page = page;
             filter.Size = size;
 
+            PhotoAlbumList list = _cmsRepository.getPhotoAlbum(filter);
             model.List = _cmsRepository.getPhotoAlbum(filter);
 
+
+            if (model.List == null)
+                model.List = new PhotoAlbumList()
+                {
+                    Data = null,
+                    Pager = new Pager()
+                    {
+                        items_count = 0,
+                        page_count = 1,
+                        page = 1,
+                        size = 30
+                    }
+                };
+
             var json = Json(model.List, JsonRequestBehavior.AllowGet);
+
             return json;
         }
     }

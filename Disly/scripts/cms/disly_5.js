@@ -770,7 +770,7 @@ function InitTinyMCE_new(id, _width, _height, directory) {
         //theme: "modern",
         add_unload_trigger: false,
         schema: "html5",
-        plugins: [["anchor nonbreaking paste hr searchreplace  textcolor charmap  link autolink image media table visualblocks code fullscreen contextmenu gallery"]],
+        plugins: [["anchor nonbreaking paste hr searchreplace textcolor charmap link autolink image media table visualblocks code fullscreen contextmenu gallery"]],
         toolbar: 'undo redo | styleselect fontsizeselect | bold italic underline superscript subscript | forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist | outdent indent | table | link image media gallery | removeformat code',
         contextmenu: "copy paste | link image",
         extended_valid_elements: "code",

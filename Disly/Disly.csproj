@@ -389,7 +389,7 @@
     <Content Include="Content\plugins\tinymce\plugins\emoticons\plugin.min.js" />
     <Content Include="Content\plugins\tinymce\plugins\fullpage\plugin.min.js" />
     <Content Include="Content\plugins\tinymce\plugins\fullscreen\plugin.min.js" />
-    <Content Include="Content\plugins\tinymce\plugins\gallery\plugin.min.js" />
+    <None Include="Content\plugins\tinymce\plugins\gallery\plugin.min.js_korkin" />
     <Content Include="Content\plugins\tinymce\plugins\help\img\logo.png" />
     <Content Include="Content\plugins\tinymce\plugins\help\plugin.min.js" />
     <Content Include="Content\plugins\tinymce\plugins\hr\plugin.min.js" />
@@ -413,6 +413,7 @@
     <Content Include="Content\plugins\tinymce\plugins\tabfocus\plugin.min.js" />
     <Content Include="Content\plugins\tinymce\plugins\table\plugin.min.js" />
     <Content Include="Content\plugins\tinymce\plugins\template\plugin.min.js" />
+    <Content Include="Content\plugins\tinymce\plugins\gallery\plugin.min.js" />
     <Content Include="Content\plugins\tinymce\plugins\textcolor\plugin.min.js" />
     <Content Include="Content\plugins\tinymce\plugins\textpattern\plugin.min.js" />
     <Content Include="Content\plugins\tinymce\plugins\toc\plugin.min.js" />
