@@ -190,7 +190,7 @@ namespace Disly.Areas.Admin.Controllers
 
                 if (!string.IsNullOrEmpty(back_model.Item.DomainListString))
                 {
-                    string[] dopDomains = back_model.Item.DomainListString.Split(';');
+                    string[] dopDomains = back_model.Item.DomainListString.Replace(" ","").Split(';');
                     foreach (var d in dopDomains)
                     {
                         if (!string.IsNullOrEmpty(d))
