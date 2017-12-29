@@ -141,12 +141,17 @@ $(document).ready(function () {
      //показываем preloader при клике на ссылку
     $('a').click(function () {
         var $load_bg = $("<div/>", { "class": "load_page" });
-        $load_bg.bind({
-            mousedown: function () { return false; },
-            selectstart: function () { return false; }
-        });
+        var dataAction = $(this).attr('data-action');
+        if (dataAction === 'noPreloader-accept') {
 
-        $('body').append($load_bg);
+        }
+        else {
+            $load_bg.bind({
+                mousedown: function () { return false; },
+                selectstart: function () { return false; }
+            });
+            $('body').append($load_bg);
+        }        
     });
 
     // Панель авторизации пользователя    
