@@ -190,7 +190,7 @@ namespace Disly.Areas.Admin.Controllers
 
                 if (!string.IsNullOrEmpty(back_model.Item.DomainListString))
                 {
-                    string[] dopDomains = back_model.Item.DomainListString.Split(';');
+                    string[] dopDomains = back_model.Item.DomainListString.Replace(" ","").Split(';');
                     foreach (var d in dopDomains)
                     {
                         if (!string.IsNullOrEmpty(d))
@@ -284,9 +284,11 @@ namespace Disly.Areas.Admin.Controllers
         {
             try
             {
+
                 Guid id = Guid.Parse(Request["Item.Id"]);
                 var SiteId = _cmsRepository.getSite(id).Alias;
                 string Domain = Request["new_domain"];
+
                 _cmsRepository.insertDomain(SiteId, Domain);
             }
             catch (Exception ex)

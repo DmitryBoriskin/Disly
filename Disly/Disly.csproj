@@ -143,6 +143,7 @@
     <Content Include="Content\css\styles_old.css" />
     <Content Include="Content\css\theme\blue.css" />
     <Content Include="Content\css\theme\green.css" />
+    <Content Include="Content\css\theme\purple.css" />
     <Content Include="Content\css\theme\turquoise.css" />
     <Content Include="Content\decor\chuvashia\bg.png" />
     <Content Include="Content\decor\chuvashia\chuvashia-logo.png" />
@@ -388,7 +389,7 @@
     <Content Include="Content\plugins\tinymce\plugins\emoticons\plugin.min.js" />
     <Content Include="Content\plugins\tinymce\plugins\fullpage\plugin.min.js" />
     <Content Include="Content\plugins\tinymce\plugins\fullscreen\plugin.min.js" />
-    <Content Include="Content\plugins\tinymce\plugins\gallery\plugin.min.js" />
+    <None Include="Content\plugins\tinymce\plugins\gallery\plugin.min.js_korkin" />
     <Content Include="Content\plugins\tinymce\plugins\help\img\logo.png" />
     <Content Include="Content\plugins\tinymce\plugins\help\plugin.min.js" />
     <Content Include="Content\plugins\tinymce\plugins\hr\plugin.min.js" />
@@ -412,6 +413,7 @@
     <Content Include="Content\plugins\tinymce\plugins\tabfocus\plugin.min.js" />
     <Content Include="Content\plugins\tinymce\plugins\table\plugin.min.js" />
     <Content Include="Content\plugins\tinymce\plugins\template\plugin.min.js" />
+    <Content Include="Content\plugins\tinymce\plugins\gallery\plugin.min.js" />
     <Content Include="Content\plugins\tinymce\plugins\textcolor\plugin.min.js" />
     <Content Include="Content\plugins\tinymce\plugins\textpattern\plugin.min.js" />
     <Content Include="Content\plugins\tinymce\plugins\toc\plugin.min.js" />
@@ -531,6 +533,9 @@
     <Compile Include="Areas\Admin\Controllers\BannersController.cs" />
     <Compile Include="Areas\Admin\Controllers\cmsMenuController.cs" />
     <Compile Include="Areas\Admin\Controllers\DocumentsController .cs" />
+    <Compile Include="Areas\Admin\Controllers\AnketaController.cs" />
+    <Compile Include="Areas\Admin\Models\AnketaViewModel.cs" />
+    <Compile Include="Controllers\WorksheetController.cs" />
     <Compile Include="Controllers\VacancyController.cs" />
     <Compile Include="Controllers\RedirectFromOldController.cs" />
     <Compile Include="Areas\Admin\Controllers\PhotoAlbumsController.cs" />
@@ -608,6 +613,7 @@
     </Compile>
     <Compile Include="Areas\Admin\Models\CoreViewModel.cs" />
     <Compile Include="Models\EventViewModel.cs" />
+    <Compile Include="Models\WorksheetViewModel.cs" />
     <Compile Include="Models\FeedbackViewModel.cs" />
     <Compile Include="Models\DoctorsViewModel.cs" />
     <Compile Include="Models\ContactsViewModel.cs" />
@@ -700,7 +706,6 @@
     <Content Include="Areas\Admin\Views\Services\Log.cshtml" />
     <Content Include="Areas\Admin\Views\Services\UserResolutions.cshtml" />
     <Content Include="Areas\Admin\Views\Services\GroupClaims.cshtml" />
-    <Content Include="Areas\Admin\Views\Sites\Domains.cshtml" />
     <Content Include="Areas\Admin\Views\Sites\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Sites\Item.cshtml" />
     <Content Include="Areas\Admin\Views\Sites\Master.cshtml" />
@@ -817,6 +822,9 @@
     <Content Include="Areas\Admin\Views\Shared\Modal\Sites.cshtml" />
     <Content Include="Content\css\commonless.less" />
     <Content Include="Content\css\theme\green.less" />
+    <Content Include="Areas\Admin\Views\Anketa\Item.cshtml" />
+    <Content Include="Areas\Admin\Views\Anketa\Index.cshtml" />
+    <Content Include="Content\css\theme\purple.less" />
     <None Include="Content\plugins\datatables\i18n\ru.json" />
     <Content Include="Content\plugins\tinymce\langs\readme.md" />
     <Content Include="Content\plugins\tinymce\skins\lightgray\fonts\tinymce-small.eot" />
@@ -873,6 +881,7 @@
     <Content Include="Views\Shared\part\childlist_sitemap.cshtml" />
     <Content Include="Views\Vacancy\Index.cshtml" />
     <Content Include="Views\Vacancy\Item.cshtml" />
+    <Content Include="Views\Worksheet\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

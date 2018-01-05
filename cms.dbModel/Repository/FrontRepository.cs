@@ -75,6 +75,9 @@ namespace cms.dbModel
         public abstract bool insertFeedbackItem(FeedbackModel feedback);
         public abstract bool updateFeedbackItem(FeedbackModel feedback);
 
+        //
+        public abstract AnketaModel getLastWorksheetItem();
+
         //Vote
         public abstract IEnumerable<VoteModel> getVote(string Ip); //string domain,
         public abstract VoteModel getVoteItem(Guid id, string Ip);

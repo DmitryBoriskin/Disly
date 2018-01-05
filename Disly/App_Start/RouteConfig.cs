@@ -25,10 +25,22 @@ namespace Disly
 
             //Редирект со старых сайтов
             routes.MapRoute(
+              name: "RedirectFromOld1",
+              url: "pg_{pg}/id_{id}/{action}.aspx",
+              defaults: new { controller = "RedirectFromOld", action = "Index", id = UrlParameter.Optional, pg = UrlParameter.Optional }
+           );
+            routes.MapRoute(
+             name: "RedirectFromOld2",
+             url: "id_{id}/{action}.aspx",
+             defaults: new { controller = "RedirectFromOld", action = "Index", id = UrlParameter.Optional }
+          );
+
+            routes.MapRoute(
                name: "RedirectFromOld",
                url: "{action}.aspx",
                defaults: new { controller = "RedirectFromOld", action = "Index" }
             );
+
 
             routes.MapRoute(
                 name: "Registry",
@@ -229,7 +241,6 @@ namespace Disly
                defaults: new { controller = "Documents", action = "Index", path = UrlParameter.Optional }
             );
 
-
             //Обратная связь
             routes.MapRoute(
              name: "Feedback",
@@ -237,6 +248,13 @@ namespace Disly
              defaults: new { controller = "Feedback", action = "Index", path = UrlParameter.Optional },
              constraints: new { controller = "Feedback", action = "^Appeallist$|^Reviewlist$|^SendForm$|^AnswerForm$" } //Restriction for controller and action
              );
+
+            // Анкета
+            routes.MapRoute(
+               name: "Anketa",
+               url: "Feedback/Anketa/{*action}",
+               defaults: new { controller = "Worksheet", action = "Index", path = UrlParameter.Optional }
+            );
 
 
             // Типовая страница (карта сайта)

@@ -19,6 +19,7 @@ namespace Disly.Controllers
             model = new MedicalServicesViewModel
             {
                 SitesInfo = siteModel,
+                CurrentPage = currentPage,
                 SiteMapArray = siteMapArray,
                 BannerArray = bannerArray,
                 Breadcrumbs = new List<Breadcrumbs>()
@@ -50,6 +51,7 @@ namespace Disly.Controllers
             var neededEls = _repository.getSiteMapSiblings(sibling.Path);
             model.Nav = new List<MaterialsGroup>();
             model.Nav.Add(new MaterialsGroup { Title = "Медицинские услуги" });
+            model.Nav.Add(new MaterialsGroup { Title = "Дополнительно", Alias = "dop" });
 
             if (neededEls != null)
             {
@@ -83,7 +85,7 @@ namespace Disly.Controllers
                         Title = "Дополнительная информация",
                         Url = ""
                     });
-                    model.Info = _repository.getSiteMap(sibling.Path, type);
+                    model.Info = _repository.getSiteMap(sibling.Path, sibling.Alias);
                     break;
                 default:
                     model.MedicalServices = _repository.getMedicalServices(Domain);

@@ -26,6 +26,20 @@ namespace cms.dbase.models
 	/// </summary>
 	public partial class CMSdb : LinqToDB.Data.DataConnection
 	{
+		public ITable<__DUBL_content_departments>                   __DUBL_content_departmentss                   { get { return this.GetTable<__DUBL_content_departments>(); } }
+		public ITable<__DUBL_content_materials>                     __DUBL_content_materialss                     { get { return this.GetTable<__DUBL_content_materials>(); } }
+		public ITable<__DUBL_content_org_structure>                 __DUBL_content_org_structures                 { get { return this.GetTable<__DUBL_content_org_structure>(); } }
+		public ITable<__DUBL_content_people_department_link>        __DUBL_content_people_department_links        { get { return this.GetTable<__DUBL_content_people_department_link>(); } }
+		public ITable<__importCD_Wards>                             __importCD_Wardss                             { get { return this.GetTable<__importCD_Wards>(); } }
+		public ITable<__importCS_Doctors>                           __importCS_Doctorss                           { get { return this.GetTable<__importCS_Doctors>(); } }
+		public ITable<__importF_Hospital_Doctors>                   __importF_Hospital_Doctorss                   { get { return this.GetTable<__importF_Hospital_Doctors>(); } }
+		public ITable<__importF_Ward_Doctors>                       __importF_Ward_Doctorss                       { get { return this.GetTable<__importF_Ward_Doctors>(); } }
+		public ITable<__importMD_JUR_PERSON>                        __importMD_JUR_PERSONs                        { get { return this.GetTable<__importMD_JUR_PERSON>(); } }
+		public ITable<_DUBL_content_people_department_link>         _DUBL_content_people_department_links         { get { return this.GetTable<_DUBL_content_people_department_link>(); } }
+		public ITable<_importCD_Gallery>                            _importCD_Gallerys                            { get { return this.GetTable<_importCD_Gallery>(); } }
+		public ITable<_importSD_EVENTS>                             _importSD_EVENTSs                             { get { return this.GetTable<_importSD_EVENTS>(); } }
+		public ITable<_importSD_NEWS>                               _importSD_NEWSs                               { get { return this.GetTable<_importSD_NEWS>(); } }
+		public ITable<_importSD_PUBLICATION>                        _importSD_PUBLICATIONs                        { get { return this.GetTable<_importSD_PUBLICATION>(); } }
 		public ITable<cms_content_sv_people_posts>                  cms_content_sv_people_postss                  { get { return this.GetTable<cms_content_sv_people_posts>(); } }
 		public ITable<cms_log>                                      cms_logs                                      { get { return this.GetTable<cms_log>(); } }
 		public ITable<cms_log_actions>                              cms_log_actionss                              { get { return this.GetTable<cms_log_actions>(); } }
@@ -45,6 +59,7 @@ namespace cms.dbase.models
 		public ITable<cms_user_site_link>                           cms_user_site_links                           { get { return this.GetTable<cms_user_site_link>(); } }
 		public ITable<cms_users>                                    cms_userss                                    { get { return this.GetTable<cms_users>(); } }
 		public ITable<cms_users_group>                              cms_users_groups                              { get { return this.GetTable<cms_users_group>(); } }
+		public ITable<content_anketas>                              content_anketass                              { get { return this.GetTable<content_anketas>(); } }
 		public ITable<content_banner_sections>                      content_banner_sectionss                      { get { return this.GetTable<content_banner_sections>(); } }
 		public ITable<content_banners>                              content_bannerss                              { get { return this.GetTable<content_banners>(); } }
 		public ITable<content_content_link>                         content_content_links                         { get { return this.GetTable<content_content_link>(); } }
@@ -191,6 +206,410 @@ namespace cms.dbase.models
 		}
 
 		#endregion
+	}
+
+	[Table(Schema="dbo", Name="__DUBL_content_departments")]
+	public partial class __DUBL_content_departments
+	{
+		[PrimaryKey, NotNull    ] public Guid   id          { get; set; } // uniqueidentifier
+		[Column,     NotNull    ] public Guid   f_structure { get; set; } // uniqueidentifier
+		[Column,     NotNull    ] public string c_title     { get; set; } // varchar(1024)
+		[Column,        Nullable] public string c_adress    { get; set; } // varchar(max)
+		[Column,     NotNull    ] public int    n_sort      { get; set; } // int
+	}
+
+	[Table(Schema="dbo", Name="__DUBL_content_materials")]
+	public partial class __DUBL_content_materials
+	{
+		[PrimaryKey, NotNull    ] public Guid     id                    { get; set; } // uniqueidentifier
+		[Column,     NotNull    ] public DateTime d_date                { get; set; } // datetime
+		[Column,     NotNull    ] public string   c_title               { get; set; } // varchar(512)
+		[Column,        Nullable] public string   c_preview             { get; set; } // varchar(512)
+		[Column,        Nullable] public string   c_text                { get; set; } // varchar(max)
+		[Column,        Nullable] public string   c_url                 { get; set; } // varchar(1024)
+		[Column,        Nullable] public string   c_url_name            { get; set; } // varchar(512)
+		[Column,        Nullable] public string   c_desc                { get; set; } // varchar(1024)
+		[Column,        Nullable] public string   c_keyw                { get; set; } // varchar(512)
+		[Column,     NotNull    ] public int      n_year                { get; set; } // int
+		[Column,     NotNull    ] public int      n_month               { get; set; } // int
+		[Column,     NotNull    ] public int      n_day                 { get; set; } // int
+		[Column,     NotNull    ] public string   c_alias               { get; set; } // varchar(512)
+		[Column,     NotNull    ] public bool     b_disabled            { get; set; } // bit
+		[Column,     NotNull    ] public bool     b_important           { get; set; } // bit
+		[Column,     NotNull    ] public Guid     f_content_origin      { get; set; } // uniqueidentifier
+		[Column,     NotNull    ] public string   c_content_type_origin { get; set; } // varchar(64)
+		[Column,     NotNull    ] public bool     b_locked              { get; set; } // bit
+		[Column,     NotNull    ] public int      n_count_see           { get; set; } // int
+		[Column,        Nullable] public string   c_preview_source      { get; set; } // varchar(128)
+		[Column,        Nullable] public int?     n_old_id              { get; set; } // int
+	}
+
+	[Table(Schema="dbo", Name="__DUBL_content_org_structure")]
+	public partial class __DUBL_content_org_structure
+	{
+		[PrimaryKey, NotNull    ] public Guid    id                { get; set; } // uniqueidentifier
+		[Column,     NotNull    ] public Guid    f_ord             { get; set; } // uniqueidentifier
+		[Column,     NotNull    ] public string  c_title           { get; set; } // nvarchar(512)
+		[Column,        Nullable] public string  c_adress          { get; set; } // nvarchar(512)
+		[Column,        Nullable] public double? n_geopoint_x      { get; set; } // float
+		[Column,        Nullable] public double? n_geopoint_y      { get; set; } // float
+		[Column,        Nullable] public string  c_phone           { get; set; } // varchar(64)
+		[Column,        Nullable] public string  c_phone_reception { get; set; } // varchar(64)
+		[Column,        Nullable] public string  c_fax             { get; set; } // varchar(64)
+		[Column,        Nullable] public string  c_email           { get; set; } // varchar(128)
+		[Column,        Nullable] public string  c_routes          { get; set; } // nvarchar(max)
+		[Column,        Nullable] public string  c_schedule        { get; set; } // nvarchar(max)
+		[Column,        Nullable] public string  c_director_post   { get; set; } // varchar(64)
+		[Column,        Nullable] public Guid?   f_director        { get; set; } // uniqueidentifier
+		[Column,     NotNull    ] public bool    b_ovp             { get; set; } // bit
+		[Column,     NotNull    ] public int     n_sort            { get; set; } // int
+		[Identity               ] public int     num               { get; set; } // int
+	}
+
+	[Table(Schema="dbo", Name="__DUBL_content_people_department_link")]
+	public partial class __DUBL_content_people_department_link
+	{
+		[PrimaryKey(1), NotNull    ] public Guid   f_department { get; set; } // uniqueidentifier
+		[PrimaryKey(2), NotNull    ] public Guid   f_people     { get; set; } // uniqueidentifier
+		[Column,           Nullable] public string c_status     { get; set; } // varchar(128)
+		[Column,           Nullable] public string c_post       { get; set; } // varchar(128)
+	}
+
+	[Table(Schema="dbo", Name="__importCD_Wards")]
+	public partial class __importCD_Wards
+	{
+		[Column, NotNull    ] public int    LINK             { get; set; } // int
+		[Column,    Nullable] public int?   F_Hospital       { get; set; } // int
+		[Column,    Nullable] public string C_Name           { get; set; } // varchar(200)
+		[Column,    Nullable] public string C_Description    { get; set; } // text
+		[Column,    Nullable] public string C_Phone          { get; set; } // varchar(200)
+		[Column,    Nullable] public string C_PhoneDoctors   { get; set; } // varchar(200)
+		[Column,    Nullable] public string C_PhoneNurses    { get; set; } // varchar(200)
+		[Column,    Nullable] public string C_PhoneMainNurse { get; set; } // varchar(200)
+		[Column,    Nullable] public string C_ChiefInfo      { get; set; } // text
+		[Column,    Nullable] public string C_MainNurseInfo  { get; set; } // text
+		[Column,    Nullable] public int?   F_WardType       { get; set; } // int
+		[Column,    Nullable] public string C_MedTypeRun     { get; set; } // varchar(200)
+		[Column,    Nullable] public string C_PhotoChief     { get; set; } // varchar(100)
+		[Column,    Nullable] public string C_PhotoNurse     { get; set; } // varchar(100)
+		[Column,    Nullable] public int?   F_GALLERY        { get; set; } // int
+		[Column, NotNull    ] public Guid   GUID             { get; set; } // uniqueidentifier
+	}
+
+	[Table(Schema="dbo", Name="__importCS_Doctors")]
+	public partial class __importCS_Doctors
+	{
+		[Column, NotNull    ] public int       LINK                { get; set; } // int
+		[Column,    Nullable] public int?      F_DoctorSpec        { get; set; } // int
+		[Column,    Nullable] public string    C_FIO               { get; set; } // varchar(250)
+		[Column,    Nullable] public string    C_Code              { get; set; } // varchar(50)
+		[Column,    Nullable] public Guid?     GUID                { get; set; } // uniqueidentifier
+		[Column,    Nullable] public DateTime? D_TIME              { get; set; } // datetime
+		[Column,    Nullable] public string    C_Email             { get; set; } // varchar(200)
+		[Column,    Nullable] public DateTime? D_BirthDate         { get; set; } // datetime
+		[Column,    Nullable] public string    C_Education         { get; set; } // text
+		[Column,    Nullable] public string    C_Career            { get; set; } // text
+		[Column,    Nullable] public string    C_Photo             { get; set; } // varchar(100)
+		[Column,    Nullable] public string    C_ExtensionCourse   { get; set; } // text
+		[Column,    Nullable] public string    C_Certificates      { get; set; } // text
+		[Column,    Nullable] public string    C_Curator           { get; set; } // text
+		[Column,    Nullable] public string    C_Awards            { get; set; } // text
+		[Column,    Nullable] public string    C_ScientificWork    { get; set; } // text
+		[Column,    Nullable] public string    C_DoctorSpecBase    { get; set; } // varchar(100)
+		[Column,    Nullable] public string    C_DoctorSpecDop     { get; set; } // varchar(100)
+		[Column,    Nullable] public bool?     B_ShowDocCard       { get; set; } // bit
+		[Column,    Nullable] public int?      F_DoctorCategory    { get; set; } // int
+		[Column,    Nullable] public string    C_DocSpecExt2       { get; set; } // varchar(200)
+		[Column,    Nullable] public string    C_VUZ               { get; set; } // varchar(300)
+		[Column,    Nullable] public int?      N_DiplomaYear       { get; set; } // int
+		[Column,    Nullable] public int?      F_DiplomaSpec       { get; set; } // int
+		[Column,    Nullable] public bool?     B_HasCertificates   { get; set; } // bit
+		[Column,    Nullable] public int?      F_SpecMainJob       { get; set; } // int
+		[Column,    Nullable] public string    C_Degree            { get; set; } // text
+		[Column,    Nullable] public DateTime? D_DissertationDate  { get; set; } // datetime
+		[Column,    Nullable] public string    C_DissertationTheme { get; set; } // text
+		[Column,    Nullable] public string    C_Titles            { get; set; } // text
+		[Column,    Nullable] public string    C_AssotiationsText  { get; set; } // text
+		[Column,    Nullable] public string    C_WWW               { get; set; } // varchar(200)
+		[Column,    Nullable] public string    C_Phone             { get; set; } // varchar(200)
+		[Column,    Nullable] public string    C_Info              { get; set; } // text
+		[Column,    Nullable] public string    C_WorkStyle         { get; set; } // text
+		[Column,    Nullable] public string    C_Motto             { get; set; } // text
+		[Column,    Nullable] public string    C_Hobby             { get; set; } // text
+		[Column,    Nullable] public int?      F_MainHospital      { get; set; } // int
+		[Column,    Nullable] public string    C_TaughtRank        { get; set; } // varchar(150)
+		[Column,    Nullable] public bool?     B_Male              { get; set; } // bit
+		[Column,    Nullable] public string    C_F                 { get; set; } // varchar(150)
+		[Column,    Nullable] public string    C_I                 { get; set; } // varchar(150)
+		[Column,    Nullable] public string    C_O                 { get; set; } // varchar(150)
+		[Column,    Nullable] public string    C_SNILS             { get; set; } // varchar(11)
+		[Column,    Nullable] public DateTime? D_ModDate           { get; set; } // datetime
+		[Column,    Nullable] public string    C_ModUser           { get; set; } // varchar(100)
+		[Column,    Nullable] public string    C_ModIP             { get; set; } // varchar(50)
+	}
+
+	[Table(Schema="dbo", Name="__importF_Hospital_Doctors")]
+	public partial class __importF_Hospital_Doctors
+	{
+		[Column, NotNull    ] public int       LINK                 { get; set; } // int
+		[Column,    Nullable] public int?      F_Hospital           { get; set; } // int
+		[Column,    Nullable] public int?      F_Doctor             { get; set; } // int
+		[Column,    Nullable] public int?      F_Job                { get; set; } // int
+		[Column,    Nullable] public int?      F_DoctorSpec         { get; set; } // int
+		[Column,    Nullable] public int?      F_Category           { get; set; } // int
+		[Column,    Nullable] public bool?     B_Certificate        { get; set; } // bit
+		[Column,    Nullable] public string    C_Spec1              { get; set; } // varchar(80)
+		[Column,    Nullable] public int?      F_Category1          { get; set; } // int
+		[Column,    Nullable] public bool?     B_Certificate1       { get; set; } // bit
+		[Column,    Nullable] public string    C_Spec2              { get; set; } // varchar(80)
+		[Column,    Nullable] public int?      F_Category2          { get; set; } // int
+		[Column,    Nullable] public bool?     B_Certificate2       { get; set; } // bit
+		[Column,    Nullable] public bool?     B_Head               { get; set; } // bit
+		[Column,    Nullable] public string    C_Cabinet            { get; set; } // varchar(50)
+		[Column,    Nullable] public string    C_PhoneWork          { get; set; } // varchar(200)
+		[Column,    Nullable] public string    C_Districts          { get; set; } // varchar(300)
+		[Column,    Nullable] public string    C_Wards              { get; set; } // varchar(300)
+		[Column, NotNull    ] public bool      B_Quited             { get; set; } // bit
+		[Column,    Nullable] public DateTime? D_CreateDate         { get; set; } // datetime
+		[Column,    Nullable] public DateTime? D_ModDate            { get; set; } // datetime
+		[Column,    Nullable] public string    C_ModUser            { get; set; } // varchar(100)
+		[Column,    Nullable] public string    C_ModIP              { get; set; } // varchar(50)
+		[Column,    Nullable] public DateTime? D_DelDate            { get; set; } // datetime
+		[Column, NotNull    ] public bool      B_QuitedFRMP         { get; set; } // bit
+		[Column,    Nullable] public int?      EQ_Employee_Id       { get; set; } // int
+		[Column,    Nullable] public string    EQ_Employee_Login    { get; set; } // varchar(100)
+		[Column,    Nullable] public string    EQ2_C_Employee_Id    { get; set; } // varchar(100)
+		[Column,    Nullable] public string    EQ2_C_Employee_Login { get; set; } // varchar(100)
+	}
+
+	[Table(Schema="dbo", Name="__importF_Ward_Doctors")]
+	public partial class __importF_Ward_Doctors
+	{
+		[Column, NotNull    ] public int    LINK             { get; set; } // int
+		[Column,    Nullable] public int?   F_Ward           { get; set; } // int
+		[Column,    Nullable] public int?   F_Job            { get; set; } // int
+		[Column,    Nullable] public int?   F_DoctorSpec     { get; set; } // int
+		[Column,    Nullable] public bool?  B_Head           { get; set; } // bit
+		[Column,    Nullable] public string C_Cabinet        { get; set; } // varchar(50)
+		[Column,    Nullable] public string C_PhoneWork      { get; set; } // varchar(200)
+		[Column,    Nullable] public int?   F_HospitalDoctor { get; set; } // int
+		[Column,    Nullable] public bool?  B_MainNurse      { get; set; } // bit
+	}
+
+	[Table(Schema="dbo", Name="__importMD_JUR_PERSON")]
+	public partial class __importMD_JUR_PERSON
+	{
+		[Column, NotNull    ] public int       LINK                         { get; set; } // int
+		[Column,    Nullable] public int?      F_TYPE_ID                    { get; set; } // int
+		[Column,    Nullable] public int?      F_REG_ID                     { get; set; } // int
+		[Column,    Nullable] public int?      F_GBRANCH_ID                 { get; set; } // int
+		[Column,    Nullable] public string    C_ADDRESS_HEAD               { get; set; } // text
+		[Column,    Nullable] public string    C_FULL_NAME                  { get; set; } // varchar(1024)
+		[Column,    Nullable] public string    C_SHORT_NAME                 { get; set; } // varchar(200)
+		[Column,    Nullable] public decimal?  N_OGRN                       { get; set; } // decimal(13, 0)
+		[Column,    Nullable] public int?      N_CODE                       { get; set; } // int
+		[Column,    Nullable] public int?      N_CODE_TERR                  { get; set; } // int
+		[Column,    Nullable] public string    C_INDEX_ADDR                 { get; set; } // varchar(1000)
+		[Column,    Nullable] public string    C_JOB                        { get; set; } // varchar(100)
+		[Column,    Nullable] public string    C_FIO                        { get; set; } // varchar(100)
+		[Column,    Nullable] public string    C_RECEIVING_DAYS             { get; set; } // varchar(200)
+		[Column,    Nullable] public string    C_ZIP_TEL                    { get; set; } // varchar(150)
+		[Column,    Nullable] public string    C_FAX                        { get; set; } // varchar(250)
+		[Column,    Nullable] public string    C_EMAIL                      { get; set; } // varchar(150)
+		[Column,    Nullable] public string    C_WWW                        { get; set; } // varchar(100)
+		[Column,    Nullable] public string    C_INN                        { get; set; } // varchar(20)
+		[Column,    Nullable] public string    C_PAYMENT                    { get; set; } // varchar(200)
+		[Column,    Nullable] public string    C_PHOTO_CHIEF                { get; set; } // varchar(100)
+		[Column,    Nullable] public string    C_EMBLEM                     { get; set; } // varchar(100)
+		[Column,    Nullable] public string    C_PHOTO_BUILDING             { get; set; } // varchar(100)
+		[Column,    Nullable] public string    C_SHEDULETRAVEL              { get; set; } // varchar(5000)
+		[Column,    Nullable] public string    C_PHOTO_SHEDULE_TRAVEL       { get; set; } // varchar(100)
+		[Column,    Nullable] public string    C_INFO                       { get; set; } // text
+		[Column,    Nullable] public string    C_STATUS                     { get; set; } // text
+		[Column,    Nullable] public int?      N_WORKERS                    { get; set; } // int
+		[Column,    Nullable] public bool?     L_DISABLE                    { get; set; } // bit
+		[Column,    Nullable] public int?      F_HIERARHY_ID                { get; set; } // int
+		[Column,    Nullable] public int?      F_THEME_ID                   { get; set; } // int
+		[Column,    Nullable] public int?      F_PODCHIN_ID                 { get; set; } // int
+		[Column,    Nullable] public DateTime? D_TIME                       { get; set; } // datetime
+		[Column,    Nullable] public string    C_MOD_USER                   { get; set; } // varchar(50)
+		[Column,    Nullable] public string    C_MOD_IP                     { get; set; } // varchar(50)
+		[Column,    Nullable] public DateTime? D_MOD_DATE                   { get; set; } // datetime
+		[Column,    Nullable] public int?      F_LOG_ID                     { get; set; } // int
+		[Column,    Nullable] public string    C_KLADR                      { get; set; } // varchar(50)
+		[Column,    Nullable] public string    C_LICENSE                    { get; set; } // varchar(8000)
+		[Column,    Nullable] public string    C_MED_ACTIVITIES             { get; set; } // varchar(255)
+		[Column,    Nullable] public Guid?     GUID                         { get; set; } // uniqueidentifier
+		[Column, NotNull    ] public bool      B_HideForRegistry            { get; set; } // bit
+		[Column,    Nullable] public string    C_MedType                    { get; set; } // varchar(200)
+		[Column,    Nullable] public string    C_MedTypeRun                 { get; set; } // varchar(200)
+		[Column,    Nullable] public string    C_History                    { get; set; } // text
+		[Column,    Nullable] public string    C_Stay                       { get; set; } // text
+		[Column,    Nullable] public int?      N_Level                      { get; set; } // int
+		[Column,    Nullable] public string    C_Vkey                       { get; set; } // varchar(255)
+		[Column,    Nullable] public string    C_PRICE                      { get; set; } // varchar(150)
+		[Column,    Nullable] public int?      F_GALLERY                    { get; set; } // int
+		[Column,    Nullable] public string    C_FLASH                      { get; set; } // varchar(150)
+		[Column,    Nullable] public string    C_Vacancies                  { get; set; } // varchar(150)
+		[Column,    Nullable] public string    C_Attention                  { get; set; } // varchar(4000)
+		[Column,    Nullable] public string    C_WebSvcUrl                  { get; set; } // varchar(500)
+		[Column,    Nullable] public string    C_WebSvcUserName             { get; set; } // varchar(100)
+		[Column,    Nullable] public string    C_WebSvcPassword             { get; set; } // varchar(100)
+		[Column,    Nullable] public bool?     B_WebSvcEnabled              { get; set; } // bit
+		[Column,    Nullable] public int?      N_FieldDesc_SerNumPolis      { get; set; } // int
+		[Column,    Nullable] public int?      N_FieldDesc_InsureCompany    { get; set; } // int
+		[Column,    Nullable] public int?      N_FieldDesc_PatientName      { get; set; } // int
+		[Column,    Nullable] public int?      N_FieldDesc_PatientSurname   { get; set; } // int
+		[Column,    Nullable] public int?      N_FieldDesc_PatientOtchestvo { get; set; } // int
+		[Column,    Nullable] public int?      N_FieldDesc_PatientGender    { get; set; } // int
+		[Column,    Nullable] public int?      N_FieldDesc_BirthDay         { get; set; } // int
+		[Column,    Nullable] public int?      N_FieldDesc_Address          { get; set; } // int
+		[Column,    Nullable] public int?      N_FieldDesc_Phone            { get; set; } // int
+		[Column,    Nullable] public int?      N_FieldDesc_Email            { get; set; } // int
+		[Column,    Nullable] public string    C_WebSvcCustomUrl            { get; set; } // varchar(500)
+		[Column,    Nullable] public string    C_WebSvcCustomUserName       { get; set; } // varchar(100)
+		[Column,    Nullable] public string    C_WebSvcCustomPassword       { get; set; } // varchar(100)
+		[Column,    Nullable] public bool?     B_WebSvcCustomEnabled        { get; set; } // bit
+		[Column,    Nullable] public int?      N_StopRecordMinutes          { get; set; } // int
+		[Column,    Nullable] public string    C_Email2                     { get; set; } // varchar(150)
+		[Column,    Nullable] public DateTime? D_DelDate                    { get; set; } // datetime
+		[Column, NotNull    ] public bool      B_TestOnly                   { get; set; } // bit
+		[Column,    Nullable] public string    C_FdrlPlaceId                { get; set; } // varchar(30)
+		[Column,    Nullable] public string    C_FdrlToken                  { get; set; } // varchar(30)
+		[Column,    Nullable] public int?      F_Location                   { get; set; } // int
+		[Column,    Nullable] public bool?     B_OMS                        { get; set; } // bit
+		[Column,    Nullable] public string    C_OGRN                       { get; set; } // varchar(50)
+		[Column,    Nullable] public decimal?  N_Latitude                   { get; set; } // decimal(8, 6)
+		[Column,    Nullable] public decimal?  N_Longitude                  { get; set; } // decimal(8, 6)
+		[Column,    Nullable] public string    C_House                      { get; set; } // varchar(50)
+		[Column,    Nullable] public string    C_Building                   { get; set; } // varchar(50)
+		[Column,    Nullable] public string    C_Flat                       { get; set; } // varchar(50)
+		[Column,    Nullable] public string    C_Location_KALDR             { get; set; } // varchar(50)
+		[Column,    Nullable] public int?      F_MuType                     { get; set; } // int
+		[Column, NotNull    ] public bool      B_AllowHospitalization       { get; set; } // bit
+		[Column,    Nullable] public string    C_FdrlQueuePrefix            { get; set; } // varchar(50)
+		[Column,    Nullable] public string    C_FdrlToken_v2               { get; set; } // varchar(32)
+		[Column,    Nullable] public Guid?     U_FRMP_ID                    { get; set; } // uniqueidentifier
+		[Column, NotNull    ] public bool      B_AllowManualDoctorAdd       { get; set; } // bit
+		[Column,    Nullable] public string    C_NameForSMS                 { get; set; } // varchar(50)
+		[Column,    Nullable] public string    C_PhoneForSMS                { get; set; } // varchar(30)
+		[Column, NotNull    ] public bool      B_SendSMS                    { get; set; } // bit
+		[Column, NotNull    ] public bool      B_EnableDoctorCall           { get; set; } // bit
+		[Column,    Nullable] public string    C_PersonalDataPolicy         { get; set; } // text
+		[Column,    Nullable] public string    C_EQ_Office                  { get; set; } // varchar(10)
+		[Column,    Nullable] public string    C_EQ_Name                    { get; set; } // varchar(100)
+		[Column,    Nullable] public string    C_DoctorCallWarning          { get; set; } // text
+		[Column,    Nullable] public string    F_FRMP_OID                   { get; set; } // varchar(128)
+	}
+
+	[Table(Schema="dbo", Name="_DUBL_content_people_department_link")]
+	public partial class _DUBL_content_people_department_link
+	{
+		[Column, NotNull    ] public Guid   f_department { get; set; } // uniqueidentifier
+		[Column, NotNull    ] public Guid   f_people     { get; set; } // uniqueidentifier
+		[Column,    Nullable] public string c_status     { get; set; } // varchar(128)
+		[Column,    Nullable] public string c_post       { get; set; } // varchar(128)
+	}
+
+	[Table(Schema="dbo", Name="_importCD_Gallery")]
+	public partial class _importCD_Gallery
+	{
+		[Column, NotNull    ] public int       LINK             { get; set; } // int
+		[Column,    Nullable] public int?      F_ORGS           { get; set; } // int
+		[Column,    Nullable] public string    C_NAME           { get; set; } // varchar(500)
+		[Column,    Nullable] public string    C_DESCRIPTION    { get; set; } // varchar(5000)
+		[Column,    Nullable] public DateTime? D_DATE           { get; set; } // datetime
+		[Column,    Nullable] public short?    N_WIDTH          { get; set; } // smallint
+		[Column,    Nullable] public short?    N_HEIGHT         { get; set; } // smallint
+		[Column,    Nullable] public string    C_GALLERY_FOLDER { get; set; } // varchar(500)
+		[Column, NotNull    ] public DateTime  D_TIME           { get; set; } // datetime
+	}
+
+	[Table(Schema="dbo", Name="_importSD_EVENTS")]
+	public partial class _importSD_EVENTS
+	{
+		[Column, NotNull    ] public int       LINK         { get; set; } // int
+		[Column,    Nullable] public int?      F_JURL_ID    { get; set; } // int
+		[Column,    Nullable] public DateTime? D_DATE_BEGIN { get; set; } // datetime
+		[Column,    Nullable] public DateTime? D_DATE_END   { get; set; } // datetime
+		[Column,    Nullable] public string    C_NAME       { get; set; } // varchar(250)
+		[Column,    Nullable] public string    C_PLACE      { get; set; } // varchar(200)
+		[Column,    Nullable] public string    C_INFO       { get; set; } // text
+		[Column,    Nullable] public string    C_PHOTO      { get; set; } // varchar(100)
+		[Column,    Nullable] public string    C_URL        { get; set; } // varchar(250)
+		[Column,    Nullable] public bool?     L_VERIFY     { get; set; } // bit
+		[Column,    Nullable] public string    C_ORG        { get; set; } // varchar(200)
+		[Column,    Nullable] public int?      N_JURL_ID    { get; set; } // int
+		[Column,    Nullable] public string    SUBJECT      { get; set; } // varchar(250)
+		[Column,    Nullable] public DateTime? D_TIME       { get; set; } // datetime
+		[Column, NotNull    ] public Guid      GUID         { get; set; } // uniqueidentifier
+		[Column,    Nullable] public string    C_MOD_USER   { get; set; } // varchar(50)
+		[Column,    Nullable] public string    C_MOD_IP     { get; set; } // varchar(50)
+		[Column,    Nullable] public DateTime? D_MOD_DATE   { get; set; } // datetime
+		[Column,    Nullable] public int?      F_LOG_ID     { get; set; } // int
+	}
+
+	[Table(Schema="dbo", Name="_importSD_NEWS")]
+	public partial class _importSD_NEWS
+	{
+		[Column, NotNull    ] public int       LINK           { get; set; } // int
+		[Column,    Nullable] public int?      F_JURL_ID      { get; set; } // int
+		[Column,    Nullable] public DateTime? D_DATE         { get; set; } // datetime
+		[Column,    Nullable] public string    C_NAME         { get; set; } // varchar(200)
+		[Column,    Nullable] public string    C_INFO         { get; set; } // text
+		[Column,    Nullable] public bool?     L_MAIN_NEWS    { get; set; } // bit
+		[Column,    Nullable] public string    C_PHOTO        { get; set; } // varchar(100)
+		[Column,    Nullable] public string    C_URL          { get; set; } // varchar(250)
+		[Column,    Nullable] public bool?     L_VERIFY       { get; set; } // bit
+		[Column,    Nullable] public int?      N_JURL_ID      { get; set; } // int
+		[Column,    Nullable] public string    SUBJECT        { get; set; } // varchar(250)
+		[Column,    Nullable] public DateTime? D_TIME         { get; set; } // datetime
+		[Column,    Nullable] public int?      LINK_REG       { get; set; } // int
+		[Column,    Nullable] public bool?     L_TOIMPORT     { get; set; } // bit
+		[Column,    Nullable] public bool?     L_IMPORTED     { get; set; } // bit
+		[Column,    Nullable] public int?      N_Count        { get; set; } // int
+		[Column,    Nullable] public int?      F_NewsPriority { get; set; } // int
+		[Column,    Nullable] public string    C_MOD_USER     { get; set; } // varchar(50)
+		[Column,    Nullable] public string    C_MOD_IP       { get; set; } // varchar(50)
+		[Column,    Nullable] public DateTime? D_MOD_DATE     { get; set; } // datetime
+		[Column,    Nullable] public int?      F_LOG_ID       { get; set; } // int
+		[Column,    Nullable] public string    C_JURL_ID      { get; set; } // varchar(255)
+		[Column,    Nullable] public int?      CAP_ID         { get; set; } // int
+		[Column,    Nullable] public int?      F_GALLERY      { get; set; } // int
+		[Column,    Nullable] public string    C_VIDEO        { get; set; } // varchar(500)
+		[Column,    Nullable] public string    C_AUDIO        { get; set; } // varchar(500)
+		[Column, NotNull    ] public Guid      GUID           { get; set; } // uniqueidentifier
+		[Column, NotNull    ] public bool      L_DISPATCH     { get; set; } // bit
+		[Column, NotNull    ] public bool      L_POSTED       { get; set; } // bit
+	}
+
+	[Table(Schema="dbo", Name="_importSD_PUBLICATION")]
+	public partial class _importSD_PUBLICATION
+	{
+		[Column, NotNull    ] public int       LINK             { get; set; } // int
+		[Column,    Nullable] public int?      F_JURL_ID        { get; set; } // int
+		[Column,    Nullable] public int?      F_SOURCE_ID      { get; set; } // int
+		[Column,    Nullable] public DateTime? D_DATE           { get; set; } // datetime
+		[Column,    Nullable] public string    C_NAME           { get; set; } // varchar(150)
+		[Column,    Nullable] public string    C_AUTHOR         { get; set; } // varchar(100)
+		[Column,    Nullable] public string    C_INFO           { get; set; } // text
+		[Column,    Nullable] public string    C_PHOTO          { get; set; } // varchar(100)
+		[Column,    Nullable] public string    C_URL            { get; set; } // varchar(200)
+		[Column,    Nullable] public bool?     L_VERIFY         { get; set; } // bit
+		[Column,    Nullable] public bool?     L_DISABLE_SOURCE { get; set; } // bit
+		[Column,    Nullable] public string    C_SOURCE         { get; set; } // varchar(70)
+		[Column,    Nullable] public int?      N_JURL_ID        { get; set; } // int
+		[Column,    Nullable] public string    SUBJECT          { get; set; } // varchar(250)
+		[Column,    Nullable] public DateTime? D_TIME           { get; set; } // datetime
+		[Column, NotNull    ] public Guid      GUID             { get; set; } // uniqueidentifier
+		[Column,    Nullable] public string    C_MOD_USER       { get; set; } // varchar(50)
+		[Column,    Nullable] public string    C_MOD_IP         { get; set; } // varchar(50)
+		[Column,    Nullable] public DateTime? D_MOD_DATE       { get; set; } // datetime
+		[Column,    Nullable] public int?      F_LOG_ID         { get; set; } // int
+		[Column,    Nullable] public int?      CAP_ID           { get; set; } // int
+		[Column,    Nullable] public string    C_VIDEO          { get; set; } // varchar(500)
+		[Column,    Nullable] public string    C_AUDIO          { get; set; } // varchar(500)
+		[Column,    Nullable] public int?      F_GALLERY        { get; set; } // int
 	}
 
 	// View
@@ -675,6 +1094,20 @@ namespace cms.dbase.models
 		public IEnumerable<cms_resolutions_templates> fkusergroupresolutionss { get; set; }
 
 		#endregion
+	}
+
+	[Table(Schema="dbo", Name="content_anketas")]
+	public partial class content_anketas
+	{
+		[PrimaryKey, NotNull    ] public Guid      id         { get; set; } // uniqueidentifier
+		[Column,     NotNull    ] public string    c_alias    { get; set; } // varchar(512)
+		[Column,     NotNull    ] public DateTime  d_date     { get; set; } // datetime
+		[Column,        Nullable] public DateTime? d_date_end { get; set; } // datetime
+		[Column,     NotNull    ] public string    c_title    { get; set; } // varchar(512)
+		[Column,        Nullable] public string    c_text     { get; set; } // varchar(4096)
+		[Column,        Nullable] public string    c_url      { get; set; } // varchar(1024)
+		[Column,     NotNull    ] public bool      b_disabled { get; set; } // bit
+		[Column,     NotNull    ] public int       n_count    { get; set; } // int
 	}
 
 	[Table(Schema="dbo", Name="content_banner_sections")]
@@ -2210,6 +2643,31 @@ namespace cms.dbase.models
 
 	public static partial class TableExtensions
 	{
+		public static __DUBL_content_departments Find(this ITable<__DUBL_content_departments> table, Guid id)
+		{
+			return table.FirstOrDefault(t =>
+				t.id == id);
+		}
+
+		public static __DUBL_content_materials Find(this ITable<__DUBL_content_materials> table, Guid id)
+		{
+			return table.FirstOrDefault(t =>
+				t.id == id);
+		}
+
+		public static __DUBL_content_org_structure Find(this ITable<__DUBL_content_org_structure> table, Guid id)
+		{
+			return table.FirstOrDefault(t =>
+				t.id == id);
+		}
+
+		public static __DUBL_content_people_department_link Find(this ITable<__DUBL_content_people_department_link> table, Guid f_department, Guid f_people)
+		{
+			return table.FirstOrDefault(t =>
+				t.f_department == f_department &&
+				t.f_people     == f_people);
+		}
+
 		public static cms_log Find(this ITable<cms_log> table, Guid id)
 		{
 			return table.FirstOrDefault(t =>
@@ -2280,6 +2738,12 @@ namespace cms.dbase.models
 		{
 			return table.FirstOrDefault(t =>
 				t.c_alias == c_alias);
+		}
+
+		public static content_anketas Find(this ITable<content_anketas> table, Guid id)
+		{
+			return table.FirstOrDefault(t =>
+				t.id == id);
 		}
 
 		public static content_banner_sections Find(this ITable<content_banner_sections> table, Guid id)

@@ -8,7 +8,7 @@
         @Html.Partial("part/nav")
 
         <div class="row">
-            @if (Model.MedicalServices != null)
+            @if (Model.MedicalServices != null && string.IsNullOrEmpty(Model.Type))
             {
                 foreach (var item in Model.MedicalServices)
                 {
@@ -18,7 +18,7 @@
                     </div>
                 }
             }
-            else if (Model.Info != null)
+            else if (Model.Info != null && Model.Type == "dop")
             {
                 <div class="col-md-12">@Html.Raw(Model.Info.Text)</div>
             }

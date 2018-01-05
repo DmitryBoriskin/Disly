@@ -38,6 +38,7 @@ namespace cms.dbase
                                             Id = s.id,
                                             Title = s.c_title,
                                             Date = s.d_date,
+                                            Text = s.c_text,
                                             PreviewImage = new Photo() { Url = s.c_preview }
                                             });
                         return new PhotoAlbumList

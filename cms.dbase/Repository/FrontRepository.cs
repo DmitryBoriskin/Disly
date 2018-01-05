@@ -714,7 +714,14 @@ namespace cms.dbase
                 {
                     var query = db.content_sv_materials_groupss
                         .Where(w => materialIds.Contains(w.id))
-                        .Where(w => w.group_id.Equals(g))
+                        .Where(w => w.group_id.Equals(g));
+
+                    if (g != Guid.Parse("651CFEB9-E157-4F42-B40D-DE5A7DC1A8FC"))
+                    {
+                        query = query.Where(w => w.d_date <= DateTime.Now);
+                    }
+
+                    var data = query
                         .Where(w => w.b_disabled == false)
                         .OrderByDescending(o => o.d_date)
                         .Select(s => new MaterialFrontModule
@@ -727,9 +734,10 @@ namespace cms.dbase
                             Photo = s.c_preview
                         });
 
+
                     // берём последние 3 новости данной группы
-                    if (query.Any())
-                        list.AddRange(query.Take(2));
+                    if (data.Any())
+                        list.AddRange(data.Take(2));
                 }
 
                 if (list.Any())
@@ -767,7 +775,7 @@ namespace cms.dbase
 
                     var query = db.content_materialss
                                 .Where(w => materials.Contains(w.id));
-
+                    
                     if (filter.Disabled != null)
                     {
                         query = query.Where(w => w.b_disabled == filter.Disabled);
@@ -787,6 +795,11 @@ namespace cms.dbase
 
                     if (!String.IsNullOrEmpty(filter.Category))
                     {
+                        if (filter.Category != "announcement")
+                        {
+                            query = query.Where(w => w.d_date <= DateTime.Now);
+                        }
+
                         var category = db.content_materials_groupss.Where(w => w.c_alias == filter.Category).First().id;
                         query = query
                                     .Join(
@@ -794,6 +807,7 @@ namespace cms.dbase
                                             .Where(o => o.f_group == category),
                                             e => e.id, o => o.f_material, (o, e) => o
                                          );
+                        //query = query.Where(w => w.d_date <= DateTime.Now && w.);
                     }
 
                     query = query.OrderByDescending(w => w.d_date);
@@ -2186,6 +2200,44 @@ namespace cms.dbase
             {
                 //write to log ex
                 return false;
+            }
+        }
+
+        /// <summary>
+        /// Анкета
+        /// </summary>
+        /// <param name="filter"></param>
+        /// <returns></returns>
+        public override AnketaModel getLastWorksheetItem()
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var query = db.content_anketass.AsQueryable();
+
+                query = query.Where(s => s.b_disabled == false)
+                    .Where(s => s.d_date <= DateTime.Now);
+
+                // Сделать привязку
+                var data = query
+                    .OrderByDescending(s => s.d_date)
+                    .Select(s => new AnketaModel
+                    {
+                        Id = s.id,
+                        Count = s.n_count,
+                        Title = s.c_title,
+                        Alias = s.c_alias,
+                        Text = s.c_text,
+                        Url = s.c_url,
+                        DateBegin = s.d_date,
+                        DateEnd = s.d_date_end,
+                        Disabled = s.b_disabled,
+                        //Links  заполняем в контроллере
+                    });
+                if (data.Any())
+                    return data.First();
+
+                else
+                    return null;
             }
         }
 

@@ -17,7 +17,7 @@
             <div class="row padding-top-30">
                 <div class="col-md-8">
                     @*<div class="text-left"><a class="btn sub btn-primary" href="@newItemBtnLink">Оставить отзыв</a><br /><br /></div>*@
-                    <div class="text-left"><a class="btn sub btn-primary" href="#feedback-send-form">Оставить отзыв</a><br /><br /></div>
+                    <div class="text-left"><a class="btn sub btn-primary" href="#feedback-send-form">Задать вопрос</a><br /><br /></div>
 
                     <div class="feedback_list">
                         @if (Model.List != null)
@@ -26,7 +26,7 @@
                             {
                                 foreach (var item in Model.List.Data)
                                 {
-                                    var title = Regex.Replace(item.Title, @"<[^>]*>", "");
+                                    var title = !string.IsNullOrWhiteSpace(item.Title) ? Regex.Replace(item.Title, @"<[^>]*>", "") : null;
                                     var teaser = item.Text.Length > maxChars ? item.Text.Substring(0, maxChars) + " ..." : item.Text;
 
                                     <div id="feedback_@item.Id" class="feedback_item">
