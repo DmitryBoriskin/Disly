@@ -17,7 +17,7 @@ checkbox (документация на сайте http://www.bootstraptoggle.co
 	@data_on = ""			- текст выбранного чекбокса (возможно размещение html)
 	@data_max = "true"		- чекбокс примет ширину родителя
 	@data_size = "large,normal,small,mini"	- Размер кнопки (по умолчанию - small)
-	@data_width = ""
+	@data_width = "" 
 	@data_height = ""
 	@data_offstyle = "primary,success,info,warning,danger,default"	- Цвет чекбокса 
 	@data_onstyle = "primary,success,info,warning,danger,default"	- Цвет выбранного checkbox (по умолчанию - default)
