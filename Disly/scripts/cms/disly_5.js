@@ -829,8 +829,6 @@ function InitTinyMCE_new(id, _width, _height, directory) {
     });
 };
 
-
-
 function Coords(x, y, title, desc, zoom) {
     $(document).ready(function () {
         var JQ_Ymaps = $('script[src$="//api-maps.yandex.ru/2.0/?load=package.full&lang=ru-RU"]').length;

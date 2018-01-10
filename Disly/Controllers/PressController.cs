@@ -61,7 +61,7 @@ namespace Disly.Controllers
             ViewBag.Alias = (RouteData.Values["alias"] != null) ? RouteData.Values["alias"] : String.Empty;
             model.Item = _repository.getMaterialsItem(year, month, day, alias); //,Domain
 
-            #region Создаем переменные (значения по умолчанию)            
+            #region Создаем переменные (значения по умолчанию)
             string _ViewName = (ViewName != String.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";
 
             string PageTitle =(model.Item!=null)?model.Item.Title: "Новости";
@@ -80,7 +80,7 @@ namespace Disly.Controllers
 
         public ActionResult Category(string category)
         {
-            ViewBag.CurrentCategory = category;         
+            ViewBag.CurrentCategory = category;
             var filter = getFilter();
             filter.Disabled = false;
             filter.Category = category;

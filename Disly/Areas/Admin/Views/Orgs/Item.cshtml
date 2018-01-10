@@ -1,8 +1,8 @@
 ﻿@model OrgsViewModel
 @{
     string urlParam = "/Admin/Services/ChangePermit?group=orgs_structure";
-    string fileName = (Model.Item != null && Model.Item.Logo != null) ? Model.Item.Logo.Name : null;
-    string fileSize = (Model.Item != null && Model.Item.Logo != null) ? Model.Item.Logo.Size : null;
+    //string fileName = (Model.Item != null && Model.Item.Logo != null) ? Model.Item.Logo.Name : null;
+    //string fileSize = (Model.Item != null && Model.Item.Logo != null) ? Model.Item.Logo.Size : null;
     string fileUrl = (Model.Item != null && Model.Item.Logo != null) ? Model.Item.Logo.Url : null;
     Guid? orgId = ViewBag.OrgId;
 }
@@ -186,8 +186,10 @@
 
             @Html.TextBoxFor(m => m.Item.Oid, new { type = "text", title = "ОИД" })
 
-            @Html.TextBox("upload", null, new { type = "file", title = "Изображение", data_name = fileName, data_size = fileSize, data_url = fileUrl, accept = ".jpg,.jpeg,.png,.gif" })
-            @Html.TextBoxFor(m => m.Item.Logo.Url, new { type = "hidden", value = fileUrl })
+            @*@Html.TextBox("upload", null, new { type = "file", title = "Изображение", data_name = fileName, data_size = fileSize, data_url = fileUrl, accept = ".jpg,.jpeg,.png,.gif" })
+            @Html.TextBoxFor(m => m.Item.Logo.Url, new { type = "hidden", value = fileUrl })*@
+            @Html.TextBoxFor(m => m.AdministrativItem.Photo.Url, new { type = "file", data_posted_name = "upload", data_url = fileUrl, title = "Изображение", accept = ".jpg,.jpeg,.png,.gif" })
+
             @Html.CheckBoxFor(m => m.Item.Disabled, new { type = "checkbox", title = "Запретить просмотр", data_toggle = "toggle", data_on = "запретить просмотр", data_onstyle = "danger", data_off = "показывать на сайте", data_offstyle = "success", data_width = "248" })
             
             @if (Model.Item != null)
