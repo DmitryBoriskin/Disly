@@ -1,11 +1,11 @@
 ﻿@model OrgsViewModel
 @{
-    string fileName = (Model.AdministrativItem != null && Model.AdministrativItem.Photo != null) ? Model.AdministrativItem.Photo.Name : string.Empty;
-    string fileSize = (Model.AdministrativItem != null && Model.AdministrativItem.Photo != null) ? Model.AdministrativItem.Photo.Size : string.Empty;
+    //string fileName = (Model.AdministrativItem != null && Model.AdministrativItem.Photo != null) ? Model.AdministrativItem.Photo.Name : string.Empty;
+    //string fileSize = (Model.AdministrativItem != null && Model.AdministrativItem.Photo != null) ? Model.AdministrativItem.Photo.Size : string.Empty;
     string fileUrl = (Model.AdministrativItem != null && Model.AdministrativItem.Photo != null) ? Model.AdministrativItem.Photo.Url : string.Empty;
     string orgid = Request.Params["orgid"] != null ? Request.Params["orgid"] : ViewBag.OrgId.ToString();
-    
-    SelectList PeopleList = null;                 
+
+    SelectList PeopleList = null;
     if (Model.PeopleList != null)
     {
         PeopleList = new SelectList(Model.PeopleList, "Id", "FIO", 0);
@@ -21,8 +21,11 @@
         @Html.TextBoxFor(m => m.AdministrativItem.Surname, new { required = "", type = "text", maxlength = "64", title = "Фамилия" })               
         @Html.TextBoxFor(m => m.AdministrativItem.Name, new { required = "", type = "text", maxlength = "64", title = "Имя" })
         @Html.TextBoxFor(m => m.AdministrativItem.Patronymic, new {type = "text", maxlength = "64", title = "Отчество" })
-        @Html.TextBox("upload", null, new { type = "file", title = "Изображение:", data_name = fileName, data_size = fileSize, data_url = fileUrl, accept = ".jpg,.jpeg,.png,.gif" })
-        @Html.TextBoxFor(m => m.AdministrativItem.Photo.Url, new { type = "hidden", value = fileUrl })
+
+        @*@Html.TextBox("upload", null, new { type = "file", title = "Изображение:", data_name = fileName, data_size = fileSize, data_url = fileUrl, accept = ".jpg,.jpeg,.png,.gif" })
+        @Html.TextBoxFor(m => m.AdministrativItem.Photo.Url, new { type = "hidden", value = fileUrl })*@
+        @Html.TextBoxFor(m => m.AdministrativItem.Photo.Url, new { type = "file", data_posted_name = "upload", data_url = fileUrl, title = "Изображение", accept = ".jpg,.jpeg,.png,.gif" })
+
         @Html.TextBoxFor(m => m.AdministrativItem.Post, new { type = "text", maxlength = "128", title = "Должность" })
         
 

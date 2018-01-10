@@ -13,11 +13,6 @@ namespace Disly.Controllers
         protected string siteId = "";
         protected string action = "";
 
-        //public string Domain;
-        //public string ControllerName;
-        //public string ActionName;
-        //public string ViewName;
-        //public string StartUrl;
 
         protected int? oldId = null;
         protected string siteName = String.Empty;
@@ -26,13 +21,13 @@ namespace Disly.Controllers
         {
             base.OnActionExecuting(filterContext);
 
-            var Domain = Request.Url.Host;
-            ActionName = RouteData.Values["action"].ToString().ToLower();
+            redirectUrl = Request.Url.Host;
 
-            redirectUrl = string.Format("http://{0}", baseUrl);
-            var port = Request.Url.Port;
-            if (baseUrl == "localhost")
+            if (Domain == "localhost")
+            {
+                var port = Request.Url.Port;
                 redirectUrl = string.Format("{0}:{1}", redirectUrl, port);
+            }
 
         }
 
@@ -52,7 +47,7 @@ namespace Disly.Controllers
                 var menu = _repository.getSiteMapByOldId(pageId);
                 if (menu != null)
                 {
-                    redirectUrl = string.Format("http://{0}{1}{2}", Domain, menu.Path, menu.Alias);
+                    redirectUrl = string.Format("/{0}{1}", menu.Path, menu.Alias);
                 }
             }
 
@@ -80,11 +75,11 @@ namespace Disly.Controllers
 
             if (material != null)
             {
-                redirectUrl = string.Format("http://{0}/{1}/{2}/{3}/{4}/{5}", Domain, "press", material.Year, material.Month, material.Day, material.Alias);
+                redirectUrl = string.Format("/press/{0}/{1}/{2}/{3}", material.Year, material.Month, material.Day, material.Alias);
             }
             else
             {
-                redirectUrl = string.Format("http://{0}/{1}", Domain, "press");
+                redirectUrl = "/press/";
             }
 
             return Redirect(redirectUrl);
@@ -113,27 +108,27 @@ namespace Disly.Controllers
         //О нас
         public ActionResult AboutOrgs()
         {
-            return Redirect("/about");
+            return Redirect("/about/");
         }
         //Как нас найти
         public ActionResult SheduleTravel()
         {
-            return Redirect("/findus");
+            return Redirect("/findus/");
         }
         //Контакты
         public ActionResult Contacts()
         {
-            return Redirect("/contacts");
+            return Redirect("/contacts/");
         }
         //Структура
         public ActionResult Branches()
         {
-            return Redirect("/structure");
+            return Redirect("/structure/");
         }
         //Врачи
         public ActionResult Doctors()
         {
-            return Redirect("/doctors");
+            return Redirect("/doctors/");
         }
         //Расписание работы
         public ActionResult Timetable()
@@ -144,7 +139,7 @@ namespace Disly.Controllers
         //Вопросы и ответы
         public ActionResult Questions()
         {
-            return Redirect("/feedback/appeallist");
+            return Redirect("/feedback/appeallist/");
         }
         //Архив
         public ActionResult Archives()

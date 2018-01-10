@@ -12,8 +12,11 @@
             @Html.TextBoxFor(m => m.Album.Title, new { required = "", type = "text", maxlength = "128", title = "Заголовок" })
             <div class="row">
                 <div class="col-lg-12">
-                    @Html.TextBox("upload", null, new { type = "file", title = "Картинка для предпросмотра", data_name = fileName, data_size = fileSize, data_url = fileUrl, data_help = "Размер фотографии должен быть не менне 400 точек по ширине и пропорции картинки - 4х3", accept = ".jpg,.jpeg,.png,.gif" })
-                    @Html.TextBoxFor(m => m.Album.PreviewImage.Url, new { type = "hidden", value = fileUrl })
+                    @*@Html.TextBox("upload", null, new { type = "file", title = "Картинка для предпросмотра", data_name = fileName, data_size = fileSize, data_url = fileUrl, data_help = "Размер фотографии должен быть не менне 400 точек по ширине и пропорции картинки - 4х3", accept = ".jpg,.jpeg,.png,.gif" })
+                    @Html.TextBoxFor(m => m.Album.PreviewImage.Url, new { type = "hidden", value = fileUrl })*@
+
+                    @Html.TextBoxFor(m => m.Album.PreviewImage.Url, new { type = "file", data_posted_name = "upload", data_url = fileUrl, title = "Картинка для предпросмотра", accept = ".jpg,.jpeg,.png,.gif" })
+
                 </div>
             </div>
             <div class="group-block" title="Описание фотогаллереи">
