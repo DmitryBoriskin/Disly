@@ -99,9 +99,9 @@ namespace Integration.Frmp.models
 	[Table(Schema="dbo", Name="import_frmp_orgs_peoples")]
 	public partial class ImportFrmpOrgsPeoples
 	{
-		[Column(@"f_oid"),    NotNull] public string FOid    { get; set; } // varchar(64)
-		[Column(@"f_people"), NotNull] public Guid   FPeople { get; set; } // uniqueidentifier
-		[Column(@"f_guid"),   NotNull] public Guid   FGuid   { get; set; } // uniqueidentifier
+		[Column(@"f_oid"),       Nullable] public string FOid    { get; set; } // varchar(64)
+		[Column(@"f_people"), NotNull    ] public Guid   FPeople { get; set; } // uniqueidentifier
+		[Column(@"f_guid"),   NotNull    ] public Guid   FGuid   { get; set; } // uniqueidentifier
 	}
 
 	[Table(Schema="dbo", Name="import_frmp_people_posts_link")]
