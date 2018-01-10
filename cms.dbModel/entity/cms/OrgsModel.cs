@@ -238,6 +238,11 @@ namespace cms.dbModel.entity
         /// </summary>
         [Required(ErrorMessage = "Поле «Название структуры» не должно быть пустым.")]
         public string Title { get; set; }
+        
+        /// <summary>
+        /// Короткое название
+        /// </summary>
+        public string TitleShort { get; set; }
 
         /// <summary>
         /// Адрес

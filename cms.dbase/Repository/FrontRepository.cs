@@ -964,6 +964,7 @@ namespace cms.dbase
                     {
                         Id = s.Key.id,
                         Title = s.First().str.c_title,
+                        TitleShort= s.First().str.c_title_short,
                         Phone = s.First().str.c_phone,
                         PhoneReception = s.First().str.c_phone_reception,
                         Email = s.First().str.c_email,
