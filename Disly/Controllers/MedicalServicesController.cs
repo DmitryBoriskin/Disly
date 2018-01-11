@@ -39,63 +39,42 @@ namespace Disly.Controllers
         }
 
         // GET: PortalMedicalServices
-        public ActionResult Index(string type)
+        public ActionResult Index(string tab)
         {
-            
-            var sibling = _repository.getSiteMap("medicalservices");
+            if (model.CurrentPage == null)
+                throw new Exception("model.CurrentPage == null");
 
-           
+            var page = model.CurrentPage.FrontSection;
 
-            model.Nav = new List<MaterialsGroup>();
-            model.Nav.Add(new MaterialsGroup { Title = "Медицинские услуги" });
-            model.Nav.Add(new MaterialsGroup { Title = "Дополнительно", Alias = "dop" });
+            model.Type = tab;
 
+            //Хлебные крошки
             model.Breadcrumbs.Add(new Breadcrumbs
             {
-                Title = "Медицинские услуги",
-                Url = "/medicalservices"
+                Title = model.CurrentPage.Title,
+                Url = string.Format("/{0}/", page)
             });
 
-            var neededEls = _repository.getSiteMapSiblings(sibling.Path);
-            if (neededEls != null)
+            //Табы на странице
+            model.Nav = new List<PageTabsViewModel>();
+            model.Nav.Add(new PageTabsViewModel { Page = page, Title = "Медицинские услуги" });
+            model.Nav.Add(new PageTabsViewModel { Page = page, Title = "Дополнительно", Alias = "info" });
+
+            //Обработка активных табов
+            if (model.Nav != null && model.Nav.Where(s => s.Alias == tab).Any())
             {
-                foreach (var n in neededEls)
+                var navItem = model.Nav.Where(s => s.Alias == tab).Single();
+                navItem.Active = true;
+
+                model.Breadcrumbs.Add(new Breadcrumbs
                 {
-                    if (n.Equals("paid"))
-                    {
-                        model.Nav.Add(new MaterialsGroup { Title = "Платные услуги", Alias = "paid" });
-                    }
-                    if (n.Equals("dop"))
-                    {
-                        model.Nav.Add(new MaterialsGroup { Title = "Дополнительная информация", Alias = "dop" });
-                    }
-                }
-            }
-            
-            model.Type = type;
-            switch (type)
-            {
-                case "paid":
-                    model.Breadcrumbs.Add(new Breadcrumbs
-                    {
-                        Title = "Платные услуги",
-                        Url = ""
-                    });
-                    model.Info = _repository.getSiteMap(sibling.Path, type);
-                    break;
-                case "dop":
-                    model.Breadcrumbs.Add(new Breadcrumbs
-                    {
-                        Title = "Дополнительная информация",
-                        Url = ""
-                    });
-                    model.Info = _repository.getSiteMap(sibling.Path, sibling.Alias);
-                    break;
-                default:
-                    model.MedicalServices = _repository.getMedicalServices(Domain);
-                    break;
+                    Title = navItem.Title,
+                    Url = navItem.Alias + "/"
+                });
             }
 
+            //Получение перечня прикрепленных к организации услуг
+            model.MedicalServices = _repository.getMedicalServices(Domain);
 
             return View(model);
         }

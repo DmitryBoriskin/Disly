@@ -98,6 +98,7 @@ namespace cms.dbModel
 
         // Главные специалисты
         public abstract MainSpecialistModel[] getMainSpecialistList(FilterParams filter);
+        public abstract MainSpecialistModel getMainSpecialistItem(Guid id);
 
         //вакансии
         public abstract VacanciesList getVacancy(FilterParams filter);
