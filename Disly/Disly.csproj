@@ -594,10 +594,10 @@
     <Compile Include="Controllers\DoctorsController.cs" />
     <Compile Include="Controllers\ContactsController.cs" />
     <Compile Include="Controllers\GeneralSpecialistsController.cs" />
-    <Compile Include="Controllers\LPUController.cs" />
+    <Compile Include="Controllers\portal\LPUController.cs" />
     <Compile Include="Controllers\MapSiteController.cs" />
     <Compile Include="Controllers\SearchController.cs" />
-    <Compile Include="Controllers\PortalDoctorsController.cs" />
+    <Compile Include="Controllers\portal\PortalDoctorsController.cs" />
     <Compile Include="Controllers\MedicalServicesController.cs" />
     <Compile Include="Controllers\RedirectController.cs" />
     <Compile Include="Controllers\RedirectRegistryController.cs" />
@@ -892,6 +892,8 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Content\temp\" />
+    <Folder Include="Controllers\gs\" />
+    <Folder Include="Controllers\orgs\" />
     <Folder Include="Userfiles\" />
     <Folder Include="Views\Core\" />
     <Folder Include="Views\Redirect\" />
