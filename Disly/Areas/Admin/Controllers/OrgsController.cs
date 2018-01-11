@@ -294,7 +294,7 @@ namespace Disly.Areas.Admin.Controllers
         // GET: Admin/Orgs/structure/{Guid}
         public ActionResult Structure(Guid id)
         {
-          
+
 
             ViewBag.Title = "Структурное подразделение";
             model.StructureItem = _cmsRepository.getStructure(id);//+ список подразделений      
@@ -479,7 +479,7 @@ namespace Disly.Areas.Admin.Controllers
                     }
                 }
                 #endregion
-                
+
                 if (!model.StructureItem.Ovp)
                 {
                     return Redirect("/admin/orgs/structure/" + id);//если струкутра с таким id уже существует и не является типом OVP
@@ -891,33 +891,36 @@ namespace Disly.Areas.Admin.Controllers
         #region administrative
         public ActionResult Administrativ(Guid Id)
         {
-            #region администратор сайта
-            if (model.Account.Group.ToLower() == "admin")
+            model.AdministrativItem = _cmsRepository.getAdministrativ(Id);
+            ViewBag.Title = "Административный персонал";
+
+            if (model.AdministrativItem != null)
             {
-                if (orgId != null)
+                #region администратор сайта
+                if (model.Account.Group.ToLower() == "admin")
                 {
-                    if (!_cmsRepository.IsAdministrativeAllowedToOrg(Id, (Guid)orgId))
+                    if (orgId != null)
                     {
-                        return RedirectToAction("Item", new { id = orgId });
+                        if (!_cmsRepository.IsAdministrativeAllowedToOrg(Id, (Guid)orgId))
+                        {
+                            return RedirectToAction("Administrativ", new { id = orgId });
+                        }
+                    }
+                    else
+                    {
+                        return RedirectToAction("Index", "Main");
                     }
                 }
-                else
-                {
-                    return RedirectToAction("Index", "Main");
-                }
+                #endregion
             }
-            #endregion
-
-            ViewBag.Title = "Административный персонал";
             string _OrgId = Request.Params["orgid"];
             //информация о персоне
-            model.AdministrativItem = _cmsRepository.getAdministrativ(Id);
             Guid OrgId = (model.AdministrativItem != null) ? model.AdministrativItem.OrgId : Guid.Parse(_OrgId);
+
             #region сотрудники для выпадающего списка
             var _peopList = _cmsRepository.getPersonsThisOrg(OrgId);
             if (_peopList != null)
             {
-
                 model.PeopleList = (model.AdministrativItem != null) ? new SelectList(_peopList, "Id", "FIO", model.AdministrativItem.PeopleF) : new SelectList(_peopList, "Id", "FIO");
             }
             #endregion

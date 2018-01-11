@@ -54,7 +54,7 @@ namespace Integration.Frmp.library
                     });
                     try
                     {
-                        //ImportOrganization(orgs);
+                        ImportOrganization(orgs);
                     }
                     catch (Exception e)
                     {
@@ -69,7 +69,7 @@ namespace Integration.Frmp.library
                         .ToArray();
                     try
                     {
-                        //ImportPosts(posts);
+                        ImportPosts(posts);
                     }
                     catch (Exception e)
                     {
@@ -106,7 +106,7 @@ namespace Integration.Frmp.library
 
                     try
                     {
-                        //ImportEmployeePostsLinks(postsEmployee);
+                        ImportEmployeePostsLinks(postsEmployee);
                     }
                     catch (Exception e)
                     {
@@ -115,7 +115,7 @@ namespace Integration.Frmp.library
 
                     try
                     {
-                        //FinalizeIntegration();
+                        FinalizeIntegration();
                     }
                     catch (Exception e)
                     {
@@ -266,10 +266,10 @@ namespace Integration.Frmp.library
                         snils = snilsToCheck.Replace("-", "");
 
                         #region Сохранение изображений
-                        if (!string.IsNullOrWhiteSpace(employees[i].picture))
-                        {
-                            photo = ImageResizing(snils, employees[i].picture);
-                        }
+                        //if (!string.IsNullOrWhiteSpace(employees[i].picture))
+                        //{
+                        //    photo = ImageResizing(snils, employees[i].picture);
+                        //}
                         #endregion
 
                         // проверим существует ли запись с таким СНИЛС в таблице dbo.import_frmp_peoples
@@ -293,21 +293,21 @@ namespace Integration.Frmp.library
                                 .Insert();
                         }
 
-                        //// записываем данные в таблицу dbo.import_frmp_orgs_peoples
-                        //var queryLink = db.ImportFrmpOrgsPeopless
-                        //        .Where(w => w.FGuid.Equals(orgOid))
-                        //        .Where(w => w.FPeople.Equals(id));
+                        // записываем данные в таблицу dbo.import_frmp_orgs_peoples
+                        var queryLink = db.ImportFrmpOrgsPeopless
+                                .Where(w => w.FGuid.Equals(orgOid))
+                                .Where(w => w.FPeople.Equals(id));
 
-                        //// проверим существует ли связь сотрудника с организацией
-                        //bool isLinkExist = queryLink.Any();
-                        //if (!isLinkExist)
-                        //{
-                        //    db.ImportFrmpOrgsPeopless
-                        //        //.Value(v => v.FOid, orgOid)
-                        //        .Value(v => v.FGuid, orgOid)
-                        //        .Value(v => v.FPeople, id)
-                        //        .Insert();
-                        //}
+                        // проверим существует ли связь сотрудника с организацией
+                        bool isLinkExist = queryLink.Any();
+                        if (!isLinkExist)
+                        {
+                            db.ImportFrmpOrgsPeopless
+                                //.Value(v => v.FOid, orgOid)
+                                .Value(v => v.FGuid, orgOid)
+                                .Value(v => v.FPeople, id)
+                                .Insert();
+                        }
 
                         if (i > 0 && i % 1000 == 0)
                             SrvcLogger.Debug("{WORK}", string.Format("Импортированно {0} сотрудников из {1}", i, employees.Count()));

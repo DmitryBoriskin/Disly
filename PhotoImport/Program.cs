@@ -37,7 +37,7 @@ namespace PhotoImport
                 }
                 catch
                 {
-                    Console.WriteLine("Not correct input!");
+                    Console.WriteLine("Not corrected input!");
                     continue;
                 }
             } while (!orgIds.Contains(id));
