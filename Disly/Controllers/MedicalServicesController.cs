@@ -41,18 +41,22 @@ namespace Disly.Controllers
         // GET: PortalMedicalServices
         public ActionResult Index(string type)
         {
+            
+            var sibling = _repository.getSiteMap("medicalservices");
+
+           
+
+            model.Nav = new List<MaterialsGroup>();
+            model.Nav.Add(new MaterialsGroup { Title = "Медицинские услуги" });
+            model.Nav.Add(new MaterialsGroup { Title = "Дополнительно", Alias = "dop" });
+
             model.Breadcrumbs.Add(new Breadcrumbs
             {
                 Title = "Медицинские услуги",
                 Url = "/medicalservices"
             });
-            var sibling = _repository.getSiteMap("medicalservices");
 
             var neededEls = _repository.getSiteMapSiblings(sibling.Path);
-            model.Nav = new List<MaterialsGroup>();
-            model.Nav.Add(new MaterialsGroup { Title = "Медицинские услуги" });
-            model.Nav.Add(new MaterialsGroup { Title = "Дополнительно", Alias = "dop" });
-
             if (neededEls != null)
             {
                 foreach (var n in neededEls)

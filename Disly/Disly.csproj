@@ -535,6 +535,7 @@
     <Compile Include="Areas\Admin\Controllers\DocumentsController .cs" />
     <Compile Include="Areas\Admin\Controllers\AnketaController.cs" />
     <Compile Include="Areas\Admin\Models\AnketaViewModel.cs" />
+    <Compile Include="Controllers\ExpertsController.cs" />
     <Compile Include="Controllers\WorksheetController.cs" />
     <Compile Include="Controllers\VacancyController.cs" />
     <Compile Include="Controllers\RedirectFromOldController.cs" />
@@ -613,6 +614,7 @@
     </Compile>
     <Compile Include="Areas\Admin\Models\CoreViewModel.cs" />
     <Compile Include="Models\EventViewModel.cs" />
+    <Compile Include="Models\ExpertsViewModel.cs" />
     <Compile Include="Models\WorksheetViewModel.cs" />
     <Compile Include="Models\FeedbackViewModel.cs" />
     <Compile Include="Models\DoctorsViewModel.cs" />
@@ -882,6 +884,9 @@
     <Content Include="Views\Vacancy\Index.cshtml" />
     <Content Include="Views\Vacancy\Item.cshtml" />
     <Content Include="Views\Worksheet\Index.cshtml" />
+    <Content Include="Views\Experts\Index.cshtml" />
+    <Content Include="Views\Experts\part\nav.cshtml" />
+    <Content Include="Views\Experts\part\list.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -34,7 +34,8 @@ namespace Disly.Controllers
 
             string frontSection = "mainspec";
 
-            model.List = _repository.getMainSpecialistList();
+            var filter = getFilter();
+            model.List = _repository.getMainSpecialistList(filter);
             model.DopInfo = _repository.getSiteMap(frontSection);
             
             #region Создаем переменные (значения по умолчанию)

@@ -1,0 +1,18 @@
+﻿@model ExpertsViewModel
+
+@if (Model != null && Model.Nav != null && Model.Nav.Count > 0)
+{
+    <ul class="nav nav-pills tabs">
+        @foreach (var item in Model.Nav)
+        {
+            string active = (item.Alias == Model.Type) ? "active" : null;
+            string url = "/experts";
+            if (!String.IsNullOrEmpty(item.Alias))
+            {
+                url = string.Format("{0}?type={1}", url, item.Alias);
+            }
+
+            <li class="@active"><a href="@url">@item.Title</a></li>
+        }
+    </ul>
+}
