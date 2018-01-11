@@ -2410,6 +2410,72 @@ namespace cms.dbase
             }
         }
 
+        public override MainSpecialistModel[] getMainSpecialistContacts()
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var query = db.cms_sitess.Where(w => w.c_alias == _domain && w.c_content_type== "spec")
+                                         .Join(
+                                                 db.content_main_specialist_employees_links,
+                                                 e=>e.f_content,
+                                                 o=>o.f_main_specialist,
+                                                 (e,o)=>o
+                                                 )
+                                          .Join(
+                                                db.content_peoples,
+                                                n=>n.f_employee,
+                                                m=>m.id,
+                                                (n,m)=>m
+                                                )
+                                          .Select(s=>new MainSpecialistModel() {
+                                              Name= s.c_surname + s.c_name + s.c_patronymic,                                               
+                                              Organization = getOrgItem(s.fkcontentpeopleorglinks.Select(ss=>ss.f_org).Single())
+                                          });
+                if (query.Any())
+                {
+                    return query.ToArray();
+                }
+                return null;
+            }
+        }
+
+
+
+        /// <summary>
+        /// Получаем организацию
+        /// </summary>
+        /// <param name="id">Идентификатор</param>
+        /// <returns></returns>
+        public override OrgsModel getOrgItem(Guid id)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var data = db.content_orgss.Where(w => w.id == id)
+                    .Select(s => new OrgsModel
+                    {
+                        Id = s.id,
+                        Title = s.c_title,
+                        ShortTitle = s.c_title_short,
+                        Phone = s.c_phone,
+                        PhoneReception = s.c_phone_reception,
+                        Fax = s.c_fax,
+                        Email = s.c_email,                                                
+                        Contacts = s.c_contacts,
+                        Address = s.c_adress,
+                        GeopointX = s.n_geopoint_x,
+                        GeopointY = s.n_geopoint_y,                        
+                        Oid = s.f_oid,                        
+                        Logo = new Photo
+                        {
+                            Url = s.c_logo
+                        }
+                    });
+
+                if (!data.Any()) return null;
+                else return data.FirstOrDefault();
+            }
+        }
+
         public override VacanciesList getVacancy(FilterParams filter)
         {
             using (var db = new CMSdb(_context))
@@ -2487,5 +2553,7 @@ namespace cms.dbase
 
             }
         }
+
+
     }
 }

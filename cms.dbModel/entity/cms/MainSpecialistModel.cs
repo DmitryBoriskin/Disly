@@ -42,6 +42,7 @@ namespace cms.dbModel.entity.cms
         /// Экспертный совет
         /// </summary>
         public IEnumerable<Guid> EmployeeExpSoviet { get; set; }
+        public  OrgsModel Organization { get; set; }
     }
 
     /// <summary>
