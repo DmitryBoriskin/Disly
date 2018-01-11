@@ -21,6 +21,7 @@ namespace cms.dbModel
         public abstract SiteMapModel getSiteMapByOldId(int id);
         public abstract MaterialsModel getMaterialsByOldId(int id);
 
+        // Карта сайта
         public abstract SiteMapModel getSiteMap(string path, string alias); //, string domain
         public abstract SiteMapModel getSiteMap(string frontSection);
         public abstract string[] getSiteMapSiblings(string path);
@@ -96,9 +97,12 @@ namespace cms.dbModel
         public abstract PhotoModel[] getPhotoList(Guid id);
 
         //Главные специалисты
+        public abstract MainSpecialistModel[] getMainSpecialistList(FilterParams filter);
         public abstract MainSpecialistFrontModel[] getMainSpecialistList();
         public abstract MainSpecialistModel[] getMainSpecialistContacts();
         public abstract OrgsModel getOrgItem(Guid id);
+        
+        
 
         //вакансии
         public abstract VacanciesList getVacancy(FilterParams filter);

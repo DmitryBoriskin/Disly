@@ -2391,22 +2391,40 @@ namespace cms.dbase
         /// Получаем список главных специалистов
         /// </summary>
         /// <returns></returns>
-        public override MainSpecialistFrontModel[] getMainSpecialistList()
+        public override MainSpecialistModel[] getMainSpecialistList(FilterParams filter)
         {
             using (var db = new CMSdb(_context))
             {
-                var query = (from ms in db.content_main_specialistss
-                             join s in db.cms_sitess on ms.id equals s.f_content into s2
-                             from s in s2.DefaultIfEmpty()
-                             select new MainSpecialistFrontModel
-                             {
-                                 Id = ms.id,
-                                 Name = ms.c_name,
-                                 Domain = s.c_alias
-                             });
+                //var query = (from ms in db.content_main_specialistss
+                //             join s in db.cms_sitess on ms.id equals s.f_content into s2
+                //             from s in s2.DefaultIfEmpty()
+                //             select new MainSpecialistModel
+                //             {
+                //                 Id = ms.id,
+                //                 Name = ms.c_name,
+                //                 Desc = ms.c_desc,
+                //             }
+                //    );
 
-                if (!query.Any()) return null;
-                return query.ToArray();
+                var query = db.content_main_specialistss.AsQueryable();
+
+                if (!string.IsNullOrWhiteSpace(filter.SearchText))
+                {
+                    query = query
+                        .Where(w => w.c_name.ToLower()
+                        .Contains(filter.SearchText.ToLower()));
+                }
+                var data = query.Select(ms => new MainSpecialistModel()
+                {
+                    Id = ms.id,
+                    Name = ms.c_name,
+                    Desc = ms.c_desc,
+                });
+
+                if (data.Any()) 
+                    data.ToArray();
+
+                return null;
             }
         }
 

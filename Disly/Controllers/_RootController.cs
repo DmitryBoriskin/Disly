@@ -53,11 +53,11 @@ namespace Disly.Controllers
             string UrlPath = Request.Path;
             if (UrlPath.LastIndexOf("/") > 0 && UrlPath.LastIndexOf("/") == UrlPath.Length - 1) UrlPath = UrlPath.Substring(0, UrlPath.Length - 1);
 
-            string _path = UrlPath.Substring(0, UrlPath.LastIndexOf("/") + 1);
+            string _path = (UrlPath.LastIndexOf("/")==0) ? UrlPath.Substring(1, UrlPath.Length-1) : UrlPath.Substring(0, UrlPath.LastIndexOf("/") + 1);
             string _alias = UrlPath.Substring(UrlPath.LastIndexOf("/") + 1);
             #endregion
-            currentPage = _repository.getSiteMap(_path, _alias); //, Domain
-
+            //currentPage = _repository.getSiteMap(_path, _alias); //, Domain
+            currentPage = _repository.getSiteMap(_path);
 
             ControllerName = filterContext.RouteData.Values["Controller"].ToString().ToLower();
             ActionName = filterContext.RouteData.Values["Action"].ToString().ToLower();

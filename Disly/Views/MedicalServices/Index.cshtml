@@ -5,7 +5,7 @@
 
         <h1>Медицинские услуги</h1>
 
-        @Html.Partial("part/nav")
+        @Html.Partial("part/nav", Model)
 
         <div class="row">
             @if (Model.MedicalServices != null && string.IsNullOrEmpty(Model.Type))

@@ -134,7 +134,6 @@ namespace Disly
                namespaces: new string[] { "Disly.Controllers" }
             );
 
-
             // Структура
             routes.MapRoute(
                name: "Structure",
@@ -165,6 +164,13 @@ namespace Disly
                defaults: new { controller = "Doctors", action = "Item" }
             );
 
+            // Эксперты, главные специалисты
+            routes.MapRoute(
+              name: "Experts",
+              url: "Experts/",
+              defaults: new { controller = "Experts", action = "Index" }
+           );
+
             // Главные специалисты 
             routes.MapRoute(
                name: "MainSpecialists",
@@ -183,7 +189,6 @@ namespace Disly
                url: "Events/{num}/{alias}",
                defaults: new { controller = "EventsFront", action = "Item", alias = UrlParameter.Optional }
             );
-                      
 
             // Контакты
             routes.MapRoute(
