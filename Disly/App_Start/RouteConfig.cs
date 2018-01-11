@@ -197,6 +197,14 @@ namespace Disly
                defaults: new { controller = "Contacts", action = "Index" }
             );
 
+
+            // Контакты
+            routes.MapRoute(
+               name: "TestContacts",
+               url: "TestContacts/",
+               defaults: new { controller = "TestContacts", action = "Index" }
+            );
+
             // как нас найти findus
             routes.MapRoute(
                name: "findus",

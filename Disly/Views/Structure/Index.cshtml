@@ -35,7 +35,13 @@
                     <div class="child">
                         @foreach (var item in Model.Structures)
                         {
-                            <div class="child_link"><span>—</span><a href="/structure/@item.Num">@item.Title</a></div>
+                            <div class="child_link">
+                                <span>—</span>
+                                @{
+                                    string _title = (item.TitleShort != null) ? item.TitleShort : item.Title;
+                                }
+                                <a href="/structure/@item.Num">@_title</a>
+                            </div>
                         }
                     </div>
             }

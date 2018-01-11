@@ -583,6 +583,7 @@ namespace cms.dbase
                         Id = s.id,
                         OrgId = s.f_ord,
                         Title = s.c_title,
+                        TitleShort=s.c_title_short,
                         Adress = s.c_adress,
                         GeopointX = s.n_geopoint_x,
                         GeopointY = s.n_geopoint_y,
@@ -827,7 +828,8 @@ namespace cms.dbase
                     id = IdStructure,
                     f_ord = OrgId,
                     n_sort = MaxSort,
-                    c_title = insertStructure.Title,
+                    c_title = insertStructure.Title, 
+                    c_title_short= insertStructure.TitleShort,
                     c_adress = insertStructure.Adress,
                     c_phone = insertStructure.PhoneReception,
                     c_fax = insertStructure.Fax,
@@ -893,6 +895,7 @@ namespace cms.dbase
                     throw new Exception("Запись с таким Id не существует");
                 }
                 cdStructur.c_title = updStructure.Title;
+                cdStructur.c_title_short = updStructure.TitleShort;
                 cdStructur.c_adress = updStructure.Adress;
                 cdStructur.n_geopoint_x = updStructure.GeopointX;
                 cdStructur.n_geopoint_y = updStructure.GeopointY;

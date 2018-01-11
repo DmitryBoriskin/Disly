@@ -21,6 +21,7 @@
         @Html.Partial("part/bread")
         @Html.Hidden("orgid", orgid)
         @Html.TextBoxFor(m => m.StructureItem.Title, new { required = "", type = "text", maxlength = "256", title = "Название подразделения" })
+        @Html.TextBoxFor(m => m.StructureItem.TitleShort, new {type = "text", maxlength = "256", title = "Короткое название" })
    
         <div class="group-block open" title="Адрес">
             @Html.TextBoxFor(m => m.StructureItem.Adress, new { type = "text", maxlength = "512", title = "Адрес организации:" })
