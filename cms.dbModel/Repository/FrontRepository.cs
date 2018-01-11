@@ -89,15 +89,19 @@ namespace cms.dbModel
         //Attached Documents
         public abstract DocumentsModel[] getAttachDocuments(Guid id);
 
-        // события
+        //события
         public abstract EventsList getEvents(FilterParams filter);
         public abstract EventsModel getEvent(int num, string alias);
 
         //фотоальбом
         public abstract PhotoModel[] getPhotoList(Guid id);
 
-        // Главные специалисты
+        //Главные специалисты
         public abstract MainSpecialistModel[] getMainSpecialistList(FilterParams filter);
+        public abstract MainSpecialistModel[] getMainSpecialistContacts();
+        public abstract OrgsModel getOrgItem(Guid id);
+        
+        
         public abstract MainSpecialistModel getMainSpecialistItem(Guid id);
 
         //вакансии
