@@ -2446,7 +2446,7 @@ namespace cms.dbase
                                                 (n,m)=>m
                                                 )
                                           .Select(s=>new MainSpecialistModel() {
-                                              Name= s.c_surname + s.c_name + s.c_patronymic,                                               
+                                              Name= s.c_surname + s.c_name + s.c_patronymic,
                                               Organization = getOrgItem(s.fkcontentpeopleorglinks.Select(ss=>ss.f_org).Single())
                                           });
                 if (query.Any())

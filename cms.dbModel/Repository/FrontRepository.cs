@@ -97,8 +97,7 @@ namespace cms.dbModel
         public abstract PhotoModel[] getPhotoList(Guid id);
 
         //Главные специалисты
-        public abstract MainSpecialistModel[] getMainSpecialistList(FilterParams filter);
-        public abstract MainSpecialistFrontModel[] getMainSpecialistList();
+        public abstract MainSpecialistModel[] getMainSpecialistList(FilterParams filter);        
         public abstract MainSpecialistModel[] getMainSpecialistContacts();
         public abstract OrgsModel getOrgItem(Guid id);
         
