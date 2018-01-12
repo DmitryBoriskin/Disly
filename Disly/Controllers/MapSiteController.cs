@@ -7,13 +7,13 @@ namespace Disly.Controllers
 {
     public class MapSiteController : RootController
     {
-        private MapSiteViewModel model;
+        private SiteMapViewModel model;
 
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             base.OnActionExecuting(filterContext);
 
-            model = new MapSiteViewModel
+            model = new SiteMapViewModel
             {
                 SitesInfo = siteModel,
                 SiteMapArray = siteMapArray,

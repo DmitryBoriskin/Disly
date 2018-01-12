@@ -97,11 +97,14 @@ namespace cms.dbModel
         public abstract PhotoModel[] getPhotoList(Guid id);
 
         //Главные специалисты
+
         public abstract MainSpecialistModel[] getMainSpecialistList(FilterParams filter);        
+
         public abstract MainSpecialistModel[] getMainSpecialistContacts();
         public abstract OrgsModel getOrgItem(Guid id);
         
         
+        public abstract MainSpecialistModel getMainSpecialistItem(Guid id);
 
         //вакансии
         public abstract VacanciesList getVacancy(FilterParams filter);

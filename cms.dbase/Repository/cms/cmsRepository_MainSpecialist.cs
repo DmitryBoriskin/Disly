@@ -139,12 +139,12 @@ namespace cms.dbase
                                              join m in db.content_main_specialistss
                                              on l.f_main_specialist equals m.id
                                              where (l.f_main_specialist.Equals(s.id) && l.f_type.Equals("main"))
-                                             select l.f_employee).ToArray(),
+                                             select l.f_people).ToArray(),
                         EmployeeExpSoviet = (from l in db.content_main_specialist_employees_links
                                              join m in db.content_main_specialistss
                                              on l.f_main_specialist equals m.id
                                              where (l.f_main_specialist.Equals(s.id) && l.f_type.Equals("soviet"))
-                                             select l.f_employee).ToArray()
+                                             select l.f_people).ToArray()
                     });
 
                 if (!query.Any()) return null;
@@ -262,7 +262,7 @@ namespace cms.dbase
                     {
                         db.content_main_specialist_employees_links
                             .Value(v => v.f_main_specialist, item.Id)
-                            .Value(v => v.f_employee, m)
+                            .Value(v => v.f_people, m)
                             .Value(v => v.f_type, "main")
                             .Insert();
                     }
@@ -275,7 +275,7 @@ namespace cms.dbase
                     {
                         db.content_main_specialist_employees_links
                             .Value(v => v.f_main_specialist, item.Id)
-                            .Value(v => v.f_employee, s)
+                            .Value(v => v.f_people, s)
                             .Value(v => v.f_type, "soviet")
                             .Insert();
                     }

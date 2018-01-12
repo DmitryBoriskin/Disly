@@ -166,9 +166,9 @@ namespace Disly
 
             // Эксперты, главные специалисты
             routes.MapRoute(
-              name: "Experts",
-              url: "Experts/",
-              defaults: new { controller = "Experts", action = "Index" }
+              name: "SpecStructure",
+              url: "SpecStructure/",
+              defaults: new { controller = "SpecStructure", action = "Index" }
            );
 
             // Главные специалисты 

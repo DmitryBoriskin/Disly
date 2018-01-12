@@ -49,7 +49,7 @@ namespace Disly.Controllers
             }
 
             //views/
-            _ViewName = _ViewName.ToLower().Replace("views/", "views/portal/")
+            //_ViewName = _ViewName.ToLower().Replace("views/", "views/portal/");
             return View(_ViewName, model);
         }
     }
