@@ -36,7 +36,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>12/28/2017 09:23:51</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Banners/Index.cshtml">
-      <publishTime>08/12/2017 17:18:15</publishTime>
+      <publishTime>12/08/2017 17:18:15</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Banners/Item.cshtml">
       <publishTime>01/10/2018 10:55:18</publishTime>
@@ -69,10 +69,10 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>09/27/2017 09:21:44</publishTime>
     </File>
     <File Include="Areas/Admin/Views/MainSpecialist/Index.cshtml">
-      <publishTime>01/12/2017 12:16:20</publishTime>
+      <publishTime>12/01/2017 12:16:20</publishTime>
     </File>
     <File Include="Areas/Admin/Views/MainSpecialist/Item.cshtml">
-      <publishTime>05/12/2017 11:56:45</publishTime>
+      <publishTime>12/05/2017 11:56:45</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Materials/Index.cshtml">
       <publishTime>12/15/2017 10:04:23</publishTime>
@@ -81,10 +81,10 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>01/10/2018 10:55:18</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Materials/Orgs.cshtml">
-      <publishTime>08/11/2017 16:47:41</publishTime>
+      <publishTime>11/08/2017 16:47:41</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Materials/OrgsSaved.cshtml">
-      <publishTime>08/11/2017 16:47:41</publishTime>
+      <publishTime>11/08/2017 16:47:41</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Orgs/Administrativ.cshtml">
       <publishTime>01/10/2018 10:55:18</publishTime>
@@ -93,10 +93,10 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>12/20/2017 13:33:18</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Orgs/Index.cshtml">
-      <publishTime>01/12/2017 12:16:20</publishTime>
+      <publishTime>12/01/2017 12:16:20</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Orgs/Item.cshtml">
-      <publishTime>01/10/2018 10:55:18</publishTime>
+      <publishTime>01/12/2018 15:08:49</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Orgs/Ovp.cshtml">
       <publishTime>01/09/2018 11:49:53</publishTime>
@@ -105,16 +105,16 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>09/29/2017 13:26:05</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Orgs/Structure.cshtml">
-      <publishTime>12/14/2017 17:14:47</publishTime>
+      <publishTime>01/12/2018 15:08:59</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Person/Index.cshtml">
-      <publishTime>01/12/2017 12:16:20</publishTime>
+      <publishTime>12/01/2017 12:16:20</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Person/Item.cshtml">
       <publishTime>01/10/2018 10:55:18</publishTime>
     </File>
     <File Include="Areas/Admin/Views/PhotoAlbums/Index.cshtml">
-      <publishTime>05/12/2017 11:56:45</publishTime>
+      <publishTime>12/05/2017 11:56:45</publishTime>
     </File>
     <File Include="Areas/Admin/Views/PhotoAlbums/Item.cshtml">
       <publishTime>01/10/2018 10:55:18</publishTime>
@@ -123,10 +123,10 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>11/30/2017 11:31:06</publishTime>
     </File>
     <File Include="Areas/Admin/Views/PortalUsers/Item.cshtml">
-      <publishTime>11/12/2017 13:13:58</publishTime>
+      <publishTime>12/11/2017 13:13:58</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Services/ChangePass.cshtml">
-      <publishTime>11/12/2017 15:57:45</publishTime>
+      <publishTime>12/11/2017 15:57:45</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Services/GetFile.cshtml">
       <publishTime>09/28/2017 10:45:20</publishTime>
@@ -162,7 +162,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>12/14/2017 16:17:26</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Shared/Modal/Success.cshtml">
-      <publishTime>08/11/2017 16:47:41</publishTime>
+      <publishTime>11/08/2017 16:47:41</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Shared/Partial/BreadCrumbSiteMap.cshtml">
       <publishTime>09/29/2017 13:26:05</publishTime>
@@ -204,13 +204,13 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>12/28/2017 09:23:51</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Sites/Master.cshtml">
-      <publishTime>05/12/2017 11:56:45</publishTime>
+      <publishTime>12/05/2017 11:56:45</publishTime>
     </File>
     <File Include="Areas/Admin/Views/SiteSection/Index.cshtml">
-      <publishTime>07/12/2017 17:09:05</publishTime>
+      <publishTime>12/07/2017 17:09:05</publishTime>
     </File>
     <File Include="Areas/Admin/Views/SiteSection/Item.cshtml">
-      <publishTime>11/12/2017 13:12:25</publishTime>
+      <publishTime>12/11/2017 13:12:25</publishTime>
     </File>
     <File Include="Areas/Admin/Views/SiteSettings/Index.cshtml">
       <publishTime>01/10/2018 10:55:18</publishTime>
@@ -219,7 +219,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>11/14/2017 10:21:06</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Users/Item.cshtml">
-      <publishTime>11/12/2017 13:12:25</publishTime>
+      <publishTime>12/11/2017 13:12:25</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Vacancy/Index.cshtml">
       <publishTime>12/18/2017 13:59:50</publishTime>
@@ -249,25 +249,25 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>09/27/2017 09:21:45</publishTime>
     </File>
     <File Include="bin/cms.dbase.dll">
-      <publishTime>01/12/2018 10:39:05</publishTime>
+      <publishTime>01/15/2018 14:56:26</publishTime>
     </File>
     <File Include="bin/cms.dbase.dll.config">
       <publishTime>09/27/2017 09:21:45</publishTime>
     </File>
     <File Include="bin/cms.dbase.pdb">
-      <publishTime>01/12/2018 10:39:05</publishTime>
+      <publishTime>01/15/2018 14:56:26</publishTime>
     </File>
     <File Include="bin/cms.dbModel.dll">
-      <publishTime>01/12/2018 10:39:04</publishTime>
+      <publishTime>01/15/2018 14:56:25</publishTime>
     </File>
     <File Include="bin/cms.dbModel.pdb">
-      <publishTime>01/12/2018 10:39:04</publishTime>
+      <publishTime>01/15/2018 14:56:25</publishTime>
     </File>
     <File Include="bin/Disly.dll">
-      <publishTime>01/12/2018 10:39:05</publishTime>
+      <publishTime>01/15/2018 15:37:28</publishTime>
     </File>
     <File Include="bin/Disly.pdb">
-      <publishTime>01/12/2018 10:39:05</publishTime>
+      <publishTime>01/15/2018 15:37:28</publishTime>
     </File>
     <File Include="bin/EntityFramework.dll">
       <publishTime>09/27/2017 09:21:45</publishTime>
@@ -294,7 +294,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>01/28/2015 04:04:40</publishTime>
     </File>
     <File Include="bin/ru/System.Web.Mvc.resources.dll">
-      <publishTime>01/10/2013 20:56:22</publishTime>
+      <publishTime>10/01/2013 20:56:22</publishTime>
     </File>
     <File Include="bin/ru/System.Web.Razor.resources.dll">
       <publishTime>01/28/2015 04:02:40</publishTime>
@@ -348,7 +348,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>11/29/2017 15:24:31</publishTime>
     </File>
     <File Include="Content/css/styles.css">
-      <publishTime>01/11/2018 09:43:03</publishTime>
+      <publishTime>01/12/2018 15:07:43</publishTime>
     </File>
     <File Include="Content/css/styles_login.css">
       <publishTime>09/27/2017 09:21:44</publishTime>
@@ -370,6 +370,12 @@ by editing this MSBuild file. In order to learn more about this please visit htt
     </File>
     <File Include="Content/css/theme/green.less">
       <publishTime>12/28/2017 10:20:31</publishTime>
+    </File>
+    <File Include="Content/css/theme/green_portal.css">
+      <publishTime>01/15/2018 12:14:59</publishTime>
+    </File>
+    <File Include="Content/css/theme/green_portal.less">
+      <publishTime>01/15/2018 11:47:15</publishTime>
     </File>
     <File Include="Content/css/theme/purple.css">
       <publishTime>12/28/2017 10:21:34</publishTime>
@@ -399,7 +405,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>09/27/2017 09:21:44</publishTime>
     </File>
     <File Include="Content/decor/first/color.css">
-      <publishTime>08/11/2017 16:47:41</publishTime>
+      <publishTime>11/08/2017 16:47:41</publishTime>
     </File>
     <File Include="Content/decor/first/main.css">
       <publishTime>11/24/2017 13:49:17</publishTime>
@@ -408,7 +414,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>09/27/2017 09:21:44</publishTime>
     </File>
     <File Include="Content/fonts/fontello/fontello.css">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/fonts/fontello/fontello.eot">
       <publishTime>09/27/2017 09:21:44</publishTime>
@@ -471,85 +477,85 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>11/29/2017 11:34:14</publishTime>
     </File>
     <File Include="Content/fonts/PtSans/pts55f.woff">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/fonts/PtSans/pts55f.woff2">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/fonts/PtSans/pts56f.woff">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/fonts/PtSans/pts56f.woff2">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/fonts/PtSans/pts75f.woff">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/fonts/PtSans/pts75f.woff2">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/fonts/PtSans/pts76f.woff">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/fonts/PtSans/pts76f.woff2">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/fonts/PtSans/ptsans.css">
       <publishTime>11/29/2017 15:24:31</publishTime>
     </File>
     <File Include="Content/fonts/PtSansNarrow/PTN57F_W.eot">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/fonts/PtSansNarrow/PTN57F_W.svg">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/fonts/PtSansNarrow/PTN57F_W.ttf">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/fonts/PtSansNarrow/PTN57F_W.woff">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/fonts/PtSansNarrow/PTN77F_W.eot">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/fonts/PtSansNarrow/PTN77F_W.svg">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/fonts/PtSansNarrow/PTN77F_W.ttf">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/fonts/PtSansNarrow/PTN77F_W.woff">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/fonts/PtSansNarrow/ptsansnarrow.css">
-      <publishTime>08/11/2017 16:47:41</publishTime>
+      <publishTime>11/08/2017 16:47:41</publishTime>
     </File>
     <File Include="Content/fonts/PtSerif/ptf55f-webfont.woff">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/fonts/PtSerif/ptf55f-webfont.woff2">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/fonts/PtSerif/ptf56f-webfont.woff">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/fonts/PtSerif/ptf56f-webfont.woff2">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/fonts/PtSerif/ptf75f-webfont.woff">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/fonts/PtSerif/ptf75f-webfont.woff2">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/fonts/PtSerif/ptf76f-webfont.woff">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/fonts/PtSerif/ptf76f-webfont.woff2">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/fonts/PtSerif/ptserif.css">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/fonts/raleway/raleway-regular-webfont.svg">
       <publishTime>09/28/2017 10:45:20</publishTime>
@@ -570,88 +576,88 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>09/27/2017 09:21:44</publishTime>
     </File>
     <File Include="Content/fonts/Roboto/roboto-italic_4-webfont.svg">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/fonts/Roboto/roboto-italic_4-webfont.woff">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/fonts/Roboto/roboto-italic_4-webfont.woff2">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/fonts/Roboto/roboto-mediumitalic_4-webfont.svg">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/fonts/Roboto/roboto-mediumitalic_4-webfont.woff">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/fonts/Roboto/roboto-mediumitalic_4-webfont.woff2">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/fonts/Roboto/roboto-medium_4-webfont.svg">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/fonts/Roboto/roboto-medium_4-webfont.woff">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/fonts/Roboto/roboto-medium_4-webfont.woff2">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/fonts/Roboto/roboto-regular_4-webfont.svg">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/fonts/Roboto/roboto-regular_4-webfont.woff">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/fonts/Roboto/roboto-regular_4-webfont.woff2">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/fonts/Roboto/roboto.css">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/fonts/RobotoSlab/robotoslab.css">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/fonts/RobotoSlab/robotoslabbold-webfont.svg">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/fonts/RobotoSlab/robotoslabbold-webfont.woff">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/fonts/RobotoSlab/robotoslabbold-webfont.woff2">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/fonts/RobotoSlab/robotoslablight-webfont.svg">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/fonts/RobotoSlab/robotoslablight-webfont.woff">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/fonts/RobotoSlab/robotoslablight-webfont.woff2">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/fonts/RobotoSlab/robotoslabregular-webfont.svg">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/fonts/RobotoSlab/robotoslabregular-webfont.woff">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/fonts/RobotoSlab/robotoslabregular-webfont.woff2">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/fonts/themify/themify-icons.css">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/fonts/themify/themify.eot">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/fonts/themify/themify.svg">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/fonts/themify/themify.ttf">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/fonts/themify/themify.woff">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/fonts/Ubuntu/ubuntu_300.eot">
       <publishTime>09/27/2017 09:21:44</publishTime>
@@ -774,37 +780,37 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>09/27/2017 09:21:44</publishTime>
     </File>
     <File Include="Content/img/asoft_logo.png">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/img/calendar-logo.png">
-      <publishTime>07/11/2017 16:28:58</publishTime>
+      <publishTime>11/07/2017 16:28:58</publishTime>
     </File>
     <File Include="Content/img/doctor.png">
-      <publishTime>08/11/2017 16:47:41</publishTime>
+      <publishTime>11/08/2017 16:47:41</publishTime>
     </File>
     <File Include="Content/img/favicon.ico">
-      <publishTime>05/12/2017 15:24:31</publishTime>
+      <publishTime>12/05/2017 15:24:31</publishTime>
     </File>
     <File Include="Content/img/foot_logo.png">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/img/gosuslugi.png">
-      <publishTime>07/11/2017 16:28:58</publishTime>
+      <publishTime>11/07/2017 16:28:58</publishTime>
     </File>
     <File Include="Content/img/logo.png">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/img/MapRF.svg">
       <publishTime>09/28/2017 10:45:20</publishTime>
     </File>
     <File Include="Content/img/metrica1.png">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/img/metrica2.png">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/img/minzdrav-logo.png">
-      <publishTime>07/11/2017 16:28:58</publishTime>
+      <publishTime>11/07/2017 16:28:58</publishTime>
     </File>
     <File Include="Content/img/nophoto.jpg">
       <publishTime>09/27/2017 09:21:44</publishTime>
@@ -813,7 +819,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>11/13/2017 10:53:22</publishTime>
     </File>
     <File Include="Content/img/obr-project.png">
-      <publishTime>07/11/2017 16:28:58</publishTime>
+      <publishTime>11/07/2017 16:28:58</publishTime>
     </File>
     <File Include="Content/img/portal_bg.jpg">
       <publishTime>12/13/2017 14:19:20</publishTime>
@@ -831,16 +837,16 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>11/27/2017 11:40:25</publishTime>
     </File>
     <File Include="Content/img/temporal.jpg">
-      <publishTime>08/11/2017 16:47:41</publishTime>
+      <publishTime>11/08/2017 16:47:41</publishTime>
     </File>
     <File Include="Content/img/youtube-ico.png">
       <publishTime>11/27/2017 14:37:59</publishTime>
     </File>
     <File Include="Content/js/menu.js">
-      <publishTime>11/12/2017 13:12:25</publishTime>
+      <publishTime>12/11/2017 13:12:25</publishTime>
     </File>
     <File Include="Content/js/script.js">
-      <publishTime>12/13/2017 13:35:24</publishTime>
+      <publishTime>01/15/2018 10:23:16</publishTime>
     </File>
     <File Include="Content/plugins/bootstrap/config.json">
       <publishTime>09/28/2017 10:45:20</publishTime>
@@ -855,7 +861,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>09/28/2017 10:45:20</publishTime>
     </File>
     <File Include="Content/plugins/bootstrap/css/bootstrap.css">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/bootstrap/css/bootstrap.min.css">
       <publishTime>11/29/2017 13:57:49</publishTime>
@@ -876,10 +882,10 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>09/27/2017 09:21:44</publishTime>
     </File>
     <File Include="Content/plugins/bootstrap/js/bootstrap-select.js">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/bootstrap/js/bootstrap-toggle.js">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/bootstrap/js/bootstrap.js">
       <publishTime>09/28/2017 10:45:20</publishTime>
@@ -888,22 +894,22 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>09/28/2017 10:45:20</publishTime>
     </File>
     <File Include="Content/plugins/datatables/dataTables.bootstrap.min.css">
-      <publishTime>10/11/2017 08:43:06</publishTime>
+      <publishTime>11/10/2017 08:43:06</publishTime>
     </File>
     <File Include="Content/plugins/datatables/dataTables.bootstrap.min.js">
-      <publishTime>10/11/2017 08:43:06</publishTime>
+      <publishTime>11/10/2017 08:43:06</publishTime>
     </File>
     <File Include="Content/plugins/datatables/datatables.css">
-      <publishTime>10/11/2017 08:43:06</publishTime>
+      <publishTime>11/10/2017 08:43:06</publishTime>
     </File>
     <File Include="Content/plugins/datatables/datatables.js">
-      <publishTime>10/11/2017 08:43:06</publishTime>
+      <publishTime>11/10/2017 08:43:06</publishTime>
     </File>
     <File Include="Content/plugins/datatables/datatables.min.css">
-      <publishTime>10/11/2017 08:43:06</publishTime>
+      <publishTime>11/10/2017 08:43:06</publishTime>
     </File>
     <File Include="Content/plugins/datatables/datatables.min.js">
-      <publishTime>10/11/2017 08:43:06</publishTime>
+      <publishTime>11/10/2017 08:43:06</publishTime>
     </File>
     <File Include="Content/plugins/Disly/DislyControls.css">
       <publishTime>11/15/2017 08:34:59</publishTime>
@@ -912,352 +918,352 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>01/10/2018 10:55:18</publishTime>
     </File>
     <File Include="Content/plugins/icheck/icheck.js">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/icheck/icheck.min.js">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/icheck/skins/all.css">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/icheck/skins/flat/aero%402x.png">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/icheck/skins/flat/aero.css">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/icheck/skins/flat/aero.png">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/icheck/skins/flat/blue%402x.png">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/icheck/skins/flat/blue.css">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/icheck/skins/flat/blue.png">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/icheck/skins/flat/flat%402x.png">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/icheck/skins/flat/flat.css">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/icheck/skins/flat/flat.png">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/icheck/skins/flat/green%402x.png">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/icheck/skins/flat/green.css">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/icheck/skins/flat/green.png">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/icheck/skins/flat/grey%402x.png">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/icheck/skins/flat/grey.css">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/icheck/skins/flat/grey.png">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/icheck/skins/flat/orange%402x.png">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/icheck/skins/flat/orange.css">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/icheck/skins/flat/orange.png">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/icheck/skins/flat/pink%402x.png">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/icheck/skins/flat/pink.css">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/icheck/skins/flat/pink.png">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/icheck/skins/flat/purple%402x.png">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/icheck/skins/flat/purple.css">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/icheck/skins/flat/purple.png">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/icheck/skins/flat/red%402x.png">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/icheck/skins/flat/red.css">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/icheck/skins/flat/red.png">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/icheck/skins/flat/yellow%402x.png">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/icheck/skins/flat/yellow.css">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/icheck/skins/flat/yellow.png">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/icheck/skins/flat/_all.css">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/icheck/skins/futurico/futurico%402x.png">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/icheck/skins/futurico/futurico.css">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/icheck/skins/futurico/futurico.png">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/icheck/skins/line/aero.css">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/icheck/skins/line/blue.css">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/icheck/skins/line/green.css">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/icheck/skins/line/grey.css">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/icheck/skins/line/line%402x.png">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/icheck/skins/line/line.css">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/icheck/skins/line/line.png">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/icheck/skins/line/orange.css">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/icheck/skins/line/pink.css">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/icheck/skins/line/purple.css">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/icheck/skins/line/red.css">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/icheck/skins/line/yellow.css">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/icheck/skins/line/_all.css">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/icheck/skins/minimal/aero%402x.png">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/icheck/skins/minimal/aero.css">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/icheck/skins/minimal/aero.png">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/icheck/skins/minimal/blue%402x.png">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/icheck/skins/minimal/blue.css">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/icheck/skins/minimal/blue.png">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/icheck/skins/minimal/green%402x.png">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/icheck/skins/minimal/green.css">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/icheck/skins/minimal/green.png">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/icheck/skins/minimal/grey%402x.png">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/icheck/skins/minimal/grey.css">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/icheck/skins/minimal/grey.png">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/icheck/skins/minimal/minimal%402x.png">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/icheck/skins/minimal/minimal.css">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/icheck/skins/minimal/minimal.png">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/icheck/skins/minimal/orange%402x.png">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/icheck/skins/minimal/orange.css">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/icheck/skins/minimal/orange.png">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/icheck/skins/minimal/pink%402x.png">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/icheck/skins/minimal/pink.css">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/icheck/skins/minimal/pink.png">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/icheck/skins/minimal/purple%402x.png">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/icheck/skins/minimal/purple.css">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/icheck/skins/minimal/purple.png">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/icheck/skins/minimal/red%402x.png">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/icheck/skins/minimal/red.css">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/icheck/skins/minimal/red.png">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/icheck/skins/minimal/yellow%402x.png">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/icheck/skins/minimal/yellow.css">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/icheck/skins/minimal/yellow.png">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/icheck/skins/minimal/_all.css">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/icheck/skins/polaris/polaris%402x.png">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/icheck/skins/polaris/polaris.css">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/icheck/skins/polaris/polaris.png">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/icheck/skins/square/aero%402x.png">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/icheck/skins/square/aero.css">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/icheck/skins/square/aero.png">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/icheck/skins/square/blue%402x.png">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/icheck/skins/square/blue.css">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/icheck/skins/square/blue.png">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/icheck/skins/square/green%402x.png">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/icheck/skins/square/green.css">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/icheck/skins/square/green.png">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/icheck/skins/square/grey%402x.png">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/icheck/skins/square/grey.css">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/icheck/skins/square/grey.png">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/icheck/skins/square/orange%402x.png">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/icheck/skins/square/orange.css">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/icheck/skins/square/orange.png">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/icheck/skins/square/pink%402x.png">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/icheck/skins/square/pink.css">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/icheck/skins/square/pink.png">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/icheck/skins/square/purple%402x.png">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/icheck/skins/square/purple.css">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/icheck/skins/square/purple.png">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/icheck/skins/square/red%402x.png">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/icheck/skins/square/red.css">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/icheck/skins/square/red.png">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/icheck/skins/square/square%402x.png">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/icheck/skins/square/square.css">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/icheck/skins/square/square.png">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/icheck/skins/square/yellow%402x.png">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/icheck/skins/square/yellow.css">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/icheck/skins/square/yellow.png">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/icheck/skins/square/_all.css">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/jquery/jquery-3.2.1.min.js">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Content/plugins/jquery/jquery.cookie.js">
       <publishTime>09/28/2017 10:45:20</publishTime>
@@ -1305,187 +1311,187 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>11/29/2017 15:24:31</publishTime>
     </File>
     <File Include="Content/plugins/select2/css/select2.css">
-      <publishTime>08/11/2017 16:47:41</publishTime>
+      <publishTime>11/08/2017 16:47:41</publishTime>
     </File>
     <File Include="Content/plugins/select2/css/select2.min.css">
-      <publishTime>08/11/2017 16:47:41</publishTime>
+      <publishTime>11/08/2017 16:47:41</publishTime>
     </File>
     <File Include="Content/plugins/select2/css/select2_custom.css">
-      <publishTime>08/11/2017 16:47:41</publishTime>
+      <publishTime>11/08/2017 16:47:41</publishTime>
     </File>
     <File Include="Content/plugins/select2/i18n/af.js">
-      <publishTime>08/11/2017 16:47:41</publishTime>
+      <publishTime>11/08/2017 16:47:41</publishTime>
     </File>
     <File Include="Content/plugins/select2/i18n/ar.js">
-      <publishTime>08/11/2017 16:47:41</publishTime>
+      <publishTime>11/08/2017 16:47:41</publishTime>
     </File>
     <File Include="Content/plugins/select2/i18n/az.js">
-      <publishTime>08/11/2017 16:47:41</publishTime>
+      <publishTime>11/08/2017 16:47:41</publishTime>
     </File>
     <File Include="Content/plugins/select2/i18n/bg.js">
-      <publishTime>08/11/2017 16:47:41</publishTime>
+      <publishTime>11/08/2017 16:47:41</publishTime>
     </File>
     <File Include="Content/plugins/select2/i18n/bs.js">
-      <publishTime>08/11/2017 16:47:41</publishTime>
+      <publishTime>11/08/2017 16:47:41</publishTime>
     </File>
     <File Include="Content/plugins/select2/i18n/ca.js">
-      <publishTime>08/11/2017 16:47:41</publishTime>
+      <publishTime>11/08/2017 16:47:41</publishTime>
     </File>
     <File Include="Content/plugins/select2/i18n/cs.js">
-      <publishTime>08/11/2017 16:47:41</publishTime>
+      <publishTime>11/08/2017 16:47:41</publishTime>
     </File>
     <File Include="Content/plugins/select2/i18n/da.js">
-      <publishTime>08/11/2017 16:47:41</publishTime>
+      <publishTime>11/08/2017 16:47:41</publishTime>
     </File>
     <File Include="Content/plugins/select2/i18n/de.js">
-      <publishTime>08/11/2017 16:47:41</publishTime>
+      <publishTime>11/08/2017 16:47:41</publishTime>
     </File>
     <File Include="Content/plugins/select2/i18n/dsb.js">
-      <publishTime>08/11/2017 16:47:41</publishTime>
+      <publishTime>11/08/2017 16:47:41</publishTime>
     </File>
     <File Include="Content/plugins/select2/i18n/el.js">
-      <publishTime>08/11/2017 16:47:41</publishTime>
+      <publishTime>11/08/2017 16:47:41</publishTime>
     </File>
     <File Include="Content/plugins/select2/i18n/en.js">
-      <publishTime>08/11/2017 16:47:41</publishTime>
+      <publishTime>11/08/2017 16:47:41</publishTime>
     </File>
     <File Include="Content/plugins/select2/i18n/es.js">
-      <publishTime>08/11/2017 16:47:41</publishTime>
+      <publishTime>11/08/2017 16:47:41</publishTime>
     </File>
     <File Include="Content/plugins/select2/i18n/et.js">
-      <publishTime>08/11/2017 16:47:41</publishTime>
+      <publishTime>11/08/2017 16:47:41</publishTime>
     </File>
     <File Include="Content/plugins/select2/i18n/eu.js">
-      <publishTime>08/11/2017 16:47:41</publishTime>
+      <publishTime>11/08/2017 16:47:41</publishTime>
     </File>
     <File Include="Content/plugins/select2/i18n/fa.js">
-      <publishTime>08/11/2017 16:47:41</publishTime>
+      <publishTime>11/08/2017 16:47:41</publishTime>
     </File>
     <File Include="Content/plugins/select2/i18n/fi.js">
-      <publishTime>08/11/2017 16:47:41</publishTime>
+      <publishTime>11/08/2017 16:47:41</publishTime>
     </File>
     <File Include="Content/plugins/select2/i18n/fr.js">
-      <publishTime>08/11/2017 16:47:41</publishTime>
+      <publishTime>11/08/2017 16:47:41</publishTime>
     </File>
     <File Include="Content/plugins/select2/i18n/gl.js">
-      <publishTime>08/11/2017 16:47:41</publishTime>
+      <publishTime>11/08/2017 16:47:41</publishTime>
     </File>
     <File Include="Content/plugins/select2/i18n/he.js">
-      <publishTime>08/11/2017 16:47:41</publishTime>
+      <publishTime>11/08/2017 16:47:41</publishTime>
     </File>
     <File Include="Content/plugins/select2/i18n/hi.js">
-      <publishTime>08/11/2017 16:47:41</publishTime>
+      <publishTime>11/08/2017 16:47:41</publishTime>
     </File>
     <File Include="Content/plugins/select2/i18n/hr.js">
-      <publishTime>08/11/2017 16:47:41</publishTime>
+      <publishTime>11/08/2017 16:47:41</publishTime>
     </File>
     <File Include="Content/plugins/select2/i18n/hsb.js">
-      <publishTime>08/11/2017 16:47:41</publishTime>
+      <publishTime>11/08/2017 16:47:41</publishTime>
     </File>
     <File Include="Content/plugins/select2/i18n/hu.js">
-      <publishTime>08/11/2017 16:47:41</publishTime>
+      <publishTime>11/08/2017 16:47:41</publishTime>
     </File>
     <File Include="Content/plugins/select2/i18n/hy.js">
-      <publishTime>08/11/2017 16:47:41</publishTime>
+      <publishTime>11/08/2017 16:47:41</publishTime>
     </File>
     <File Include="Content/plugins/select2/i18n/id.js">
-      <publishTime>08/11/2017 16:47:41</publishTime>
+      <publishTime>11/08/2017 16:47:41</publishTime>
     </File>
     <File Include="Content/plugins/select2/i18n/is.js">
-      <publishTime>08/11/2017 16:47:41</publishTime>
+      <publishTime>11/08/2017 16:47:41</publishTime>
     </File>
     <File Include="Content/plugins/select2/i18n/it.js">
-      <publishTime>08/11/2017 16:47:41</publishTime>
+      <publishTime>11/08/2017 16:47:41</publishTime>
     </File>
     <File Include="Content/plugins/select2/i18n/ja.js">
-      <publishTime>08/11/2017 16:47:41</publishTime>
+      <publishTime>11/08/2017 16:47:41</publishTime>
     </File>
     <File Include="Content/plugins/select2/i18n/km.js">
-      <publishTime>08/11/2017 16:47:41</publishTime>
+      <publishTime>11/08/2017 16:47:41</publishTime>
     </File>
     <File Include="Content/plugins/select2/i18n/ko.js">
-      <publishTime>08/11/2017 16:47:41</publishTime>
+      <publishTime>11/08/2017 16:47:41</publishTime>
     </File>
     <File Include="Content/plugins/select2/i18n/lt.js">
-      <publishTime>08/11/2017 16:47:41</publishTime>
+      <publishTime>11/08/2017 16:47:41</publishTime>
     </File>
     <File Include="Content/plugins/select2/i18n/lv.js">
-      <publishTime>08/11/2017 16:47:41</publishTime>
+      <publishTime>11/08/2017 16:47:41</publishTime>
     </File>
     <File Include="Content/plugins/select2/i18n/mk.js">
-      <publishTime>08/11/2017 16:47:41</publishTime>
+      <publishTime>11/08/2017 16:47:41</publishTime>
     </File>
     <File Include="Content/plugins/select2/i18n/ms.js">
-      <publishTime>08/11/2017 16:47:41</publishTime>
+      <publishTime>11/08/2017 16:47:41</publishTime>
     </File>
     <File Include="Content/plugins/select2/i18n/nb.js">
-      <publishTime>08/11/2017 16:47:41</publishTime>
+      <publishTime>11/08/2017 16:47:41</publishTime>
     </File>
     <File Include="Content/plugins/select2/i18n/nl.js">
-      <publishTime>08/11/2017 16:47:41</publishTime>
+      <publishTime>11/08/2017 16:47:41</publishTime>
     </File>
     <File Include="Content/plugins/select2/i18n/pl.js">
-      <publishTime>08/11/2017 16:47:41</publishTime>
+      <publishTime>11/08/2017 16:47:41</publishTime>
     </File>
     <File Include="Content/plugins/select2/i18n/ps.js">
-      <publishTime>08/11/2017 16:47:41</publishTime>
+      <publishTime>11/08/2017 16:47:41</publishTime>
     </File>
     <File Include="Content/plugins/select2/i18n/pt-BR.js">
-      <publishTime>08/11/2017 16:47:41</publishTime>
+      <publishTime>11/08/2017 16:47:41</publishTime>
     </File>
     <File Include="Content/plugins/select2/i18n/pt.js">
-      <publishTime>08/11/2017 16:47:41</publishTime>
+      <publishTime>11/08/2017 16:47:41</publishTime>
     </File>
     <File Include="Content/plugins/select2/i18n/ro.js">
-      <publishTime>08/11/2017 16:47:41</publishTime>
+      <publishTime>11/08/2017 16:47:41</publishTime>
     </File>
     <File Include="Content/plugins/select2/i18n/ru.js">
-      <publishTime>08/11/2017 16:47:41</publishTime>
+      <publishTime>11/08/2017 16:47:41</publishTime>
     </File>
     <File Include="Content/plugins/select2/i18n/sk.js">
-      <publishTime>08/11/2017 16:47:41</publishTime>
+      <publishTime>11/08/2017 16:47:41</publishTime>
     </File>
     <File Include="Content/plugins/select2/i18n/sl.js">
-      <publishTime>08/11/2017 16:47:41</publishTime>
+      <publishTime>11/08/2017 16:47:41</publishTime>
     </File>
     <File Include="Content/plugins/select2/i18n/sr-Cyrl.js">
-      <publishTime>08/11/2017 16:47:41</publishTime>
+      <publishTime>11/08/2017 16:47:41</publishTime>
     </File>
     <File Include="Content/plugins/select2/i18n/sr.js">
-      <publishTime>08/11/2017 16:47:41</publishTime>
+      <publishTime>11/08/2017 16:47:41</publishTime>
     </File>
     <File Include="Content/plugins/select2/i18n/sv.js">
-      <publishTime>08/11/2017 16:47:41</publishTime>
+      <publishTime>11/08/2017 16:47:41</publishTime>
     </File>
     <File Include="Content/plugins/select2/i18n/th.js">
-      <publishTime>08/11/2017 16:47:41</publishTime>
+      <publishTime>11/08/2017 16:47:41</publishTime>
     </File>
     <File Include="Content/plugins/select2/i18n/tr.js">
-      <publishTime>08/11/2017 16:47:41</publishTime>
+      <publishTime>11/08/2017 16:47:41</publishTime>
     </File>
     <File Include="Content/plugins/select2/i18n/uk.js">
-      <publishTime>08/11/2017 16:47:41</publishTime>
+      <publishTime>11/08/2017 16:47:41</publishTime>
     </File>
     <File Include="Content/plugins/select2/i18n/vi.js">
-      <publishTime>08/11/2017 16:47:41</publishTime>
+      <publishTime>11/08/2017 16:47:41</publishTime>
     </File>
     <File Include="Content/plugins/select2/i18n/zh-CN.js">
-      <publishTime>08/11/2017 16:47:41</publishTime>
+      <publishTime>11/08/2017 16:47:41</publishTime>
     </File>
     <File Include="Content/plugins/select2/i18n/zh-TW.js">
-      <publishTime>08/11/2017 16:47:41</publishTime>
+      <publishTime>11/08/2017 16:47:41</publishTime>
     </File>
     <File Include="Content/plugins/select2/select2.full.js">
-      <publishTime>08/11/2017 16:47:41</publishTime>
+      <publishTime>11/08/2017 16:47:41</publishTime>
     </File>
     <File Include="Content/plugins/select2/select2.full.min.js">
-      <publishTime>07/11/2017 13:55:38</publishTime>
+      <publishTime>11/07/2017 13:55:38</publishTime>
     </File>
     <File Include="Content/plugins/select2/select2.js">
-      <publishTime>08/11/2017 16:47:41</publishTime>
+      <publishTime>11/08/2017 16:47:41</publishTime>
     </File>
     <File Include="Content/plugins/select2/select2.min.js">
-      <publishTime>07/11/2017 13:55:38</publishTime>
+      <publishTime>11/07/2017 13:55:38</publishTime>
     </File>
     <File Include="Content/plugins/tinymce/jquery.tinymce.min.js">
       <publishTime>11/22/2017 11:46:04</publishTime>
@@ -1746,7 +1752,10 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>11/22/2017 11:46:04</publishTime>
     </File>
     <File Include="Content/portal/img/bg.jpg">
-      <publishTime>01/12/2018 08:50:56</publishTime>
+      <publishTime>01/12/2018 12:53:42</publishTime>
+    </File>
+    <File Include="Content/portal/img/browse_press.jpg">
+      <publishTime>01/15/2018 12:30:34</publishTime>
     </File>
     <File Include="Content/portal/img/e-reg.jpg">
       <publishTime>01/12/2018 10:06:19</publishTime>
@@ -1754,38 +1763,53 @@ by editing this MSBuild file. In order to learn more about this please visit htt
     <File Include="Content/portal/img/event_calendar.jpg">
       <publishTime>01/12/2018 10:06:19</publishTime>
     </File>
+    <File Include="Content/portal/img/logo.png">
+      <publishTime>01/15/2018 15:33:24</publishTime>
+    </File>
+    <File Include="Content/portal/img/med_logo_footer.jpg">
+      <publishTime>01/15/2018 14:33:18</publishTime>
+    </File>
     <File Include="Content/portal/img/online-consultation.jpg">
       <publishTime>01/12/2018 10:06:19</publishTime>
+    </File>
+    <File Include="Content/portal/img/smi-for-med-chuvashia.jpg">
+      <publishTime>01/15/2018 12:30:34</publishTime>
+    </File>
+    <File Include="Content/portal/img/tv-radio-plot.jpg">
+      <publishTime>01/15/2018 12:30:34</publishTime>
     </File>
     <File Include="Content/portal/img/your-opinion.jpg">
       <publishTime>01/12/2018 10:06:19</publishTime>
     </File>
+    <File Include="Content/portal/img/youtube-med-chuv.jpg">
+      <publishTime>01/15/2018 12:30:35</publishTime>
+    </File>
     <File Include="Content/portal/style.css">
-      <publishTime>01/12/2018 10:24:35</publishTime>
+      <publishTime>01/15/2018 14:56:06</publishTime>
     </File>
     <File Include="favicon.ico">
       <publishTime>09/27/2017 09:21:44</publishTime>
     </File>
     <File Include="fonts/glyphicons-halflings-regular.eot">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="fonts/glyphicons-halflings-regular.svg">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="fonts/glyphicons-halflings-regular.ttf">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="fonts/glyphicons-halflings-regular.woff">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="fonts/glyphicons-halflings-regular.woff2">
-      <publishTime>01/11/2017 08:46:07</publishTime>
+      <publishTime>11/01/2017 08:46:07</publishTime>
     </File>
     <File Include="Global.asax">
       <publishTime>09/27/2017 09:21:44</publishTime>
     </File>
     <File Include="gulpfile.js">
-      <publishTime>12/28/2017 09:55:02</publishTime>
+      <publishTime>01/15/2018 12:14:50</publishTime>
     </File>
     <File Include="package.json">
       <publishTime>11/24/2017 14:19:12</publishTime>
@@ -1794,13 +1818,13 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>11/24/2017 13:55:36</publishTime>
     </File>
     <File Include="scripts/cms/disly_5.js">
-      <publishTime>01/10/2018 16:26:12</publishTime>
+      <publishTime>01/12/2018 15:25:54</publishTime>
     </File>
     <File Include="scripts/cms/disly_5_login.js">
       <publishTime>09/27/2017 09:21:44</publishTime>
     </File>
     <File Include="scripts/cms/disly_5_popup.js">
-      <publishTime>11/12/2017 13:13:58</publishTime>
+      <publishTime>12/11/2017 13:13:58</publishTime>
     </File>
     <File Include="scripts/popUp_script.js">
       <publishTime>11/13/2017 08:14:29</publishTime>
@@ -1815,7 +1839,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>09/27/2017 09:21:44</publishTime>
     </File>
     <File Include="test.html">
-      <publishTime>05/12/2017 08:45:21</publishTime>
+      <publishTime>12/05/2017 08:45:21</publishTime>
     </File>
     <File Include="UC_params.txt">
       <publishTime>01/10/2018 10:55:18</publishTime>
@@ -1827,7 +1851,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>09/27/2017 09:21:44</publishTime>
     </File>
     <File Include="Views/Contacts/Index.cshtml">
-      <publishTime>07/12/2017 09:06:36</publishTime>
+      <publishTime>01/15/2018 15:20:05</publishTime>
     </File>
     <File Include="Views/Contacts/part/administration.cshtml">
       <publishTime>12/14/2017 16:17:26</publishTime>
@@ -1836,13 +1860,13 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>11/29/2017 15:24:31</publishTime>
     </File>
     <File Include="Views/Contacts/part/phone.cshtml">
-      <publishTime>11/12/2017 13:12:25</publishTime>
+      <publishTime>12/11/2017 13:12:25</publishTime>
     </File>
     <File Include="Views/Doctors/Index.cshtml">
-      <publishTime>11/30/2017 08:37:03</publishTime>
+      <publishTime>01/15/2018 15:23:23</publishTime>
     </File>
     <File Include="Views/Doctors/part/item.cshtml">
-      <publishTime>07/12/2017 09:06:36</publishTime>
+      <publishTime>01/15/2018 10:28:33</publishTime>
     </File>
     <File Include="Views/Doctors/part/list.cshtml">
       <publishTime>12/14/2017 16:17:26</publishTime>
@@ -1857,34 +1881,34 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>09/27/2017 09:21:44</publishTime>
     </File>
     <File Include="Views/Error/Index.cshtml">
-      <publishTime>05/12/2017 08:45:21</publishTime>
+      <publishTime>12/05/2017 08:45:21</publishTime>
     </File>
     <File Include="Views/EventsFront/Archive.cshtml">
-      <publishTime>12/12/2017 15:53:11</publishTime>
+      <publishTime>01/15/2018 15:23:36</publishTime>
     </File>
     <File Include="Views/EventsFront/Index.cshtml">
-      <publishTime>12/12/2017 16:14:05</publishTime>
+      <publishTime>01/15/2018 15:23:40</publishTime>
     </File>
     <File Include="Views/EventsFront/Item.cshtml">
-      <publishTime>05/12/2017 08:45:21</publishTime>
+      <publishTime>01/15/2018 15:23:45</publishTime>
     </File>
     <File Include="Views/Feedback/AnswerForm.cshtml">
-      <publishTime>12/19/2017 10:09:14</publishTime>
+      <publishTime>01/15/2018 15:24:22</publishTime>
     </File>
     <File Include="Views/Feedback/AppealList.cshtml">
-      <publishTime>12/29/2017 09:24:03</publishTime>
+      <publishTime>01/15/2018 15:24:22</publishTime>
     </File>
     <File Include="Views/Feedback/Form.cshtml">
-      <publishTime>12/19/2017 10:09:14</publishTime>
+      <publishTime>01/15/2018 15:24:06</publishTime>
     </File>
     <File Include="Views/Feedback/Index.cshtml">
-      <publishTime>12/12/2017 16:14:05</publishTime>
+      <publishTime>01/15/2018 15:24:17</publishTime>
     </File>
     <File Include="Views/Feedback/ReviewList.cshtml">
-      <publishTime>12/28/2017 09:23:51</publishTime>
+      <publishTime>01/15/2018 15:24:22</publishTime>
     </File>
     <File Include="Views/FindUs/Index.cshtml">
-      <publishTime>12/14/2017 16:17:26</publishTime>
+      <publishTime>01/15/2018 15:24:22</publishTime>
     </File>
     <File Include="Views/GeneralSpecialists/Index.cshtml">
       <publishTime>01/11/2018 14:42:40</publishTime>
@@ -1902,28 +1926,34 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>12/18/2017 15:40:18</publishTime>
     </File>
     <File Include="Views/LPU/Index.cshtml">
-      <publishTime>08/12/2017 17:47:11</publishTime>
+      <publishTime>01/15/2018 15:27:21</publishTime>
     </File>
     <File Include="Views/LPU/Nav.cshtml">
       <publishTime>11/29/2017 15:24:31</publishTime>
     </File>
     <File Include="Views/MapSite/Index.cshtml">
-      <publishTime>11/12/2017 16:01:37</publishTime>
+      <publishTime>01/15/2018 15:27:32</publishTime>
     </File>
     <File Include="Views/MedicalServices/Index.cshtml">
-      <publishTime>01/12/2018 08:19:41</publishTime>
+      <publishTime>01/15/2018 15:27:43</publishTime>
     </File>
     <File Include="Views/MedicalServices/part/nav.cshtml">
       <publishTime>12/07/2017 09:06:36</publishTime>
     </File>
+    <File Include="Views/OrgGsMembers/Index.cshtml">
+      <publishTime>01/15/2018 15:27:50</publishTime>
+    </File>
     <File Include="Views/Page/Index.cshtml">
-      <publishTime>01/12/2018 10:38:34</publishTime>
+      <publishTime>01/15/2018 15:28:04</publishTime>
     </File>
     <File Include="Views/PortalDoctors/Index.cshtml">
-      <publishTime>12/12/2017 16:14:05</publishTime>
+      <publishTime>01/15/2018 15:28:11</publishTime>
+    </File>
+    <File Include="Views/PortalGsSites/Index.cshtml">
+      <publishTime>01/15/2018 15:28:22</publishTime>
     </File>
     <File Include="Views/Press/Index.cshtml">
-      <publishTime>12/28/2017 09:23:51</publishTime>
+      <publishTime>01/15/2018 15:28:28</publishTime>
     </File>
     <File Include="Views/Press/part/Item.cshtml">
       <publishTime>01/10/2018 10:55:18</publishTime>
@@ -1935,7 +1965,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>12/13/2017 11:05:47</publishTime>
     </File>
     <File Include="Views/Search/Index.cshtml">
-      <publishTime>05/12/2017 08:45:21</publishTime>
+      <publishTime>01/15/2018 15:28:34</publishTime>
     </File>
     <File Include="Views/Service/Photo.cshtml">
       <publishTime>01/10/2018 10:55:18</publishTime>
@@ -1953,64 +1983,70 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>12/14/2017 08:29:21</publishTime>
     </File>
     <File Include="Views/Shared/part/childtabs.cshtml">
-      <publishTime>07/12/2017 16:00:10</publishTime>
+      <publishTime>12/07/2017 16:00:10</publishTime>
     </File>
     <File Include="Views/Shared/part/nav.cshtml">
       <publishTime>01/12/2018 08:19:41</publishTime>
     </File>
     <File Include="Views/Shared/services/breadcrumbs.cshtml">
-      <publishTime>08/11/2017 15:59:39</publishTime>
+      <publishTime>11/08/2017 15:59:39</publishTime>
     </File>
     <File Include="Views/Shared/services/Pager.cshtml">
-      <publishTime>07/12/2017 09:06:36</publishTime>
+      <publishTime>12/07/2017 09:06:36</publishTime>
     </File>
     <File Include="Views/Shared/_Layout.cshtml">
       <publishTime>12/19/2017 09:55:09</publishTime>
     </File>
+    <File Include="Views/SpecStructure/Index.cshtml">
+      <publishTime>01/15/2018 15:29:04</publishTime>
+    </File>
+    <File Include="Views/SpecStructure/list.cshtml">
+      <publishTime>01/15/2018 10:28:33</publishTime>
+    </File>
     <File Include="Views/Structure/DepartmentItem.cshtml">
-      <publishTime>12/13/2017 13:14:59</publishTime>
+      <publishTime>01/15/2018 15:29:17</publishTime>
     </File>
     <File Include="Views/Structure/Index.cshtml">
-      <publishTime>01/09/2018 12:11:08</publishTime>
+      <publishTime>01/15/2018 15:29:21</publishTime>
     </File>
     <File Include="Views/Structure/Ovp.cshtml">
-      <publishTime>12/15/2017 14:16:08</publishTime>
+      <publishTime>01/15/2018 15:29:25</publishTime>
     </File>
     <File Include="Views/Structure/part/boss_list.cshtml">
       <publishTime>12/13/2017 13:16:53</publishTime>
     </File>
     <File Include="Views/Structure/StructureItem.cshtml">
-      <publishTime>11/30/2017 10:05:08</publishTime>
+      <publishTime>01/15/2018 15:29:29</publishTime>
     </File>
     <File Include="Views/Vacancy/Index.cshtml">
-      <publishTime>12/19/2017 11:26:24</publishTime>
+      <publishTime>01/15/2018 15:29:35</publishTime>
     </File>
     <File Include="Views/Vacancy/Item.cshtml">
-      <publishTime>12/19/2017 10:34:39</publishTime>
+      <publishTime>01/15/2018 15:29:40</publishTime>
     </File>
     <File Include="Views/Vote/Index.cshtml">
-      <publishTime>07/12/2017 09:06:36</publishTime>
+      <publishTime>01/15/2018 15:29:46</publishTime>
     </File>
     <File Include="Views/Vote/Item.cshtml">
       <publishTime>11/22/2017 11:24:06</publishTime>
     </File>
     <File Include="Views/Vote/List.cshtml">
-      <publishTime>12/18/2017 12:20:34</publishTime>
+      <publishTime>01/15/2018 15:29:50</publishTime>
     </File>
     <File Include="Views/web.config">
-      <publishTime>02/11/2017 16:26:13</publishTime>
+      <publishTime>11/02/2017 16:26:13</publishTime>
     </File>
     <File Include="Views/Worksheet/Index.cshtml">
-      <publishTime>12/28/2017 09:23:51</publishTime>
+      <publishTime>01/15/2018 15:30:10</publishTime>
     </File>
     <File Include="Views/_portal/home/Index.cshtml">
-      <publishTime>01/12/2018 10:24:05</publishTime>
+      <publishTime>01/15/2018 14:15:37</publishTime>
     </File>
     <File Include="Views/_portal/shared/_Layout - Копировать.cshtml">
       <publishTime>01/12/2018 08:52:14</publishTime>
     </File>
     <File Include="Views/_portal/shared/_Layout.cshtml">
-      <publishTime>01/12/2018 09:34:46</publishTime>
+      <publishTime>01/15/2018 15:34:24</publishTime>
     </File>
     <File Include="Views/_ViewStart.cshtml">
       <publishTime>09/27/2017 09:21:44</publishTime>

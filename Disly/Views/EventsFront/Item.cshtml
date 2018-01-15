@@ -3,6 +3,12 @@
     string dateBegin = Model.Item.DateBegin.ToString("HH:mm | dd.MM.yyyy");
     string dateEnd = (Model.Item.DateEnd != null ? Convert.ToDateTime(Model.Item.DateEnd).ToString("HH:mm | dd.MM.yyyy") : null);
 }
+@{
+    if (Model.SitesInfo.Alias == "main")
+    {
+        Layout = "/views/_portal/shared/_layout.cshtml";
+    }
+}
 <div class="container">
     <div class="row">
         <div class="col-md-12">

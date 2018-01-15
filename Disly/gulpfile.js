@@ -35,3 +35,8 @@ gulp.task("green", function () {
         .pipe(less())
         .pipe(gulp.dest(paths.webroot + 'css/theme'))
 });
+gulp.task("green_portal", function () {
+    return gulp.src('content/css/theme/green_portal.less')
+        .pipe(less())
+        .pipe(gulp.dest(paths.webroot + 'css/theme'))
+});

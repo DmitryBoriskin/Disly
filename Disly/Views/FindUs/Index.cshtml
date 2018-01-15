@@ -1,4 +1,10 @@
 ﻿@model ContatcsViewModel
+@{
+    if (Model.SitesInfo.Alias == "main")
+    {
+        Layout = "/views/_portal/shared/_layout.cshtml";
+    }
+}
 <div class="type-page">
     <div class="container">
         <h1>Как нас найти</h1>
@@ -67,12 +73,11 @@
                                     @if (item.DopAddres != null)
                                     {
                                         if (item.DopAddres.Length > 0)
-                                        {                                           
-
+                                        {
                                             foreach (var dopadres in item.DopAddres)
                                             {
-                                                <div class="geopoint" data-title="@dopadres.Address" data-x="@dopadres.GeopointX.ToString().Replace(",", ".")" data-y="@dopadres.GeopointY.ToString().Replace(",", ".")"></div>                                            }
-                                            
+                                                <div class="geopoint" data-title="@dopadres.Address" data-x="@dopadres.GeopointX.ToString().Replace(",", ".")" data-y="@dopadres.GeopointY.ToString().Replace(",", ".")"></div>                                            
+                                            }
                                         }
 
                                     }

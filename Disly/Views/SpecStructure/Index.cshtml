@@ -1,5 +1,11 @@
 ﻿@model SpecStructureViewModel
 @{
+    if (Model.SitesInfo.Alias == "main")
+    {
+        Layout = "/views/_portal/shared/_layout.cshtml";
+    }
+}
+@{
     // Model.CurrentPage == null Проверяем в контроллере, он не должен быть null
     People[] model = null;
 }

@@ -1,4 +1,10 @@
 ﻿@model NewsViewModel
+@{
+    if (Model.SitesInfo.Alias == "main")
+    {
+        Layout = "/views/_portal/shared/_layout.cshtml";
+    }
+}
 <div class="type-page">
     <div class="container">
         <div class="row">

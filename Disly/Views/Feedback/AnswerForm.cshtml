@@ -2,6 +2,12 @@
 @{
     var item = Model.Item;
 }
+@{
+    if (Model.SitesInfo.Alias == "main")
+    {
+        Layout = "/views/_portal/shared/_layout.cshtml";
+    }
+}
 
 <script src='https://www.google.com/recaptcha/api.js'></script>
 <div class="container">

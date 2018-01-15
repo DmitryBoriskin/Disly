@@ -15,6 +15,8 @@ body {
             padding:0 60px;
 }
 
+.row60{margin-left:-60px;margin-right:-60px;}
+
 .flank-paddings-15{
     padding-left:15px;
     padding-right:15px;
@@ -80,4 +82,46 @@ body {
 .linker_text_bottom {
     color: #999;
     line-height: 21px;    
+}
+
+.imglink-benefit-block {
+    padding-left: 60px;
+    padding-right: 60px;
+}
+
+.portal_lk_wr{    
+    padding-bottom:30px;
+    overflow:hidden;
+    background-color:#fff;
+    margin-bottom:108px;
+}
+.portal_lk {
+    padding-left: 60px;
+    padding-right: 60px;
+    display: inline-block;
+    width: 100%;
+    background-color: #669900;
+    padding-top: 25px;
+    padding-bottom: 10px;    
+}
+.portal_lk a{display:inline-block;margin-bottom:20px;}
+.bottom_block{
+    padding-top:0;
+}
+.portal_footer {
+    background-color: #fff;
+    padding-top:60px;
+}
+.row.bottom-linkimg{
+    margin-left:60px;
+    margin-right:60px;
+}
+.footer{
+    margin-left:60px;
+    margin-right:60px;
+}
+.footer-copyright {
+    margin-left: 60px;
+    margin-right: 60px;
+    padding-bottom:30px;
 }
