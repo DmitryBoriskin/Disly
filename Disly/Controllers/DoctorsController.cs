@@ -46,7 +46,8 @@ namespace Disly.Controllers
             #endregion
 
             var filter = getFilter();
-            model.DoctorsList = _repository.getPeopleList(filter);
+            var pfilter = FilterParams.Extend<PeopleFilter>(filter);
+            model.DoctorsList = _repository.getPeopleList(pfilter);
             model.DepartmentsSelectList = _repository.getDeparatamentsSelectList(); //Domain
             model.PeoplePosts = _repository.getPeoplePosts();//Domain
 

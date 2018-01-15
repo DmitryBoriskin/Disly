@@ -1,0 +1,71 @@
+﻿@model SpecialistsViewModel
+
+@{
+// Model.CurrentPage == null Проверяем в контроллере, он не должен быть null
+}
+<div class="type-page">
+    <div class="container">
+        @Html.Partial("services/breadcrumbs")
+
+        <h1>@Model.CurrentPage.Title</h1>
+
+        @if (Model.CurrentPage != null)
+        {
+            @Html.Raw(Model.CurrentPage.Text)
+        }
+
+        @if (Model.Members != null && Model.Members.Count() > 0)
+        {
+            <div class="row">
+                <div class="col-md-9">
+                    <table class="adminlist">
+                        @foreach (var item in Model.Members)
+                        {
+                            string link = "/doctors/" + item.Id;
+                            string photo = !string.IsNullOrWhiteSpace(item.Photo) ? item.Photo
+                                        : "/Content/img/nophoto.jpg";
+                            <tr>
+                                <td class="adminlist_img_td">
+                                    <a class="adminlist_img_wr" target="_blank" href="@link">
+                                        <img class="img-circle img-person-list" alt="@item.FIO" src="@photo" />
+                                    </a>
+                                </td>
+                                <td>
+                                    <a href="@link">@item.FIO</a><br />
+                                    @if (item.MainSpec != null && !string.IsNullOrEmpty(item.MainSpec.Name))
+                                    {
+                                        if (item.MainSpec.DomainUrls != null && item.MainSpec.DomainUrls.Count() > 0)
+                                        {
+                                            <span>Главный специалист: <a href="@item.MainSpec.DomainUrls.First().DomainName">@item.MainSpec.Name</a></span>
+                                        }
+                                        else
+                                        {
+                                            <span>Главный специалист: @item.MainSpec.Name</span>
+                                        }
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </table>
+                </div>
+                <div class="col-md-3">
+                    <form id="list-filter-form" role="form" class="filtr_news" action="/@ViewBag.ControllerName/">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="form-group search_news">
+                                    <label class="label_filtr" for="search_news">Ключевые слова</label>
+                                    <input type="text" class="filtr_data form-control" name="searchtext" id="search_news" value="@ViewBag.SearchText" />
+                                </div>
+                            </div>
+
+                            <div class="col-sm-12 control-filter">
+                                <a class="btn btn-default pull-right" href="/@ViewBag.ControllerName">Очистить</a>
+                                <button class="btn sub btn-primary" type="submit">Применить</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        }
+    </div>
+</div>

@@ -2348,6 +2348,7 @@ namespace cms.dbase.models
 		[Column,     NotNull    ] public string c_title     { get; set; } // nvarchar(256)
 		[Column,        Nullable] public string f_page_type { get; set; } // varchar(64)
 		[Column,     NotNull    ] public string c_url       { get; set; } // varchar(1024)
+		[Column,     NotNull    ] public int    n_sort      { get; set; } // int
 
 		#region Associations
 

@@ -37,6 +37,9 @@ namespace Disly.Controllers
         /// <returns></returns>
         public ActionResult Index(string tab)
         {
+            if ((model.SitesInfo == null) || (model.SitesInfo != null && model.SitesInfo.Type != ContentLinkType.SPEC.ToString().ToLower()))
+                return RedirectToRoute("Error", new { httpCode = 405});
+
             model.Type = tab;
             if (model.CurrentPage == null)
                 throw new Exception("model.CurrentPage == null");
@@ -55,7 +58,7 @@ namespace Disly.Controllers
             model.Nav.Add(new PageTabsViewModel {Page = page, Title = "Информация" });
             model.Nav.Add(new PageTabsViewModel { Page = page, Title = "Главные специалисты", Alias = "specialists" });
             model.Nav.Add(new PageTabsViewModel { Page = page, Title = "Экспертный состав", Alias = "experts" });
-            model.Nav.Add(new PageTabsViewModel { Page = page, Title = "Врачи", Alias = "doctors" });
+            model.Nav.Add(new PageTabsViewModel { Page = page, Title = "Специалисты / члены общества", Alias = "doctors" });
 
             //Обработка активных табов
             if (model.Nav != null && model.Nav.Where(s => s.Alias == tab).Any())
@@ -72,31 +75,41 @@ namespace Disly.Controllers
 
             //Получаем модель "главный специалист" (в нее может входить несколько врачей)
             var filter = getFilter();
-            var mainSpec = _repository.getMainSpecialistItem(Guid.Parse("8f82d333-81e9-4b38-adc7-2632e0842a67"));
+            filter.Domain = null;
+            var pfilter = FilterParams.Extend<PeopleFilter>(filter);
+            var mainSpec = _repository.getMainSpecialistItem(model.SitesInfo.ContentId);
             if (mainSpec != null)
             {
                 model.MainSpec = mainSpec;
-                filter.Domain = null;
-                //Список врачей, входящих в модель "главный специалист"
-                if (mainSpec.EmployeeMainSpecs != null)
-                {
-                    filter.Id = mainSpec.EmployeeMainSpecs.ToArray();
-                    model.SpesialitsList = _repository.getPeopleList(filter);
-                }
 
-                //Получение экспертного состава
-                if (mainSpec.EmployeeMainSpecs != null)
+                switch (tab)
                 {
-                    filter.Id = mainSpec.EmployeeExpSoviet.ToArray();
-                    model.ExpertsList = _repository.getPeopleList(filter);
+                    case "specialists":
+                        //Список врачей, входящих в модель "главный специалист"
+                        if (mainSpec.EmployeeMainSpecs != null)
+                        {
+                            pfilter.Id = mainSpec.EmployeeMainSpecs.ToArray();
+                            model.SpesialitsList = _repository.getPeopleList(pfilter);
+                        }
+                        break;
+                    case "experts":
+                        //Получение экспертного состава
+                        if (mainSpec.EmployeeMainSpecs != null)
+                        {
+                            pfilter.Id = mainSpec.EmployeeExpSoviet.ToArray();
+                            model.ExpertsList = _repository.getPeopleList(pfilter);
+                        }
+                        break;
+                    case "doctors":
+                        if (mainSpec.Specialisations != null)
+                        {
+                            //Получение членов общества (врачей по специальности)
+                            pfilter.Specialization = mainSpec.Specialisations;
+                            model.DoctorsList = _repository.getPeopleList(pfilter);
+                        }
+                        break;
                 }
-
-                //Получение членов общества (врачей по специальности)
-                model.DoctorsList = null;
             }
-            
-
-           
 
 
             #region Создаем переменные (значения по умолчанию)
