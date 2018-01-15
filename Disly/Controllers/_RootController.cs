@@ -126,7 +126,9 @@ namespace Disly.Controllers
                 return_url = addFiltrParam(return_url, "size", String.Empty);
             }
             return_url = (!Convert.ToBoolean(Request.QueryString["disabled"])) ? addFiltrParam(return_url, "disabled", String.Empty) : return_url;
+            return_url = String.IsNullOrEmpty(Request.QueryString["tab"]) ? addFiltrParam(return_url, "tab", String.Empty) : return_url;
             return_url = String.IsNullOrEmpty(Request.QueryString["searchtext"]) ? addFiltrParam(return_url, "searchtext", String.Empty) : return_url;
+           
             // Если парамметры из адресной строки равны значениям по умолчанию - удаляем их из URL
             if (return_url.ToLower() != HttpUtility.UrlDecode(Request.Url.Query).ToLower())
                 Response.Redirect(StartUrl + return_url);

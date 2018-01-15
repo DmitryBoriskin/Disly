@@ -22,7 +22,7 @@ namespace cms.dbase
             using (var db = new CMSdb(_context))
             {
                 var query = db.front_page_viewss.AsQueryable();
-                query = query.OrderBy(o => o.f_site).ThenBy(o => o.id);
+                query = query.OrderBy(o => o.n_sort).ThenBy(o => o.f_site);
                 if (query.Any())
                 {
                     int ItemCount = query.Count();

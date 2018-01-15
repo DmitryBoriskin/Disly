@@ -536,6 +536,7 @@
     <Compile Include="Areas\Admin\Controllers\AnketaController.cs" />
     <Compile Include="Areas\Admin\Models\AnketaViewModel.cs" />
     <Compile Include="Controllers\gs\SpecStructureController.cs" />
+    <Compile Include="Controllers\orgs\OrgGsMembersController.cs" />
     <Compile Include="Controllers\WorksheetController.cs" />
     <Compile Include="Controllers\VacancyController.cs" />
     <Compile Include="Controllers\RedirectFromOldController.cs" />
@@ -594,7 +595,7 @@
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\DoctorsController.cs" />
     <Compile Include="Controllers\ContactsController.cs" />
-    <Compile Include="Controllers\GeneralSpecialistsController.cs" />
+    <Compile Include="Controllers\portal\PortalGsSitesController.cs" />
     <Compile Include="Controllers\portal\LPUController.cs" />
     <Compile Include="Controllers\MapSiteController.cs" />
     <Compile Include="Controllers\SearchController.cs" />
@@ -620,16 +621,16 @@
     <Compile Include="Models\FeedbackViewModel.cs" />
     <Compile Include="Models\DoctorsViewModel.cs" />
     <Compile Include="Models\ContactsViewModel.cs" />
-    <Compile Include="Models\GeneralSpecialistViewModel.cs" />
-    <Compile Include="Models\LPUViewModel.cs" />
+    <Compile Include="Models\portal\SpecialistsViewModel.cs" />
+    <Compile Include="Models\portal\LPUViewModel.cs" />
     <Compile Include="Models\MapSiteViewModel.cs" />
-    <Compile Include="Models\PortalDoctorsViewModel.cs" />
+    <Compile Include="Models\portal\PortalDoctorsViewModel.cs" />
     <Compile Include="Models\MedicalServicesViewModel.cs" />
     <Compile Include="Models\RedirectRegistryViewModel.cs" />
     <Compile Include="Models\StructureViewModel.cs" />
     <Compile Include="Models\VacancyViewModel.cs" />
     <Compile Include="Models\VoteViewModel.cs" />
-    <Compile Include="Models\base\TypePageViewModel.cs" />
+    <Compile Include="Models\TypePageViewModel.cs" />
     <Compile Include="Models\NewsViewModel.cs" />
     <Compile Include="Models\HomePageViewModel.cs" />
     <Compile Include="Models\base\PageViewModel.cs" />
@@ -876,7 +877,7 @@
     <Content Include="Views\Feedback\AppealList.cshtml" />
     <Content Include="Views\Feedback\ReviewList.cshtml" />
     <Content Include="Views\Shared\part\childtabs.cshtml" />
-    <Content Include="Views\GeneralSpecialists\Index.cshtml" />
+    <Content Include="Views\PortalGsSites\Index.cshtml" />
     <Content Include="Views\Service\Photo.cshtml" />
     <Content Include="Views\Press\RssSettings.cshtml" />
     <Content Include="Views\EventsFront\Archive.cshtml" />
@@ -884,9 +885,10 @@
     <Content Include="Views\Vacancy\Index.cshtml" />
     <Content Include="Views\Vacancy\Item.cshtml" />
     <Content Include="Views\Worksheet\Index.cshtml" />
-    <Content Include="Views\gs\Structure\Index.cshtml" />
-    <Content Include="Views\gs\Structure\list.cshtml" />
+    <Content Include="Views\SpecStructure\Index.cshtml" />
+    <Content Include="Views\SpecStructure\list.cshtml" />
     <Content Include="Views\Shared\part\nav.cshtml" />
+    <Content Include="Views\OrgGsMembers\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -897,11 +899,9 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Content\temp\" />
-    <Folder Include="Controllers\orgs\" />
     <Folder Include="Models\event\" />
     <Folder Include="Models\org\" />
     <Folder Include="Userfiles\" />
-    <Folder Include="Views\Core\" />
     <Folder Include="Views\Redirect\" />
   </ItemGroup>
   <ItemGroup>

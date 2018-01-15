@@ -1,0 +1,65 @@
+﻿@model SpecialistsViewModel
+
+@{
+// Model.CurrentPage == null Проверяем в контроллере, он не должен быть null
+}
+<div class="type-page">
+    <div class="container">
+        @Html.Partial("services/breadcrumbs")
+
+        <h1>@Model.CurrentPage.Title</h1>
+
+        @if (Model.CurrentPage != null)
+        {
+            @Html.Raw(Model.CurrentPage.Text)
+        }
+
+        @if (Model.List != null && Model.List.Count() > 0)
+        {
+            <div class="row">
+                <div class="col-md-9">
+                    <table class="table">
+                        @foreach (var item in Model.List)
+                        {
+                            <tr>
+                                <td>
+                                    <h3> @item.Name</h3>
+                                    @if (item.DomainUrls != null)
+                                    {
+                                        foreach (var site in item.DomainUrls)
+                                        {
+                                            var link = "http://" + site.DomainName;
+                                            <a target="_blank" href="@link"><small>@link</small></a><br />
+                                        }
+
+                                    }
+                                    else
+                                    {
+                                        <span class="news-list_date">нет сайта</span>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </table>
+                    </div>
+                <div class="col-md-3">
+                    <form id="list-filter-form" role="form" class="filtr_news" action="/@ViewBag.ControllerName/">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="form-group search_news">
+                                    <label class="label_filtr" for="search_news">Ключевые слова</label>
+                                    <input type="text" class="filtr_data form-control" name="searchtext" id="search_news" value="@ViewBag.SearchText" />
+                                </div>
+                            </div>
+
+                            <div class="col-sm-12 control-filter">
+                                <a class="btn btn-default pull-right" href="/@ViewBag.ControllerName">Очистить</a>
+                                <button class="btn sub btn-primary" type="submit">Применить</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        }
+    </div>
+</div>

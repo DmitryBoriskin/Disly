@@ -14,7 +14,7 @@
         {
             @Html.Partial("part/nav", Model.Nav)
         }
-
+        <input type="hidden" name="tab" value="@Model.Type" form="list-filter-form" />
         @switch (Model.Type)
         {
             case "specialists":

@@ -47,7 +47,7 @@ namespace cms.dbModel
         public abstract Departments getOvpDepartaments(Guid id);
 
         //Persons
-        public abstract People[] getPeopleList(FilterParams filter);
+        public abstract People[] getPeopleList(PeopleFilter filter);
         public abstract People getPeopleItem(Guid id);
         public abstract string getPeopleSnils(Guid id);
         public abstract StructureModel[] getDeparatamentsSelectList(); //string domain
@@ -99,6 +99,7 @@ namespace cms.dbModel
         //Главные специалисты
         public abstract MainSpecialistModel[] getMainSpecialistList(FilterParams filter);
         public abstract MainSpecialistModel[] getMainSpecialistContacts();
+        public abstract People[] getMainSpecialistMembers(PeopleFilter filter);
         public abstract OrgsModel getOrgItem(Guid id);
         
         

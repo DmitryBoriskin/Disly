@@ -237,7 +237,7 @@ namespace cms.dbase
                         ContentId = (Guid)s.f_content,
                         ContentType = (ContentLinkType)Enum.Parse(typeof(ContentLinkType), s.c_content_type, true),
                         Type = s.c_content_type,
-                        Scripts=s.c_scripts,
+                        Scripts = s.c_scripts,
                         Facebook = s.c_facebook,
                         Vk = s.c_vk,
                         Instagramm = s.c_instagramm,
@@ -263,7 +263,7 @@ namespace cms.dbase
             using (var db = new CMSdb(_context))
             {
                 string siteId = _domain;
-                var data = db.cms_sites_domainss.Where(w=>w.f_site== siteId);
+                var data = db.cms_sites_domainss.Where(w => w.f_site == siteId);
                 if (data.Any())
                 {
                     return data.OrderBy(o => o.num).Select(s => s.c_domain).FirstOrDefault();
@@ -421,8 +421,8 @@ namespace cms.dbase
                             }
                         });
 
-                        return list.ToArray();
-                    }
+                    return list.ToArray();
+                }
 
                 return null;
             }
@@ -470,7 +470,7 @@ namespace cms.dbase
             string domain = _domain;
             using (var db = new CMSdb(_context))
             {
-                var query = db.content_sitemaps.Where(w => w.c_path == path && w.c_alias == alias && w.f_site == domain && w.b_disabled==false);
+                var query = db.content_sitemaps.Where(w => w.c_path == path && w.c_alias == alias && w.f_site == domain && w.b_disabled == false);
                 var data = query.Select(s => new SiteMapModel
                 {
                     Title = s.c_title,
@@ -582,7 +582,7 @@ namespace cms.dbase
                                  .Where(w => w.b_disabled == false)
                                  .Where(w => w.b_disabled_menu == false)
                                  .Where(w => w.uui_parent.Equals(ParentId))
-                                 .Where(w=>w.b_disabled_menu==false)
+                                 .Where(w => w.b_disabled_menu == false)
                                  .OrderBy(o => o.n_sort)
                                  .Select(c => new SiteMapModel
                                  {
@@ -656,14 +656,14 @@ namespace cms.dbase
                                     Title = w.c_title,
                                     Url = w.c_path + w.c_alias
                                 });
-                    if(getContentSitemaps.Any())
+                    if (getContentSitemaps.Any())
                         try
                         {
                             var itemContentSitemap = getContentSitemaps.SingleOrDefault();
-                            if(itemContentSitemap != null)
+                            if (itemContentSitemap != null)
                                 data.Add(itemContentSitemap);
                         }
-                        catch(Exception ex)
+                        catch (Exception ex)
                         {
                             throw new Exception("FrontRepository > getBreadCrumbCollection: Found more than one record " + ex);
                         }
@@ -775,7 +775,7 @@ namespace cms.dbase
 
                     var query = db.content_materialss
                                 .Where(w => materials.Contains(w.id));
-                    
+
                     if (filter.Disabled != null)
                     {
                         query = query.Where(w => w.b_disabled == filter.Disabled);
@@ -964,7 +964,7 @@ namespace cms.dbase
                     {
                         Id = s.Key.id,
                         Title = s.First().str.c_title,
-                        TitleShort= s.First().str.c_title_short,
+                        TitleShort = s.First().str.c_title_short,
                         Phone = s.First().str.c_phone,
                         PhoneReception = s.First().str.c_phone_reception,
                         Email = s.First().str.c_email,
@@ -1099,7 +1099,7 @@ namespace cms.dbase
                                         FIO = s.c_surname + " " + s.c_name + " " + s.c_patronymic,
                                         Post = s.c_post,
                                         Status = s.c_status,
-                                        Photo=s.c_photo
+                                        Photo = s.c_photo
                                     });
 
                     if (People.Any())
@@ -1146,7 +1146,7 @@ namespace cms.dbase
                     {
                         data.Phones = Phones.ToArray();
                     }
-                
+
 
                     var People = db.content_sv_people_departments.Where(w => w.f_department == data.Id).OrderBy(o => new { o.c_surname, o.c_name, o.c_patronymic })
                                 .Select(s => new People()
@@ -1220,7 +1220,7 @@ namespace cms.dbase
         /// </summary>
         /// <param name="filter">фильтр</param>
         /// <returns></returns>
-        public override People[] getPeopleList(FilterParams filter)
+        public override People[] getPeopleList(PeopleFilter filter)
         {
             using (var db = new CMSdb(_context))
             {
@@ -1275,6 +1275,11 @@ namespace cms.dbase
                 if (!string.IsNullOrEmpty(domain))
                 {
                     data = data.Where(n => n.p.s.c_alias == domain);
+                }
+
+                if (filter.Specialization != null && filter.Specialization.Count() > 0)
+                {
+                    data = data.Where(n => filter.Specialization.Contains(n.ep.id));
                 }
 
                 var data2 = data.ToArray()
@@ -1335,11 +1340,14 @@ namespace cms.dbase
                                  DepartmentId = d.id,
                                  DepartmentTitle = d.c_title,
                                  Domain = s.c_alias,
-                                 MainSpec = ms.c_name
+                                 MainSpec = new MainSpecialistModel()
+                                 {
+                                     Name = ms.c_name
+                                 }
                              });
 
                 if (query.Any())
-                    return query.SingleOrDefault();
+                    return query.FirstOrDefault();
 
                 return null;
             }
@@ -2332,12 +2340,12 @@ namespace cms.dbase
                     query = query.Where(w => (w.d_date >= filter.Date) || (w.d_date_end >= filter.Date)
                              || (w.b_annually && (w.d_date.DayOfYear >= ((DateTime)filter.Date).DayOfYear || w.d_date_end.DayOfYear >= ((DateTime)filter.Date).DayOfYear)));
                 }
-                if (filter.DateEnd!= null)
+                if (filter.DateEnd != null)
                 {
                     query = query.Where(w => (w.d_date <= filter.DateEnd) || (w.d_date_end <= filter.DateEnd)
                              || (w.b_annually && (w.d_date.DayOfYear <= ((DateTime)filter.DateEnd).DayOfYear || w.d_date_end.DayOfYear <= ((DateTime)filter.DateEnd).DayOfYear)));
                 }
-                
+
 
                 if (!string.IsNullOrWhiteSpace(filter.SearchText))
                 {
@@ -2432,15 +2440,15 @@ namespace cms.dbase
                 var query = db.content_photoss.Where(w => w.f_album == id);
                 if (query.Any())
                 {
-                     var data=query.OrderBy(o => o.n_sort)
-                                   .Select(s => new PhotoModel()
-                                   {
-                                       PreviewImage = new Photo { Url = s.c_preview },
-                                       PhotoImage = new Photo { Url = s.c_photo },
-                                       PhotoOriginal =s.c_photo,
-                                       Id = s.id,
-                                       Title = s.c_title
-                                   }).ToArray();
+                    var data = query.OrderBy(o => o.n_sort)
+                                  .Select(s => new PhotoModel()
+                                  {
+                                      PreviewImage = new Photo { Url = s.c_preview },
+                                      PhotoImage = new Photo { Url = s.c_photo },
+                                      PhotoOriginal = s.c_photo,
+                                      Id = s.id,
+                                      Title = s.c_title
+                                  }).ToArray();
                     return data;
                 }
                 return null;
@@ -2455,59 +2463,58 @@ namespace cms.dbase
         {
             using (var db = new CMSdb(_context))
             {
-                //var query = (from ms in db.content_main_specialistss
-                //             join s in db.cms_sitess on ms.id equals s.f_content into s2
-                //             from s in s2.DefaultIfEmpty()
-                //             select new MainSpecialistModel
-                //             {
-                //                 Id = ms.id,
-                //                 Name = ms.c_name,
-                //                 Desc = ms.c_desc,
-                //             }
-                //    );
-
-                var query = db.content_main_specialistss.AsQueryable();
+                var query = (from ms in db.content_main_specialistss
+                             join s in db.cms_sitess on ms.id equals s.f_content into s2
+                             from s in s2.DefaultIfEmpty()
+                             select new MainSpecialistModel
+                             {
+                                 Id = ms.id,
+                                 Name = ms.c_name,
+                                 Desc = ms.c_desc,
+                                 Domain = s.c_alias,
+                                 DomainUrls = getSiteDomains(s.c_alias)
+                             }
+                    );
 
                 if (!string.IsNullOrWhiteSpace(filter.SearchText))
                 {
                     query = query
-                        .Where(w => w.c_name.ToLower()
-                        .Contains(filter.SearchText.ToLower()));
+                        .Where(w => w.Name.ToLower().Contains(filter.SearchText.ToLower()));
                 }
-                var data = query.Select(ms => new MainSpecialistModel()
-                {
-                    Id = ms.id,
-                    Name = ms.c_name,
-                    Desc = ms.c_desc,
-                });
 
-                if (data.Any()) 
-                    data.ToArray();
+
+                if (query.Any())
+                    return query.ToArray();
 
                 return null;
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public override MainSpecialistModel[] getMainSpecialistContacts()
         {
             using (var db = new CMSdb(_context))
             {
-                var query = db.cms_sitess.Where(w => w.c_alias == _domain && w.c_content_type== "spec")
+                var query = db.cms_sitess.Where(w => w.c_alias == _domain && w.c_content_type == "spec")
                                          .Join(
                                                  db.content_main_specialist_employees_links,
-                                                 e=>e.f_content,
-                                                 o=>o.f_main_specialist,
-                                                 (e,o)=>o
+                                                 e => e.f_content,
+                                                 o => o.f_main_specialist,
+                                                 (e, o) => o
                                                  )
                                           .Join(
                                                 db.content_peoples,
-                                                n=>n.f_employee,
-                                                m=>m.id,
-                                                (n,m)=>m
+                                                n => n.f_people,
+                                                m => m.id,
+                                                (n, m) => m
                                                 )
-                                          .Select(s=>new MainSpecialistModel() {
-                                              Name= s.c_surname + s.c_name + s.c_patronymic,                                               
-                                              Organization = getOrgItem(s.fkcontentpeopleorglinks.Select(ss=>ss.f_org).Single())
+                                          .Select(s => new MainSpecialistModel()
+                                          {
+                                              Name = s.c_surname + " " + s.c_name + " " + s.c_patronymic,
+                                              Organization = getOrgItem(s.fkcontentpeopleorglinks.Select(ss => ss.f_org).Single())
                                           });
                 if (query.Any())
                 {
@@ -2517,7 +2524,58 @@ namespace cms.dbase
             }
         }
 
+        /// <summary>
+        /// Список врачей, входящих в Главных специалистов 
+        /// </summary>
+        /// <param name="filtr"></param>
+        /// <returns></returns>
+        public override People[] getMainSpecialistMembers(PeopleFilter filtr)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var type = "main";
+                var people = (from s in db.content_main_specialist_employees_links
 
+                              join spec in db.content_main_specialistss on s.f_main_specialist equals spec.id
+
+                              join site in db.cms_sitess on s.f_main_specialist equals site.f_content into ss
+                              from site in ss.DefaultIfEmpty()
+
+                              join p in db.content_peoples on s.f_people equals p.id
+
+                              join org in db.content_people_org_links on p.id equals org.f_people into ps
+                              from org in ps.DefaultIfEmpty()
+
+                              where (s.f_type == type)
+                              orderby p.c_surname
+
+                              select new { s, p, org, spec, site }
+                              );
+
+                if (filtr.Orgs != null && filtr.Orgs.Count() > 0)
+                {
+                    people = people.Where(w => filtr.Orgs.Contains(w.org.f_org));
+                }
+
+                var data = people.Select(s => 
+                    new People() {
+                                Id = s.p.id,
+                                FIO = s.p.c_surname + " " + s.p.c_name + " " + s.p.c_patronymic,
+                                MainSpec = new MainSpecialistModel()
+                                {
+                                   Id = s.spec.id,
+                                   Name = s.spec.c_name,
+                                   DomainUrls = (!string.IsNullOrEmpty(s.site.c_alias))? getSiteDomains(s.site.c_alias): null,
+                                }
+                                
+                            });
+
+                if (data.Any())
+                    return data.ToArray();
+                
+                return null;
+            }
+        }
 
         /// <summary>
         /// Получаем организацию
@@ -2537,12 +2595,12 @@ namespace cms.dbase
                         Phone = s.c_phone,
                         PhoneReception = s.c_phone_reception,
                         Fax = s.c_fax,
-                        Email = s.c_email,                                                
+                        Email = s.c_email,
                         Contacts = s.c_contacts,
                         Address = s.c_adress,
                         GeopointX = s.n_geopoint_x,
-                        GeopointY = s.n_geopoint_y,                        
-                        Oid = s.f_oid,                        
+                        GeopointY = s.n_geopoint_y,
+                        Oid = s.f_oid,
                         Logo = new Photo
                         {
                             Url = s.c_logo
@@ -2601,7 +2659,7 @@ namespace cms.dbase
             using (var db = new CMSdb(_context))
             {
                 var query = db.content_vacanciess.AsQueryable();
-                    query= query.Where(w =>(w.f_site == _domain && w.b_disabled==false));
+                query = query.Where(w => (w.f_site == _domain && w.b_disabled == false));
                 if (filter.Date != null)
                 {
                     query = query.Where(w => w.d_date >= filter.Date);
@@ -2609,24 +2667,25 @@ namespace cms.dbase
                 query = query.OrderBy(o => o.d_date);
                 if (!string.IsNullOrWhiteSpace(filter.SearchText))
                 {
-                    query = query.Where(w => 
+                    query = query.Where(w =>
                                             (
-                                            w.c_profession.Contains(filter.SearchText) || 
-                                            w.c_post.Contains(filter.SearchText) || 
+                                            w.c_profession.Contains(filter.SearchText) ||
+                                            w.c_post.Contains(filter.SearchText) ||
                                             w.c_desc.Contains(filter.SearchText)
                                           ));
                 }
-                
+
                 var vacancyList = query
                             .Skip(filter.Size * (filter.Page - 1))
                             .Take(filter.Size)
-                            .Select(s => new VacancyModel {
-                                Id=s.id,
-                                Profession=s.c_profession,
-                                Post=s.c_post,
-                                Desc=s.c_desc,
-                                Date=s.d_date,
-                                Salary=s.c_salary
+                            .Select(s => new VacancyModel
+                            {
+                                Id = s.id,
+                                Profession = s.c_profession,
+                                Post = s.c_post,
+                                Desc = s.c_desc,
+                                Date = s.d_date,
+                                Salary = s.c_salary
                             });
 
                 if (vacancyList.Any())
@@ -2653,17 +2712,18 @@ namespace cms.dbase
         {
             using (var db = new CMSdb(_context))
             {
-                var query = db.content_vacanciess.Where(w => (w.id == id && w.b_disabled==false));
+                var query = db.content_vacanciess.Where(w => (w.id == id && w.b_disabled == false));
                 if (query.Any())
                 {
-                    var data = query.Select(s => new VacancyModel() {
+                    var data = query.Select(s => new VacancyModel()
+                    {
                         Id = s.id,
                         Profession = s.c_profession,
                         Post = s.c_post,
                         Desc = s.c_desc,
-                        Experience=s.с_experience,
-                        Сonditions=s.с_conditions,
-                        Temporarily=s.b_temporarily,
+                        Experience = s.с_experience,
+                        Сonditions = s.с_conditions,
+                        Temporarily = s.b_temporarily,
                         Date = s.d_date,
                         Salary = s.c_salary
                     }).Single();
@@ -2673,5 +2733,30 @@ namespace cms.dbase
 
             }
         }
+
+
+        #region private methods
+
+        /// <summary>
+        /// список доменных имен по алиасу сайта
+        /// </summary>
+        /// <param name="SiteId"></param>
+        /// <returns></returns>
+        private Domain[] getSiteDomains(string SiteId)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var data = db.cms_sites_domainss.Where(w => w.f_site == SiteId);
+                if (data.Any())
+                    return data.Select(s => new Domain()
+                    {
+                        DomainName = s.c_domain,
+                        id = s.id
+                    }).ToArray();
+                return null;
+            }
+        }
+
+        #endregion
     }
 }

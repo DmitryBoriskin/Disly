@@ -15,12 +15,19 @@ namespace Disly
                url: "Error/{*code}",
                defaults: new { controller = "Error", action = "Custom", code = UrlParameter.Optional }
             );
-            
+
             // Главная страница
             routes.MapRoute(
                name: "Index",
                url: "",
                defaults: new { controller = "Home", action = "Index" }
+            );
+
+            // перенаправление
+            routes.MapRoute(
+               name: "Redirect",
+               url: "Redirect/{action}/{*id}",
+               defaults: new { controller = "Redirect", action = "Index", id = UrlParameter.Optional }
             );
 
             //Редирект со старых сайтов
@@ -40,7 +47,6 @@ namespace Disly
                url: "{action}.aspx",
                defaults: new { controller = "RedirectFromOld", action = "Index" }
             );
-
 
             routes.MapRoute(
                 name: "Registry",
@@ -87,31 +93,11 @@ namespace Disly
                defaults: new { controller = "LPU", action = "Index", id = UrlParameter.Optional }
             );
 
-            // врачи портала
-            routes.MapRoute(
-               name: "PortalDoctors",
-               url: "PortalDoctors/",
-               defaults: new { controller = "PortalDoctors", action = "Index"}
-            );
-
-            routes.MapRoute(
-               name: "PortalDoctorsItem",
-               url: "PortalDoctors/{id}",
-               defaults: new { controller = "Doctors", action = "Item" }
-            );
-
             // медицинские услуги портала
             routes.MapRoute(
                name: "MedicalServices",
                url: "MedicalServices/",
                defaults: new { controller = "MedicalServices", action = "Index", id = UrlParameter.Optional }
-            );
-
-            // перенаправление
-            routes.MapRoute(
-               name: "Redirect",
-               url: "Redirect/{action}/{*id}",
-               defaults: new { controller = "Redirect", action = "Index", id = UrlParameter.Optional }
             );
 
             //голосование
@@ -151,6 +137,19 @@ namespace Disly
                defaults: new { controller = "Structure", action = "Department" }
             );
 
+            // врачи портала
+            routes.MapRoute(
+               name: "PortalDoctors",
+               url: "PortalDoctors/",
+               defaults: new { controller = "PortalDoctors", action = "Index" }
+            );
+
+            routes.MapRoute(
+               name: "PortalDoctorsItem",
+               url: "PortalDoctors/{id}",
+               defaults: new { controller = "Doctors", action = "Item" }
+            );
+
             //Врачи
             routes.MapRoute(
                name: "Doctors",
@@ -164,19 +163,24 @@ namespace Disly
                defaults: new { controller = "Doctors", action = "Item" }
             );
 
-            // Эксперты, главные специалисты
+            // Структура в гс
             routes.MapRoute(
               name: "SpecStructure",
               url: "SpecStructure/",
               defaults: new { controller = "SpecStructure", action = "Index" }
            );
 
-            // Главные специалисты 
+            // Главные специалисты на портале
             routes.MapRoute(
-               name: "MainSpecialists",
-               url: "MainSpecialists/",
-               defaults: new { controller = "GeneralSpecialists", action = "Index" }
+               name: "PortalGsSites",
+               url: "PortalGsSites/",
+               defaults: new { controller = "PortalGsSites", action = "Index" }
             );
+            routes.MapRoute(
+              name: "OrgGsMembers",
+              url: "OrgGsMembers/",
+              defaults: new { controller = "OrgGsMembers", action = "Index" }
+           );
 
             // события
             routes.MapRoute(
@@ -195,14 +199,6 @@ namespace Disly
                name: "contacts",
                url: "contacts/",
                defaults: new { controller = "Contacts", action = "Index" }
-            );
-
-
-            // Контакты
-            routes.MapRoute(
-               name: "TestContacts",
-               url: "TestContacts/",
-               defaults: new { controller = "TestContacts", action = "Index" }
             );
 
             // как нас найти findus
@@ -254,7 +250,7 @@ namespace Disly
                defaults: new { controller = "Documents", action = "Index", path = UrlParameter.Optional }
             );
 
-            //Обратная связь
+            // Обратная связь
             routes.MapRoute(
              name: "Feedback",
              url: "Feedback/{*action}",
@@ -269,7 +265,6 @@ namespace Disly
                defaults: new { controller = "Worksheet", action = "Index", path = UrlParameter.Optional }
             );
 
-
             // Типовая страница (карта сайта)
             routes.MapRoute(
                name: "Page",
@@ -278,6 +273,7 @@ namespace Disly
                //constraints: new { path = @"\d{6}" }
             );
 
+            
             routes.MapRoute(
                 name: "Service",
                 url: "Service/{action}/{*id}",
@@ -291,7 +287,7 @@ namespace Disly
                 //constraints: new { path = @"\d{6}" }
             );
 
-            
+
         }
     }
 }

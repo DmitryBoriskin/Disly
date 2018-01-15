@@ -21,7 +21,10 @@
             string link = "http://" + Model.DoctorsItem.Domain + ".med.cap.ru";
             <div>
                 <strong>Главный специалист: </strong>
-                <a href="@link" target="_blank">@Model.DoctorsItem.MainSpec</a>
+                @if (Model.DoctorsItem.MainSpec != null)
+                {
+                    <a href="@link" target="_blank">@Model.DoctorsItem.MainSpec.Name</a>
+                }
             </div>
         }
 

@@ -39,6 +39,11 @@ namespace cms.dbModel.entity.cms
         public string Domain { get; set; }
 
         /// <summary>
+        /// Адреса сайта
+        /// </summary>
+        public Domain[] DomainUrls { get; set; }
+
+        /// <summary>
         /// Главные специалисты
         /// </summary>
         public IEnumerable<Guid> EmployeeMainSpecs { get; set; }

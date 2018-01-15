@@ -1,4 +1,5 @@
-﻿using System;
+﻿using cms.dbModel.entity.cms;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
@@ -462,9 +463,9 @@ namespace cms.dbModel.entity
         public string Domain { get; set; }
 
         /// <summary>
-        /// Название главного специалиста
+        /// главный специалист
         /// </summary>
-        public string MainSpec { get; set; }
+        public MainSpecialistModel MainSpec { get; set; }
     }
 
     /// <summary>
