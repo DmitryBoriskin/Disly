@@ -595,7 +595,8 @@ namespace cms.dbase
                         Schedule = s.c_schedule,
                         DirecorPost = s.c_director_post,
                         Ovp = s.b_ovp,
-                        Departments = getDepartmentsList(s.id)
+                        Departments = getDepartmentsList(s.id),
+                        DopAddres=getDopAddres(s.id)
 
                         //f_direcor
                     }).FirstOrDefault();
@@ -799,6 +800,49 @@ namespace cms.dbase
                     tran.Commit();
                     return true;
                 }
+            }
+        }
+
+
+        public override bool addAddressStructure(DopAddres addres)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                db.content_org_structure_adresss
+                  .Value(v => v.c_adress, addres.Address)
+                  .Value(v => v.n_geopoint_x, addres.GeopointX)
+                  .Value(v => v.n_geopoint_y, addres.GeopointY)
+                  .Value(v => v.f_org_structure, addres.IdStructure)
+                  .Insert();
+                return true;
+            }
+        }
+        public override DopAddres[] getDopAddres(Guid StrucId)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var query = db.content_org_structure_adresss.Where(w => w.f_org_structure == StrucId);
+                if (query.Any())
+                {
+                    return query.Select(s => new DopAddres()
+                    {
+                        Id=s.id,
+                        Address=s.c_adress
+                    }).ToArray();
+                }
+                return null;
+            }
+        }
+        public override bool delAddressStructure(Guid id)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var data = db.content_org_structure_adresss.Where(w => w.id == id);
+                if (data.Any())
+                {                    
+                    data.Delete();
+                }
+                return true;
             }
         }
 

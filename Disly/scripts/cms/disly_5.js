@@ -290,6 +290,25 @@ $(document).ready(function () {
         });
     });
 
+    //удалить дополнительный адрес
+    $('.del_dop_address').click(function (e) {
+        e.preventDefault();
+        var idDopAddres = $(this).attr("data-id");
+        var $Container = $(this).parent().parent();
+
+        $.ajax({
+            type: "POST",
+            async: false,
+            url: "/admin/orgs/DelDopAddres",
+            data: { id: idDopAddres },
+            error: function () { alert("error"); },
+            success: function (data) {
+                $Container.remove();
+            }
+        });
+
+    });
+
     //удаление домена
     $('.del_domain').click(function (e) {
         e.preventDefault();
@@ -320,7 +339,6 @@ $(document).ready(function () {
             }
             
         });
-
         
     });
 

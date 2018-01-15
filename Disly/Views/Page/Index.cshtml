@@ -12,15 +12,25 @@
         
         @if (Model.Child != null)
         {
-            <div class="col-md-8">
-                @if (Model.Item != null)
-                {
-                    @Html.Raw(Model.Item.Text)
-                }
-            </div>
-            <div class="col-md-3 col-md-push-1">
-                @Html.Partial("part/childlist_sitemap")
-            </div>
+            if (Model.Item.Text != null)
+            {
+                <div class="col-md-8">
+                    @if (Model.Item != null)
+                    {
+                        @Html.Raw(Model.Item.Text)
+                    }
+                </div>
+                <div class="col-md-3 col-md-push-1">
+                    @Html.Partial("part/childlist_sitemap")
+                </div>
+            }
+            else
+            {
+                <div class="col-md-12">
+                    @Html.Partial("part/childlist_sitemap")
+                </div>
+            }
+
         }
         else
         {
