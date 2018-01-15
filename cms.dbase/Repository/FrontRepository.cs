@@ -2565,9 +2565,9 @@ namespace cms.dbase
                                 {
                                    Id = s.spec.id,
                                    Name = s.spec.c_name,
-                                   DomainUrls = (!string.IsNullOrEmpty(s.site.c_alias))? getSiteDomains(s.site.c_alias): null,
-                                }
-                                
+                                   DomainUrls = (!string.IsNullOrEmpty(s.site.c_alias))? getSiteDomains(s.site.c_alias): null
+                                },
+                                Photo = s.p.c_photo
                             });
 
                 if (data.Any())
