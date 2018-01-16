@@ -19,25 +19,25 @@
                                         @*не выводим название департамента, если он ОВП*@
                                         @if (!item.Ovp)
                                         {
-                                        <div class="department_name">
-                                            <a href="/structure/@item.Num/@dep.Id">@dep.Title</a>
-                                        </div>
+                                            <div class="department_name">
+                                                <a href="/structure/@item.Num/@dep.Id">@dep.Title</a>
+                                            </div>
                                         }
                                         @if (dep.Phones != null && dep.Phones.Count() > 0)
                                         {
                                             foreach (var phone in dep.Phones)
                                             {
-                                            <div><span>@phone.Label: </span>@phone.Value</div>
+                                                <div><span>@phone.Label: </span>@phone.Value</div>
                                             }
                                         }
-                                    </div>                                    
+                                    </div>
                                 }
                             }
                         </div>
                     </div>
                 </div>
-                
-               
+
+
             </div>
         }
     }

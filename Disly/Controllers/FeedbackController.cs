@@ -64,7 +64,6 @@ namespace Disly.Controllers
         /// <returns></returns>
         public ActionResult Appeallist()
         {
-
             var filter = getFilter();
             filter.Disabled = false;
             //Только вопросы
@@ -86,7 +85,7 @@ namespace Disly.Controllers
             //return View(_ViewName, model);
             return View(model);
         }
-        
+
         /// <summary>
         /// Список отзывов
         /// </summary>
@@ -115,7 +114,7 @@ namespace Disly.Controllers
             //return View(_ViewName, model);
             return View(model);
         }
-        
+
         /// <summary>
         /// Форма отправки обращения
         /// </summary>
@@ -154,7 +153,7 @@ namespace Disly.Controllers
 
         //    return View(_ViewName, model);
         //}
-        
+
         /// <summary>
         /// Отправка обращения
         /// </summary>
@@ -184,8 +183,8 @@ namespace Disly.Controllers
                     SenderName = bindData.SenderName,
                     SenderEmail = bindData.SenderEmail,
                     SenderContacts = bindData.SenderContacts,
-                    Title = !string.IsNullOrEmpty(bindData.Theme) 
-                            ? bindData.Theme : 
+                    Title = !string.IsNullOrEmpty(bindData.Theme)
+                            ? bindData.Theme :
                             (bindData.Text.Length > 126) ? bindData.Text.Substring(0, 126) + " ..." : bindData.Text,
                     Text = bindData.Text,
                     Anonymous = bindData.Anonymous,
@@ -242,13 +241,13 @@ namespace Disly.Controllers
                         bindData.Text,
                         answerLink
                         );
-                    
-                        Mailer letter = new Mailer();
-                        letter.isSsl = true;
-                        letter.Theme = "Сайт " + Domain + ": Обратная связь";
-                        letter.Text = msgText;
-                        letter.Attachments = savedFileName;
-                        letter.MailTo = Settings.mailTo;
+
+                    Mailer letter = new Mailer();
+                    letter.isSsl = true;
+                    letter.Theme = "Сайт " + Domain + ": Обратная связь";
+                    letter.Text = msgText;
+                    letter.Attachments = savedFileName;
+                    letter.MailTo = Settings.mailTo;
 
                     var admins = _repository.getSiteAdmins();
                     if (admins != null)
@@ -408,7 +407,7 @@ namespace Disly.Controllers
 
             model.Item = feedbackItem;
 
-            if(feedbackItem.FbType == FeedbackType.review)
+            if (feedbackItem.FbType == FeedbackType.review)
                 return RedirectToAction("Reviewlist");
 
             return RedirectToAction("Appeallist");

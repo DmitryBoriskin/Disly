@@ -14,14 +14,17 @@
 
         <h1>@ViewBag.Title</h1>
 
-        @Html.Partial("Nav")
+        @if (Model.Nav != null)
+        {
+            @Html.Partial("part/nav", Model.Nav)
+        }
 
         @if (Model.OrgTypes != null)
         {
             <div class="row">
                 @foreach (var item in Model.OrgTypes)
                 {
-                    string link = "/lpu?t=typelist&id=" + item.Id;
+                    string link = "/lpu?tab=typelist&id=" + item.Id;
                     <div class="col-md-6">
                         <a href="@link">@item.Title</a>
                     </div>
@@ -33,7 +36,7 @@
             <div class="row">
                 @foreach (var item in Model.DepartmentAffiliations)
                 {
-                    string link = "/lpu?t=affiliation&id=" + item.Key;
+                    string link = "/lpu?tab=affiliation&id=" + item.Key;
                     <div class="col-md-6">
                         <a href="@link">@item.Value</a>
                     </div>
@@ -46,7 +49,7 @@
             <div class="row">
                 @foreach (var item in Model.MedicalServices)
                 {
-                    string link = "/lpu?t=services&id=" + item.Id;
+                    string link = "/lpu?tab=services&id=" + item.Id;
                     <div class="col-md-6">
                         <a href="@link">@item.Title</a>
                     </div>
@@ -65,14 +68,12 @@
                 <div class="col-md-12">
                     @foreach (var item in Model.OrgList)
                     {
-                        string logoImg = (!string.IsNullOrWhiteSpace(item.Logo))
-                          ? File.Exists(Server.MapPath(item.Logo))
-                              ? item.Logo : "/Content/img/nophoto.jpg"
-                          : "/Content/img/nophoto.jpg";
-
                         <div class="row org_item">
                             <div class="col-md-1">
-                                <img src="@logoImg" alt="@item.Title" />
+                                @if (!string.IsNullOrWhiteSpace(item.Logo) && File.Exists(Server.MapPath(item.Logo)))
+                                {
+                                    <img src="@item.Logo" alt="@item.Title" />
+                                }
                             </div>
 
                             <div class="col-md-9">

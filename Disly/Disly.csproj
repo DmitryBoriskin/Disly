@@ -869,13 +869,11 @@
     <Content Include="Views\Vote\Index.cshtml" />
     <Content Include="Views\Vote\Item.cshtml" />
     <Content Include="Views\Vote\List.cshtml" />
-    <Content Include="Views\Contacts\part\nav.cshtml" />
     <Content Include="Views\Contacts\part\administration.cshtml" />
     <Content Include="Views\Contacts\part\phone.cshtml" />
     <Content Include="Views\Doctors\Redirect.cshtml" />
     <Content Include="Views\MapSite\Index.cshtml" />
     <Content Include="Views\LPU\Index.cshtml" />
-    <Content Include="Views\LPU\Nav.cshtml" />
     <Content Include="Views\Press\part\Item.cshtml" />
     <Content Include="Views\Home\part\media.cshtml" />
     <Content Include="Views\PortalDoctors\Index.cshtml" />
@@ -901,7 +899,7 @@
     <Content Include="Views\Vacancy\Item.cshtml" />
     <Content Include="Views\Anketa\Index.cshtml" />
     <Content Include="Views\SpecStructure\Index.cshtml" />
-    <Content Include="Views\SpecStructure\list.cshtml" />
+    <Content Include="Views\SpecStructure\part\list.cshtml" />
     <Content Include="Views\Shared\part\nav.cshtml" />
     <Content Include="Views\_portal\home\Index.cshtml" />
     <Content Include="Views\_portal\shared\_Layout.cshtml" />

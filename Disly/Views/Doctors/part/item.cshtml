@@ -101,12 +101,10 @@
                            : "/Content/img/no_avatar.png";
             }
 
-            @if (Model.DoctorsItem.Photo != null)
-            {
-                <a href="/doctors/@Model.DoctorsItem.Id" class="boss_img_wrap">
-                    <img src="@photo" title="@Model.DoctorsItem.FIO" alt="@Model.DoctorsItem.FIO"/>
-               </a>
-            }
+            <a href="/doctors/@Model.DoctorsItem.Id" class="boss_img_wrap">
+                <img src="@photo" title="@Model.DoctorsItem.FIO" alt="@Model.DoctorsItem.FIO" />
+            </a>
+
             <a class="btn_print" onClick="window.print()">Распечатать</a><br />
             <a class="btn_share" title="Поделиться" href="../../../../#">Поделиться</a><br />
             @if (Model.DoctorsItem.IsRedirectUrl)

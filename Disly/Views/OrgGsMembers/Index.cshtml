@@ -30,8 +30,8 @@
 
                             string photo = (!string.IsNullOrWhiteSpace(item.Photo))
                           ? File.Exists(Server.MapPath(item.Photo))
-                              ? item.Photo : "/Content/img/nophoto.jpg"
-                          : "/Content/img/nophoto.jpg";
+                              ? item.Photo : "/Content/img/no_avatar.png"
+                          : "/Content/img/no_avatar.png";
 
                             <tr>
                                 <td class="adminlist_img_td">

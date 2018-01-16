@@ -46,9 +46,6 @@ namespace Disly.Controllers
         // GET: PortalMedicalServices
         public ActionResult Index(string tab)
         {
-            if (model.CurrentPage == null)
-                throw new Exception("model.CurrentPage == null");
-
             var page = model.CurrentPage.FrontSection;
 
             model.Type = tab;

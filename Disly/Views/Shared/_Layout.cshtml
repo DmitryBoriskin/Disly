@@ -61,19 +61,12 @@
                         <div class="row">
                             <div class="col-md-8">
                                 <a href="/" class="head_link">
-                                    @{
-                                        string logoImg = (Model.SitesInfo.Logo != null && !string.IsNullOrWhiteSpace(Model.SitesInfo.Logo.Url))
-                                                                            ? File.Exists(Server.MapPath(Model.SitesInfo.Logo.Url))
-                                                                            ? Model.SitesInfo.Logo.Url : String.Empty
-                                                                            : String.Empty;
-                                    }
-                                    @if (logoImg != String.Empty)
-                                    {
-                                        <div class="head_logo">
-                                            <img src="@logoImg" />
-                                        </div>
-                                    }
-                                        
+                                    <div class="head_logo">
+                                        @if (Model.SitesInfo.Logo != null && !string.IsNullOrWhiteSpace(Model.SitesInfo.Logo.Url) && File.Exists(Server.MapPath(Model.SitesInfo.Logo.Url)))
+                                        {
+                                            <img src="@Model.SitesInfo.Logo.Url" />
+                                        }
+                                    </div>
                                     <div class="head_title"><span>@Model.SitesInfo.LongTitle</span></div>
                                 </a>
                             </div>
@@ -99,7 +92,10 @@
                             <span class="icons-bar"></span>
                         </button>
                         <a id="brand" class="navbar-brand" href="/">
-                            <img src="@logoImg" />
+                            @if (Model.SitesInfo.Logo != null && !string.IsNullOrWhiteSpace(Model.SitesInfo.Logo.Url) && File.Exists(Server.MapPath(Model.SitesInfo.Logo.Url)))
+                            {
+                                <img src="@Model.SitesInfo.Logo.Url" />
+                            }
                         </a>
                     </div>
                     <div id="navbar" class="collapse navbar-collapse">
@@ -184,9 +180,12 @@
                     <div class="row">
                         <div class="col-md-8">
                             <div class="media">
-                                    <div class="bottom_left">
-                                        <img class="logo-small" src="@logoImg" />
-                                    </div>
+                                <div class="bottom_left">
+                                    @if (Model.SitesInfo.Logo != null && !string.IsNullOrWhiteSpace(Model.SitesInfo.Logo.Url) && File.Exists(Server.MapPath(Model.SitesInfo.Logo.Url)))
+                                    {
+                                        <img class="logo-small" src="@Model.SitesInfo.Logo.Url" />
+                                    }
+                                </div>
 
                                 @if (Model != null && Model.SitesInfo != null)
                                 {
@@ -280,4 +279,5 @@
     </script>
     @Html.Raw(Model.SitesInfo.Scripts)
 </body>
+
 </html>

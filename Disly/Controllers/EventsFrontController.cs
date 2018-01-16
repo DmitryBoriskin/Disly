@@ -47,7 +47,10 @@ namespace Disly.Controllers
             });
         }
 
-        // GET: Default
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public ActionResult Index()
         {
             var filter = getFilter();
@@ -58,7 +61,7 @@ namespace Disly.Controllers
             ViewBag.NewsSearchArea = filter.SearchText;
             ViewBag.NewsSearchDateStart = filter.Date;
             ViewBag.NewsSearchDateFin = filter.DateEnd;
-            
+
             return View(model);
         }
 
@@ -76,6 +79,11 @@ namespace Disly.Controllers
             }
             return View("Item", model);
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public ActionResult Archive()
         {
 

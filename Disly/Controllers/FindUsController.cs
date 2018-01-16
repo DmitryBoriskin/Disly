@@ -24,7 +24,7 @@ namespace Disly.Controllers
             {
                 SitesInfo = siteModel,
                 SiteMapArray = siteMapArray,
-                Breadcrumbs= breadcrumb,
+                Breadcrumbs = breadcrumb,
                 BannerArray = bannerArray,
                 CurrentPage = currentPage
             };
@@ -49,30 +49,12 @@ namespace Disly.Controllers
         /// <returns></returns>
         public ActionResult Index()
         {
-            #region Получаем данные из адресной строки
-            string UrlPath = "/" + (String)RouteData.Values["path"];
-            if (UrlPath.LastIndexOf("/") > 0 && UrlPath.LastIndexOf("/") == UrlPath.Length - 1) UrlPath = UrlPath.Substring(0, UrlPath.Length - 1);
-
-            string _path = UrlPath.Substring(0, UrlPath.LastIndexOf("/") + 1);
-            string _alias = UrlPath.Substring(UrlPath.LastIndexOf("/") + 1);
-            #endregion            
-
-            model.OrgItem = _repository.getOrgInfo(); //Domain
-            model.Structures = _repository.getStructures(); //Domain
-
-            #region Создаем переменные (значения по умолчанию)
-            PageViewModel Model = new PageViewModel();
             string _ViewName = (ViewName != String.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";
-            string PageTitle = "Как нас найти";
-            string PageDesc = "описание страницы";
-            string PageKeyw = "ключевые слова";
-            #endregion                      
-            #region Метатеги
-            ViewBag.Title = PageTitle;
-            ViewBag.Description = PageDesc;
-            ViewBag.KeyWords = PageKeyw;
-            #endregion
-            return View(_ViewName,model);
+
+            model.OrgItem = _repository.getOrgInfo();
+            model.Structures = _repository.getStructures();
+
+            return View(_ViewName, model);
         }
     }
 }

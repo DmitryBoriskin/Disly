@@ -15,7 +15,5 @@ namespace Disly.Controllers
 
             return Redirect(link);
         }
-
-
     }
 }

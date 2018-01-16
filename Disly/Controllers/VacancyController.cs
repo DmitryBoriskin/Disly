@@ -20,7 +20,7 @@ namespace Disly.Controllers
             currentPage = _repository.getSiteMap("Vacancy");
 
             if (currentPage == null)
-                throw new Exception("model.CurrentPage == null");
+                throw new Exception("model.CurrentPage == null"); //Заменить потом все на  return new HttpNotFoundResult();
 
             model = new VacancyViewModel
             {
@@ -90,9 +90,7 @@ namespace Disly.Controllers
                 }
             }
             else
-            {
                 return new HttpNotFoundResult();
-            }
 
             return View(model);
         }
