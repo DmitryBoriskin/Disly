@@ -1,14 +1,15 @@
 /*3*/
 /*3*/
 /*3*/
+/*3*/
 a {
   color: #669900;
 }
 a:hover {
-  color: #0e6d8c;
+  color: #446600;
 }
 .head_title span {
-  color: #0e6d8c;
+  color: #446600;
 }
 .bottom_menu a:hover,
 .right_section a:hover {
@@ -19,7 +20,7 @@ a:hover {
   color: #ccc;
 }
 .media-heading {
-  color: #0e6d8c;
+  color: #446600;
 }
 .slider-message {
   color: #e53964;
@@ -90,7 +91,7 @@ a:hover {
 .btn-primary:hover,
 .btn-primary:active,
 .btn-primary:focus {
-  background-color: #0e6d8c;
+  background-color: #446600;
 }
 .module-media {
   background-color: #669900;
@@ -114,7 +115,7 @@ a:hover {
   background-color: #669900;
 }
 .sitemap-plate:hover:after {
-  border-bottom: 10px solid #0e6d8c;
+  border-bottom: 10px solid #446600;
 }
 .bottom-linkimg-item:hover {
   color: #669900;
@@ -134,13 +135,13 @@ a:hover {
   background-color: #669900;
 }
 .searchform button:hover {
-  background-color: #0e6d8c;
+  background-color: #446600;
 }
 .searchform_dop button {
   background-color: #669900;
 }
 .searchform_dop button:hover {
-  background-color: #0e6d8c;
+  background-color: #446600;
 }
 .feedback-item-more:hover {
   color: #669900;
