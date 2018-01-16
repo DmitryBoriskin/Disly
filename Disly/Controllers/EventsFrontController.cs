@@ -14,7 +14,7 @@ namespace Disly.Controllers
         {
             base.OnActionExecuting(filterContext);
 
-            currentPage = _repository.getSiteMap("EventsFront");
+            currentPage = _repository.getSiteMap("Events");
 
             if (currentPage == null)
                 throw new Exception("model.CurrentPage == null");
