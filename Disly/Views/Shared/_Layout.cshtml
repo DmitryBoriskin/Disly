@@ -64,12 +64,16 @@
                                     @{
                                         string logoImg = (Model.SitesInfo.Logo != null && !string.IsNullOrWhiteSpace(Model.SitesInfo.Logo.Url))
                                                                             ? File.Exists(Server.MapPath(Model.SitesInfo.Logo.Url))
-                                                                            ? Model.SitesInfo.Logo.Url : "/Content/img/nophoto.jpg"
-                                                                            : "/Content/img/nophoto.jpg";
+                                                                            ? Model.SitesInfo.Logo.Url : String.Empty
+                                                                            : String.Empty;
                                     }
+                                    @if (logoImg != String.Empty)
+                                    {
                                         <div class="head_logo">
                                             <img src="@logoImg" />
                                         </div>
+                                    }
+                                        
                                     <div class="head_title"><span>@Model.SitesInfo.LongTitle</span></div>
                                 </a>
                             </div>
@@ -130,13 +134,13 @@
                             </ul>
                             <ul class="nav navbar-nav navbar-right">
                                 <li>
-                                    <a href="#" class="searchform_show seacrh_button__hide icon-search"></a>
+                                    <a href="#" title="Поиск" class="searchform_show seacrh_button__hide icon-search"></a>
                                 </li>
                             </ul>
                             <ul class="nav navbar-nav navbar-right menu-mini-icons">
-                                <li><a href="/mapsite"><span class="ti-layers-alt top-icon"></span></a></li>
-                                <li><a href="/press/rsssettings"><span class="ti-rss-alt top-icon"></span></a></li>
-                                <li><a href="http://www.med.cap.ru/" target="_blank"><span class="ti-new-window top-icon"></span></a></li>
+                                <li><a href="/mapsite" title="Карта сайта"><span class="ti-layers-alt top-icon"></span></a></li>
+                                <li><a href="/press/rsssettings" title="RSS"><span class="ti-rss-alt top-icon"></span></a></li>
+                                <li><a href="http://www.med.cap.ru/" target="_blank" title="Портал med.cap.ru"><span class="ti-new-window top-icon"></span></a></li>
                                 <li><a href="/spec" title="версия для слабовидящих"><span class="spec-info">Aa</span></a></li>
                             </ul>
                         }

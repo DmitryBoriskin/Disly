@@ -36,8 +36,11 @@
     });
 
 
-    if ($('.geopoint').length > 0) {
-        GeoCollection();
+    if ($('.geo_area').length > 0) {
+        $('.geo_area').each(function () {
+            GeoCollection($(this));
+        });
+        
     }
 
 
@@ -119,26 +122,23 @@
 
 
 
-function GeoCollection() {
+function GeoCollection(obj) {
 
     //опредлеим центр карты
     var x_center=0;
     var y_center = 0;
-    var point_count = $('.geopoint').length;
+    var point_count = obj.find('.geopoint').length;
     
 
-    $('.geopoint').each(function () {
+    obj.find('.geopoint').each(function () {
         x_center = x_center +   parseFloat($(this).attr('data-x'));
         y_center = y_center + parseFloat($(this).attr('data-y'));
     });
-    //крайние точки для масштаба
-    
-
 
 
     function init() {
-    
-        myMap = new ymaps.Map("maplist", {
+        var idmaparea = obj.find('.maplist').attr('id');
+        myMap = new ymaps.Map(idmaparea, {
             center: [x_center / point_count, y_center / point_count],
             zoom: 14,
             controls: []
@@ -150,11 +150,28 @@ function GeoCollection() {
         myMap.behaviors.disable('scrollZoom');
         var gCollection = new ymaps.GeoObjectCollection();
 
-        $('.geopoint').each(function () {
+        obj.find('.geopoint').each(function () {
             var _placemark = push($(this));
+            
             gCollection.add(_placemark);
+
+            _placemark.events.add('click', function (e) {
+                gCollection.each(function (geoObject) {
+                    geoObject.options.set({
+                        preset: 'islands#blueDotIcon'
+                    });
+                });
+                var activeGeoObject = e.get('target');
+                activeGeoObject.options.set({
+                    preset: 'islands#redDotIcon'
+                });                
+            });
         });
         myMap.geoObjects.add(gCollection);
+
+
+
+       
     }    
 
 
@@ -162,12 +179,16 @@ function GeoCollection() {
         var x = obj.attr('data-x');
         var y = obj.attr('data-y');
         var title = obj.attr('data-title');
+        var addres = obj.attr('data-addres');
+
         var _placemark = new ymaps.Placemark([x, y],
             {
-                balloonContent:title
+                balloonContent: '<b>' + title + '</b><br> ' + addres
             },{
-                preset: 'islands#redDotIcon'
+                preset: 'islands#blueDotIcon'
             });
+     
+
         return _placemark;
     }
 

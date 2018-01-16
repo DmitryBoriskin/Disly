@@ -905,7 +905,6 @@
     <Content Include="Views\Shared\part\nav.cshtml" />
     <Content Include="Views\_portal\home\Index.cshtml" />
     <Content Include="Views\_portal\shared\_Layout.cshtml" />
-    <Content Include="Views\_portal\shared\_Layout - Копировать.cshtml" />
     <Content Include="Views\OrgGsMembers\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>

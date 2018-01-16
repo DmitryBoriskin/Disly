@@ -30,6 +30,7 @@ namespace cms.dbase
         {
             _context = ConnectionString;
             _domain = (!string.IsNullOrEmpty(DomainUrl)) ? getSiteId(DomainUrl) : "";
+            _domain = "rkod";
             LinqToDB.Common.Configuration.Linq.AllowMultipleQuery = true;
         }
         #region redirect methods
@@ -1022,12 +1023,14 @@ namespace cms.dbase
                 var query = db.content_org_structure_adresss.Where(w => w.f_org_structure == StrucId);
                 if (query.Any())
                 {
+                    query= query.OrderBy(o=>new { o.c_title,o.c_adress});
                     return query.Select(s => new DopAddres()
                     {
                         Id = s.id,
                         Address = s.c_adress,
                         GeopointX=s.n_geopoint_x,
-                        GeopointY=s.n_geopoint_y
+                        GeopointY=s.n_geopoint_y,
+                        Title=s.c_title
                     }).ToArray();
                 }
                 return null;

@@ -59,6 +59,7 @@
                             @foreach (var item in Model.StructureItem.DopAddres)
                             {
                                 <tr>
+                                    <td>@item.Title</td>
                                     <td>@item.Address</td>
                                     <td class="text-right">
                                         <a  class="del_dop_address" data-id="@item.Id" data-url="/admin/orgs/DelDopAddress"></a>
@@ -73,8 +74,11 @@
                      <h5>Добавить аддрес</h5>
                  </div>
                  @Html.HiddenFor(m=>m.StructureItem.Id)
-                 <div class="col-md-8"> 
-                     <input  type="text" title="Аддрес" name="dop-addres"/>
+                 <div class="col-md-4"> 
+                     <input  type="text" title="Назваеме" name="dop-addres-title"/>
+                 </div>
+                 <div class="col-md-4">
+                     <input type="text" title="Адрес" name="dop-addres" />
                  </div>
                  <div class="col-md-4">
                      <button style="margin-top: 23px;" class="button icon-create green pull-right" type="submit" name="action" value="add-new-address-struct">Добавить</button>
