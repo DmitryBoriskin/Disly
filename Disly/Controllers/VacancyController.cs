@@ -17,21 +17,37 @@ namespace Disly.Controllers
         {
             base.OnActionExecuting(filterContext);
 
+            currentPage = _repository.getSiteMap("Vacancy");
+
+            if (currentPage == null)
+                throw new Exception("model.CurrentPage == null");
+
             model = new VacancyViewModel
             {
                 SitesInfo = siteModel,
                 SiteMapArray = siteMapArray,
-                Breadcrumbs= breadcrumb,
-                BannerArray = bannerArray
+                Breadcrumbs = breadcrumb,
+                BannerArray = bannerArray,
+                CurrentPage = currentPage
             };
+
+            #region Создаем переменные (значения по умолчанию)
+            string PageTitle = model.CurrentPage.Title;
+            string PageDesc = model.CurrentPage.Desc;
+            string PageKeyw = model.CurrentPage.Keyw;
+            #endregion
+
+            #region Метатеги
+            ViewBag.Title = PageTitle;
+            ViewBag.Description = PageDesc;
+            ViewBag.KeyWords = PageKeyw;
+            #endregion
 
             model.Breadcrumbs.Add(new Breadcrumbs()
             {
-                Title = "Вакансии",
-                Url = "/" + ControllerName + "/"
+                Title = PageTitle,
+                Url = string.Format("/{0}/", model.CurrentPage.FrontSection)
             });
-
-
         }
 
         /// <summary>
@@ -40,33 +56,30 @@ namespace Disly.Controllers
         /// <returns></returns>
         public ActionResult Index()
         {
-            var filter = getFilter();            
+            string _ViewName = (ViewName != String.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";
+
+            var filter = getFilter();
             model.List = _repository.getVacancy(filter);
+
             ViewBag.Filter = filter;
             ViewBag.NewsSearchArea = filter.SearchText;
 
-            #region Создаем переменные (значения по умолчанию)
-            PageViewModel Model = new PageViewModel();
-            string _ViewName = (ViewName != String.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";
-            string PageTitle = "Вакансии";//(model.Item != null)? model.Item.Title: null;
-            string PageDesc = "описание страницы";
-            string PageKeyw = "ключевые слова";
-            #endregion            
-          
-            #region Метатеги
-            ViewBag.Title = PageTitle;
-            ViewBag.Description = PageDesc;
-            ViewBag.KeyWords = PageKeyw;
-            #endregion
-
-            return View(_ViewName,model);            
+            return View(_ViewName, model);
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public ActionResult Item(Guid id)
         {
-            model.Item=_repository.getVacancyItem(id);
+            string _ViewName = (ViewName != String.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";
+
+            model.Item = _repository.getVacancyItem(id);
+
             if (model.Item != null)
             {
-                #region хлебные крошки
                 if (model.Breadcrumbs != null)
                 {
                     model.Breadcrumbs.Add(new Breadcrumbs()
@@ -74,30 +87,14 @@ namespace Disly.Controllers
                         Title = model.Item.Profession,
                         Url = "/" + ControllerName + "/" + id
                     });
-                } 
-                #endregion
+                }
             }
             else
             {
                 return new HttpNotFoundResult();
             }
 
-            #region Создаем переменные (значения по умолчанию)
-            PageViewModel Model = new PageViewModel();
-            string _ViewName = (ViewName != String.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";
-            string PageTitle = (model.Item != null)? model.Item.Profession+" — "+ model.Item.Post: "Вакансия";
-            string PageDesc = "описание страницы";
-            string PageKeyw = "ключевые слова";
-            #endregion
-
-            #region Метатеги
-            ViewBag.Title = PageTitle;
-            ViewBag.Description = PageDesc;
-            ViewBag.KeyWords = PageKeyw;
-            #endregion
-
             return View(model);
         }
     }
 }
-

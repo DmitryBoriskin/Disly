@@ -17,6 +17,12 @@ namespace Disly.Controllers
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             base.OnActionExecuting(filterContext);
+
+            currentPage = _repository.getSiteMap(_path, _alias);
+
+            if (currentPage == null)
+                throw new Exception("model.CurrentPage == null");
+
             model = new FeedbackViewModel
             {
                 SitesInfo = siteModel,
@@ -25,6 +31,22 @@ namespace Disly.Controllers
                 BannerArray = bannerArray,
                 CurrentPage = currentPage
             };
+
+            if (model.CurrentPage == null)
+                throw new Exception("model.CurrentPage == null");
+
+            #region Создаем переменные (значения по умолчанию)
+            string PageTitle = model.CurrentPage.Title;
+            string PageDesc = model.CurrentPage.Desc;
+            string PageKeyw = model.CurrentPage.Keyw;
+            #endregion
+
+            #region Метатеги
+            ViewBag.Title = PageTitle;
+            ViewBag.Description = PageDesc;
+            ViewBag.KeyWords = PageKeyw;
+            #endregion
+
         }
 
         /// <summary>
@@ -42,6 +64,7 @@ namespace Disly.Controllers
         /// <returns></returns>
         public ActionResult Appeallist()
         {
+
             var filter = getFilter();
             filter.Disabled = false;
             //Только вопросы
@@ -55,18 +78,6 @@ namespace Disly.Controllers
             ViewBag.NewsSearchDateStart = filter.Date;
             ViewBag.NewsSearchDateFin = filter.DateEnd;
 
-            #region Создаем переменные (значения по умолчанию)
-            //string _ViewName = (ViewName != String.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";
-            
-            string PageTitle = "Обращения пользователей";
-            string PageDesc = "описание страницы";
-            string PageKeyw = "ключевые слова";
-            #endregion
-            #region Метатеги
-            ViewBag.Title = PageTitle;
-            ViewBag.Description = PageDesc;
-            ViewBag.KeyWords = PageKeyw;
-            #endregion
             ViewBag.IsAgree = false;
             ViewBag.Anonymous = false;
             ViewBag.captchaKey = Settings.CaptchaKey;
@@ -82,6 +93,7 @@ namespace Disly.Controllers
         /// <returns></returns>
         public ActionResult Reviewlist()
         {
+
             var filter = getFilter();
             filter.Disabled = false;
             //Только отзывы
@@ -95,22 +107,11 @@ namespace Disly.Controllers
             ViewBag.NewsSearchDateStart = filter.Date;
             ViewBag.NewsSearchDateFin = filter.DateEnd;
 
-            #region Создаем переменные (значения по умолчанию)
-            //string _ViewName = (ViewName != String.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";
-
-            string PageTitle = "Отзывы пользователей";
-            string PageDesc = "описание страницы";
-            string PageKeyw = "ключевые слова";
-            #endregion
-            #region Метатеги
-            ViewBag.Title = PageTitle;
-            ViewBag.Description = PageDesc;
-            ViewBag.KeyWords = PageKeyw;
-            #endregion
             ViewBag.IsAgree = false;
             ViewBag.Anonymous = false;
             ViewBag.captchaKey = Settings.CaptchaKey;
             ViewBag.FbType = FeedbackType.review;
+
             //return View(_ViewName, model);
             return View(model);
         }
@@ -163,21 +164,8 @@ namespace Disly.Controllers
         [MultiButton(MatchFormKey = "action", MatchFormValue = "send-btn")]
         public ActionResult SendForm(FeedbackFormViewModel bindData)
         {
+
             model.Child = (model.CurrentPage != null) ? _repository.getSiteMapChild(model.CurrentPage.Id) : null;
-
-            #region Создаем переменные (значения по умолчанию)
-            string _ViewName = (ViewName != String.Empty) ? "Form" : "~/Views/Error/CustomError.cshtml";
-
-            string PageTitle = "Форма обратной связи";
-            string PageDesc = "описание страницы";
-            string PageKeyw = "ключевые слова";
-            #endregion
-
-            #region Метатеги
-            ViewBag.Title = PageTitle;
-            ViewBag.Description = PageDesc;
-            ViewBag.KeyWords = PageKeyw;
-            #endregion
 
             var newId = Guid.NewGuid();
             string PrivateKey = Settings.SecretKey;
@@ -304,19 +292,7 @@ namespace Disly.Controllers
         /// <returns></returns>
         public ActionResult AnswerForm(Guid id, Guid code)
         {
-            #region Создаем переменные (значения по умолчанию)
             string _ViewName = (ViewName != String.Empty) ? "AnswerForm" : "~/Views/Error/CustomError.cshtml";
-
-            string PageTitle = "Форма ответа на обращение";
-            string PageDesc = "описание страницы";
-            string PageKeyw = "ключевые слова";
-            #endregion
-
-            #region Метатеги
-            ViewBag.Title = PageTitle;
-            ViewBag.Description = PageDesc;
-            ViewBag.KeyWords = PageKeyw;
-            #endregion
 
             var feedbackItem = _repository.getFeedbackItem(id);
             if (feedbackItem == null || (feedbackItem != null && feedbackItem.AnswererCode.HasValue && feedbackItem.AnswererCode.Value != code))
@@ -348,19 +324,6 @@ namespace Disly.Controllers
         [MultiButton(MatchFormKey = "action", MatchFormValue = "answer-btn")]
         public ActionResult AnswerForm(FeedbackAnswerFormViewModel bindData)
         {
-            #region Создаем переменные (значения по умолчанию)
-            string _ViewName = (ViewName != String.Empty) ? "AnswerForm" : "~/Views/Error/CustomError.cshtml";
-
-            string PageTitle = "Форма ответа на обращение";
-            string PageDesc = "описание страницы";
-            string PageKeyw = "ключевые слова";
-            #endregion
-
-            #region Метатеги
-            ViewBag.Title = PageTitle;
-            ViewBag.Description = PageDesc;
-            ViewBag.KeyWords = PageKeyw;
-            #endregion
 
             ViewBag.ByEmail = true;
             ViewBag.captchaKey = Settings.CaptchaKey;

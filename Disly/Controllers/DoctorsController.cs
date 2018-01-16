@@ -19,16 +19,35 @@ namespace Disly.Controllers
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             base.OnActionExecuting(filterContext);
+
+            currentPage = _repository.getSiteMap("Doctors");
+
+            if (currentPage == null)
+                throw new Exception("model.CurrentPage == null");
+
             model = new DoctorsViewModel
             {
                 SitesInfo = siteModel,
                 SiteMapArray = siteMapArray,
                 Breadcrumbs = breadcrumb,
                 BannerArray = bannerArray,
+                CurrentPage = currentPage,
                 Oid = _repository.getOid()
             };
 
             model.DoctorsRegistry = repoRegistry.getVDoctors(model.Oid);
+
+            #region Создаем переменные (значения по умолчанию)
+            string PageTitle = model.CurrentPage.Title;
+            string PageDesc = model.CurrentPage.Desc;
+            string PageKeyw = model.CurrentPage.Keyw;
+            #endregion
+
+            #region Метатеги
+            ViewBag.Title = PageTitle;
+            ViewBag.Description = PageDesc;
+            ViewBag.KeyWords = PageKeyw;
+            #endregion
         }
 
         /// <summary>

@@ -53,20 +53,23 @@
 
 <body>
     <div class="cont_wrap">
-        
-        <div class="container">            
+
+        <div class="container">
             <nav id="header" class="navbar navbar-fixed-top">
                 <div id="header-container" class="container navbar-container">
                     <div class="head">
                         <div class="row">
                             <div class="col-md-8">
                                 <a href="/" class="head_link">
-                                    @if (Model.SitesInfo.Logo.Url != null)
-                                    {
-                                        <div class="head_logo">
-                                            <img src="@Model.SitesInfo.Logo.Url" />
-                                        </div>
+                                    @{
+                                        string logoImg = (Model.SitesInfo.Logo != null && !string.IsNullOrWhiteSpace(Model.SitesInfo.Logo.Url))
+                                                                            ? File.Exists(Server.MapPath(Model.SitesInfo.Logo.Url))
+                                                                            ? Model.SitesInfo.Logo.Url : "/Content/img/nophoto.jpg"
+                                                                            : "/Content/img/nophoto.jpg";
                                     }
+                                        <div class="head_logo">
+                                            <img src="@logoImg" />
+                                        </div>
                                     <div class="head_title"><span>@Model.SitesInfo.LongTitle</span></div>
                                 </a>
                             </div>
@@ -90,9 +93,9 @@
                             <span class="icons-bar"></span>
                             <span class="icons-bar"></span>
                             <span class="icons-bar"></span>
-                        </button>      
+                        </button>
                         <a id="brand" class="navbar-brand" href="/">
-                            <img src="@Model.SitesInfo.Logo.Url" />
+                            <img src="@logoImg" />
                         </a>
                     </div>
                     <div id="navbar" class="collapse navbar-collapse">
@@ -123,7 +126,7 @@
                                     <li @_class>
                                         <a href="@fullPath">@item.Title</a>
                                     </li>
-                                }                                
+                                }
                             </ul>
                             <ul class="nav navbar-nav navbar-right">
                                 <li>
@@ -136,16 +139,16 @@
                                 <li><a href="http://www.med.cap.ru/" target="_blank"><span class="ti-new-window top-icon"></span></a></li>
                                 <li><a href="/spec" title="версия для слабовидящих"><span class="spec-info">Aa</span></a></li>
                             </ul>
-                        }                        
+                        }
                     </div>
                 </div>
             </nav>
         </div>
-        
+
         @RenderBody()
-        
+
         <div class="bottom_block">
-            <div class="container">                
+            <div class="container">
                 @if (Model != null && Model.BannerArray != null && Model.BannerArray.Count() > 0)
                 {
                     var bannerBottom = Model.BannerArray
@@ -172,20 +175,14 @@
                         }
                     </div>
                 }
-                
+
                 <div class="footer noprint">
                     <div class="row">
                         <div class="col-md-8">
                             <div class="media">
-                                @if (Model.SitesInfo.Logo != null)
-                            {
-                                if (Model.SitesInfo.Logo.Url != null)
-                                {
-                                        <div class="bottom_left">
-                                            <img class="logo-small" src="@Model.SitesInfo.Logo.Url" />
-                                        </div>
-                                }
-                            }
+                                    <div class="bottom_left">
+                                        <img class="logo-small" src="@logoImg" />
+                                    </div>
 
                                 @if (Model != null && Model.SitesInfo != null)
                                 {
@@ -269,7 +266,7 @@
                             </a>
                         </div>
                     </div>
-                </div>                
+                </div>
             </div>
         </div>
     </div>

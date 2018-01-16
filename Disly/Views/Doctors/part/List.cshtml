@@ -1,50 +1,57 @@
 ﻿@model DoctorsViewModel
 
-<h1>Врачи</h1>
+<h1>@ViewBag.Title</h1>
 <div class="row">
     <div class="col-md-8">
-        @if(Model.DoctorsList != null && Model.DoctorsList.Count() > 0)
+        @if (Model.DoctorsList != null && Model.DoctorsList.Count() > 0)
         {
-        <table class="adminlist">
+            <table class="adminlist">
 
-            @foreach (var item in Model.DoctorsList)
-            {
-                string link = "/" + ViewBag.ControllerName + "/" + item.Id;
-                string photo = !string.IsNullOrWhiteSpace(item.Photo) ? item.Photo
-                            : "/Content/img/nophoto.jpg";
-                <tr>
-                    <td class="adminlist_img_td"> 
-                        <a class="adminlist_img_wr" target="_blank" href="@link">
-                            <img class="img-circle img-person-list" alt="@item.FIO" src="@photo" />
-                        </a>
-                    </td>
-                    <td>
-                        <a class="adminlist_name" href="@link">@item.FIO</a>
+                @foreach (var item in Model.DoctorsList)
+                {
+                    string link = "/" + ViewBag.ControllerName + "/" + item.Id;
 
-                        @if (item.Posts != null)
+                    //string photo = !string.IsNullOrWhiteSpace(item.Photo) ? item.Photo
+                    //            : "/Content/img/nophoto.jpg";
+                    string photo = !string.IsNullOrWhiteSpace(item.Photo)
+                        ? File.Exists(Server.MapPath(item.Photo))
+                            ? item.Photo : "/Content/img/nophoto.jpg"
+                        : "/Content/img/nophoto.jpg";
+                    <tr>
+
+
+                        <td class="adminlist_img_td">
+                            <a class="adminlist_img_wr" target="_blank" href="@link">
+                                <img class="img-circle img-person-list" alt="@item.FIO" src="@photo" />
+                            </a>
+                        </td>
+                        <td>
+                            <a class="adminlist_name" href="@link">@item.FIO</a>
+
+                            @if (item.Posts != null)
+                    {
+                        string posts = string.Empty;
+                        foreach (var p in item.Posts)
                         {
-                            string posts = string.Empty;
-                            foreach (var p in item.Posts)
-                            {
-                                <div class="adminlist_post">
-                                    @p.Name
-                                </div>
+                                    <div class="adminlist_post">
+                                        @p.Name
+                                    </div>
+                                }
                             }
-                        }
-                    </td>
-                    <td>
-                        @if (item.IsRedirectUrl)
-                        {
-                            <a target="_blank" href="/RedirectRegistry/Doctors/@item.Id/?oid=@Model.Oid">Расписание</a>
-                        }
-                        else
-                        {
-                            <p>По графику</p>
-                        }
-                    </td>
-                </tr>
-            }
-        </table>
+                        </td>
+                        <td>
+                            @if (item.IsRedirectUrl)
+                            {
+                                <a target="_blank" href="/RedirectRegistry/Doctors/@item.Id/?oid=@Model.Oid">Расписание</a>
+                            }
+                            else
+                            {
+                                <p>По графику</p>
+                            }
+                        </td>
+                    </tr>
+                }
+            </table>
         }
 
         @*<div class="row">

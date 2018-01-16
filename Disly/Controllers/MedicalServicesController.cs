@@ -16,6 +16,11 @@ namespace Disly.Controllers
         {
             base.OnActionExecuting(filterContext);
 
+            currentPage = _repository.getSiteMap("MedicalServices");
+
+            if (currentPage == null)
+                throw new Exception("model.CurrentPage == null");
+
             model = new MedicalServicesViewModel
             {
                 SitesInfo = siteModel,
@@ -26,9 +31,9 @@ namespace Disly.Controllers
             };
 
             #region Создаем переменные (значения по умолчанию)
-            string PageTitle = "Медицинские услуги";
-            string PageDesc = "описание страницы";
-            string PageKeyw = "ключевые слова";
+            string PageTitle = model.CurrentPage.Title;
+            string PageDesc = model.CurrentPage.Desc;
+            string PageKeyw = model.CurrentPage.Keyw;
             #endregion
 
             #region Метатеги

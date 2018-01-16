@@ -14,13 +14,32 @@ namespace Disly.Controllers
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             base.OnActionExecuting(filterContext);
+
+            currentPage = _repository.getSiteMap("PortalDoctors");
+
+            if (currentPage == null)
+                throw new Exception("model.CurrentPage == null");
+
             model = new PortalDoctorsViewModel
             {
                 SitesInfo = siteModel,
                 SiteMapArray = siteMapArray,
                 Breadcrumbs = breadcrumb,
-                BannerArray = bannerArray
+                BannerArray = bannerArray,
+                CurrentPage = currentPage
             };
+
+            #region Создаем переменные (значения по умолчанию)
+            string PageTitle = model.CurrentPage.Title;
+            string PageDesc = model.CurrentPage.Desc;
+            string PageKeyw = model.CurrentPage.Keyw;
+            #endregion
+
+            #region Метатеги
+            ViewBag.Title = PageTitle;
+            ViewBag.Description = PageDesc;
+            ViewBag.KeyWords = PageKeyw;
+            #endregion
         }
 
         // GET: PortalDoctors

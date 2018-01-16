@@ -20,6 +20,12 @@ namespace Disly.Controllers
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             base.OnActionExecuting(filterContext);
+
+            currentPage = _repository.getSiteMap("SpecStructure");
+
+            if (currentPage == null)
+                throw new Exception("model.CurrentPage == null");
+
             model = new SpecStructureViewModel
             {
                 SitesInfo = siteModel,
@@ -29,6 +35,18 @@ namespace Disly.Controllers
                // Breadcrumbs = breadcrumb,
                 Breadcrumbs = new List<Breadcrumbs>()
             };
+
+            #region Создаем переменные (значения по умолчанию)
+            string PageTitle = model.CurrentPage.Title;
+            string PageDesc = model.CurrentPage.Desc;
+            string PageKeyw = model.CurrentPage.Keyw;
+            #endregion
+
+            #region Метатеги
+            ViewBag.Title = PageTitle;
+            ViewBag.Description = PageDesc;
+            ViewBag.KeyWords = PageKeyw;
+            #endregion
         }
 
         /// <summary>
@@ -40,6 +58,8 @@ namespace Disly.Controllers
             if ((model.SitesInfo == null) || (model.SitesInfo != null && model.SitesInfo.Type != ContentLinkType.SPEC.ToString().ToLower()))
                 return RedirectToRoute("Error", new { httpCode = 405});
 
+            string _ViewName = (ViewName != String.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";
+
             model.Type = tab;
             if (model.CurrentPage == null)
                 throw new Exception("model.CurrentPage == null");
@@ -50,7 +70,7 @@ namespace Disly.Controllers
             model.Breadcrumbs.Add(new Breadcrumbs
             {
                 Title = model.CurrentPage.Title,
-                Url = string.Format("/{0}/", page)
+                Url = string.Format("/{0}/", page) // ""
             });
 
             //Табы на странице
@@ -110,21 +130,6 @@ namespace Disly.Controllers
                         break;
                 }
             }
-
-
-            #region Создаем переменные (значения по умолчанию)
-            PageViewModel Model = new PageViewModel();
-            string _ViewName = (ViewName != String.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";
-            string PageTitle = "Специалисты";
-            string PageDesc = "описание страницы";
-            string PageKeyw = "ключевые слова";
-            #endregion
-
-            #region Метатеги
-            ViewBag.Title = PageTitle;
-            ViewBag.Description = PageDesc;
-            ViewBag.KeyWords = PageKeyw;
-            #endregion
 
             ViewBag.SearchText = filter.SearchText;
             ViewBag.DepartGroup = filter.Group;

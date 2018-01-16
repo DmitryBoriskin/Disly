@@ -470,7 +470,12 @@ namespace cms.dbase
             string domain = _domain;
             using (var db = new CMSdb(_context))
             {
-                var query = db.content_sitemaps.Where(w => w.c_path == path && w.c_alias == alias && w.f_site == domain && w.b_disabled == false);
+                var query = db.content_sitemaps
+                    .Where(w => w.f_site == domain)
+                    .Where(w => w.b_disabled == false)
+                    .Where(w => w.c_path.ToLower() == path.ToLower())
+                    .Where(w => w.c_alias.ToLower() == alias.ToLower());
+
                 var data = query.Select(s => new SiteMapModel
                 {
                     Title = s.c_title,
@@ -485,13 +490,12 @@ namespace cms.dbase
                 if (data.Any())
                     return data.First();
 
-
                 return null;
             }
         }
 
         /// <summary>
-        /// Получим эл-т карты сайта
+        /// Получим эл-т карты сайта по frontSection, что фактически является названием контроллера
         /// </summary>
         /// <param name="frontSection"></param>
         /// <returns></returns>
@@ -502,20 +506,25 @@ namespace cms.dbase
             using (var db = new CMSdb(_context))
             {
                 var query = db.content_sitemaps
-                    .Where(w => w.f_site.Equals(domain))
-                    .Where(w => w.f_front_section.Equals(frontSection))
-                    .Select(s => new SiteMapModel
+                    .Where(w => w.f_site == domain)
+                    .Where(w => w.b_disabled == false)
+                    .Where(w => w.f_front_section.ToLower() == frontSection.ToLower());
+
+                var data = query.Select(s => new SiteMapModel
                     {
                         Title = s.c_title,
                         Text = s.c_text,
                         Alias = s.c_alias,
                         Path = s.c_path,
                         Id = s.id,
+                        ParentId = s.uui_parent,
                         FrontSection = s.f_front_section
                     });
 
-                if (!query.Any()) return null;
-                return query.SingleOrDefault();
+                if (data.Any())
+                    return data.First();
+
+                return null;
             }
         }
 

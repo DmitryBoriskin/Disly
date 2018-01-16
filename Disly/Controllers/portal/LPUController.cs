@@ -15,11 +15,17 @@ namespace Disly.Controllers
         {
             base.OnActionExecuting(filterContext);
 
+            currentPage = _repository.getSiteMap("LPU");
+
+            if (currentPage == null)
+                throw new Exception("model.CurrentPage == null");
+
             model = new LPUViewModel
             {
                 SitesInfo = siteModel,
                 SiteMapArray = siteMapArray,
                 BannerArray = bannerArray,
+                CurrentPage = currentPage,
                 Breadcrumbs = new List<Breadcrumbs>()
             };
 

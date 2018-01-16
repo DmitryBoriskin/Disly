@@ -262,7 +262,7 @@ namespace Disly
             routes.MapRoute(
                name: "Anketa",
                url: "Feedback/Anketa/{*action}",
-               defaults: new { controller = "Worksheet", action = "Index", path = UrlParameter.Optional }
+               defaults: new { controller = "Anketa", action = "Index", path = UrlParameter.Optional }
             );
 
             // Типовая страница (карта сайта)

@@ -13,7 +13,7 @@
                 string disabled = (item.Disabled) ? "disabled" : "";
                 <div class="list-item event-list @disabled ">
                     <div class="li-desc ">
-                        <a title="@item.Title" class="li-caption" href="/admin/anketa/item/@item.Id/@ViewBag.urlQuery">@item.Title</a><br />
+                        <a title="@item.Title" class="li-caption" href="/admin/worksheet/item/@item.Id/@ViewBag.urlQuery">@item.Title</a><br />
                         <span>Дата проведения:</span> @Convert.ToDateTime(item.DateBegin).ToString("dd MMMM yyyy")
                         @if (item.DateEnd.HasValue)
                         {

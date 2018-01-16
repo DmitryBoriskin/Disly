@@ -14,14 +14,32 @@ namespace Disly.Controllers
         {
             base.OnActionExecuting(filterContext);
 
+            currentPage = _repository.getSiteMap("Press");
+
+            if (currentPage == null)
+                throw new Exception("model.CurrentPage == null");
+
             model = new NewsViewModel
             {
                 SitesInfo = siteModel,
                 SiteMapArray = siteMapArray,
                 Breadcrumbs = breadcrumb,
                 BannerArray = bannerArray,
-                Group=_repository.getMaterialsGroup()
+                CurrentPage = currentPage,
+                Group = _repository.getMaterialsGroup()
             };
+
+            #region Создаем переменные (значения по умолчанию)
+            string PageTitle = model.CurrentPage.Title;
+            string PageDesc = model.CurrentPage.Desc;
+            string PageKeyw = model.CurrentPage.Keyw;
+            #endregion
+
+            #region Метатеги
+            ViewBag.Title = PageTitle;
+            ViewBag.Description = PageDesc;
+            ViewBag.KeyWords = PageKeyw;
+            #endregion
         }
 
         /// <summary>
@@ -30,6 +48,7 @@ namespace Disly.Controllers
         /// <returns></returns>
         public ActionResult Index()
         {
+            string _ViewName = (ViewName != String.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";
             ViewBag.Category = (RouteData.Values["category"] != null) ? RouteData.Values["category"] : String.Empty;
             var filter = getFilter();
             filter.Disabled = false;
@@ -37,49 +56,27 @@ namespace Disly.Controllers
 
             ViewBag.Filter = filter;
             ViewBag.NewsSearchArea = filter.SearchText;
-            ViewBag.NewsSearchDateStart=filter.Date;
-            ViewBag.NewsSearchDateFin=filter.DateEnd;
+            ViewBag.NewsSearchDateStart = filter.Date;
+            ViewBag.NewsSearchDateFin = filter.DateEnd;
 
-            #region Создаем переменные (значения по умолчанию)            
-            string _ViewName = (ViewName != String.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";
-
-            string PageTitle = "Новости";
-            string PageDesc = "описание страницы";
-            string PageKeyw = "ключевые слова";
-            #endregion            
-            #region Метатеги
-            ViewBag.Title = PageTitle;
-            ViewBag.Description = PageDesc;
-            ViewBag.KeyWords = PageKeyw;
-            #endregion
             return View(_ViewName, model);
         }
 
         public ActionResult Item(string year, string month, string day, string alias)
         {
+            string _ViewName = (ViewName != String.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";
+
             ViewBag.Day = day.ToString();
             ViewBag.Alias = (RouteData.Values["alias"] != null) ? RouteData.Values["alias"] : String.Empty;
             model.Item = _repository.getMaterialsItem(year, month, day, alias); //,Domain
-
-            #region Создаем переменные (значения по умолчанию)
-            string _ViewName = (ViewName != String.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";
-
-            string PageTitle =(model.Item!=null)?model.Item.Title: "Новости";
-            string PageDesc = "описание страницы";
-            string PageKeyw = "ключевые слова";
-            #endregion
-            
-            #region Метатеги
-            ViewBag.Title = PageTitle;
-            ViewBag.Description = PageDesc;
-            ViewBag.KeyWords = PageKeyw;
-            #endregion
 
             return View(_ViewName, model);
         }
 
         public ActionResult Category(string category)
         {
+            string _ViewName = (ViewName != String.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";
+
             ViewBag.CurrentCategory = category;
             var filter = getFilter();
             filter.Disabled = false;
@@ -88,23 +85,13 @@ namespace Disly.Controllers
 
             model.List = _repository.getMaterialsList(filter);
 
-            #region Создаем переменные (значения по умолчанию)            
-            string _ViewName = (ViewName != String.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";
-
-            string PageTitle = "Новости";
-            string PageDesc = "описание страницы";
-            string PageKeyw = "ключевые слова";
-            #endregion            
-            #region Метатеги
-            ViewBag.Title = PageTitle;
-            ViewBag.Description = PageDesc;
-            ViewBag.KeyWords = PageKeyw;
-            #endregion
             return View(_ViewName, model);
         }
 
         public ActionResult RssSettings()
         {
+            string _ViewName = (ViewName != String.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";
+
             ViewBag.Category = (RouteData.Values["category"] != null) ? RouteData.Values["category"] : String.Empty;
             var filter = getFilter();
             filter.Disabled = false;
@@ -117,18 +104,6 @@ namespace Disly.Controllers
 
             ViewBag.SiteUrl = _repository.getDomainSite();
 
-            #region Создаем переменные (значения по умолчанию)            
-            string _ViewName = (ViewName != String.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";
-
-            string PageTitle = "Rss ленты";
-            string PageDesc = "описание страницы";
-            string PageKeyw = "ключевые слова";
-            #endregion            
-            #region Метатеги
-            ViewBag.Title = PageTitle;
-            ViewBag.Description = PageDesc;
-            ViewBag.KeyWords = PageKeyw;
-            #endregion
             return View(model);
         }
 
@@ -138,14 +113,15 @@ namespace Disly.Controllers
         {
             Response.ContentType = "text/xml";
             var filter = getFilter();
-            filter.Disabled = false;            
+            filter.Disabled = false;
             model.List = _repository.getMaterialsList(filter);
             if (model.List != null)
             {
                 ViewBag.LastDatePublish = model.List.Data[0].Date;
-            }            
-            ViewBag.Domain = _repository.getDomainSite();            
-            string _ViewName = (ViewName != String.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";            
+            }
+            ViewBag.Domain = _repository.getDomainSite();
+
+            string _ViewName = (ViewName != String.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";
             return View("rss", model);
         }
 

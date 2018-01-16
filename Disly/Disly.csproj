@@ -533,11 +533,11 @@
     <Compile Include="Areas\Admin\Controllers\BannersController.cs" />
     <Compile Include="Areas\Admin\Controllers\cmsMenuController.cs" />
     <Compile Include="Areas\Admin\Controllers\DocumentsController .cs" />
-    <Compile Include="Areas\Admin\Controllers\AnketaController.cs" />
+    <Compile Include="Areas\Admin\Controllers\WorksheetController.cs" />
     <Compile Include="Areas\Admin\Models\AnketaViewModel.cs" />
     <Compile Include="Controllers\gs\SpecStructureController.cs" />
     <Compile Include="Controllers\orgs\OrgGsMembersController.cs" />
-    <Compile Include="Controllers\WorksheetController.cs" />
+    <Compile Include="Controllers\AnketaController.cs" />
     <Compile Include="Controllers\VacancyController.cs" />
     <Compile Include="Controllers\RedirectFromOldController.cs" />
     <Compile Include="Areas\Admin\Controllers\PhotoAlbumsController.cs" />
@@ -826,8 +826,8 @@
     <Content Include="Areas\Admin\Views\Shared\Modal\Sites.cshtml" />
     <Content Include="Content\css\commonless.less" />
     <Content Include="Content\css\theme\green.less" />
-    <Content Include="Areas\Admin\Views\Anketa\Item.cshtml" />
-    <Content Include="Areas\Admin\Views\Anketa\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\Worksheet\Item.cshtml" />
+    <Content Include="Areas\Admin\Views\Worksheet\Index.cshtml" />
     <Content Include="Content\css\theme\purple.less" />
     <None Include="Content\plugins\datatables\i18n\ru.json" />
     <Content Include="Content\plugins\tinymce\langs\readme.md" />
@@ -884,7 +884,7 @@
     <Content Include="Views\Shared\part\childlist_sitemap.cshtml" />
     <Content Include="Views\Vacancy\Index.cshtml" />
     <Content Include="Views\Vacancy\Item.cshtml" />
-    <Content Include="Views\Worksheet\Index.cshtml" />
+    <Content Include="Views\Anketa\Index.cshtml" />
     <Content Include="Views\SpecStructure\Index.cshtml" />
     <Content Include="Views\SpecStructure\list.cshtml" />
     <Content Include="Views\Shared\part\nav.cshtml" />

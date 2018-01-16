@@ -12,7 +12,7 @@ using System.Web.Mvc;
 
 namespace Disly.Areas.Admin.Controllers
 {
-    public class AnketaController : CoreController
+    public class WorksheetController : CoreController
     {
         AnketaViewModel model;
         FilterParams filter;

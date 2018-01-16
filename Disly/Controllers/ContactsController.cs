@@ -16,13 +16,31 @@ namespace Disly.Controllers
         {
             base.OnActionExecuting(filterContext);
 
+            currentPage = _repository.getSiteMap("Contacts");
+
+            if (currentPage == null)
+                throw new Exception("model.CurrentPage == null");
+
             model = new ContatcsViewModel
             {
                 SitesInfo = siteModel,
                 SiteMapArray = siteMapArray,
                 Breadcrumbs = breadcrumb,
-                BannerArray = bannerArray
+                BannerArray = bannerArray,
+                CurrentPage = currentPage
             };
+
+            #region Создаем переменные (значения по умолчанию)
+            string PageTitle = model.CurrentPage.Title;
+            string PageDesc = model.CurrentPage.Desc;
+            string PageKeyw = model.CurrentPage.Keyw;
+            #endregion
+
+            #region Метатеги
+            ViewBag.Title = PageTitle;
+            ViewBag.Description = PageDesc;
+            ViewBag.KeyWords = PageKeyw;
+            #endregion
         }
 
 
@@ -32,23 +50,13 @@ namespace Disly.Controllers
         /// <returns></returns>
         public ActionResult Index(string t)
         {
-            #region Получаем данные из адресной строки
-            string UrlPath = "/" + (String)RouteData.Values["path"];
-            //string UrlPath = Request.Path;
-            if (UrlPath.LastIndexOf("/") > 0 && UrlPath.LastIndexOf("/") == UrlPath.Length - 1) UrlPath = UrlPath.Substring(0, UrlPath.Length - 1);
-
-            string _path = UrlPath.Substring(0, UrlPath.LastIndexOf("/") + 1);
-            string _alias = UrlPath.Substring(UrlPath.LastIndexOf("/") + 1);
-            #endregion     
-
             #region Создаем переменные (значения по умолчанию)
             PageViewModel Model = new PageViewModel();
             string _ViewName = (ViewName != String.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";
-            string PageTitle = "Контакты";
-            string PageDesc = "описание страницы";
-            string PageKeyw = "ключевые слова";
+            string PageTitle = model.CurrentPage.Title;
+            string PageDesc = model.CurrentPage.Desc;
+            string PageKeyw = model.CurrentPage.Keyw;
             #endregion    
-
 
             model.Nav = new MaterialsGroup[]
             {
@@ -66,7 +74,7 @@ namespace Disly.Controllers
                     break;
                 case "dop":
                     PageTitle = "Дополнительная информация";
-                    model.DopInfo = _repository.getSiteMap("contacts"); 
+                    model.DopInfo = model.CurrentPage;  //Избавиться от DopInfo
                     break;
                 case "phone":
                     PageTitle = "Телефонный правочник";

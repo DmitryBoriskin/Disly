@@ -94,18 +94,18 @@
 
     <div class="col-md-3 col-md-push-1">
         <div class="dop-block">
+            @{
+                string photo = (!string.IsNullOrWhiteSpace(Model.DoctorsItem.Photo))
+                           ? File.Exists(Server.MapPath(Model.DoctorsItem.Photo))
+                               ? Model.DoctorsItem.Photo : "/Content/img/no_avatar.png"
+                           : "/Content/img/no_avatar.png";
+            }
+
             @if (Model.DoctorsItem.Photo != null)
             {
                 <a href="/doctors/@Model.DoctorsItem.Id" class="boss_img_wrap">
-                    @if (Model.DoctorsItem.Photo != null)
-                    {
-                        <img src="@Model.DoctorsItem.Photo" title="@Model.DoctorsItem.Photo" />
-                    }
-                    else
-                    {
-                        <img src="~/Content/img/no_avatar.png" />
-                    }
-                </a>
+                    <img src="@photo" title="@Model.DoctorsItem.FIO" alt="@Model.DoctorsItem.FIO"/>
+               </a>
             }
             <a class="btn_print" onClick="window.print()">Распечатать</a><br />
             <a class="btn_share" title="Поделиться" href="../../../../#">Поделиться</a><br />
