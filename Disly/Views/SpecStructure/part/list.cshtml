@@ -10,8 +10,8 @@
                     string link = "/doctors/" + item.Id;
                     string photo = (!string.IsNullOrWhiteSpace(item.Photo))
                           ? File.Exists(Server.MapPath(item.Photo))
-                              ? item.Photo : "/Content/img/nophoto.jpg"
-                          : "/Content/img/nophoto.jpg";
+                              ? item.Photo : "/Content/img/no_avatar.png"
+                          : "/Content/img/no_avatar.png";
                     <tr>
                         <td class="adminlist_img_td">
                             <a class="adminlist_img_wr" target="_blank" href="@link">

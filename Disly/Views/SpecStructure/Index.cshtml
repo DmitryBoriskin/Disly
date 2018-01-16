@@ -27,21 +27,21 @@
                 model = Model.SpesialitsList;
                 if (model != null)
                 {
-                    @Html.Partial("/Views/gs/Structure/list.cshtml", model)
+                    @Html.Partial("part/list", model)
                 }
                 break;
             case "experts":
                 model = Model.ExpertsList;
                 if (model != null)
                 {
-                    @Html.Partial("/Views/gs/Structure/list.cshtml", model)
+                    @Html.Partial("part/list", model)
                 }
                 break;
             case "doctors":
                 model = Model.DoctorsList;
                 if (model != null)
                 {
-                    @Html.Partial("/Views/gs/Structure/list.cshtml", model)
+                    @Html.Partial("part/list", model)
                 }
                 break;
             default:

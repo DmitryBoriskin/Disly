@@ -901,7 +901,7 @@
     <Content Include="Views\Vacancy\Item.cshtml" />
     <Content Include="Views\Anketa\Index.cshtml" />
     <Content Include="Views\SpecStructure\Index.cshtml" />
-    <Content Include="Views\SpecStructure\list.cshtml" />
+    <Content Include="Views\SpecStructure\part\list.cshtml" />
     <Content Include="Views\Shared\part\nav.cshtml" />
     <Content Include="Views\_portal\home\Index.cshtml" />
     <Content Include="Views\_portal\shared\_Layout.cshtml" />
