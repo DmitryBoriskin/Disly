@@ -85,9 +85,6 @@ namespace Disly.Controllers
                 });
             }
 
-            //-----------------------------------------------------------------
-
-            model.Type = tab;
             switch (tab)
             {
                 case "administration":

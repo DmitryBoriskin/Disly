@@ -23,11 +23,6 @@ namespace Disly.Models
         public DepartmentAffiliationModel[] DepartmentAffiliations { get; set; }
 
         /// <summary>
-        /// Навигация
-        /// </summary>
-        public MaterialsGroup[] Nav { get; set; }
-
-        /// <summary>
         /// тип информации показываемой на странице 
         /// </summary>
         public string Type { get; set; }

@@ -874,7 +874,6 @@
     <Content Include="Views\Doctors\Redirect.cshtml" />
     <Content Include="Views\MapSite\Index.cshtml" />
     <Content Include="Views\LPU\Index.cshtml" />
-    <Content Include="Views\LPU\Nav.cshtml" />
     <Content Include="Views\Press\part\Item.cshtml" />
     <Content Include="Views\Home\part\media.cshtml" />
     <Content Include="Views\PortalDoctors\Index.cshtml" />

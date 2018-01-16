@@ -43,39 +43,48 @@ namespace Disly.Controllers
         }
 
         // GET: LPU
-        public ActionResult Index(string t, Guid? id)
+        public ActionResult Index(string tab, Guid? id)
         {
-            model.Nav = new MaterialsGroup[]
-            {
-                new MaterialsGroup{Title="Все"},
-                new MaterialsGroup{Title="По типу медицинского учреждения", Alias="typelist"},
-                new MaterialsGroup{Title="По ведомственной принадлежности", Alias="affiliation"},
-                new MaterialsGroup{Title="Медицинские услуги", Alias="services"}
-            };
+            model.Type = tab;
+            var page = model.CurrentPage.FrontSection;
 
+            //Хлебные крошки
             model.Breadcrumbs.Add(new Breadcrumbs
             {
-                Title = "ЛПУ",
-                Url = "/lpu"
+                Title = model.CurrentPage.Title,
+                Url = string.Format("/{0}/", page) // ""
             });
 
-            model.Type = t;
-            switch (t)
+            //Табы на странице
+            model.Nav = new List<PageTabsViewModel>();
+            model.Nav.Add(new PageTabsViewModel { Page = page, Title = "Все" });
+            model.Nav.Add(new PageTabsViewModel { Page = page, Title = "По типу медицинского учреждения", Alias = "typelist" });
+            model.Nav.Add(new PageTabsViewModel { Page = page, Title = "По ведомственной принадлежности", Alias = "affiliation" });
+            model.Nav.Add(new PageTabsViewModel { Page = page, Title = "Медицинские услуги", Alias = "services" });
+
+            //Обработка активных табов
+            if (model.Nav != null && model.Nav.Where(s => s.Alias == tab).Any())
+            {
+                var navItem = model.Nav.Where(s => s.Alias == tab).Single();
+                navItem.Active = true;
+
+                model.Breadcrumbs.Add(new Breadcrumbs
+                {
+                    Title = navItem.Title,
+                    Url = navItem.Alias + "/"
+                });
+            }
+
+            switch (tab)
             {
                 case "typelist":
-                    model.Breadcrumbs.Add(new Breadcrumbs
-                    {
-                        Title = "По типу медицинского учреждения",
-                        Url = "/lpu?t=typelist"
-                    });
-
-                    if (!id.Equals(null))
+                    if (id.HasValue)
                     {
                         // список организаций
-                        model.OrgList = _repository.getOrgModels(id);
+                        model.OrgList = _repository.getOrgModels(id.Value);
 
                         // название типа организаций
-                        ViewBag.TypeTitle = _repository.getOrgTypeName((Guid)id);
+                        ViewBag.TypeTitle = _repository.getOrgTypeName(id.Value);
 
                         model.Breadcrumbs.Add(new Breadcrumbs
                         {
@@ -84,24 +93,16 @@ namespace Disly.Controllers
                         });
                     }
                     else
-                    {
                         model.OrgTypes = _repository.getOrgTypes();
-                    }
 
                     break;
                 case "affiliation":
-                    model.Breadcrumbs.Add(new Breadcrumbs
-                    {
-                        Title = "По ведомственной принадлежности",
-                        Url = "/lpu?t=affiliation"
-                    });
-
-                    if (id != null)
+                    if (id.HasValue)
                     {
                         model.OrgList = _repository.getOrgModels(null)
                             .Where(w => w.Affiliation.Equals(id)).ToArray();
 
-                        ViewBag.TypeTitle = _repository.getAffiliationDepartment((Guid)id);
+                        ViewBag.TypeTitle = _repository.getAffiliationDepartment(id.Value);
 
                         model.Breadcrumbs.Add(new Breadcrumbs
                         {
@@ -110,43 +111,35 @@ namespace Disly.Controllers
                         });
                     }
                     else
-                    {
                         model.DepartmentAffiliations = _repository.getDepartmentAffiliations();
-                    }
 
                     break;
                 case "services":
-                    model.Breadcrumbs.Add(new Breadcrumbs
+                    if (id.HasValue)
                     {
-                        Title = "Медицинские услуги",
-                        Url = "/lpu?t=services"
-                    });
-                    if (id != null)
-                    {
-                        ViewBag.TypeTitle = _repository.getMedicalServiceTitle((Guid)id);
+                        ViewBag.TypeTitle = _repository.getMedicalServiceTitle(id.Value);
 
                         model.Breadcrumbs.Add(new Breadcrumbs
                         {
                             Title = ViewBag.TypeTitle,
                             Url = ""
                         });
-                        model.OrgList = _repository.getOrgPortalModels((Guid)id);
+                        model.OrgList = _repository.getOrgPortalModels(id.Value);
                     }
                     else
-                    {
                         model.MedicalServices = _repository.getMedicalServices(null);
-                    }
 
                     break;
                 default:
-                    // список организаций
-                    model.OrgList = _repository.getOrgModels(id);
-
-                    // название типа организаций
-                    if (!id.Equals(null))
+                    if (id.HasValue)
                     {
-                        ViewBag.TypeTitle = _repository.getOrgTypeName((Guid)id);
+                        // список организаций
+                        model.OrgList = _repository.getOrgModels(id.Value);
+
+                        ViewBag.TypeTitle = _repository.getOrgTypeName(id.Value);
                     }
+                    else
+                        model.OrgList = _repository.getOrgModels(null);
 
                     break;
             }

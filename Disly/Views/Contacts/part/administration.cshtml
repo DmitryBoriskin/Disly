@@ -6,7 +6,7 @@
         {
             string fio = item.Surname + " " + item.Name + " " + item.Patronymic;
 
-            string link = (item.PeopleF.HasValue)? string.Format("/doctors/{0}", item.PeopleF.Value): "";
+            string link = (item.PeopleF.HasValue) ? string.Format("/doctors/{0}", item.PeopleF.Value) : "";
 
             string photo = (item.Photo != null && !string.IsNullOrWhiteSpace(item.Photo.Url))
                        ? File.Exists(Server.MapPath(item.Photo.Url))
@@ -15,9 +15,9 @@
 
             <tr>
                 <td class="adminlist_img_td">
-                        <a class="adminlist_img_wr" target="_blank" href="@link">
-                            <img class="img-circle img-person-list" src="@photo" />
-                        </a>
+                    <a class="adminlist_img_wr" target="_blank" href="@link">
+                        <img class="img-circle img-person-list" src="@photo" />
+                    </a>
                 </td>
                 <td>
                     <a class="adminlist_name" href="@link">@fio</a>
