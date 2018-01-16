@@ -147,7 +147,7 @@ namespace Disly
             routes.MapRoute(
                name: "PortalDoctorsItem",
                url: "PortalDoctors/{id}",
-               defaults: new { controller = "Doctors", action = "Item" }
+               defaults: new { controller = "PortalDoctors", action = "Item" }
             );
 
             //Врачи
