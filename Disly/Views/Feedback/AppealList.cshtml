@@ -1,5 +1,10 @@
 ﻿@model FeedbackViewModel
-
+@{
+    if (Model.SitesInfo.Alias == "main")
+    {
+        Layout = "/views/_portal/shared/_layout.cshtml";
+    }
+}
 @using System.Text.RegularExpressions;
 @{
     int maxChars = 126;

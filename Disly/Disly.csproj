@@ -143,6 +143,7 @@
     <Content Include="Content\css\styles_old.css" />
     <Content Include="Content\css\theme\blue.css" />
     <Content Include="Content\css\theme\green.css" />
+    <Content Include="Content\css\theme\green_portal.css" />
     <Content Include="Content\css\theme\purple.css" />
     <Content Include="Content\css\theme\turquoise.css" />
     <Content Include="Content\decor\chuvashia\bg.png" />
@@ -389,6 +390,7 @@
     <Content Include="Content\plugins\tinymce\plugins\emoticons\plugin.min.js" />
     <Content Include="Content\plugins\tinymce\plugins\fullpage\plugin.min.js" />
     <Content Include="Content\plugins\tinymce\plugins\fullscreen\plugin.min.js" />
+    <Content Include="Content\css\theme\green_portal.less" />
     <None Include="Content\plugins\tinymce\plugins\gallery\plugin.min.js_korkin" />
     <Content Include="Content\plugins\tinymce\plugins\help\img\logo.png" />
     <Content Include="Content\plugins\tinymce\plugins\help\plugin.min.js" />
@@ -434,6 +436,19 @@
     <Content Include="Content\plugins\tinymce\themes\inlite\theme.min.js" />
     <Content Include="Content\plugins\tinymce\themes\modern\theme.min.js" />
     <Content Include="Content\plugins\tinymce\tinymce.min.js" />
+    <Content Include="Content\portal\img\bg.jpg" />
+    <Content Include="Content\portal\img\browse_press.jpg" />
+    <Content Include="Content\portal\img\e-reg.jpg" />
+    <Content Include="Content\portal\img\event_calendar.jpg" />
+    <Content Include="Content\portal\img\logo.png" />
+    <Content Include="Content\portal\img\med_logo_footer.jpg" />
+    <Content Include="Content\portal\img\mini-logo-med.png" />
+    <Content Include="Content\portal\img\online-consultation.jpg" />
+    <Content Include="Content\portal\img\smi-for-med-chuvashia.jpg" />
+    <Content Include="Content\portal\img\tv-radio-plot.jpg" />
+    <Content Include="Content\portal\img\your-opinion.jpg" />
+    <Content Include="Content\portal\img\youtube-med-chuv.jpg" />
+    <Content Include="Content\portal\style.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -888,6 +903,9 @@
     <Content Include="Views\SpecStructure\Index.cshtml" />
     <Content Include="Views\SpecStructure\list.cshtml" />
     <Content Include="Views\Shared\part\nav.cshtml" />
+    <Content Include="Views\_portal\home\Index.cshtml" />
+    <Content Include="Views\_portal\shared\_Layout.cshtml" />
+    <Content Include="Views\_portal\shared\_Layout - Копировать.cshtml" />
     <Content Include="Views\OrgGsMembers\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>

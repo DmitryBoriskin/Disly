@@ -1,5 +1,10 @@
 ﻿@model WorksheetViewModel
-
+@{
+    if (Model.SitesInfo.Alias == "main")
+    {
+        Layout = "/views/_portal/shared/_layout.cshtml";
+    }
+}
 <div class="container">
     <div class="row">
         <div class="col-md-12">

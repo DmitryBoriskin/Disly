@@ -141,6 +141,9 @@ namespace cms.dbModel
         public abstract bool updateStructure(Guid id, StructureModel insert);
         public abstract bool deleteStructure(Guid id);
         public abstract bool sortStructure(Guid id, int new_num);
+        public abstract bool addAddressStructure(DopAddres addres);
+        public abstract DopAddres[] getDopAddres(Guid StrucId);
+        public abstract bool delAddressStructure(Guid id);
 
         public abstract bool insOvp(Guid IdStructure, Guid OrgId, StructureModel insertStructure);
         public abstract bool setOvp(Guid IdStructure, StructureModel updStructure, Departments updDepart);

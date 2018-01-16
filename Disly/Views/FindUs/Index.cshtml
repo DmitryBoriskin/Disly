@@ -1,4 +1,10 @@
 ﻿@model ContatcsViewModel
+@{
+    if (Model.SitesInfo.Alias == "main")
+    {
+        Layout = "/views/_portal/shared/_layout.cshtml";
+    }
+}
 <div class="type-page">
     <div class="container">
         <h1>@ViewBag.Title</h1>
@@ -57,9 +63,24 @@
                             </div>
                             <div class="col-md-4">
                                 <div>
-                                    <div class="contact_info_it">
+                                    @*<div class="contact_info_it">
                                         <div id="map-@item.Id" class="buildmap" data-zoom="13" style="width: 100%; height: 250px;" data-height="300" data-x="@item.GeopointX.ToString().Replace(",", ".")" data-y="@item.GeopointY.ToString().Replace(",", ".")" data-title="@Model.OrgItem.Title"></div>
-                                    </div>
+                                    </div>*@
+                                </div>
+                                <div class="">
+                                    <div style=" width: 100%; height: 300px; padding: 0; margin: 0;" id="maplist"></div>
+                                    <div class="geopoint" data-title="@item.Adress" data-x="@item.GeopointX.ToString().Replace(",", ".")" data-y="@item.GeopointY.ToString().Replace(",", ".")"></div>
+                                    @if (item.DopAddres != null)
+                                    {
+                                        if (item.DopAddres.Length > 0)
+                                        {
+                                            foreach (var dopadres in item.DopAddres)
+                                            {
+                                                <div class="geopoint" data-title="@dopadres.Address" data-x="@dopadres.GeopointX.ToString().Replace(",", ".")" data-y="@dopadres.GeopointY.ToString().Replace(",", ".")"></div>                                            
+                                            }
+                                        }
+
+                                    }
                                 </div>
                             </div>
                         </div>

@@ -983,6 +983,15 @@ namespace cms.dbase
                         Ovp = s.First().str.b_ovp,
                         Adress = s.First().str.c_adress,
                         Routes = s.First().str.c_routes,
+                        DopAddres = getDopAddresStructur(s.First().str.id),
+                        //DopAddres = (from ad in db.content_org_structure_adresss
+                        //             where ad.f_org_structure==s.First().str.id
+                        //             select new DopAddres
+                        //             {
+                        //                 Address = ad.c_adress,
+                        //                 GeopointX = ad.n_geopoint_x,
+                        //                 GeopointY = ad.n_geopoint_y
+                        //             }).ToArray(),
                         Departments = s.Select(d => new Departments
                         {
                             Id = d.dep.id,
@@ -1001,6 +1010,26 @@ namespace cms.dbase
                 if (data.Any())
                     return data.ToArray();
 
+                return null;
+            }
+        }
+
+
+        public override DopAddres[] getDopAddresStructur(Guid StrucId)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var query = db.content_org_structure_adresss.Where(w => w.f_org_structure == StrucId);
+                if (query.Any())
+                {
+                    return query.Select(s => new DopAddres()
+                    {
+                        Id = s.id,
+                        Address = s.c_adress,
+                        GeopointX=s.n_geopoint_x,
+                        GeopointY=s.n_geopoint_y
+                    }).ToArray();
+                }
                 return null;
             }
         }

@@ -2,9 +2,6 @@
     $('.select2').select2();
 
 
-
-
-
     $('input[data-type=date').datepicker({ onSelect: function (dateText, inst) { $(this).attr('value', dateText); } });
 
     $('input[data-mask]').each(function () {
@@ -37,6 +34,12 @@
         e.preventDefault();
         ShowShare($(this));
     });
+
+
+    if ($('.geopoint').length > 0) {
+        GeoCollection();
+    }
+
 
 
     //Фильтр по новостям
@@ -113,6 +116,68 @@
     }
 
 });
+
+
+
+function GeoCollection() {
+
+    //опредлеим центр карты
+    var x_center=0;
+    var y_center = 0;
+    var point_count = $('.geopoint').length;
+    
+
+    $('.geopoint').each(function () {
+        x_center = x_center +   parseFloat($(this).attr('data-x'));
+        y_center = y_center + parseFloat($(this).attr('data-y'));
+    });
+    //крайние точки для масштаба
+    
+
+
+
+    function init() {
+    
+        myMap = new ymaps.Map("maplist", {
+            center: [x_center / point_count, y_center / point_count],
+            zoom: 14,
+            controls: []
+        }, {
+                searchControlProvider: 'yandex#search'
+        });
+
+        myMap.controls.add('zoomControl');
+        myMap.behaviors.disable('scrollZoom');
+        var gCollection = new ymaps.GeoObjectCollection();
+
+        $('.geopoint').each(function () {
+            var _placemark = push($(this));
+            gCollection.add(_placemark);
+        });
+        myMap.geoObjects.add(gCollection);
+    }    
+
+
+    function push(obj) {
+        var x = obj.attr('data-x');
+        var y = obj.attr('data-y');
+        var title = obj.attr('data-title');
+        var _placemark = new ymaps.Placemark([x, y],
+            {
+                balloonContent:title
+            },{
+                preset: 'islands#redDotIcon'
+            });
+        return _placemark;
+    }
+
+    
+
+    ymaps.ready(init);
+
+}
+
+
 
 function PhGall() {
     $(".swipebox").swipebox();

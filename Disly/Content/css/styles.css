@@ -1028,6 +1028,12 @@ a.button.icon-cancel{
 .del_domain:hover:before{color:#c50505;}
 
 
+.del_dop_address{display:block;cursor:pointer;}
+.del_dop_address:hover{text-decoration:none;}
+.del_dop_address:before{content:'\ec5b';font-family:fontello;color:red;}
+.del_dop_address:hover:before{color:#c50505;}
+
+
 
 /*banners*/
 .list_img_preview{

@@ -309,6 +309,23 @@ namespace cms.dbModel.entity
         /// Отделения
         /// </summary>
         public Departments[] Departments { get; set; }
+        /// <summary>
+        /// дополнительные аддреса
+        /// </summary>
+        public DopAddres[] DopAddres { get; set; }
+    }
+
+    /// <summary>
+    /// Дополнительный аддрес
+    /// </summary>
+    public class DopAddres
+    {
+        public Guid Id { get; set; }
+        public Guid IdStructure { get; set; }
+        public string Title { get; set; }
+        public string Address { get; set; }
+        public double? GeopointX { get; set; }
+        public double? GeopointY { get; set; }
     }
 
     /// <summary>

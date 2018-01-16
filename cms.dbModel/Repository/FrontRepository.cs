@@ -41,6 +41,7 @@ namespace cms.dbModel
 
         //Departments and structure
         public abstract StructureModel[] getStructures(); //string domain
+        public abstract DopAddres[] getDopAddresStructur(Guid StrucId);
         public abstract StructureModel getStructureItem(int num); //string domain,
         public abstract Departments[] getDepartmentsList(Guid StructureId);
         public abstract Departments getDepartmentsItem(Guid Id);
