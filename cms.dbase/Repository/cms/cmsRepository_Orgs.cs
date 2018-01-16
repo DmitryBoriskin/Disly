@@ -813,6 +813,7 @@ namespace cms.dbase
                   .Value(v => v.n_geopoint_x, addres.GeopointX)
                   .Value(v => v.n_geopoint_y, addres.GeopointY)
                   .Value(v => v.f_org_structure, addres.IdStructure)
+                  .Value(v => v.c_title, addres.Title)
                   .Insert();
                 return true;
             }
@@ -827,7 +828,8 @@ namespace cms.dbase
                     return query.Select(s => new DopAddres()
                     {
                         Id=s.id,
-                        Address=s.c_adress
+                        Address=s.c_adress,
+                        Title=s.c_title
                     }).ToArray();
                 }
                 return null;

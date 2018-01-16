@@ -437,6 +437,7 @@ namespace Disly.Areas.Admin.Controllers
         {
             string IdStruc = Request["StructureItem.Id"];
             string DopAddres = Request["dop-addres"];
+            string DopAddresTitle = Request["dop-addres-title"];
 
             var CoordResult = Spots.Coords(DopAddres);
             
@@ -445,17 +446,17 @@ namespace Disly.Areas.Admin.Controllers
                 IdStructure=Guid.Parse(IdStruc),
                 Address = DopAddres,
                 GeopointX = CoordResult.GeopointX,
-                GeopointY = CoordResult.GeopointY
+                GeopointY = CoordResult.GeopointY,
+                Title= DopAddresTitle
             };
 
             _cmsRepository.addAddressStructure(newaddres);            
             return Redirect(((System.Web.HttpRequestWrapper)Request).RawUrl);
         }
 
-        public ActionResult DelDopAddres(int id)
-        {
-            var resst = id;
-            _cmsRepository.delAddressStructure(Guid.Parse(id.ToString()));
+        public ActionResult DelDopAddres(string id)
+        {            
+            _cmsRepository.delAddressStructure(Guid.Parse(id));
             return null;
         }
 
