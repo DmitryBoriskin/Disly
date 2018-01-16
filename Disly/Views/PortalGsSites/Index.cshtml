@@ -22,7 +22,7 @@
         @if (Model.List != null && Model.List.Count() > 0)
         {
             <div class="row">
-                <div class="col-md-9">
+                <div class="col-md-8">
                     <table class="table">
                         @foreach (var item in Model.List)
                         {
@@ -46,8 +46,8 @@
                             </tr>
                         }
                     </table>
-                    </div>
-                <div class="col-md-3">
+                </div>
+                <div class="col-md-3 col-md-push-1">
                     <form id="list-filter-form" role="form" class="filtr_news" action="/@ViewBag.ControllerName/">
                         <div class="row">
                             <div class="col-sm-12">
