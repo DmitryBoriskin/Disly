@@ -32,7 +32,7 @@ namespace Disly.Controllers
                 SiteMapArray = siteMapArray,
                 BannerArray = bannerArray,
                 CurrentPage = currentPage,
-               // Breadcrumbs = breadcrumb,
+                // Breadcrumbs = breadcrumb,
                 Breadcrumbs = new List<Breadcrumbs>()
             };
 
@@ -56,14 +56,11 @@ namespace Disly.Controllers
         public ActionResult Index(string tab)
         {
             if ((model.SitesInfo == null) || (model.SitesInfo != null && model.SitesInfo.Type != ContentLinkType.SPEC.ToString().ToLower()))
-                return RedirectToRoute("Error", new { httpCode = 405});
+                return RedirectToRoute("Error", new { httpCode = 405 });
 
             string _ViewName = (ViewName != String.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";
 
             model.Type = tab;
-            if (model.CurrentPage == null)
-                throw new Exception("model.CurrentPage == null");
-
             var page = model.CurrentPage.FrontSection;
 
             //Хлебные крошки
@@ -75,7 +72,7 @@ namespace Disly.Controllers
 
             //Табы на странице
             model.Nav = new List<PageTabsViewModel>();
-            model.Nav.Add(new PageTabsViewModel {Page = page, Title = "Информация" });
+            model.Nav.Add(new PageTabsViewModel { Page = page, Title = "Информация" });
             model.Nav.Add(new PageTabsViewModel { Page = page, Title = "Главные специалисты", Alias = "specialists" });
             model.Nav.Add(new PageTabsViewModel { Page = page, Title = "Экспертный состав", Alias = "experts" });
             model.Nav.Add(new PageTabsViewModel { Page = page, Title = "Специалисты / члены общества", Alias = "doctors" });

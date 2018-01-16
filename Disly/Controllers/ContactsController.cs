@@ -2,6 +2,8 @@
 using cms.dbModel.entity;
 using Disly.Models;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Web.Mvc;
 
 namespace Disly.Controllers
@@ -48,49 +50,65 @@ namespace Disly.Controllers
         /// Сраница по умолчанию
         /// </summary>
         /// <returns></returns>
-        public ActionResult Index(string t)
+        public ActionResult Index(string tab) 
         {
-            #region Создаем переменные (значения по умолчанию)
-            PageViewModel Model = new PageViewModel();
             string _ViewName = (ViewName != String.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";
-            string PageTitle = model.CurrentPage.Title;
-            string PageDesc = model.CurrentPage.Desc;
-            string PageKeyw = model.CurrentPage.Keyw;
-            #endregion    
+            string PageTitle = "";
 
-            model.Nav = new MaterialsGroup[]
+            model.Type = tab;
+            var page = model.CurrentPage.FrontSection;
+
+            //Хлебные крошки
+            model.Breadcrumbs.Add(new Breadcrumbs
             {
-                new MaterialsGroup{Title="Контактная информация"},
-                new MaterialsGroup{Title="Администрация", Alias="administration"},
-                new MaterialsGroup{Title="Телефонный справочник", Alias="phone"},
-                new MaterialsGroup{Title="Дополнительная информация", Alias="dop"}
-            };
-            model.Type = t;
-            switch (t)
+                Title = model.CurrentPage.Title,
+                Url = string.Format("/{0}/", page) // ""
+            });
+
+            //Табы на странице
+            model.Nav = new List<PageTabsViewModel>();
+            model.Nav.Add(new PageTabsViewModel { Page = page, Title = "Контактная информация" });
+            model.Nav.Add(new PageTabsViewModel { Page = page, Title = "Администрация", Alias = "administration" });
+            model.Nav.Add(new PageTabsViewModel { Page = page, Title = "Телефонный справочник", Alias = "phone" });
+            model.Nav.Add(new PageTabsViewModel { Page = page, Title = "Дополнительная информация", Alias = "info" });
+
+            //Обработка активных табов
+            if (model.Nav != null && model.Nav.Where(s => s.Alias == tab).Any())
+            {
+                var navItem = model.Nav.Where(s => s.Alias == tab).Single();
+                navItem.Active = true;
+
+                model.Breadcrumbs.Add(new Breadcrumbs
+                {
+                    Title = navItem.Title,
+                    Url = navItem.Alias + "/"
+                });
+            }
+
+            //-----------------------------------------------------------------
+
+            model.Type = tab;
+            switch (tab)
             {
                 case "administration":
                     PageTitle = "Администрация";
                     model.Administrativ = _repository.getAdministrative(Domain);
                     break;
-                case "dop":
+                case "info":
                     PageTitle = "Дополнительная информация";
-                    model.DopInfo = model.CurrentPage;  //Избавиться от DopInfo
                     break;
                 case "phone":
                     PageTitle = "Телефонный правочник";
-                    model.Structures = _repository.getStructures(); //Domain
+                    model.Structures = _repository.getStructures();
                     break;
                 default:
                     PageTitle = "Контактная информация";
-                    model.OrgItem = _repository.getOrgInfo(); //Domain
+                    model.OrgItem = _repository.getOrgInfo();
                     break;
             }
 
-            #region Метатеги
             ViewBag.Title = PageTitle;
-            ViewBag.Description = PageDesc;
-            ViewBag.KeyWords = PageKeyw;
-            #endregion
+
             return View(_ViewName, model);
         }
     }

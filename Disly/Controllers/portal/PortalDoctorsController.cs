@@ -52,24 +52,14 @@ namespace Disly.Controllers
             ViewBag.SearchText = filter.SearchText;
             ViewBag.Position = filter.Type;
 
-            #region Создаем переменные (значения по умолчанию)
-            PageViewModel Model = new PageViewModel();
-            string PageDesc = "описание страницы";
-            string PageKeyw = "ключевые слова";
-            #endregion                   
-
-            #region Метатеги
-            ViewBag.Title = "Врачи";
-            ViewBag.Description = PageDesc;
-            ViewBag.KeyWords = PageKeyw;
-            #endregion
-            
             return View(model);
         }
 
         // GET: portaldoctors/id
         public ActionResult Item(Guid id)
         {
+            string _ViewName = (ViewName != String.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";
+
             model.Doctor = _repository.getPeopleItem(id);
 
             // десериализация xml
@@ -80,20 +70,6 @@ namespace Disly.Controllers
                 var result = (Employee)serializer.Deserialize(reader);
                 model.Doctor.EmployeeInfo = result;
             }
-
-            #region Создаем переменные (значения по умолчанию)
-            PageViewModel Model = new PageViewModel();
-            string _ViewName = (ViewName != String.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";
-            string PageTitle = model.Doctor.FIO;
-            string PageDesc = "описание страницы";
-            string PageKeyw = "ключевые слова";
-            #endregion                   
-
-            #region Метатеги
-            ViewBag.Title = PageTitle;
-            ViewBag.Description = PageDesc;
-            ViewBag.KeyWords = PageKeyw;
-            #endregion
 
             return View("Index", model);
         }

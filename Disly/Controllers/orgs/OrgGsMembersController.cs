@@ -45,16 +45,10 @@ namespace Disly.Controllers
         // GET: GeneralSpecialists
         public ActionResult Index()
         {
+            string _ViewName = (ViewName != string.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";
+
             if ((model.SitesInfo == null) || (model.SitesInfo != null && model.SitesInfo.Type != ContentLinkType.ORG.ToString().ToLower()) && model.SitesInfo.Alias != "main")
                 return RedirectToRoute("Error", new { httpCode = 405 });
-
-            #region Создаем переменные (значения по умолчанию)
-            PageViewModel Model = new PageViewModel();
-            string _ViewName = (ViewName != string.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";
-            string PageTitle = model.CurrentPage.Title;
-            string PageDesc = model.CurrentPage.Desc;
-            string PageKeyw = model.CurrentPage.Keyw;
-            #endregion
 
             //Хлебные крошки
             model.Breadcrumbs.Add(new Breadcrumbs
@@ -68,13 +62,6 @@ namespace Disly.Controllers
             var pfilter = FilterParams.Extend<PeopleFilter>(filter);
             pfilter.Orgs = new Guid[] { model.SitesInfo.ContentId };
             model.Members = _repository.getMainSpecialistMembers(pfilter);
-
-            #region Метатеги
-            ViewBag.Title = PageTitle;
-            ViewBag.Description = PageDesc;
-            ViewBag.KeyWords = PageKeyw;
-            #endregion
-
 
             return View(model);
         }

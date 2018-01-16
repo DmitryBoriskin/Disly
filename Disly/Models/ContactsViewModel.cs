@@ -1,4 +1,5 @@
 ﻿using cms.dbModel.entity;
+using System.Collections.Generic;
 using System.Web.Mvc;
 
 namespace Disly.Models
@@ -28,14 +29,5 @@ namespace Disly.Models
         /// </summary>
         public string Type { get; set; }
 
-        /// <summary>
-        /// Навигация
-        /// </summary>
-        public MaterialsGroup[] Nav { get; set; }
-
-        /// <summary>
-        /// Доболнительная информация из библиотеки
-        /// </summary>
-        public SiteMapModel DopInfo { get; set; }
     }
 }

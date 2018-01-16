@@ -92,7 +92,10 @@
                             <span class="icons-bar"></span>
                         </button>
                         <a id="brand" class="navbar-brand" href="/">
-                            <img src="@logoImg" />
+                            @if (Model.SitesInfo.Logo != null && !string.IsNullOrWhiteSpace(Model.SitesInfo.Logo.Url) && File.Exists(Server.MapPath(Model.SitesInfo.Logo.Url)))
+                            {
+                                <img src="@Model.SitesInfo.Logo.Url" />
+                            }
                         </a>
                     </div>
                     <div id="navbar" class="collapse navbar-collapse">
@@ -178,7 +181,10 @@
                         <div class="col-md-8">
                             <div class="media">
                                 <div class="bottom_left">
-                                    <img class="logo-small" src="@logoImg" />
+                                    @if (Model.SitesInfo.Logo != null && !string.IsNullOrWhiteSpace(Model.SitesInfo.Logo.Url) && File.Exists(Server.MapPath(Model.SitesInfo.Logo.Url)))
+                                    {
+                                        <img class="logo-small" src="@Model.SitesInfo.Logo.Url" />
+                                    }
                                 </div>
 
                                 @if (Model != null && Model.SitesInfo != null)
