@@ -47,7 +47,7 @@ namespace Disly.Controllers
         {
             var filter = getFilter();
             model.DoctorList = _repository.getDoctorsList(filter);
-            model.PeoplePosts = _repository.getPeoplePosts();//Domain
+            model.PeoplePosts = _repository.getPeoplePosts();
 
             ViewBag.SearchText = filter.SearchText;
             ViewBag.Position = filter.Type;
