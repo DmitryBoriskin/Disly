@@ -442,6 +442,7 @@
     <Content Include="Content\portal\img\event_calendar.jpg" />
     <Content Include="Content\portal\img\logo.png" />
     <Content Include="Content\portal\img\med_logo_footer.jpg" />
+    <Content Include="Content\portal\img\mini-logo-med.png" />
     <Content Include="Content\portal\img\online-consultation.jpg" />
     <Content Include="Content\portal\img\smi-for-med-chuvashia.jpg" />
     <Content Include="Content\portal\img\tv-radio-plot.jpg" />

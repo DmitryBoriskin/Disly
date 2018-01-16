@@ -14,6 +14,20 @@ body {
 .cont_block{background-color:#fff;margin-top:100px;
             padding:0 60px;
 }
+.cont_wrap{
+    padding-bottom:523px;   
+}
+@media (min-width: 1200px){
+    .container .container {
+        width:1110px!important;
+    }
+}
+.fixed-theme .navbar-container.fixed-theme {
+    width: 1230px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
 
 .row60{margin-left:-60px;margin-right:-60px;}
 
@@ -92,8 +106,7 @@ body {
 .portal_lk_wr{    
     padding-bottom:30px;
     overflow:hidden;
-    background-color:#fff;
-    margin-bottom:108px;
+    background-color:#fff;    
 }
 .portal_lk {
     padding-left: 60px;
