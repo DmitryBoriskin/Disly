@@ -123,5 +123,52 @@ namespace PhotoImport.Services
                     .ToArray();
             }
         }
+
+        /// <summary>
+        /// Возвращает список новостей
+        /// </summary>
+        /// <param name="org"></param>
+        /// <returns></returns>
+        public Material[] GetMaterials(int org)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var query = (from m in db.content_materialss
+                             join om in db._importSD_NEWSs on m.n_old_id equals om.LINK
+                             join cl in db.content_content_links on m.id equals cl.f_content
+                             join s in db.cms_sitess on cl.f_link equals s.f_content
+                             join mgl in db.content_materials_groups_links on m.id equals mgl.f_material
+                             join mg in db.content_materials_groupss on mgl.f_group equals mg.id
+                             join ig in db._importCD_Gallerys on om.F_GALLERY equals ig.LINK
+                             where mg.c_alias.Equals("photo") && om.F_JURL_ID.Equals(org) 
+                                    && !ig.C_GALLERY_FOLDER.Equals(null) && !om.F_GALLERY.Equals(-1)
+                             select new Material
+                             {
+                                 Id = m.id,
+                                 Preview = m.c_preview,
+                                 Text = m.c_text,
+                                 Gallery = ig.LINK,
+                                 OldId = m.n_old_id
+                             });
+
+                if (query.Any()) return query.ToArray();
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Добавляет iframe в текст новости
+        /// </summary>
+        /// <param name="item"></param>
+        public void UpdateMaterial(Material item)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                db.content_materialss
+                    .Where(w => w.id.Equals(item.Id))
+                    .Set(u => u.c_text, item.Text)
+                    .Update();
+            }
+        }
     }
 }
