@@ -63,6 +63,7 @@ namespace Disly.Areas.Admin.Controllers
         public ActionResult Item(Guid Id)
         {
             model.Item = _cmsRepository.getVacancy(Id);
+            ViewBag.DataPath = Settings.UserFiles + Domain + "/vacancy/"+Id.ToString()+"/";
             if (model.Item == null)
                 model.Item = new VacancyModel()
                 {

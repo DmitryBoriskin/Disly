@@ -96,6 +96,9 @@ fieldset {
     padding-right: 20px;
     float: left;
 }
+.head_logo img{
+    max-width:100%;
+}
 
 .head_title {
     padding: 5px 0 5px;
@@ -1081,6 +1084,7 @@ a.sitemap-plate.sitemap-plate-image {
     font-size: 14px;
     box-shadow: none;
 }
+.filtr_news .input-group.date {width:100%;}
 
 .select2-container .select2-selection--single {
     height: 34px;

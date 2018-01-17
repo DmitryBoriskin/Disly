@@ -28,7 +28,7 @@
             </div>
             <div class="row">
                 <div class="col-lg-12">
-                    @Html.TextAreaFor(m => m.Item.Text, new { type = "editor", title = "Текст", height = "300" })
+                    @Html.TextAreaFor(m => m.Item.Text, new { type = "editor", title = "Текст", height = "300",data_dir= ViewBag.DataPath })
                 </div>
             </div>
             <div class="row">
@@ -200,5 +200,5 @@ else
         }
         
     }
-    <button type="button" @*name="action" value="cancel-btn"*@ data-action="cancel" data-link="@ViewBag.Backlink" class="button icon-cancel">Закрыть</button>
+    <button type="submit" name="action" value="cancel-btn" data-action="cancel" data-link="@ViewBag.Backlink" class="button icon-cancel">Закрыть</button>
 </div>

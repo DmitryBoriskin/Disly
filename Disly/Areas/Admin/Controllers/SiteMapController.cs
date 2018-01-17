@@ -81,12 +81,28 @@ namespace Disly.Areas.Admin.Controllers
         {
             // текущий элемент карты сайта
             model.Item = _cmsRepository.getSiteMapItem(id);
+
+            ViewBag.DataPath = Settings.UserFiles + Domain + Settings.SiteMapDir;
+            
             if (model.Item == null)
             {
                 model.Item = new SiteMapModel()
                 {
                     Id = id
                 };
+                #region опредлим родителя чтобы построить путь в директорию
+                string parent = Request.QueryString["parent"];
+                if (parent != String.Empty && parent != null && parent != "")
+                {
+                    var parentitem = _cmsRepository.getSiteMapItem(Guid.Parse(parent));
+                    ViewBag.DataPath = ViewBag.DataPath + parentitem.Path + parentitem.Alias + "/";                    
+                }
+                #endregion
+                ViewBag.DataPath = ViewBag.DataPath.Replace("//", "/");
+            }
+            else
+            {
+                ViewBag.DataPath = ViewBag.DataPath + model.Item.Path + "/" + model.Item.Alias + "/";
             }
             var mg = new MultiSelectList(model.MenuTypes, "value", "text", model.Item != null ? model.Item.MenuGroups : null);
             ViewBag.GroupMenu = mg;

@@ -74,6 +74,7 @@ namespace Disly.Areas.Admin.Controllers
         public ActionResult Item(Guid Id)
         {
             model.Item = _cmsRepository.getAnketaItem(Id);
+            ViewBag.DataPath = Settings.UserFiles + Domain + "/Worksheet/" + Id.ToString() + "/";
             if (model.Item == null)
                 model.Item = new AnketaModel()
                 {

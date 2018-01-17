@@ -16,7 +16,7 @@
 
             @Html.TextBoxFor(m => m.Item.Photo.Url, new { type = "file",  data_posted_name = "upload", data_url = fileUrl, title = "Изображение", accept = ".jpg,.jpeg,.png,.gif" })
 
-            @Html.TextAreaFor(m => m.Item.Text, new { type = "editor", title = "Текст", height = "300" })
+            @Html.TextAreaFor(m => m.Item.Text, new { type = "editor", title = "Текст", height = "300",data_dir= ViewBag.DataPath })
             @Html.TextBoxFor(m => m.Item.Url, new { type = "text", title = "Ссылка", placeholder = "http://", MaxLength = "128" })
             @Html.Hidden("Item.Section", section)
 

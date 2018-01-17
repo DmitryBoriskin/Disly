@@ -92,6 +92,8 @@ namespace Disly.Areas.Admin.Controllers
         public ActionResult Item(Guid id)
         {
             var banner = _cmsRepository.getBannerItem(id);
+            ViewBag.DataPath = Settings.UserFiles + Domain + Settings.BannersDir+id.ToString()+"/";
+
             if (banner == null)
             {
                 var section = Guid.NewGuid();

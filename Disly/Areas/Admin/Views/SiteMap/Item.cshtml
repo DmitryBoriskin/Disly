@@ -14,9 +14,6 @@
     {
         blocked = false;
     }
-
-    //string fileName = (Model.Item != null && Model.Item.Photo != null) ? Model.Item.Photo.Name : string.Empty;
-    //string fileSize = (Model.Item != null && Model.Item.Photo != null) ? Model.Item.Photo.Size : string.Empty;
     string fileUrl = (Model.Item != null && Model.Item.Photo != null) ? Model.Item.Photo.Url : string.Empty;
 }
 
@@ -50,7 +47,7 @@
             @Html.TextBoxFor(m => m.Item.Photo.Url, new { type = "file", data_posted_name = "upload", data_url = fileUrl, title = "Картинка для предпросмотра", accept = ".jpg,.jpeg,.png,.gif" })
 
             <div class="group-block" title="Текст">
-                @Html.TextAreaFor(m => m.Item.Text, new { @type = "editor", @height = "300" })
+                @Html.TextAreaFor(m => m.Item.Text, new { @type = "editor", @height = "300" ,data_dir= ViewBag.DataPath})
             </div>
             <div class="row">
                 <div class="col-sm-5">
@@ -206,5 +203,5 @@ else
             <button type="submit" name="action" value="delete-btn" data-action="delete" class="button icon-delete">Удалить</button>
         }
     }
-    <button type="submit" name="action" value="cancel-btn" data-action="cancel" class="button icon-cancel">Назад</button>
+    <button type="submit" name="action" value="cancel-btn"  data-action="cancel" class="button icon-cancel">Назад</button>
 </div>
