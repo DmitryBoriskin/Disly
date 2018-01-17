@@ -62,6 +62,7 @@ namespace Disly.Areas.Admin.Controllers
         {
             ViewBag.VoteId = Id.ToString();
             model.Item = _cmsRepository.getVoteItem(Id);
+            ViewBag.DataPath = Settings.UserFiles + Domain + "/Vote/" + Id.ToString() + "/";
             if (model.Item == null)
             {
                 ViewBag.DateStart = DateTime.Today;

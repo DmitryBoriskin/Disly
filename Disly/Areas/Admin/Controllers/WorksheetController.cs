@@ -27,6 +27,8 @@ namespace Disly.Areas.Admin.Controllers
             ViewBag.HttpKeys = Request.QueryString.AllKeys;
             ViewBag.Query = Request.QueryString;
 
+            ViewBag.DataPath = Settings.UserFiles + Domain + "/Worksheet/";
+
             filter = getFilter();
 
             model = new AnketaViewModel()
@@ -74,6 +76,7 @@ namespace Disly.Areas.Admin.Controllers
         public ActionResult Item(Guid Id)
         {
             model.Item = _cmsRepository.getAnketaItem(Id);
+            ViewBag.DataPath = Settings.UserFiles + Domain + "/Worksheet/" + Id.ToString() + "/";
             if (model.Item == null)
                 model.Item = new AnketaModel()
                 {

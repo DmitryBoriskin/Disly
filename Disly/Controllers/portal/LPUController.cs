@@ -45,9 +45,6 @@ namespace Disly.Controllers
         // GET: LPU
         public ActionResult Index(string tab, Guid? id)
         {
-            //Заменить потом все на  return new HttpNotFoundResult(); //return RedirectToRoute("Error", new { httpCode = 405 });
-            //return new HttpNotFoundResult();
-
             model.Type = tab;
             var page = model.CurrentPage.FrontSection;
 

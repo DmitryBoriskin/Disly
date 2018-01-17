@@ -24,6 +24,7 @@ namespace Disly.Areas.Admin.Controllers
 
             ViewBag.HttpKeys = Request.QueryString.AllKeys;
             ViewBag.Query = Request.QueryString;
+            ViewBag.DataPath = Settings.UserFiles + Domain + "/orgs/";
 
             filter = getFilter();
 
@@ -494,6 +495,7 @@ namespace Disly.Areas.Admin.Controllers
             ViewBag.Title = "Отделение/ФАП";
             var OrgId = Request.Params["orgid"];
             model.StructureItem = _cmsRepository.getStructure(id);
+            ViewBag.DataPath = ViewBag.DataPath + "/" + id.ToString() + "/";
 
             if (model.StructureItem != null)
             {
@@ -711,6 +713,8 @@ namespace Disly.Areas.Admin.Controllers
 
             ViewBag.Title = "Отделение";
             model.DepartmentItem = _cmsRepository.getDepartamentItem(id);
+
+            ViewBag.DataPath = ViewBag.DataPath + "/" + id.ToString() + "/";
             if (model.DepartmentItem != null)
             {
                 model.BreadCrumbOrg = _cmsRepository.getBreadCrumbOrgs(id, ViewBag.ActionName);

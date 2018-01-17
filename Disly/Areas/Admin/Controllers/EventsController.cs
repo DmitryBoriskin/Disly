@@ -68,6 +68,16 @@ namespace Disly.Areas.Admin.Controllers
         public ActionResult Item(Guid Id)
         {
             model.Item = _cmsRepository.getEvent(Id);
+
+            ViewBag.DataPath = Settings.UserFiles + Domain + Settings.EventsDir;
+            ViewBag.DataPath = (model.Item == null) ?
+                ViewBag.DataPath + DateTime.Today.ToString("yyyy") + "/" + DateTime.Today.ToString("MM") + "/" + DateTime.Today.ToString("dd") + "/"
+                :
+                ViewBag.DataPath + model.Item.DateBegin.ToString("yyyy") + "/" + model.Item.DateBegin.ToString("MM") + "/" + model.Item.DateBegin.ToString("dd") + "/";
+
+
+
+
             if (model.Item == null)
                 model.Item = new EventsModel()
                 {

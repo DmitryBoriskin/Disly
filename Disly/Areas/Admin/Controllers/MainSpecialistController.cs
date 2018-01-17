@@ -16,6 +16,9 @@ namespace Disly.Areas.Admin.Controllers
         {
             base.OnActionExecuting(filterContext);
 
+
+            ViewBag.DataPath = Settings.UserFiles + Domain + "/mainspecialist/";
+
             // наполняем фильтр
             filter = getFilter();
 
@@ -74,6 +77,8 @@ namespace Disly.Areas.Admin.Controllers
             #endregion
 
             model.Item = _cmsRepository.getMainSpecialistItem(id);
+
+            ViewBag.DataPath = ViewBag.DataPath + id.ToString()+"/";
 
             if (model.Item != null)
             {

@@ -18,17 +18,17 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-lg-12">@Html.TextAreaFor(m => m.Item.Desc, new { type = "editor", title = "Должностные обязанности", height = "300", maxlength = "2048" })</div>
+            <div class="col-lg-12">@Html.TextAreaFor(m => m.Item.Desc, new { type = "editor", title = "Должностные обязанности", height = "300", maxlength = "2048", data_dir= ViewBag.DataPath })</div>
         </div>
         <div class="row">
             <div class="col-lg-12">
-                @Html.TextAreaFor(m => m.Item.Experience, new { type = "editor", title = "Требования", height = "300", maxlength = "2048" })
+                @Html.TextAreaFor(m => m.Item.Experience, new { type = "editor", title = "Требования", height = "300", maxlength = "2048", data_dir = ViewBag.DataPath })
             </div>
         </div>
         <div class="row">
             <div class="col-lg-12">
 
-                @Html.TextAreaFor(m => m.Item.Сonditions, new { type = "editor", title = "Условия", placeholder = "", height = "300", maxlength = "4096" })
+                @Html.TextAreaFor(m => m.Item.Сonditions, new { type = "editor", title = "Условия", placeholder = "", height = "300", maxlength = "4096", data_dir = ViewBag.DataPath })
             </div>
         </div>
     </div>

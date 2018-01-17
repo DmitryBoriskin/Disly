@@ -20,7 +20,7 @@
                 </div>
             </div>
             <div class="group-block" title="Описание фотогаллереи">
-                @Html.TextAreaFor(m => m.Album.Text, new { type = "editor", title = "Текст", height = "300" })
+                @Html.TextAreaFor(m => m.Album.Text, new { type = "editor", title = "Текст", height = "300",data_dir= ViewBag.DataPath })
             </div>   
             
             <div class="form-group">

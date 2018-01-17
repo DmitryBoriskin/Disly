@@ -64,6 +64,13 @@ namespace Disly.Areas.Admin.Controllers
             EventsModel[] events = null;
             OrgsModel[] orgs = null;
             model.Item = _cmsRepository.getMaterial(Id);
+
+            ViewBag.DataPath = Settings.UserFiles + Domain + Settings.MaterialsDir;
+            ViewBag.DataPath = (model.Item == null)? 
+                ViewBag.DataPath + DateTime.Today.ToString("yyyy") + "/" + DateTime.Today.ToString("MM") + "/" + DateTime.Today.ToString("dd") + "/"
+                :
+                ViewBag.DataPath + model.Item.Date.ToString("yyyy") + "/" + model.Item.Date.ToString("MM") + "/" + model.Item.Date.ToString("dd") + "/";
+
             if (model.Item == null)
             {
                 model.Item = new MaterialsModel()
@@ -73,6 +80,8 @@ namespace Disly.Areas.Admin.Controllers
                 };
             }
 
+            
+            
             if (model.Item.PreviewImage != null && model.Item.PreviewImage != null && !string.IsNullOrEmpty(model.Item.PreviewImage.Url))
             {
                 var photo = model.Item.PreviewImage;

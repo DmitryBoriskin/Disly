@@ -140,6 +140,7 @@ namespace Integration.Frmp.library
 
             using (var db = new DbModel(connectionString))
             {
+                db.ImportFrmpOrgss.Delete();
                 using (var tr = db.BeginTransaction())
                 {
                     foreach (var org in distinctOrgs)
