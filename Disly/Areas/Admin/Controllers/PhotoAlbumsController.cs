@@ -73,6 +73,7 @@ namespace Disly.Areas.Admin.Controllers
                 model.Album.Date = DateTime.Now;
 
             }
+            ViewBag.DataPath = Settings.UserFiles + Domain + Settings.PhotoDir+id.ToString()+"/";
             return View("Item", model);
         }
 

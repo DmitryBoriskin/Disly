@@ -178,7 +178,7 @@ $(document).ready(function () {
     $('input[data-type=date').datepicker({ onSelect: function (dateText, inst) { $(this).attr('value', dateText); } });
     // инициализаация TinyMCE
     $('textarea[type=editor]').each(function () {
-        InitTinyMCE_new($(this).attr('id'), 0, $(this).attr('height'), "/UserFiles/");
+        InitTinyMCE_new($(this).attr('id'), 0, $(this).attr('height'), $(this).attr('data-dir') );//"/UserFiles/"
     });
     $('textarea[type=liteeditor]').each(function () {
         InitLiteTinyMCE($(this).attr('id'), 0, 200);

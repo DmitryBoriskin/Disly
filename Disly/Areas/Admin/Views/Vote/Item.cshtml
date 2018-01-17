@@ -13,7 +13,7 @@
         @*<input type="hidden" value="@Model.Item.Id" name="vote_id" id="vote_id" />*@
         <div class="row">
             <div class="col-lg-12">
-                @Html.TextAreaFor(m => m.Item.Text, new { type = "editor", title = "Текст", height = "200" })
+                @Html.TextAreaFor(m => m.Item.Text, new { type = "editor", title = "Текст", height = "200",data_dir= ViewBag.DataPath })
             </div>
         </div>
 

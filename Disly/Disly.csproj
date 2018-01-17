@@ -450,7 +450,6 @@
     <Content Include="Content\portal\img\youtube-med-chuv.jpg" />
     <Content Include="Content\portal\style.css" />
     <Content Include="favicon.ico" />
-    <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Areas\Admin\Views\web.config" />
     <Content Include="Areas\Admin\Web.config" />
@@ -797,10 +796,6 @@
     <Content Include="Content\fonts\PtSerif\ptf76f-webfont.woff" />
     <Content Include="Content\fonts\PtSerif\ptf76f-webfont.woff2" />
     <Content Include="Areas\Admin\Views\SiteSettings\Index.cshtml" />
-    <Content Include="fonts\glyphicons-halflings-regular.woff2" />
-    <Content Include="fonts\glyphicons-halflings-regular.woff" />
-    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
-    <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="Content\fonts\themify\themify.ttf" />
     <Content Include="Content\fonts\themify\themify.woff" />
     <Content Include="Content\fonts\themify\themify.eot" />
