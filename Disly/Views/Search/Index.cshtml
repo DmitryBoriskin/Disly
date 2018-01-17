@@ -1,8 +1,14 @@
 ﻿@model TypePageViewModel
+@{
+    if (Model.SitesInfo.Alias == "main")
+    {
+        Layout = "/views/_portal/shared/_layout.cshtml";
+    }
+}
 <div class="type-page">
     <div class="container">
         @Html.Partial("services/breadcrumbs")
-        <h1>Поиск</h1>
+        <h1>@ViewBag.Title</h1>
         @Html.Partial("part/childlist")    
         <div>            
             <form class="searchform_dop">                

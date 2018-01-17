@@ -21,6 +21,7 @@ namespace cms.dbModel
         public abstract SiteMapModel getSiteMapByOldId(int id);
         public abstract MaterialsModel getMaterialsByOldId(int id);
 
+        // Карта сайта
         public abstract SiteMapModel getSiteMap(string path, string alias); //, string domain
         public abstract SiteMapModel getSiteMap(string frontSection);
         public abstract string[] getSiteMapSiblings(string path);
@@ -40,13 +41,14 @@ namespace cms.dbModel
 
         //Departments and structure
         public abstract StructureModel[] getStructures(); //string domain
+        public abstract DopAddres[] getDopAddresStructur(Guid StrucId);
         public abstract StructureModel getStructureItem(int num); //string domain,
         public abstract Departments[] getDepartmentsList(Guid StructureId);
         public abstract Departments getDepartmentsItem(Guid Id);
         public abstract Departments getOvpDepartaments(Guid id);
 
         //Persons
-        public abstract People[] getPeopleList(FilterParams filter);
+        public abstract People[] getPeopleList(PeopleFilter filter);
         public abstract People getPeopleItem(Guid id);
         public abstract string getPeopleSnils(Guid id);
         public abstract StructureModel[] getDeparatamentsSelectList(); //string domain
@@ -88,15 +90,23 @@ namespace cms.dbModel
         //Attached Documents
         public abstract DocumentsModel[] getAttachDocuments(Guid id);
 
-        // события
+        //события
         public abstract EventsList getEvents(FilterParams filter);
         public abstract EventsModel getEvent(int num, string alias);
 
         //фотоальбом
         public abstract PhotoModel[] getPhotoList(Guid id);
 
-        // Главные специалисты
-        public abstract MainSpecialistFrontModel[] getMainSpecialistList();
+        //Главные специалисты
+
+        public abstract MainSpecialistModel[] getMainSpecialistList(FilterParams filter);        
+
+        public abstract MainSpecialistModel[] getMainSpecialistContacts();
+        public abstract People[] getMainSpecialistMembers(PeopleFilter filter);
+        public abstract OrgsModel getOrgItem(Guid id);
+        
+        
+        public abstract MainSpecialistModel getMainSpecialistItem(Guid id);
 
         //вакансии
         public abstract VacanciesList getVacancy(FilterParams filter);

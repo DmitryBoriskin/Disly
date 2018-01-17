@@ -70,11 +70,16 @@
                                     string link = "/redirect/link/" + item.Id;
                                     i++;
 
+                                    string sliderfoto = (!string.IsNullOrWhiteSpace(item.Url))
+                                                  ? File.Exists(Server.MapPath(item.Url))
+                                                      ? item.Url : "/Content/img/nophoto.jpg"
+                                                  : "/Content/img/nophoto.jpg";
+
                                     <div class="item @active">
                                         <div class="slider-item">
                                             <div class="slider-img">
                                                 <a href="@link">
-                                                    <img src="@item.Url" alt="@item.Title">
+                                                    <img src="@sliderfoto" alt="@item.Title">
                                                 </a>
                                             </div>
                                             <div class="slider-text-block">
@@ -197,7 +202,12 @@
                         var ev = events.FirstOrDefault();
 
                         string link = "/press/" + ev.Date.Year + "/" + ev.Date.Month + "/" + ev.Date.Day + "/" + ev.Alias;
-                        string photo = !string.IsNullOrEmpty(ev.Photo) ? ev.Photo : "~/Content/img/temporal.jpg";
+                        //string photo = !string.IsNullOrEmpty(ev.Photo) ? ev.Photo : "~/Content/img/temporal.jpg";
+
+                        string eventfoto = (!string.IsNullOrWhiteSpace(ev.Photo))
+                                                 ? File.Exists(Server.MapPath(ev.Photo))
+                                                     ? ev.Photo : "/Content/img/temporal.jpg"
+                                                 : "/Content/img/temporal.jpg";
 
                         <div class="event-item-module">
                             <div class="event-item-module-opacity top-op">
@@ -211,7 +221,7 @@
                                 <a href="/press/@ev.GroupAlias" class="module-material-item-group-link">@ev.GroupName</a>
                             </div>
                             <a href="@link">
-                                <img src="@photo" alt="@ev.Title" />
+                                <img src="@eventfoto" alt="@ev.Title" />
                             </a>
                             <div class="event-item-module-opacity bottom-op">
                                 <a href="@link">@ev.Title</a>
@@ -244,13 +254,15 @@
                                 title = title.Substring(0, 70);
                             }
 
+                            string benefitbanerfoto = (!string.IsNullOrWhiteSpace(item.Url))
+                                          ? File.Exists(Server.MapPath(item.Url))
+                                              ? item.Url : "/Content/img/nophoto.jpg"
+                                          : "/Content/img/nophoto.jpg";
+
                             <div class="linkimg_item col-md-3">
                                 <a href="@link">
                                     <div class="imglink-item">
-                                        @if (!string.IsNullOrEmpty(item.Url))
-                                        {
-                                            <img class="imglink-pic" src="@item.Url" />
-                                        }
+                                        <img class="imglink-pic" src="@benefitbanerfoto" />
                                         <div class="imglink-title">
                                             @Html.Raw(title)
                                         </div>
@@ -296,10 +308,13 @@
                         fullPath = "/" + item.FrontSection;
                     }
                     <div class="col-sm-3">
-                        @if (!string.IsNullOrWhiteSpace(item.Photo.Url))
+                        @if (item.Photo != null && !string.IsNullOrWhiteSpace(item.Photo.Url))
                         {
+                            string platefoto = File.Exists(Server.MapPath(item.Photo.Url))
+                                      ? item.Photo.Url : "/Content/img/nophoto.jpg";
+
                             <a href="@fullPath" class="sitemap-plate sitemap-plate-image" title="@item.Title">
-                                <img src="@item.Photo.Url" alt="@item.Title" />
+                                <img src="@platefoto" alt="@item.Title" />
                             </a>
                         }
                         else

@@ -1,0 +1,60 @@
+﻿@model AnketaViewModel
+@using System.Text.RegularExpressions;
+
+@if (Model.UserResolution.Read)
+{
+    <div class="content">
+        <h1>@ViewBag.Title</h1>
+
+        @if (Model.List != null && Model.List.Data != null)
+        {
+            foreach (var item in Model.List.Data)
+            {
+                string disabled = (item.Disabled) ? "disabled" : "";
+                <div class="list-item event-list @disabled ">
+                    <div class="li-desc ">
+                        <a title="@item.Title" class="li-caption" href="/admin/worksheet/item/@item.Id/@ViewBag.urlQuery">@item.Title</a><br />
+                        <span>Дата проведения:</span> @Convert.ToDateTime(item.DateBegin).ToString("dd MMMM yyyy")
+                        @if (item.DateEnd.HasValue)
+                        {
+                            <span> - </span>
+                            @Convert.ToDateTime(item.DateEnd).ToString("dd MMMM yyyy")
+                        }<br />
+                       
+                    </div>
+                </div>
+            }
+            Html.RenderAction("Pager", "Templates", new { @Model = Model.List.Pager });
+        }
+        else
+        {
+            <div class="alert alert-info">Не найдено ни одной записи.</div>
+        }
+    </div>
+
+    <div class="dop_info-block">
+        <div class="dop-caption">Фильтр</div>
+        @Html.TextBox("filter", Request.QueryString["filter"], new { @class = "uc_input", @title = "Поиск по ключевым словам", @placeholder = "поиск...", @MaxLength = "512" })
+        @Html.CheckBox("enabeld", String.IsNullOrEmpty(Request.QueryString["enabeld"]), new { @class = "uc_input", @title = "Отображать", @data_on = "Все записи", @data_off = "Только запрещенные", @data_width = "270" })
+        <div class="row">
+            <div class="col-xs-6">@Html.TextBox("datestart", Request.QueryString["datestart"], new { @class = "uc_input", @data_type = "date", @title = "Дата публикации с", @placeholder = "дд.мм.гггг" })</div>
+            <div class="col-xs-6">@Html.TextBox("dateend", Request.QueryString["dateend"], new { @class = "uc_input", @data_type = "date", @title = "по", @placeholder = "дд.мм.гггг" })</div>
+        </div>
+        <div class="row">
+            <div class="col-md-6"><button type="submit" name="action" value="search-btn" class="button btn-primary">Применить</button></div>
+            <div class="col-md-6"><button type="submit" name="action" value="clear-btn" class="button btn-default">Сбросить</button></div>
+        </div>
+    </div>
+
+    <div class="buttons">
+        @if (Model.UserResolution.Write)
+        {
+            <button type="submit" name="action" value="insert-btn" class="button icon-create">Создать</button>
+            @*<button type="submit" name="action" value="rssimport-btn" class="button icon-create green">Импорт с других сайтов</button>*@
+        }
+    </div>
+}
+else
+{
+    <div class="content"><p>У вас недостаточно прав.</p></div>
+}

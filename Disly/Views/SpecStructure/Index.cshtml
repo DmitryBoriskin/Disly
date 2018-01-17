@@ -1,0 +1,61 @@
+﻿@model SpecStructureViewModel
+@{
+    if (Model.SitesInfo.Alias == "main")
+    {
+        Layout = "/views/_portal/shared/_layout.cshtml";
+    }
+}
+@{
+    // Model.CurrentPage == null Проверяем в контроллере, он не должен быть null
+    People[] model = null;
+}
+<div class="type-page">
+    <div class="container">
+
+        @Html.Partial("services/breadcrumbs")
+
+        <h1>@ViewBag.Title</h1>
+
+        @if (Model.Nav != null)
+        {
+            @Html.Partial("part/nav", Model.Nav)
+        }
+        <input type="hidden" name="tab" value="@Model.Type" form="list-filter-form" />
+        @switch (Model.Type)
+        {
+            case "specialists":
+                model = Model.SpesialitsList;
+                if (model != null)
+                {
+                    @Html.Partial("part/list", model)
+                }
+                break;
+            case "experts":
+                model = Model.ExpertsList;
+                if (model != null)
+                {
+                    @Html.Partial("part/list", model)
+                }
+                break;
+            case "doctors":
+                model = Model.DoctorsList;
+                if (model != null)
+                {
+                    @Html.Partial("part/list", model)
+                }
+                break;
+            default:
+                if (Model.MainSpec != null)
+                {
+                    <div class="col-md-12">
+                        <h3>@Model.MainSpec.Name</h3>
+                        @Html.Raw(Model.MainSpec.Desc)
+                    </div>
+                }
+                <div class="col-md-12">
+                    @Html.Raw(Model.CurrentPage.Text)
+                </div>
+                break;
+        }
+    </div>
+</div>

@@ -1,7 +1,13 @@
 ﻿@model ContatcsViewModel
+@{
+    if (Model.SitesInfo.Alias == "main")
+    {
+        Layout = "/views/_portal/shared/_layout.cshtml";
+    }
+}
 <div class="type-page">
     <div class="container">
-        <h1>Как нас найти</h1>
+        <h1>@ViewBag.Title</h1>
         <div class="findus_list">
             @if (Model.Structures != null)
             {
@@ -24,12 +30,28 @@
                                     }
                                 </div>
                                 <div class="findus_info">
-                                    @if (!string.IsNullOrEmpty(item.Adress))
-                                    {
-                                        <div>
-                                            <strong>Адрес: </strong>@item.Adress
+                                    
+                                    
+                                        <div>@item.Adress<br>
+                                            @if (item.DopAddres != null)
+                                            {
+                                                if (item.DopAddres.Length > 0)
+                                                {
+                                                    <div>
+                                                        <dl>
+                                                            @foreach (var dopadres in item.DopAddres)
+                                                            {
+                                                                <dt>@dopadres.Title</dt>
+                                                                <dd>@dopadres.Address</dd>
+                                                            }
+                                                        </dl>
+
+                                                    </div>
+
+                                                }
+                                            }
                                         </div>
-                                    }
+                                    
                                     @if (!string.IsNullOrEmpty(item.PhoneReception))
                                     {
                                         <div><strong>Телефон регистратуры: </strong>@item.PhoneReception</div>
@@ -45,6 +67,7 @@
                                             <a href="mailto:@item.Email">@item.Email</a>
                                         </div>
                                     }
+                                   
                                     @if (!string.IsNullOrEmpty(item.Routes))
                                     {
                                         <div>
@@ -55,12 +78,25 @@
                                     }
                                 </div>
                             </div>
-                            <div class="col-md-4">
-                                <div>
-                                    <div class="contact_info_it">
-                                        <div id="map-@item.Id" class="buildmap" data-zoom="13" style="width: 100%; height: 250px;" data-height="300" data-x="@item.GeopointX.ToString().Replace(",", ".")" data-y="@item.GeopointY.ToString().Replace(",", ".")" data-title="@Model.OrgItem.Title"></div>
+                            <div class="col-md-4">                                                                                               
+                                @if (!(item.Adress == null && item.DopAddres == null))
+                                {
+                                    <div class="geo_area">
+                                        <div style=" width: 100%; height: 300px; padding: 0; margin: 0;" class="maplist" id="maplist-@item.Id"></div>
+                                        <div class="geopoint" data-title="@item.Title" data-addres="@item.Adress" data-x="@item.GeopointX.ToString().Replace(",", ".")" data-y="@item.GeopointY.ToString().Replace(",", ".")"></div>
+                                        @if (item.DopAddres != null)
+                                        {
+                                            if (item.DopAddres.Length > 0)
+                                            {
+                                                foreach (var dopadres in item.DopAddres)
+                                                {
+                                                    <div class="geopoint" data-title="@dopadres.Title" data-addres="@dopadres.Address" data-x="@dopadres.GeopointX.ToString().Replace(",", ".")" data-y="@dopadres.GeopointY.ToString().Replace(",", ".")"></div>
+                                                }
+                                            }
+                                        }
                                     </div>
-                                </div>
+                                }
+                                
                             </div>
                         </div>
                     </div>

@@ -5,38 +5,36 @@
     {
         <div class="boos_item">
             <a href="/doctors/@boss.Id" class="boss_img_wrap">
-                @if (boss.Photo != null)
-                {
-                    <img src="@boss.Photo" title="@boss.FIO" />
+                @{
+                    string bossfoto = (!string.IsNullOrWhiteSpace(boss.Photo))
+                ? File.Exists(Server.MapPath(boss.Photo))
+                ? boss.Photo : "/Content/img/no_avatar.png"
+                : "/Content/img/no_avatar.png";
                 }
-                else
-                {
-                    <img src="~/Content/img/no_avatar.png" />
-                }
+
+                <img src="@bossfoto" title="@boss.FIO" />
             </a>
             <a class="boss_fio" href="/doctors/@boss.Id">@boss.FIO</a>
             @if (!String.IsNullOrEmpty(boss.Post))
             {
-            <div class="boss_post">@boss.Post</div>
+                <div class="boss_post">@boss.Post</div>
             }
         </div>
-    }
-}
+                        }
+                    }
 
 @if (Model.DepartmentItem.Sister != null)
 {
     foreach (var boss in Model.DepartmentItem.Sister)
     {
+            string photo = (!string.IsNullOrWhiteSpace(boss.Photo))
+        ? File.Exists(Server.MapPath(boss.Photo))
+        ? boss.Photo : "/Content/img/no_avatar.png"
+        : "/Content/img/no_avatar.png";
+
         <div class="boos_item">
             <a href="/doctors/@boss.Id" class="boss_img_wrap">
-                @if (boss.Photo != null)
-                {
-                    <img src="@boss.Photo" title="@boss.FIO" />
-                }
-                else
-                {
-                    <img src="~/Content/img/no_avatar.png" />
-                }
+                    <img src="@photo" title="@boss.FIO" />
             </a>
             <a class="boss_fio" href="/doctors/@boss.Id">@boss.FIO</a>
             @if (!String.IsNullOrEmpty(boss.Post))

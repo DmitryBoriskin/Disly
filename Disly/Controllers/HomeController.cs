@@ -24,7 +24,7 @@ namespace Disly.Controllers
         /// <summary>
         /// Сраница по умолчанию
         /// </summary>
-        /// <returns></returns>
+        /// <returns ></returns>
         public ActionResult Index()
         {
             #region Создаем переменные (значения по умолчанию)
@@ -43,6 +43,11 @@ namespace Disly.Controllers
 
             model.Materials = _repository.getMaterialsModule(); //Domain
             model.Oid = _repository.getOid();
+
+            if (model.SitesInfo.Alias == "main") 
+            {                
+                _ViewName = _ViewName.ToLower().Replace("views/", "views/_portal/");//спец вьюха для главного сайта 
+            }
 
             return View(_ViewName, model);
         }

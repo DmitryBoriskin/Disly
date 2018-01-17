@@ -19,16 +19,35 @@ namespace Disly.Controllers
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             base.OnActionExecuting(filterContext);
+
+            currentPage = _repository.getSiteMap("Doctors");
+
+            if (currentPage == null)
+                throw new Exception("model.CurrentPage == null");
+
             model = new DoctorsViewModel
             {
                 SitesInfo = siteModel,
                 SiteMapArray = siteMapArray,
                 Breadcrumbs = breadcrumb,
                 BannerArray = bannerArray,
+                CurrentPage = currentPage,
                 Oid = _repository.getOid()
             };
 
             model.DoctorsRegistry = repoRegistry.getVDoctors(model.Oid);
+
+            #region Создаем переменные (значения по умолчанию)
+            string PageTitle = model.CurrentPage.Title;
+            string PageDesc = model.CurrentPage.Desc;
+            string PageKeyw = model.CurrentPage.Keyw;
+            #endregion
+
+            #region Метатеги
+            ViewBag.Title = PageTitle;
+            ViewBag.Description = PageDesc;
+            ViewBag.KeyWords = PageKeyw;
+            #endregion
         }
 
         /// <summary>
@@ -37,16 +56,11 @@ namespace Disly.Controllers
         /// <returns></returns>
         public ActionResult Index()
         {
-            #region Получаем данные из адресной строки
-            string UrlPath = "/" + (String)RouteData.Values["path"];
-            if (UrlPath.LastIndexOf("/") > 0 && UrlPath.LastIndexOf("/") == UrlPath.Length - 1) UrlPath = UrlPath.Substring(0, UrlPath.Length - 1);
-
-            string _path = UrlPath.Substring(0, UrlPath.LastIndexOf("/") + 1);
-            string _alias = UrlPath.Substring(UrlPath.LastIndexOf("/") + 1);
-            #endregion
+            string _ViewName = (ViewName != String.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";
 
             var filter = getFilter();
-            model.DoctorsList = _repository.getPeopleList(filter);
+            var pfilter = FilterParams.Extend<PeopleFilter>(filter);
+            model.DoctorsList = _repository.getPeopleList(pfilter);
             model.DepartmentsSelectList = _repository.getDeparatamentsSelectList(); //Domain
             model.PeoplePosts = _repository.getPeoplePosts();//Domain
 
@@ -68,20 +82,6 @@ namespace Disly.Controllers
             ViewBag.DepartGroup = filter.Group;
             ViewBag.Position = filter.Type;
 
-            #region Создаем переменные (значения по умолчанию)
-            PageViewModel Model = new PageViewModel();
-            string _ViewName = (ViewName != String.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";
-            string PageTitle = "страница сайта";
-            string PageDesc = "описание страницы";
-            string PageKeyw = "ключевые слова";
-            #endregion                   
-
-            #region Метатеги
-            ViewBag.Title = "Врачи";
-            ViewBag.Description = PageDesc;
-            ViewBag.KeyWords = PageKeyw;
-            #endregion
-
             return View(_ViewName, model);
         }
 
@@ -91,18 +91,12 @@ namespace Disly.Controllers
         /// <returns></returns>
         public ActionResult Item(Guid id)
         {
-            #region Получаем данные из адресной строки
-            string UrlPath = "/" + (String)RouteData.Values["path"];
-            if (UrlPath.LastIndexOf("/") > 0 && UrlPath.LastIndexOf("/") == UrlPath.Length - 1) UrlPath = UrlPath.Substring(0, UrlPath.Length - 1);
-
-            string _path = UrlPath.Substring(0, UrlPath.LastIndexOf("/") + 1);
-            string _alias = UrlPath.Substring(UrlPath.LastIndexOf("/") + 1);
-            #endregion
+            string _ViewName = (ViewName != String.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";
 
             var filter = getFilter();
             model.DoctorsItem = _repository.getPeopleItem(id);
 
-            if(model.DoctorsItem != null)
+            if (model.DoctorsItem != null)
             {
 
                 #region Запись на приём
@@ -122,25 +116,11 @@ namespace Disly.Controllers
                     var result = (Employee)serializer.Deserialize(reader);
                     model.DoctorsItem.EmployeeInfo = result;
                 }
-
             }
 
-
-            #region Создаем переменные (значения по умолчанию)
-            PageViewModel Model = new PageViewModel();
-            string _ViewName = (ViewName != String.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";
-            string PageTitle = "Доктор не найден";
-            if(model.DoctorsItem != null)
-                PageTitle = model.DoctorsItem.FIO;
-            string PageDesc = "описание страницы";
-            string PageKeyw = "ключевые слова";
-            #endregion                   
-
-            #region Метатеги
-            ViewBag.Title = PageTitle;
-            ViewBag.Description = PageDesc;
-            ViewBag.KeyWords = PageKeyw;
-            #endregion
+            ViewBag.Title = "Доктор не найден";
+            if (model.DoctorsItem != null)
+                ViewBag.Title = model.DoctorsItem.FIO;
 
             return View(_ViewName, model);
         }

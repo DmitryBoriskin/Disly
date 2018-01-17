@@ -2,6 +2,8 @@
 using cms.dbModel.entity;
 using Disly.Models;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Web.Mvc;
 
 namespace Disly.Controllers
@@ -16,13 +18,31 @@ namespace Disly.Controllers
         {
             base.OnActionExecuting(filterContext);
 
+            currentPage = _repository.getSiteMap("Contacts");
+
+            if (currentPage == null)
+                throw new Exception("model.CurrentPage == null");
+
             model = new ContatcsViewModel
             {
                 SitesInfo = siteModel,
                 SiteMapArray = siteMapArray,
                 Breadcrumbs = breadcrumb,
-                BannerArray = bannerArray
+                BannerArray = bannerArray,
+                CurrentPage = currentPage
             };
+
+            #region Создаем переменные (значения по умолчанию)
+            string PageTitle = model.CurrentPage.Title;
+            string PageDesc = model.CurrentPage.Desc;
+            string PageKeyw = model.CurrentPage.Keyw;
+            #endregion
+
+            #region Метатеги
+            ViewBag.Title = PageTitle;
+            ViewBag.Description = PageDesc;
+            ViewBag.KeyWords = PageKeyw;
+            #endregion
         }
 
 
@@ -30,59 +50,62 @@ namespace Disly.Controllers
         /// Сраница по умолчанию
         /// </summary>
         /// <returns></returns>
-        public ActionResult Index(string t)
+        public ActionResult Index(string tab) 
         {
-            #region Получаем данные из адресной строки
-            string UrlPath = "/" + (String)RouteData.Values["path"];
-            //string UrlPath = Request.Path;
-            if (UrlPath.LastIndexOf("/") > 0 && UrlPath.LastIndexOf("/") == UrlPath.Length - 1) UrlPath = UrlPath.Substring(0, UrlPath.Length - 1);
-
-            string _path = UrlPath.Substring(0, UrlPath.LastIndexOf("/") + 1);
-            string _alias = UrlPath.Substring(UrlPath.LastIndexOf("/") + 1);
-            #endregion     
-
-            #region Создаем переменные (значения по умолчанию)
-            PageViewModel Model = new PageViewModel();
             string _ViewName = (ViewName != String.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";
-            string PageTitle = "Контакты";
-            string PageDesc = "описание страницы";
-            string PageKeyw = "ключевые слова";
-            #endregion    
+            string PageTitle = "";
 
+            model.Type = tab;
+            var page = model.CurrentPage.FrontSection;
 
-            model.Nav = new MaterialsGroup[]
+            //Хлебные крошки
+            model.Breadcrumbs.Add(new Breadcrumbs
             {
-                new MaterialsGroup{Title="Контактная информация"},
-                new MaterialsGroup{Title="Администрация", Alias="administration"},
-                new MaterialsGroup{Title="Телефонный справочник", Alias="phone"},
-                new MaterialsGroup{Title="Дополнительная информация", Alias="dop"}
-            };
-            model.Type = t;
-            switch (t)
+                Title = model.CurrentPage.Title,
+                Url = string.Format("/{0}/", page) // ""
+            });
+
+            //Табы на странице
+            model.Nav = new List<PageTabsViewModel>();
+            model.Nav.Add(new PageTabsViewModel { Page = page, Title = "Контактная информация" });
+            model.Nav.Add(new PageTabsViewModel { Page = page, Title = "Администрация", Alias = "administration" });
+            model.Nav.Add(new PageTabsViewModel { Page = page, Title = "Телефонный справочник", Alias = "phone" });
+            model.Nav.Add(new PageTabsViewModel { Page = page, Title = "Дополнительная информация", Alias = "info" });
+
+            //Обработка активных табов
+            if (model.Nav != null && model.Nav.Where(s => s.Alias == tab).Any())
+            {
+                var navItem = model.Nav.Where(s => s.Alias == tab).Single();
+                navItem.Active = true;
+
+                model.Breadcrumbs.Add(new Breadcrumbs
+                {
+                    Title = navItem.Title,
+                    Url = navItem.Alias + "/"
+                });
+            }
+
+            switch (tab)
             {
                 case "administration":
                     PageTitle = "Администрация";
                     model.Administrativ = _repository.getAdministrative(Domain);
                     break;
-                case "dop":
+                case "info":
                     PageTitle = "Дополнительная информация";
-                    model.DopInfo = _repository.getSiteMap("contacts"); 
                     break;
                 case "phone":
                     PageTitle = "Телефонный правочник";
-                    model.Structures = _repository.getStructures(); //Domain
+                    model.Structures = _repository.getStructures();
                     break;
                 default:
                     PageTitle = "Контактная информация";
-                    model.OrgItem = _repository.getOrgInfo(); //Domain
+                    model.OrgItem = _repository.getOrgInfo();
                     break;
             }
 
-            #region Метатеги
             ViewBag.Title = PageTitle;
-            ViewBag.Description = PageDesc;
-            ViewBag.KeyWords = PageKeyw;
-            #endregion
+
             return View(_ViewName, model);
         }
     }

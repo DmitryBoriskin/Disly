@@ -143,6 +143,7 @@
     <Content Include="Content\css\styles_old.css" />
     <Content Include="Content\css\theme\blue.css" />
     <Content Include="Content\css\theme\green.css" />
+    <Content Include="Content\css\theme\green_portal.css" />
     <Content Include="Content\css\theme\purple.css" />
     <Content Include="Content\css\theme\turquoise.css" />
     <Content Include="Content\decor\chuvashia\bg.png" />
@@ -389,6 +390,7 @@
     <Content Include="Content\plugins\tinymce\plugins\emoticons\plugin.min.js" />
     <Content Include="Content\plugins\tinymce\plugins\fullpage\plugin.min.js" />
     <Content Include="Content\plugins\tinymce\plugins\fullscreen\plugin.min.js" />
+    <Content Include="Content\css\theme\green_portal.less" />
     <None Include="Content\plugins\tinymce\plugins\gallery\plugin.min.js_korkin" />
     <Content Include="Content\plugins\tinymce\plugins\help\img\logo.png" />
     <Content Include="Content\plugins\tinymce\plugins\help\plugin.min.js" />
@@ -434,6 +436,19 @@
     <Content Include="Content\plugins\tinymce\themes\inlite\theme.min.js" />
     <Content Include="Content\plugins\tinymce\themes\modern\theme.min.js" />
     <Content Include="Content\plugins\tinymce\tinymce.min.js" />
+    <Content Include="Content\portal\img\bg.jpg" />
+    <Content Include="Content\portal\img\browse_press.jpg" />
+    <Content Include="Content\portal\img\e-reg.jpg" />
+    <Content Include="Content\portal\img\event_calendar.jpg" />
+    <Content Include="Content\portal\img\logo.png" />
+    <Content Include="Content\portal\img\med_logo_footer.jpg" />
+    <Content Include="Content\portal\img\mini-logo-med.png" />
+    <Content Include="Content\portal\img\online-consultation.jpg" />
+    <Content Include="Content\portal\img\smi-for-med-chuvashia.jpg" />
+    <Content Include="Content\portal\img\tv-radio-plot.jpg" />
+    <Content Include="Content\portal\img\your-opinion.jpg" />
+    <Content Include="Content\portal\img\youtube-med-chuv.jpg" />
+    <Content Include="Content\portal\style.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -533,9 +548,11 @@
     <Compile Include="Areas\Admin\Controllers\BannersController.cs" />
     <Compile Include="Areas\Admin\Controllers\cmsMenuController.cs" />
     <Compile Include="Areas\Admin\Controllers\DocumentsController .cs" />
-    <Compile Include="Areas\Admin\Controllers\AnketaController.cs" />
+    <Compile Include="Areas\Admin\Controllers\WorksheetController.cs" />
     <Compile Include="Areas\Admin\Models\AnketaViewModel.cs" />
-    <Compile Include="Controllers\WorksheetController.cs" />
+    <Compile Include="Controllers\gs\SpecStructureController.cs" />
+    <Compile Include="Controllers\orgs\OrgGsMembersController.cs" />
+    <Compile Include="Controllers\AnketaController.cs" />
     <Compile Include="Controllers\VacancyController.cs" />
     <Compile Include="Controllers\RedirectFromOldController.cs" />
     <Compile Include="Areas\Admin\Controllers\PhotoAlbumsController.cs" />
@@ -593,11 +610,11 @@
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\DoctorsController.cs" />
     <Compile Include="Controllers\ContactsController.cs" />
-    <Compile Include="Controllers\GeneralSpecialistsController.cs" />
-    <Compile Include="Controllers\LPUController.cs" />
+    <Compile Include="Controllers\portal\PortalGsSitesController.cs" />
+    <Compile Include="Controllers\portal\LPUController.cs" />
     <Compile Include="Controllers\MapSiteController.cs" />
     <Compile Include="Controllers\SearchController.cs" />
-    <Compile Include="Controllers\PortalDoctorsController.cs" />
+    <Compile Include="Controllers\portal\PortalDoctorsController.cs" />
     <Compile Include="Controllers\MedicalServicesController.cs" />
     <Compile Include="Controllers\RedirectController.cs" />
     <Compile Include="Controllers\RedirectRegistryController.cs" />
@@ -613,14 +630,16 @@
     </Compile>
     <Compile Include="Areas\Admin\Models\CoreViewModel.cs" />
     <Compile Include="Models\EventViewModel.cs" />
+    <Compile Include="Models\gs\SpecStructureViewModel.cs" />
+    <Compile Include="Models\base\ErrorViewModel.cs" />
     <Compile Include="Models\WorksheetViewModel.cs" />
     <Compile Include="Models\FeedbackViewModel.cs" />
     <Compile Include="Models\DoctorsViewModel.cs" />
     <Compile Include="Models\ContactsViewModel.cs" />
-    <Compile Include="Models\GeneralSpecialistViewModel.cs" />
-    <Compile Include="Models\LPUViewModel.cs" />
+    <Compile Include="Models\portal\SpecialistsViewModel.cs" />
+    <Compile Include="Models\portal\LPUViewModel.cs" />
     <Compile Include="Models\MapSiteViewModel.cs" />
-    <Compile Include="Models\PortalDoctorsViewModel.cs" />
+    <Compile Include="Models\portal\PortalDoctorsViewModel.cs" />
     <Compile Include="Models\MedicalServicesViewModel.cs" />
     <Compile Include="Models\RedirectRegistryViewModel.cs" />
     <Compile Include="Models\StructureViewModel.cs" />
@@ -629,7 +648,7 @@
     <Compile Include="Models\TypePageViewModel.cs" />
     <Compile Include="Models\NewsViewModel.cs" />
     <Compile Include="Models\HomePageViewModel.cs" />
-    <Compile Include="Models\PageViewModel.cs" />
+    <Compile Include="Models\base\PageViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Cripto.cs" />
     <Compile Include="Properties\Files.cs" />
@@ -822,8 +841,8 @@
     <Content Include="Areas\Admin\Views\Shared\Modal\Sites.cshtml" />
     <Content Include="Content\css\commonless.less" />
     <Content Include="Content\css\theme\green.less" />
-    <Content Include="Areas\Admin\Views\Anketa\Item.cshtml" />
-    <Content Include="Areas\Admin\Views\Anketa\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\Worksheet\Item.cshtml" />
+    <Content Include="Areas\Admin\Views\Worksheet\Index.cshtml" />
     <Content Include="Content\css\theme\purple.less" />
     <None Include="Content\plugins\datatables\i18n\ru.json" />
     <Content Include="Content\plugins\tinymce\langs\readme.md" />
@@ -850,13 +869,11 @@
     <Content Include="Views\Vote\Index.cshtml" />
     <Content Include="Views\Vote\Item.cshtml" />
     <Content Include="Views\Vote\List.cshtml" />
-    <Content Include="Views\Contacts\part\nav.cshtml" />
     <Content Include="Views\Contacts\part\administration.cshtml" />
     <Content Include="Views\Contacts\part\phone.cshtml" />
     <Content Include="Views\Doctors\Redirect.cshtml" />
     <Content Include="Views\MapSite\Index.cshtml" />
     <Content Include="Views\LPU\Index.cshtml" />
-    <Content Include="Views\LPU\Nav.cshtml" />
     <Content Include="Views\Press\part\Item.cshtml" />
     <Content Include="Views\Home\part\media.cshtml" />
     <Content Include="Views\PortalDoctors\Index.cshtml" />
@@ -870,18 +887,23 @@
     <Content Include="Views\EventsFront\Index.cshtml" />
     <Content Include="Views\EventsFront\Item.cshtml" />
     <Content Include="Views\Structure\part\boss_list.cshtml" />
-    <Content Include="Views\MedicalServices\part\nav.cshtml" />
     <Content Include="Views\Feedback\AppealList.cshtml" />
     <Content Include="Views\Feedback\ReviewList.cshtml" />
     <Content Include="Views\Shared\part\childtabs.cshtml" />
-    <Content Include="Views\GeneralSpecialists\Index.cshtml" />
+    <Content Include="Views\PortalGsSites\Index.cshtml" />
     <Content Include="Views\Service\Photo.cshtml" />
     <Content Include="Views\Press\RssSettings.cshtml" />
     <Content Include="Views\EventsFront\Archive.cshtml" />
     <Content Include="Views\Shared\part\childlist_sitemap.cshtml" />
     <Content Include="Views\Vacancy\Index.cshtml" />
     <Content Include="Views\Vacancy\Item.cshtml" />
-    <Content Include="Views\Worksheet\Index.cshtml" />
+    <Content Include="Views\Anketa\Index.cshtml" />
+    <Content Include="Views\SpecStructure\Index.cshtml" />
+    <Content Include="Views\SpecStructure\part\list.cshtml" />
+    <Content Include="Views\Shared\part\nav.cshtml" />
+    <Content Include="Views\_portal\home\Index.cshtml" />
+    <Content Include="Views\_portal\shared\_Layout.cshtml" />
+    <Content Include="Views\OrgGsMembers\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -892,8 +914,9 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Content\temp\" />
+    <Folder Include="Models\event\" />
+    <Folder Include="Models\org\" />
     <Folder Include="Userfiles\" />
-    <Folder Include="Views\Core\" />
     <Folder Include="Views\Redirect\" />
   </ItemGroup>
   <ItemGroup>

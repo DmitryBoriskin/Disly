@@ -19,13 +19,30 @@ namespace Disly.Controllers
         {
             base.OnActionExecuting(filterContext);
 
+            currentPage = _repository.getSiteMap("Vote");
+
+            if (currentPage == null)
+                throw new Exception("model.CurrentPage == null");
+
             model = new VoteViewModel
             {
                 SitesInfo = siteModel,
                 SiteMapArray = siteMapArray,
                 BannerArray = bannerArray,
-                CurrentPage = _repository.getSiteMap("vote")
+                CurrentPage = currentPage
             };
+
+            #region Создаем переменные (значения по умолчанию)
+            string PageTitle = model.CurrentPage.Title;
+            string PageDesc = model.CurrentPage.Desc;
+            string PageKeyw = model.CurrentPage.Keyw;
+            #endregion
+
+            #region Метатеги
+            ViewBag.Title = PageTitle;
+            ViewBag.Description = PageDesc;
+            ViewBag.KeyWords = PageKeyw;
+            #endregion
 
             model.Breadcrumbs = new List<Breadcrumbs>();
             model.Breadcrumbs.Add(new Breadcrumbs
@@ -41,13 +58,7 @@ namespace Disly.Controllers
         /// <returns></returns>
         public ActionResult Index()
         {
-            #region Получаем данные из адресной строки
-            string UrlPath = "/" + (String)RouteData.Values["path"];
-            if (UrlPath.LastIndexOf("/") > 0 && UrlPath.LastIndexOf("/") == UrlPath.Length - 1) UrlPath = UrlPath.Substring(0, UrlPath.Length - 1);
-
-            string _path = UrlPath.Substring(0, UrlPath.LastIndexOf("/") + 1);
-            string _alias = UrlPath.Substring(UrlPath.LastIndexOf("/") + 1);
-            #endregion
+            string _ViewName = (ViewName != String.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";
 
             model.Breadcrumbs.Add(new Breadcrumbs
             {
@@ -58,23 +69,10 @@ namespace Disly.Controllers
             model.List = _repository.getVote(_ip); //Domain,
             model.Siblings = (model.CurrentPage != null) ? _repository.getSiteMapSiblingElements("/feedback/") : null;
 
-            if(model.Siblings != null && !model.Siblings.Select(p=>p.Id).Contains(model.CurrentPage.Id))
+            if (model.Siblings != null && !model.Siblings.Select(p => p.Id).Contains(model.CurrentPage.Id))
                 model.Siblings.Add(model.CurrentPage);
 
             model.Child = model.Siblings.ToArray();
-
-            #region Создаем переменные (значения по умолчанию)            
-            string _ViewName = (ViewName != String.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";
-            string PageTitle = "Опросы";
-            string PageDesc = "описание страницы";
-            string PageKeyw = "ключевые слова";
-            #endregion
-
-            #region Метатеги
-            ViewBag.Title = PageTitle;
-            ViewBag.Description = PageDesc;
-            ViewBag.KeyWords = PageKeyw;
-            #endregion
 
             return View(_ViewName, model);
         }
@@ -92,31 +90,11 @@ namespace Disly.Controllers
 
         public ActionResult Item(Guid id)
         {
-            #region Получаем данные из адресной строки
-            string UrlPath = "/" + (String)RouteData.Values["path"];
-            if (UrlPath.LastIndexOf("/") > 0 && UrlPath.LastIndexOf("/") == UrlPath.Length - 1) UrlPath = UrlPath.Substring(0, UrlPath.Length - 1);
-
-            string _path = UrlPath.Substring(0, UrlPath.LastIndexOf("/") + 1);
-            string _alias = UrlPath.Substring(UrlPath.LastIndexOf("/") + 1);
-            #endregion
+            string _ViewName = (ViewName != String.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";
 
             model.Item = _repository.getVoteItem(id, _ip);
-
-            #region Создаем переменные (значения по умолчанию)            
-            string _ViewName = (ViewName != String.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";
-            string PageTitle = "Опросы";
-            string PageDesc = "описание страницы";
-            string PageKeyw = "ключевые слова";
-            #endregion
-
-            #region Метатеги
-            ViewBag.Title = PageTitle;
-            ViewBag.Description = PageDesc;
-            ViewBag.KeyWords = PageKeyw;
-            #endregion
 
             return View(_ViewName, model);
         }
     }
 }
-

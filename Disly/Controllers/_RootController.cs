@@ -8,6 +8,7 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Mvc;
+using System.IO;
 
 namespace Disly.Controllers
 {
@@ -23,6 +24,9 @@ namespace Disly.Controllers
         public string ActionName;
         public string ViewName;
         public string StartUrl;
+
+        public string _path;
+        public string _alias;
 
         protected SitesModel siteModel;
         protected SiteMapModel[] siteMapArray;
@@ -48,28 +52,56 @@ namespace Disly.Controllers
                 if (Request.Url.Host.ToLower().Replace("www.", "") != ConfigurationManager.AppSettings["BaseURL"]) filterContext.Result = Redirect("/Error/");
                 else Domain = String.Empty;
             }
+            Domain = "rkod";
 
             #region Получаем данные из адресной строки
-            string UrlPath = Request.Path;
-            if (UrlPath.LastIndexOf("/") > 0 && UrlPath.LastIndexOf("/") == UrlPath.Length - 1) UrlPath = UrlPath.Substring(0, UrlPath.Length - 1);
+            //string UrlPath = Request.Path;
+            //if (UrlPath.LastIndexOf("/") > 0 && UrlPath.LastIndexOf("/") == UrlPath.Length - 1)
+            //    UrlPath = UrlPath.Substring(0, UrlPath.Length - 1);
+            //string _path = (UrlPath.LastIndexOf("/")==0) ? UrlPath.Substring(1, UrlPath.Length-1) : UrlPath.Substring(0, UrlPath.LastIndexOf("/") + 1);
+            //string _alias = UrlPath.Substring(UrlPath.LastIndexOf("/") + 1);
 
-            string _path = UrlPath.Substring(0, UrlPath.LastIndexOf("/") + 1);
-            string _alias = UrlPath.Substring(UrlPath.LastIndexOf("/") + 1);
+            //Частные случаи (model.CurrentPage = null) рассматриваем в самих контроллерах 
+            _alias = "";
+            _path = "/";
+
+            var url = HttpContext.Request.Url.AbsolutePath.ToLower();
+
+            //Сюда попадаем еще, если на странице есть картинки или файлы
+            if (url.LastIndexOf(".") > -1)
+                return;
+            
+                //Обрезаем  query string (Все, что после ? )
+                if (url.LastIndexOf("?") > -1)
+                    url = url.Substring(0, url.LastIndexOf("?"));
+                //Сегменты пути 
+                var segments = url.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
+
+
+                if (segments != null && segments.Count() > 0)
+                {
+                    _alias = segments.Last();
+
+                    if (segments.Count() > 1)
+                    {
+                        _path = string.Join("/", segments.Take(segments.Length - 1));
+                        _path = string.Format("/{0}/", _path);
+                    }
+                }
+                currentPage = _repository.getSiteMap(_path, _alias);
+                breadcrumb = _repository.getBreadCrumbCollection(HttpContext.Request.Url.PathAndQuery);
+            
+
             #endregion
-            currentPage = _repository.getSiteMap(_path, _alias); //, Domain
-
 
             ControllerName = filterContext.RouteData.Values["Controller"].ToString().ToLower();
             ActionName = filterContext.RouteData.Values["Action"].ToString().ToLower();
 
-#warning front_section не совпадает с именем контроллера ControllerName (feedback/reviewlist vs feedback)
             ViewName = _repository.getView(ControllerName); //Domain, 
-
-            siteModel = _repository.getSiteInfo(); //Domain
+            siteModel = _repository.getSiteInfo();
+            
             siteMapArray = _repository.getSiteMapList(); //Domain
 
-
-            breadcrumb =_repository.getBreadCrumbCollection(((System.Web.HttpRequestWrapper)Request).RawUrl); // Domain
             bannerArray = _repository.getBanners(); //Domain
 
             ViewBag.MedCap = MedCap = Settings.MedCap;
@@ -126,7 +158,9 @@ namespace Disly.Controllers
                 return_url = addFiltrParam(return_url, "size", String.Empty);
             }
             return_url = (!Convert.ToBoolean(Request.QueryString["disabled"])) ? addFiltrParam(return_url, "disabled", String.Empty) : return_url;
+            return_url = String.IsNullOrEmpty(Request.QueryString["tab"]) ? addFiltrParam(return_url, "tab", String.Empty) : return_url;
             return_url = String.IsNullOrEmpty(Request.QueryString["searchtext"]) ? addFiltrParam(return_url, "searchtext", String.Empty) : return_url;
+           
             // Если парамметры из адресной строки равны значениям по умолчанию - удаляем их из URL
             if (return_url.ToLower() != HttpUtility.UrlDecode(Request.Url.Query).ToLower())
                 Response.Redirect(StartUrl + return_url);
@@ -177,7 +211,8 @@ namespace Disly.Controllers
             query = query.Replace("?&", "?").Replace("&&", "&");
 
             return query;
-        }        
+        }
+
     }
 }
 

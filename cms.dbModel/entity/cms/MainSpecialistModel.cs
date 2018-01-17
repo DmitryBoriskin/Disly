@@ -34,6 +34,16 @@ namespace cms.dbModel.entity.cms
         public Guid? SiteId { get; set; }
 
         /// <summary>
+        /// Идентификатор сайта
+        /// </summary>
+        public string Domain { get; set; }
+
+        /// <summary>
+        /// Адреса сайта
+        /// </summary>
+        public Domain[] DomainUrls { get; set; }
+
+        /// <summary>
         /// Главные специалисты
         /// </summary>
         public IEnumerable<Guid> EmployeeMainSpecs { get; set; }
@@ -42,6 +52,7 @@ namespace cms.dbModel.entity.cms
         /// Экспертный совет
         /// </summary>
         public IEnumerable<Guid> EmployeeExpSoviet { get; set; }
+        public  OrgsModel Organization { get; set; }
     }
 
     /// <summary>
@@ -58,26 +69,5 @@ namespace cms.dbModel.entity.cms
         /// Пейджер
         /// </summary>
         public Pager Pager { get; set; }
-    }
-
-    /// <summary>
-    /// Главный специалист для внешней части
-    /// </summary>
-    public class MainSpecialistFrontModel
-    {
-        /// <summary>
-        /// Идентификатор
-        /// </summary>
-        public Guid Id { get; set; }
-
-        /// <summary>
-        /// Название
-        /// </summary>
-        public string Name { get; set; }
-
-        /// <summary>
-        /// Домен
-        /// </summary>
-        public string Domain { get; set; }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using cms.dbModel.entity;
 using Disly.Models;
+using System;
 using System.Collections.Generic;
 using System.Web.Mvc;
 
@@ -7,23 +8,29 @@ namespace Disly.Controllers
 {
     public class MapSiteController : RootController
     {
-        private MapSiteViewModel model;
+        private SiteMapViewModel model;
 
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             base.OnActionExecuting(filterContext);
 
-            model = new MapSiteViewModel
+            currentPage = _repository.getSiteMap("MapSite");
+
+            if (currentPage == null)
+                throw new Exception("model.CurrentPage == null");
+
+            model = new SiteMapViewModel
             {
                 SitesInfo = siteModel,
                 SiteMapArray = siteMapArray,
                 BannerArray = bannerArray,
+                CurrentPage = currentPage,
                 Breadcrumbs = new List<Breadcrumbs>()
             };
             #region Создаем переменные (значения по умолчанию)
-            string PageTitle = "Карта сайта";
-            string PageDesc = "описание страницы";
-            string PageKeyw = "ключевые слова";
+            string PageTitle = model.CurrentPage.Title;
+            string PageDesc = model.CurrentPage.Desc;
+            string PageKeyw = model.CurrentPage.Keyw;
             #endregion
 
             #region Метатеги

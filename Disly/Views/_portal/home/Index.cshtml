@@ -1,0 +1,323 @@
+﻿@model HomePageViewModel
+@{
+    Layout = "/views/_portal/shared/_layout.cshtml";
+    var slider = (Model.BannerArray != null) ?
+        Model.BannerArray
+        .Where(w => w.SectionAlias.Equals("slider"))
+        .Select(s => new
+        {
+            Id = s.Id,
+            Title = s.Title,
+            Url = s.Photo.Url,
+            Text = s.Text,
+            Link = s.Url
+        })
+        : null;
+
+    var sitemapPlates = (Model.SiteMapArray != null) ?
+        Model.SiteMapArray
+        .Where(w => w.MenuAlias.Equals("plate"))
+        .OrderBy(o => o.MenuSort)
+        .Select(s => new
+        {
+            Path = s.Path,
+            Alias = s.Alias,
+            Title = s.Title,
+            FrontSection = s.FrontSection,
+            Url = s.Url,
+            Photo = s.Photo
+        })
+        : null;
+
+    var benefitBanners = (Model.BannerArray != null) ?
+        Model.BannerArray
+        .Where(w => w.SectionAlias.Equals("benefits"))
+        .Select(s => new
+        {
+            Id = s.Id,
+            Title = s.Title,
+            Url = s.Photo.Url,
+            Text = s.Text,
+            Link = s.Url
+        })
+        : null;
+
+    var announcements = (Model.Materials != null) ? Model.Materials.Where(w => w.GroupAlias.Equals("announcement")) : null;
+    var news = (Model.Materials != null) ? Model.Materials.Where(w => w.GroupAlias.Equals("news")) : null;
+    var events = (Model.Materials != null) ? Model.Materials.Where(w => w.GroupAlias.Equals("actual")) : null;
+    var smi = (Model.Materials != null) ? Model.Materials.Where(w => w.GroupAlias.Equals("smi")) : null;
+    int i = 0;
+
+    string backgroundSlider = Model.SitesInfo.BackGroundImg != null
+        ? "style=background-image:url(" + Model.SitesInfo.BackGroundImg.Url + ");"
+        : null;
+
+}
+
+
+@*верхний модуль*@
+<div class="news-module">
+    <div class="row">
+        <div class="col-md-6">
+            @if (news != null && news.FirstOrDefault() != null)
+            {
+                var news_it = news.FirstOrDefault();
+
+                string link = "/press/" + news_it.Date.Year + "/" + news_it.Date.Month + "/" + news_it.Date.Day + "/" + news_it.Alias;
+                string photo = !string.IsNullOrEmpty(news_it.Photo) ? news_it.Photo : "~/Content/img/temporal.jpg";
+
+                <div class="event-item-module">
+                    <div class="event-item-module-opacity top-op">
+                        <div class="module-material-item-date">
+                            <div class="module-material-item-day">@news_it.Date.Day.ToString()</div>
+                            <div class="module-material-item-otherdate">
+                                <div>@news_it.Date.ToString("MMMM")</div>
+                                <div>@news_it.Date.ToString("yyyy")</div>
+                            </div>
+                        </div>
+                        <a href="/press/@news_it.GroupAlias" class="module-material-item-group-link">@news_it.GroupName</a>
+                    </div>
+                    <a href="@link">
+                        <img src="@photo" alt="@news_it.Title" />
+                    </a>
+                    <div class="event-item-module-opacity bottom-op">
+                        <a href="@link">@news_it.Title</a>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <div class="col-md-3 flank-paddings-15">
+            <a class="linker linker__top" href="https://reg.med.cap.ru/Default.aspx" target="_blank">
+                <div class="linker_text linker_reg">
+                    <div class="linker_text_top">Электронная регистратура</div>
+                    <div class="linker_text_bottom">Запишитесь на прием к врачу online</div>                
+                </div>
+                <img src="~/Content/portal/img/e-reg.jpg"/>
+            </a>
+            <a class="linker linker__bottom" href="/vote" >
+                <img src="~/Content/portal/img/your-opinion.jpg" />
+                <div class="linker_text  linker_check">
+                    <div class="linker_text_top">Нам важно ваше мнение!</div>                    
+                </div>                
+            </a>
+        </div>
+        <div class="col-md-3 flank-paddings-15">
+            <a class="linker linker__bottom" href="https://reg.med.cap.ru/Default.aspx" target="_blank">
+                <img src="~/Content/portal/img/event_calendar.jpg" />
+                <div class="linker_text linker_calendar">
+                    <div class="linker_text_top">Календарь событий</div>
+                </div>
+            </a>
+
+            <a class="linker linker__top" href="https://reg.med.cap.ru/Default.aspx" target="_blank">
+                <div class="linker_text linker_online">
+                    <div class="linker_text_top">Консультация online</div>
+                    <div class="linker_text_bottom">Задайте вопрос главным специалистам Республики</div>
+                </div>
+                <img src="~/Content/portal/img/online-consultation.jpg" />
+            </a>
+        </div>
+    </div>
+</div>
+
+@*модуль новостей*@ 
+
+    @if (Model.Materials != null)
+    {
+        <div class="news-module">
+            <p class="module-title">Пресс-центр<span class="ti-folder"></span><a class="link-to-archive" href="/press">Архив</a></p>
+            <div class="row">
+                <div class="col-md-3">
+                    @if (announcements != null && announcements.Count() > 0)
+                    {
+                        foreach (var ann in announcements.ToList()) //for (int j = 0; j < 2; j++)
+                        {
+                            string link = "/press/" + ann.Date.Year + "/" + ann.Date.Month + "/" + ann.Date.Day + "/" + ann.Alias;
+
+                            <div class="module-material-item">
+                                <div class="module-material-item-date">
+                                    <div class="module-material-item-day">@ann.Date.Day.ToString()</div>
+                                    <div class="module-material-item-otherdate">
+                                        <div>@ann.Date.ToString("MMMM")</div>
+                                        <div>@ann.Date.ToString("yyyy")</div>
+                                    </div>
+                                </div>
+                                <a class="module-material-item-group-link" href="/press/@ann.GroupAlias">@ann.GroupName                                </a>
+                                <a class="module-material-title" href="@link">@ann.Title</a>
+                            </div>
+                        }
+                    }
+                </div>
+                <div class="col-md-3">
+                    @if (news != null && smi.Count() > 0)
+                    {
+                        foreach (var item in smi.ToList()) //for (int j = 0; j < 2; j++)
+                        {                            
+                            string link = "/press/" + item.Date.Year + "/" + item.Date.Month + "/" + item.Date.Day + "/" + item.Alias;
+                            <div class="module-material-item">
+                                <div class="module-material-item-date">
+                                    <div class="module-material-item-day">@item.Date.Day.ToString()</div>
+                                    <div class="module-material-item-otherdate">
+                                        <div>@item.Date.ToString("MMMM")</div>
+                                        <div>@item.Date.ToString("yyyy")</div>
+                                    </div>
+                                </div>
+                                <a href="/press/@item.GroupAlias" class="module-material-item-group-link">@item.GroupName</a>
+                                <a href="@link" class="module-material-title">@item.Title</a>
+                            </div>                            
+                        }
+                    }
+                </div>
+                <div class="col-md-6">
+                    @if (events != null && events.FirstOrDefault() != null)
+                    {
+                        var ev = events.FirstOrDefault();
+
+                        string link = "/press/" + ev.Date.Year + "/" + ev.Date.Month + "/" + ev.Date.Day + "/" + ev.Alias;
+                        string photo = !string.IsNullOrEmpty(ev.Photo) ? ev.Photo : "~/Content/img/temporal.jpg";
+
+                        <div class="event-item-module">
+                            <div class="event-item-module-opacity top-op">
+                                <div class="module-material-item-date">
+                                    <div class="module-material-item-day">@ev.Date.Day.ToString()</div>
+                                    <div class="module-material-item-otherdate">
+                                        <div>@ev.Date.ToString("MMMM")</div>
+                                        <div>@ev.Date.ToString("yyyy")</div>
+                                    </div>
+                                </div>
+                                <a href="/press/@ev.GroupAlias" class="module-material-item-group-link">@ev.GroupName</a>
+                            </div>
+                            <a href="@link">
+                                <img src="@photo" alt="@ev.Title" />
+                            </a>
+                            <div class="event-item-module-opacity bottom-op">
+                                <a href="@link">@ev.Title</a>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+
+        </div>
+    }
+
+@*конец модуля новостей*@ 
+@*модуль полезные ресурсы*@ 
+<div class="row60">
+    <div class="col-md-12">
+        @if (benefitBanners != null)
+        {
+            <div class="row">
+                <div class="imglink-benefit-block module-main-page">
+                    <p class="module-title">Полезные ресурсы<span class="ti-folder"></span><a class="link-to-archive" href="#">Архив</a></p>
+                    <div class="ling_img_on carousel slide">
+                        <div class="carousel-inner" data-count="4">
+                            @foreach (var item in benefitBanners)
+                            {
+                                string link = "/redirect/link/" + item.Id;
+
+                                string title = item.Title;
+                                if (title.Length > 70)
+                                {
+                                    title = title.Substring(0, 70);
+                                }
+
+                                <div class="linkimg_item col-md-3">
+                                    <a href="@link">
+                                        <div class="imglink-item">
+                                            @if (!string.IsNullOrEmpty(item.Url))
+                                            {
+                                                <img class="imglink-pic" src="@item.Url" />
+                                            }
+                                            <div class="imglink-title">
+                                                @Html.Raw(title)
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                            }
+                        </div>
+                        @if (benefitBanners.Count() > 4)
+                        {
+                            <div class="imglink-controlls">
+                                <a data-slide="prev" class="ti-angle-left prev"></a>
+                                <a data-slide="next" class="ti-angle-right next"></a>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+ @*конец модуля полезные ресурсы*@
+@*карта сайта плиткой*@
+<div class="container">
+    @if (sitemapPlates != null && sitemapPlates.Count() > 0)
+    {
+        <div class="sitemap-plates-block">
+            <div class="row">
+                @foreach (var item in sitemapPlates)
+                {
+                    string fullPath = "/";
+
+                    if (!string.IsNullOrEmpty(item.Url))
+                    {
+                        fullPath = item.Url;
+                    }
+                    else if (item.FrontSection.ToLower().Equals("page"))
+                    {
+                        fullPath = item.Path + item.Alias;
+                    }
+                    else
+                    {
+                        fullPath = "/" + item.FrontSection;
+                    }
+                    <div class="col-sm-3">
+                        @if (!string.IsNullOrWhiteSpace(item.Photo.Url))
+                        {
+                            <a href="@fullPath" class="sitemap-plate sitemap-plate-image" title="@item.Title">
+                                <img src="@item.Photo.Url" alt="@item.Title" />
+                            </a>
+                        }
+                        else
+                        {
+                            <a href="@fullPath" class="sitemap-plate">@item.Title</a>
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+    }
+</div>
+@*конец карты сайта плиткой*@ 
+
+<div class="row60 portal_lk_wr">
+    <div class="col-md-12">
+        <div class="row">
+            <divc class="portal_lk">
+                <div class="col-md-3">
+                    <a href="#">
+                        <img  src="~/Content/portal/img/tv-radio-plot.jpg"/>
+                    </a>
+                </div>
+                <div class="col-md-3">
+                    <a href="#">
+                        <img src="~/Content/portal/img/smi-for-med-chuvashia.jpg"/>
+                    </a>
+                </div>
+                <div class="col-md-3">
+                    <a href="#">
+                        <img src="~/Content/portal/img/browse_press.jpg" />
+                    </a>
+                </div>
+                <div class="col-md-3">
+                    <a href="#">
+                        <img src="~/Content/portal/img/youtube-med-chuv.jpg" />
+                    </a>                    
+                </div>
+            </divc>
+        </div>
+    </div>
+</div>

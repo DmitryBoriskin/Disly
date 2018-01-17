@@ -1,4 +1,10 @@
 ﻿@model StructureViewModel
+@{
+    if (Model.SitesInfo.Alias == "main")
+    {
+        Layout = "/views/_portal/shared/_layout.cshtml";
+    }
+}
 <h1>@Model.DepartmentItem.Title</h1>
 @Html.Partial("services/breadcrumbs")
 <div class="structur">

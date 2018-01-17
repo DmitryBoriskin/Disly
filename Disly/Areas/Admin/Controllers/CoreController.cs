@@ -60,7 +60,7 @@ namespace Disly.Areas.Admin.Controllers
 
                 AppLogger.Debug("CoreController: Не получилось определить Domain", ex);
             }
-            ViewBag.Domain = Domain;
+            ViewBag.Domain = Domain;            
 
             StartUrl = "/Admin/" + (String)RouteData.Values["controller"] + "/";
 

@@ -1,11 +1,17 @@
 ﻿@model VoteViewModel
+@{
+    if (Model.SitesInfo.Alias == "main")
+    {
+        Layout = "/views/_portal/shared/_layout.cshtml";
+    }
+}
 <div class="type-page">
     <div class="container">
         <div class="row">
             <div class="col-md-12">
                 @Html.Partial("services/breadcrumbs")
 
-                <h1>Голосование</h1>
+                <h1>@ViewBag.Title</h1>
 
                 @Html.Partial("part/childtabs", Model)
 

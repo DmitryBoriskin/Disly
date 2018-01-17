@@ -1,30 +1,43 @@
 ﻿@model MedicalServicesViewModel
+@{
+    if (Model.SitesInfo.Alias == "main")
+    {
+        Layout = "/views/_portal/shared/_layout.cshtml";
+    }
+}
+@{
+// Model.CurrentPage == null Проверяем в контроллере, он не должен быть null
+}
 <div class="type-page">
     <div class="container">
         @Html.Partial("services/breadcrumbs")
 
-        <h1>Медицинские услуги</h1>
+        <h1>@ViewBag.Title</h1>
 
-        @Html.Partial("part/nav")
+        @if (Model.Nav != null)
+        {
+            @Html.Partial("part/nav", Model.Nav)
+        }
 
         <div class="row">
-            @if (Model.MedicalServices != null && string.IsNullOrEmpty(Model.Type))
+            @switch (Model.Type)
             {
-                foreach (var item in Model.MedicalServices)
-                {
-                    string link = "/structure";
-                    <div class="col-md-6">
-                        <a href="@link">@item.Title</a>
-                    </div>
-                }
-            }
-            else if (Model.Info != null && Model.Type == "dop")
-            {
-                <div class="col-md-12">@Html.Raw(Model.Info.Text)</div>
-            }
-            else
-            {
-                <div class="col-md-12"><p>Список медицинских услуг пуст.</p></div>
+                case "":
+                case null:
+                    if (Model.MedicalServices != null && Model.MedicalServices.Count() > 0)
+                    {
+                        foreach (var item in Model.MedicalServices)
+                        {
+                            string link = "/structure";
+                            <div class="col-md-6">
+                                <a href="@link">@item.Title</a>
+                            </div>
+                        }
+                    }
+                    break;
+                default:
+                    <div class="col-md-12">@Html.Raw(Model.CurrentPage.Text)</div>
+                    break;
             }
         </div>
     </div>

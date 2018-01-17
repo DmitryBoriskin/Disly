@@ -66,8 +66,7 @@ $(document).ready(function () {
     //                })
     //                .fail(function (jqXHR, status) {
     //                    console.log("Ошибка" + " " + status + " " + jqXHR);
-    //                    //elTooltip.attr("title", "Ошибка сохранения");
-                        
+    //                    //elTooltip.attr("title", "Ошибка сохранения");                        
     //                })
     //                .always(function (response) {
     //                    //setTimeout(function () {
@@ -139,20 +138,20 @@ $(document).ready(function () {
         }
     });
      //показываем preloader при клике на ссылку
-    $('a').click(function () {
-        var $load_bg = $("<div/>", { "class": "load_page" });
-        var dataAction = $(this).attr('data-action');
-        if (dataAction === 'noPreloader-accept') {
+    //$('a').click(function () {
+    //    var $load_bg = $("<div/>", { "class": "load_page" });
+    //    var dataAction = $(this).attr('data-action');
+    //    if (dataAction === 'noPreloader-accept') {
 
-        }
-        else {
-            $load_bg.bind({
-                mousedown: function () { return false; },
-                selectstart: function () { return false; }
-            });
-            $('body').append($load_bg);
-        }        
-    });
+    //    }
+    //    else {
+    //        $load_bg.bind({
+    //            mousedown: function () { return false; },
+    //            selectstart: function () { return false; }
+    //        });
+    //        $('body').append($load_bg);
+    //    }        
+    //});
 
     // Панель авторизации пользователя    
     $('.account-info').click(function () {
@@ -171,7 +170,6 @@ $(document).ready(function () {
         click: function () {
             $('.modal').modal('toggle');
             setCursor();
-
             return false;
         }
     })
@@ -292,6 +290,25 @@ $(document).ready(function () {
         });
     });
 
+    //удалить дополнительный адрес
+    $('.del_dop_address').click(function (e) {
+        e.preventDefault();
+        var idDopAddres = $(this).attr("data-id");
+        var $Container = $(this).parent().parent();
+
+        $.ajax({
+            type: "POST",
+            async: false,
+            url: "/admin/orgs/DelDopAddres",
+            data: { id: idDopAddres },
+            error: function () { alert("error"); },
+            success: function (data) {
+                $Container.remove();
+            }
+        });
+
+    });
+
     //удаление домена
     $('.del_domain').click(function (e) {
         e.preventDefault();
@@ -322,7 +339,6 @@ $(document).ready(function () {
             }
             
         });
-
         
     });
 

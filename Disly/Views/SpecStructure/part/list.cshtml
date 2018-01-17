@@ -1,0 +1,104 @@
+﻿@model People[]
+
+@if (Model != null && Model.Count() > 0)
+{
+    <div class="row">
+        <div class="col-md-8">
+            <table class="adminlist">
+                @foreach (var item in Model)
+                {
+                    string link = "/doctors/" + item.Id;
+                    string photo = (!string.IsNullOrWhiteSpace(item.Photo))
+                          ? File.Exists(Server.MapPath(item.Photo))
+                              ? item.Photo : "/Content/img/no_avatar.png"
+                          : "/Content/img/no_avatar.png";
+                    <tr>
+                        <td class="adminlist_img_td">
+                            <a class="adminlist_img_wr" target="_blank" href="@link">
+                                <img class="img-circle img-person-list" alt="@item.FIO" src="@photo" />
+                            </a>
+                        </td>
+                        <td>
+                            <a class="adminlist_name" href="@link">@item.FIO</a>
+
+                            @if (item.Posts != null)
+                            {
+                                string posts = string.Empty;
+                                foreach (var p in item.Posts)
+                                {
+                                    <div class="adminlist_post">
+                                        @p.Name
+                                    </div>
+                                }
+                            }
+                        </td>
+                    </tr>
+                }
+            </table>
+        </div>
+        <div class="col-md-1"></div>
+        <div class="col-md-3">
+            <form id="list-filter-form" role="form" class="filtr_news" action="/@ViewBag.ControllerName/">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="form-group search_news">
+                            <label class="label_filtr" for="search_news">Ключевые слова</label>
+                            <input type="text" class="filtr_data form-control" name="searchtext" id="search_news" value="@ViewBag.SearchText" />
+                        </div>
+                    </div>
+                    @*@if (Model.DepartmentsSelectList != null)
+                        {
+                                <div class="col-sm-12">
+                                    <div class="form-group">
+                                        <label class="label_filtr">Отделения</label>
+                                        <select class="form-control select2" name="group">
+                                            <option value="">не выбрано</option>
+                                            @foreach (var item in Model.DepartmentsSelectList)
+                                            {
+                                                <optgroup label="@item.Title">
+                                                    @if (item.Departments != null)
+                                                    {
+                                                        foreach (var department in item.Departments)
+                                                        {
+                                                            string selected = (department.Id.ToString() == ViewBag.DepartGroup) ? "selected" : "";
+                                                            <option value="@department.Id" @selected>@department.Title</option>
+                                                        }
+
+                                                        <option value="test">test</option>
+                                                    }
+                                                </optgroup>
+                                            }
+                                        </select>
+
+                                    </div>
+                                </div>
+                            }
+
+                            @if (Model.PeoplePosts != null)
+                        {
+                                <div class="col-sm-12">
+                                    <div class="form-group">
+                                        <label class="label_filtr">Специализации</label>
+                                        <select class="form-control select2" name="type">
+                                            <option value="">не выбрано</option>
+                                            @foreach (var item in Model.PeoplePosts)
+                                            {
+                                                string selected = (item.Id.ToString() == ViewBag.Position) ? "selected" : string.Empty;
+                                                <option value="@item.Id" @selected>@item.Name</option>
+                                            }
+                                        </select>
+
+                                    </div>
+                                </div>
+                            }*@
+
+                    <div class="col-sm-12 control-filter">
+                        <a class="btn btn-default pull-right" href="/@ViewBag.ControllerName">Очистить</a>
+                        <button class="btn sub btn-primary" type="submit">Применить</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+    </div>
+}

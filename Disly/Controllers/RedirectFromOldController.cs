@@ -32,7 +32,7 @@ namespace Disly.Controllers
         }
 
         public ActionResult Index()
-         {
+        {
             return Redirect(redirectUrl);
         }
 
@@ -135,7 +135,7 @@ namespace Disly.Controllers
         {
             return Redirect(redirectUrl);
         }
-       
+
         //Вопросы и ответы
         public ActionResult Questions()
         {
@@ -146,14 +146,12 @@ namespace Disly.Controllers
         {
             return Redirect(redirectUrl);
         }
-       
+
         //Политика персональных данных
         public ActionResult PersonalDataPolicy()
         {
             return Redirect(redirectUrl);
         }
 
-
-
     }
- }
+}

@@ -6,6 +6,11 @@
 public class FilterParams
 {
     /// <summary>
+    /// Id
+    /// </summary>
+    public Guid[] Id { get; set; }
+
+    /// <summary>
     /// Домен
     /// </summary>
     public string Domain { get; set; }
@@ -65,6 +70,7 @@ public class FilterParams
     {
         return new T()
         {
+            Id = f.Id,
             Domain = f.Domain,
             Page = f.Page,
             Size = f.Size,

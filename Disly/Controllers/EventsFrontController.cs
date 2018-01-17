@@ -14,18 +14,24 @@ namespace Disly.Controllers
         {
             base.OnActionExecuting(filterContext);
 
+            currentPage = _repository.getSiteMap("Events");
+
+            if (currentPage == null)
+                throw new Exception("model.CurrentPage == null");
+
             model = new EventViewModel
             {
                 SitesInfo = siteModel,
                 SiteMapArray = siteMapArray,
                 BannerArray = bannerArray,
+                CurrentPage = currentPage,
                 Breadcrumbs = new List<Breadcrumbs>()
             };
 
-            #region Создаем переменные (значения по умолчанию)            
-            string PageTitle = "События";
-            string PageDesc = "описание страницы";
-            string PageKeyw = "ключевые слова";
+            #region Создаем переменные (значения по умолчанию)
+            string PageTitle = model.CurrentPage.Title;
+            string PageDesc = model.CurrentPage.Desc;
+            string PageKeyw = model.CurrentPage.Keyw;
             #endregion
 
             #region Метатеги
@@ -33,6 +39,7 @@ namespace Disly.Controllers
             ViewBag.Description = PageDesc;
             ViewBag.KeyWords = PageKeyw;
             #endregion
+
             model.Breadcrumbs.Add(new Breadcrumbs
             {
                 Title = "События",
@@ -40,7 +47,10 @@ namespace Disly.Controllers
             });
         }
 
-        // GET: Default
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public ActionResult Index()
         {
             var filter = getFilter();
@@ -51,7 +61,7 @@ namespace Disly.Controllers
             ViewBag.NewsSearchArea = filter.SearchText;
             ViewBag.NewsSearchDateStart = filter.Date;
             ViewBag.NewsSearchDateFin = filter.DateEnd;
-            
+
             return View(model);
         }
 
@@ -69,6 +79,11 @@ namespace Disly.Controllers
             }
             return View("Item", model);
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public ActionResult Archive()
         {
 

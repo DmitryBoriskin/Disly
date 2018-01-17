@@ -9,6 +9,11 @@ namespace Disly.Models
     public class MedicalServicesViewModel : PageViewModel
     {
         /// <summary>
+        /// тип информации, показываемой на странице 
+        /// </summary>
+        public string Type { get; set; }
+
+        /// <summary>
         /// Медицинские услуги
         /// </summary>
         public MedicalService[] MedicalServices { get; set; }
@@ -17,20 +22,5 @@ namespace Disly.Models
         /// Список организаций
         /// </summary>
         public OrgFrontModel[] OrgList { get; set; }
-
-        /// <summary>
-        /// тип информации показываемой на странице 
-        /// </summary>
-        public string Type { get; set; }
-
-        /// <summary>
-        /// Навигация
-        /// </summary>
-        public List<MaterialsGroup> Nav { get; set; }
-
-        /// <summary>
-        /// Информация
-        /// </summary>
-        public SiteMapModel Info { get; set; }
     }
 }

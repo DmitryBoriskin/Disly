@@ -623,6 +623,8 @@ namespace cms.dbase
                     }
                 }
 
+                query = query.OrderBy(n => n.n_sort);
+
                 var data = query
                     .Select(s => new SiteMapMenu
                     {
@@ -630,8 +632,10 @@ namespace cms.dbase
                         Value = s.f_page_type
                     });
 
-                if (!data.Any()) { return null; }
-                else { return data.ToArray(); }
+                if (data.Any())
+                    return data.ToArray();
+
+                return null;
             }
         }
 

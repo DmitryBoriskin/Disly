@@ -127,8 +127,8 @@ namespace cms.dbase
         /// <returns></returns>
         public override SitesModel getSite(Guid Id)
         {
-            try
-            {
+            //try
+            //{
                 using (var db = new CMSdb(_context))
                 {
                     var data = db.cms_sitess.Where(w => w.id == Id)
@@ -159,11 +159,11 @@ namespace cms.dbase
 
                     return null;
                 }
-            }
-            catch(Exception ex)
-            {
-                throw new Exception("cmsRepository > getSiteId: It is not possible to determine the site by id (" + Id + ") " + ex);
-            }
+            //}
+            //catch(Exception ex)
+            //{
+            //    throw new Exception("cmsRepository > getSiteId: It is not possible to determine the site by id (" + Id + ") " + ex);
+            //}
         }
 
         /// <summary>
@@ -938,53 +938,22 @@ namespace cms.dbase
                         }
 
 
-                        #region Значение по умолчанию
-                        //карта сайта и меню
+                        #region Значение по умолчанию                        
                         string domain_source = "template-site";
-
-                        db.dublicate_content_sitemap(domain_source, ins.Alias);
-                        
-                        var sitemap_val = db.content_sitemaps.Where(w => w.f_site == domain_source && w.uui_parent==null).ToArray();
-
-
-                        //foreach (var sm_item in sitemap_val)
-                        //{
-                        //    Guid ParentGuid= Guid.NewGuid();
-                        //    Guid SitemapItemGuid = Guid.NewGuid();
-
-                        //    db.content_sitemaps
-                        //        .Value(v => v.id, SitemapItemGuid)
-                        //        .Value(v => v.f_site, ins.Alias)
-                        //        .Value(v => v.f_front_section, sm_item.f_front_section)
-                        //        .Value(v => v.c_path, sm_item.c_path)
-                        //        .Value(v => v.c_alias, sm_item.c_alias)
-                        //        .Value(v => v.c_title, sm_item.c_title)
-                        //        .Value(v => v.n_sort, sm_item.n_sort)
-                        //        .Value(v => v.b_disabled, false)
-                        //        .Value(v => v.b_blocked, false)
-                        //        .Value(v => v.b_disabled_menu, false)
-                        //        .Insert();
-
-                        //    var MenuGroup = db.content_sitemap_menutypess.Where(w => w.f_sitemap == sm_item.id).ToArray();
-                            
-                        //    foreach (var menugroup_item in MenuGroup)
-                        //    {
-                        //        // сортировка
-                        //        var maxSort = db.content_sitemap_menutypess
-                        //            .Where(w => w.f_site.Equals(ins.Alias))
-                        //            .Where(w => w.f_menutype.Equals(menugroup_item.f_menutype))
-                        //            .Select(s => s.n_sort);
-
-                        //        int mS = maxSort.Any() ? maxSort.Max() : 0;
-
-                        //        db.content_sitemap_menutypess
-                        //            .Value(v => v.f_sitemap, SitemapItemGuid)
-                        //            .Value(v => v.f_menutype, menugroup_item.f_menutype)
-                        //            .Value(v => v.f_site, ins.Alias)
-                        //            .Value(v => v.n_sort, mS + 1)
-                        //            .Insert();
-                        //    }
-                        //}
+                        switch (ins.Type)//по типу сайта определяется шаблон для дублирования информации
+                        {
+                            case "org":
+                                domain_source = "template-site";
+                                break;
+                            case "spec":
+                                domain_source = "template-site-gs";
+                                break;
+                            case "event":
+                                domain_source = "template-site-event";
+                                break;
+                        }
+                        db.dublicate_content_sitemap(domain_source, ins.Alias);                        
+                        var sitemap_val = db.content_sitemaps.Where(w => w.f_site == domain_source && w.uui_parent==null).ToArray();                        
                         #endregion
 
                         #region Доменные имена

@@ -426,6 +426,40 @@ namespace Disly.Areas.Admin.Controllers
             model.ErrorInfo = userMassage;
             return View("structure", model);
         }
+
+        /// <summary>
+        /// Добавление телефонного номера отделению
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        [MultiButton(MatchFormKey = "action", MatchFormValue = "add-new-address-struct")]
+        public ActionResult AddNewAddres()
+        {
+            string IdStruc = Request["StructureItem.Id"];
+            string DopAddres = Request["dop-addres"];
+            string DopAddresTitle = Request["dop-addres-title"];
+
+            var CoordResult = Spots.Coords(DopAddres);
+            
+            DopAddres newaddres = new DopAddres
+            {
+                IdStructure=Guid.Parse(IdStruc),
+                Address = DopAddres,
+                GeopointX = CoordResult.GeopointX,
+                GeopointY = CoordResult.GeopointY,
+                Title= DopAddresTitle
+            };
+
+            _cmsRepository.addAddressStructure(newaddres);            
+            return Redirect(((System.Web.HttpRequestWrapper)Request).RawUrl);
+        }
+
+        public ActionResult DelDopAddres(string id)
+        {            
+            _cmsRepository.delAddressStructure(Guid.Parse(id));
+            return null;
+        }
+
         //[HttpPost]
         //[ValidateInput(false)]
         //[MultiButton(MatchFormKey = "action", MatchFormValue = "delete-adminiatrativ-btn")]

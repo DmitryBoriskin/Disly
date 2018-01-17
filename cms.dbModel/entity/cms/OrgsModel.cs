@@ -1,4 +1,5 @@
-﻿using System;
+﻿using cms.dbModel.entity.cms;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
@@ -308,6 +309,23 @@ namespace cms.dbModel.entity
         /// Отделения
         /// </summary>
         public Departments[] Departments { get; set; }
+        /// <summary>
+        /// дополнительные аддреса
+        /// </summary>
+        public DopAddres[] DopAddres { get; set; }
+    }
+
+    /// <summary>
+    /// Дополнительный аддрес
+    /// </summary>
+    public class DopAddres
+    {
+        public Guid Id { get; set; }
+        public Guid IdStructure { get; set; }
+        public string Title { get; set; }
+        public string Address { get; set; }
+        public double? GeopointX { get; set; }
+        public double? GeopointY { get; set; }
     }
 
     /// <summary>
@@ -462,9 +480,9 @@ namespace cms.dbModel.entity
         public string Domain { get; set; }
 
         /// <summary>
-        /// Название главного специалиста
+        /// главный специалист
         /// </summary>
-        public string MainSpec { get; set; }
+        public MainSpecialistModel MainSpec { get; set; }
     }
 
     /// <summary>
