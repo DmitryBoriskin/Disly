@@ -144,9 +144,9 @@
                                                         {
                                                             string link = "/" + ViewBag.ControllerName + "/" + item.Id;
                                                             string photo = (!string.IsNullOrWhiteSpace(item.Photo))
-                                    ? File.Exists(Server.MapPath(item.Photo))
-                                    ? item.Photo : "/Content/img/no_avatar.png"
-                                    : "/Content/img/no_avatar.jpg";
+                                                                            ? File.Exists(Server.MapPath(item.Photo))
+                                                                            ? item.Photo : "/Content/img/no_avatar.png"
+                                                                            : "/Content/img/no_avatar.png";
 
                                                             <tr>
                                                                 <td>

@@ -19,9 +19,6 @@ namespace Disly.Controllers
 
             currentPage = _repository.getSiteMap("Vacancy");
 
-            if (currentPage == null)
-                throw new Exception("model.CurrentPage == null"); //Заменить потом все на  return new HttpNotFoundResult();
-
             model = new VacancyViewModel
             {
                 SitesInfo = siteModel,
@@ -56,6 +53,9 @@ namespace Disly.Controllers
         /// <returns></returns>
         public ActionResult Index()
         {
+            if(model.CurrentPage == null)
+                return new HttpNotFoundResult();
+
             string _ViewName = (ViewName != String.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";
 
             var filter = getFilter();

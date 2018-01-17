@@ -54,7 +54,6 @@ namespace Disly.Controllers
         public ActionResult Index()
         {
             string _ViewName = (ViewName != String.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";
-            model.CurrentPage = currentPage;
 
             model.Item = _repository.getSiteMap(_path,_alias); //,Domain
             if (model.Item != null)
