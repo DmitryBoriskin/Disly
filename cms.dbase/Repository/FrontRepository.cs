@@ -512,15 +512,15 @@ namespace cms.dbase
                     .Where(w => w.f_front_section.ToLower() == frontSection.ToLower());
 
                 var data = query.Select(s => new SiteMapModel
-                    {
-                        Title = s.c_title,
-                        Text = s.c_text,
-                        Alias = s.c_alias,
-                        Path = s.c_path,
-                        Id = s.id,
-                        ParentId = s.uui_parent,
-                        FrontSection = s.f_front_section
-                    });
+                {
+                    Title = s.c_title,
+                    Text = s.c_text,
+                    Alias = s.c_alias,
+                    Path = s.c_path,
+                    Id = s.id,
+                    ParentId = s.uui_parent,
+                    FrontSection = s.f_front_section
+                });
 
                 if (data.Any())
                     return data.First();
@@ -938,16 +938,28 @@ namespace cms.dbase
         {
             using (var db = new CMSdb(_context))
             {
-                var data = db.content_materials_groupss;
-                if (data.Any())
-                {
-                    return data.OrderBy(o => o.n_sort)
-                               .Select(s => new MaterialsGroup
-                               {
-                                   Alias = s.c_alias,
-                                   Title = s.c_title
-                               }).ToArray();
-                }
+                //var data = db.content_materials_groupss;
+                //if (data.Any())
+                //{
+                //    return data.OrderBy(o => o.n_sort)
+                //               .Select(s => new MaterialsGroup
+                //               {
+                //                   Alias = s.c_alias,
+                //                   Title = s.c_title
+                //               }).ToArray();
+                //}
+                //return null;
+
+                var query = db.content_sv_materials_groups_for_sites
+                    .Where(w => w.domain.Equals(_domain))
+                    .OrderBy(o => o.n_sort)
+                    .Select(s => new MaterialsGroup
+                    {
+                        Alias = s.c_alias,
+                        Title = s.c_title
+                    });
+
+                if (query.Any()) return query.ToArray();
                 return null;
             }
         }
@@ -1023,14 +1035,14 @@ namespace cms.dbase
                 var query = db.content_org_structure_adresss.Where(w => w.f_org_structure == StrucId);
                 if (query.Any())
                 {
-                    query= query.OrderBy(o=>new { o.c_title,o.c_adress});
+                    query = query.OrderBy(o => new { o.c_title, o.c_adress });
                     return query.Select(s => new DopAddres()
                     {
                         Id = s.id,
                         Address = s.c_adress,
-                        GeopointX=s.n_geopoint_x,
-                        GeopointY=s.n_geopoint_y,
-                        Title=s.c_title
+                        GeopointX = s.n_geopoint_x,
+                        GeopointY = s.n_geopoint_y,
+                        Title = s.c_title
                     }).ToArray();
                 }
                 return null;
@@ -2598,22 +2610,23 @@ namespace cms.dbase
                     people = people.Where(w => filtr.Orgs.Contains(w.org.f_org));
                 }
 
-                var data = people.Select(s => 
-                    new People() {
-                                Id = s.p.id,
-                                FIO = s.p.c_surname + " " + s.p.c_name + " " + s.p.c_patronymic,
-                                MainSpec = new MainSpecialistModel()
-                                {
-                                   Id = s.spec.id,
-                                   Name = s.spec.c_name,
-                                   DomainUrls = (!string.IsNullOrEmpty(s.site.c_alias))? getSiteDomains(s.site.c_alias): null
-                                },
-                                Photo = s.p.c_photo
-                            });
+                var data = people.Select(s =>
+                    new People()
+                    {
+                        Id = s.p.id,
+                        FIO = s.p.c_surname + " " + s.p.c_name + " " + s.p.c_patronymic,
+                        MainSpec = new MainSpecialistModel()
+                        {
+                            Id = s.spec.id,
+                            Name = s.spec.c_name,
+                            DomainUrls = (!string.IsNullOrEmpty(s.site.c_alias)) ? getSiteDomains(s.site.c_alias) : null
+                        },
+                        Photo = s.p.c_photo
+                    });
 
                 if (data.Any())
                     return data.ToArray();
-                
+
                 return null;
             }
         }
