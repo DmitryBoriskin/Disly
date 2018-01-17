@@ -98,12 +98,12 @@ namespace Disly.Areas.Admin.Controllers
                     ViewBag.DataPath = ViewBag.DataPath + parentitem.Path + parentitem.Alias + "/";                    
                 }
                 #endregion
-                ViewBag.DataPath = ViewBag.DataPath.Replace("//", "/");
             }
             else
             {
                 ViewBag.DataPath = ViewBag.DataPath + model.Item.Path + "/" + model.Item.Alias + "/";
             }
+            ViewBag.DataPath = ViewBag.DataPath.Replace("//", "/");
             var mg = new MultiSelectList(model.MenuTypes, "value", "text", model.Item != null ? model.Item.MenuGroups : null);
             ViewBag.GroupMenu = mg;
 

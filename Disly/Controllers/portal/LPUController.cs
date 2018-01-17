@@ -30,9 +30,9 @@ namespace Disly.Controllers
             };
 
             #region Создаем переменные (значения по умолчанию)
-            string PageTitle = "ЛПУ";
-            string PageDesc = "описание страницы";
-            string PageKeyw = "ключевые слова";
+            string PageTitle = model.CurrentPage.Title;
+            string PageDesc = model.CurrentPage.Desc;
+            string PageKeyw = model.CurrentPage.Keyw;
             #endregion
 
             #region Метатеги

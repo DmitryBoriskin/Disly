@@ -8,6 +8,6 @@ namespace Disly.Models
     public class VacancyViewModel : PageViewModel
     {
         public VacanciesList List { get; set; }
-        public VacancyModel Item { get; set; }        
+        public VacancyModel Item { get; set; }
     }
 }

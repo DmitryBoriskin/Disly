@@ -83,7 +83,7 @@
                                         <h4>
                                             @if (!string.IsNullOrWhiteSpace(item.Link))
                                             {
-                                                string link = "http://" + item.Link + ".med.cap.ru";
+                                                string link = "http://" + item.Link + Settings.BaseURL;
                                                 <strong>
                                                     <a target="_blank" href="@link">@item.Title</a>
                                                 </strong>
@@ -127,16 +127,16 @@
                                 }
                             </div>
                             <div class="col-md-2">
-                                @if (item.Leader != null && item.Leader.id != Guid.Empty)
+                                @if (item.Leader != null && item.Leader.PeopleF.HasValue)
                                 {
                                     string photo = (item.Leader.Photo != null && !string.IsNullOrWhiteSpace(item.Leader.Photo.Url))
                                           ? File.Exists(Server.MapPath(item.Leader.Photo.Url))
-                                              ? item.Leader.Photo.Url : "/Content/img/nophoto.jpg"
-                                          : "/Content/img/nophoto.jpg";
+                                              ? item.Leader.Photo.Url : "/Content/img/no_avatar.png"
+                                          : "/Content/img/no_avatar.png";
 
                                     <img class="img-circle img-person-list" src="@photo" alt="@item.Leader.Surname" />
                                     <div class="org_item_post">@item.Leader.Post</div>
-                                    <a target="_blank" href="/doctors/@item.Leader.id">@item.Leader.Surname @item.Leader.Name @item.Leader.Patronymic</a>
+                                    <a target="_blank" href="/doctors/@item.Leader.PeopleF">@item.Leader.Surname @item.Leader.Name @item.Leader.Patronymic</a>
                                 }
                             </div>
                         </div>

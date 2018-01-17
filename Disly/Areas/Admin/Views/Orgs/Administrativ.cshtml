@@ -18,29 +18,29 @@
         <h1>@ViewBag.Title</h1>
         @Html.Partial("part/bread")
         @Html.Hidden("orgid", orgid)
-        @Html.TextBoxFor(m => m.AdministrativItem.Surname, new { required = "", type = "text", maxlength = "64", title = "Фамилия" })               
+        @Html.TextBoxFor(m => m.AdministrativItem.Surname, new { required = "", type = "text", maxlength = "64", title = "Фамилия" })
         @Html.TextBoxFor(m => m.AdministrativItem.Name, new { required = "", type = "text", maxlength = "64", title = "Имя" })
-        @Html.TextBoxFor(m => m.AdministrativItem.Patronymic, new {type = "text", maxlength = "64", title = "Отчество" })
+        @Html.TextBoxFor(m => m.AdministrativItem.Patronymic, new { type = "text", maxlength = "64", title = "Отчество" })
 
         @*@Html.TextBox("upload", null, new { type = "file", title = "Изображение:", data_name = fileName, data_size = fileSize, data_url = fileUrl, accept = ".jpg,.jpeg,.png,.gif" })
-        @Html.TextBoxFor(m => m.AdministrativItem.Photo.Url, new { type = "hidden", value = fileUrl })*@
+            @Html.TextBoxFor(m => m.AdministrativItem.Photo.Url, new { type = "hidden", value = fileUrl })*@
         @Html.TextBoxFor(m => m.AdministrativItem.Photo.Url, new { type = "file", data_posted_name = "upload", data_url = fileUrl, title = "Изображение", accept = ".jpg,.jpeg,.png,.gif" })
 
         @Html.TextBoxFor(m => m.AdministrativItem.Post, new { type = "text", maxlength = "128", title = "Должность" })
-        
+
 
         @Html.DropDownListFor(m => m.AdministrativItem.PeopleF, Model.PeopleList, new { @title = "Выберите врача", @class = "selectpicker", @data_live_search = "true", @data_help = "Выберите значение если эта персона есть в списке врачей, иначе оставьте поле пустым" })
 
         @*@Html.DropDownListFor(m=>m.AdministrativItem.PeopleF, PeopleList, new { @title = "Выберите врача", @class = "selectpicker", @data_live_search = "true" })*@
-        
+
         @**@
 
-        @Html.TextBoxFor(m => m.AdministrativItem.Phone, new { type = "text", maxlength = "128", title = "Телефон" })      
+        @Html.TextBoxFor(m => m.AdministrativItem.Phone, new { type = "text", maxlength = "128", title = "Телефон" })
         @Html.TextAreaFor(m => m.AdministrativItem.Text, new { type = "editor", title = "Дополнительная информация", height = "150" })
     </div>
     <div class="dop_info-block">
         <div class="dop-caption">Настройки</div>
-        @Html.CheckBoxFor(m => m.AdministrativItem.Leader, new { type = "checkbox", title = "Руководитель организации", data_toggle = "toggle", data_on = "Да", data_onstyle="primary", data_off = "Нет" })
+        @Html.CheckBoxFor(m => m.AdministrativItem.Leader, new { type = "checkbox", title = "Руководитель организации. (При выборе положительного значения снимает соответствующее значение у ранее назначенного) ", data_toggle = "toggle", data_on = "Да", data_onstyle = "primary", data_off = "Нет" })
     </div>
 }
 else

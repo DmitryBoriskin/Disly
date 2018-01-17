@@ -380,6 +380,7 @@ namespace cms.dbase
                     var data = db.content_orgss.Where(w => w.id == id);
                     if (data.Any())
                     {
+                        var url = (model.Logo != null) ? model.Logo.Url : null;
                         data
                             .Set(s => s.c_title, model.Title)
                             .Set(s => s.c_title_short, model.ShortTitle)
@@ -395,7 +396,7 @@ namespace cms.dbase
                             .Set(s => s.n_geopoint_y, model.GeopointY)
                             .Set(s => s.f_oid, model.Oid)
                             .Set(s => s.f_department_affiliation, model.DepartmentAffiliation)
-                            .Set(s => s.c_logo, model.Logo.Url)
+                            .Set(s => s.c_logo, url)
                             .Set(s => s.b_disabled, model.Disabled)
                             .Update();
 
@@ -1727,22 +1728,38 @@ namespace cms.dbase
         {
             using (var db = new CMSdb(_context))
             {
-                var data = db.content_orgs_adminstrativs.Where(w => w.id == id);
-                if (data.Any())
+                using (var tran = db.BeginTransaction())
                 {
-                    data.Set(s => s.c_surname, upd.Surname)
-                        .Set(s => s.c_name, upd.Name)
-                        .Set(s => s.c_patronymic, upd.Patronymic)
-                        .Set(s => s.c_phone, upd.Phone)
-                        .Set(s => s.c_photo, upd.Photo.Url)
-                        .Set(s => s.c_post, upd.Post)
-                        .Set(s => s.c_text, upd.Text)
-                        .Set(s => s.f_people, upd.PeopleF)
-                        .Set(s => s.b_leader, upd.Leader)
-                        .Update();
-                    return true;
+                    var data = db.content_orgs_adminstrativs.Where(w => w.id == id);
+                    if (data.Any())
+                    {
+                        var item = data.Single();
+
+                        if (upd.Leader)
+                        {
+                            var lider = db.content_orgs_adminstrativs
+                                .Where(p => p.f_org == item.f_org);
+
+                            lider.Set(p => p.b_leader, false)
+                                .Update();
+                        }
+
+                        data.Set(s => s.c_surname, upd.Surname)
+                            .Set(s => s.c_name, upd.Name)
+                            .Set(s => s.c_patronymic, upd.Patronymic)
+                            .Set(s => s.c_phone, upd.Phone)
+                            .Set(s => s.c_photo, upd.Photo.Url)
+                            .Set(s => s.c_post, upd.Post)
+                            .Set(s => s.c_text, upd.Text)
+                            .Set(s => s.f_people, upd.PeopleF)
+                            .Set(s => s.b_leader, upd.Leader)
+                            .Update();
+
+                        tran.Commit();
+                        return true;
+                    }
+                    return false;
                 }
-                return false;
             }
         }
 
