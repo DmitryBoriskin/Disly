@@ -19,6 +19,10 @@ namespace PhotoImport
         // репозиторий
         private static Repository repository = new Repository();
 
+        /// <summary>
+        /// Точка входа
+        /// </summary>
+        /// <param name="args"></param>
         static void Main(string[] args)
         {
             Console.WriteLine("Import photogallery app");
@@ -66,106 +70,115 @@ namespace PhotoImport
             foreach (var album in albums)
             {
                 currentAlbumNumber++;
-
-                // идентификатор нового альбома
-                Guid id = Guid.NewGuid();
-
-                // путь до старой директории
-                string oldDirectory = (_params.OldDirectory + album.Org + album.Folder.Replace(".", "")).Replace("/", "\\");
-
-                if (Directory.Exists(oldDirectory))
+                try
                 {
-                    // информация по полученной директории
-                    DirectoryInfo di = new DirectoryInfo(oldDirectory);
+                    // идентификатор нового альбома
+                    Guid id = Guid.NewGuid();
 
-                    // список файлов в директории
-                    FileInfo[] fi = di.GetFiles();
+                    // путь до старой директории
+                    string oldDirectory = (_params.OldDirectory + album.Org + album.Folder.Replace(".", "")).Replace("/", "\\");
 
-                    string datePath = "/" + album.Time.ToString("yyyy_MM") + "/" + album.Time.ToString("dd") + "/";
-
-                    // путь в приложении
-                    string localPath = _params.UserFiles + album.Domain + "/Photo" + datePath + id + "/";
-
-                    // путь для сохранения альбома
-                    string savePath = _params.NewDirectory + localPath;
-
-                    // создадим папку для нового альбома
-                    if (!Directory.Exists(savePath))
+                    if (Directory.Exists(oldDirectory))
                     {
-                        DirectoryInfo _di = Directory.CreateDirectory(savePath);
-                    }
+                        // информация по полученной директории
+                        DirectoryInfo di = new DirectoryInfo(oldDirectory);
 
-                    // добавим в бд запись по фотоальбому
-                    string _title = album.Name.Length > 512 ?
-                        album.Name.Substring(0, 512) : album.Name;
+                        // список файлов в директории
+                        FileInfo[] fi = di.GetFiles();
 
-                    PhotoAlbumNew newAlbum = new PhotoAlbumNew
-                    {
-                        Id = id,
-                        Title = _title,
-                        Text = album.Description,
-                        Date = album.Time,
-                        Domain = album.Domain,
-                        Path = localPath,
-                        Disabled = false,
-                        OldId = album.Link
-                    };
+                        string datePath = "/" + album.Time.ToString("yyyy_MM") + "/" + album.Time.ToString("dd") + "/";
 
-                    repository.InsertPhotoAlbum(newAlbum);
+                        // путь в приложении
+                        string localPath = _params.UserFiles + album.Domain + "/Photo" + datePath + id + "/";
 
-                    // номер фотки
-                    int count = 0;
+                        // путь для сохранения альбома
+                        string savePath = _params.NewDirectory + localPath;
 
-                    // превьюшка для альбома
-                    string _previewAlbum = null;
-
-                    foreach (var img in fi)
-                    {
-                        if (allowedExtensions.Contains(img.Extension.ToLower()))
+                        // создадим папку для нового альбома
+                        if (!Directory.Exists(savePath))
                         {
-                            count++;
+                            DirectoryInfo _di = Directory.CreateDirectory(savePath);
+                        }
 
-                            // превьюшка для фотки
-                            Bitmap imgPrev = (Bitmap)Bitmap.FromFile(img.FullName);
-                            imgPrev = Imaging.Resize(imgPrev, 120, 120, "center", "center");
-                            imgPrev.Save(savePath + "prev_" + count + img.Extension);
+                        // добавим в бд запись по фотоальбому
+                        string _title = album.Name.Length > 512 ?
+                            album.Name.Substring(0, 512) : album.Name;
 
-                            // основное изображение
-                            Bitmap imgReal = (Bitmap)Bitmap.FromFile(img.FullName);
-                            imgReal = Imaging.Resize(imgReal, 2000, "width");
-                            imgReal.Save(savePath + count + img.Extension);
+                        PhotoAlbumNew newAlbum = new PhotoAlbumNew
+                        {
+                            Id = id,
+                            Title = _title,
+                            Text = album.Description,
+                            Date = album.Time,
+                            Domain = album.Domain,
+                            Path = localPath,
+                            Disabled = false,
+                            OldId = album.Link
+                        };
 
-                            // сохраняем превьюшку для альбома
-                            if (count == 1)
+                        // добавление альбома
+                        repository.InsertPhotoAlbum(newAlbum);
+
+                        // номер фотки
+                        int count = 0;
+
+                        // превьюшка для альбома
+                        string _previewAlbum = null;
+
+                        foreach (var img in fi)
+                        {
+                            if (allowedExtensions.Contains(img.Extension.ToLower()))
                             {
-                                Bitmap albumPrev = (Bitmap)Bitmap.FromFile(img.FullName);
-                                albumPrev = Imaging.Resize(albumPrev, 540, 360, "center", "center");
-                                albumPrev.Save(savePath + "albumprev" + img.Extension);
+                                count++;
 
-                                _previewAlbum = localPath + "albumprev" + img.Extension;
-                                repository.UpdatePreviewAlbum(id, _previewAlbum);
+                                // превьюшка для фотки
+                                Bitmap imgPrev = (Bitmap)Bitmap.FromFile(img.FullName);
+                                imgPrev = Imaging.Resize(imgPrev, 120, 120, "center", "center");
+                                imgPrev.Save(savePath + "prev_" + count + img.Extension);
+
+                                // основное изображение
+                                Bitmap imgReal = (Bitmap)Bitmap.FromFile(img.FullName);
+                                imgReal = Imaging.Resize(imgReal, 2000, "width");
+                                imgReal.Save(savePath + count + img.Extension);
+
+                                // сохраняем превьюшку для альбома
+                                if (count == 1)
+                                {
+                                    Bitmap albumPrev = (Bitmap)Bitmap.FromFile(img.FullName);
+                                    albumPrev = Imaging.Resize(albumPrev, 540, 360, "center", "center");
+                                    albumPrev.Save(savePath + "albumprev" + img.Extension);
+
+                                    _previewAlbum = localPath + "albumprev" + img.Extension;
+                                    repository.UpdatePreviewAlbum(id, _previewAlbum);
+                                }
+
+                                // новая фотка
+                                Photo photo = new Photo
+                                {
+                                    Id = Guid.NewGuid(),
+                                    AlbumId = id,
+                                    Title = count + img.Extension,
+                                    Date = img.LastWriteTime,
+                                    Preview = localPath + "prev_" + count + img.Extension,
+                                    Original = localPath + count + img.Extension,
+                                    Sort = count
+                                };
+
+                                // добавление фото
+                                repository.InsertPhotoItem(photo);
                             }
-
-                            // новая фотка
-                            Photo photo = new Photo
-                            {
-                                Id = Guid.NewGuid(),
-                                AlbumId = id,
-                                Title = count + img.Extension,
-                                Date = img.LastWriteTime,
-                                Preview = localPath + "prev_" + count + img.Extension,
-                                Original = localPath + count + img.Extension,
-                                Sort = count
-                            };
-
-                            repository.InsertPhotoItem(photo);
                         }
                     }
-                }
 
-                // сколько альбомов обработанно
-                if (currentAlbumNumber % 10 == 0)
-                    Console.WriteLine("Processed " + currentAlbumNumber + " of " + countAlbums);
+                    // сколько альбомов обработанно
+                    if (currentAlbumNumber % 10 == 0)
+                        Console.WriteLine("Processed " + currentAlbumNumber + " of " + countAlbums);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("Error on iteration: " + currentAlbumNumber + " of " + countAlbums);
+                    Console.WriteLine(e.ToString());
+                }
             }
         }
     }
