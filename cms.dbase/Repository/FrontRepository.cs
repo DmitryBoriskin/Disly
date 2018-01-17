@@ -2064,7 +2064,7 @@ namespace cms.dbase
                                where s.f_content == null || s.f_content == o.id
                                join pepl in db.content_people_employee_posts_links on p.id equals pepl.f_people
                                join ep in db.content_employee_postss on pepl.f_post equals ep.id
-                               where post == null || pepl.f_post.ToString().Equals(post)
+                               where (post == null || pepl.f_post.ToString().Equals(post)) && ep.b_doctor
                                orderby p.c_surname, p.c_name, p.c_patronymic, ep.c_name
                                select new
                                {
