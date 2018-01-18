@@ -53,17 +53,9 @@ namespace Disly.Controllers
         public ActionResult Index(string tab) 
         {
             string _ViewName = (ViewName != String.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";
-            string PageTitle = "";
 
             model.Type = tab;
             var page = model.CurrentPage.FrontSection;
-
-            //Хлебные крошки
-            model.Breadcrumbs.Add(new Breadcrumbs
-            {
-                Title = model.CurrentPage.Title,
-                Url = string.Format("/{0}/", page) // ""
-            });
 
             //Табы на странице
             model.Nav = new List<PageTabsViewModel>();
@@ -81,30 +73,24 @@ namespace Disly.Controllers
                 model.Breadcrumbs.Add(new Breadcrumbs
                 {
                     Title = navItem.Title,
-                    Url = navItem.Alias + "/"
+                    Url = ""
                 });
             }
 
             switch (tab)
             {
                 case "administration":
-                    PageTitle = "Администрация";
                     model.Administrativ = _repository.getAdministrative(Domain);
                     break;
                 case "info":
-                    PageTitle = "Дополнительная информация";
                     break;
                 case "phone":
-                    PageTitle = "Телефонный правочник";
                     model.Structures = _repository.getStructures();
                     break;
                 default:
-                    PageTitle = "Контактная информация";
                     model.OrgItem = _repository.getOrgInfo();
                     break;
             }
-
-            ViewBag.Title = PageTitle;
 
             return View(_ViewName, model);
         }

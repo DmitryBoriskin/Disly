@@ -11,33 +11,37 @@
             <div class="col-md-12">
                 @Html.Partial("services/breadcrumbs")
                 <h1>@ViewBag.Title</h1>
+
+
+
                 @if (!String.IsNullOrEmpty(ViewBag.Alias))
                 {
                     @Html.Partial("part/Item")
                 }
                 else
                 {
-                    <br /><br />
                     <div class="row">
                         <div class="col-md-8">
+                            <div>
+                                <p>
+                                    @Html.Raw(Model.CurrentPage.Text)
+                                </p>
+                            </div>
                             <div class="news_list">
-                                @if (Model.List != null)
+                                @if (Model.List != null && Model.List.Data != null && Model.List.Data.Count() > 0)
                                 {
-                                    if (Model.List.Data != null)
-                                    {
                                         foreach (var item in Model.List.Data)
                                         {
                                             string date = item.DateBegin.ToString("dd.MM.yyyy")
-                                                + (item.DateEnd != null ?  " — " + Convert.ToDateTime(item.DateEnd).ToString("dd.MM.yyyy") : string.Empty);
-                                            
+                                                + (item.DateEnd != null ? " — " + Convert.ToDateTime(item.DateEnd).ToString("dd.MM.yyyy") : string.Empty);
+
                                             <div class="col-md-12">
                                                 <div class="item_news">
-                                                    <div class="news-list_date"><span>@date</span></div>                                                    
+                                                    <div class="news-list_date"><span>@date</span></div>
                                                     <a class="news-list_title" href="/events/@item.Num/@item.Alias">@item.Title</a>
                                                 </div>
                                             </div>
                                         }
-                                    }
                                     Html.RenderAction("Pager", "Service", new { @Model = Model.List.Pager });
                                 }
                             </div>
@@ -55,19 +59,19 @@
                                     </div>
 
                                     @*<div class="form-group col-sm-6 col-md-6 data_start_wr">
-                                        <label class="label_filtr" for="data_start">Дата начала</label>
-                                        <div class='input-group date' id="date-begin">
-                                            <input type='text' class="form-control" name="date" data-type="date" data-mask="99.99.9999" placeholder="дд.мм.гггг" value="@ViewBag.Filter.Date" />
+                                            <label class="label_filtr" for="data_start">Дата начала</label>
+                                            <div class='input-group date' id="date-begin">
+                                                <input type='text' class="form-control" name="date" data-type="date" data-mask="99.99.9999" placeholder="дд.мм.гггг" value="@ViewBag.Filter.Date" />
+                                            </div>
                                         </div>
-                                    </div>
 
-                                    <div class="form-group col-sm-6 col-md-6 date-end_wr">
-                                        <label class="label_filtr" for="data_fin">Дата конца</label>
-                                        <div class='input-group date' id="date-end">
-                                            <input type='text' class="form-control" name="dateend" data-type="date" data-mask="99.99.9999" placeholder="дд.мм.гггг" value="@ViewBag.Filter.DateEnd" />
+                                        <div class="form-group col-sm-6 col-md-6 date-end_wr">
+                                            <label class="label_filtr" for="data_fin">Дата конца</label>
+                                            <div class='input-group date' id="date-end">
+                                                <input type='text' class="form-control" name="dateend" data-type="date" data-mask="99.99.9999" placeholder="дд.мм.гггг" value="@ViewBag.Filter.DateEnd" />
 
-                                        </div>
-                                    </div>*@
+                                            </div>
+                                        </div>*@
 
                                     <div class="col-sm-12 control-filter">
                                         <a class="btn btn-default pull-right" href="/events">Очистить</a>

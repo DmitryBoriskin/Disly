@@ -218,5 +218,10 @@ namespace cms.dbModel.entity
         /// Доменное имя
         /// </summary>
         public string DomainName { get; set; }
+
+        /// <summary>
+        /// Доменное имя является основным
+        /// </summary>
+        public bool IsDefault { get; set; }
     }
 }

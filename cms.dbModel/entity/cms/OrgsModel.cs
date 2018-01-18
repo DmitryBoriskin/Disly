@@ -477,7 +477,7 @@ namespace cms.dbModel.entity
         /// <summary>
         /// Ссылка на сайт главного специалиста
         /// </summary>
-        public string Domain { get; set; }
+        public string GsUrl { get; set; }
 
         /// <summary>
         /// главный специалист
@@ -516,14 +516,14 @@ namespace cms.dbModel.entity
         public Guid? OrgId { get; set; }
 
         /// <summary>
-        /// Домен 
-        /// </summary>
-        public string OrgAlias { get; set; }
-
-        /// <summary>
         /// Название организации
         /// </summary>
         public string OrgTitle { get; set; }
+
+        /// <summary>
+        /// ссылка на Сайт организации 
+        /// </summary>
+        public string OrgUrl { get; set; }
     }
     
     /// <summary>

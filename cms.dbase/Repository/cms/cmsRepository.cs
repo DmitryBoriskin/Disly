@@ -1096,7 +1096,8 @@ namespace cms.dbase
                 return data.Select(s => new Domain()
                 {
                     DomainName = s.c_domain,
-                    id = s.id
+                    id = s.id,
+                    IsDefault = s.b_default
                 }).ToArray();
             return null;
         }
