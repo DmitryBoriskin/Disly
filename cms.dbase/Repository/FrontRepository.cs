@@ -1298,10 +1298,10 @@ namespace cms.dbase
                               join pol in db.content_people_org_links on p.id equals pol.f_people
 #warning Раскоментировать, когда будет исправлена ошибка в интеграции (пользователи прикрепленные к организации в таблицах не соответствуют друг другу в db.content_people_org_links и db.content_people_employee_posts_links, и все врачи почему-то уволенные)
                               //where !pol.b_dismissed
-                             
+                              join o in db.content_orgss on pol.f_org equals o.id
                               join s in db.cms_sitess on pol.f_org equals s.f_content into ps
                               from s in ps.DefaultIfEmpty()
-                              select new { p, pol, s });
+                              select new { p, pol, s, o });
 
                 if (filter.Id != null && filter.Id.Count() > 0)
                 {
@@ -1322,7 +1322,6 @@ namespace cms.dbase
 
                 var data = (from p in people
                             join pepl in db.content_people_employee_posts_links on p.p.id equals pepl.f_people
-                            join o in db.content_orgss on pepl.f_org_guid equals o.id
                             join ep in db.content_employee_postss on pepl.f_post equals ep.id
                             join pdl in db.content_people_department_links on p.pol.id equals pdl.f_people into ps
                             from pdl in ps.DefaultIfEmpty()
@@ -1331,7 +1330,7 @@ namespace cms.dbase
                                     && ep.b_doctor
                                     && (specialization == 0 || pepl.f_post.Equals(specialization))
                             orderby ep.id, p.p.c_surname, p.p.c_name, p.p.c_patronymic, pepl.n_type
-                            select new { p, ep, o });
+                            select new { p, ep });
 
                 if (!string.IsNullOrEmpty(domain))
                 {
@@ -1355,7 +1354,7 @@ namespace cms.dbase
                         {
                             Id = ep2.ep.id,
                             Name = ep2.ep.c_name,
-                            OrgTitle = string.IsNullOrEmpty(ep2.o.c_title_short)? ep2.o.c_title_short: ep2.o.c_title,
+                            OrgTitle = !string.IsNullOrEmpty(ep2.p.o.c_title_short)? ep2.p.o.c_title_short: ep2.p.o.c_title,
                             OrgUrl = !string.IsNullOrEmpty(ep2.p.s.c_alias)? getSiteDefaultDomain(ep2.p.s.c_alias) : null,
                         }).ToArray()
                     });
