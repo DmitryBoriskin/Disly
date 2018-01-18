@@ -118,6 +118,12 @@
         SearchDopWork()
     }
 
+    $('.spec_version').on('click', function (event) {
+        event.preventDefault();
+        $.cookie("spec_version", true);
+        location.reload();
+    });
+
 });
 
 

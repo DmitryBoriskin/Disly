@@ -137,6 +137,7 @@
     <Content Include="Content\css\commonless.css" />
     <Content Include="Content\css\iframe_tinymce.css" />
     <Content Include="Content\css\print.css" />
+    <Content Include="Content\css\spec_style.css" />
     <Content Include="Content\css\styles_popUp.css" />
     <Content Include="Content\css\styles.css" />
     <Content Include="Content\css\styles_login.css" />
@@ -202,10 +203,25 @@
     <Content Include="Content\img\preloader.svg" />
     <Content Include="Content\img\present-ico.png" />
     <Content Include="Content\img\share-arrow.png" />
+    <Content Include="Content\img\special\image.jpg" />
+    <Content Include="Content\img\special\museum.png" />
+    <Content Include="Content\img\special\sand-blind-panel\a1.png" />
+    <Content Include="Content\img\special\sand-blind-panel\a2.png" />
+    <Content Include="Content\img\special\sand-blind-panel\a3.png" />
+    <Content Include="Content\img\special\sand-blind-panel\access.png" />
+    <Content Include="Content\img\special\sand-blind-panel\c1.png" />
+    <Content Include="Content\img\special\sand-blind-panel\c2.png" />
+    <Content Include="Content\img\special\sand-blind-panel\c3.png" />
+    <Content Include="Content\img\special\sand-blind-panel\f1.png" />
+    <Content Include="Content\img\special\sand-blind-panel\f2.png" />
+    <Content Include="Content\img\special\sand-blind-panel\f3.png" />
+    <Content Include="Content\img\special\sand-blind-panel\sel.png" />
+    <Content Include="Content\img\special\sand-blind-panel\w_normal.png" />
     <Content Include="Content\img\temporal.jpg" />
     <Content Include="Content\img\youtube-ico.png" />
     <Content Include="Content\js\menu.js" />
     <Content Include="Content\js\script.js" />
+    <Content Include="Content\js\spec.js" />
     <Content Include="Content\plugins\bootstrap\css\bootstrap-theme.css" />
     <Content Include="Content\plugins\bootstrap\css\bootstrap-theme.min.css" />
     <Content Include="Content\plugins\bootstrap\css\bootstrap.css" />
@@ -899,6 +915,8 @@
     <Content Include="Views\_portal\home\Index.cshtml" />
     <Content Include="Views\_portal\shared\_Layout.cshtml" />
     <Content Include="Views\OrgGsMembers\Index.cshtml" />
+    <Content Include="Views\_spec\shared\_Layout.cshtml" />
+    <Content Include="Views\_spec\home\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

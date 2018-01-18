@@ -39,6 +39,8 @@ namespace Disly.Controllers
         protected string Concept;
         protected string Coordination;
 
+        protected bool IsSpecVersion = false;
+
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             base.OnActionExecuting(filterContext);

@@ -46,7 +46,8 @@
     <script src="/Content/plugins/jquery/jquery.ui.js"></script>
     <script src="/Content/plugins/jquery/jquery.mask.min.js"></script>
     <script src="/Content/plugins/select2/select2.min.js"></script>    
-    <script src="/Content/plugins/mobileGallery/js/jquery.swipebox.js"></script>    
+    <script src="/Content/plugins/mobileGallery/js/jquery.swipebox.js"></script>
+    <script src="/Content/plugins/jquery/jquery.cookie.js"></script>    
     <script src="/Content/js/script.js"></script>
     <script src="/Content/js/menu.js"></script>
 </head>
@@ -77,7 +78,7 @@
                                     <li><a target="_blank" href="http://www.med.cap.ru/"><span class="ti-new-window top-icon"></span>Медицинский портал</a></li>
                                 </ul>
                                 <div class="pull-right spec-version-link">
-                                    <a href="/spec"><span class="spec-info">Aa</span>Для слабовидящих</a>
+                                    <a class="spec_version" href="/spec"><span class="spec-info">Aa</span>Для слабовидящих</a>
                                 </div>
                             </div>
                         </div>
@@ -137,7 +138,7 @@
                                 <li><a href="/mapsite" title="Карта сайта"><span class="ti-layers-alt top-icon"></span></a></li>
                                 <li><a href="/press/rsssettings" title="RSS"><span class="ti-rss-alt top-icon"></span></a></li>
                                 <li><a href="http://www.med.cap.ru/" target="_blank" title="Портал med.cap.ru"><span class="ti-new-window top-icon"></span></a></li>
-                                <li><a href="/spec" title="версия для слабовидящих"><span class="spec-info">Aa</span></a></li>
+                                <li><a class="spec_version" href="/spec" title="версия для слабовидящих"><span class="spec-info">Aa</span></a></li>
                             </ul>
                         }
                     </div>
