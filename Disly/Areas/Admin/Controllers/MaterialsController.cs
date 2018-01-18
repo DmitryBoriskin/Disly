@@ -2,9 +2,13 @@
 using Disly.Areas.Admin.Models;
 using Disly.Areas.Admin.Service;
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
+using System.Xml.Linq;
 
 namespace Disly.Areas.Admin.Controllers
 {
@@ -341,6 +345,153 @@ namespace Disly.Areas.Admin.Controllers
 
             return PartialView("Orgs", model);
         }
+
+        #region rss импорт
+
+        [HttpGet]
+        public ActionResult RssList()
+        {
+            ViewBag.Title = "Импорт из RSS";
+            //список подключенных rss лент  + очистка объектов прошлой выборки из базы
+            model.RssChannelList = _cmsRepository.getRssChannelMiniList();
+            if (model.RssChannelList != null)
+            {
+                foreach (var item in model.RssChannelList)
+                {
+                    XmlParser(item.RssLink);//запись в таблицу актуальных значений подключенных rss лент
+                }
+            }
+            
+            //вывод значений записанных в предыдущем шаге
+            model.RssObject = _cmsRepository.getRssObjects();
+
+            return View(model);
+        }
+
+        // Вспомогательный метод для парсинга XML
+        public void XmlParser(string Url)
+        {
+            //try { 
+            string XmlUrl = Url;
+            WebClient client = new WebClient();
+            client.Encoding = Encoding.UTF8;
+
+            string xml = client.DownloadString(XmlUrl);
+
+            XDocument doc = XDocument.Load(XmlUrl);
+
+            DateTime dt;
+            XNamespace yandex = "http://news.yandex.ru";
+
+            List<RssItem> items = (from s in doc.Descendants("item")
+                                   select new RssItem()
+                                   {
+                                       title = s.Element("title").Value,
+                                       link = s.Element("link").Value,
+                                       yandex_full_text = (string)s.Element(yandex + "full-text").Value,
+                                       pubDate = DateTime.TryParseExact((s.Element("pubDate").Value)
+                                       , "ddd, dd MMM yyyy HH:mm:ss +ffff",
+                                       System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out dt) ?
+                                       DateTime.ParseExact((s.Element("pubDate").Value)
+                                       , "ddd, dd MMM yyyy HH:mm:ss +ffff",
+                                       System.Globalization.CultureInfo.InvariantCulture) : DateTime.ParseExact((s.Element("pubDate").Value)
+                                       , "ddd, dd MMM yyyy HH:mm:ss 'GMT'",
+                                       System.Globalization.CultureInfo.InvariantCulture),
+                                       description = s.Element("description").Value
+                                   }).ToList();
+
+            List<RssImportModel> channel = (from s in doc.Descendants("channel")
+                                            select new RssImportModel()
+                                            {
+                                                title = s.Element("title").Value,
+                                                link = s.Element("link").Value,
+                                                description = s.Element("description").Value,
+                                                language = s.Element("language").Value,
+                                                copyright = s.Element("copyright").Value,
+                                                lastBuildDate = DateTime.TryParseExact((s.Element("lastbuilddate").Value)
+                                       , "ddd, dd MMM yyyy HH:mm:ss +ffff",
+                                       System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out dt) ?
+                                       DateTime.ParseExact((s.Element("lastbuilddate").Value)
+                                                , "ddd, dd MMM yyyy HH:mm:ss +ffff",
+                                       System.Globalization.CultureInfo.InvariantCulture) : DateTime.ParseExact((s.Element("lastbuilddate").Value)
+                                       , "ddd, dd MMM yyyy HH:mm:ss 'GMT'",
+                                   System.Globalization.CultureInfo.InvariantCulture),
+                                                items = items
+                                            }
+                                          ).ToList();
+
+            RssImportModel importModel = channel[0];
+
+            foreach (RssItem rssItem in importModel.items)
+            {
+                Guid id = Guid.NewGuid();
+                MaterialsModel item = new MaterialsModel()
+                {
+                    Id = id,                    
+                    Title = rssItem.title,                    
+                    Alias = Transliteration.Translit(rssItem.title),
+                    Desc = rssItem.description,
+                    Date = rssItem.pubDate,
+                    Year = Convert.ToInt32(rssItem.pubDate.ToString("yyyy")),
+                    Month = Convert.ToInt32(rssItem.pubDate.ToString("MM")),
+                    Day = Convert.ToInt32(rssItem.pubDate.ToString("dd")),
+                    Text = rssItem.yandex_full_text,                    
+                    Url = rssItem.link,
+                    UrlName = importModel.title,
+                    Disabled = false,
+                    ImportRss=true
+                };                
+                _cmsRepository.insertRssObject(item);
+            }
+            //}
+            //catch { }
+        }
+
+        [HttpPost]
+        [MultiButton(MatchFormKey = "action", MatchFormValue = "add-rss")]
+        public ActionResult AddRssLenta(string RssUrl)
+        {
+            ErrorMessage userMessage = new ErrorMessage();
+            userMessage.title = "Информация";
+
+            WebRequest request = WebRequest.Create(RssUrl);
+            HttpWebResponse response = request.GetResponse() as HttpWebResponse;
+            if (response.StatusDescription == "OK")
+            {
+                string XmlUrl = RssUrl;
+                WebClient client = new WebClient();
+                client.Encoding = Encoding.UTF8;
+                string xml = client.DownloadString(XmlUrl);
+                XDocument doc = XDocument.Load(XmlUrl);
+
+                RssChannel channel
+                    = (from s in doc.Descendants("channel")
+                                                select new RssChannel()
+                                                {
+                                                    Title = s.Element("title").Value
+                                                }).FirstOrDefault();
+
+                if (_cmsRepository.insertRssLink(RssUrl, channel.Title))
+                {
+                    userMessage.info = "Rss лента добавлена";
+                }
+                else
+                {
+                    userMessage.info = "Эта Rss лента добавлена";
+                }
+            }
+
+            userMessage.buttons = new ErrorMassegeBtn[]{
+                                     new ErrorMassegeBtn { url = "/Admin/materials/rsslist", text = "ок"}
+                                 };
+
+
+
+            model.ErrorInfo = userMessage;
+            return View(model);
+        }
+
+        #endregion
 
         //[HttpPost]
         //[MultiButton(MatchFormKey = "action", MatchFormValue = "save-org-btn")]

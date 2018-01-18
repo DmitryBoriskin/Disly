@@ -284,6 +284,7 @@ namespace cms.dbase
                         }
                         catch { }
                         MaxSort++;
+                        string _Logo = (model.Logo != null) ? model.Logo.Url : null;
                         db.content_orgss
                             .Value(s => s.id, id)
                             .Value(s => s.n_sort, MaxSort)
@@ -301,7 +302,7 @@ namespace cms.dbase
                             .Value(s => s.n_geopoint_y, model.GeopointY)
                             .Value(s => s.f_oid, model.Oid)
                             .Value(s => s.f_department_affiliation, model.DepartmentAffiliation)
-                            .Value(s => s.c_logo, model.Logo.Url)
+                            .Value(s => s.c_logo, _Logo)
                             .Value(s => s.b_disabled, model.Disabled)
                             .Insert();
 

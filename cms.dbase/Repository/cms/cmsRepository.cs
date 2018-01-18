@@ -952,6 +952,9 @@ namespace cms.dbase
                                 domain_source = "template-site-event";
                                 break;
                         }
+//#warning !!!!не забыть удалить строку
+//                        domain_source = "rkob";
+//#warning !!!!не забыть удалить строку
                         db.dublicate_content_sitemap(domain_source, ins.Alias);                        
                         var sitemap_val = db.content_sitemaps.Where(w => w.f_site == domain_source && w.uui_parent==null).ToArray();                        
                         #endregion

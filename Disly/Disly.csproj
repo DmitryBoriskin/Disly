@@ -391,6 +391,7 @@
     <Content Include="Content\plugins\tinymce\plugins\fullpage\plugin.min.js" />
     <Content Include="Content\plugins\tinymce\plugins\fullscreen\plugin.min.js" />
     <Content Include="Content\css\theme\green_portal.less" />
+    <Content Include="Areas\Admin\Views\Materials\RssList.cshtml" />
     <None Include="Content\plugins\tinymce\plugins\gallery\plugin.min.js_korkin" />
     <Content Include="Content\plugins\tinymce\plugins\help\img\logo.png" />
     <Content Include="Content\plugins\tinymce\plugins\help\plugin.min.js" />

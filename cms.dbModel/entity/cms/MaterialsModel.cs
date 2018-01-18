@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace cms.dbModel.entity
@@ -123,6 +124,11 @@ namespace cms.dbModel.entity
         /// Отключено для редактирования администратором портала, даже тем кто создал
         /// </summary>
         public bool Locked { get; set; }
+
+        /// <summary>
+        /// Признак импортированности материала из рсс ленты
+        /// </summary>
+        public bool ImportRss { get; set; }
         //-------------------------------------------------------------
         /// <summary>
         /// Группа
@@ -143,6 +149,7 @@ namespace cms.dbModel.entity
         /// Название группы (для модуля внешней части)
         /// </summary>
         public string GroupName { get; set; }
+      
     }
 
     /// <summary>
@@ -204,5 +211,37 @@ namespace cms.dbModel.entity
         /// Картинка к новости
         /// </summary>
         public string Photo { get; set; }
+    }
+
+
+
+    public class RssChannel
+    {
+        public Guid id { get; set; }
+        public string Title { get; set; }
+        public string RssLink { get; set; }
+    }
+
+    public class RssImportModel
+    {
+        public string title { get; set; }
+        public string link { get; set; }
+        public string description { get; set; }
+        public string language { get; set; }
+        public string copyright { get; set; }
+        public DateTime lastBuildDate { get; set; }
+        public string yandex_logo { get; set; }
+        public List<RssItem> items { get; set; }
+    }
+    public class RssItem
+    {
+        public string title { get; set; }
+        public string link { get; set; }
+        public DateTime pubDate { get; set; }
+        public string yandex_full_text { get; set; }
+        public string description { get; set; }
+        public string yandex_genre { get; set; }
+        public string category { get; set; }
+        public string enclosure { get; set; }
     }
 }

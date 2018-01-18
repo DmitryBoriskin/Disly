@@ -6,6 +6,7 @@ public class Settings
     //public const string PrevUrl = "~/";
     //public static bool DebugInfo = Convert.ToBoolean(ConfigurationManager.AppSettings["DebugInfo"]);
 
+
     public static string SiteTitle = ConfigurationManager.AppSettings["SiteTitle"];
     public static string SiteDesc = ConfigurationManager.AppSettings["SiteDesc"];
     public static string BaseURL = ConfigurationManager.AppSettings["BaseURL"];

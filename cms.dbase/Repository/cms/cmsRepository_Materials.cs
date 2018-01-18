@@ -461,5 +461,93 @@ namespace cms.dbase
                 else return data.ToArray();
             }
         }
+
+        /// <summary>
+        /// добавляем ссылку на рсс ленту
+        /// </summary>
+        /// <param name="rsslink"></param>
+        /// <param name="title"></param>
+        /// <returns></returns>
+        public override bool insertRssLink(string rsslink, string title)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var query = db.content_rss_links.Where(w => w.f_site == _domain && w.c_url.ToLower() == rsslink);
+                if (query.Any())
+                {
+                    return false;//случай когда эта рсс лента уже подключена
+                }
+
+
+                db.content_rss_links
+                    .Value(v => v.c_url, rsslink)
+                    .Value(v => v.c_title, title)
+                    .Value(v => v.f_site, _domain)
+                    .Insert();
+                return true;//успешное добалените рсс ленты
+            }
+        }
+
+
+        public override RssChannel[] getRssChannelMiniList()
+        {
+            using (var db = new CMSdb(_context))
+            {
+                //удаляем все rss объекты прошлой выборки
+                db.content_rss_materialss.Where(w => w.f_site == _domain).Delete();
+
+                var query = db.content_rss_links.Where(w => w.f_site == _domain);
+                if (query.Any())
+                {
+                    return query.Select(s => new RssChannel() {
+                                            Title=s.c_title,
+                                            RssLink=s.c_url,
+                                            id=s.id
+                                        }).ToArray();
+                }
+                return null;
+            }
+        }
+
+
+        public override bool insertRssObject(MaterialsModel ins)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                string Prev = (ins.PreviewImage != null) ? ins.PreviewImage.Url : null;
+                db.content_rss_materialss
+                   .Value(v => v.f_site, _domain)
+                   .Value(v => v.d_date, ins.Date)
+                   .Value(v => v.c_title, ins.Title)
+                   .Value(v => v.c_preview, Prev)
+                   .Value(v => v.c_text, ins.Text+"<p>Источник: "+ins.Url+"</p>")
+                   .Value(v => v.c_desc, ins.Desc)
+                   .Value(v => v.c_keyw, ins.Keyw)                   
+                   .Insert();
+                return true;
+
+
+            }
+
+        }
+
+        public override MaterialsModel[] getRssObjects()
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var query = db.content_rss_materialss.Where(w => w.f_site == _domain);
+                if (query.Any())
+                {
+                    query = query.OrderBy(o => o.d_date);
+                    return query.Select(s => new MaterialsModel() {
+                                            Title=s.c_title,
+                                            Date=s.d_date,
+                                            Id=s.id
+                                        }).ToArray();
+                }
+                return null;
+            }
+        }
+
     }
 }

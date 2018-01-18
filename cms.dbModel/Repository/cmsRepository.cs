@@ -90,6 +90,11 @@ namespace cms.dbModel
         public abstract bool deleteCmsMaterial(Guid id);
         public abstract MaterialsGroup[] getMaterialsGroups();
 
+        public abstract bool insertRssLink(string rsslink, string title);
+        public abstract RssChannel[] getRssChannelMiniList();
+        public abstract bool insertRssObject(MaterialsModel ins);
+        public abstract MaterialsModel[] getRssObjects();
+
         public abstract bool updateContentLink(ContentLinkModel model);
 
         // Events
