@@ -1252,3 +1252,22 @@ div.ListItem img.photo-preview {
     font-size: 16px;
     color: #85afcc;
 }
+
+/* Rss-лента */
+.rss_link_lock:hover, .rss_link_unlock:hover {text-decoration:none;}
+.rss_link_unlock:before {content:'\f041'; font-family:fontello;color:#f51919; margin-right:10px;}
+.rss_link_lock:before {content:'\f041'; font-family:fontello;color:#454141;}
+button.rss_add {
+    border: none;
+    background: none;
+    position: relative;
+    top: 6px;
+    right: 5px;
+    line-height: 21px;
+    padding: 4px 0 0;
+}
+button.rss_delete {border:none; background:none;}
+.rss_add:before {content:'\e844'; font-family:fontello; color:#00baa4; font-size:28px;}
+.rss_delete:before {content: '\ef34'; font-family:fontello; color:#2e5066;}
+.rss_list {list-style-type: none; padding-left: 0;}
+.rss_list li {margin:5px 0;}

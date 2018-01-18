@@ -168,6 +168,16 @@ namespace PhotoImport
                                 repository.InsertPhotoItem(photo);
                             }
                         }
+
+                        try
+                        {
+                            MaterialsUpdate(newAlbum, org);
+                        }
+                        catch (Exception e)
+                        {
+                            Console.WriteLine("Error updating materials with album id: " + newAlbum.Id);
+                            Console.WriteLine(e.ToString());
+                        }
                     }
 
                     // сколько альбомов обработанно
@@ -179,6 +189,24 @@ namespace PhotoImport
                     Console.WriteLine("Error on iteration: " + currentAlbumNumber + " of " + countAlbums);
                     Console.WriteLine(e.ToString());
                 }
+            }
+        }
+
+        /// <summary>
+        /// Обновление новостей
+        /// </summary>
+        private static void MaterialsUpdate(PhotoAlbumNew album, int org)
+        {
+            // список новостей
+            var list = repository.GetMaterials(org);
+
+            // iframe
+            string iframe = "<p><iframe width=\"100%\" height=\"150\" src=\"/Photolist/" + album.Id 
+                                + " class=\"photo-gallery\" frameborder=\"0\" allowfullscreen=\"allowfullscreen\"></iframe></p>";
+
+            foreach (var item in list)
+            {
+                item.Text += iframe;
             }
         }
     }

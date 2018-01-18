@@ -52,6 +52,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\Material.cs" />
     <Compile Include="Models\Photo.cs" />
     <Compile Include="Models\PhotoAlbum.cs" />
     <Compile Include="Program.cs" />

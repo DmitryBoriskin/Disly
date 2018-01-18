@@ -24,6 +24,11 @@ namespace Disly.Areas.Admin.Models
         /// </summary>
         public List<OrgType> OrgsByType { get; set; }
 
-
+        /// <summary>
+        /// rss канал
+        /// </summary>
+        public MaterialsModel[] RssObject { get; set; }        
+        public RssChannel RssChannel { get; set; }
+        public RssChannel[] RssChannelList { get; set; }
     }
 }

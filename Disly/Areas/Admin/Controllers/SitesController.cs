@@ -186,7 +186,7 @@ namespace Disly.Areas.Admin.Controllers
             {
                 // дополнительные домены
                 List<string> domains = new List<string>();
-                domains.Add(back_model.Item.Alias + ".localhost");
+                domains.Add(back_model.Item.Alias + "."+Settings.BaseURL);
 
                 if (!string.IsNullOrEmpty(back_model.Item.DomainListString))
                 {
