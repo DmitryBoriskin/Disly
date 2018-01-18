@@ -19,6 +19,8 @@ namespace Disly.Controllers
                 SiteMapArray = siteMapArray,
                 BannerArray = bannerArray,
             };
+
+            IsSpecVersion = HttpContext.Request.Cookies["spec_version"] != null;
         }
 
         /// <summary>
@@ -34,7 +36,7 @@ namespace Disly.Controllers
             string PageDesc = "описание страницы";
             string PageKeyw = "ключевые слова";
             #endregion
-            
+
             #region Метатеги
             ViewBag.Title = PageTitle;
             ViewBag.Description = PageDesc;
@@ -44,9 +46,15 @@ namespace Disly.Controllers
             model.Materials = _repository.getMaterialsModule(); //Domain
             model.Oid = _repository.getOid();
 
-            if (model.SitesInfo.Alias == "main") 
-            {                
+            if (model.SitesInfo.Alias == "main")
+            {
                 _ViewName = _ViewName.ToLower().Replace("views/", "views/_portal/");//спец вьюха для главного сайта 
+            }
+
+            // версия для слабовидящих
+            if (IsSpecVersion)
+            {
+                _ViewName = _ViewName.ToLower().Replace("views/", "views/_spec/");
             }
 
             return View(_ViewName, model);
