@@ -956,7 +956,7 @@ namespace cms.dbase.models
 		[Column,     NotNull] public Guid   id        { get; set; } // uniqueidentifier
 		[Column,     NotNull] public string f_site    { get; set; } // varchar(64)
 		[PrimaryKey, NotNull] public string c_domain  { get; set; } // varchar(256)
-		[Column,     NotNull] public bool   d_default { get; set; } // bit
+		//[Column,     NotNull] public bool   d_default { get; set; } // bit
 
 		#region Associations
 
