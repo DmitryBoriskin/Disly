@@ -102,7 +102,7 @@ namespace Disly.Controllers
             ViewBag.NewsSearchDateStart = filter.Date;
             ViewBag.NewsSearchDateFin = filter.DateEnd;
 
-            ViewBag.SiteUrl = _repository.getDomainSite();
+            ViewBag.SiteUrl = _repository.getSiteDefaultDomain(Domain);
 
             return View(model);
         }
@@ -118,7 +118,7 @@ namespace Disly.Controllers
             {
                 ViewBag.LastDatePublish = model.List.Data[0].Date;
             }
-            ViewBag.Domain = _repository.getDomainSite();
+            ViewBag.Domain = _repository.getSiteDefaultDomain(Domain);
 
             string _ViewName = (ViewName != String.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";
             return View("rss", model);

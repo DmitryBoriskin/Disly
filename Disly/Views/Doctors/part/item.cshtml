@@ -4,7 +4,7 @@
     <div class="col-md-8">
         <div>
             <strong>Место работы: </strong>
-            @Model.DoctorsItem.EmployeeInfo.UZ.Name
+               @Model.DoctorsItem.EmployeeInfo.UZ.Name
         </div>
 
         @if (Model.DoctorsItem.StructureId != null && Model.DoctorsItem.DepartmentId != null)
@@ -13,12 +13,12 @@
             <div>
                 <strong>Отделение: </strong>
                 <a href="@link">@Model.DoctorsItem.DepartmentTitle</a>
-            </div>
+            </div> 
         }
 
-        @if (!string.IsNullOrWhiteSpace(Model.DoctorsItem.Domain))
+        @if (!string.IsNullOrWhiteSpace(Model.DoctorsItem.GsUrl))
         {
-            string link = "http://" + Model.DoctorsItem.Domain + ".med.cap.ru";
+            var link = string.Format("http://{0}", Model.DoctorsItem.GsUrl);
             <div>
                 <strong>Главный специалист: </strong>
                 @if (Model.DoctorsItem.MainSpec != null)

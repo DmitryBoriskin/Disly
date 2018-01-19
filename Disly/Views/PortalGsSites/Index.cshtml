@@ -28,20 +28,24 @@
                         {
                             <tr>
                                 <td>
-                                    <h3> @item.Name</h3>
-                                    @if (item.DomainUrls != null)
-                                    {
-                                        foreach (var site in item.DomainUrls)
+                                    <h3>
+                                        @if (!string.IsNullOrEmpty(item.DomainUrl))
                                         {
-                                            var link = "http://" + site.DomainName;
-                                            <a target="_blank" href="@link"><small>@link</small></a><br />
+                                            var link = string.Format("http://{0}", item.DomainUrl);
+                                            <a target="_blank" href="@link" title="@item.Name">@item.Name</a>
                                         }
+                                        else
+                                        {
+                                            <span>@item.Name</span>
+                                        }
+                                    </h3>
+                                    <div>
+                                        @if(!string.IsNullOrEmpty(item.Desc)){
+                                            var max = (item.Desc.Length > 250) ? 250 : item.Desc.Length;
 
-                                    }
-                                    else
-                                    {
-                                        <span class="news-list_date">нет сайта</span>
-                                    }
+                                            <span>@Html.Raw(item.Desc.Substring(0, max))</span>
+                                        }
+                                    </div>
                                 </td>
                             </tr>
                         }

@@ -43,9 +43,10 @@
                                     <a href="@link">@item.FIO</a><br />
                                     @if (item.MainSpec != null && !string.IsNullOrEmpty(item.MainSpec.Name))
                                     {
-                                        if (item.MainSpec.DomainUrls != null && item.MainSpec.DomainUrls.Count() > 0)
+                                        if (!string.IsNullOrEmpty(item.MainSpec.DomainUrl))
                                         {
-                                            <span>Главный специалист: <a href="http://@item.MainSpec.DomainUrls.First().DomainName">@item.MainSpec.Name</a></span>
+                                            var mainSpeclink = string.Format("http://{0}", item.MainSpec.DomainUrl);
+                                            <span>Главный специалист: <a href="@mainSpeclink">@item.MainSpec.Name</a></span>
                                         }
                                         else
                                         {

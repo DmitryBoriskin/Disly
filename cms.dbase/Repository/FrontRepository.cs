@@ -259,17 +259,21 @@ namespace cms.dbase
         }
 
 
-        public override string getDomainSite()
+        public override string getSiteDefaultDomain( string siteId)
         {
             using (var db = new CMSdb(_context))
             {
-                string siteId = _domain;
-                var data = db.cms_sites_domainss.Where(w => w.f_site == siteId);
-                if (data.Any())
-                {
-                    return data.OrderBy(o => o.num).Select(s => s.c_domain).FirstOrDefault();
+                var data = db.cms_sites_domainss
+                    .Where(w => w.f_site == siteId)
+                    .Where(w => w.b_default == true);
+                
+                try {
+                    return data.Select(p => p.c_domain).SingleOrDefault();
                 }
-                return null;
+                catch (Exception ex)
+                {
+                    throw new Exception("FrontRepository > getSiteDefaultDomain : Обнаружено более одного домена по умолчанию " + siteId);
+                }
             }
         }
         /// <summary>
@@ -810,14 +814,19 @@ namespace cms.dbase
                             query = query.Where(w => w.d_date <= DateTime.Now);
                         }
 
-                        var category = db.content_materials_groupss.Where(w => w.c_alias == filter.Category).First().id;
-                        query = query
-                                    .Join(
-                                            db.content_materials_groups_links
-                                            .Where(o => o.f_group == category),
-                                            e => e.id, o => o.f_material, (o, e) => o
-                                         );
+                        var category = db.content_materials_groupss.Where(w => w.c_alias == filter.Category);
+                        if(category.Any())
+                        {
+                            var cat = category.First().id;
+                            query = query
+                                        .Join(
+                                                db.content_materials_groups_links
+                                                .Where(o => o.f_group == cat),
+                                                e => e.id, o => o.f_material, (o, e) => o
+                                             );
                         //query = query.Where(w => w.d_date <= DateTime.Now && w.);
+                        }
+                        
                     }
 
                     query = query.OrderByDescending(w => w.d_date);
@@ -1292,9 +1301,12 @@ namespace cms.dbase
                 //              select new { p, pol, s });
                 var people = (from p in db.content_peoples
                               join pol in db.content_people_org_links on p.id equals pol.f_people
+#warning Раскоментировать, когда будет исправлена ошибка в интеграции (пользователи прикрепленные к организации в таблицах не соответствуют друг другу в db.content_people_org_links и db.content_people_employee_posts_links, и все врачи почему-то уволенные)
+                              //where !pol.b_dismissed
+                              join o in db.content_orgss on pol.f_org equals o.id
                               join s in db.cms_sitess on pol.f_org equals s.f_content into ps
                               from s in ps.DefaultIfEmpty()
-                              select new { p, pol, s });
+                              select new { p, pol, s, o });
 
                 if (filter.Id != null && filter.Id.Count() > 0)
                 {
@@ -1346,7 +1358,10 @@ namespace cms.dbase
                         Posts = s.Select(ep2 => new PeoplePost
                         {
                             Id = ep2.ep.id,
-                            Name = ep2.ep.c_name
+                            Name = ep2.ep.c_name,
+                            OrgId = ep2.p.o.id,
+                            OrgTitle = !string.IsNullOrEmpty(ep2.p.o.c_title_short)? ep2.p.o.c_title_short: ep2.p.o.c_title,
+                            OrgUrl = (ep2.p.s != null && !string.IsNullOrEmpty(ep2.p.s.c_alias))? getSiteDefaultDomain(ep2.p.s.c_alias) : null,
                         }).ToArray()
                     });
 
@@ -1392,7 +1407,7 @@ namespace cms.dbase
                                  StructureId = os.num,
                                  DepartmentId = d.id,
                                  DepartmentTitle = d.c_title,
-                                 Domain = s.c_alias,
+                                 GsUrl = (!string.IsNullOrEmpty(s.c_alias)) ? getSiteDefaultDomain(s.c_alias) : null,
                                  MainSpec = new MainSpecialistModel()
                                  {
                                      Name = ms.c_name
@@ -1796,7 +1811,7 @@ namespace cms.dbase
                                      Email = o.c_email,
                                      Address = o.c_adress,
                                      Logo = o.c_logo,
-                                     Link = s.c_alias,
+                                     Link = (!string.IsNullOrEmpty(s.c_alias))? getSiteDefaultDomain(s.c_alias) : null,
                                      Leader = new OrgsAdministrative
                                      {
                                          id = p.f_people,
@@ -1837,7 +1852,7 @@ namespace cms.dbase
                                      Email = o.c_email,
                                      Address = o.c_adress,
                                      Logo = o.c_logo,
-                                     Link = s.c_alias,
+                                     Link = (!string.IsNullOrEmpty(s.c_alias)) ? getSiteDefaultDomain(s.c_alias) : null,
                                      Affiliation = o.f_department_affiliation,
                                      Leader = new OrgsAdministrative
                                      {
@@ -2070,6 +2085,8 @@ namespace cms.dbase
 
                 var doctors = (from p in people
                                join pol in db.content_people_org_links on p.id equals pol.f_people
+#warning Раскоментировать, когда будет исправлена ошибка в интеграции (пользователи прикрепленные к организации в таблицах не соответствуют друг другу в db.content_people_org_links и db.content_people_employee_posts_links, и все врачи почему-то уволенные)
+                               //where !pol.b_dismissed
                                join o in db.content_orgss on pol.f_org equals o.id
                                join s in db.cms_sitess on o.id equals s.f_content into ss
                                from s in ss.DefaultIfEmpty()
@@ -2092,8 +2109,8 @@ namespace cms.dbase
                                    {
                                        id = ep.id,
                                        name = ep.c_name,
-                                       org = pepl.f_org_guid,
-                                       title = o.c_title,
+                                       org = pol.f_org,
+                                       title = !string.IsNullOrEmpty(o.c_title_short)? o.c_title_short: o.c_title,
                                        domain = s.c_alias
                                    }
                                });
@@ -2119,7 +2136,7 @@ namespace cms.dbase
                             Id = ep2.ep.id,
                             Name = ep2.ep.name,
                             OrgId = ep2.ep.org,
-                            OrgAlias = ep2.ep.domain,
+                            OrgUrl = !string.IsNullOrEmpty(ep2.ep.domain)? getSiteDefaultDomain(ep2.ep.domain): null,
                             OrgTitle = ep2.ep.title
                         }).ToArray()
                     });
@@ -2525,7 +2542,7 @@ namespace cms.dbase
                                  Name = ms.c_name,
                                  Desc = ms.c_desc,
                                  Domain = s.c_alias,
-                                 DomainUrls = getSiteDomains(s.c_alias)
+                                 DomainUrl = getSiteDefaultDomain(s.c_alias)
                              }
                     );
 
@@ -2619,7 +2636,7 @@ namespace cms.dbase
                         {
                             Id = s.spec.id,
                             Name = s.spec.c_name,
-                            DomainUrls = (!string.IsNullOrEmpty(s.site.c_alias)) ? getSiteDomains(s.site.c_alias) : null
+                            DomainUrl = (!string.IsNullOrEmpty(s.site.c_alias)) ? getSiteDefaultDomain(s.site.c_alias) : null
                         },
                         Photo = s.p.c_photo
                     });
@@ -2787,30 +2804,5 @@ namespace cms.dbase
 
             }
         }
-
-
-        #region private methods
-
-        /// <summary>
-        /// список доменных имен по алиасу сайта
-        /// </summary>
-        /// <param name="SiteId"></param>
-        /// <returns></returns>
-        private Domain[] getSiteDomains(string SiteId)
-        {
-            using (var db = new CMSdb(_context))
-            {
-                var data = db.cms_sites_domainss.Where(w => w.f_site == SiteId);
-                if (data.Any())
-                    return data.Select(s => new Domain()
-                    {
-                        DomainName = s.c_domain,
-                        id = s.id
-                    }).ToArray();
-                return null;
-            }
-        }
-
-        #endregion
     }
 }

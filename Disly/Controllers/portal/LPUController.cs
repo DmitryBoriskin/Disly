@@ -71,7 +71,7 @@ namespace Disly.Controllers
                 model.Breadcrumbs.Add(new Breadcrumbs
                 {
                     Title = navItem.Title,
-                    Url = navItem.Alias + "/"
+                    Url = !string.IsNullOrEmpty(navItem.Alias)? "?tab=" + navItem.Alias : ""
                 });
             }
 

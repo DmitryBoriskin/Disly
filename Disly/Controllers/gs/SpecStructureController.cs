@@ -67,7 +67,7 @@ namespace Disly.Controllers
             model.Breadcrumbs.Add(new Breadcrumbs
             {
                 Title = model.CurrentPage.Title,
-                Url = string.Format("/{0}/", page) // ""
+                Url = ""
             });
 
             //Табы на странице
@@ -86,7 +86,7 @@ namespace Disly.Controllers
                 model.Breadcrumbs.Add(new Breadcrumbs
                 {
                     Title = navItem.Title,
-                    Url = navItem.Alias + "/"
+                    Url = ""
                 });
             }
 

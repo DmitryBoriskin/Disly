@@ -41,7 +41,7 @@ namespace cms.dbModel.entity.cms
         /// <summary>
         /// Адреса сайта
         /// </summary>
-        public Domain[] DomainUrls { get; set; }
+        public string DomainUrl { get; set; }
 
         /// <summary>
         /// Главные специалисты

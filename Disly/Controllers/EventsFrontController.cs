@@ -42,8 +42,8 @@ namespace Disly.Controllers
 
             model.Breadcrumbs.Add(new Breadcrumbs
             {
-                Title = "События",
-                Url = "/events"
+                Title = model.CurrentPage.Title,
+                Url = string.Format("/{0}/", model.CurrentPage.FrontSection)
             });
         }
 
@@ -53,6 +53,7 @@ namespace Disly.Controllers
         /// <returns></returns>
         public ActionResult Index()
         {
+
             var filter = getFilter();
             filter.Date = DateTime.Now;
             model.List = _repository.getEvents(filter);
@@ -86,7 +87,6 @@ namespace Disly.Controllers
         /// <returns></returns>
         public ActionResult Archive()
         {
-
             var filter = getFilter();
             filter.DateEnd = DateTime.Now;
             model.List = _repository.getEvents(filter);
@@ -95,7 +95,6 @@ namespace Disly.Controllers
             ViewBag.NewsSearchArea = filter.SearchText;
             ViewBag.NewsSearchDateStart = filter.Date;
             ViewBag.NewsSearchDateFin = filter.DateEnd;
-
 
             ViewBag.Title = "Архив событий";
             return View(model);

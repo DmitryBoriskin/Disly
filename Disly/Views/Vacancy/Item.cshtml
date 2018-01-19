@@ -5,70 +5,115 @@
         Layout = "/views/_portal/shared/_layout.cshtml";
     }
 }
-<div class="type-page">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-                @Html.Partial("services/breadcrumbs")
-                <h1>@ViewBag.Title</h1>
-                <div class="row">
-                    <div class="col-md-3 col-md-push-9">
-                        <div class="dop-block">
-                            @if (Model.Item.Temporarily)
-                            {
-                                <div class="dop-block_info">
-                                    <label></label>
-                                    <div>Вакансия на замещение должности</div>
-                                </div>
-                            }
-                            @if (Model.Item.Date != null)
-                            {
+@if (Model.Item != null)
+{
+    <div class="type-page">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    @Html.Partial("services/breadcrumbs")
+                    <h1>@ViewBag.Title</h1>
+                    <div class="row">
+                        <div class="col-md-3 col-md-push-9">
+                            <div class="dop-block">
+                                @if (Model.Item.Profession != null)
+                                {
+                                    <div class="dop-block_info">
+                                        <label>Профессия: </label>
+                                        <div>@Model.Item.Profession</div>
+                                    </div>
+                                }
+                                @if (Model.Item.Post != null)
+                                {
+                                    <div class="dop-block_info">
+                                        <label>Должность: </label>
+                                        <div>@Model.Item.Post</div>
+                                    </div>
+                                }
+
+                                @if (Model.Item.Salary != null)
+                                {
+                                    <div class="dop-block_info">
+                                        <label>Зарплата</label>
+                                        <div>@Model.Item.Salary</div>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="dop-block_info">
+                                        <label>Зарплата</label>
+                                        <div>з/п не указана</div>
+                                    </div>
+                                }
                                 <div class="dop-block_info">
                                     <label>Дата публикации</label>
                                     <div>@Model.Item.Date.ToString("dd.MM.yyyy")</div>
                                 </div>
-                            }
-                            @if (Model.Item.Salary != null)
-                            {
-                                <div class="dop-block_info">
-                                    <label>Зарплата</label>
-                                    <div>@Model.Item.Salary</div>
+                                <br />
+                                <a class="btn_print" onClick="window.print()">Распечатать</a><br />
+                                <a class="btn_share" title="Поделиться" href="../../../../#">Поделиться</a>
+                            </div>
+                        </div>
+                        <div class="col-md-8 col-md-pull-3">
+                            <div class="row">
+                                <div class="col-md-12">
+
+                                    <div class="row vacancy-single-desc">
+
+                                        <div class="col-md-2"><strong>Профессия/<br />должность</strong></div>
+                                        <div class="col-md-10">
+                                            @if (!string.IsNullOrEmpty(Model.Item.Profession))
+                                            {
+                                                <span>@Model.Item.Profession</span>
+                                                if (!string.IsNullOrEmpty(Model.Item.Profession))
+                                                {
+                                                    <br />
+                                                }
+                                            }
+
+                                            @if (!string.IsNullOrEmpty(Model.Item.Post))
+                                            {
+                                                <span>@Model.Item.Post </span>
+                                            }
+
+                                            @if (Model.Item.Temporarily)
+                                            {
+                                                <span> (Вакансия на замещение должности)</span>
+                                            }
+                                        </div>
+                                    </div><br />
+
+                                    @if (Model.Item.Desc != null)
+                                    {
+                                        <div class="vacancy-single-desc">
+                                            <strong>Должностные обязанности:</strong><br />
+                                            @Html.Raw(Model.Item.Desc)
+                                        </div>
+                                    }
+                                    @if (Model.Item.Experience != null)
+                                    {
+                                        <div class="vacancy-single-desc">
+                                            <strong>Требования: </strong>
+                                            @Html.Raw(Model.Item.Experience)
+                                        </div>
+                                    }
+                                    @if (Model.Item.Сonditions != null)
+                                    {
+                                        <div class="vacancy-single-desc">
+                                            <strong>Условия: </strong>
+                                            @Html.Raw(Model.Item.Сonditions)
+                                        </div>
+                                    }
+                                    <br />
+                                    <div class="vacancy-single-desc">
+                                        <a href="/contacts/">Контактная информация</a>
+                                    </div>
                                 </div>
-                            }
-                            <a class="btn_print" onClick="window.print()">Распечатать</a><br />
-                            <a class="btn_share" title="Поделиться" href="../../../../#">Поделиться</a>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-md-8 col-md-pull-3">
-                        <div class="row">
-                            <div class="col-md-12">
-                                @if (Model.Item.Desc != null)
-                                {
-                                    <div class="vacancy-single-desc">
-                                        <h4>Должностные обязанности</h4>
-                                        @Html.Raw(Model.Item.Desc)
-                                    </div>
-                                }
-                                @if (Model.Item.Experience != null)
-                                {
-                                    <div class="vacancy-single-desc">
-                                        <h4>Требования</h4>
-                                        @Html.Raw(Model.Item.Experience)
-                                    </div>
-                                }
-                                @if (Model.Item.Сonditions != null)
-                                {
-                                    <div class="vacancy-single-desc">
-                                        <h4>Условия</h4>
-                                        @Html.Raw(Model.Item.Сonditions)
-                                    </div>
-                                }
-                                
-                            </div>                            
-                        </div>
-                    </div>                    
                 </div>
             </div>
         </div>
     </div>
-</div>
+}

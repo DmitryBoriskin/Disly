@@ -85,7 +85,7 @@ namespace Disly.Controllers
                     model.Breadcrumbs.Add(new Breadcrumbs()
                     {
                         Title = model.Item.Profession,
-                        Url = "/" + ControllerName + "/" + id
+                        Url = ""
                     });
                 }
             }
