@@ -814,14 +814,19 @@ namespace cms.dbase
                             query = query.Where(w => w.d_date <= DateTime.Now);
                         }
 
-                        var category = db.content_materials_groupss.Where(w => w.c_alias == filter.Category).First().id;
-                        query = query
-                                    .Join(
-                                            db.content_materials_groups_links
-                                            .Where(o => o.f_group == category),
-                                            e => e.id, o => o.f_material, (o, e) => o
-                                         );
+                        var category = db.content_materials_groupss.Where(w => w.c_alias == filter.Category);
+                        if(category.Any())
+                        {
+                            var cat = category.First().id;
+                            query = query
+                                        .Join(
+                                                db.content_materials_groups_links
+                                                .Where(o => o.f_group == cat),
+                                                e => e.id, o => o.f_material, (o, e) => o
+                                             );
                         //query = query.Where(w => w.d_date <= DateTime.Now && w.);
+                        }
+                        
                     }
 
                     query = query.OrderByDescending(w => w.d_date);
@@ -1354,8 +1359,9 @@ namespace cms.dbase
                         {
                             Id = ep2.ep.id,
                             Name = ep2.ep.c_name,
+                            OrgId = ep2.p.o.id,
                             OrgTitle = !string.IsNullOrEmpty(ep2.p.o.c_title_short)? ep2.p.o.c_title_short: ep2.p.o.c_title,
-                            OrgUrl = !string.IsNullOrEmpty(ep2.p.s.c_alias)? getSiteDefaultDomain(ep2.p.s.c_alias) : null,
+                            OrgUrl = (ep2.p.s != null && !string.IsNullOrEmpty(ep2.p.s.c_alias))? getSiteDefaultDomain(ep2.p.s.c_alias) : null,
                         }).ToArray()
                     });
 
