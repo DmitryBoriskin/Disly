@@ -1573,7 +1573,7 @@ a.sitemap-plate.sitemap-plate-image {
 
 
 .adminlist_img_td{width: 110px;}
-.adminlist_img_wr{margin-right:20px;position:relative;top:-14px; min-height: 80px; display: block;}
+.adminlist_img_wr{margin-right:20px;position:relative;/*top:-14px;*/ min-height: 80px; display: block;}
 .adminlist_name{font-size:18px;font-weight:bold;}
 .adminlist_post {color: #808080; font-size: 14px; line-height: 18px;padding-top:3px;}
 .adminlist_phone{}

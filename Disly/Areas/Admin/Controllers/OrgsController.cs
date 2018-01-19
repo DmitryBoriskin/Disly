@@ -574,14 +574,15 @@ namespace Disly.Areas.Admin.Controllers
             ViewBag.Titlecoord = back_model.StructureItem.Title;
             ViewBag.Xcoord = MapX;
             ViewBag.Ycoord = MapY;
-            try
-            {
+            
                 if (back_model.StructureItem.Adress != String.Empty && (MapX == 0 || MapY == 0))
                 {
                     var CoordResult = Spots.Coords(back_model.StructureItem.Adress);
                     back_model.StructureItem.GeopointX = CoordResult.GeopointX;
                     back_model.StructureItem.GeopointY = CoordResult.GeopointY;
                 }
+            try
+            {
             }
             catch { }
             #endregion

@@ -108,7 +108,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>09/29/2017 13:26:05</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Orgs/Structure.cshtml">
-      <publishTime>01/16/2018 11:38:24</publishTime>
+      <publishTime>01/18/2018 14:26:40</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Person/Index.cshtml">
       <publishTime>01/12/2017 12:16:20</publishTime>
@@ -258,13 +258,13 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>09/27/2017 09:21:45</publishTime>
     </File>
     <File Include="bin/cms.dbase.dll">
-      <publishTime>01/18/2018 11:40:11</publishTime>
+      <publishTime>01/18/2018 14:35:23</publishTime>
     </File>
     <File Include="bin/cms.dbase.dll.config">
       <publishTime>09/27/2017 09:21:45</publishTime>
     </File>
     <File Include="bin/cms.dbase.pdb">
-      <publishTime>01/18/2018 11:40:11</publishTime>
+      <publishTime>01/18/2018 14:35:23</publishTime>
     </File>
     <File Include="bin/cms.dbModel.dll">
       <publishTime>01/18/2018 08:43:55</publishTime>
@@ -273,10 +273,10 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>01/18/2018 08:43:55</publishTime>
     </File>
     <File Include="bin/Disly.dll">
-      <publishTime>01/18/2018 11:40:12</publishTime>
+      <publishTime>01/18/2018 14:35:23</publishTime>
     </File>
     <File Include="bin/Disly.pdb">
-      <publishTime>01/18/2018 11:40:12</publishTime>
+      <publishTime>01/18/2018 14:35:23</publishTime>
     </File>
     <File Include="bin/EntityFramework.dll">
       <publishTime>09/27/2017 09:21:45</publishTime>
@@ -355,6 +355,9 @@ by editing this MSBuild file. In order to learn more about this please visit htt
     </File>
     <File Include="Content/css/print.css">
       <publishTime>11/29/2017 15:24:31</publishTime>
+    </File>
+    <File Include="Content/css/spec_style.css">
+      <publishTime>01/18/2018 13:12:57</publishTime>
     </File>
     <File Include="Content/css/styles.css">
       <publishTime>01/17/2018 10:55:27</publishTime>
@@ -845,6 +848,48 @@ by editing this MSBuild file. In order to learn more about this please visit htt
     <File Include="Content/img/share-arrow.png">
       <publishTime>11/27/2017 11:40:25</publishTime>
     </File>
+    <File Include="Content/img/special/image.jpg">
+      <publishTime>01/18/2018 13:12:57</publishTime>
+    </File>
+    <File Include="Content/img/special/museum.png">
+      <publishTime>01/18/2018 13:12:57</publishTime>
+    </File>
+    <File Include="Content/img/special/sand-blind-panel/a1.png">
+      <publishTime>01/18/2018 13:12:57</publishTime>
+    </File>
+    <File Include="Content/img/special/sand-blind-panel/a2.png">
+      <publishTime>01/18/2018 13:12:57</publishTime>
+    </File>
+    <File Include="Content/img/special/sand-blind-panel/a3.png">
+      <publishTime>01/18/2018 13:12:57</publishTime>
+    </File>
+    <File Include="Content/img/special/sand-blind-panel/access.png">
+      <publishTime>01/18/2018 13:12:57</publishTime>
+    </File>
+    <File Include="Content/img/special/sand-blind-panel/c1.png">
+      <publishTime>01/18/2018 13:12:57</publishTime>
+    </File>
+    <File Include="Content/img/special/sand-blind-panel/c2.png">
+      <publishTime>01/18/2018 13:12:57</publishTime>
+    </File>
+    <File Include="Content/img/special/sand-blind-panel/c3.png">
+      <publishTime>01/18/2018 13:12:57</publishTime>
+    </File>
+    <File Include="Content/img/special/sand-blind-panel/f1.png">
+      <publishTime>01/18/2018 13:12:57</publishTime>
+    </File>
+    <File Include="Content/img/special/sand-blind-panel/f2.png">
+      <publishTime>01/18/2018 13:12:57</publishTime>
+    </File>
+    <File Include="Content/img/special/sand-blind-panel/f3.png">
+      <publishTime>01/18/2018 13:12:57</publishTime>
+    </File>
+    <File Include="Content/img/special/sand-blind-panel/sel.png">
+      <publishTime>01/18/2018 13:12:57</publishTime>
+    </File>
+    <File Include="Content/img/special/sand-blind-panel/w_normal.png">
+      <publishTime>01/18/2018 13:12:57</publishTime>
+    </File>
     <File Include="Content/img/temporal.jpg">
       <publishTime>08/11/2017 16:47:41</publishTime>
     </File>
@@ -855,7 +900,10 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>11/12/2017 13:12:25</publishTime>
     </File>
     <File Include="Content/js/script.js">
-      <publishTime>01/16/2018 12:46:15</publishTime>
+      <publishTime>01/18/2018 13:12:57</publishTime>
+    </File>
+    <File Include="Content/js/spec.js">
+      <publishTime>01/18/2018 13:12:57</publishTime>
     </File>
     <File Include="Content/plugins/bootstrap/config.json">
       <publishTime>09/28/2017 10:45:20</publishTime>
@@ -1977,7 +2025,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>01/17/2018 08:59:44</publishTime>
     </File>
     <File Include="Views/Press/RssSettings.cshtml">
-      <publishTime>01/17/2018 08:59:44</publishTime>
+      <publishTime>01/18/2018 12:01:48</publishTime>
     </File>
     <File Include="Views/Search/Index.cshtml">
       <publishTime>01/16/2018 08:50:11</publishTime>
@@ -2010,7 +2058,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>07/12/2017 09:06:36</publishTime>
     </File>
     <File Include="Views/Shared/_Layout.cshtml">
-      <publishTime>01/16/2018 12:50:02</publishTime>
+      <publishTime>01/18/2018 13:12:58</publishTime>
     </File>
     <File Include="Views/SpecStructure/Index.cshtml">
       <publishTime>01/17/2018 08:59:44</publishTime>
@@ -2058,13 +2106,19 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>01/15/2018 15:30:10</publishTime>
     </File>
     <File Include="Views/_portal/home/Index.cshtml">
-      <publishTime>01/17/2018 08:59:44</publishTime>
+      <publishTime>01/18/2018 14:42:39</publishTime>
     </File>
     <File Include="Views/_portal/shared/_Layout - Копировать.cshtml">
       <publishTime>01/12/2018 08:52:14</publishTime>
     </File>
     <File Include="Views/_portal/shared/_Layout.cshtml">
       <publishTime>01/18/2018 11:54:14</publishTime>
+    </File>
+    <File Include="Views/_spec/home/Index.cshtml">
+      <publishTime>01/18/2018 13:12:58</publishTime>
+    </File>
+    <File Include="Views/_spec/shared/_Layout.cshtml">
+      <publishTime>01/18/2018 13:12:58</publishTime>
     </File>
     <File Include="Views/_ViewStart.cshtml">
       <publishTime>09/27/2017 09:21:44</publishTime>

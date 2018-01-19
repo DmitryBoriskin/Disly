@@ -13,15 +13,15 @@
 
                 <h1>@ViewBag.Title</h1>
 
-                @Html.Partial("part/childtabs", Model)
+                @Html.Partial("/Views/shared/part/childtabs.cshtml", Model)
 
                 @if (Model.Item == null)
                 {
-                    @Html.Partial("List")
+                    @Html.Partial("/Views/vote/List.cshtml")
                 }
                 else
                 {
-                    @Html.Partial("Item")
+                    @Html.Partial("/Views/vote/Item.cshtml")
                 }
             </div>
         </div>
