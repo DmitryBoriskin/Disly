@@ -88,7 +88,7 @@ namespace Disly.Controllers
                     model.Structures = _repository.getStructures();
                     break;
                 default:
-                    model.OrgItem = _repository.getOrgInfo();
+                    model.OrgItem = _repository.getOrgInfo(null);
                     break;
             }
 

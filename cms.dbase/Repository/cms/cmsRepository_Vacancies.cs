@@ -18,9 +18,14 @@ namespace cms.dbase
         {
             using (var db = new CMSdb(_context))
             {
-                var query = db.content_vacanciess
-                    .Where(w => w.f_site == _domain)
-                    .OrderByDescending(o => o.d_date);
+                var query = db.content_vacanciess.AsQueryable();
+
+                if(!string.IsNullOrEmpty(filtr.Domain))
+                {
+                    query = query.Where(w => w.f_site == _domain);
+                }
+
+                query = query.OrderByDescending(o => o.d_date);
 
                 if (query.Any())
                 {

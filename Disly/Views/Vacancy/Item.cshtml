@@ -16,18 +16,19 @@
                     <div class="row">
                         <div class="col-md-3 col-md-push-9">
                             <div class="dop-block">
-                                @if (Model.Item.Profession != null)
-                                {
-                                    <div class="dop-block_info">
-                                        <label>Профессия: </label>
-                                        <div>@Model.Item.Profession</div>
-                                    </div>
-                                }
+
                                 @if (Model.Item.Post != null)
                                 {
                                     <div class="dop-block_info">
                                         <label>Должность: </label>
                                         <div>@Model.Item.Post</div>
+                                    </div>
+                                }
+                                @if (Model.Item.Profession != null)
+                                {
+                                    <div class="dop-block_info">
+                                        <label>Профессия: </label>
+                                        <div>@Model.Item.Profession</div>
                                     </div>
                                 }
 
@@ -62,27 +63,31 @@
 
                                         <div class="col-md-2"><strong>Профессия/<br />должность</strong></div>
                                         <div class="col-md-10">
-                                            @if (!string.IsNullOrEmpty(Model.Item.Profession))
-                                            {
-                                                <span>@Model.Item.Profession</span>
-                                                if (!string.IsNullOrEmpty(Model.Item.Profession))
-                                                {
-                                                    <br />
-                                                }
-                                            }
-
-                                            @if (!string.IsNullOrEmpty(Model.Item.Post))
-                                            {
-                                                <span>@Model.Item.Post </span>
-                                            }
-
+                                            <span>@Model.Item.Post</span>
                                             @if (Model.Item.Temporarily)
                                             {
                                                 <span> (Вакансия на замещение должности)</span>
                                             }
-                                        </div>
-                                    </div><br />
 
+                                            @if (!string.IsNullOrEmpty(Model.Item.Profession))
+                                            {
+                                                <br />
+                                                <span>@Model.Item.Profession</span>
+                                            }
+                                        </div>
+                                    </div>
+
+                                    @if (Model.SitesInfo != null && Model.SitesInfo.Alias == "main")
+                                    {
+                                        <div class="vacancy-single-desc">
+                                            <div class="col-md-2"><strong>ЛПУ:</strong></div>
+                                            <div class="col-md-10">
+                                                <a href="http://@Model.Item.OrgUrl">@Model.Item.OrgName</a>
+                                            </div>
+                                        </div>
+                                    }
+
+                                    <br />
                                     @if (Model.Item.Desc != null)
                                     {
                                         <div class="vacancy-single-desc">
@@ -106,7 +111,8 @@
                                     }
                                     <br />
                                     <div class="vacancy-single-desc">
-                                        <a href="/contacts/">Контактная информация</a>
+
+                                        <a href="@(!string.IsNullOrEmpty(Model.Item.OrgUrl)? string.Format("http://{0}/contacts/", Model.Item.OrgUrl) : "/contacts")">Контактная информация</a>
                                     </div>
                                 </div>
                             </div>

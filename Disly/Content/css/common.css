@@ -1713,4 +1713,4 @@ iframe.photo-gallery{display:none;}
 }
 .vacnacy_item_date{font-size:12px;color:#999;}
 
-.vacancy-single-desc{margin-bottom:20px;}
+.vacancy-single-desc{margin-bottom:20px;overflow:hidden;}

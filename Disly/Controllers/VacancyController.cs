@@ -59,6 +59,8 @@ namespace Disly.Controllers
             string _ViewName = (ViewName != String.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";
 
             var filter = getFilter();
+            if (Domain == "main")
+                filter.Domain = null;
             model.List = _repository.getVacancy(filter);
 
             ViewBag.Filter = filter;
