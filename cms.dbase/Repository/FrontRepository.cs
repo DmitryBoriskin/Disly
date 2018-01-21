@@ -623,14 +623,14 @@ namespace cms.dbase
         {
             using (var db = new CMSdb(_context))
             {
-                var data = db.content_documentss.Where(w => w.id_page == id)
+                var data = db.content_documentss.Where(w => w.f_link == id)
                  .OrderBy(o => o.n_sort)
                  .Select(s => new DocumentsModel
                  {
                      id = s.id,
                      Title = s.c_title,
                      FilePath = s.c_file_path,
-                     idPage = s.id_page
+                     LinkId = s.f_link
                  });
 
                 if (data.Any())

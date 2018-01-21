@@ -10,7 +10,10 @@ namespace cms.dbModel.entity
         public string Title { get; set; }
         public string FilePath { get; set; }
         public DateTime DateCreate { get; set; }
-        public Guid idPage { get; set; }
+        /// <summary>
+        /// Ид контента(новость, событие, вакансия и тп) или страницы
+        /// </summary>
+        public Guid LinkId { get; set; }
         public int Permit { get; set; }
     }
 }

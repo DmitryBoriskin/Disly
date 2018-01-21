@@ -700,16 +700,16 @@ namespace cms.dbase.models
 		#region Associations
 
 		/// <summary>
-		/// FK_cms_log_sections
-		/// </summary>
-		[Association(ThisKey="f_section", OtherKey="c_alias", CanBeNull=true, KeyName="FK_cms_log_sections", BackReferenceName="cmslogsectionss")]
-		public cms_log_sections cmslogsections { get; set; }
-
-		/// <summary>
 		/// FK_log_actions
 		/// </summary>
 		[Association(ThisKey="f_action", OtherKey="c_action", CanBeNull=false, KeyName="FK_log_actions", BackReferenceName="logactionss")]
 		public cms_log_actions logactions { get; set; }
+
+		/// <summary>
+		/// FK_cms_log_sections
+		/// </summary>
+		[Association(ThisKey="f_section", OtherKey="c_alias", CanBeNull=true, KeyName="FK_cms_log_sections", BackReferenceName="cmslogsectionss")]
+		public cms_log_sections cmslogsections { get; set; }
 
 		#endregion
 	}
@@ -1310,6 +1310,7 @@ namespace cms.dbase.models
 		[Column,        Nullable] public string c_file_path { get; set; } // varchar(1024)
 		[Column,     NotNull    ] public Guid   id_page     { get; set; } // uniqueidentifier
 		[Column,     NotNull    ] public int    n_sort      { get; set; } // int
+		[Column,     NotNull    ] public Guid   f_link      { get; set; } // uniqueidentifier
 
 		#region Associations
 
@@ -1915,16 +1916,16 @@ namespace cms.dbase.models
 		#region Associations
 
 		/// <summary>
-		/// FK_content_org_people_link
-		/// </summary>
-		[Association(ThisKey="f_org", OtherKey="id", CanBeNull=false, KeyName="FK_content_org_people_link", BackReferenceName="contentorgpeoplelinks")]
-		public content_orgs contentorgpeoplelink { get; set; }
-
-		/// <summary>
 		/// fk_content_people_org_link
 		/// </summary>
 		[Association(ThisKey="f_people", OtherKey="id", CanBeNull=false, KeyName="fk_content_people_org_link", BackReferenceName="fkcontentpeopleorglinks")]
 		public content_people fkcontentpeopleorglink { get; set; }
+
+		/// <summary>
+		/// FK_content_org_people_link
+		/// </summary>
+		[Association(ThisKey="f_org", OtherKey="id", CanBeNull=false, KeyName="FK_content_org_people_link", BackReferenceName="contentorgpeoplelinks")]
+		public content_orgs contentorgpeoplelink { get; set; }
 
 		#endregion
 	}
@@ -3183,4 +3184,3 @@ namespace cms.dbase.models
 		}
 	}
 }
- 

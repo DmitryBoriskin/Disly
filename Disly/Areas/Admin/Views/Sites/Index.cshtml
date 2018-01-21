@@ -11,7 +11,15 @@
                 string disabled = (Item.SiteOff) ? "disabled" : "";
                 <div class="list-item @disabled">
                     <a title="" class="li-caption" href="/admin/sites/item/@Item.Id/@ViewBag.urlQuery">@Item.Title</a>
-                    <div class="li-desc">@(Item.Alias).@Settings.BaseURL</div>
+                    <div class="li-desc">
+                        @if (Item.DomainList != null && Item.DomainList.Count() > 0)
+                        {
+                            if (Item.DomainList.Where(p => p.IsDefault == true).Any())
+                            {
+                               <span>@Item.DomainList.SingleOrDefault(p => p.IsDefault == true).DomainName </span>
+                            }
+                        }
+                    </div>
                 </div>
             }
             Html.RenderAction("Pager", "Templates", new { @Model = Model.List.Pager });

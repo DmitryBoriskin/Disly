@@ -110,6 +110,11 @@
                                         </div>
                                     }
                                     <br />
+                                    @if (Model.Documents != null)
+                                    {
+                                        @Html.Partial("part/attachedFiles", Model.Documents)
+                                    }
+                                    <br />
                                     <div class="vacancy-single-desc">
 
                                         <a href="@(!string.IsNullOrEmpty(Model.Item.OrgUrl)? string.Format("http://{0}/contacts/", Model.Item.OrgUrl) : "/contacts")">Контактная информация</a>

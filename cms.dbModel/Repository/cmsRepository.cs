@@ -48,6 +48,7 @@ namespace cms.dbModel
         public abstract Domain[] getSiteDomains(string SiteId);
         public abstract bool insertDomain(String SiteId, string NewDomain);
         public abstract bool deleteDomain(Guid id);
+        public abstract bool setDomainDefault(Guid id);
         public abstract string getSiteId(Guid ContentId);
 
         // Все пользователи портала

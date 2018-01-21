@@ -79,7 +79,7 @@ namespace Disly.Controllers
             string _ViewName = (ViewName != String.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";
 
             model.Item = _repository.getVacancyItem(id);
-
+           
             if (model.Item != null)
             {
                 if (model.Breadcrumbs != null)
@@ -90,6 +90,7 @@ namespace Disly.Controllers
                         Url = ""
                     });
                 }
+                model.Documents = _repository.getAttachDocuments(id);
             }
             else
                 return new HttpNotFoundResult();

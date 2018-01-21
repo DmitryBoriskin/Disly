@@ -61,7 +61,7 @@ namespace Disly.Areas.Admin.Controllers
         [MultiButton(MatchFormKey = "action", MatchFormValue = "create-btn-files")]
         public ActionResult Create(Guid id, IEnumerable<HttpPostedFileBase> upload)
         {
-            string savePath = Settings.UserFiles + Domain + "/sitemap/doc/" + id + "/";            
+            string savePath = Settings.UserFiles + Domain + "/sitemap/doc/" + id + "/";
             foreach (HttpPostedFileBase doc in upload)
             {
                 if (doc != null && doc.ContentLength > 0)
@@ -89,7 +89,7 @@ namespace Disly.Areas.Admin.Controllers
                     {
                         FilePath = FullName,
                         Title = Title,
-                        idPage = id
+                        LinkId = id
                     };
 
                     _cmsRepository.insDocuments(docModel);
