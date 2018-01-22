@@ -9,6 +9,7 @@ using Integration.Frmp.library.Models;
 using System.Text;
 using System.Drawing;
 using System.Drawing.Imaging;
+using LinqToDB.Data;
 
 namespace Integration.Frmp.library
 {
@@ -138,6 +139,10 @@ namespace Integration.Frmp.library
             var distinctOrgs = (from e in orgs
                                 select e).GroupBy(x => x.ID).Select(x => x.First()).ToList();
 
+            // кол-во организаций
+            int count = distinctOrgs.Count();
+            SrvcLogger.Debug("{WORK}", "Кол-во организаций: " + count);
+
             using (var db = new DbModel(connectionString))
             {
                 db.ImportFrmpOrgss.Delete();
@@ -153,7 +158,7 @@ namespace Integration.Frmp.library
 
                         // проверим существует ли запись с таким идентификатором в базе
                         //var query = db.ImportFrmpOrgss.Where(w => w.COid.Equals(oid));
-                        var query = db.ImportFrmpOrgss.Where(w => w.COid.Equals(id.ToString()));
+                        var query = db.ImportFrmpOrgss.Where(w => w.Guid.Equals(id));
 
                         bool isExist = query.Any();
                         if (!isExist)
@@ -168,7 +173,7 @@ namespace Integration.Frmp.library
                         else
                         {
                             db.ImportFrmpOrgss
-                                .Where(w => w.Guid.Equals(org.ID))
+                                .Where(w => w.Guid.Equals(id))
                                 //.Where(w => w.COid.ToLower().Equals(oid))
                                 .Set(u => u.CName, name)
                                 .Set(u => u.DModify, DateTime.Now)
@@ -191,6 +196,10 @@ namespace Integration.Frmp.library
             var distinctPosts = (from e in posts
                                  select e).GroupBy(x => x.ID).Select(x => x.First())
                                 .OrderBy(o => o.ID).ToList();
+
+            // кол-во должностей
+            int count = distinctPosts.Count();
+            SrvcLogger.Debug("{WORK}", "Кол-во должностей: " + count);
 
             using (var db = new DbModel(connectionString))
             {
@@ -235,8 +244,16 @@ namespace Integration.Frmp.library
 
             using (var db = new DbModel(connectionString))
             {
-                // очистим таблицу dbo.import_frmp_peoples перед новым импортом
-                db.ImportFrmpPeopless.Delete();
+                // предварительно очищаем таблицу импорта сотрудников
+                //SrvcLogger.Debug("{WORK}", "Чистим таблицу dbo.import_frmp_peoples");
+
+                //db.ImportFrmpPeopless.Delete();
+
+                // список импортируемых врачей
+                List<ImportFrmpPeoples> importPeoples = new List<ImportFrmpPeoples>();
+
+                // список связей людей с организациями
+                List<ImportFrmpOrgsPeoples> importPeopleOrgsLink = new List<ImportFrmpOrgsPeoples>();
 
                 for (int i = 0; i < employees.Count(); i++)
                 {
@@ -255,7 +272,7 @@ namespace Integration.Frmp.library
                     DateTime? birthDate = employees[i].Birthdate; // дата рождения
                     DateTime? modifyDate = employees[i].ChangeTime; // дата изменения записи
                     string snilsToCheck = employees[i].SNILS; // СНИЛС для проверки
-                    Guid orgOid = employees[i].UZ.ID; // идентификатор организации
+                    Guid orgId = employees[i].UZ.ID; // идентификатор организации
                     //string orgOid = employees[i].UZ.ID.ToString(); // идентификатор организации
                     string photo = null; // изображение
 
@@ -273,54 +290,121 @@ namespace Integration.Frmp.library
                         //}
                         #endregion
 
-                        // проверим существует ли запись с таким СНИЛС в таблице dbo.import_frmp_peoples
-                        var query = db.ImportFrmpPeopless.Where(w => w.CSnils.Equals(snils));
-                        bool isExist = query.Any();
+                        #region comments
+                        //// проверим существует ли запись с таким СНИЛС в таблице dbo.import_frmp_peoples
+                        //var query = db.ImportFrmpPeopless.Where(w => w.CSnils.Equals(snils));
+                        //bool isExist = query.Any();
 
-                        // записываем данные в таблицу dbo.import_frmp_peoples
-                        if (!isExist)
+                        //// записываем данные в таблицу dbo.import_frmp_peoples
+                        //if (!isExist)
+                        //{
+                        //    db.ImportFrmpPeopless
+                        //        .Value(v => v.Id, id)
+                        //        .Value(v => v.CSurname, surname)
+                        //        .Value(v => v.CName, name)
+                        //        .Value(v => v.CPatronymic, patroname)
+                        //        .Value(v => v.CSnils, snils)
+                        //        .Value(v => v.BSex, sex)
+                        //        .Value(v => v.DBirthdate, birthDate)
+                        //        .Value(v => v.DModify, modifyDate)
+                        //        .Value(v => v.XmlInfo, stringXml)
+                        //        .Value(v => v.CPhoto, photo)
+                        //        .Insert();
+                        //}
+
+
+                        //// записываем данные в таблицу dbo.import_frmp_orgs_peoples
+                        //var queryLink = db.ImportFrmpOrgsPeopless
+                        //        .Where(w => w.FGuid.Equals(orgId))
+                        //        .Where(w => w.FPeople.Equals(id));
+
+                        //// проверим существует ли связь сотрудника с организацией
+                        //bool isLinkExist = queryLink.Any();
+                        //if (!isLinkExist)
+                        //{
+                        //    db.ImportFrmpOrgsPeopless
+                        //        .Value(v => v.FGuid, orgId)
+                        //        .Value(v => v.FPeople, id)
+                        //        .Insert();
+                        //}
+                        #endregion
+
+                        #region trying buklcopy
+                        importPeoples.Add(new ImportFrmpPeoples
                         {
-                            db.ImportFrmpPeopless
-                                .Value(v => v.Id, id)
-                                .Value(v => v.CSurname, surname)
-                                .Value(v => v.CName, name)
-                                .Value(v => v.CPatronymic, patroname)
-                                .Value(v => v.CSnils, snils)
-                                .Value(v => v.BSex, sex)
-                                .Value(v => v.DBirthdate, birthDate)
-                                .Value(v => v.DModify, modifyDate)
-                                .Value(v => v.XmlInfo, stringXml)
-                                .Value(v => v.CPhoto, photo)
-                                .Insert();
-                        }
+                            Id = id,
+                            CSurname = surname,
+                            CName = name,
+                            CPatronymic = patroname,
+                            CSnils = snils,
+                            BSex = sex,
+                            DBirthdate = birthDate,
+                            DModify = modifyDate,
+                            XmlInfo = stringXml,
+                            CPhoto = photo
+                        });
 
-                        // записываем данные в таблицу dbo.import_frmp_orgs_peoples
-                        var queryLink = db.ImportFrmpOrgsPeopless
-                                .Where(w => w.FGuid.Equals(orgOid))
-                                .Where(w => w.FPeople.Equals(id));
-
-                        // проверим существует ли связь сотрудника с организацией
-                        bool isLinkExist = queryLink.Any();
-                        if (!isLinkExist)
+                        importPeopleOrgsLink.Add(new ImportFrmpOrgsPeoples
                         {
-                            db.ImportFrmpOrgsPeopless
-                                //.Value(v => v.FOid, orgOid)
-                                .Value(v => v.FGuid, orgOid)
-                                .Value(v => v.FPeople, id)
-                                .Insert();
-                        }
-
-                        if (i > 0 && i % 1000 == 0)
-                            SrvcLogger.Debug("{WORK}", string.Format("Импортированно {0} сотрудников из {1}", i, employees.Count()));
+                            FPeople = id,
+                            FOrg = orgId
+                        });
+                        #endregion
                     }
                     else
                     {
                         SrvcLogger.Error("{WORK}", string.Format("Неправильный формат СНИЛС для записи --> id: {0}, фамилия: {1}, имя: {2}, отчество: {3}, СНИЛС: {4}", id, surname, name, patroname, snilsToCheck));
                     }
-
                 }
-                SrvcLogger.Debug("{WORK}", "Данные по сотрудникам успешно добавлены в таблицу dbo.import_frmp_peoples");
-                SrvcLogger.Debug("{WORK}", "Данные связей сотрудников и организаций успешно добавлены в таблицу dbo.import_frmp_orgs_peoples");
+
+                try
+                {
+                    // уникальные сотрудники
+                    var distinctPeoples = (from p in importPeoples
+                                           select p).GroupBy(x => x.Id).Select(s => s.First()).ToArray();
+
+                    // кол-во уникальных сотрудников
+                    int countDistinctPeoples = distinctPeoples.Count();
+
+                    SrvcLogger.Debug("{WORK}", string.Format("Общее кол-во сотрудников {0}", importPeoples.Count()));
+                    SrvcLogger.Debug("{WORK}", string.Format("Кол-во уникальных сотрудников {0}", countDistinctPeoples));
+
+                    for (int i = 0; i < countDistinctPeoples; i += 1000)
+                    {
+                        var bulk = distinctPeoples.Skip(i).Take(1000);
+                        db.BulkCopy(bulk);
+                        SrvcLogger.Debug("{WORK}", string.Format("Импортированно {0} сотрудников из {1}", i, countDistinctPeoples));
+                    }
+                    SrvcLogger.Debug("{WORK}", "Данные по сотрудникам успешно добавлены в таблицу dbo.import_frmp_peoples");
+
+                    // уникальные связи сотрудников и организаций
+                    var distinctPeopleOrgLinks = (from l in importPeopleOrgsLink
+                                                  group l by new { l.FOrg, l.FPeople } into gl
+                                                  select new ImportFrmpOrgsPeoples
+                                                  {
+                                                      FPeople = gl.Key.FPeople,
+                                                      FOrg = gl.Key.FOrg
+                                                  });
+
+                    // кол-во уникальных связей сотрудников и организаций
+                    int countDistinctLinks = distinctPeopleOrgLinks.Count();
+
+                    SrvcLogger.Debug("{WORK}", string.Format("Общее кол-во связей сотрудников с организациями {0}", importPeopleOrgsLink.Count()));
+                    SrvcLogger.Debug("{WORK}", string.Format("Кол-во уникальных связей сотрудников с организациями {0}", countDistinctLinks));
+
+                    for (int i = 0; i < countDistinctLinks; i += 1000)
+                    {
+                        var bulk = distinctPeopleOrgLinks.Skip(i).Take(1000);
+                        db.BulkCopy(bulk);
+                        SrvcLogger.Debug("{WORK}", string.Format("Импортированно {0} связей сотрудников и организаций из {1}", i, countDistinctLinks));
+                    }
+                    SrvcLogger.Debug("{WORK}", "Данные связей сотрудников и организаций успешно добавлены в таблицу dbo.import_frmp_orgs_peoples");
+                }
+                catch (Exception e)
+                {
+                    SrvcLogger.Debug("{WORK}", string.Format("Ошибка при bulkcopy в dbo.import_frmp_peoples"));
+                    SrvcLogger.Debug("{WORK}", string.Format(e.ToString()));
+                }
             }
         }
 
@@ -332,47 +416,96 @@ namespace Integration.Frmp.library
         {
             using (var db = new DbModel(connectionString))
             {
-                int count = 0;
-                int postsCount = emplPosts.Count();
+                //int count = 0;
+                //int postsCount = emplPosts.Count();
+
+                // список связей сотрудников и должностей
+                List<ImportFrmpPeoplePostsLink> list = new List<ImportFrmpPeoplePostsLink>();
 
                 foreach (var item in emplPosts)
                 {
-                    count++;
+                    //count++;
                     foreach (var p in item.Posts)
                     {
-                        var isExists = db.ImportFrmpPeoplePostsLinks
-                            .Where(w => w.FPeople.Equals(item.Id))
-                            .Where(w => w.FEmployeePost.Equals(p.Post.ID))
-                            .Where(w => w.FOrgGuid.Equals(p.OrgId));
+                        #region comments
+                        //var isExists = db.ImportFrmpPeoplePostsLinks
+                        //    .Where(w => w.FPeople.Equals(item.Id))
+                        //    .Where(w => w.FEmployeePost.Equals(p.Post.ID))
+                        //    .Where(w => w.FOrgGuid.Equals(p.OrgId));
+
+                        //if (p.OrgId != Guid.Empty)
+                        //{
+                        //    if (!isExists.Any())
+                        //    {
+                        //        db.ImportFrmpPeoplePostsLinks
+                        //            .Value(v => v.FPeople, item.Id)
+                        //            .Value(v => v.FEmployeePost, p.Post.ID)
+                        //            .Value(v => v.NType, p.PositionType.ID)
+                        //            .Value(v => v.FOrgGuid, p.OrgId)
+                        //            .Insert();
+                        //    }
+                        //    else
+                        //    {
+                        //        db.ImportFrmpPeoplePostsLinks
+                        //            .Where(w => w.FPeople.Equals(item.Id))
+                        //            .Where(w => w.FEmployeePost.Equals(p.Post.ID))
+                        //            .Where(w => w.FOrgGuid.Equals(p.OrgId))
+                        //            .Set(u => u.NType, p.PositionType.ID)
+                        //            .Set(u => u.FOrgGuid, p.OrgId)
+                        //            .Update();
+                        //    }
+                        //}
+
+                        //if (count % 1000 == 0)
+                        //    SrvcLogger.Debug("{WORK}", string.Format("Обработанно {0} связей сотрудников и должностей", count));
+                        #endregion
 
                         if (p.OrgId != Guid.Empty)
                         {
-                            if (!isExists.Any())
+                            list.Add(new ImportFrmpPeoplePostsLink
                             {
-                                db.ImportFrmpPeoplePostsLinks
-                                    .Value(v => v.FPeople, item.Id)
-                                    .Value(v => v.FEmployeePost, p.Post.ID)
-                                    .Value(v => v.NType, p.PositionType.ID)
-                                    .Value(v => v.FOrgGuid, p.OrgId)
-                                    .Insert();
-                            }
-                            else
-                            {
-                                db.ImportFrmpPeoplePostsLinks
-                                    .Where(w => w.FPeople.Equals(item.Id))
-                                    .Where(w => w.FEmployeePost.Equals(p.Post.ID))
-                                    .Where(w => w.FOrgGuid.Equals(p.OrgId))
-                                    .Set(u => u.NType, p.PositionType.ID)
-                                    .Set(u => u.FOrgGuid, p.OrgId)
-                                    .Update();
-                            }
+                                FPeople = item.Id,
+                                FEmployeePost = p.Post.ID,
+                                NType = p.PositionType.ID,
+                                FOrgGuid = p.OrgId
+                            });
                         }
-
-                        if (count % 1000 == 0)
-                            SrvcLogger.Debug("{WORK}", string.Format("Обработанно {0} связей сотрудников и должностей", count));
                     }
                 }
-                SrvcLogger.Debug("{WORK}", "Данные по сотрудникам успешно добавлены в таблицу dbo.import_frmp_people_posts_link");
+
+                try
+                {
+                    // уникальные связи сотрудников и должностей в организациях
+                    var distinctLinks = (from l in list
+                                         group l by new { l.FPeople, l.FOrgGuid, l.FEmployeePost } into gl
+                                         select new ImportFrmpPeoplePostsLink
+                                         {
+                                             FPeople = gl.Key.FPeople,
+                                             FEmployeePost = gl.Key.FEmployeePost,
+                                             FOrgGuid = gl.Key.FOrgGuid,
+                                             NType = gl.First().NType
+                                         });
+
+                    // кол-во уникальных связей
+                    int countLinks = distinctLinks.Count();
+
+                    SrvcLogger.Debug("{WORK}", string.Format("Общее кол-во связей сотрудников и должностей в организациях {0}", list.Count()));
+                    SrvcLogger.Debug("{WORK}", string.Format("Кол-во уникальных связей сотрудников и должностей в организациях {0}", countLinks));
+
+                    for (int i = 0; i < countLinks; i += 1000)
+                    {
+                        var bulk = distinctLinks.Skip(i).Take(1000);
+                        db.BulkCopy(bulk);
+                        SrvcLogger.Debug("{WORK}", string.Format("Импортировано связей сотрудников и должностей {0} из {1}", i, countLinks));
+                    }
+
+                    SrvcLogger.Debug("{WORK}", "Данные по сотрудникам успешно добавлены в таблицу dbo.import_frmp_people_posts_link");
+                }
+                catch (Exception e)
+                {
+                    SrvcLogger.Debug("{WORK}", string.Format("Ошибка при bulkcopy в dbo.import_frmp_people_posts_link"));
+                    SrvcLogger.Debug("{WORK}", string.Format(e.ToString()));
+                }
             }
         }
 
@@ -383,6 +516,8 @@ namespace Integration.Frmp.library
         {
             using (var db = new DbModel(connectionString))
             {
+                db.CommandTimeout = 20000;
+
                 try
                 {
                     db.ImportFrmpEmployees();
@@ -393,7 +528,7 @@ namespace Integration.Frmp.library
                 }
                 catch (Exception e)
                 {
-                    SrvcLogger.Fatal("{WORK}", "Ошибка при обновлении таблицы dbo.content_people" + Environment.NewLine + " " + e.ToString());
+                    SrvcLogger.Fatal("{WORK}", "Ошибка при финализации" + Environment.NewLine + " " + e.ToString());
                 }
             }
         }
