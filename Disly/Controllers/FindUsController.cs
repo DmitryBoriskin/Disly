@@ -51,7 +51,7 @@ namespace Disly.Controllers
         {
             string _ViewName = (ViewName != String.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";
 
-            model.OrgItem = _repository.getOrgInfo();
+            model.OrgItem = _repository.getOrgInfo(null);
             model.Structures = _repository.getStructures();
 
             return View(_ViewName, model);

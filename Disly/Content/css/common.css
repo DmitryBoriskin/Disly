@@ -1573,7 +1573,7 @@ a.sitemap-plate.sitemap-plate-image {
 
 
 .adminlist_img_td{width: 110px;}
-.adminlist_img_wr{margin-right:20px;position:relative;top:-14px; min-height: 80px; display: block;}
+.adminlist_img_wr{margin-right:20px;position:relative;/*top:-14px;*/ min-height: 80px; display: block;}
 .adminlist_name{font-size:18px;font-weight:bold;}
 .adminlist_post {color: #808080; font-size: 14px; line-height: 18px;padding-top:3px;}
 .adminlist_phone{}
@@ -1713,4 +1713,4 @@ iframe.photo-gallery{display:none;}
 }
 .vacnacy_item_date{font-size:12px;color:#999;}
 
-.vacancy-single-desc{margin-bottom:20px;}
+.vacancy-single-desc{margin-bottom:20px;overflow:hidden;}

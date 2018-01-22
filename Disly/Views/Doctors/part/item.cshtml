@@ -2,19 +2,19 @@
 
 <div class="row">
     <div class="col-md-8">
-        <div>
-            <strong>Место работы: </strong>
-               @Model.DoctorsItem.EmployeeInfo.UZ.Name
-        </div>
+        @*<div>
+                <strong>Место работы: </strong>
+                   @Model.DoctorsItem.EmployeeInfo.UZ.Name
+            </div
 
-        @if (Model.DoctorsItem.StructureId != null && Model.DoctorsItem.DepartmentId != null)
-        {
-            string link = "/structure/" + Model.DoctorsItem.StructureId + "/" + Model.DoctorsItem.DepartmentId;
-            <div>
-                <strong>Отделение: </strong>
-                <a href="@link">@Model.DoctorsItem.DepartmentTitle</a>
-            </div> 
-        }
+            @if (Model.DoctorsItem.StructureId != null && Model.DoctorsItem.DepartmentId != null)
+            {
+                string link = "/structure/" + Model.DoctorsItem.StructureId + "/" + Model.DoctorsItem.DepartmentId;
+                <div>
+                    <strong>Отделение: </strong>
+                    <a href="@link">@Model.DoctorsItem.DepartmentTitle</a>
+                </div>
+            }>*@
 
         @if (!string.IsNullOrWhiteSpace(Model.DoctorsItem.GsUrl))
         {
@@ -28,15 +28,40 @@
             </div>
         }
 
-        <div>
-            <strong>Занимаемая должность: </strong>
+        <strong>Место работы: </strong>
+        <ol>
+            @if (Model.DoctorsItem.EmployeeInfo.EmployeeRecords != null && Model.DoctorsItem.EmployeeInfo.EmployeeRecords.Count() > 0)
+            {
+
+                var postsByOrg = Model.DoctorsItem.EmployeeInfo.EmployeeRecords.Where(p => p.Organisation != null).Any() ?
+                    Model.DoctorsItem.EmployeeInfo.EmployeeRecords.Where(p => p.Organisation != null).GroupBy(p => p.Organisation) : null;
+                if (postsByOrg != null)
+                {
+                    foreach (var postByOrg in postsByOrg)
+                    {
+
+                        var org = postByOrg.Where(p => p.Organisation == postByOrg.Key).First();
+                        <li>
+                            <b>@(org.Organisation):</b><br />
+
+                            @foreach (var p in postByOrg)
+                            {
+                                <strong>Отделение: </strong> @p.Unit <br />
+                                <span> -@p.RecordPost.Name (@p.RecordPositionType.Name) </span><br />
+                            }
+                        </li>
+                    }
+                }
+            }
+
+            @*<strong>Занимаем должность: </strong>
             <ol>
                 @foreach (var p in Model.DoctorsItem.EmployeeInfo.EmployeeRecords)
                 {
                     <li>@p.RecordPost.Name</li>
                 }
-            </ol>
-        </div>
+            </ol>*@
+        </ol>
 
         <div>
             <strong>Дата рождения: </strong>

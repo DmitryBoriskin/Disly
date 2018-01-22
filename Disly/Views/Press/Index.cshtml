@@ -4,6 +4,8 @@
     {
         Layout = "/views/_portal/shared/_layout.cshtml";
     }
+
+    string _allactiv = (String.IsNullOrEmpty(ViewBag.CurrentCategory)) ? "class=active" : "";
 }
 <div class="type-page">
     <div class="container">
@@ -18,14 +20,14 @@
                 else
                 {
                     <ul class="nav nav-pills tabs">
-                        @{
-                            string _allactiv = (String.IsNullOrEmpty(ViewBag.CurrentCategory)) ? "class=active" : "";
-                        }
                         <li @_allactiv><a href="/press">Все</a></li>
-                        @foreach (var item in Model.Group)
+                        @if (Model.Group != null && Model.Group.Count() > 0)
                         {
-                            string _class = (item.Alias == ViewBag.CurrentCategory) ? "class=active" : "";
-                            <li @_class><a href="/press/@item.Alias">@item.Title</a></li>
+                            foreach (var item in Model.Group)
+                            {
+                                string _class = (item.Alias == ViewBag.CurrentCategory) ? "class=active" : "";
+                                <li @_class><a href="/press/@item.Alias">@item.Title</a></li>
+                            }
                         }
                     </ul>
 

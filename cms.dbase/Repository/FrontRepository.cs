@@ -623,14 +623,14 @@ namespace cms.dbase
         {
             using (var db = new CMSdb(_context))
             {
-                var data = db.content_documentss.Where(w => w.id_page == id)
+                var data = db.content_documentss.Where(w => w.f_link == id)
                  .OrderBy(o => o.n_sort)
                  .Select(s => new DocumentsModel
                  {
                      id = s.id,
                      Title = s.c_title,
                      FilePath = s.c_file_path,
-                     idPage = s.id_page
+                     LinkId = s.f_link
                  });
 
                 if (data.Any())
@@ -814,14 +814,19 @@ namespace cms.dbase
                             query = query.Where(w => w.d_date <= DateTime.Now);
                         }
 
-                        var category = db.content_materials_groupss.Where(w => w.c_alias == filter.Category).First().id;
-                        query = query
-                                    .Join(
-                                            db.content_materials_groups_links
-                                            .Where(o => o.f_group == category),
-                                            e => e.id, o => o.f_material, (o, e) => o
-                                         );
+                        var category = db.content_materials_groupss.Where(w => w.c_alias == filter.Category);
+                        if(category.Any())
+                        {
+                            var cat = category.First().id;
+                            query = query
+                                        .Join(
+                                                db.content_materials_groups_links
+                                                .Where(o => o.f_group == cat),
+                                                e => e.id, o => o.f_material, (o, e) => o
+                                             );
                         //query = query.Where(w => w.d_date <= DateTime.Now && w.);
+                        }
+                        
                     }
 
                     query = query.OrderByDescending(w => w.d_date);
@@ -1354,8 +1359,9 @@ namespace cms.dbase
                         {
                             Id = ep2.ep.id,
                             Name = ep2.ep.c_name,
+                            OrgId = ep2.p.o.id,
                             OrgTitle = !string.IsNullOrEmpty(ep2.p.o.c_title_short)? ep2.p.o.c_title_short: ep2.p.o.c_title,
-                            OrgUrl = !string.IsNullOrEmpty(ep2.p.s.c_alias)? getSiteDefaultDomain(ep2.p.s.c_alias) : null,
+                            OrgUrl = (ep2.p.s != null && !string.IsNullOrEmpty(ep2.p.s.c_alias))? getSiteDefaultDomain(ep2.p.s.c_alias) : null,
                         }).ToArray()
                     });
 
@@ -1497,15 +1503,16 @@ namespace cms.dbase
         /// </summary>
         /// <param name="domain"></param>
         /// <returns></returns>
-        public override OrgsModel getOrgInfo()
+        public override OrgsModel getOrgInfo(string siteId)
         {
-            string domain = _domain;
+            string domain = !string.IsNullOrEmpty(siteId)? siteId: _domain;
             using (var db = new CMSdb(_context))
             {
                 var data = db.cms_sitess.Where(w => w.c_alias == domain)
                              .Join(db.content_orgss, e => e.f_content, o => o.id, (e, o) => o)
                              .Select(s => new OrgsModel
                              {
+                                 Title = !string.IsNullOrEmpty(s.c_title_short)? s.c_title_short: s.c_title,
                                  Address = s.c_adress,
                                  Phone = s.c_phone,
                                  Fax = s.c_fax,
@@ -1521,6 +1528,7 @@ namespace cms.dbase
                 return null;
             }
         }
+
 
         /// <summary>
         /// Получем список голосования
@@ -2723,22 +2731,30 @@ namespace cms.dbase
         {
             using (var db = new CMSdb(_context))
             {
-                var query = db.content_vacanciess.AsQueryable();
-                query = query.Where(w => (w.f_site == _domain && w.b_disabled == false));
+                var query = db.content_vacanciess
+                     .Where(w => w.b_disabled == false);
+                
+                if(!string.IsNullOrEmpty(filter.Domain))
+                {
+                    query = query.Where(w => w.f_site == filter.Domain);
+                }
+
                 if (filter.Date != null)
                 {
                     query = query.Where(w => w.d_date >= filter.Date);
                 }
-                query = query.OrderBy(o => o.d_date);
+
                 if (!string.IsNullOrWhiteSpace(filter.SearchText))
                 {
                     query = query.Where(w =>
-                                            (
-                                            w.c_profession.Contains(filter.SearchText) ||
-                                            w.c_post.Contains(filter.SearchText) ||
-                                            w.c_desc.Contains(filter.SearchText)
-                                          ));
+                                (
+                                w.c_profession.Contains(filter.SearchText) ||
+                                w.c_post.Contains(filter.SearchText) ||
+                                w.c_desc.Contains(filter.SearchText)
+                                ));
                 }
+
+                query = query.OrderByDescending(o => o.d_date);
 
                 var vacancyList = query
                             .Skip(filter.Size * (filter.Page - 1))
@@ -2750,7 +2766,10 @@ namespace cms.dbase
                                 Post = s.c_post,
                                 Desc = s.c_desc,
                                 Date = s.d_date,
-                                Salary = s.c_salary
+                                Salary = s.c_salary,
+                                OrgName = getOrgInfo(s.f_site).Title,
+                                OrgUrl = getSiteDefaultDomain(s.f_site),
+                                Temporarily = s.b_temporarily
                             });
 
                 if (vacancyList.Any())
@@ -2790,7 +2809,9 @@ namespace cms.dbase
                         Сonditions = s.с_conditions,
                         Temporarily = s.b_temporarily,
                         Date = s.d_date,
-                        Salary = s.c_salary
+                        Salary = s.c_salary,
+                        OrgName = getOrgInfo(s.f_site).Title,
+                        OrgUrl = getSiteDefaultDomain(s.f_site)
                     }).Single();
                     return data;
                 }

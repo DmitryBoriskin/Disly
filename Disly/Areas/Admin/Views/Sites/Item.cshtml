@@ -31,24 +31,29 @@
                     <table class="table">
                         <thead>
                             <tr>
-                                <th>Основной</th>
-                                <th>Доменное имя</th>
+                                <th>Основной домен</th>
+                                <th width="90%">Доменное имя</th>
                                 <th>&nbsp;</th>
                             </tr>
                         </thead>
                         <tbody>
                        @foreach (var item in Model.Item.DomainList)
                         {
-                          
-                                <tr>
-                                    <td>@Html.CheckBoxFor(m => m.Item.DomainList[i].IsDefault, new { @class = "checkbox", @title = "", @data_toggle = "toggle", @data_off = "Нет", @data_on = "Да", @data_onstyle = "success", @data_offstyle = "danger", @data_width = "50" })</td>
-                                    <td>@item.DomainName</td>
-                                    <td class="text-right">
-                                        <span id="domain_@(item.DomainName)" data-container="body" data-toggle="popover" data-placement="left" data-content=""></span>
-                                        <a class="del_domain" data-id="@item.id" data-domain-name="@item.DomainName" data-url="/admin/orgs/DelPhoneDepart" data-init="false"></a>
-                                    </td>
-                                </tr>
-                           i++;
+                            <tr>
+                                <td>
+                                    <div class="host-chkbx-div" data-domain-id="@item.id">
+                                       @* @Html.CheckBoxFor(m => m.Item.DomainList[i].IsDefault, new { @class = "checkbox", @title = "", @data_toggle = "toggle", @data_off = "Нет", @data_on = "Да", @data_onstyle = "success", @data_offstyle = "danger", @data_width = "50" })*@
+                                        <input name="domainName" type="checkbox" class = "checkbox" title = "" data-toggle = "toggle" data-off = "Нет" data-on = "Да" data-onstyle = "success" data-offstyle = "danger" data-width = "50" @(item.IsDefault? "checked":"")/>
+                                    </div>
+                                </td>
+
+                                <td>@item.DomainName</td>
+                                <td class="text-right">
+                                    <span id="domain_@(item.DomainName)" data-container="body" data-toggle="popover" data-placement="left" data-content=""></span>
+                                    <a class="del_domain" data-id="@item.id" data-domain-name="@item.DomainName" data-url="/admin/orgs/DelPhoneDepart" data-init="false"></a>
+                                </td>
+                            </tr>
+                            i++;
                        }
                         </tbody>
                     </table>

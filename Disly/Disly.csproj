@@ -918,6 +918,7 @@
     <Content Include="Views\OrgGsMembers\Index.cshtml" />
     <Content Include="Views\_spec\shared\_Layout.cshtml" />
     <Content Include="Views\_spec\home\Index.cshtml" />
+    <Content Include="Views\Shared\part\attachedFiles.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

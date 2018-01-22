@@ -59,6 +59,8 @@ namespace Disly.Controllers
             string _ViewName = (ViewName != String.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";
 
             var filter = getFilter();
+            if (Domain == "main")
+                filter.Domain = null;
             model.List = _repository.getVacancy(filter);
 
             ViewBag.Filter = filter;
@@ -77,7 +79,7 @@ namespace Disly.Controllers
             string _ViewName = (ViewName != String.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";
 
             model.Item = _repository.getVacancyItem(id);
-
+           
             if (model.Item != null)
             {
                 if (model.Breadcrumbs != null)
@@ -88,6 +90,7 @@ namespace Disly.Controllers
                         Url = ""
                     });
                 }
+                model.Documents = _repository.getAttachDocuments(id);
             }
             else
                 return new HttpNotFoundResult();
