@@ -129,6 +129,7 @@ namespace cms.dbModel.entity
         /// Признак импортированности материала из рсс ленты
         /// </summary>
         public bool ImportRss { get; set; }
+  
         //-------------------------------------------------------------
         /// <summary>
         /// Группа
@@ -235,6 +236,7 @@ namespace cms.dbModel.entity
     }
     public class RssItem
     {
+        public Guid id { get; set; }
         public string title { get; set; }
         public string link { get; set; }
         public DateTime pubDate { get; set; }
@@ -243,5 +245,7 @@ namespace cms.dbModel.entity
         public string yandex_genre { get; set; }
         public string category { get; set; }
         public string enclosure { get; set; }
+        public bool New { get; set; }
+        public string RssGuid { get; set; }
     }
 }

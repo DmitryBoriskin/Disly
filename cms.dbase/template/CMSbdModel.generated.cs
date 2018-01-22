@@ -1310,6 +1310,7 @@ namespace cms.dbase.models
 		[Column,        Nullable] public string c_file_path { get; set; } // varchar(1024)
 		[Column,     NotNull    ] public Guid   id_page     { get; set; } // uniqueidentifier
 		[Column,     NotNull    ] public int    n_sort      { get; set; } // int
+		[Column,     NotNull    ] public Guid   f_link      { get; set; } // uniqueidentifier
 
 		#region Associations
 
@@ -1502,6 +1503,7 @@ namespace cms.dbase.models
 		[Column,        Nullable] public string   c_preview_source      { get; set; } // varchar(128)
 		[Column,        Nullable] public int?     n_old_id              { get; set; } // int
 		[Column,     NotNull    ] public bool     b_rss_import          { get; set; } // bit
+		[Column,        Nullable] public Guid?    b_rss_guid            { get; set; } // uniqueidentifier
 
 		#region Associations
 
@@ -2007,6 +2009,8 @@ namespace cms.dbase.models
 		[Column,        Nullable] public string   c_desc           { get; set; } // varchar(1024)
 		[Column,        Nullable] public string   c_keyw           { get; set; } // varchar(512)
 		[Column,        Nullable] public string   c_preview_source { get; set; } // varchar(128)
+		[Column,        Nullable] public string   c_url            { get; set; } // varchar(1024)
+		[Column,        Nullable] public string   c_url_name       { get; set; } // varchar(512)
 
 		#region Associations
 
