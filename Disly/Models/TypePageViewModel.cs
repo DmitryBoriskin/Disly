@@ -7,7 +7,7 @@ namespace Disly.Models
     /// </summary>
     public class TypePageViewModel : PageViewModel
     {         
-        public SiteMapModel Item { get; set; }        
+        public SiteMapModel Item { get; set; }
         /// <summary>
         /// Прикрепленные документы
         /// </summary>

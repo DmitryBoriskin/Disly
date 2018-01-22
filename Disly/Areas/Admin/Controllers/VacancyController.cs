@@ -52,6 +52,8 @@ namespace Disly.Areas.Admin.Controllers
         public ActionResult Index(string category, string type)
         {
             // Наполняем модель данными
+            if (Domain == "main")
+                filter.Domain = null;
             model.List = _cmsRepository.getVacanciesList(filter);
             return View(model);
         }

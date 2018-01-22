@@ -1214,6 +1214,50 @@ namespace cms.dbase
         }
 
         /// <summary>
+        /// Делаем домен по умолчанию
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public override bool setDomainDefault(Guid id)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                using (var tran = db.BeginTransaction())
+                {
+                    var data = db.cms_sites_domainss
+                                    .Where(w => w.id == id);
+
+                    if (data.Any())
+                    {
+                        string domainName = data
+                                            .Select(s => s.c_domain)
+                                            .SingleOrDefault();
+
+                        data.Set(p => p.b_default, true)
+                            .Update();
+
+                        //логирование
+                        var log = new LogModel()
+                        {
+                            Site = _domain,
+                            Section = LogSection.Sites,
+                            Action = LogAction.update,
+                            PageId = id,
+                            PageName = domainName,
+                            UserId = _currentUserId,
+                            IP = _ip,
+                        };
+                        insertLog(log);
+
+                        tran.Commit();
+                        return true;
+                    }
+                    return false;
+                }
+
+            }
+        }
+        /// <summary>
         /// Служит для определения идентификатора сайта
         /// </summary>
         /// <param name="ContentId">идентификатор контента</param>

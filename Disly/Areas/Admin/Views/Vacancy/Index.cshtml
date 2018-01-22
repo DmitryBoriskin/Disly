@@ -14,33 +14,28 @@
 
                 string disabled = (Item.Disabled) ? "disabled" : "";
 
-                <div class="list-item @disabled">
-                    <div class="li-desc">
-                        <a title="@Item." class="li-caption" href="/admin/vacancy/item/@Item.Id/@ViewBag.urlQuery">
+                <div class="row list-item @disabled">
+                    <div class="col-md-1 li-desc">@Convert.ToDateTime(Item.Date).ToString("dd.MM.yyyy")</div>
+                    <div class="col-md-11 li-desc">
+                        <a title="@Item.Post" class="li-caption" href="/admin/vacancy/item/@Item.Id/@ViewBag.urlQuery">
+                            @Item.Post ,
+                            
                             @if (!string.IsNullOrEmpty(Item.Profession))
                             {
-                                @Item.Profession
-                                if (!string.IsNullOrEmpty(Item.Post))
-                                { <span>,</span>}
-                            }
-                            @if (!string.IsNullOrEmpty(Item.Post))
-                            {
-                                @Item.Post
+                               @Item.Profession
                             }
                         </a>
-                        <br />
-                        <span>Дата: </span> @Convert.ToDateTime(Item.Date).ToString("dd.MM.yyyy")
-                        <br />
-                        <span>Описание</span>
-                        @if (!string.IsNullOrEmpty(Item.Desc) && Item.Desc.Length > maxChars)
-                        {
-                            @Html.Raw(Item.Desc.Substring(0, maxChars))
-                            <span> ...</span>
-                        }
-                        else
-                        {
-                            @Html.Raw(Item.Desc)
-                        }
+                        <p>
+                            @if (!string.IsNullOrEmpty(Item.Desc) && Item.Desc.Length > maxChars)
+                            {
+                                @Html.Raw(Item.Desc.Substring(0, maxChars))
+                                <span> ...</span>
+                            }
+                            else
+                            {
+                                @Html.Raw(Item.Desc)
+                            }
+                        </p>
                     </div>
                 </div>
             }

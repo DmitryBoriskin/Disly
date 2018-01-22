@@ -9,5 +9,9 @@ namespace Disly.Models
     {
         public VacanciesList List { get; set; }
         public VacancyModel Item { get; set; }
+        /// <summary>
+        /// Прикрепленные документы
+        /// </summary>
+        public DocumentsModel[] Documents { get; set; }
     }
 }

@@ -54,7 +54,7 @@ namespace cms.dbModel
         public abstract StructureModel[] getDeparatamentsSelectList(); //string domain
         public abstract PeoplePost[] getPeoplePosts();//string domain
 
-        public abstract OrgsModel getOrgInfo(); //string domain
+        public abstract OrgsModel getOrgInfo(string siteId);
         public abstract string getOid();
         public abstract OrgsAdministrative[] getAdministrative(string domain);
 

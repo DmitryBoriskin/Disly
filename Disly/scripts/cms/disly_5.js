@@ -282,9 +282,51 @@ $(document).ready(function () {
         });
 
     });
+    //Домен по умолчанию
+    $(".host-chkbx-div label").on("click", function (e) {
+        var el = $(this).closest(".input-group").children().first();
+        //текущее значение кастомного чекбокса, нам нужно измененное
+        var isDefault = el.hasClass("off") ? true : false;
+        var idDomain = $(this).closest(".host-chkbx-div").data("domainId");
+
+        if (isDefault) {
+            //Видимость переключения остальных чекбоксов как в radio
+            $(".host-chkbx-div label").not($(this)).closest(".input-group").children().addClass("off");
+
+            try {
+
+                $.ajax({
+                    method: "POST",
+                    url: "/admin/sites/SetDomainDefault",
+                    async: false,
+                    data: { id: idDomain },
+                })
+                    .done(function (response) {
+                        //elTooltip.tooltip('show');
+                    })
+                    .fail(function (jqXHR, status) {
+                        console.log("Ошибка" + " " + status + " " + jqXHR);
+                        //elTooltip.attr("title", "Ошибка сохранения");
+                    })
+                    .always(function (response) {
+                        //setTimeout(function () {
+                        //    //content.fadeOut("slow");
+                        //    elTooltip.tooltip('hide');
+                        //}, 1000);
+                        location.reload();
+                    });
+            }
+            catch (ex) {
+                console.log(ex);
+            }
+        }
+        else {
+            location.reload();
+        }
+    });
 
     //удаление домена
-    $('.del_domain').click(function (e) {
+    $('.del_domain').on("click", function (e) {
         e.preventDefault();
         $(".load_page").remove();
 

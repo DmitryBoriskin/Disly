@@ -300,11 +300,22 @@ namespace Disly.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        public ActionResult SetDomainDefault(Guid id)
+        {
+            var res = _cmsRepository.setDomainDefault(id);
+            if (res)
+                return Json("Success");
+            
+            return Json("An Error Has occourred");
+        }
+
+        [HttpPost]
         public ActionResult DelDomain(Guid id)
         {
             _cmsRepository.deleteDomain(id);
             return null;
         }
+
         [HttpPost]
         [MultiButton(MatchFormKey = "action", MatchFormValue = "cancel-btn")]
         public ActionResult Cancel()

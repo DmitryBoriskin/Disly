@@ -53,55 +53,55 @@
         }
 
         @*<div class="row">
-            <div class="col-xs-12">
-                @if (Model.DoctorsList != null)
-                {
-                    <table class="table">
-                        <tr>
-                            <th>Изображение</th>
-                            <th>ФИО</th>
-                            <th>Должность</th>
-                            <th>Запись</th>
-                        </tr>
-                        @foreach (var item in Model.DoctorsList)
-                        {
-                            string link = "/" + ViewBag.ControllerName + "/" + item.Id;
-                            string photo = !string.IsNullOrWhiteSpace(item.Photo) ? item.Photo
-                                        : "/Content/img/nophoto.jpg";
+                <div class="col-xs-12">
+                    @if (Model.DoctorsList != null)
+                    {
+                        <table class="table">
                             <tr>
-                                <td>
-                                    <a href="@link">
-                                        <img src="@photo" class="img-circle img-person-list" alt="@item.FIO" />
-                                    </a>
-                                </td>
-                                <td><a href="@link">@item.FIO</a></td>
-                                <td>
-                                    @if (item.Posts != null)
-                                    {
-                                        string posts = string.Empty;
-
-                                        foreach (var p in item.Posts)
-                                        {
-                                            <p>@p.Name</p>
-                                        }
-                                    }
-                                </td>
-                                <td>
-                                    @if (item.IsRedirectUrl)
-                                    {
-                                        <a target="_blank" href="/RedirectRegistry/Doctors/@item.Id/?oid=@Model.Oid">Расписание</a>
-                                    }
-                                    else
-                                    {
-                                        <p>По графику</p>
-                                    }
-                                </td>
+                                <th>Изображение</th>
+                                <th>ФИО</th>
+                                <th>Должность</th>
+                                <th>Запись</th>
                             </tr>
-                        }
-                    </table>
-                }
-            </div>
-        </div>*@
+                            @foreach (var item in Model.DoctorsList)
+                            {
+                                string link = "/" + ViewBag.ControllerName + "/" + item.Id;
+                                string photo = !string.IsNullOrWhiteSpace(item.Photo) ? item.Photo
+                                            : "/Content/img/nophoto.jpg";
+                                <tr>
+                                    <td>
+                                        <a href="@link">
+                                            <img src="@photo" class="img-circle img-person-list" alt="@item.FIO" />
+                                        </a>
+                                    </td>
+                                    <td><a href="@link">@item.FIO</a></td>
+                                    <td>
+                                        @if (item.Posts != null)
+                                        {
+                                            string posts = string.Empty;
+
+                                            foreach (var p in item.Posts)
+                                            {
+                                                <p>@p.Name</p>
+                                            }
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (item.IsRedirectUrl)
+                                        {
+                                            <a target="_blank" href="/RedirectRegistry/Doctors/@item.Id/?oid=@Model.Oid">Расписание</a>
+                                        }
+                                        else
+                                        {
+                                            <p>По графику</p>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </table>
+                    }
+                </div>
+            </div>*@
     </div>
     <div class="col-md-1"></div>
     <div class="col-md-3">

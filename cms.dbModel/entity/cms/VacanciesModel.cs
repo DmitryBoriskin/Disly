@@ -19,31 +19,32 @@ namespace cms.dbModel.entity
         [Required(ErrorMessage = "Поле не должно быть пустым.")]
         public DateTime Date { get; set; }
         /// <summary>
-        /// Профессия varchar(100)
-        /// </summary>
-        [Required(ErrorMessage = "Поле не должно быть пустым.")]
-        public string Profession { get; set; }
-        /// <summary>
         /// Должность varchar(512)
         /// </summary>
+        [Required(ErrorMessage = "Поле не должно быть пустым.")]
         public string Post { get; set; }
         /// <summary>
-        /// Образование varchar(2048)
+        /// Профессия varchar(100)
         /// </summary>
-        public string Сonditions { get; set; }
+        public string Profession { get; set; }
         /// <summary>
-        /// Опыт/Стаж varchar(2048)
+        /// Должностные обязанности varchar(2048)
+        /// </summary>
+        public string Desc { get; set; }
+        /// <summary>
+        /// <summary>
+        /// Требования varchar(2048)
         /// </summary>
         public string Experience { get; set; }
+        /// <summary>
+        /// Условия
+        /// </summary>
+        public string Сonditions { get; set; }
         /// <summary>
         /// Зарплата varchar(100)
         /// </summary>
         public string Salary { get; set; }
-        /// <summary>
-        /// Описание varchar(2048)
-        /// </summary>
-        public string Desc { get; set; }
-        /// <summary>
+        
         /// Замещение
         /// </summary>
         public bool Temporarily { get; set; }
@@ -51,5 +52,15 @@ namespace cms.dbModel.entity
         /// Неактивное
         /// </summary>
         public bool Disabled { get; set; }
+
+        /// <summary>
+        /// Организация
+        /// </summary>
+        public string OrgName { get; set; }
+
+        /// <summary>
+        /// Ссылка на сайт организации
+        /// </summary>
+        public string OrgUrl { get; set; }
     }
 }

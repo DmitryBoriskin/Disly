@@ -17,14 +17,14 @@ namespace cms.dbase
         {
             using (var db = new CMSdb(_context))
             {
-                var data = db.content_documentss.Where(w => w.id_page == id)
+                var data = db.content_documentss.Where(w => w.f_link == id)
                     .OrderBy(o => o.n_sort)
                     .Select(s => new DocumentsModel
                     {
                         id = s.id,
                         Title = s.c_title,
                         FilePath = s.c_file_path,
-                        idPage = s.id_page
+                        LinkId = s.f_link
                     })
 
                     ;
@@ -35,20 +35,20 @@ namespace cms.dbase
 
         public override bool insDocuments(DocumentsModel insert)
         {
-            int MaxPermit = 0;
             using (var db = new CMSdb(_context))
             {
                 var queryMaxSort = db.content_documentss
-                     .Where(w => w.id_page==insert.idPage)                     
+                     .Where(w => w.f_link == insert.LinkId)
                      .Select(s => s.n_sort);
 
                 int maxSort = queryMaxSort.Any() ? queryMaxSort.Max() + 1 : 1;
                 
-                MaxPermit = MaxPermit + 1;
                 var data = db.content_documentss
                     .Value(v => v.c_title, insert.Title)
                     .Value(v => v.c_file_path, insert.FilePath)
-                    .Value(v => v.id_page, insert.idPage)
+                    .Value(v => v.f_link, insert.LinkId)
+#warning Убрать столбец и внешний ключ 
+                    .Value(v => v.id_page, Guid.Parse("12bbcf4f-1e4f-4c9d-bb73-a11c0d024d72"))
                     .Value(v => v.n_sort, maxSort)
                     .Insert();
                 return true;
@@ -99,27 +99,50 @@ namespace cms.dbase
         {
             using (var db = new CMSdb(_context))
             {
-                var data = db.content_documentss.Where(w => w.id == id).Select(s => new DocumentsModel { idPage = s.id_page, Permit = s.n_sort }).First();
-                var PageId = data.idPage;
+                using (var tran = db.BeginTransaction())
+                {
+                    var query = db.content_documentss
+                        .Where(w => w.id == id);
 
-                if (num > data.Permit)
-                {
-                    db.content_documentss.Where(w => w.id_page == PageId && w.n_sort > data.Permit && w.n_sort <= num)
-                        .Set(p => p.n_sort, p => p.n_sort - 1)
+                    if (!query.Any())
+                        return false;
+
+                    var data = query
+                        .Select(s => new DocumentsModel()
+                        {
+                            LinkId = s.f_link,
+                            Permit = s.n_sort
+                        })
+                        .First();
+
+                    var PageId = data.LinkId;
+
+                    if (num > data.Permit)
+                    {
+                        db.content_documentss
+                            .Where(w => w.id_page == PageId)
+                            .Where(w => w.n_sort > data.Permit)
+                            .Where(w => w.n_sort <= num)
+                            .Set(p => p.n_sort, p => p.n_sort - 1)
+                            .Update();
+                    }
+                    else
+                    {
+                        db.content_documentss
+                            .Where(w => w.id_page == PageId)
+                            .Where(w => w.n_sort < data.Permit)
+                            .Where(w => w.n_sort >= num)
+                            .Set(p => p.n_sort, p => p.n_sort + 1)
+                            .Update();
+                    }
+
+                    db.content_documentss
+                        .Where(w => w.id == id)
+                        .Set(s => s.n_sort, num)
                         .Update();
                 }
-                else
-                {
-                    db.content_documentss.Where(w => w.id_page == PageId && w.n_sort < data.Permit && w.n_sort >= num)
-                        .Set(p => p.n_sort, p => p.n_sort + 1)
-                        .Update();
-                }
-                db.content_documentss
-                    .Where(w => w.id == id)
-                    .Set(s => s.n_sort, num)
-                    .Update();
+                return true;
             }
-            return true;
         }
 
     }
