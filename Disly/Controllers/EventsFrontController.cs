@@ -25,6 +25,7 @@ namespace Disly.Controllers
                 SiteMapArray = siteMapArray,
                 BannerArray = bannerArray,
                 CurrentPage = currentPage,
+                Child = _repository.getSiteMapChild(currentPage.Id),
                 Breadcrumbs = new List<Breadcrumbs>()
             };
 

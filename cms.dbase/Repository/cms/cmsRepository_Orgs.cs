@@ -1582,7 +1582,6 @@ namespace cms.dbase
             }
         }
 
-#warning удалить дублирование
         /// <summary>
         /// Отметим выбранные организации
         /// <param name="id">Идентификатор</param>

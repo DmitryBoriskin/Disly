@@ -1301,8 +1301,7 @@ namespace cms.dbase
                 //              select new { p, pol, s });
                 var people = (from p in db.content_peoples
                               join pol in db.content_people_org_links on p.id equals pol.f_people
-#warning Раскоментировать, когда будет исправлена ошибка в интеграции (пользователи прикрепленные к организации в таблицах не соответствуют друг другу в db.content_people_org_links и db.content_people_employee_posts_links, и все врачи почему-то уволенные)
-                              //where !pol.b_dismissed
+                              where !pol.b_dismissed
                               join o in db.content_orgss on pol.f_org equals o.id
                               join s in db.cms_sitess on pol.f_org equals s.f_content into ps
                               from s in ps.DefaultIfEmpty()
@@ -2087,8 +2086,7 @@ namespace cms.dbase
 
                 var doctors = (from p in people
                                join pol in db.content_people_org_links on p.id equals pol.f_people
-#warning Раскоментировать, когда будет исправлена ошибка в интеграции (пользователи прикрепленные к организации в таблицах не соответствуют друг другу в db.content_people_org_links и db.content_people_employee_posts_links, и все врачи почему-то уволенные)
-                               //where !pol.b_dismissed
+                               where !pol.b_dismissed
                                join o in db.content_orgss on pol.f_org equals o.id
                                join s in db.cms_sitess on o.id equals s.f_content into ss
                                from s in ss.DefaultIfEmpty()

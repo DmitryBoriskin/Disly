@@ -61,6 +61,11 @@ fieldset {
     vertical-align: top;
     border-top: 1px solid
 }
+.page-info{
+    border-left: 5px solid #ccc;
+    padding-left: 10px;
+    margin-bottom:36px;
+}
 
 @media (min-width: 1200px) {
     .container {
@@ -807,6 +812,7 @@ a.sitemap-plate.sitemap-plate-image {
     border: 1px solid #d9d9d9;
     position: relative;
     padding: 20px 25px 20px;
+    margin-bottom:36px;
 }
 .child_sitemap:before{
     content: '';
@@ -877,7 +883,7 @@ a.sitemap-plate.sitemap-plate-image {
 }
 
 .dop-block_info {
-    margin-bottom: 24px;
+    margin-bottom: 36px; /*24px;*/
     font-size: 14px;
 }
 

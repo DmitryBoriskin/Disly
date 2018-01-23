@@ -16,41 +16,33 @@
                     <div class="row">
                         <div class="col-md-3 col-md-push-9">
                             <div class="dop-block">
+                                <div class="dop-block_info">
+                                    @if (Model.Item.Post != null)
+                                    {
 
-                                @if (Model.Item.Post != null)
-                                {
-                                    <div class="dop-block_info">
                                         <label>Должность: </label>
                                         <div>@Model.Item.Post</div>
-                                    </div>
-                                }
-                                @if (Model.Item.Profession != null)
-                                {
-                                    <div class="dop-block_info">
+                                    }
+                                    @if (Model.Item.Profession != null)
+                                    {
                                         <label>Профессия: </label>
                                         <div>@Model.Item.Profession</div>
-                                    </div>
-                                }
+                                    }
 
-                                @if (Model.Item.Salary != null)
-                                {
-                                    <div class="dop-block_info">
+                                    @if (Model.Item.Salary != null)
+                                    {
                                         <label>Зарплата</label>
                                         <div>@Model.Item.Salary</div>
-                                    </div>
-                                }
-                                else
-                                {
-                                    <div class="dop-block_info">
+                                    }
+                                    else
+                                    {
                                         <label>Зарплата</label>
                                         <div>з/п не указана</div>
-                                    </div>
-                                }
-                                <div class="dop-block_info">
+                                    }
                                     <label>Дата публикации</label>
                                     <div>@Model.Item.Date.ToString("dd.MM.yyyy")</div>
                                 </div>
-                                <br />
+
                                 <a class="btn_print" onClick="window.print()">Распечатать</a><br />
                                 <a class="btn_share" title="Поделиться" href="../../../../#">Поделиться</a>
                             </div>

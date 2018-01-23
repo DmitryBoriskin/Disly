@@ -45,16 +45,20 @@
                 }
                 break;
             default:
+                <div class="row">
+                    <div class="col-md-12 page-info">
+                        @Html.Raw(Model.CurrentPage.Text)
+                    </div>
+                </div>
                 if (Model.MainSpec != null)
                 {
-                    <div class="col-md-12">
-                        <h3>@Model.MainSpec.Name</h3>
-                        @Html.Raw(Model.MainSpec.Desc)
+                    <div class="row">
+                        <div class="col-md-12 page-info">
+                            @Html.Raw(Model.MainSpec.Desc)
+                        </div>
                     </div>
                 }
-                <div class="col-md-12">
-                    @Html.Raw(Model.CurrentPage.Text)
-                </div>
+               
                 break;
         }
     </div>
