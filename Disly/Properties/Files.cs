@@ -256,6 +256,14 @@ public class Files
     /// <returns></returns>
     public static Photo getInfoImage(string url)
     {
+        if (url.IndexOf("http:") > -1 || url.IndexOf("https:") > -1 || url.IndexOf("www.") > -1)
+            return new Photo
+            {
+                Name = url,
+                Size = null,
+                Url = url
+            };
+
         try
         {
             var serverPath = HttpContext.Current.Server.MapPath(url);
