@@ -407,47 +407,50 @@ namespace Disly.Areas.Admin.Controllers
                                             {
                                                 title = s.Element("title").Value,
                                                 link = s.Element("link").Value,
-                                                
                                                 description = s.Element("description").Value,
                                                 language = s.Element("language").Value,
                                                 copyright = s.Element("copyright").Value,
-                                                lastBuildDate = DateTime.TryParseExact((s.Element("lastbuilddate").Value)
-                                       , "ddd, dd MMM yyyy HH:mm:ss +ffff",
-                                       System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out dt) ?
-                                       DateTime.ParseExact((s.Element("lastbuilddate").Value)
-                                                , "ddd, dd MMM yyyy HH:mm:ss +ffff",
-                                       System.Globalization.CultureInfo.InvariantCulture) : DateTime.ParseExact((s.Element("lastbuilddate").Value)
-                                       , "ddd, dd MMM yyyy HH:mm:ss 'GMT'",
-                                   System.Globalization.CultureInfo.InvariantCulture),
+
+                                   //             lastBuildDate = DateTime.TryParseExact((s.Element("lastbuilddate").Value)
+                                   //    , "ddd, dd MMM yyyy HH:mm:ss +ffff",
+                                   //    System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out dt) ?
+                                   //    DateTime.ParseExact((s.Element("lastbuilddate").Value)
+                                   //             , "ddd, dd MMM yyyy HH:mm:ss +ffff",
+                                   //    System.Globalization.CultureInfo.InvariantCulture) : DateTime.ParseExact((s.Element("lastbuilddate").Value)
+                                   //    , "ddd, dd MMM yyyy HH:mm:ss 'GMT'",
+                                   //System.Globalization.CultureInfo.InvariantCulture),
                                                 items = items
                                             }
                                           ).ToList();
 
             RssImportModel importModel = channel[0];
-
-            foreach (RssItem rssItem in importModel.items)
+            if (importModel.items != null)
             {
-                Guid id = Guid.NewGuid();
-                Photo Prev= (rssItem.enclosure != null) ?new Photo {Url= rssItem.enclosure }  : null;                
-                MaterialsModel item = new MaterialsModel()
+                foreach (RssItem rssItem in importModel.items)
                 {
-                    Id = id,                    
-                    Title = rssItem.title,      
-                    PreviewImage= Prev,
-                    Alias = Transliteration.Translit(rssItem.title),
-                    Desc = rssItem.description,
-                    Date = rssItem.pubDate,
-                    Year = Convert.ToInt32(rssItem.pubDate.ToString("yyyy")),
-                    Month = Convert.ToInt32(rssItem.pubDate.ToString("MM")),
-                    Day = Convert.ToInt32(rssItem.pubDate.ToString("dd")),
-                    Text = rssItem.yandex_full_text,                    
-                    Url = rssItem.link,
-                    UrlName = importModel.title,
-                    Disabled = false,
-                    ImportRss=true
-                };                
-                _cmsRepository.insertRssObject(item);
+                    Guid id = Guid.NewGuid();
+                    Photo Prev = (rssItem.enclosure != null) ? new Photo { Url = rssItem.enclosure } : null;
+                    MaterialsModel item = new MaterialsModel()
+                    {
+                        Id = id,
+                        Title = rssItem.title,
+                        PreviewImage = Prev,
+                        Alias = Transliteration.Translit(rssItem.title),
+                        Desc = rssItem.description,
+                        Date = rssItem.pubDate,
+                        Year = Convert.ToInt32(rssItem.pubDate.ToString("yyyy")),
+                        Month = Convert.ToInt32(rssItem.pubDate.ToString("MM")),
+                        Day = Convert.ToInt32(rssItem.pubDate.ToString("dd")),
+                        Text = rssItem.yandex_full_text,
+                        Url = rssItem.link,
+                        UrlName = importModel.title,
+                        Disabled = false,
+                        ImportRss = true
+                    };
+                    _cmsRepository.insertRssObject(item);
+                }
             }
+            
             //}
             //catch { }
         }
