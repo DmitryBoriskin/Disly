@@ -1,9 +1,5 @@
 ﻿@model EventViewModel
 @{
-    string dateBegin = Model.Item.DateBegin.ToString("HH:mm | dd.MM.yyyy");
-    string dateEnd = (Model.Item.DateEnd != null ? Convert.ToDateTime(Model.Item.DateEnd).ToString("HH:mm | dd.MM.yyyy") : null);
-}
-@{
     if (Model.SitesInfo.Alias == "main")
     {
         Layout = "/views/_portal/shared/_layout.cshtml";
@@ -14,26 +10,33 @@
         <div class="col-md-12">
             @Html.Partial("services/breadcrumbs")
             <h1>@ViewBag.Title</h1>
-            <h2>@Model.Item.Title</h2>
+            
         </div>
         <div class="col-md-8">
+            
+            <h2>@Model.Item.Title</h2>
             @Html.Raw(Model.Item.Text)
         </div>
         <div class="col-md-1"></div>
         <div class="col-md-3">
+            
+
             <div class="dop-block">
                 <div class="dop-block_info">
                     <label>Дата начала</label>
-                    <div>@dateBegin</div>
+                    <div>@Model.Item.DateBegin.ToString("dd MMMM yyyy")</div>
 
-                    @if (dateEnd != null)
+                    @if (Model.Item.DateEnd.HasValue)
                     {
                         <label>Дата окончания</label>
-                        <div>@dateEnd</div>
+                        <div>@Model.Item.DateEnd.Value.ToString("dd MMMM yyyy")</div>
                     }
+                    <label>Ежегодное:</label>
+                    <div>@(Model.Item.Annually? "Да": "Нет")</div>
                 </div>
                 <a class="btn_print" onClick="window.print()">Распечатать</a><br />
                 <a class="btn_share" title="Поделиться" href="../../../../#">Поделиться</a>
+                <br /><br />
             </div>
         </div>
     </div>

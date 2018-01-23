@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Mvc;
 using System.Xml.Linq;
@@ -388,6 +389,7 @@ namespace Disly.Areas.Admin.Controllers
                                    {
                                        title = s.Element("title").Value,
                                        link = s.Element("link").Value,
+                                       enclosure=(s.Element("enclosure")!=null)? s.Element("enclosure").Attribute("url").Value:null,
                                        yandex_full_text = (string)s.Element(yandex + "full-text").Value,
                                        pubDate = DateTime.TryParseExact((s.Element("pubDate").Value)
                                        , "ddd, dd MMM yyyy HH:mm:ss +ffff",
@@ -405,6 +407,7 @@ namespace Disly.Areas.Admin.Controllers
                                             {
                                                 title = s.Element("title").Value,
                                                 link = s.Element("link").Value,
+                                                
                                                 description = s.Element("description").Value,
                                                 language = s.Element("language").Value,
                                                 copyright = s.Element("copyright").Value,
@@ -425,10 +428,12 @@ namespace Disly.Areas.Admin.Controllers
             foreach (RssItem rssItem in importModel.items)
             {
                 Guid id = Guid.NewGuid();
+                Photo Prev= (rssItem.enclosure != null) ?new Photo {Url= rssItem.enclosure }  : null;                
                 MaterialsModel item = new MaterialsModel()
                 {
                     Id = id,                    
-                    Title = rssItem.title,                    
+                    Title = rssItem.title,      
+                    PreviewImage= Prev,
                     Alias = Transliteration.Translit(rssItem.title),
                     Desc = rssItem.description,
                     Date = rssItem.pubDate,
@@ -491,6 +496,84 @@ namespace Disly.Areas.Admin.Controllers
             return View(model);
         }
 
+
+        [HttpPost]
+        public ActionResult RealizeRssImport(Guid id)
+        {
+            MaterialsModel data = _cmsRepository.getRssMaterial(id);
+            data.Alias= Transliteration.Translit(data.Title);
+            data.Text = AdaptationXMLForHtml(data.Text);
+            data.Title = AdaptationXMLForHtml(data.Title);
+            data.ContentLink = SiteInfo.ContentId;
+            data.ContentLinkType = SiteInfo.Type;
+            _cmsRepository.insertCmsMaterialRss(data);
+            return null;
+        }
+
+        /// <summary>
+        /// удаляет rss ленту
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult DeleteRssLenta(Guid id)
+        {
+            _cmsRepository.delRssLink(id);
+            return null;
+        }
+
+        public string AdaptationXMLForHtml(string source)
+        {
+            if (source == null) return null;
+            Dictionary<string, string> words = new Dictionary<string, string>();
+
+            words.Add("&amp;", "&");
+            words.Add("&lt;", "<");
+            words.Add("&gt;", ">");
+            words.Add("&apos;", "'");
+            words.Add("&quot;", "\"");
+
+            Regex re = new Regex("[-]{2,}");
+            Regex Re = new Regex("[_]{2,}");
+            Regex StartRe = new Regex("^[-|_]{1,}");
+            Regex EndRe = new Regex("[-|_]${1,}");
+
+            foreach (KeyValuePair<string, string> pair in words)
+            {
+                source = source.Replace(pair.Key, pair.Value);
+            }
+            source = re.Replace(source, "-");
+            source = Re.Replace(source, "_");
+            source = StartRe.Replace(source, "");
+            source = EndRe.Replace(source, "");
+            return source;
+        }
+        public string AdaptationHtmlForXML(string source)
+        {
+            if (source == null) return null;
+            Dictionary<string, string> words = new Dictionary<string, string>();
+
+            words.Add("&", "&amp;");
+            words.Add("<", "&lt;");
+            words.Add(">", "&gt;");
+            words.Add("'", "&apos;");
+            words.Add("\"", "&quot;");
+
+            Regex re = new Regex("[-]{2,}");
+            Regex Re = new Regex("[_]{2,}");
+            Regex StartRe = new Regex("^[-|_]{1,}");
+            Regex EndRe = new Regex("[-|_]${1,}");
+
+            foreach (KeyValuePair<string, string> pair in words)
+            {
+                source = source.Replace(pair.Key, pair.Value);
+            }
+            source = re.Replace(source, "-");
+            source = Re.Replace(source, "_");
+            source = StartRe.Replace(source, "");
+            source = EndRe.Replace(source, "");
+            return source;
+        }
         #endregion
 
         //[HttpPost]

@@ -27,7 +27,7 @@ namespace Disly.Areas.Admin.Models
         /// <summary>
         /// rss канал
         /// </summary>
-        public MaterialsModel[] RssObject { get; set; }        
+        public RssItem[] RssObject { get; set; }        
         public RssChannel RssChannel { get; set; }
         public RssChannel[] RssChannelList { get; set; }
     }
