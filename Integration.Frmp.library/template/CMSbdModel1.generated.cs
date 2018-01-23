@@ -101,7 +101,7 @@ namespace Integration.Frmp.models
 	{
 		[Column(@"f_oid"),       Nullable] public string FOid    { get; set; } // varchar(64)
 		[Column(@"f_people"), NotNull    ] public Guid   FPeople { get; set; } // uniqueidentifier
-		[Column(@"f_guid"),   NotNull    ] public Guid   FGuid   { get; set; } // uniqueidentifier
+		[Column(@"f_org"),    NotNull    ] public Guid   FOrg    { get; set; } // uniqueidentifier
 	}
 
 	[Table(Schema="dbo", Name="import_frmp_people_posts_link")]

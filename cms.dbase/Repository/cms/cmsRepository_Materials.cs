@@ -489,6 +489,20 @@ namespace cms.dbase
         }
 
 
+        public override bool delRssLink(Guid id)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var data = db.content_rss_links.Where(w => w.id == id);
+                if (data.Any())
+                {
+                    data.Delete();
+                    return true;
+                }
+                return false;
+            }
+        }
+
         public override RssChannel[] getRssChannelMiniList()
         {
             using (var db = new CMSdb(_context))
@@ -522,7 +536,9 @@ namespace cms.dbase
                    .Value(v => v.c_preview, Prev)
                    .Value(v => v.c_text, ins.Text+"<p>Источник: "+ins.Url+"</p>")
                    .Value(v => v.c_desc, ins.Desc)
-                   .Value(v => v.c_keyw, ins.Keyw)                   
+                   .Value(v => v.c_keyw, ins.Keyw)
+                   .Value(v => v.c_url, ins.Url)
+                   .Value(v => v.c_url_name, ins.UrlName)
                    .Insert();
                 return true;
 
@@ -531,7 +547,7 @@ namespace cms.dbase
 
         }
 
-        public override MaterialsModel[] getRssObjects()
+        public override RssItem[] getRssObjects()
         {
             using (var db = new CMSdb(_context))
             {
@@ -539,13 +555,159 @@ namespace cms.dbase
                 if (query.Any())
                 {
                     query = query.OrderBy(o => o.d_date);
-                    return query.Select(s => new MaterialsModel() {
-                                            Title=s.c_title,
-                                            Date=s.d_date,
-                                            Id=s.id
-                                        }).ToArray();
+                    return query.Select(s => new RssItem() {
+                                            title=s.c_title,
+                                            pubDate=s.d_date,
+                                            id=s.id,
+                                            link=s.c_url,
+                                            enclosure= s.c_preview,
+                                            New=true,
+                                            RssGuid= getSpotRssMaterial(s.c_url)
+                    }).ToArray();
                 }
                 return null;
+            }
+        }
+
+        public override MaterialsModel getRssMaterial(Guid id)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var data = db.content_rss_materialss.Where(w => w.id == id);
+                if (data.Any())
+                {
+                    return data.Select(s=>new MaterialsModel {
+                            Id=s.id,
+                            Title=s.c_title,
+                            Date=s.d_date,
+
+                            Year = Convert.ToInt32(s.d_date.ToString("yyyy")),
+                            Month = Convert.ToInt32(s.d_date.ToString("MM")),
+                            Day = Convert.ToInt32(s.d_date.ToString("dd")),
+                            PreviewImage=(s.c_preview!=null)?new Photo {Url= s.c_preview }:null,
+                            Text =s.c_text,
+                            Url=s.c_url,
+                            ImportRss=true                            
+                        //ImportRss
+                    }).Single();
+                }
+                return null;
+            }
+        }
+        /// <summary>
+        /// опрделяем была ли импотрирована э
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public override string getSpotRssMaterial(string link)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var contentType = ContentType.MATERIAL.ToString().ToLower();
+
+                var materials = db.content_content_links.Where(e => e.f_content_type == contentType)
+                    .Join(db.cms_sitess.Where(o => o.c_alias == _domain),
+                            e => e.f_link,
+                            o => o.f_content,
+                            (e, o) => e.f_content
+                            );
+
+                if (!materials.Any())
+                    return null;
+
+                var query = db.content_materialss.Where(w => materials.Contains(w.id) && w.c_url.ToLower()==link.ToLower());
+                if (query.Count() > 0)
+                {
+                    return query.Single().id.ToString();
+                }
+                return null;
+            }                
+        }
+
+
+        /// <summary>
+        /// запись материала из рсс
+        /// </summary>
+        /// <param name="material"></param>
+        /// <returns></returns>
+        public override bool insertCmsMaterialRss(MaterialsModel material)
+        {
+            try
+            {
+                using (var db = new CMSdb(_context))
+                {
+                    using (var tran = db.BeginTransaction())
+                    {
+                        content_materials cdMaterial = db.content_materialss
+                                                .Where(p => p.id == material.Id)
+                                                .SingleOrDefault();
+                        if (cdMaterial != null)
+                        {
+                            throw new Exception("Запись с таким Id уже существует");
+                        }
+                        Guid idMaterial = Guid.NewGuid();
+                        cdMaterial = new content_materials
+                        {
+                            id = idMaterial,
+                            c_title = material.Title,
+                            c_alias = material.Alias,
+                            c_text = material.Text,
+                            d_date = material.Date,
+                            c_preview = (material.PreviewImage != null) ? material.PreviewImage.Url : null,
+                            c_preview_source = (material.PreviewImage != null) ? material.PreviewImage.Source : null,
+                            c_url = material.Url,
+                            c_url_name = material.UrlName,
+                            c_desc = material.Desc,
+                            c_keyw = material.Keyw,
+                            b_important = material.Important,
+                            b_disabled = material.Disabled,
+                            n_day = material.Date.Day,
+                            n_month = material.Date.Month,
+                            n_year = material.Date.Year,
+                            f_content_origin = material.ContentLink,
+                            c_content_type_origin = material.ContentLinkType,
+                            b_rss_import=true,
+                            b_rss_guid=material.Id//записываем его старый id 
+                            
+                        };
+
+                        // добавляем принадлежность к сущности(ссылку на организацию/событие/персону)
+                        var cdMaterialLink = new content_content_link
+                        {
+                            id = Guid.NewGuid(),
+                            f_content = idMaterial,
+                            f_content_type = ContentType.MATERIAL.ToString().ToLower(),
+                            f_link = material.ContentLink,
+                            f_link_type = material.ContentLinkType,
+                            b_origin = true
+                        };
+
+                        db.Insert(cdMaterial);
+                        db.Insert(cdMaterialLink);
+
+                        db_updateMaterialGroups(db, material.Id, material.GroupsId);
+
+                        var log = new LogModel()
+                        {
+                            Site = _domain,
+                            Section = LogSection.Materials,
+                            Action = LogAction.insert,
+                            PageId = material.Id,
+                            PageName = material.Title,
+                            UserId = _currentUserId,
+                            IP = _ip,
+                        };
+                        insertLog(log);
+
+                        tran.Commit();
+                        return true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                //write to log ex
+                return false;
             }
         }
 

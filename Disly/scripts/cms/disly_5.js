@@ -29,57 +29,7 @@ $(document).ready(function () {
     // Полоса прокрутки
     $('.scrollbar').mCustomScrollbar();
 
-    //$("[type='button']").on("click", function () {
-    //    var action = $(this).data("action");
-    //    var link = $(this).data("link");
-    //    if (action === "cancel") {
-    //        if (change !== 0) {
-    //            // Confirm('Уведомление', 'Выйти без изменений?', $(this));
-    //            //ModalConfirm('Уведомление', 'Выйти без изменений?');
-    //            $(location).attr("href", link);
-    //        }
-    //        else {
-    //            $(location).attr("href", link);
-    //        }
-    //    }
-    //    if (action === "delete") {
-    //        try {
-    //            //ShowPreloader(content);
-    //            var form = $("form").first();
-    //            var targetUrl = form.attr("action");
-
-    //            var formData = new FormData();
-    //            formData.append("action", "delete-btn");
-
-    //            $.ajax({
-    //                url: targetUrl,
-    //                method: "POST",
-    //                async: true,
-    //                cache: false,
-    //                processData: false,
-    //                contentType: false,
-    //                data: formData
-    //            })
-    //                .done(function (response) {
-    //                    //elTooltip.attr("title", "Сохранено");
-    //                    //elTooltip.tooltip('show');
-    //                })
-    //                .fail(function (jqXHR, status) {
-    //                    console.log("Ошибка" + " " + status + " " + jqXHR);
-    //                    //elTooltip.attr("title", "Ошибка сохранения");                        
-    //                })
-    //                .always(function (response) {
-    //                    //setTimeout(function () {
-    //                    //    elTooltip.tooltip('hide');
-    //                    //}, 1000);
-    //                    $(location).attr("href", link);
-    //                });
-    //        }
-    //        catch (ex) {
-    //            console.log(ex);
-    //        }
-    //    }
-    //});
+    
 
      //События Кнопок
     $('input[type=submit], .button').bind({
@@ -137,21 +87,6 @@ $(document).ready(function () {
             }
         }
     });
-     //показываем preloader при клике на ссылку
-    //$('a').click(function () {
-    //    var $load_bg = $("<div/>", { "class": "load_page" });
-    //    var dataAction = $(this).attr('data-action');
-    //    if (dataAction === 'noPreloader-accept') {
-
-    //    }
-    //    else {
-    //        $load_bg.bind({
-    //            mousedown: function () { return false; },
-    //            selectstart: function () { return false; }
-    //        });
-    //        $('body').append($load_bg);
-    //    }        
-    //});
 
     // Панель авторизации пользователя    
     $('.account-info').click(function () {
@@ -204,6 +139,45 @@ $(document).ready(function () {
             $('.Sortable').each(function () { sortingPhotoInit($(this)); });        
         }        
     });
+
+    if ($('.list-rss').length > 0) {
+        $('.import-rss-new').click(function (e) {
+            e.preventDefault();
+            var id = $(this).attr('data-id');
+
+            $.ajax({
+                type: "POST",
+                async: false,
+                url: "/Admin/Materials/RealizeRssImport/",
+                data: { id: id },
+                error: function () { alert("error"); },
+                success: function (data) {
+                    //$Container.remove();
+                    location.reload();
+                }
+            });
+
+        });        
+
+
+        $('.rss_delete').click(function (e) {
+            e.preventDefault();
+            var id = $(this).attr('data-id');
+            $.ajax({
+                type: "POST",
+                async: false,
+                url: "/Admin/Materials/DeleteRssLenta/",
+                data: { id: id },
+                error: function () { alert("error"); },
+                success: function (data) {
+                    //$Container.remove();
+                    location.reload();
+                }
+            });
+
+        });
+    }
+
     //удаление фотогрфии из галлереи
     if ($('.photoalbum').length > 0) {
 
