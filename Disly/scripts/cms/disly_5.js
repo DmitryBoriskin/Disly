@@ -164,24 +164,24 @@ $(document).ready(function () {
 
         });        
 
-
-        $('.rss_delete').click(function (e) {
-            e.preventDefault();
-            var id = $(this).attr('data-id');
-            $.ajax({
-                type: "POST",
-                async: false,
-                url: "/Admin/Materials/DeleteRssLenta/",
-                data: { id: id },
-                error: function () { alert("error"); },
-                success: function (data) {
-                    //$Container.remove();
-                    location.reload();
-                }
-            });
-
-        });
+               
     }
+    $('.rss_delete').click(function (e) {
+        e.preventDefault();
+        var id = $(this).attr('data-id');
+        $.ajax({
+            type: "POST",
+            async: false,
+            url: "/Admin/Materials/DeleteRssLenta/",
+            data: { id: id },
+            error: function () { alert("error"); },
+            success: function (data) {
+                //$Container.remove();
+                location.reload();
+            }
+        });
+
+    });
 
     //удаление фотогрфии из галлереи
     if ($('.photoalbum').length > 0) {
