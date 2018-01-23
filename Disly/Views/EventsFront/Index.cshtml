@@ -12,8 +12,6 @@
                 @Html.Partial("services/breadcrumbs")
                 <h1>@ViewBag.Title</h1>
 
-
-
                 @if (!String.IsNullOrEmpty(ViewBag.Alias))
                 {
                     @Html.Partial("part/Item")
@@ -22,7 +20,7 @@
                 {
                     <div class="row">
                         <div class="col-md-8">
-                            <div>
+                            <div class="page-info">
                                 <p>
                                     @Html.Raw(Model.CurrentPage.Text)
                                 </p>
@@ -48,6 +46,8 @@
                         </div>
                         <div class="col-md-1"></div>
                         <div class="col-md-3">
+                            @Html.Partial("part/childlist_sitemap")
+                
                             <form role="form" class="filtr_news" action="/events/">
                                 <div class="row">
 

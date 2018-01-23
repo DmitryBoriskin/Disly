@@ -516,7 +516,7 @@ namespace Integration.Frmp.library
         {
             using (var db = new DbModel(connectionString))
             {
-                db.CommandTimeout = 20000;
+                db.CommandTimeout = 1200000;
 
                 try
                 {
