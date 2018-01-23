@@ -2,6 +2,11 @@
 var change = 0;
 
 $(document).ready(function () {
+
+    $('#DomainSelect').change(function () {
+        window.location.href = this.options[this.selectedIndex].value
+    });
+    
     $modal = $('.modal');
     $modalTitle = $('.modal .modal-title');
     $modalBody = $('.modal .modal-body');
@@ -449,8 +454,6 @@ $(document).ready(function () {
         //$('.sortable').each(function () {
         //    Sorting_init($(this));
         //});
-
-
 
     });
 
