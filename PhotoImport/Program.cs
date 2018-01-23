@@ -207,6 +207,7 @@ namespace PhotoImport
             foreach (var item in list)
             {
                 item.Text += iframe;
+                repository.UpdateMaterial(item);
             }
         }
     }
