@@ -35,16 +35,16 @@ namespace Disly.Controllers
             //#endregion
 
             //#region Создаем переменные (значения по умолчанию)
-            //string PageTitle = model.CurrentPage.Title;
-            //string PageDesc = model.CurrentPage.Desc;
-            //string PageKeyw = model.CurrentPage.Keyw;
+            string PageTitle = model.CurrentPage.Title;
+            string PageDesc = model.CurrentPage.Desc;
+            string PageKeyw = model.CurrentPage.Keyw;
             //#endregion
 
-            //#region Метатеги
-            //ViewBag.Title = PageTitle;
-            //ViewBag.Description = PageDesc;
-            //ViewBag.KeyWords = PageKeyw;
-            //#endregion
+            #region Метатеги
+            ViewBag.Title = PageTitle;
+            ViewBag.Description = PageDesc;
+            ViewBag.KeyWords = PageKeyw;
+            #endregion
         }
 
         /// <summary>
@@ -69,7 +69,6 @@ namespace Disly.Controllers
             {
                 return new HttpNotFoundResult();
             }
-
             return View(_ViewName,model);
         }
     }

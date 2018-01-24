@@ -1,0 +1,39 @@
+﻿@model TypePageViewModel
+@{    
+    Layout = "/views/_spec/shared/_layout.cshtml";
+}
+<div class="type-page">
+    <div class="container">
+        @Html.Partial("services/breadcrumbs")
+        @if (Model.Item != null)
+        {
+            <h1>@Model.Item.Title</h1>
+        }
+        
+        @if (Model.Child != null)
+        {
+            <div>
+                @Html.Partial("part/childlist_sitemap")
+                @if (Model.Item != null)
+                {
+                @Html.Raw(Model.Item.Text)
+                }
+            </div>            
+        }
+        else
+        {
+            <div class="col-md-12">
+                @if (Model.Item != null)
+                {
+                    @Html.Raw(Model.Item.Text)
+                }
+            </div>
+        }
+
+        <br />
+        @if (Model.Documents != null)
+        {
+            @Html.Partial("part/attachedFiles", Model.Documents)
+        }
+    </div>
+</div>

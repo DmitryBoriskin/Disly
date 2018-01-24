@@ -213,7 +213,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>12/07/2017 17:09:05</publishTime>
     </File>
     <File Include="Areas/Admin/Views/SiteSection/Item.cshtml">
-      <publishTime>12/11/2017 13:12:25</publishTime>
+      <publishTime>01/23/2018 10:01:38</publishTime>
     </File>
     <File Include="Areas/Admin/Views/SiteSettings/Index.cshtml">
       <publishTime>01/10/2018 10:55:18</publishTime>
@@ -258,25 +258,25 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>09/27/2017 09:21:45</publishTime>
     </File>
     <File Include="bin/cms.dbase.dll">
-      <publishTime>01/22/2018 15:42:58</publishTime>
+      <publishTime>01/23/2018 16:08:17</publishTime>
     </File>
     <File Include="bin/cms.dbase.dll.config">
       <publishTime>09/27/2017 09:21:45</publishTime>
     </File>
     <File Include="bin/cms.dbase.pdb">
-      <publishTime>01/22/2018 15:42:58</publishTime>
+      <publishTime>01/23/2018 16:08:17</publishTime>
     </File>
     <File Include="bin/cms.dbModel.dll">
-      <publishTime>01/22/2018 15:42:57</publishTime>
+      <publishTime>01/23/2018 16:08:16</publishTime>
     </File>
     <File Include="bin/cms.dbModel.pdb">
-      <publishTime>01/22/2018 15:42:57</publishTime>
+      <publishTime>01/23/2018 16:08:16</publishTime>
     </File>
     <File Include="bin/Disly.dll">
-      <publishTime>01/23/2018 09:22:45</publishTime>
+      <publishTime>01/23/2018 16:08:17</publishTime>
     </File>
     <File Include="bin/Disly.pdb">
-      <publishTime>01/23/2018 09:22:45</publishTime>
+      <publishTime>01/23/2018 16:08:17</publishTime>
     </File>
     <File Include="bin/EntityFramework.dll">
       <publishTime>09/27/2017 09:21:45</publishTime>
@@ -342,7 +342,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>09/27/2017 09:21:47</publishTime>
     </File>
     <File Include="Content/css/common.css">
-      <publishTime>01/22/2018 15:42:02</publishTime>
+      <publishTime>01/23/2018 10:24:25</publishTime>
     </File>
     <File Include="Content/css/commonless.css">
       <publishTime>01/17/2018 08:59:44</publishTime>
@@ -1847,6 +1847,18 @@ by editing this MSBuild file. In order to learn more about this please visit htt
     <File Include="Content/portal/style.css">
       <publishTime>01/17/2018 09:04:20</publishTime>
     </File>
+    <File Include="Content/spec/cecu.css">
+      <publishTime>01/23/2018 14:32:54</publishTime>
+    </File>
+    <File Include="Content/spec/cecu.less">
+      <publishTime>01/23/2018 14:32:52</publishTime>
+    </File>
+    <File Include="Content/spec/main.js">
+      <publishTime>01/23/2018 12:07:41</publishTime>
+    </File>
+    <File Include="Content/spec/style.css">
+      <publishTime>01/23/2018 15:59:46</publishTime>
+    </File>
     <File Include="favicon.ico">
       <publishTime>09/27/2017 09:21:44</publishTime>
     </File>
@@ -1869,7 +1881,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>09/27/2017 09:21:44</publishTime>
     </File>
     <File Include="gulpfile.js">
-      <publishTime>01/15/2018 12:14:50</publishTime>
+      <publishTime>01/23/2018 11:12:38</publishTime>
     </File>
     <File Include="package.json">
       <publishTime>11/24/2017 14:19:12</publishTime>
@@ -1878,13 +1890,16 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>11/24/2017 13:55:36</publishTime>
     </File>
     <File Include="scripts/cms/disly_5.js">
-      <publishTime>01/22/2018 16:01:46</publishTime>
+      <publishTime>01/23/2018 12:16:34</publishTime>
     </File>
     <File Include="scripts/cms/disly_5_login.js">
       <publishTime>09/27/2017 09:21:44</publishTime>
     </File>
     <File Include="scripts/cms/disly_5_popup.js">
       <publishTime>12/11/2017 13:13:58</publishTime>
+    </File>
+    <File Include="scripts/modernizr.js">
+      <publishTime>01/23/2018 11:25:16</publishTime>
     </File>
     <File Include="scripts/popUp_script.js">
       <publishTime>11/13/2017 08:14:29</publishTime>
@@ -1950,10 +1965,10 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>01/17/2018 08:59:44</publishTime>
     </File>
     <File Include="Views/EventsFront/Index.cshtml">
-      <publishTime>01/19/2018 09:32:08</publishTime>
+      <publishTime>01/23/2018 09:29:19</publishTime>
     </File>
     <File Include="Views/EventsFront/Item.cshtml">
-      <publishTime>01/15/2018 15:23:45</publishTime>
+      <publishTime>01/23/2018 09:29:19</publishTime>
     </File>
     <File Include="Views/Feedback/AnswerForm.cshtml">
       <publishTime>01/15/2018 15:24:22</publishTime>
@@ -2007,7 +2022,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>01/19/2018 09:32:08</publishTime>
     </File>
     <File Include="Views/Page/Index.cshtml">
-      <publishTime>01/22/2018 15:42:02</publishTime>
+      <publishTime>01/23/2018 16:07:45</publishTime>
     </File>
     <File Include="Views/PortalDoctors/Index.cshtml">
       <publishTime>01/22/2018 15:42:02</publishTime>
@@ -2019,7 +2034,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>01/19/2018 09:32:08</publishTime>
     </File>
     <File Include="Views/Press/part/Item.cshtml">
-      <publishTime>01/10/2018 10:55:18</publishTime>
+      <publishTime>01/23/2018 16:06:24</publishTime>
     </File>
     <File Include="Views/Press/Rss.cshtml">
       <publishTime>01/17/2018 08:59:44</publishTime>
@@ -2061,10 +2076,10 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>12/07/2017 09:06:36</publishTime>
     </File>
     <File Include="Views/Shared/_Layout.cshtml">
-      <publishTime>01/18/2018 13:12:58</publishTime>
+      <publishTime>01/23/2018 10:17:53</publishTime>
     </File>
     <File Include="Views/SpecStructure/Index.cshtml">
-      <publishTime>01/17/2018 08:59:44</publishTime>
+      <publishTime>01/23/2018 09:29:19</publishTime>
     </File>
     <File Include="Views/SpecStructure/list.cshtml">
       <publishTime>01/16/2018 08:50:11</publishTime>
@@ -2091,7 +2106,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>01/22/2018 15:42:02</publishTime>
     </File>
     <File Include="Views/Vacancy/Item.cshtml">
-      <publishTime>01/22/2018 15:42:02</publishTime>
+      <publishTime>01/23/2018 09:29:19</publishTime>
     </File>
     <File Include="Views/Vote/Index.cshtml">
       <publishTime>01/18/2018 15:17:08</publishTime>
@@ -2115,13 +2130,19 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>01/12/2018 08:52:14</publishTime>
     </File>
     <File Include="Views/_portal/shared/_Layout.cshtml">
-      <publishTime>01/19/2018 13:08:06</publishTime>
+      <publishTime>01/23/2018 10:26:07</publishTime>
     </File>
     <File Include="Views/_spec/home/Index.cshtml">
-      <publishTime>01/18/2018 13:12:58</publishTime>
+      <publishTime>01/23/2018 15:59:10</publishTime>
+    </File>
+    <File Include="Views/_spec/page/Index.cshtml">
+      <publishTime>01/23/2018 14:03:49</publishTime>
+    </File>
+    <File Include="Views/_spec/shared/_Layout - Копировать.cshtml">
+      <publishTime>01/23/2018 10:44:49</publishTime>
     </File>
     <File Include="Views/_spec/shared/_Layout.cshtml">
-      <publishTime>01/18/2018 13:12:58</publishTime>
+      <publishTime>01/23/2018 15:54:21</publishTime>
     </File>
     <File Include="Views/_ViewStart.cshtml">
       <publishTime>09/27/2017 09:21:44</publishTime>

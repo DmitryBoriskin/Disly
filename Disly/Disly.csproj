@@ -137,7 +137,6 @@
     <Content Include="Content\css\commonless.css" />
     <Content Include="Content\css\iframe_tinymce.css" />
     <Content Include="Content\css\print.css" />
-    <Content Include="Content\css\spec_style.css" />
     <Content Include="Content\css\styles_popUp.css" />
     <Content Include="Content\css\styles.css" />
     <Content Include="Content\css\styles_login.css" />
@@ -221,7 +220,6 @@
     <Content Include="Content\img\youtube-ico.png" />
     <Content Include="Content\js\menu.js" />
     <Content Include="Content\js\script.js" />
-    <Content Include="Content\js\spec.js" />
     <Content Include="Content\plugins\bootstrap\css\bootstrap-theme.css" />
     <Content Include="Content\plugins\bootstrap\css\bootstrap-theme.min.css" />
     <Content Include="Content\plugins\bootstrap\css\bootstrap.css" />
@@ -466,6 +464,9 @@
     <Content Include="Content\portal\img\your-opinion.jpg" />
     <Content Include="Content\portal\img\youtube-med-chuv.jpg" />
     <Content Include="Content\portal\style.css" />
+    <Content Include="Content\spec\cecu.css" />
+    <Content Include="Content\spec\main.js" />
+    <Content Include="Content\spec\style.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Areas\Admin\Views\web.config" />
@@ -542,6 +543,7 @@
     <Content Include="Content\plugins\select2\select2.js" />
     <Content Include="Content\plugins\select2\select2.min.js" />
     <Content Include="gulpfile.js" />
+    <Content Include="scripts\modernizr.js" />
     <Content Include="test.html" />
     <Content Include="scripts\cms\disly_5_popup.js" />
     <Content Include="scripts\cms\disly_5_login.js" />
@@ -865,6 +867,7 @@
     <Content Include="Content\plugins\tinymce\skins\lightgray\fonts\tinymce.ttf" />
     <Content Include="Content\plugins\tinymce\skins\lightgray\fonts\tinymce.woff" />
     <Content Include="package.json" />
+    <Content Include="Content\spec\cecu.less" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\services\Pager.cshtml" />
@@ -919,6 +922,21 @@
     <Content Include="Views\_spec\shared\_Layout.cshtml" />
     <Content Include="Views\_spec\home\Index.cshtml" />
     <Content Include="Views\Shared\part\attachedFiles.cshtml" />
+    <Content Include="Views\_spec\shared\_Layout - Копировать.cshtml" />
+    <Content Include="Views\_spec\page\Index.cshtml" />
+    <Content Include="Views\_spec\Contacts\Index.cshtml" />
+    <Content Include="Views\_spec\Contacts\part\administration.cshtml" />
+    <Content Include="Views\_spec\Contacts\part\phone.cshtml" />
+    <Content Include="Views\_spec\FindUs.cshtml" />
+    <Content Include="Views\_spec\Structure\DepartmentItem.cshtml" />
+    <Content Include="Views\_spec\Structure\Index.cshtml" />
+    <Content Include="Views\_spec\Structure\Ovp.cshtml" />
+    <Content Include="Views\_spec\Structure\part\boss_list.cshtml" />
+    <Content Include="Views\_spec\Structure\StructureItem.cshtml" />
+    <Content Include="Views\_spec\Doctors\Index.cshtml" />
+    <Content Include="Views\_spec\Doctors\part\item.cshtml" />
+    <Content Include="Views\_spec\Doctors\part\List.cshtml" />
+    <Content Include="Views\_spec\Doctors\Redirect.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

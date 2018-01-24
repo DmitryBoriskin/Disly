@@ -66,6 +66,23 @@ namespace Disly
                 "~/Content/plugins/Disly/DislyControls.css",
                 "~/Content/css/styles_popUp.css"));
 
+            //версия для слоабовидящих
+            bundles.Add(new StyleBundle("~/Content/style_spec").Include(                      
+                      "~/Content/plugins/bootstrap/css/bootstrap.min.css",
+                      "~/Content/spec/style.css",
+                      "~/Content/spec/cecu.css"                      
+                      ));
+            bundles.Add(new ScriptBundle("~/Content/js_spec").Include(
+                     "~/Content/plugins/bootstrap/js/bootstrap.min.js",
+                     "~/content/spec/main.js"
+                 ));
+             bundles.Add(new ScriptBundle("~/bundles/jquery_spec").Include(
+                "~/Content/plugins/jquery/jquery.js",
+                "~/Content/plugins/jquery/jquery.ui.js",
+                "~/Content/plugins/jquery/jquery.cookie.js"
+                ));
+            bundles.Add(new ScriptBundle("~/bundles/modernizr").Include(
+                       "~/Scripts/modernizr.js"));
         }
     }
 }
