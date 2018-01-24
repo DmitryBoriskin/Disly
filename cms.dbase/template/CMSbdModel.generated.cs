@@ -92,6 +92,7 @@ namespace cms.dbase.models
 		public ITable<content_people>                               content_peoples                               { get { return this.GetTable<content_people>(); } }
 		public ITable<content_people_department_link>               content_people_department_links               { get { return this.GetTable<content_people_department_link>(); } }
 		public ITable<content_people_employee_posts_link>           content_people_employee_posts_links           { get { return this.GetTable<content_people_employee_posts_link>(); } }
+		public ITable<content_people_infos>                         content_people_infoss                         { get { return this.GetTable<content_people_infos>(); } }
 		public ITable<content_people_org_link>                      content_people_org_links                      { get { return this.GetTable<content_people_org_link>(); } }
 		public ITable<content_photoalbum>                           content_photoalbums                           { get { return this.GetTable<content_photoalbum>(); } }
 		public ITable<content_photos>                               content_photoss                               { get { return this.GetTable<content_photos>(); } }
@@ -123,6 +124,7 @@ namespace cms.dbase.models
 		public ITable<front_sv_page_veiw>                           front_sv_page_veiws                           { get { return this.GetTable<front_sv_page_veiw>(); } }
 		public ITable<import_frmp_orgs>                             import_frmp_orgss                             { get { return this.GetTable<import_frmp_orgs>(); } }
 		public ITable<import_frmp_orgs_peoples>                     import_frmp_orgs_peopless                     { get { return this.GetTable<import_frmp_orgs_peoples>(); } }
+		public ITable<import_frmp_people_infos>                     import_frmp_people_infoss                     { get { return this.GetTable<import_frmp_people_infos>(); } }
 		public ITable<import_frmp_people_posts_link>                import_frmp_people_posts_links                { get { return this.GetTable<import_frmp_people_posts_link>(); } }
 		public ITable<import_frmp_peoples>                          import_frmp_peopless                          { get { return this.GetTable<import_frmp_peoples>(); } }
 		public ITable<import_frmp_posts>                            import_frmp_postss                            { get { return this.GetTable<import_frmp_posts>(); } }
@@ -1905,6 +1907,13 @@ namespace cms.dbase.models
 		#endregion
 	}
 
+	[Table(Schema="dbo", Name="content_people_infos")]
+	public partial class content_people_infos
+	{
+		[Column, NotNull] public Guid   f_people { get; set; } // uniqueidentifier
+		[Column, NotNull] public string c_xml    { get; set; } // nvarchar(max)
+	}
+
 	[Table(Schema="dbo", Name="content_people_org_link")]
 	public partial class content_people_org_link
 	{
@@ -2549,6 +2558,13 @@ namespace cms.dbase.models
 		#endregion
 	}
 
+	[Table(Schema="dbo", Name="import_frmp_people_infos")]
+	public partial class import_frmp_people_infos
+	{
+		[Column, NotNull] public Guid   f_people { get; set; } // uniqueidentifier
+		[Column, NotNull] public string c_xml    { get; set; } // nvarchar(max)
+	}
+
 	[Table(Schema="dbo", Name="import_frmp_people_posts_link")]
 	public partial class import_frmp_people_posts_link
 	{
@@ -3188,4 +3204,8 @@ namespace cms.dbase.models
 		}
 	}
 }
+<<<<<<< HEAD
+ 
+=======
   
+>>>>>>> 9ea6ebe01ceed371a73f4cdf8332ea1e7844842a

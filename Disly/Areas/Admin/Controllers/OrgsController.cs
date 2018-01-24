@@ -874,7 +874,8 @@ namespace Disly.Areas.Admin.Controllers
             {
                 Domain = Domain,
                 RelId = objId,
-                RelType = objType
+                RelType = objType,
+                Size = 1000
             };
 
             var model = new OrgsModalViewModel()

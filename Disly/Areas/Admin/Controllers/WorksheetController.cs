@@ -262,48 +262,5 @@ namespace Disly.Areas.Admin.Controllers
             return View(model);
         }
 
-        //Получение списка организаций по параметрам для отображения в модальном окне
-        [HttpGet]
-        public ActionResult EventsListModal(Guid objId, ContentType objType)
-        {
-            var filtr = new EventFilter()
-            {
-                Domain = Domain,
-                RelId = objId,
-                RelType = objType,
-                Size = last_items
-            };
-
-            var model = new EventsModalViewModel()
-            {
-                ObjctId = objId,
-                ObjctType = objType,
-                EventsList = _cmsRepository.getLastEventsListWithCheckedFor(filtr),
-            };
-
-            //var model = new OrgsModalViewModel()
-            //{
-
-            //    OrgsList = _cmsRepository.getOrgs(filtr),
-            //    OrgsAll = _cmsRepository.getOrgs(new OrgFilter() { }),
-            //    OrgsTypes = _cmsRepository.getOrgTypesList(new OrgTypeFilter() { })
-            //};
-
-            return PartialView("Modal/Events", model);
-        }
-
-        [HttpPost]
-        public ActionResult UpdateLinkToEvent(ContentLinkModel data)
-        {
-            if (data != null)
-            {
-                var res = _cmsRepository.updateContentLink(data);
-                if (res)
-                    return Json("Success");
-            }
-
-            //return Response.Status = "OK";
-            return Json("An Error Has occourred"); //Ne
-        }
     }
 }

@@ -244,10 +244,8 @@ namespace Integration.Frmp.library
 
             using (var db = new DbModel(connectionString))
             {
-                // предварительно очищаем таблицу импорта сотрудников
-                //SrvcLogger.Debug("{WORK}", "Чистим таблицу dbo.import_frmp_peoples");
-
-                //db.ImportFrmpPeopless.Delete();
+                // детальная информация по сотрудникам
+                List<ImportFrmpPeopleInfos> importPeopleInfos = new List<ImportFrmpPeopleInfos>();
 
                 // список импортируемых врачей
                 List<ImportFrmpPeoples> importPeoples = new List<ImportFrmpPeoples>();
@@ -330,6 +328,12 @@ namespace Integration.Frmp.library
                         #endregion
 
                         #region trying buklcopy
+                        importPeopleInfos.Add(new ImportFrmpPeopleInfos
+                        {
+                            FPeople = id,
+                            CXml = stringXml
+                        });
+
                         importPeoples.Add(new ImportFrmpPeoples
                         {
                             Id = id,
@@ -368,7 +372,7 @@ namespace Integration.Frmp.library
 
                     SrvcLogger.Debug("{WORK}", string.Format("Общее кол-во сотрудников {0}", importPeoples.Count()));
                     SrvcLogger.Debug("{WORK}", string.Format("Кол-во уникальных сотрудников {0}", countDistinctPeoples));
-
+                    
                     for (int i = 0; i < countDistinctPeoples; i += 1000)
                     {
                         var bulk = distinctPeoples.Skip(i).Take(1000);
@@ -377,6 +381,14 @@ namespace Integration.Frmp.library
                     }
                     SrvcLogger.Debug("{WORK}", "Данные по сотрудникам успешно добавлены в таблицу dbo.import_frmp_peoples");
 
+                    for (int i = 0; i < importPeopleInfos.Count(); i += 1000)
+                    {
+                        var bulk = importPeopleInfos.Skip(i).Take(1000);
+                        db.BulkCopy(bulk);
+                        SrvcLogger.Debug("{WORK}", string.Format("Импортированно информации по сотрудникам {0} из {1}", i, importPeopleInfos.Count()));
+                    }
+                    SrvcLogger.Debug("{WORK}", "Данные по сотрудникам успешно добавлены в таблицу dbo.import_frmp_people_infos");
+                    
                     // уникальные связи сотрудников и организаций
                     var distinctPeopleOrgLinks = (from l in importPeopleOrgsLink
                                                   group l by new { l.FOrg, l.FPeople } into gl

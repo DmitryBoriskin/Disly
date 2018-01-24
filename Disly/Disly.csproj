@@ -891,7 +891,7 @@
     <Content Include="Views\LPU\Index.cshtml" />
     <Content Include="Views\Press\part\Item.cshtml" />
     <Content Include="Views\Home\part\media.cshtml" />
-    <Content Include="Views\PortalDoctors\Index.cshtml" />
+    <Content Include="Views\PortalDoctors\Index_old.cshtml" />
     <Content Include="Views\Doctors\part\item.cshtml" />
     <Content Include="Views\Doctors\part\list.cshtml" />
     <Content Include="Views\MedicalServices\Index.cshtml" />
@@ -936,6 +936,9 @@
     <Content Include="Views\_spec\Doctors\part\item.cshtml" />
     <Content Include="Views\_spec\Doctors\part\List.cshtml" />
     <Content Include="Views\_spec\Doctors\Redirect.cshtml" />
+    <Content Include="Views\PortalDoctors\part\item.cshtml" />
+    <Content Include="Views\PortalDoctors\part\list.cshtml" />
+    <Content Include="Views\PortalDoctors\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
