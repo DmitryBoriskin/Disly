@@ -29,6 +29,7 @@ namespace Integration.Frmp.models
 	{
 		public ITable<ImportFrmpOrgs>            ImportFrmpOrgss            { get { return this.GetTable<ImportFrmpOrgs>(); } }
 		public ITable<ImportFrmpOrgsPeoples>     ImportFrmpOrgsPeopless     { get { return this.GetTable<ImportFrmpOrgsPeoples>(); } }
+		public ITable<ImportFrmpPeopleInfos>     ImportFrmpPeopleInfoss     { get { return this.GetTable<ImportFrmpPeopleInfos>(); } }
 		public ITable<ImportFrmpPeoplePostsLink> ImportFrmpPeoplePostsLinks { get { return this.GetTable<ImportFrmpPeoplePostsLink>(); } }
 		public ITable<ImportFrmpPeoples>         ImportFrmpPeopless         { get { return this.GetTable<ImportFrmpPeoples>(); } }
 		public ITable<ImportFrmpPosts>           ImportFrmpPostss           { get { return this.GetTable<ImportFrmpPosts>(); } }
@@ -102,6 +103,13 @@ namespace Integration.Frmp.models
 		[Column(@"f_oid"),       Nullable] public string FOid    { get; set; } // varchar(64)
 		[Column(@"f_people"), NotNull    ] public Guid   FPeople { get; set; } // uniqueidentifier
 		[Column(@"f_org"),    NotNull    ] public Guid   FOrg    { get; set; } // uniqueidentifier
+	}
+
+	[Table(Schema="dbo", Name="import_frmp_people_infos")]
+	public partial class ImportFrmpPeopleInfos
+	{
+		[Column(@"f_people"), NotNull] public Guid   FPeople { get; set; } // uniqueidentifier
+		[Column(@"c_xml"),    NotNull] public string CXml    { get; set; } // nvarchar(max)
 	}
 
 	[Table(Schema="dbo", Name="import_frmp_people_posts_link")]
