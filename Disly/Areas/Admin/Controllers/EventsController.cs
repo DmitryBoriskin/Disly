@@ -349,7 +349,7 @@ namespace Disly.Areas.Admin.Controllers
                 Domain = Domain,
                 RelId = objId,
                 RelType = objType,
-                Size = last_items
+                Size = 100
             };
 
             var model = new EventsModalViewModel()
