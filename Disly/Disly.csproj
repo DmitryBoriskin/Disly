@@ -922,7 +922,6 @@
     <Content Include="Views\_spec\shared\_Layout.cshtml" />
     <Content Include="Views\_spec\home\Index.cshtml" />
     <Content Include="Views\Shared\part\attachedFiles.cshtml" />
-    <Content Include="Views\_spec\shared\_Layout - Копировать.cshtml" />
     <Content Include="Views\_spec\page\Index.cshtml" />
     <Content Include="Views\_spec\Contacts\Index.cshtml" />
     <Content Include="Views\_spec\Contacts\part\administration.cshtml" />

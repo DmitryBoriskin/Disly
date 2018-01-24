@@ -1,18 +1,13 @@
 ﻿@model WorksheetViewModel
 @{
-    if (Model.SitesInfo.Alias == "main")
-    {
-        Layout = "/views/_portal/shared/_layout.cshtml";
-    }
+    Layout=ViewBag.Layout;
 }
 <div class="container">
     <div class="row">
         <div class="col-md-12">
             @Html.Partial("services/breadcrumbs")
             <h1>@ViewBag.Title</h1>
-
             @Html.Partial("part/childtabs", Model)
-
             <div class="row padding-top-30">
                 <div class="col-md-12">
                     @if (Model != null && Model.Item != null && !string.IsNullOrEmpty(Model.Item.Url))
@@ -57,12 +52,9 @@
 <script type="text/javascript">
     $(document).ready(function ()
     {
-
         var ifr = $(".modal_frame");
-
         //var h = Math.max(d.body.offsetHeight, d.body.scrollHeight);
         //h += (document.all) ? 60 : 20;
-
         $('iframe').load(function () {
             var _ih = $('iframe').contents().height();
             $('iframe').height(_ih);

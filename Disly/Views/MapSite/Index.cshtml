@@ -1,9 +1,6 @@
 ﻿@model MapSiteViewModel
 @{
-    if (Model.SitesInfo.Alias == "main")
-    {
-        Layout = "/views/_portal/shared/_layout.cshtml";
-    }
+    Layout = ViewBag.Layout;
 }
 @functions{
     private string getChildren(string path, string alias)

@@ -1805,7 +1805,7 @@ namespace cms.dbase
                                  join p in db.content_people_org_links on a.f_people equals p.id into ts
                                  from p in ts.DefaultIfEmpty()
                                  where p.id == null || p.id == a.f_people
-                                 where t.f_type.Equals(type) && o.f_oid != null
+                                 where t.f_type.Equals(type) /*&& o.f_oid != null*/
                                  select new OrgFrontModel
                                  {
                                      Id = o.id,
@@ -1846,7 +1846,7 @@ namespace cms.dbase
                                  from p in ts.DefaultIfEmpty()
                                  where p.id == null || p.id == a.f_people
                                  orderby o.n_sort
-                                 where (s.id == null || s.f_content.Equals(o.id)) && o.f_oid != null
+                                 where (s.id == null || s.f_content.Equals(o.id))// && o.f_oid != null
                                  select new OrgFrontModel
                                  {
                                      Id = o.id,

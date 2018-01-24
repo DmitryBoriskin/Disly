@@ -121,3 +121,140 @@ footer {
 .child_link span{
     padding-right:10px;
 }
+
+
+/* Календарь */
+.ui-datepicker {
+    margin: 3px 0 0;
+    padding: 5px;
+    font-size: 14px;
+    border: solid 1px #d9d9d9;
+    background: #ffffff;
+    -webkit-box-shadow:  3px 3px 5px rgba(0,0,0,.1);
+    -moz-box-shadow:  3px 3px 5px rgba(0,0,0,.1);
+    box-shadow: 3px 3px 5px rgba(0,0,0,.1);
+     
+    z-index: 999 !important;
+}
+
+.ui-datepicker-header {
+    overflow: hidden;
+    color: #3456af;
+}
+
+    .ui-datepicker-header:hover {
+        text-decoration: none;
+    }
+
+.ui-datepicker-prev,
+.ui-datepicker-next {
+    display: block;
+    width: 24px;
+    padding: 5px 0;
+    text-align: center;
+    cursor: pointer;
+}
+
+    .ui-datepicker-prev:hover,
+    .ui-datepicker-next:hover {
+        text-decoration: none;
+        color: #3456af;
+    }
+
+.ui-datepicker-prev {
+    float: left;
+}
+
+.ui-datepicker-next {
+    float: right;
+}
+
+.ui-datepicker-title {
+    overflow: hidden;
+    padding: 5px 0;
+    text-align: center;
+}
+
+.ui-datepicker-calendar {
+    border-collapse: collapse;
+}
+
+    .ui-datepicker-calendar th {
+        padding: 6px;
+        text-align: center;
+        color: #999999;
+        font-weight: normal;
+    }
+
+    .ui-datepicker-calendar td {
+        text-align: center;
+        width: 24px;
+        padding: 6px;
+        border: none;
+        color: #212121;
+    }
+
+        .ui-datepicker-calendar td a {
+            color: #212121;
+        }
+
+            .ui-datepicker-calendar td a:hover {
+                text-decoration: none;
+            }
+
+        .ui-datepicker-calendar td.ui-datepicker-today {
+            background: #e6e6e6;
+            color: #212121;
+        }
+
+        .ui-datepicker-calendar td.ui-datepicker-current-day {
+            background: #4d6bbc;
+            color: #ffffff;
+        }
+
+            .ui-datepicker-calendar td.ui-datepicker-current-day a {
+                color: #ffffff;
+            }
+
+        .ui-datepicker-calendar td.ui-datepicker-other-month,
+        .ui-datepicker-calendar td.ui-datepicker-other-month a {
+            color: #e6e6e6;
+        }
+
+
+.item_news{
+    margin-bottom:30px;
+    padding-bottom:20px;
+    border-bottom:1px solid;
+}
+
+
+
+.adminlist{width:100%;}
+.adminlist tr td{padding:36px 0 4px;border-bottom:1px solid;vertical-align:top;min-height:121px;}
+.adminlist tr td p{margin-bottom:1px;}
+
+
+.adminlist_img_td{width: 110px;}
+.adminlist_img_wr{margin-right:20px;position:relative;min-height: 80px; display: block;}
+.adminlist_name{font-size:18px;font-weight:bold;}
+.adminlist_post{font-size: 14px; line-height: 18px;padding-top:3px;}
+
+
+/*фотогаллерея*/
+.gallery__list{    display: inline-block;}
+iframe.photo-gallery{display:none;}
+.swip_wr{display:inline-block;margin-bottom:15px;margin-right:15px;}
+.swip_wr a {  
+    background:50% 50% no-repeat;
+    background-size:cover;    
+    display:block;
+    width:130px;height:130px;
+}
+#swipebox-original{
+    display:block;    width:50px;height:50px;position:absolute;
+    left:50%;    margin-left:-25px;    top:14px;z-index:999;
+    
+}
+#swipebox-original:before{font-family:fontello;content:'\ea6d';color:#fff;font-size:21px;position:relative;left:14px;}
+

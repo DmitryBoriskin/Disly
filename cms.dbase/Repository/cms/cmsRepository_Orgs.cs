@@ -381,7 +381,17 @@ namespace cms.dbase
                     var data = db.content_orgss.Where(w => w.id == id);
                     if (data.Any())
                     {
-                        var url = (model.Logo != null) ? model.Logo.Url : null;
+                        var url = string.Empty;
+                        if ((model.Logo != null))
+                        {
+                            url = model.Logo.Url;
+                        }
+                        else
+                        {
+                            url = null;
+                        }
+                             
+
                         data
                             .Set(s => s.c_title, model.Title)
                             .Set(s => s.c_title_short, model.ShortTitle)
@@ -1738,10 +1748,13 @@ namespace cms.dbase
                         if (upd.Leader)
                         {
                             var lider = db.content_orgs_adminstrativs
-                                .Where(p => p.f_org == item.f_org);
-
-                            lider.Set(p => p.b_leader, false)
+                                .Where(p => p.f_org == item.f_org && p.b_leader==true);
+                            if (lider.Any())
+                            {
+                                lider.Set(p => p.b_leader, false)
                                 .Update();
+                            }
+                            
                         }
 
                         data.Set(s => s.c_surname, upd.Surname)

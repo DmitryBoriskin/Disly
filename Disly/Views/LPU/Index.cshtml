@@ -1,9 +1,6 @@
 ﻿@model LPUViewModel
 @{
-    if (Model.SitesInfo.Alias == "main")
-    {
-        Layout = "/views/_portal/shared/_layout.cshtml";
-    }
+    Layout = ViewBag.Layout;
 }
 @{
     string title = ViewBag.TypeTitle;
