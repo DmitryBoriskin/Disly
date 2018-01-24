@@ -53,7 +53,7 @@ namespace Disly.Controllers
 
 #warning Если путь типа http://www.med.cap.ru/Page.aspx?id=555860/content
 
-            return Redirect(redirectUrl);
+            return RedirectPermanent(redirectUrl);
         }
 
         public ActionResult News(int? id, int? pg)
@@ -82,75 +82,83 @@ namespace Disly.Controllers
                 redirectUrl = "/press/";
             }
 
-            return Redirect(redirectUrl);
+            return RedirectPermanent(redirectUrl);
         }
 
         //Hospitals.aspx?lib=557311
         //О нас
         public ActionResult Hospitals()
         {
-            return Redirect(redirectUrl);
+            return RedirectPermanent("/lpu/");
         }
 
         //Services.aspx?lib=557238
         public ActionResult Services()
         {
-            return Redirect(redirectUrl);
+            return RedirectPermanent(redirectUrl);
         }
         //Vacancies.aspx?lib=557281
         public ActionResult Vacancies()
         {
-            return Redirect(redirectUrl);
+            return RedirectPermanent("/vacancy/");
         }
-
 
         //www.cheb-gb1.med.cap.ru
         //О нас
         public ActionResult AboutOrgs()
         {
-            return Redirect("/about/");
+            return RedirectPermanent("/about/");
         }
         //Как нас найти
         public ActionResult SheduleTravel()
         {
-            return Redirect("/findus/");
+            return RedirectPermanent("/findus/");
         }
         //Контакты
         public ActionResult Contacts()
         {
-            return Redirect("/contacts/");
+            return RedirectPermanent("/contacts/");
         }
         //Структура
         public ActionResult Branches()
         {
-            return Redirect("/structure/");
+            return RedirectPermanent("/structure/");
         }
-        //Врачи
+        //Врачи портала
+        public ActionResult Doctorsnew()
+        {
+            return RedirectPermanent("/portaldoctors/");
+        }
+
+        //Врачи конкретной лпу
         public ActionResult Doctors()
         {
-            return Redirect("/doctors/");
+            //нет соответствия докторов
+            //Doctors.aspx?id=3943
+            //http://www.cheb-gb1.med.cap.ru/id_1786/Doctors.aspx
+            return RedirectPermanent("/doctors/");
         }
         //Расписание работы
         public ActionResult Timetable()
         {
-            return Redirect(redirectUrl);
+            return RedirectPermanent(redirectUrl);
         }
 
         //Вопросы и ответы
         public ActionResult Questions()
         {
-            return Redirect("/feedback/appeallist/");
+            return RedirectPermanent("/feedback/appeallist/");
         }
         //Архив
         public ActionResult Archives()
         {
-            return Redirect(redirectUrl);
+            return RedirectPermanent(redirectUrl);
         }
 
         //Политика персональных данных
         public ActionResult PersonalDataPolicy()
         {
-            return Redirect(redirectUrl);
+            return RedirectPermanent(redirectUrl);
         }
 
     }

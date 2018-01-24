@@ -1,0 +1,259 @@
+﻿@white: white;
+@black: black;
+@blue: #9dd1ff;
+@blue-c: #063462;
+@yellow: #f7f3d6;
+@yellow-c: #4d4b43;
+@green: #3b2717;
+@green-c: #a9e44d;
+
+.white-black {
+    background-color: @white !important;
+    color: @black !important;
+}
+
+.white-black-hover {
+    color: @white !important;
+    background-color: @black !important;
+}
+
+.black-white {
+    background-color: @black !important;
+    color: @white !important;
+}
+
+.black-white-hover {
+    color: @black !important;
+    background-color: @white !important;
+}
+
+.blue-black {
+    background-color: @blue !important;
+    color: @blue-c !important;
+}
+
+.blue-black-hover {
+    color: @blue !important;
+    background-color: @blue-c !important;
+}
+
+.yellow-black {
+    background-color: @yellow !important;
+    color: @yellow-c !important;
+}
+
+.yellow-black-hover {
+    color: @yellow !important;
+    background-color: @yellow-c !important;
+}
+
+.black-green {
+    background-color: @green !important;
+    color: @green-c !important;
+}
+
+.black-green-hover {
+    color: @green !important;
+    background-color: @green-c !important;
+}
+
+.btn {
+    border: 1px solid;
+    font-size: inherit;
+}
+
+//фон
+.cecu {
+    &.cs-bw {
+        .white-black;
+
+        .nav a {
+            .white-black
+        }
+
+        .nav a:hover, .nav .active a {
+            .white-black-hover;
+        }
+
+        .btn {
+            border-color: @black;
+            background-color: @white;
+            color: @black;
+        }
+
+        .btn:hover {
+            color: @white;
+            background-color: @black;
+        }
+
+        .stat_line_proc {
+            background-color: @black;
+        }
+    }
+
+    &.cs-wb {
+        .black-white;
+
+        .nav a {
+            .black-white
+        }
+
+        .nav a:hover, .nav .active a {
+            .black-white-hover;
+        }
+
+        .btn {
+            border-color: @white;
+            background-color: @black;
+            color: @white
+        }
+
+        .btn:hover {
+            color: @black;
+            background-color: @white;
+        }
+
+        .stat_line_proc {
+            background-color: @white;
+        }
+    }
+
+    &.cs-bb {
+        .blue-black;
+
+        .nav a {
+            .blue-black
+        }
+
+        .nav a:hover, .nav .active a {
+            .blue-black-hover;
+        }
+
+        .btn {
+            border-color: @blue-c;
+            background-color: @blue;
+        }
+
+        .btn:hover {
+            color: @blue;
+            background-color: @blue-c;
+        }
+
+        .stat_line_proc {
+            background-color: @blue-c;
+        }
+    }
+
+    &.cs-gb {
+        .yellow-black;
+
+        .nav a {
+            .yellow-black
+        }
+
+        .nav a:hover, .nav .active a {
+            .yellow-black-hover;
+        }
+
+        .btn {
+            border-color: @yellow-c;
+            background-color: @yellow;
+        }
+
+        .btn:hover {
+            color: @yellow;
+            background-color: @yellow-c;
+        }
+
+        .stat_line_proc {
+            background-color: @yellow-c;
+        }
+    }
+
+    &.cs-yg {
+        .black-green;
+
+        .nav a {
+            .black-green;
+        }
+
+        .nav a:hover, .nav .active a {
+            .black-green-hover;
+        }
+
+        .btn {
+            border-color: @green-c;
+            background-color: @green;
+            color: @green-c;
+        }
+
+        .btn:hover {
+            color: @green;
+            background-color: @green-c;
+        }
+
+        .stat_line_proc {
+            background-color: @green-c;
+        }
+    }
+}
+//шрифт
+.f_small {
+    font-size: 14px;
+}
+
+.f_middl {
+    font-size: 18px;
+}
+
+.f_big {
+    font-size: 22px;
+}
+
+.cecu {
+    &.fs-n > * {
+        font-size: 1em;
+    }
+
+    &.fs-m > * {
+        font-size: 1.3em;
+    }
+
+    &.fs-l > * {
+        font-size: 1.7em;
+    }
+}
+//img
+.cecu.off {
+    img {
+        display: none !important;
+    }
+}
+
+
+.cs-outer {
+    .cs-bw, .cs-bw:focus, .cs-bw:hover {
+        color: black !important;
+        background: white !important;
+    }
+
+    .cs-wb, .cs-wb:focus, .cs-wb:hover {
+        color: white !important;
+        background: black !important;
+    }
+
+    .cs-bb, .cs-bb:focus, .cs-bb:hover {
+        color: #063462 !important;
+        background: #9dd1ff !important;
+    }
+
+    .cs-gb, .cs-gb:focus, .cs-gb:hover {
+        color: #4d4b43 !important;
+        background: #f7f3d6 !important;
+    }
+
+    .cs-yg, .cs-yg:focus, .cs-yg:hover {
+        color: #a9e44d !important;
+        background: #3b2717 !important;
+    }
+}

@@ -189,22 +189,24 @@ namespace cms.dbase
         /// </summary>
         /// <param name="siteSection">Секция</param>
         /// <returns></returns>
-        public override string getView(string siteSection) //string siteId,
+        public override SiteSectionModel getView(string siteSection) //string siteId,
         {
             string siteId = _domain;
             using (var db = new CMSdb(_context))
             {
-                string ViewPath = "~/Error/404/";
+                
 
                 var query = (from s in db.front_site_sections
                              join v in db.front_page_viewss
                              on s.f_page_view equals v.id
                              where (s.f_site.Equals(siteId) && s.f_front_section.Equals(siteSection))
-                             select v.c_url);
+                             select v);
                 if (query.Any())
-                    ViewPath = query.SingleOrDefault();
-
-                return ViewPath;
+                    return query.Select(s => new SiteSectionModel {
+                                Url=s.c_url,
+                                UrlSpec=s.c_url_spec
+                            }).FirstOrDefault();
+                return null;
             }
         }
 
@@ -920,6 +922,8 @@ namespace cms.dbase
                         Id = s.id,
                         Title = s.c_title,
                         Text = s.c_text,
+                        Url=s.c_url,
+                        UrlName=s.c_url_name,
                         Date = s.d_date,
                         PreviewImage = new Photo
                         {
@@ -1334,7 +1338,7 @@ namespace cms.dbase
                                     && ep.b_doctor
                                     && (specialization == 0 || pepl.f_post.Equals(specialization))
                             orderby ep.id, p.p.c_surname, p.p.c_name, p.p.c_patronymic, pepl.n_type
-                            select new { p, ep });
+                            select new { p, ep, pepl });
 
                 if (!string.IsNullOrEmpty(domain))
                 {
@@ -1359,8 +1363,9 @@ namespace cms.dbase
                             Id = ep2.ep.id,
                             Name = ep2.ep.c_name,
                             OrgId = ep2.p.o.id,
-                            OrgTitle = !string.IsNullOrEmpty(ep2.p.o.c_title_short)? ep2.p.o.c_title_short: ep2.p.o.c_title,
-                            OrgUrl = (ep2.p.s != null && !string.IsNullOrEmpty(ep2.p.s.c_alias))? getSiteDefaultDomain(ep2.p.s.c_alias) : null,
+                            OrgTitle = !string.IsNullOrEmpty(ep2.p.o.c_title_short) ? ep2.p.o.c_title_short : ep2.p.o.c_title,
+                            OrgUrl = (ep2.p.s != null && !string.IsNullOrEmpty(ep2.p.s.c_alias)) ? getSiteDefaultDomain(ep2.p.s.c_alias) : null,
+                            Type = ep2.pepl.n_type
                         }).ToArray()
                     });
 
@@ -2112,6 +2117,10 @@ namespace cms.dbase
                                        org = pol.f_org,
                                        title = !string.IsNullOrEmpty(o.c_title_short)? o.c_title_short: o.c_title,
                                        domain = s.c_alias
+                                   },
+                                   pepl = new
+                                   {
+                                       type = pepl.n_type
                                    }
                                });
 
@@ -2137,7 +2146,8 @@ namespace cms.dbase
                             Name = ep2.ep.name,
                             OrgId = ep2.ep.org,
                             OrgUrl = !string.IsNullOrEmpty(ep2.ep.domain)? getSiteDefaultDomain(ep2.ep.domain): null,
-                            OrgTitle = ep2.ep.title
+                            OrgTitle = ep2.ep.title,
+                            Type = ep2.pepl.type
                         }).ToArray()
                     });
 

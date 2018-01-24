@@ -50,6 +50,7 @@
     <script src="/Content/plugins/jquery/jquery.mask.min.js"></script>
     <script src="/Content/plugins/select2/select2.min.js"></script>    
     <script src="/Content/plugins/mobileGallery/js/jquery.swipebox.js"></script>    
+    <script src="/Content/plugins/jquery/jquery.cookie.js"></script>    
     <script src="/Content/js/script.js"></script>
     <script src="/Content/js/menu.js"></script>
 </head>
@@ -74,11 +75,17 @@
                                         @*<div class="head_title"><span>@Model.SitesInfo.LongTitle</span></div>*@
                                     </a>
                                 </div>
-                                <div class="col-md-4 right_section">                                    
-                                    <ul class="nav navbar-nav navbar-right">
-                                        <li><a href="/mapsite"><span class="ti-layers-alt top-icon"></span>Карта сайта</a></li>
-                                        <li><a href="/press/rsssettings"><span class="ti-rss-alt top-icon"></span>RSS</a></li>                                        
-                                    </ul>
+                                <div class="col-md-4 right_section">     
+                                    <div class="navbar-right_wr">
+                                        <ul class="nav navbar-nav navbar-right">
+                                            <li><a href="/mapsite"><span class="ti-layers-alt top-icon"></span>Карта сайта</a></li>
+                                            <li><a href="/press/rsssettings"><span class="ti-rss-alt top-icon"></span>RSS</a></li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <div class="pull-right spec-version-link">
+                                        <a class="spec_version" href="/spec"><span class="spec-info">Aa</span>Для слабовидящих</a>
+                                    </div>
                                 </div>
                             </div>
 

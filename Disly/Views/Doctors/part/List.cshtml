@@ -16,8 +16,6 @@
                             ? item.Photo : "/Content/img/no_avatar.png"
                         : "/Content/img/no_avatar.png";
                     <tr>
-
-
                         <td class="adminlist_img_td">
                             <a class="adminlist_img_wr" target="_blank" href="@link">
                                 <img class="img-circle img-person-list" alt="@item.FIO" src="@photo" />
@@ -26,15 +24,15 @@
                         <td>
                             <a class="adminlist_name" href="@link">@item.FIO</a>
 
-                            @if (item.Posts != null)
-                    {
-                        string posts = string.Empty;
-                        foreach (var p in item.Posts)
-                        {
-                                    <div class="adminlist_post">
-                                        @p.Name
-                                    </div>
-                                }
+                            @if (item.Posts != null && item.Posts.Where(p => p.OrgId == Model.SitesInfo.ContentId).Any())
+                            {
+                                string posts = string.Empty;
+                                foreach (var p in item.Posts.Where(p => p.OrgId == Model.SitesInfo.ContentId).OrderBy(p => p.Type))
+                                {
+                                        <div class="adminlist_post">
+                                            @p.Name
+                                        </div>
+                                    }
                             }
                         </td>
                         <td>
@@ -141,7 +139,7 @@
                     </div>
                 }
 
-                @if (Model.PeoplePosts != null)
+                @if (Model.PeoplePosts != null && Model.PeoplePosts.Count() > 0)
                 {
                     <div class="col-sm-12">
                         <div class="form-group">

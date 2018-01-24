@@ -1,0 +1,53 @@
+﻿@model StructureViewModel
+@{
+    Layout = "/views/_spec/shared/_layout.cshtml";
+}
+<div class="type-page">
+    <div class="container">
+        @if (Model.DepartmentItem != null)
+    {
+        if(Model.StructureItem != null)
+        {
+            if (Model.StructureItem.Ovp)
+            {
+                //ОВП/ФАП
+                @Html.Partial("Ovp")
+            }
+            else
+            {
+                //отделение
+                @Html.Partial("DepartmentItem")
+            }
+        }
+    }
+    else
+    {
+        if (Model.StructureItem != null)
+        {
+            //струкутура
+            @Html.Partial("StructureItem")
+        }
+        else
+        {
+            //список
+            @Html.Partial("services/breadcrumbs")
+            <h1>Структура</h1>
+            if (Model.Structures != null)
+            {
+                    <div class="child">
+                        @foreach (var item in Model.Structures)
+                        {
+                            <div class="child_link">
+                                <span>—</span>
+                                @{
+                                    string _title = (item.TitleShort != null) ? item.TitleShort : item.Title;
+                                }
+                                <a href="/structure/@item.Num">@_title</a>
+                            </div>
+                        }
+                    </div>
+            }
+        }
+    }
+    </div>
+</div>

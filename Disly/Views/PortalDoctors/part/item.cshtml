@@ -1,0 +1,141 @@
+﻿@model PortalDoctorsViewModel
+
+<div class="row">
+    <div class="col-md-8">
+        @*<div>
+                <strong>Место работы: </strong>
+                   @Model.DoctorsItem.EmployeeInfo.UZ.Name
+            </div
+
+            @if (Model.DoctorsItem.StructureId != null && Model.DoctorsItem.DepartmentId != null)
+            {
+                string link = "/structure/" + Model.DoctorsItem.StructureId + "/" + Model.DoctorsItem.DepartmentId;
+                <div>
+                    <strong>Отделение: </strong>
+                    <a href="@link">@Model.DoctorsItem.DepartmentTitle</a>
+                </div>
+            }>*@
+
+        @if (!string.IsNullOrWhiteSpace(Model.DoctorsItem.GsUrl))
+        {
+            var link = string.Format("http://{0}", Model.DoctorsItem.GsUrl);
+            <div>
+                <strong>Главный специалист: </strong>
+                @if (Model.DoctorsItem.MainSpec != null)
+                {
+                    <a href="@link" target="_blank">@Model.DoctorsItem.MainSpec.Name</a>
+                }
+            </div>
+        }
+
+        <strong>Место работы: </strong>
+        <ol>
+            @if (Model.DoctorsItem.EmployeeInfo.EmployeeRecords != null && Model.DoctorsItem.EmployeeInfo.EmployeeRecords.Count() > 0)
+            {
+
+                var postsByOrg = Model.DoctorsItem.EmployeeInfo.EmployeeRecords.Where(p => p.Organisation != null).Any() ?
+                    Model.DoctorsItem.EmployeeInfo.EmployeeRecords.Where(p => p.Organisation != null).GroupBy(p => p.Organisation) : null;
+                if (postsByOrg != null)
+                {
+                    foreach (var postByOrg in postsByOrg)
+                    {
+
+                        var org = postByOrg.Where(p => p.Organisation == postByOrg.Key).First();
+                        <li>
+                            <b>@(org.Organisation):</b><br />
+
+                            @foreach (var p in postByOrg)
+                            {
+                                <strong>Отделение: </strong> @p.Unit <br />
+                                <span> -@p.RecordPost.Name (@p.RecordPositionType.Name) </span><br />
+                            }
+                        </li>
+                    }
+                }
+            }
+
+            @*<strong>Занимаем должность: </strong>
+            <ol>
+                @foreach (var p in Model.DoctorsItem.EmployeeInfo.EmployeeRecords)
+                {
+                    <li>@p.RecordPost.Name</li>
+                }
+            </ol>*@
+        </ol>
+
+        <div>
+            <strong>Дата рождения: </strong>
+            @if (Model.DoctorsItem.EmployeeInfo.Birthdate != null)
+            {
+                string birthDate = Convert.ToDateTime(Model.DoctorsItem.EmployeeInfo.Birthdate).ToString("dd MMMM yyyy") + " г.";
+                @birthDate
+            }
+        </div>
+
+        <div>
+            <strong>Образовательные учреждения: </strong>
+            <ol>
+                @foreach (var e in Model.DoctorsItem.EmployeeInfo.EmployeeSertificateEducation.OrderBy(o => o.IssueDate))
+                {
+                    <li>
+                        <strong>Название: </strong>@e.IssueOrg.Name<br />
+                        <strong>Год выпуска: </strong>@(e.IssueDate != null ? Convert.ToDateTime(e.IssueDate).Year.ToString() + " г." : null)<br />
+                        <strong>Специальность: </strong>@e.EducationSpeciality.Name
+                    </li>
+                }
+            </ol>
+        </div>
+
+        <div>
+            <strong>Стаж работы в отрасли: </strong>
+            <ol>
+                @foreach (var s in Model.DoctorsItem.EmployeeInfo.EmployeeRecords.OrderBy(o => o.DateBegin))
+                {
+                    string dateBegin = s.DateBegin != null ? Convert.ToDateTime(s.DateBegin).ToString("dd.MM.yyyy") + " г. " : null;
+                    string dateEnd = s.DateEnd != null ? "—" + Convert.ToDateTime(s.DateEnd).ToString("dd.MM.yyyy") + " г. " : null;
+                    string experience = dateBegin + dateEnd + s.RecordPost.Name + " " + s.Organisation;
+
+                    <li>@experience</li>
+                }
+            </ol>
+        </div>
+
+        <div>
+            @if (Model.DoctorsItem.EmployeeInfo.EmployeeAwards != null)
+            {
+                <strong>Награды: </strong>
+                <ol>
+                    @foreach (var a in Model.DoctorsItem.EmployeeInfo.EmployeeAwards.OrderBy(o => o.Issued))
+                    {
+                        string dateAward = a.Issued != null ? Convert.ToDateTime(a.Issued).ToString("dd.MM.yyyy") + " г. " : null;
+                        <li>
+                            @dateAward + @a.Name
+                        </li>
+                    }
+                </ol>
+            }
+        </div>
+    </div>
+
+    <div class="col-md-3 col-md-push-1">
+        <div class="dop-block">
+            @{
+                string photo = (!string.IsNullOrWhiteSpace(Model.DoctorsItem.Photo))
+                           ? File.Exists(Server.MapPath(Model.DoctorsItem.Photo))
+                               ? Model.DoctorsItem.Photo : "/Content/img/no_avatar.png"
+                           : "/Content/img/no_avatar.png";
+            }
+
+            <a href="/doctors/@Model.DoctorsItem.Id" class="boss_img_wrap">
+                <img src="@photo" title="@Model.DoctorsItem.FIO" alt="@Model.DoctorsItem.FIO" />
+            </a>
+
+            <a class="btn_print" onClick="window.print()">Распечатать</a><br />
+            <a class="btn_share" title="Поделиться" href="../../../../#">Поделиться</a><br />
+            @if (Model.DoctorsItem.IsRedirectUrl)
+            {
+                <a class="btn_reg ti-info-alt" target="_blank" href="/RedirectRegistry/Doctors/@Model.DoctorsItem.Id/?oid=@Model.Oid">Расписание</a>
+            }
+        </div>
+    </div>
+</div>

@@ -42,130 +42,93 @@
         })
         : null;
 
-    var announcements = (Model.Materials != null) ? Model.Materials.Where(w => w.GroupAlias.Equals("announcement")) : null;
-    var news = (Model.Materials != null) ? Model.Materials.Where(w => w.GroupAlias.Equals("news")) : null;
-    var events = (Model.Materials != null) ? Model.Materials.Where(w => w.GroupAlias.Equals("actual")) : null;
+    var announcements = (Model.Materials != null) ? Model.Materials.Where(w => w.GroupAlias.Equals("announcement")).OrderByDescending(o=>o.Date) : null;
+    var news = (Model.Materials != null) ? Model.Materials.Where(w => w.GroupAlias.Equals("news")).OrderByDescending(o => o.Date) : null;
+    var actual = (Model.Materials != null) ? Model.Materials.Where(w => w.GroupAlias.Equals("actual")).OrderByDescending(o => o.Date) : null;
     int i = 0;
 }
-<!-- слайдер -->
-<div>
-    <div class="module">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-4">
-                    <a target="_blank" href="/RedirectRegistry/Hospitals/@Model.Oid">
-                        <div class="slider-message slider-message-1">
-                            <div class="icon-slider-message">
-                                <span class="ti-support"></span>
-                            </div>
-                            <div class="slider-message-full">
-                                <div class="slider-message-title">электронная&nbsp;регистратура</div>
-                                <div class="slider-message-text">Запишитесь на приём к врачу online</div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <div class="col-md-4">
-                    <a href="/contacts?t=phone">
-                        <div class="slider-message slider-message-2">
-                            <div class="icon-slider-message">
-                                <span class="ti-mobile"></span>
-                            </div>
-                            <div class="slider-message-full">
-                                <div class="slider-message-title">номера&nbsp;наших&nbsp;телефонов</div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <div class="col-md-4">
-                    <a href="/vote">
-                        <div class="slider-message orange">
-                            <div class="icon-slider-message">
-                                <span class="ti-check-box"></span>
-                            </div>
-                            <div class="slider-message-full">
-                                <div class="slider-message-title">нам&nbsp;важно&nbsp;ваше&nbsp;мнение!</div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-            </div>
+
+@*основные ссылки*@
+<div class="container">
+    <div class="link-list">
+        <div class="col-md-3">
+            <a class="link_item btn" href="https://reg.med.cap.ru/Default.aspx" target="_blank">Электронная регистратура</a>
+        </div>
+        <div class="col-md-3">
+            <a class="link_item btn" href="/vote">Нам важно ваше мнение!</a>
+        </div>
+        <div class="col-md-3">
+            <a class="link_item btn" href="/kalendarj">Календарь событий</a>
+        </div>
+        <div class="col-md-3">
+            <a class="link_item btn" href="http://med.cap.ru/portalgssites" target="_blank">Консультация online</a>
         </div>
     </div>
 </div>
-<!-- конец слайдера -->
-<!-- модуль новостей -->
-<div class="container">
-    @if (Model.Materials != null)
-    {
-        <div class="news-module">
-            <p class="module-title"><a href="/press">Пресс-центр</a></p>
-            <div class="row">
-                <div class="col-md-4">
-                    @if (announcements != null && announcements.Count() > 0)
-                    {
-                        foreach (var ann in announcements.ToList())
-                        {
-                            string link = "/press/" + ann.Date.Year + "/" + ann.Date.Month + "/" + ann.Date.Day + "/" + ann.Alias;
 
-                            <div class="module-material-item">
-                                <div class="module-material-item-date">
-                                    <div class="module-material-item-day">@ann.Date.Day.ToString() @ann.Date.ToString("MMMM") @ann.Date.ToString("yyyy")</div>
-                                </div>
-                                <a class="module-material-item-group-link" href="/press/@ann.GroupAlias">@ann.GroupName                                </a>
-                                <a class="module-material-title" href="@link">@ann.Title</a>
+
+
+
+<div class="container">
+    @if (news != null)
+    {
+        <div class="block">
+            <div class="col-md-12">
+                @if (news != null)
+                {
+                    <div class="block_category">
+                        <h2>Новости</h2>
+                        @foreach (var item in news)
+                    {
+                        string link = "/press/" + item.Date.Year + "/" + item.Date.Month + "/" + item.Date.Day + "/" + item.Alias;
+                            <div class="block_item">
+                                <h3><a href="link">@item.Title</a></h3>
+                                <p class="block_item_published">@item.Date.ToString("D")</p>                                
                             </div>
                         }
-                    }
-                </div>
-                <div class="col-md-4">
-                    @if (news != null && news.Count() > 0)
-                    {
-                        foreach (var item in news.ToList())
+                    </div>
+                }
+                
+                @if (actual != null)
+                {
+                    <div class="block_category">
+                        <h2>Акуталььно</h2>
+                        @foreach (var item in actual)
                         {
                             string link = "/press/" + item.Date.Year + "/" + item.Date.Month + "/" + item.Date.Day + "/" + item.Alias;
-
-                            <div class="module-material-item">
-                                <div class="module-material-item-date">
-                                    <div class="module-material-item-day">@item.Date.Day.ToString() @item.Date.ToString("MMMM") @item.Date.ToString("yyyy")</div>
-                                </div>
-                                <a href="/press/@item.GroupAlias" class="module-material-item-group-link">@item.GroupName</a>
-                                <a href="@link" class="module-material-title">@item.Title</a>
+                            <div class="block_item">
+                                <h3><a href="link">@item.Title</a></h3>
+                                <p class="block_item_published">@item.Date.ToString("D")</p>                                
                             </div>
                         }
-                    }
-                </div>
-                <div class="col-md-4">
-                    @if (events != null && events.FirstOrDefault() != null)
-                    {
-                        var ev = events.FirstOrDefault();
-
-                        string link = "/press/" + ev.Date.Year + "/" + ev.Date.Month + "/" + ev.Date.Day + "/" + ev.Alias;
-
-                        <div class="module-material-item">
-                            <div class="module-material-item-date">
-                                <div class="module-material-item-day">@ev.Date.Day.ToString() @ev.Date.ToString("MMMM") @ev.Date.ToString("yyyy")</div>
+                    </div>
+                }
+                @if (announcements != null)
+                {
+                    <div class="block_category">
+                        <h2>Объявления</h2>
+                        @foreach (var item in announcements)
+                        {
+                            string link = "/press/" + item.Date.Year + "/" + item.Date.Month + "/" + item.Date.Day + "/" + item.Alias;
+                            <div class="block_item">
+                                <h3><a href="link">@item.Title</a></h3>
+                                <p class="block_item_published">@item.Date.ToString("D")</p>                                
                             </div>
-                            <a href="/press/@ev.GroupAlias" class="module-material-item-group-link">@ev.GroupName</a>
-                            <a href="@link" class="module-material-title">@ev.Title</a>
-                        </div>
-                    }
-                </div>
+                        }
+                    </div>
+                }               
             </div>
-
         </div>
     }
 </div>
-<!-- конец модуля новостей -->
-<!-- модуль полезные ресурсы -->
-<div>
+
+
     @if (benefitBanners != null)
-    {
-        <div class="imglink-benefit-block module-main-page">
+    {     
             <div class="container">
-                <p class="module-title">Полезные ресурсы<span class="ti-folder"></span><a class="link-to-archive" href="#">Архив</a></p>
-                <div class="ling_img_on carousel slide">
-                    <div class="carousel-inner" data-count="4">
+                <div class="col-md-12 ">
+                    <h2 class="module-title">Полезные ресурсы</h2>
+                    <div class="bl_column_4">
                         @foreach (var item in benefitBanners)
                         {
                             string link = "/redirect/link/" + item.Id;
@@ -175,78 +138,54 @@
                             {
                                 title = title.Substring(0, 70);
                             }
+                            <div class="col-md-3 item_elem">
+                                <a href="@link" class="link_item btn">@Html.Raw(title)</a>
+                            </div>
+                        }
+                    </div>                            
+                </div>                
+            </div>        
+    }
 
-                            string benefitbanerfoto = (!string.IsNullOrWhiteSpace(item.Url))
-                                          ? File.Exists(Server.MapPath(item.Url))
-                                              ? item.Url : "/Content/img/nophoto.jpg"
-                                          : "/Content/img/nophoto.jpg";
 
-                            <div class="linkimg_item col-md-3">
-                                <a href="@link">
-                                    <div class="imglink-item">
-                                        <img class="imglink-pic" src="@benefitbanerfoto" />
-                                        <div class="imglink-title">
-                                            @Html.Raw(title)
-                                        </div>
-                                    </div>
-                                </a>
+
+
+
+    @if (sitemapPlates != null && sitemapPlates.Count() > 0)
+    {
+        
+
+        <div class="container">
+            <div class="col-md-12">
+                <div class="top_line">
+                    <h2 class="module-title">Полезные ссылки</h2>
+                    <div class="bl_column_4 ">
+                        @foreach (var item in sitemapPlates)
+                        {
+                            string fullPath = "/";
+
+                            if (!string.IsNullOrEmpty(item.Url))
+                            {
+                                fullPath = item.Url;
+                            }
+                            else if (item.FrontSection.ToLower().Equals("page"))
+                            {
+                                fullPath = item.Path + item.Alias;
+                            }
+                            else
+                            {
+                                fullPath = "/" + item.FrontSection;
+                            }
+                            <div class="col-sm-3 item_elem">
+                                <a href="@fullPath" class="link_item btn">@item.Title</a>
                             </div>
                         }
                     </div>
-                    @if (benefitBanners.Count() > 4)
-                    {
-                        <div class="imglink-controlls">
-                            <a data-slide="prev" class="ti-angle-left prev"></a>
-                            <a data-slide="next" class="ti-angle-right next"></a>
-                        </div>
-                    }
                 </div>
+              
+                
             </div>
-        </div>
+        </div>            
     }
 
-</div>
-<!-- конец модуля полезные ресурсы -->
-<!-- карта сайта плиткой -->
-<div class="container">
-    @if (sitemapPlates != null && sitemapPlates.Count() > 0)
-    {
-        <div class="sitemap-plates-block">
-            <div class="row">
-                @foreach (var item in sitemapPlates)
-                {
-                    string fullPath = "/";
 
-                    if (!string.IsNullOrEmpty(item.Url))
-                    {
-                        fullPath = item.Url;
-                    }
-                    else if (item.FrontSection.ToLower().Equals("page"))
-                    {
-                        fullPath = item.Path + item.Alias;
-                    }
-                    else
-                    {
-                        fullPath = "/" + item.FrontSection;
-                    }
-                    <div class="col-sm-3">
-                        @if (item.Photo != null && !string.IsNullOrWhiteSpace(item.Photo.Url))
-                        {
-                            string platefoto = File.Exists(Server.MapPath(item.Photo.Url))
-                                      ? item.Photo.Url : "/Content/img/nophoto.jpg";
-
-                            <a href="@fullPath" class="sitemap-plate sitemap-plate-image" title="@item.Title">
-                                <img src="@platefoto" alt="@item.Title" />
-                            </a>
-                        }
-                        else
-                        {
-                            <a href="@fullPath" class="sitemap-plate">@item.Title</a>
-                        }
-                    </div>
-                }
-            </div>
-        </div>
-    }
-</div>
-<!-- конец карты сайта плиткой -->

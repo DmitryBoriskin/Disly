@@ -9,11 +9,19 @@ using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Mvc;
 
+
 namespace Disly.Controllers
 {
-    public class ServiceController : RootController
+    public class ServiceController : Controller
     {
-        //protected FrontRepository _repository { get; private set; }
+
+        /// <summary>
+        /// Контекст доступа к базе данных
+        /// </summary>
+        protected FrontRepository _repository { get; private set; }
+
+
+
 
         public ActionResult Pager(Pager Model, string startUrl, string viewName = "Services/Pager")
         {
@@ -62,30 +70,44 @@ namespace Disly.Controllers
 
             return View(viewName, viewModel);
         }
-        //public string addFiltrParam(string query, string name, string val)
-        //{
-        //    //string search_Param = @"\b" + name + @"=[\w]*[\b]*&?";
-        //    string search_Param = @"\b" + name + @"=(.*?)(&|$)";
-        //    string normal_Query = @"&$";
 
-        //    Regex delParam = new Regex(search_Param, RegexOptions.CultureInvariant);
-        //    Regex normalQuery = new Regex(normal_Query);
-        //    query = delParam.Replace(query, String.Empty);
-        //    query = normalQuery.Replace(query, String.Empty);
+        public string addFiltrParam(string query, string name, string val)
+        {
+            //string search_Param = @"\b" + name + @"=[\w]*[\b]*&?";
+            string search_Param = @"\b" + name + @"=(.*?)(&|$)";
+            string normal_Query = @"&$";
 
-        //    if (val != String.Empty)
-        //    {
-        //        if (query.IndexOf("?") > -1) query += "&" + name + "=" + val;
-        //        else query += "?" + name + "=" + val;
-        //    }
+            Regex delParam = new Regex(search_Param, RegexOptions.CultureInvariant);
+            Regex normalQuery = new Regex(normal_Query);
+            query = delParam.Replace(query, String.Empty);
+            query = normalQuery.Replace(query, String.Empty);
 
-        //    query = query.Replace("?&", "?").Replace("&&", "&");
+            if (val != String.Empty)
+            {
+                if (query.IndexOf("?") > -1) query += "&" + name + "=" + val;
+                else query += "?" + name + "=" + val;
+            }
 
-        //    return query;
-        //}
+            query = query.Replace("?&", "?").Replace("&&", "&");
+
+            return query;
+        }
+        
 
         public ActionResult Photolist(Guid id)
         {
+            var domainUrl = "";
+
+            if (System.Web.HttpContext.Current != null)
+            {
+                var context = System.Web.HttpContext.Current;
+
+                if (context.Request != null && context.Request.Url != null && !string.IsNullOrEmpty(context.Request.Url.Host))
+                    domainUrl = context.Request.Url.Host.ToLower().Replace("www.", "");
+            }
+
+            _repository = new FrontRepository("cmsdbConnection", domainUrl);
+
             PhotoModel[] model = _repository.getPhotoList(id);
             return View("/Views/Service/Photo.cshtml", model);
         }

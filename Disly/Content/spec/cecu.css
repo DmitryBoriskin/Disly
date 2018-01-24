@@ -1,0 +1,218 @@
+.white-black {
+  background-color: white !important;
+  color: black !important;
+}
+.white-black-hover {
+  color: white !important;
+  background-color: black !important;
+}
+.black-white {
+  background-color: black !important;
+  color: white !important;
+}
+.black-white-hover {
+  color: black !important;
+  background-color: white !important;
+}
+.blue-black {
+  background-color: #9dd1ff !important;
+  color: #063462 !important;
+}
+.blue-black-hover {
+  color: #9dd1ff !important;
+  background-color: #063462 !important;
+}
+.yellow-black {
+  background-color: #f7f3d6 !important;
+  color: #4d4b43 !important;
+}
+.yellow-black-hover {
+  color: #f7f3d6 !important;
+  background-color: #4d4b43 !important;
+}
+.black-green {
+  background-color: #3b2717 !important;
+  color: #a9e44d !important;
+}
+.black-green-hover {
+  color: #3b2717 !important;
+  background-color: #a9e44d !important;
+}
+.btn {
+  border: 1px solid;
+  font-size: inherit;
+}
+.cecu.cs-bw {
+  background-color: white !important;
+  color: black !important;
+}
+.cecu.cs-bw .nav a {
+  background-color: white !important;
+  color: black !important;
+}
+.cecu.cs-bw .nav a:hover,
+.cecu.cs-bw .nav .active a {
+  color: white !important;
+  background-color: black !important;
+}
+.cecu.cs-bw .btn {
+  border-color: black;
+  background-color: white;
+  color: black;
+}
+.cecu.cs-bw .btn:hover {
+  color: white;
+  background-color: black;
+}
+.cecu.cs-bw .stat_line_proc {
+  background-color: black;
+}
+.cecu.cs-wb {
+  background-color: black !important;
+  color: white !important;
+}
+.cecu.cs-wb .nav a {
+  background-color: black !important;
+  color: white !important;
+}
+.cecu.cs-wb .nav a:hover,
+.cecu.cs-wb .nav .active a {
+  color: black !important;
+  background-color: white !important;
+}
+.cecu.cs-wb .btn {
+  border-color: white;
+  background-color: black;
+  color: white;
+}
+.cecu.cs-wb .btn:hover {
+  color: black;
+  background-color: white;
+}
+.cecu.cs-wb .stat_line_proc {
+  background-color: white;
+}
+.cecu.cs-bb {
+  background-color: #9dd1ff !important;
+  color: #063462 !important;
+}
+.cecu.cs-bb .nav a {
+  background-color: #9dd1ff !important;
+  color: #063462 !important;
+}
+.cecu.cs-bb .nav a:hover,
+.cecu.cs-bb .nav .active a {
+  color: #9dd1ff !important;
+  background-color: #063462 !important;
+}
+.cecu.cs-bb .btn {
+  border-color: #063462;
+  background-color: #9dd1ff;
+}
+.cecu.cs-bb .btn:hover {
+  color: #9dd1ff;
+  background-color: #063462;
+}
+.cecu.cs-bb .stat_line_proc {
+  background-color: #063462;
+}
+.cecu.cs-gb {
+  background-color: #f7f3d6 !important;
+  color: #4d4b43 !important;
+}
+.cecu.cs-gb .nav a {
+  background-color: #f7f3d6 !important;
+  color: #4d4b43 !important;
+}
+.cecu.cs-gb .nav a:hover,
+.cecu.cs-gb .nav .active a {
+  color: #f7f3d6 !important;
+  background-color: #4d4b43 !important;
+}
+.cecu.cs-gb .btn {
+  border-color: #4d4b43;
+  background-color: #f7f3d6;
+}
+.cecu.cs-gb .btn:hover {
+  color: #f7f3d6;
+  background-color: #4d4b43;
+}
+.cecu.cs-gb .stat_line_proc {
+  background-color: #4d4b43;
+}
+.cecu.cs-yg {
+  background-color: #3b2717 !important;
+  color: #a9e44d !important;
+}
+.cecu.cs-yg .nav a {
+  background-color: #3b2717 !important;
+  color: #a9e44d !important;
+}
+.cecu.cs-yg .nav a:hover,
+.cecu.cs-yg .nav .active a {
+  color: #3b2717 !important;
+  background-color: #a9e44d !important;
+}
+.cecu.cs-yg .btn {
+  border-color: #a9e44d;
+  background-color: #3b2717;
+  color: #a9e44d;
+}
+.cecu.cs-yg .btn:hover {
+  color: #3b2717;
+  background-color: #a9e44d;
+}
+.cecu.cs-yg .stat_line_proc {
+  background-color: #a9e44d;
+}
+.f_small {
+  font-size: 14px;
+}
+.f_middl {
+  font-size: 18px;
+}
+.f_big {
+  font-size: 22px;
+}
+.cecu.fs-n > * {
+  font-size: 1em;
+}
+.cecu.fs-m > * {
+  font-size: 1.3em;
+}
+.cecu.fs-l > * {
+  font-size: 1.7em;
+}
+.cecu.off img {
+  display: none !important;
+}
+.cs-outer .cs-bw,
+.cs-outer .cs-bw:focus,
+.cs-outer .cs-bw:hover {
+  color: black !important;
+  background: white !important;
+}
+.cs-outer .cs-wb,
+.cs-outer .cs-wb:focus,
+.cs-outer .cs-wb:hover {
+  color: white !important;
+  background: black !important;
+}
+.cs-outer .cs-bb,
+.cs-outer .cs-bb:focus,
+.cs-outer .cs-bb:hover {
+  color: #063462 !important;
+  background: #9dd1ff !important;
+}
+.cs-outer .cs-gb,
+.cs-outer .cs-gb:focus,
+.cs-outer .cs-gb:hover {
+  color: #4d4b43 !important;
+  background: #f7f3d6 !important;
+}
+.cs-outer .cs-yg,
+.cs-outer .cs-yg:focus,
+.cs-outer .cs-yg:hover {
+  color: #a9e44d !important;
+  background: #3b2717 !important;
+}
