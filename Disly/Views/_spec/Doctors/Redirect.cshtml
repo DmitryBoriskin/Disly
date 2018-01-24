@@ -1,0 +1,33 @@
+﻿@model RedirectRegistryViewModel
+<div class="container">
+    @if (Model.Doctors != null)
+    {
+        <h3>@Model.Doctors[0].FIO</h3>
+        <ol>
+            @foreach (var d in Model.Doctors)
+            {
+                <li>
+                    @if (!string.IsNullOrWhiteSpace(d.Url))
+                    {
+                        string spec = !string.IsNullOrWhiteSpace(d.Spec) ? d.Spec + " " : null;
+                        string district = !string.IsNullOrWhiteSpace(d.District) ? d.District : null;
+                        string districtType = !string.IsNullOrWhiteSpace(d.DistrictType) ? " (" + d.DistrictType.ToLower() + ") " : null;
+                        string result = district + districtType;
+                        
+                        <a href="@d.Url">@result</a>
+                    }
+                    else
+                    {
+                        <p>Записаться к врачу нельзя</p>
+                    }
+                </li>
+            }
+        </ol>
+    }
+    else
+    {
+        <div class="alert alert-info">
+            <strong>Записаться к врачу нельзя</strong>
+        </div>
+    }
+</div>

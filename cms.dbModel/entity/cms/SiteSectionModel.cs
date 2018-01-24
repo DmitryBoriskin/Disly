@@ -48,6 +48,10 @@ namespace cms.dbModel.entity
         /// Ссылка на представление
         /// </summary>
         public string Url { get; set; }
+        /// <summary>
+        /// Ссылка на представление версии для слабовидящих
+        /// </summary>
+        public string UrlSpec { get; set; }
     }
     
 }

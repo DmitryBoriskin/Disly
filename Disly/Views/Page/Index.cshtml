@@ -15,7 +15,7 @@
         
         @if (Model.Child != null)
         {
-            if (Model.Item.Text != null)
+            if (!String.IsNullOrEmpty(Model.Item.Text))
             {
                 <div class="col-md-8">
                     @if (Model.Item != null)

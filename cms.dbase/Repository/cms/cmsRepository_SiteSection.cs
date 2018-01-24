@@ -72,6 +72,7 @@ namespace cms.dbase
                                Title = s.c_title,
                                Alias = s.f_page_type,
                                Url = s.c_url,
+                               UrlSpec=s.c_url_spec,
                                SiteId = s.f_site
                            });
                 if (data.Any()) return data.Single();
@@ -152,6 +153,7 @@ namespace cms.dbase
 
                         cdSiteSection.c_title = upd.Title;
                         cdSiteSection.c_url = upd.Url;
+                        cdSiteSection.c_url_spec = upd.UrlSpec;
                         db.Update(cdSiteSection);
 
                         if (cdSiteSection.f_page_type != upd.Alias)
@@ -216,7 +218,8 @@ namespace cms.dbase
                         id = sitesection.Id,
                         c_title = sitesection.Title,
                         f_page_type = sitesection.Alias,
-                        c_url = sitesection.Url
+                        c_url = sitesection.Url,
+                        c_url_spec= sitesection.UrlSpec
                     };
                     db.Insert(cdSiteSection);
                     

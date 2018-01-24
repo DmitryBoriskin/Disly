@@ -189,22 +189,24 @@ namespace cms.dbase
         /// </summary>
         /// <param name="siteSection">Секция</param>
         /// <returns></returns>
-        public override string getView(string siteSection) //string siteId,
+        public override SiteSectionModel getView(string siteSection) //string siteId,
         {
             string siteId = _domain;
             using (var db = new CMSdb(_context))
             {
-                string ViewPath = "~/Error/404/";
+                
 
                 var query = (from s in db.front_site_sections
                              join v in db.front_page_viewss
                              on s.f_page_view equals v.id
                              where (s.f_site.Equals(siteId) && s.f_front_section.Equals(siteSection))
-                             select v.c_url);
+                             select v);
                 if (query.Any())
-                    ViewPath = query.SingleOrDefault();
-
-                return ViewPath;
+                    return query.Select(s => new SiteSectionModel {
+                                Url=s.c_url,
+                                UrlSpec=s.c_url_spec
+                            }).FirstOrDefault();
+                return null;
             }
         }
 
@@ -920,6 +922,8 @@ namespace cms.dbase
                         Id = s.id,
                         Title = s.c_title,
                         Text = s.c_text,
+                        Url=s.c_url,
+                        UrlName=s.c_url_name,
                         Date = s.d_date,
                         PreviewImage = new Photo
                         {

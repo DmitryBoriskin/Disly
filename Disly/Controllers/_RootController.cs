@@ -53,7 +53,7 @@ namespace Disly.Controllers
             {
                 if (Request.Url.Host.ToLower().Replace("www.", "") != ConfigurationManager.AppSettings["BaseURL"]) filterContext.Result = Redirect("/Error/");
                 else Domain = String.Empty;
-            }
+            }            
             //Domain = "rkod";
 
             #region Получаем данные из адресной строки
@@ -99,7 +99,29 @@ namespace Disly.Controllers
             ControllerName = filterContext.RouteData.Values["Controller"].ToString().ToLower();
             ActionName = filterContext.RouteData.Values["Action"].ToString().ToLower();
 
-            ViewName = _repository.getView(ControllerName); //Domain, 
+            ViewBag.Layout = "~/Views/Shared/_Layout.cshtml";//основной шаблон
+
+            IsSpecVersion = HttpContext.Request.Cookies["spec_version"] != null;
+            if (Domain == "main")
+            {
+                ViewBag.Layout = "/views/_portal/shared/_layout.cshtml";//шаблон для главного сайта
+            }
+
+            if (IsSpecVersion)
+            {
+                ViewBag.Layout = "/views/_spec/shared/_layout.cshtml";//шаблон версии для слабовидящих
+            }
+
+            //определяем вьюху
+            ViewName = "~/Error/404/";
+            var allview= _repository.getView(ControllerName);
+            if (allview != null)
+            {
+                ViewName = (IsSpecVersion && allview.UrlSpec != null) ? allview.UrlSpec : allview.Url;
+            }
+
+
+
             siteModel = _repository.getSiteInfo();
             
             siteMapArray = _repository.getSiteMapList(); //Domain

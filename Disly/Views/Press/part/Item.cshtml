@@ -12,6 +12,14 @@
                 <label>Опубликовано</label>
                 <div>@Model.Item.Date.ToString("dd MMMM yyyy")<br>@Model.Item.Date.ToString("HH:mm")</div>
             </div>
+            @if (Model.Item.Url != null)
+            {
+                <div class="dop-block_info">
+                    <label>Первоисточник</label>
+                    <div><a href="@Model.Item.Url" target="_blank">@Model.Item.UrlName</a></div>
+                </div>
+            }
+            
             <a class="btn_print" onClick="window.print()">Распечатать</a><br />
             <a class="btn_share" title="Поделиться" href="../../../../#">Поделиться</a>            
         </div>

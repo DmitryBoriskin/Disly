@@ -20,7 +20,7 @@ namespace Disly.Controllers
                 BannerArray = bannerArray,
             };
 
-            IsSpecVersion = HttpContext.Request.Cookies["spec_version"] != null;
+            
         }
 
         /// <summary>
@@ -50,13 +50,6 @@ namespace Disly.Controllers
             {
                 _ViewName = _ViewName.ToLower().Replace("views/", "views/_portal/");//спец вьюха для главного сайта 
             }
-
-            // версия для слабовидящих
-            if (IsSpecVersion)
-            {
-                _ViewName = _ViewName.ToLower().Replace("views/", "views/_spec/");
-            }
-
             return View(_ViewName, model);
         }
     }

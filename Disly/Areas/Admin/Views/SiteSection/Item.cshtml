@@ -12,6 +12,7 @@
                     <div class="col-lg-5">@Html.TextBoxFor(m => m.Item.Alias, new { required = "", type = "text", title = "Название страницы", placeholder = "controller", MaxLength = "128", data_help = "Совпадает с названием контроллера внешней части" })</div>
                 </div>
                 @Html.TextBoxFor(m => m.Item.Url, new { required = "", type = "text", maxlength = "128", title = "Сылка на вьюху" })
+                @Html.TextBoxFor(m => m.Item.UrlSpec, new { type = "text", maxlength = "128", title = "Сылка на вьюху версии для слабовидящих" })
             </div>
 
             <div class="dop_info-block">

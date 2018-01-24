@@ -1,0 +1,123 @@
+﻿a{color:inherit;}
+a:hover{color:inherit;}
+.nav a:hover{color:#fff!important;background-color:#333!important;}
+
+.head_titel{padding:20px 0;font-size:32px;display:block;}
+
+
+.sv_settings{    
+    padding: 10px;
+    min-height: 40px;
+    font-size:22px;
+    color:#333;
+    background: white;
+}
+.sv_settings *{
+    font-weight:bold;
+}
+
+.fs-outer button{
+ display:inline-block;  
+ background:white !important;
+ color:black !important; 
+ height:35px;
+ width:35px;
+ padding: 0;
+}
+
+.fs-outer .fs-n{    font-size:14px;}
+.fs-outer .fs-m{    font-size:18px;}
+.fs-outer .fs-l{    font-size:22px;}
+
+.cs-outer button{
+display:inline-block;  
+height:35px;
+width:35px;
+padding: 0;
+}
+
+
+
+.nav li a{border:1px solid;}
+.breadcrumb{
+    background-color:inherit;
+}
+.cecu{position:relative;}
+a.default-site {
+    position: fixed;
+    display: block;
+    right: 10px;
+    bottom: 20px;    
+}
+.link-list{
+    margin:20px 0; 
+}
+.link_item{display:inline-block;
+           width:100%;
+           white-space:normal;
+           line-height:24px;
+           padding-top:20px;
+           padding-bottom:20px;
+           margin-bottom:15px;
+}
+
+.block_item{padding-bottom:10px;}
+.block_category{
+    border-bottom:1px solid;
+    padding-top:10px;
+    padding-bottom:30px;
+    margin-bottom:20px;
+}
+
+.bl_column_4 .item_elem:nth-child(4n+1){clear:both;}
+
+footer {
+    border-top: 1px solid;
+    padding-top: 30px;
+    margin-top: 40px;
+}
+.top_line {
+    border-top: 1px solid;
+    margin-top:20px;
+    padding-top:20px;
+}
+
+.adminlist_img_wr {
+    max-width: 70px;
+    min-width: 70px;
+    display: inline-block;
+}
+.adminlist_img_wr img{max-width:100%;}
+
+.contact_info_dep{
+    margin-bottom:20px;
+}
+.child_sitemap {
+    padding-left:30px;
+    margin-bottom:10px;
+}
+.child_sitemap_link{
+    position:relative;
+    margin-bottom:10px;
+}
+.child_sitemap_link:before {
+    content: '—';
+    position:absolute;
+    left:-30px;
+}
+.tabs{
+    margin-bottom:20px;
+}
+
+.findus_item{
+    padding-bottom:20px;
+    margin-bottom:40px;
+    border-bottom:1px solid;
+}
+
+.child_link{
+    margin-bottom:10px;
+}
+.child_link span{
+    padding-right:10px;
+}

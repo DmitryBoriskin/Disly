@@ -8,7 +8,7 @@ namespace cms.dbModel
     public abstract class abstract_FrontRepository
     {
         public abstract string getSiteId(string domainUrl);
-        public abstract string getView(string siteSection); //string siteId,
+        public abstract SiteSectionModel getView(string siteSection); //string siteId,
         public abstract SitesModel getSiteInfo(); //string domain
         public abstract string getSiteDefaultDomain(string siteId);
         public abstract UsersModel[] getSiteAdmins();

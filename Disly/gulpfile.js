@@ -40,3 +40,9 @@ gulp.task("green_portal", function () {
         .pipe(less())
         .pipe(gulp.dest(paths.webroot + 'css/theme'))
 });
+
+gulp.task("spec_ver", function () {
+    return gulp.src('content/spec/cecu.less')
+        .pipe(less())
+        .pipe(gulp.dest(paths.webroot + 'spec'))
+});
