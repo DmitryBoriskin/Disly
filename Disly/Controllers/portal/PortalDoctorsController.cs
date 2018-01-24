@@ -46,7 +46,7 @@ namespace Disly.Controllers
         public ActionResult Index()
         {
             var filter = getFilter();
-            model.DoctorList = _repository.getDoctorsList(filter);
+            model.DoctorsList = _repository.getDoctorsList(filter);
             model.PeoplePosts = _repository.getPeoplePosts();
 
             ViewBag.SearchText = filter.SearchText;
@@ -60,15 +60,15 @@ namespace Disly.Controllers
         {
             string _ViewName = (ViewName != String.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";
 
-            model.Doctor = _repository.getPeopleItem(id);
+            model.DoctorsItem = _repository.getPeopleItem(id);
 
             // десериализация xml
             XmlSerializer serializer = new XmlSerializer(typeof(Employee));
 
-            using (TextReader reader = new StringReader(model.Doctor.XmlInfo))
+            using (TextReader reader = new StringReader(model.DoctorsItem.XmlInfo))
             {
                 var result = (Employee)serializer.Deserialize(reader);
-                model.Doctor.EmployeeInfo = result;
+                model.DoctorsItem.EmployeeInfo = result;
             }
 
             return View("Index", model);

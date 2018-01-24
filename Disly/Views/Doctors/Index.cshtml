@@ -18,7 +18,10 @@
         }
         else
         {
-            @Html.Partial("part/list")
+            if (Model.DoctorsList != null)
+            {
+                @Html.Partial("part/list")
+            }
         }
     </div>
 </div>
