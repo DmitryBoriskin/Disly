@@ -95,8 +95,8 @@ namespace cms.dbase
 
         public override bool insertCmsVacancy(VacancyModel vacancy)
         {
-            try
-            {
+            //try
+            //{
                 using (var db = new CMSdb(_context))
                 {
                     using (var tran = db.BeginTransaction())
@@ -130,12 +130,12 @@ namespace cms.dbase
                         return true;
                     }
                 }
-            }
-            catch (Exception ex)
-            {
-                //write to log ex
-                return false;
-            }
+            //}
+            //catch (Exception ex)
+            //{
+            //    //write to log ex
+            //    return false;
+            //}
         }
         public override bool updateCmsVacancy(VacancyModel vacancy)
         {

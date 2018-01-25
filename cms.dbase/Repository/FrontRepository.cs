@@ -1802,7 +1802,7 @@ namespace cms.dbase
                                  where a.id == null || a.f_org.Equals(o.id) && a.b_leader
                                  join s in db.cms_sitess on o.id equals s.f_content into ss
                                  from s in ss.DefaultIfEmpty()
-                                 where s.c_alias!="main" &&( s.id == null || s.f_content.Equals(o.id))
+                                 where ( s.id == null || s.f_content.Equals(o.id))//s.c_alias!="main" &&
                                  join p in db.content_people_org_links on a.f_people equals p.id into ts
                                  from p in ts.DefaultIfEmpty()
                                  where p.id == null || p.id == a.f_people
@@ -1841,13 +1841,13 @@ namespace cms.dbase
                                  join a in db.content_orgs_adminstrativs on o.id equals a.f_org into ps
                                  from a in ps.DefaultIfEmpty()
                                  where a.id == null || a.f_org.Equals(o.id) && a.b_leader
-                                 join s in db.cms_sitess on o.id equals s.f_content into ss
+                                 join s in db.cms_sitess on o.id equals s.f_content into ss 
                                  from s in ss.DefaultIfEmpty()                                 
                                  join p in db.content_people_org_links on a.f_people equals p.id into ts
                                  from p in ts.DefaultIfEmpty()
                                  where p.id == null || p.id == a.f_people
                                  orderby o.n_sort
-                                 where (s.id == null || s.f_content.Equals(o.id)) && s.c_alias != "main"// && o.f_oid != null
+                                 where (s.id == null || s.f_content.Equals(o.id)) //&& s.c_alias != "main"// && o.f_oid != null
                                  select new OrgFrontModel
                                  {
                                      Id = o.id,
@@ -1877,6 +1877,83 @@ namespace cms.dbase
 
                     return null;
                 }
+            }
+        }
+
+
+        public override OrgFrontModel[] getOrgsModel(string tab, string idtype)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var query =db.content_orgss.Where(w=>w.b_disabled==false && w.id!=Guid.Parse("CC8442EF-CECE-4CD3-A544-DA319E03C981"));
+
+                if (!String.IsNullOrEmpty(idtype))
+                {
+                    switch (tab)
+                    {
+                        case "typelist":
+                            query = query.Join(db.content_orgs_types_links.Where(w => w.f_type == Guid.Parse(idtype)), n => n.id, m => m.f_org, (n, m) => n);
+                            break;
+                        case "affiliation":
+                            query = query.Where(w => w.f_department_affiliation == Guid.Parse(idtype));
+                            break;
+                        case "services":
+                            query = query.Join(db.content_orgs_medical_services_linkss.Where(w => w.f_medical_service == Guid.Parse(idtype)), n => n.id, m => m.f_org, (n, m) => n);
+                            break;
+                    }
+                }                
+                query = query.OrderBy(o => new { o.n_sort, o.c_title });
+                var data = query.Select(o => new OrgFrontModel() {
+                    //Id = o.id,
+                    Title = o.c_title,
+                    Phone = o.c_phone,
+                    PhoneReception = o.c_phone_reception,
+                    Fax = o.c_fax,
+                    Email = o.c_email,
+                    Address = o.c_adress,
+                    Logo = o.c_logo,                    
+                    Link = spotDomainContent(o.id),
+                    Leader = getLeaderOrg(o.id)
+                });
+                if (data.Any()) return data.ToArray();
+                else return null;
+            }
+        }
+        public override OrgsAdministrative getLeaderOrg(Guid OrgId)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var query = db.content_orgs_adminstrativs.Where(w => w.f_org == OrgId && w.b_leader == true);
+                if (query.Any())
+                {
+                    return query.Select(s => new OrgsAdministrative {
+                        //id = s.f_people,
+                        Surname = s.c_surname,
+                        Name = s.c_name,
+                        Patronymic = s.c_patronymic,
+                        Post = s.c_post,
+                        PeopleF = s.f_people,
+                        Photo = new Photo { Url = s.c_photo }
+                    }).Single();
+                }
+                return null;
+            }
+        }
+        public override string spotDomainContent(Guid? ContentId)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var site = db.cms_sitess.Where(w => w.f_content == ContentId);
+                if (site.Any())
+                {
+                    string SiteId = site.Single().c_alias;
+                    var domains = db.cms_sites_domainss.Where(w => w.f_site == SiteId).OrderByDescending(o=>o.b_default);
+                    if (domains.Any())
+                    {
+                        return domains.First().c_domain;
+                    }                                        
+                }
+                return null;
             }
         }
 

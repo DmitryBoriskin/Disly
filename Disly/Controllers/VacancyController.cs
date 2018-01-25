@@ -91,7 +91,7 @@ namespace Disly.Controllers
                     });
                 }
                 model.Documents = _repository.getAttachDocuments(id);
-                ViewBag.Title = model.Item.Post;
+                ViewBag.Title = model.Item.Profession;
             }
             else
                 return new HttpNotFoundResult();

@@ -196,7 +196,9 @@
             {
                 string _img = photo_it.Photo;
                 <div class="block_item">
-                    <img  src="@_img"/>
+                    <a href="/press/@photo_it.Date.Year/@photo_it.Date.Month/@photo_it.Date.Day/@photo_it.Alias">
+                        <img src="@_img" />
+                    </a>                    
                     <div class="block_item_info"><a href="/press/@photo_it.Date.Year/@photo_it.Date.Month/@photo_it.Date.Day/@photo_it.Alias">@video_it.Title</a></div>
                 </div>
                      }
@@ -212,7 +214,9 @@
             {
                 string _img = video_it.Photo;
                 <div class="block_item">
-                    <img src="@_img" />
+                    <a href="/press/@video_it.Date.Year/@video_it.Date.Month/@video_it.Date.Day/@video_it.Alias">
+                        <img src="@_img" />
+                    </a>                    
                     <div class="block_item_info"><a href="/press/@video_it.Date.Year/@video_it.Date.Month/@video_it.Date.Day/@video_it.Alias">@video_it.Title</a></div>
                 </div>
             }

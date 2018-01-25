@@ -61,6 +61,9 @@ namespace cms.dbModel
         //лпу
         public abstract OrgType[] getOrgTypes();
         public abstract OrgFrontModel[] getOrgModels(Guid? type);
+        public abstract OrgFrontModel[] getOrgsModel(string tab, string idtype);
+        public abstract OrgsAdministrative getLeaderOrg(Guid OrgId);
+        public abstract string spotDomainContent(Guid? ContentId);
         public abstract string getOrgTypeName(Guid id);
         public abstract DepartmentAffiliationModel[] getDepartmentAffiliations();
         public abstract string getAffiliationDepartment(Guid id);
