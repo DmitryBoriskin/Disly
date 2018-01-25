@@ -21,14 +21,14 @@
                                             <div class="vacnacy_item_date">@item.Date.ToString("dd.MM.yyyy")</div>
                                             <a href="/vacancy/@item.Id">@item.Post</a>
 
-                                            @if (!string.IsNullOrEmpty(item.Profession))
+                                            @*@if (!string.IsNullOrEmpty(item.Profession))
                                             {
                                                 <span>, @item.Profession</span>
                                             }
                                             @if (item.Temporarily)
                                             {
                                                 <span> (Вакансия на замещение должности)</span>
-                                            }
+                                            }*@
 
                                             <p>
                                                 @if (!string.IsNullOrEmpty(item.Desc) && item.Desc.Length > 250)

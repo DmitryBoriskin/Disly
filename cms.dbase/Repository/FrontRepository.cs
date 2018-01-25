@@ -1802,7 +1802,7 @@ namespace cms.dbase
                                  where a.id == null || a.f_org.Equals(o.id) && a.b_leader
                                  join s in db.cms_sitess on o.id equals s.f_content into ss
                                  from s in ss.DefaultIfEmpty()
-                                 where s.id == null || s.f_content.Equals(o.id)
+                                 where s.c_alias!="main" &&( s.id == null || s.f_content.Equals(o.id))
                                  join p in db.content_people_org_links on a.f_people equals p.id into ts
                                  from p in ts.DefaultIfEmpty()
                                  where p.id == null || p.id == a.f_people
@@ -1842,12 +1842,12 @@ namespace cms.dbase
                                  from a in ps.DefaultIfEmpty()
                                  where a.id == null || a.f_org.Equals(o.id) && a.b_leader
                                  join s in db.cms_sitess on o.id equals s.f_content into ss
-                                 from s in ss.DefaultIfEmpty()
+                                 from s in ss.DefaultIfEmpty()                                 
                                  join p in db.content_people_org_links on a.f_people equals p.id into ts
                                  from p in ts.DefaultIfEmpty()
                                  where p.id == null || p.id == a.f_people
                                  orderby o.n_sort
-                                 where (s.id == null || s.f_content.Equals(o.id))// && o.f_oid != null
+                                 where (s.id == null || s.f_content.Equals(o.id)) && s.c_alias != "main"// && o.f_oid != null
                                  select new OrgFrontModel
                                  {
                                      Id = o.id,

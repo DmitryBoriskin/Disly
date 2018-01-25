@@ -17,28 +17,11 @@
                         <div class="col-md-3 col-md-push-9">
                             <div class="dop-block">
                                 <div class="dop-block_info">
-                                    @if (Model.Item.Post != null)
-                                    {
+                                    <label></label>
+                                    <div><a href="~/Userfiles/anketa.zip" target="_blank">Шаблон анкеты</a></div>
+                                </div>
 
-                                        <label>Должность: </label>
-                                        <div>@Model.Item.Post</div>
-                                    }
-                                    @if (Model.Item.Profession != null)
-                                    {
-                                        <label>Профессия: </label>
-                                        <div>@Model.Item.Profession</div>
-                                    }
-
-                                    @if (Model.Item.Salary != null)
-                                    {
-                                        <label>Зарплата</label>
-                                        <div>@Model.Item.Salary</div>
-                                    }
-                                    else
-                                    {
-                                        <label>Зарплата</label>
-                                        <div>з/п не указана</div>
-                                    }
+                                <div class="dop-block_info">
                                     <label>Дата публикации</label>
                                     <div>@Model.Item.Date.ToString("dd.MM.yyyy")</div>
                                 </div>
@@ -51,23 +34,33 @@
                             <div class="row">
                                 <div class="col-md-12">
 
-                                    <div class="row vacancy-single-desc">
+                                    <div clas=" vacancy-single-desc">                                        
+                                        
+                                            
+                                        
+                                        @if (Model.Item.Temporarily)
+                                        {
+                                            <span> (Вакансия на замещение должности)</span>
+                                        }
 
-                                        <div class="col-md-2"><strong>Профессия/<br />должность</strong></div>
-                                        <div class="col-md-10">
-                                            <span>@Model.Item.Post</span>
-                                            @if (Model.Item.Temporarily)
-                                            {
-                                                <span> (Вакансия на замещение должности)</span>
-                                            }
-
-                                            @if (!string.IsNullOrEmpty(Model.Item.Profession))
-                                            {
-                                                <br />
-                                                <span>@Model.Item.Profession</span>
-                                            }
-                                        </div>
+                                        <br />
                                     </div>
+
+
+                                    @if (Model.Item.Salary != null)
+                                    {
+                                        <div class="vacancy-single-desc">
+                                            <strong>Зарплата: </strong>
+                                            <span>@Model.Item.Salary</span>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="vacancy-single-desc">
+                                            <strong>Зарплата: </strong>
+                                            <span>з/п не указана</span>
+                                        </div>
+                                    }
 
                                     @if (Model.SitesInfo != null && Model.SitesInfo.Alias == "main")
                                     {
