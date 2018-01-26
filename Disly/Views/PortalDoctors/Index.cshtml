@@ -1,27 +1,233 @@
 ﻿@model PortalDoctorsViewModel
-    @{
-        if (Model.SitesInfo.Alias == "main")
+@{
+    Layout = ViewBag.Layout;
+}
+<div class="type-page">
+    <div class="container">
+        @Html.Partial("services/breadcrumbs")
+        @if (Model.Doctor != null)
         {
-            Layout = "/views/_portal/shared/_layout.cshtml";
+            var doctorfoto = (!string.IsNullOrWhiteSpace(Model.Doctor.Photo)) ? File.Exists(Server.MapPath(Model.Doctor.Photo))
+                ? Model.Doctor.Photo : "/Content/img/no_avatar.png" : "/Content/img/no_avatar.png";
+
+            <h1>@Model.Doctor.FIO</h1>
+
+            if (Model.Doctor.EmployeeInfo != null)
+            {
+                <div class="row">
+                    <div class="col-md-9">
+                        <div>
+                            <strong>Место работы: </strong>
+                            @Model.Doctor.EmployeeInfo.UZ.Name
+                        </div>
+
+                        @if (Model.Doctor.StructureId != null && Model.Doctor.DepartmentId != null)
+                    {
+                        string link = "/structure/" + Model.Doctor.StructureId + "/" + Model.Doctor.DepartmentId;
+                            <div>
+                                <strong>Отделение: </strong>
+                                <a href="@link">@Model.Doctor.DepartmentTitle</a>
+                            </div>
+                        }
+
+                        @if (!string.IsNullOrWhiteSpace(Model.Doctor.GsUrl))
+                        {
+                            string speclink = string.Format("http://{0}", Model.Doctor.GsUrl);
+                            <div>
+                                <strong>Главный специалист: </strong>
+                                <a href="@speclink" target="_blank">@(Model.Doctor.MainSpec != null? Model.Doctor.MainSpec.Name: "")</a>
+                            </div>
+                        }
+                        <div>
+                            <strong>Занимаемая должность: </strong>
+                            <ol>
+                                @foreach (var p in Model.Doctor.EmployeeInfo.EmployeeRecords)
+                                {
+                                    <li>@p.RecordPost.Name</li>
+                                }
+                            </ol>
+                        </div>
+
+                        <div>
+                            <strong>Специальность по основной должности: </strong>
+                            <ol>
+                                @foreach (var p in Model.Doctor.EmployeeInfo.EmployeeRecords)
+                                {
+                                    <li>@p.RecrodPosition.Name</li>
+                                }
+                            </ol>
+                        </div>
+
+                        <div>
+                            <strong>Дата рождения: </strong>
+                            @if (Model.Doctor.EmployeeInfo.Birthdate.HasValue)
+                            {
+                                <span>
+                                    @Model.Doctor.EmployeeInfo.Birthdate.Value.ToString("dd MMMM yyyy") г.
+                                </span>
+                            }
+                        </div>
+
+                        <div>
+                            <strong>Образовательные учреждения: </strong>
+                            <ol>
+                                @foreach (var e in Model.Doctor.EmployeeInfo.EmployeeSertificateEducation.OrderBy(o => o.IssueDate))
+                                {
+                                    <li>
+                                        <strong>Название: </strong>@e.IssueOrg.Name<br />
+                                        <strong>Год выпуска: </strong>
+                                        @if (e.IssueDate.HasValue)
+                                        {
+                                            <span>@e.IssueDate.Value.ToString("yyyy") г.</span>
+                                        } <br />
+                                        <strong>Специальность: </strong>@e.EducationSpeciality.Name
+                                    </li>
+                                }
+                            </ol>
+                        </div>
+
+                        <div>
+                            <strong>Стаж работы в отрасли: </strong>
+                            <ol>
+                                @foreach (var s in Model.Doctor.EmployeeInfo.EmployeeRecords.OrderBy(o => o.DateBegin))
+                                {
+                                    string dateBegin = s.DateBegin.HasValue ? string.Format("{0}г. ", Convert.ToDateTime(s.DateBegin).ToString("dd.MM.yyyy")) : null;
+                                    string dateEnd = s.DateEnd.HasValue ? string.Format("— {0}г. ", Convert.ToDateTime(s.DateEnd).ToString("dd.MM.yyyy")) : null;
+
+                                    <li>@dateBegin @dateEnd @s.RecordPost.Name @s.Organisation;</li>
+                                }
+                            </ol>
+                        </div>
+
+                        <div>
+                            @if (Model.Doctor.EmployeeInfo.EmployeeAwards != null)
+                            {
+                                <strong>Награды:</strong>
+                                <ol>
+                                    @foreach (var a in Model.Doctor.EmployeeInfo.EmployeeAwards.OrderBy(o => o.Issued))
+                                    {
+                                        string dateAward = a.Issued.HasValue ? string.Format("{0} г.", Convert.ToDateTime(a.Issued).ToString("dd.MM.yyyy")) : null;
+                                        <li>
+                                            @dateAward  @a.Name
+                                        </li>
+                                    }
+                                </ol>
+                            }
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+
+                        <img src="@doctorfoto" alt="@Model.Doctor.FIO" />
+                    </div>
+                </div>
+            }
         }
-    }
-    <div class="type-page">
-        <div class="container">
-            @Html.Partial("services/breadcrumbs")
-            @if (Model.DoctorsItem != null)
-            {
-                <h1>@Model.DoctorsItem.FIO</h1>
-                if (Model.DoctorsItem.EmployeeInfo != null)
-                {
-                    @Html.Partial("part/item")
-                }
-            }
-            else
-            {
-                if (Model.DoctorsList != null)
-                {
-                    @Html.Partial("part/list")
-                }
-            }
-        </div>
+        else
+        {
+            <h1>@ViewBag.Title</h1>
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            @if (Model.DoctorList != null)
+                            {
+                                <table class="table">
+                                    <tr>
+                                        <th>Изображение</th>
+                                        <th>ФИО</th>
+                                        <th>Должность</th>
+                                    </tr>
+                                    @foreach (var item in Model.DoctorList.Doctors)
+                                    {
+                                        string link = "/" + ViewBag.ControllerName + "/" + item.Id;
+                                        string photo = (!string.IsNullOrWhiteSpace(item.Photo)) ? File.Exists(Server.MapPath(item.Photo))
+                                        ? item.Photo : "/Content/img/no_avatar.png"
+                                        : "/Content/img/no_avatar.png";
+
+                                        <tr>
+                                            <td>
+                                                <a class="adminlist_img_wr" href="@link" class="alldoc_photo">
+                                                    <img src="@photo" class="img-circle img-person-list" alt="@item.FIO" />
+                                                </a>
+                                            </td>
+                                            <td><a href="@link">@item.FIO</a></td>
+                                            <td>
+                                                @if (item.Posts != null && item.Posts.Count() > 0)
+                                                {
+                                                    var postsByOrg = item.Posts.Where(p => p.OrgId != null).Any() ?
+                                                        item.Posts.Where(p => p.OrgId != null).GroupBy(p => p.OrgId) : null;
+                                                    if (postsByOrg != null)
+                                                    {
+                                                        foreach (var postByOrg in postsByOrg)
+                                                        {
+
+                                                            var org = postByOrg.Where(p => p.OrgId == postByOrg.Key).First();
+                                                            string linkToOrg = string.Format("http://{0}", org.OrgUrl);
+                                                            <p>
+                                                                @if (!string.IsNullOrWhiteSpace(linkToOrg))
+                                                                {
+                                                                    <a target="_blank" href="@linkToOrg">@(org.OrgTitle):</a><br />
+                                                                }
+                                                                else
+                                                                {
+                                                                    <b>@(org.OrgTitle):</b><br />
+                                                                }
+
+                                                                @foreach (var p in postByOrg)
+                                                                {
+                                                                    <span> -@p.Name </span><br />
+                                                                }
+                                                            </p>
+                                                        }
+                                                    }
+                                                }
+                                            </td>
+
+                                        </tr>
+                                    }
+                                </table>
+
+                                Html.RenderAction("Pager", "Service", new { @Model = Model.DoctorList.Pager });
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-md-push-1">
+                    <form role="form" class="filtr_news" action="/@ViewBag.ControllerName/">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="form-group search_news">
+                                    <label class="label_filtr" for="search_news">Ключевые слова</label>
+                                    <input type="text" class="filtr_data form-control" name="searchtext" id="search_news" value="@ViewBag.SearchText" />
+                                </div>
+                            </div>
+
+                            @if (Model.PeoplePosts != null)
+                            {
+                                <div class="col-sm-12">
+                                    <div class="form-group">
+                                        <label class="label_filtr">Специализации</label>
+                                        <select class="form-control select2" name="type">
+                                            <option value="">не выбрано</option>
+                                            @foreach (var item in Model.PeoplePosts)
+                                            {
+                                                string selected = (item.Id.ToString() == ViewBag.Position) ? "selected" : string.Empty;
+                                                <option value="@item.Id" @selected>@item.Name</option>
+                                            }
+                                        </select>
+
+                                    </div>
+                                </div>
+                            }
+
+                            <div class="col-sm-12 control-filter">
+                                <a class="btn btn-default pull-right" href="/@ViewBag.ControllerName">Очистить</a>
+                                <button class="btn sub" type="submit">Применить</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        }
     </div>
+</div>

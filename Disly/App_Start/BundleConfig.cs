@@ -69,6 +69,7 @@ namespace Disly
             //версия для слоабовидящих
             bundles.Add(new StyleBundle("~/Content/style_spec").Include(                      
                       "~/Content/plugins/bootstrap/css/bootstrap.min.css",
+                      "~/Content/plugins/mobileGallery/swipebox.css",
                       "~/Content/spec/style.css",
                       "~/Content/spec/cecu.css"                      
                       ));
@@ -79,7 +80,8 @@ namespace Disly
              bundles.Add(new ScriptBundle("~/bundles/jquery_spec").Include(
                 "~/Content/plugins/jquery/jquery.js",
                 "~/Content/plugins/jquery/jquery.ui.js",
-                "~/Content/plugins/jquery/jquery.cookie.js"
+                "~/Content/plugins/jquery/jquery.cookie.js"                
+
                 ));
             bundles.Add(new ScriptBundle("~/bundles/modernizr").Include(
                        "~/Scripts/modernizr.js"));

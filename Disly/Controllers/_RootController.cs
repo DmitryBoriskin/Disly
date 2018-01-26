@@ -100,8 +100,11 @@ namespace Disly.Controllers
             ActionName = filterContext.RouteData.Values["Action"].ToString().ToLower();
 
             ViewBag.Layout = "~/Views/Shared/_Layout.cshtml";//основной шаблон
-
-            IsSpecVersion = HttpContext.Request.Cookies["spec_version"] != null;
+            if (HttpContext.Request.Cookies["spec_version"] != null)
+            {
+                IsSpecVersion = HttpContext.Request.Cookies["spec_version"].Value == "true";
+            }
+            
             if (Domain == "main")
             {
                 ViewBag.Layout = "/views/_portal/shared/_layout.cshtml";//шаблон для главного сайта

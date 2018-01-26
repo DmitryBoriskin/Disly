@@ -128,7 +128,7 @@ namespace Disly.Areas.Admin.Controllers
             }
             #endregion
 
-            model.Item = _cmsRepository.getOrgItem(Id);    //+ список структур    +списо административного персонала
+            model.Item = _cmsRepository.getOrgItem(Id);    //+ список структур    +список административного персонала
 
             // типы организаций
             if (model.Item != null)

@@ -1,9 +1,6 @@
 ﻿@model VacancyViewModel
 @{
-    if (Model.SitesInfo.Alias == "main")
-    {
-        Layout = "/views/_portal/shared/_layout.cshtml";
-    }
+    Layout = ViewBag.Layout;
 }
 @if (Model.List != null)
 {
@@ -22,16 +19,16 @@
                                     {
                                         <div class="vacnacy_item">
                                             <div class="vacnacy_item_date">@item.Date.ToString("dd.MM.yyyy")</div>
-                                            <a href="/vacancy/@item.Id">@item.Post</a>
+                                            <a href="/vacancy/@item.Id">@item.Profession</a>
 
-                                            @if (!string.IsNullOrEmpty(item.Profession))
+                                            @*@if (!string.IsNullOrEmpty(item.Profession))
                                             {
                                                 <span>, @item.Profession</span>
                                             }
                                             @if (item.Temporarily)
                                             {
                                                 <span> (Вакансия на замещение должности)</span>
-                                            }
+                                            }*@
 
                                             <p>
                                                 @if (!string.IsNullOrEmpty(item.Desc) && item.Desc.Length > 250)
