@@ -2015,5 +2015,19 @@ namespace cms.dbase
                 return structureIds.Contains(query.SingleOrDefault());
             }
         }
+
+
+        public override bool NormalizeDepartamnt()
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var structure = db.content_org_structures;
+                foreach (var item in structure.ToArray())
+                {
+                    db.normolize_sort_departamts(item.id);
+                }
+                return true;
+            }
+        }
     }
 }

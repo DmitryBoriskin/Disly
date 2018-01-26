@@ -702,16 +702,16 @@ namespace cms.dbase.models
 		#region Associations
 
 		/// <summary>
-		/// FK_cms_log_sections
-		/// </summary>
-		[Association(ThisKey="f_section", OtherKey="c_alias", CanBeNull=true, KeyName="FK_cms_log_sections", BackReferenceName="cmslogsectionss")]
-		public cms_log_sections cmslogsections { get; set; }
-
-		/// <summary>
 		/// FK_log_actions
 		/// </summary>
 		[Association(ThisKey="f_action", OtherKey="c_action", CanBeNull=false, KeyName="FK_log_actions", BackReferenceName="logactionss")]
 		public cms_log_actions logactions { get; set; }
+
+		/// <summary>
+		/// FK_cms_log_sections
+		/// </summary>
+		[Association(ThisKey="f_section", OtherKey="c_alias", CanBeNull=true, KeyName="FK_cms_log_sections", BackReferenceName="cmslogsectionss")]
+		public cms_log_sections cmslogsections { get; set; }
 
 		#endregion
 	}
@@ -846,16 +846,16 @@ namespace cms.dbase.models
 		#region Associations
 
 		/// <summary>
-		/// fk_user_group_resolutions
-		/// </summary>
-		[Association(ThisKey="f_user_group", OtherKey="c_alias", CanBeNull=false, KeyName="fk_user_group_resolutions", BackReferenceName="fkusergroupresolutionss")]
-		public cms_users_group fkusergroupresolutions { get; set; }
-
-		/// <summary>
 		/// fk_menu_template_resolutions
 		/// </summary>
 		[Association(ThisKey="f_menu_id", OtherKey="id", CanBeNull=false, KeyName="fk_menu_template_resolutions", BackReferenceName="fkmenutemplateresolutionss")]
 		public cms_menu fkmenutemplateresolutions { get; set; }
+
+		/// <summary>
+		/// fk_user_group_resolutions
+		/// </summary>
+		[Association(ThisKey="f_user_group", OtherKey="c_alias", CanBeNull=false, KeyName="fk_user_group_resolutions", BackReferenceName="fkusergroupresolutionss")]
+		public cms_users_group fkusergroupresolutions { get; set; }
 
 		#endregion
 	}
@@ -1227,16 +1227,16 @@ namespace cms.dbase.models
 		#region Associations
 
 		/// <summary>
-		/// FK_content_banners_content_banner_sections
-		/// </summary>
-		[Association(ThisKey="f_section", OtherKey="id", CanBeNull=false, KeyName="FK_content_banners_content_banner_sections", BackReferenceName="contentbannerscontentbannersectionss")]
-		public content_banner_sections contentbannerscontentbannersections { get; set; }
-
-		/// <summary>
 		/// FK_content_banners_cms_sites
 		/// </summary>
 		[Association(ThisKey="f_site", OtherKey="c_alias", CanBeNull=false, KeyName="FK_content_banners_cms_sites", BackReferenceName="contentbannerscmssitess")]
 		public cms_sites contentbannerscmssites { get; set; }
+
+		/// <summary>
+		/// FK_content_banners_content_banner_sections
+		/// </summary>
+		[Association(ThisKey="f_section", OtherKey="id", CanBeNull=false, KeyName="FK_content_banners_content_banner_sections", BackReferenceName="contentbannerscontentbannersectionss")]
+		public content_banner_sections contentbannerscontentbannersections { get; set; }
 
 		#endregion
 	}
@@ -1419,16 +1419,16 @@ namespace cms.dbase.models
 		#region Associations
 
 		/// <summary>
-		/// FK_content_main_specialist_employees_link_content_people
-		/// </summary>
-		[Association(ThisKey="f_people", OtherKey="id", CanBeNull=false, KeyName="FK_content_main_specialist_employees_link_content_people", BackReferenceName="contentmainspecialistemployeeslinkcontentpeoples")]
-		public content_people contentmainspecialistemployeeslinkcontentpeople { get; set; }
-
-		/// <summary>
 		/// FK_content_main_specialist_employees_link_content_main_specialists
 		/// </summary>
 		[Association(ThisKey="f_main_specialist", OtherKey="id", CanBeNull=false, KeyName="FK_content_main_specialist_employees_link_content_main_specialists", BackReferenceName="contentmainspecialistemployeeslinkcontentmainspecialistss")]
 		public content_main_specialists contentmainspecialistemployeeslinkcontentmainspecialists { get; set; }
+
+		/// <summary>
+		/// FK_content_main_specialist_employees_link_content_people
+		/// </summary>
+		[Association(ThisKey="f_people", OtherKey="id", CanBeNull=false, KeyName="FK_content_main_specialist_employees_link_content_people", BackReferenceName="contentmainspecialistemployeeslinkcontentpeoples")]
+		public content_people contentmainspecialistemployeeslinkcontentpeople { get; set; }
 
 		#endregion
 	}
@@ -2145,16 +2145,16 @@ namespace cms.dbase.models
 		#region Associations
 
 		/// <summary>
-		/// FK_content_sitemap_menutypes_content_sitemap
-		/// </summary>
-		[Association(ThisKey="f_sitemap", OtherKey="id", CanBeNull=false, KeyName="FK_content_sitemap_menutypes_content_sitemap", BackReferenceName="contentsitemapmenutypescontentsitemaps")]
-		public content_sitemap contentsitemapmenutypescontentsitemap { get; set; }
-
-		/// <summary>
 		/// FK_content_sitemap_menutypes_content_sitemap_menus
 		/// </summary>
 		[Association(ThisKey="f_menutype", OtherKey="id", CanBeNull=false, KeyName="FK_content_sitemap_menutypes_content_sitemap_menus", BackReferenceName="contentsitemapmenutypescontentsitemapmenuss")]
 		public content_sitemap_menus contentsitemapmenutypescontentsitemapmenus { get; set; }
+
+		/// <summary>
+		/// FK_content_sitemap_menutypes_content_sitemap
+		/// </summary>
+		[Association(ThisKey="f_sitemap", OtherKey="id", CanBeNull=false, KeyName="FK_content_sitemap_menutypes_content_sitemap", BackReferenceName="contentsitemapmenutypescontentsitemaps")]
+		public content_sitemap contentsitemapmenutypescontentsitemap { get; set; }
 
 		#endregion
 	}
@@ -2744,6 +2744,59 @@ namespace cms.dbase.models
 
 		#endregion
 
+		#region get_lpu_list
+
+		public static IEnumerable<get_lpu_listResult> get_lpu_list(this DataConnection dataConnection)
+		{
+			var ms = dataConnection.MappingSchema;
+
+			return dataConnection.QueryProc(dataReader =>
+				new get_lpu_listResult
+				{
+					c_title                  = Converter.ChangeTypeTo<string>(dataReader.GetValue(0), ms),
+					c_domain                 = Converter.ChangeTypeTo<string>(dataReader.GetValue(1), ms),
+					leader_id                = Converter.ChangeTypeTo<Guid?> (dataReader.GetValue(2), ms),
+					c_name                   = Converter.ChangeTypeTo<string>(dataReader.GetValue(3), ms),
+					c_surname                = Converter.ChangeTypeTo<string>(dataReader.GetValue(4), ms),
+					c_patronymic             = Converter.ChangeTypeTo<string>(dataReader.GetValue(5), ms),
+					c_phone                  = Converter.ChangeTypeTo<string>(dataReader.GetValue(6), ms),
+					c_photo                  = Converter.ChangeTypeTo<string>(dataReader.GetValue(7), ms),
+					c_post                   = Converter.ChangeTypeTo<string>(dataReader.GetValue(8), ms),
+					id                       = Converter.ChangeTypeTo<Guid>  (dataReader.GetValue(9), ms),
+					Column11                 = Converter.ChangeTypeTo<string>(dataReader.GetValue(10), ms),
+					c_phone_reception        = Converter.ChangeTypeTo<string>(dataReader.GetValue(11), ms),
+					c_fax                    = Converter.ChangeTypeTo<string>(dataReader.GetValue(12), ms),
+					c_email                  = Converter.ChangeTypeTo<string>(dataReader.GetValue(13), ms),
+					c_adress                 = Converter.ChangeTypeTo<string>(dataReader.GetValue(14), ms),
+					c_logo                   = Converter.ChangeTypeTo<string>(dataReader.GetValue(15), ms),
+					f_department_affiliation = Converter.ChangeTypeTo<Guid?> (dataReader.GetValue(16), ms),
+				},
+				"[dbo].[get_lpu_list]");
+		}
+
+		public partial class get_lpu_listResult
+		{
+			                    public string c_title                  { get; set; }
+			                    public string c_domain                 { get; set; }
+			                    public Guid?  leader_id                { get; set; }
+			                    public string c_name                   { get; set; }
+			                    public string c_surname                { get; set; }
+			                    public string c_patronymic             { get; set; }
+			                    public string c_phone                  { get; set; }
+			                    public string c_photo                  { get; set; }
+			                    public string c_post                   { get; set; }
+			                    public Guid   id                       { get; set; }
+			[Column("c_phone")] public string Column11                 { get; set; }
+			                    public string c_phone_reception        { get; set; }
+			                    public string c_fax                    { get; set; }
+			                    public string c_email                  { get; set; }
+			                    public string c_adress                 { get; set; }
+			                    public string c_logo                   { get; set; }
+			                    public Guid?  f_department_affiliation { get; set; }
+		}
+
+		#endregion
+
 		#region import_feedback
 
 		public static int import_feedback(this DataConnection dataConnection)
@@ -2797,6 +2850,16 @@ namespace cms.dbase.models
 		public partial class import_structures2Result
 		{
 			[Column("")] public string Column1 { get; set; }
+		}
+
+		#endregion
+
+		#region normolize_sort_departamts
+
+		public static int normolize_sort_departamts(this DataConnection dataConnection, Guid? @strucid)
+		{
+			return dataConnection.ExecuteProc("[dbo].[normolize_sort_departamts]",
+				new DataParameter("@strucid", @strucid, DataType.Guid));
 		}
 
 		#endregion

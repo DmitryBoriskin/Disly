@@ -133,7 +133,7 @@
                 @Html.DropDownListFor(m => m.Item.FrontSection, new SelectList(Model.FrontSectionList, "Value", "Text", "page"), new { @title = "Шаблон", @class = "selectpicker", @data_help = "Выбор шаблона страницы", @required = "" })
             }
 
-            @if (Model.Account.Group.ToLower().Equals("developer") || Model.Account.Group.ToLower().Equals("administrator"))
+            @if ((Model.Account.Group.ToLower().Equals("developer") || Model.Account.Group.ToLower().Equals("administrator")) || blocked)
             {
                 @Html.DropDownListFor(m => m.Item.MenuGroups, (MultiSelectList)ViewBag.GroupMenu, new { @title = "Группы меню", @class = "selectpicker", @multiple = "multiple" })
             }
