@@ -21,6 +21,7 @@
                 contentType: false,
                 processData: false,
                 data: false,
+                error: function (res) { alert("error - "+res); },
                 success: function (result) {
                     if (result !== '') alert(result);
                     else elem.parent().remove();

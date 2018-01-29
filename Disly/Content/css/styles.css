@@ -1138,6 +1138,10 @@ div.ListItem img.photo-preview {
 }
 
 /* mce-gallery-plugin  */
+#mce-gallery-plugin {
+    overflow-y: auto;
+    overflow-x: hidden;
+}
 
 .mce-gallery-plugin:before{
     font-family:fontello;

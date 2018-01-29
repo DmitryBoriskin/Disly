@@ -976,6 +976,23 @@ namespace cms.dbase
                 return null;
             }
         }
+        public override StructureModel[] getStructureList()
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var query = db.content_sv_structure_list_sites.Where(w => w.site_alias == _domain);
+                if (query.Any())
+                {
+                    return query.Select(s => new StructureModel() {
+                        Title=s.c_title,
+                        TitleShort=s.c_title_short,
+                        Num=s.num
+                    }).ToArray();
+                }
+                return null;
+
+            }
+        }
 
         /// <summary>
         /// Список структурных подразделений
@@ -1191,6 +1208,7 @@ namespace cms.dbase
             {
                 var query = db.content_departmentss
                             .Where(w => w.f_structure == Id)
+                            .OrderBy(o=>o.c_title)
                             .Select(s => new Departments()
                             {
                                 Id = s.id,
@@ -1885,7 +1903,8 @@ namespace cms.dbase
         {
             using (var db = new CMSdb(_context))
             {
-                var query =db.content_orgss.Where(w=>w.b_disabled==false && w.id!=Guid.Parse("CC8442EF-CECE-4CD3-A544-DA319E03C981"));
+                //var query =db.content_orgss.Where(w=>w.b_disabled==false && w.id!=Guid.Parse("CC8442EF-CECE-4CD3-A544-DA319E03C981"));
+                var query = db.get_lpu_list();
 
                 if (!String.IsNullOrEmpty(idtype))
                 {
@@ -1902,7 +1921,7 @@ namespace cms.dbase
                             break;
                     }
                 }                
-                query = query.OrderBy(o => new { o.n_sort, o.c_title });
+                //query = query.OrderBy(o => new { o.n_sort, o.c_title });
                 var data = query.Select(o => new OrgFrontModel() {
                     //Id = o.id,
                     Title = o.c_title,
@@ -1912,8 +1931,18 @@ namespace cms.dbase
                     Email = o.c_email,
                     Address = o.c_adress,
                     Logo = o.c_logo,                    
-                    Link = spotDomainContent(o.id),
-                    Leader = getLeaderOrg(o.id)
+                    Link = o.c_domain,
+                    Leader=new OrgsAdministrative
+                    {
+                        Surname = o.c_surname,
+                        Name = o.c_name,
+                        Patronymic = o.c_patronymic,
+                        Post = o.c_post,
+                        PeopleF = o.leader_id,
+                        Photo = new Photo { Url = o.c_photo }
+                    }
+                    //spotDomainContent(o.id),
+                    //Leader = getLeaderOrg(o.id)
                 });
                 if (data.Any()) return data.ToArray();
                 else return null;

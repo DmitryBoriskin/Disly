@@ -113,6 +113,7 @@ namespace cms.dbase.models
 		public ITable<content_sv_people_front>                      content_sv_people_fronts                      { get { return this.GetTable<content_sv_people_front>(); } }
 		public ITable<content_sv_people_org>                        content_sv_people_orgs                        { get { return this.GetTable<content_sv_people_org>(); } }
 		public ITable<content_sv_sitemap_menu>                      content_sv_sitemap_menus                      { get { return this.GetTable<content_sv_sitemap_menu>(); } }
+		public ITable<content_sv_structure_list_site>               content_sv_structure_list_sites               { get { return this.GetTable<content_sv_structure_list_site>(); } }
 		public ITable<content_vacancies>                            content_vacanciess                            { get { return this.GetTable<content_vacancies>(); } }
 		public ITable<content_vote>                                 content_votes                                 { get { return this.GetTable<content_vote>(); } }
 		public ITable<content_vote_answers>                         content_vote_answerss                         { get { return this.GetTable<content_vote_answers>(); } }
@@ -1310,19 +1311,8 @@ namespace cms.dbase.models
 		[PrimaryKey, NotNull    ] public Guid   id          { get; set; } // uniqueidentifier
 		[Column,     NotNull    ] public string c_title     { get; set; } // varchar(512)
 		[Column,        Nullable] public string c_file_path { get; set; } // varchar(1024)
-		[Column,     NotNull    ] public Guid   id_page     { get; set; } // uniqueidentifier
 		[Column,     NotNull    ] public int    n_sort      { get; set; } // int
 		[Column,     NotNull    ] public Guid   f_link      { get; set; } // uniqueidentifier
-
-		#region Associations
-
-		/// <summary>
-		/// FK_content_documents_content_sitemap
-		/// </summary>
-		[Association(ThisKey="id_page", OtherKey="id", CanBeNull=false, KeyName="FK_content_documents_content_sitemap", BackReferenceName="contentdocumentscontentsitemaps")]
-		public content_sitemap contentdocumentscontentsitemap { get; set; }
-
-		#endregion
 	}
 
 	[Table(Schema="dbo", Name="content_employee_posts")]
@@ -1442,16 +1432,16 @@ namespace cms.dbase.models
 		#region Associations
 
 		/// <summary>
-		/// FK_content_main_specialist_specialisations_link_content_main_specialists
-		/// </summary>
-		[Association(ThisKey="f_main_specialist", OtherKey="id", CanBeNull=false, KeyName="FK_content_main_specialist_specialisations_link_content_main_specialists", BackReferenceName="contentmainspecialistspecialisationslinkcontentmainspecialistss")]
-		public content_main_specialists contentmainspecialistspecialisationslinkcontentmainspecialists { get; set; }
-
-		/// <summary>
 		/// FK_content_main_specialist_specialisations_link_content_employee_posts
 		/// </summary>
 		[Association(ThisKey="f_specialisation", OtherKey="id", CanBeNull=false, KeyName="FK_content_main_specialist_specialisations_link_content_employee_posts", BackReferenceName="contentmainspecialistspecialisationslinkcontentemployeepostss")]
 		public content_employee_posts contentmainspecialistspecialisationslinkcontentemployeeposts { get; set; }
+
+		/// <summary>
+		/// FK_content_main_specialist_specialisations_link_content_main_specialists
+		/// </summary>
+		[Association(ThisKey="f_main_specialist", OtherKey="id", CanBeNull=false, KeyName="FK_content_main_specialist_specialisations_link_content_main_specialists", BackReferenceName="contentmainspecialistspecialisationslinkcontentmainspecialistss")]
+		public content_main_specialists contentmainspecialistspecialisationslinkcontentmainspecialists { get; set; }
 
 		#endregion
 	}
@@ -2100,12 +2090,6 @@ namespace cms.dbase.models
 		public front_section fkcontentsitemapfrontsection { get; set; }
 
 		/// <summary>
-		/// FK_content_documents_content_sitemap_BackReference
-		/// </summary>
-		[Association(ThisKey="id", OtherKey="id_page", CanBeNull=true, IsBackReference=true)]
-		public IEnumerable<content_documents> contentdocumentscontentsitemaps { get; set; }
-
-		/// <summary>
 		/// FK_content_sitemap_menutypes_content_sitemap_BackReference
 		/// </summary>
 		[Association(ThisKey="id", OtherKey="f_sitemap", CanBeNull=true, IsBackReference=true)]
@@ -2333,6 +2317,20 @@ namespace cms.dbase.models
 		[Column,    Nullable] public string c_photo         { get; set; } // nvarchar(1024)
 	}
 
+	// View
+	[Table(Schema="dbo", Name="content_sv_structure_list_site")]
+	public partial class content_sv_structure_list_site
+	{
+		[Column, NotNull    ] public Guid   id            { get; set; } // uniqueidentifier
+		[Column, NotNull    ] public Guid   f_ord         { get; set; } // uniqueidentifier
+		[Column, NotNull    ] public string c_title       { get; set; } // nvarchar(512)
+		[Column,    Nullable] public string c_title_short { get; set; } // varchar(1024)
+		[Column, NotNull    ] public bool   b_ovp         { get; set; } // bit
+		[Column, NotNull    ] public int    num           { get; set; } // int
+		[Column, NotNull    ] public int    n_sort        { get; set; } // int
+		[Column, NotNull    ] public string site_alias    { get; set; } // varchar(64)
+	}
+
 	[Table(Schema="dbo", Name="content_vacancies")]
 	public partial class content_vacancies
 	{
@@ -2521,16 +2519,16 @@ namespace cms.dbase.models
 		public front_page_views sitefrontsectionpageviews { get; set; }
 
 		/// <summary>
-		/// FK_site_front_section
-		/// </summary>
-		[Association(ThisKey="f_site", OtherKey="c_alias", CanBeNull=false, KeyName="FK_site_front_section", BackReferenceName="sitefrontsections")]
-		public cms_sites sitefrontsection { get; set; }
-
-		/// <summary>
 		/// FK_front_section_site
 		/// </summary>
 		[Association(ThisKey="f_front_section", OtherKey="c_alias", CanBeNull=false, KeyName="FK_front_section_site", BackReferenceName="frontsectionsites")]
 		public front_section frontsectionsite { get; set; }
+
+		/// <summary>
+		/// FK_site_front_section
+		/// </summary>
+		[Association(ThisKey="f_site", OtherKey="c_alias", CanBeNull=false, KeyName="FK_site_front_section", BackReferenceName="sitefrontsections")]
+		public cms_sites sitefrontsection { get; set; }
 
 		#endregion
 	}
@@ -2753,42 +2751,46 @@ namespace cms.dbase.models
 			return dataConnection.QueryProc(dataReader =>
 				new get_lpu_listResult
 				{
-					c_title           = Converter.ChangeTypeTo<string>(dataReader.GetValue(0), ms),
-					c_domain          = Converter.ChangeTypeTo<string>(dataReader.GetValue(1), ms),
-					leader_id         = Converter.ChangeTypeTo<Guid?> (dataReader.GetValue(2), ms),
-					c_name            = Converter.ChangeTypeTo<string>(dataReader.GetValue(3), ms),
-					c_surname         = Converter.ChangeTypeTo<string>(dataReader.GetValue(4), ms),
-					c_patronymic      = Converter.ChangeTypeTo<string>(dataReader.GetValue(5), ms),
-					c_phone           = Converter.ChangeTypeTo<string>(dataReader.GetValue(6), ms),
-					c_photo           = Converter.ChangeTypeTo<string>(dataReader.GetValue(7), ms),
-					id                = Converter.ChangeTypeTo<Guid>  (dataReader.GetValue(8), ms),
-					Column10          = Converter.ChangeTypeTo<string>(dataReader.GetValue(9), ms),
-					c_phone_reception = Converter.ChangeTypeTo<string>(dataReader.GetValue(10), ms),
-					c_fax             = Converter.ChangeTypeTo<string>(dataReader.GetValue(11), ms),
-					c_email           = Converter.ChangeTypeTo<string>(dataReader.GetValue(12), ms),
-					c_adress          = Converter.ChangeTypeTo<string>(dataReader.GetValue(13), ms),
-					c_logo            = Converter.ChangeTypeTo<string>(dataReader.GetValue(14), ms),
+					c_title                  = Converter.ChangeTypeTo<string>(dataReader.GetValue(0), ms),
+					c_domain                 = Converter.ChangeTypeTo<string>(dataReader.GetValue(1), ms),
+					leader_id                = Converter.ChangeTypeTo<Guid?> (dataReader.GetValue(2), ms),
+					c_name                   = Converter.ChangeTypeTo<string>(dataReader.GetValue(3), ms),
+					c_surname                = Converter.ChangeTypeTo<string>(dataReader.GetValue(4), ms),
+					c_patronymic             = Converter.ChangeTypeTo<string>(dataReader.GetValue(5), ms),
+					c_phone                  = Converter.ChangeTypeTo<string>(dataReader.GetValue(6), ms),
+					c_photo                  = Converter.ChangeTypeTo<string>(dataReader.GetValue(7), ms),
+					c_post                   = Converter.ChangeTypeTo<string>(dataReader.GetValue(8), ms),
+					id                       = Converter.ChangeTypeTo<Guid>  (dataReader.GetValue(9), ms),
+					Column11                 = Converter.ChangeTypeTo<string>(dataReader.GetValue(10), ms),
+					c_phone_reception        = Converter.ChangeTypeTo<string>(dataReader.GetValue(11), ms),
+					c_fax                    = Converter.ChangeTypeTo<string>(dataReader.GetValue(12), ms),
+					c_email                  = Converter.ChangeTypeTo<string>(dataReader.GetValue(13), ms),
+					c_adress                 = Converter.ChangeTypeTo<string>(dataReader.GetValue(14), ms),
+					c_logo                   = Converter.ChangeTypeTo<string>(dataReader.GetValue(15), ms),
+					f_department_affiliation = Converter.ChangeTypeTo<Guid?> (dataReader.GetValue(16), ms),
 				},
 				"[dbo].[get_lpu_list]");
 		}
 
 		public partial class get_lpu_listResult
 		{
-			                    public string c_title           { get; set; }
-			                    public string c_domain          { get; set; }
-			                    public Guid?  leader_id         { get; set; }
-			                    public string c_name            { get; set; }
-			                    public string c_surname         { get; set; }
-			                    public string c_patronymic      { get; set; }
-			                    public string c_phone           { get; set; }
-			                    public string c_photo           { get; set; }
-			                    public Guid   id                { get; set; }
-			[Column("c_phone")] public string Column10          { get; set; }
-			                    public string c_phone_reception { get; set; }
-			                    public string c_fax             { get; set; }
-			                    public string c_email           { get; set; }
-			                    public string c_adress          { get; set; }
-			                    public string c_logo            { get; set; }
+			                    public string c_title                  { get; set; }
+			                    public string c_domain                 { get; set; }
+			                    public Guid?  leader_id                { get; set; }
+			                    public string c_name                   { get; set; }
+			                    public string c_surname                { get; set; }
+			                    public string c_patronymic             { get; set; }
+			                    public string c_phone                  { get; set; }
+			                    public string c_photo                  { get; set; }
+			                    public string c_post                   { get; set; }
+			                    public Guid   id                       { get; set; }
+			[Column("c_phone")] public string Column11                 { get; set; }
+			                    public string c_phone_reception        { get; set; }
+			                    public string c_fax                    { get; set; }
+			                    public string c_email                  { get; set; }
+			                    public string c_adress                 { get; set; }
+			                    public string c_logo                   { get; set; }
+			                    public Guid?  f_department_affiliation { get; set; }
 		}
 
 		#endregion
@@ -3295,3 +3297,4 @@ namespace cms.dbase.models
 		}
 	}
 }
+  

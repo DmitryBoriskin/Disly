@@ -47,8 +47,8 @@ namespace cms.dbase
                     .Value(v => v.c_title, insert.Title)
                     .Value(v => v.c_file_path, insert.FilePath)
                     .Value(v => v.f_link, insert.LinkId)
-#warning Убрать столбец и внешний ключ 
-                    .Value(v => v.id_page, Guid.Parse("12bbcf4f-1e4f-4c9d-bb73-a11c0d024d72"))
+//#warning Убрать столбец и внешний ключ 
+//                    .Value(v => v.id_page, Guid.Parse("12bbcf4f-1e4f-4c9d-bb73-a11c0d024d72"))
                     .Value(v => v.n_sort, maxSort)
                     .Insert();
                 return true;
@@ -78,13 +78,14 @@ namespace cms.dbase
                 if (data != null)
                 {
                     //смещение пермитов
-                    var ThisPageId = data.FirstOrDefault().id_page;
+                    var ThisPageId = data.FirstOrDefault().f_link;
                     var ThisPermit = data.FirstOrDefault().n_sort;
-                    db.content_documentss
-                      .Where(w => w.id_page == ThisPageId && w.n_sort > ThisPermit)
-                      .Set(p => p.n_sort, p => p.n_sort- 1)
-                      .Update();
 
+                    var query = db.content_documentss.Where(w => w.f_link== ThisPageId && w.n_sort > ThisPermit);
+                    if (query.Any())
+                    {
+                        query.Set(p => p.n_sort, p => p.n_sort - 1).Update();
+                    }
                     data
                         .Where(w => w.id == id)
                         .Delete();
@@ -120,7 +121,7 @@ namespace cms.dbase
                     if (num > data.Permit)
                     {
                         db.content_documentss
-                            .Where(w => w.id_page == PageId)
+                            .Where(w => w.f_link== PageId)
                             .Where(w => w.n_sort > data.Permit)
                             .Where(w => w.n_sort <= num)
                             .Set(p => p.n_sort, p => p.n_sort - 1)
@@ -129,7 +130,7 @@ namespace cms.dbase
                     else
                     {
                         db.content_documentss
-                            .Where(w => w.id_page == PageId)
+                            .Where(w => w.f_link == PageId)
                             .Where(w => w.n_sort < data.Permit)
                             .Where(w => w.n_sort >= num)
                             .Set(p => p.n_sort, p => p.n_sort + 1)

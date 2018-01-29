@@ -114,12 +114,12 @@ namespace Disly.Areas.Admin.Controllers
             {
                 System.IO.File.Delete(Server.MapPath(model.Item.FilePath));
             }
-            try
-            {
+            //try
+            //{
                 _cmsRepository.deleteSiteMapDocuments(id);
                 return "";
-            }
-            catch { return "Не удалось удалить доменное имя."; }
+            //}
+            //catch { return "Не удалось удалить документ."; }
         }
 
     }

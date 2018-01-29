@@ -195,6 +195,8 @@ namespace cms.dbModel
         public abstract bool IsAdministrativeAllowedToOrg(Guid id, Guid orgId);
         public abstract bool IsDepartmentAllowedToOrg(Guid id, Guid orgId);
 
+
+        public abstract bool NormalizeDepartamnt();
         //Feedbacks
         public abstract FeedbacksList getFeedbacksList(FilterParams filtr);
         public abstract FeedbackModel getFeedbackItem(Guid id);

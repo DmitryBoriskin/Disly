@@ -11,6 +11,7 @@ namespace Disly.Areas.Admin.Controllers
         /// <returns></returns>
         public ActionResult Index()
         {
+            //_cmsRepository.NormalizeDepartamnt(); //робот нормализующий поля n_sort в департаментах
             MainViewModel model = new MainViewModel()
             {
                 DomainName = Domain,

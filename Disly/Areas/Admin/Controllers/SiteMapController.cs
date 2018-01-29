@@ -104,19 +104,22 @@ namespace Disly.Areas.Admin.Controllers
                 ViewBag.DataPath = ViewBag.DataPath + model.Item.Path + "/" + model.Item.Alias + "/";
             }
             ViewBag.DataPath = ViewBag.DataPath.Replace("//", "/");
-            var mg = new MultiSelectList(model.MenuTypes, "value", "text", model.Item != null ? model.Item.MenuGroups : null);
-            ViewBag.GroupMenu = mg;
-
-            var aviable = (model.MenuTypes != null) ?
-                        (model.MenuTypes.Where(p => p.available).Any()) ?
-                                    model.MenuTypes.Where(p => p.available).ToArray() : new Catalog_list[] { }
-                                        : new Catalog_list[] { };
-            var mgAviable = new MultiSelectList(aviable, "value", "text", model.Item != null ? model.Item.MenuGroups : null);
-            ViewBag.GroupMenuAviable = mgAviable;
+            //var mg = new MultiSelectList(model.MenuTypes, "value", "text", model.Item != null ? model.Item.MenuGroups : null);
+            //ViewBag.GroupMenu = mg;
 
 
-            if (model.Item != null)
-                model.Item.MenuGroups = null;
+            //var aviable = (model.MenuTypes != null) ?
+            //            (model.MenuTypes.Where(p => p.available).Any()) ?
+            //                        model.MenuTypes.Where(p => p.available).ToArray() : new Catalog_list[] { }
+            //                            : new Catalog_list[] { };
+
+
+            //var mgAviable = new MultiSelectList(aviable, "value", "text", model.Item != null ? model.Item.MenuGroups : null);
+            //ViewBag.GroupMenuAviable = mgAviable;
+
+
+            //if (model.Item != null)
+            //    model.Item.MenuGroups = null;
 
             if (!string.IsNullOrEmpty(Request.QueryString["parent"]))
             {
@@ -146,10 +149,12 @@ namespace Disly.Areas.Admin.Controllers
         [HttpPost]
         [ValidateInput(false)]
         [MultiButton(MatchFormKey = "action", MatchFormValue = "save-btn")]
-        public ActionResult Item(Guid id, SiteMapViewModel back_model, HttpPostedFileBase upload)
+        public ActionResult Item(Guid id, SiteMapViewModel back_model, HttpPostedFileBase upload, string[] Item_MenuGroups)
         {
             ErrorMessage userMessage = new ErrorMessage();
             userMessage.title = "Информация";
+
+            back_model.Item.MenuGroups = Item_MenuGroups;
 
             #region Импорт со старой базы
             if (back_model.Item.OldId != null)

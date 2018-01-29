@@ -369,6 +369,8 @@
     <Content Include="Content\plugins\mobileGallery\js\jquery-2.1.0.min.js" />
     <Content Include="Content\plugins\mobileGallery\js\jquery.swipebox.js" />
     <Content Include="Content\plugins\mobileGallery\swipebox.css" />
+    <Content Include="Content\plugins\select2\select2_mod.css" />
+    <Content Include="Content\plugins\select2\select2_mod.js" />
     <Content Include="Content\plugins\tinymce\jquery.tinymce.min.js" />
     <Content Include="Content\plugins\tinymce\langs\ru.js" />
     <Content Include="Content\plugins\tinymce\license.txt" />
@@ -939,6 +941,7 @@
     <Content Include="Views\PortalDoctors\part\item.cshtml" />
     <Content Include="Views\PortalDoctors\part\list.cshtml" />
     <Content Include="Views\PortalDoctors\Index.cshtml" />
+    <Content Include="Userfiles\rezume_form.doc" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -951,7 +954,6 @@
     <Folder Include="Content\temp\" />
     <Folder Include="Models\event\" />
     <Folder Include="Models\org\" />
-    <Folder Include="Userfiles\" />
     <Folder Include="Views\Redirect\" />
   </ItemGroup>
   <ItemGroup>

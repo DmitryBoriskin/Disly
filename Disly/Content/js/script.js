@@ -1,6 +1,7 @@
 ﻿$(document).ready(function () {
     $('.select2').select2();
 
+  
 
     $('input[data-type=date').datepicker({ onSelect: function (dateText, inst) { $(this).attr('value', dateText); } });
 
