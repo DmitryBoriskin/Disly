@@ -16,13 +16,35 @@ $(document).ready(function () {
     if (top !== self) {
         top.location.href = location.href;
     }
-
-
+    
+    //locked removed in v > 4.0 (it was in v3.5.2)
+    //<option locked="locked">
     $(".select2").select2({
         language: "ru",
         width: "100%",
-        allowClear: false
+        allowClear: false,
+        templateSelection: function (tag, container) {
+            // here we are finding option element of tag and
+            // if it has property 'locked' we will add class 'locked-tag' 
+            // to be able to style element in select
+            var $option = $('.select2 option[value="' + tag.id + '"]');
+            if ($option.attr('locked')) {
+                $(container).addClass('locked-tag');
+                tag.locked = true;
+            }
+            return tag.text;
+        }
+    })
+    .on('select2:unselecting', function(e){
+        // before removing tag we check option element of tag and 
+        // if it has property 'locked' we will create error to prevent all select2 functionality
+        if ($(e.params.args.data.element).attr('locked')) {
+            e.preventDefault();
+        }
     });
+
+
+
     $(".iCheck").iCheck({
         checkboxClass: 'icheckbox_square-blue',
         radioClass: 'icheckbox_square-blue'

@@ -340,6 +340,11 @@ a.link-close:before {
 .admin-menu_item.selected a:before {
     color:#fff;
 }
+
+.select2-container--default .select2-selection--multiple .locked-tag .select2-selection__choice__remove{
+    display:none;
+}
+
 /* Разработчик */
 .developer-block{
     position: absolute;
