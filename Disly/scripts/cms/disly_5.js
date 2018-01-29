@@ -19,10 +19,15 @@ $(document).ready(function () {
 
 
     $(".select2").select2({
-        language: "ru",
+        //language: "ru",
         width: "100%",
         allowClear: false
     });
+
+ 
+
+
+
     $(".iCheck").iCheck({
         checkboxClass: 'icheckbox_square-blue',
         radioClass: 'icheckbox_square-blue'
