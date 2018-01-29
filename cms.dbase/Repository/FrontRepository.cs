@@ -976,6 +976,23 @@ namespace cms.dbase
                 return null;
             }
         }
+        public override StructureModel[] getStructureList()
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var query = db.content_sv_structure_list_sites.Where(w => w.site_alias == _domain);
+                if (query.Any())
+                {
+                    return query.Select(s => new StructureModel() {
+                        Title=s.c_title,
+                        TitleShort=s.c_title_short,
+                        Num=s.num
+                    }).ToArray();
+                }
+                return null;
+
+            }
+        }
 
         /// <summary>
         /// Список структурных подразделений

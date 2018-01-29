@@ -113,6 +113,7 @@ namespace cms.dbase.models
 		public ITable<content_sv_people_front>                      content_sv_people_fronts                      { get { return this.GetTable<content_sv_people_front>(); } }
 		public ITable<content_sv_people_org>                        content_sv_people_orgs                        { get { return this.GetTable<content_sv_people_org>(); } }
 		public ITable<content_sv_sitemap_menu>                      content_sv_sitemap_menus                      { get { return this.GetTable<content_sv_sitemap_menu>(); } }
+		public ITable<content_sv_structure_list_site>               content_sv_structure_list_sites               { get { return this.GetTable<content_sv_structure_list_site>(); } }
 		public ITable<content_vacancies>                            content_vacanciess                            { get { return this.GetTable<content_vacancies>(); } }
 		public ITable<content_vote>                                 content_votes                                 { get { return this.GetTable<content_vote>(); } }
 		public ITable<content_vote_answers>                         content_vote_answerss                         { get { return this.GetTable<content_vote_answers>(); } }
@@ -818,16 +819,16 @@ namespace cms.dbase.models
 		#region Associations
 
 		/// <summary>
-		/// fk_user_resolutions
-		/// </summary>
-		[Association(ThisKey="c_user_id", OtherKey="id", CanBeNull=false, KeyName="fk_user_resolutions", BackReferenceName="fkuserresolutionss")]
-		public cms_users fkuserresolutions { get; set; }
-
-		/// <summary>
 		/// fk_menu_resolutions
 		/// </summary>
 		[Association(ThisKey="c_menu_id", OtherKey="id", CanBeNull=false, KeyName="fk_menu_resolutions", BackReferenceName="fkmenuresolutionss")]
 		public cms_menu fkmenuresolutions { get; set; }
+
+		/// <summary>
+		/// fk_user_resolutions
+		/// </summary>
+		[Association(ThisKey="c_user_id", OtherKey="id", CanBeNull=false, KeyName="fk_user_resolutions", BackReferenceName="fkuserresolutionss")]
+		public cms_users fkuserresolutions { get; set; }
 
 		#endregion
 	}
@@ -1227,16 +1228,16 @@ namespace cms.dbase.models
 		#region Associations
 
 		/// <summary>
-		/// FK_content_banners_content_banner_sections
-		/// </summary>
-		[Association(ThisKey="f_section", OtherKey="id", CanBeNull=false, KeyName="FK_content_banners_content_banner_sections", BackReferenceName="contentbannerscontentbannersectionss")]
-		public content_banner_sections contentbannerscontentbannersections { get; set; }
-
-		/// <summary>
 		/// FK_content_banners_cms_sites
 		/// </summary>
 		[Association(ThisKey="f_site", OtherKey="c_alias", CanBeNull=false, KeyName="FK_content_banners_cms_sites", BackReferenceName="contentbannerscmssitess")]
 		public cms_sites contentbannerscmssites { get; set; }
+
+		/// <summary>
+		/// FK_content_banners_content_banner_sections
+		/// </summary>
+		[Association(ThisKey="f_section", OtherKey="id", CanBeNull=false, KeyName="FK_content_banners_content_banner_sections", BackReferenceName="contentbannerscontentbannersectionss")]
+		public content_banner_sections contentbannerscontentbannersections { get; set; }
 
 		#endregion
 	}
@@ -2316,6 +2317,20 @@ namespace cms.dbase.models
 		[Column,    Nullable] public string c_photo         { get; set; } // nvarchar(1024)
 	}
 
+	// View
+	[Table(Schema="dbo", Name="content_sv_structure_list_site")]
+	public partial class content_sv_structure_list_site
+	{
+		[Column, NotNull    ] public Guid   id            { get; set; } // uniqueidentifier
+		[Column, NotNull    ] public Guid   f_ord         { get; set; } // uniqueidentifier
+		[Column, NotNull    ] public string c_title       { get; set; } // nvarchar(512)
+		[Column,    Nullable] public string c_title_short { get; set; } // varchar(1024)
+		[Column, NotNull    ] public bool   b_ovp         { get; set; } // bit
+		[Column, NotNull    ] public int    num           { get; set; } // int
+		[Column, NotNull    ] public int    n_sort        { get; set; } // int
+		[Column, NotNull    ] public string site_alias    { get; set; } // varchar(64)
+	}
+
 	[Table(Schema="dbo", Name="content_vacancies")]
 	public partial class content_vacancies
 	{
@@ -2504,16 +2519,16 @@ namespace cms.dbase.models
 		public front_page_views sitefrontsectionpageviews { get; set; }
 
 		/// <summary>
-		/// FK_site_front_section
-		/// </summary>
-		[Association(ThisKey="f_site", OtherKey="c_alias", CanBeNull=false, KeyName="FK_site_front_section", BackReferenceName="sitefrontsections")]
-		public cms_sites sitefrontsection { get; set; }
-
-		/// <summary>
 		/// FK_front_section_site
 		/// </summary>
 		[Association(ThisKey="f_front_section", OtherKey="c_alias", CanBeNull=false, KeyName="FK_front_section_site", BackReferenceName="frontsectionsites")]
 		public front_section frontsectionsite { get; set; }
+
+		/// <summary>
+		/// FK_site_front_section
+		/// </summary>
+		[Association(ThisKey="f_site", OtherKey="c_alias", CanBeNull=false, KeyName="FK_site_front_section", BackReferenceName="sitefrontsections")]
+		public cms_sites sitefrontsection { get; set; }
 
 		#endregion
 	}

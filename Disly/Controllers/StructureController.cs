@@ -60,7 +60,7 @@ namespace Disly.Controllers
         {
             string _ViewName = (ViewName != String.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";
 
-            model.Structures = _repository.getStructures(); //Domain
+            model.Structures = _repository.getStructureList(); //Domain
             //если в списке только одна структура — редиректим на него
             if (model.Structures != null && model.Structures.Length == 1)
             {

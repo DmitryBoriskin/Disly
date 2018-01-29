@@ -6,9 +6,8 @@
         Layout = "/views/_portal/shared/_layout.cshtml";
     }
 }
-<h1>@Model.StructureItem.Title</h1>
-
 @Html.Partial("services/breadcrumbs")
+<h1>@Model.StructureItem.Title</h1>
 <div class="structur">
     <div class="row">        
         <div class="col-sm-9">
@@ -42,9 +41,10 @@
     <div id="coords" class="buildmap" style="width: 100%; height: 350px;" data-zoom="11" data-height="300" data-x="@Model.StructureItem.GeopointX.ToString().Replace(",", ".")" data-y="@Model.StructureItem.GeopointY.ToString().Replace(",", ".")" data-title="@Model.StructureItem.Title"></div>*@
           
 
-            <h2>Отделения</h2>
+            
             @if (Model.DepartmentList != null)
             {
+                <h2>Отделения</h2>
                 <div class="child">
                     @foreach (var item in Model.DepartmentList)
                     {
