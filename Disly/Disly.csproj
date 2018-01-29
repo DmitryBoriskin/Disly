@@ -941,6 +941,7 @@
     <Content Include="Views\PortalDoctors\part\item.cshtml" />
     <Content Include="Views\PortalDoctors\part\list.cshtml" />
     <Content Include="Views\PortalDoctors\Index.cshtml" />
+    <Content Include="Userfiles\rezume_form.doc" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -953,7 +954,6 @@
     <Folder Include="Content\temp\" />
     <Folder Include="Models\event\" />
     <Folder Include="Models\org\" />
-    <Folder Include="Userfiles\" />
     <Folder Include="Views\Redirect\" />
   </ItemGroup>
   <ItemGroup>
