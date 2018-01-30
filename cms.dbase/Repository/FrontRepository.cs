@@ -983,7 +983,9 @@ namespace cms.dbase
                 var query = db.content_sv_structure_list_sites.Where(w => w.site_alias == _domain);
                 if (query.Any())
                 {
-                    return query.Select(s => new StructureModel() {
+                    return query
+                        .OrderBy(o=>o.n_sort)
+                        .Select(s => new StructureModel() {
                         Title=s.c_title,
                         TitleShort=s.c_title_short,
                         Num=s.num
