@@ -421,7 +421,7 @@ namespace Disly.Areas.Admin.Controllers
         /// Получаем альбомы в формате JSON
         /// </summary>
         /// <returns></returns>
-        public JsonResult Api(int page = 1, int size = 30)
+        public JsonResult PhotoListApi(int page = 1, int size = 30)
         {
             filter.Page = page;
             filter.Size = size;
