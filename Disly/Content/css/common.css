@@ -1678,10 +1678,9 @@ ul.menu-mini-icons  li{float:left;}
 
 .findus_list{margin:24px 0 0;}
 .findus_item {
-    border-bottom: 1px solid #e6e6e6;
-    padding-bottom:14px;
-    margin-bottom:20px;
-
+    border-bottom: 1px solid #e6e6e6;    
+    padding-bottom: 30px;
+    margin-bottom: 20px;
 }
 .findus_title a{font-size:22px;font-weight:bold;}
 .findus_info div{line-height:24px;}
