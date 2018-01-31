@@ -1387,7 +1387,7 @@ namespace cms.dbase
                             OrgUrl = (ep2.p.s != null && !string.IsNullOrEmpty(ep2.p.s.c_alias)) ? getSiteDefaultDomain(ep2.p.s.c_alias) : null,
                             Type = ep2.pepl.n_type
                         }).ToArray()
-                    });
+                    }).OrderBy(o=>o.FIO);
 
                 if (data2.Any())
                     return data2.ToArray();
