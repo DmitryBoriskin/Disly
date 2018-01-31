@@ -115,7 +115,7 @@ namespace Disly.Areas.Admin.Service
             words.Add("|", "");
             words.Add(".", "");
             words.Add("/", "-");
-
+            words.Add("№", "n");            
             words.Add("Ă", "A");
             words.Add("ă", "a");
             words.Add("ÿ", "y");

@@ -21,9 +21,11 @@
                 contentType: false,
                 processData: false,
                 data: false,
-                error: function (res) { alert("error - "+res); },
+                error: function (res) {
+                    window.alert(res);
+                },
                 success: function (result) {
-                    if (result !== '') alert(result);
+                    if (result !== '') window.alert(result);
                     else elem.parent().remove();
                 }
             });
