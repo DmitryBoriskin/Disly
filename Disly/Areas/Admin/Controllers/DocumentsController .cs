@@ -110,10 +110,18 @@ namespace Disly.Areas.Admin.Controllers
                 Item = _cmsRepository.getDocumentsPath(id)
             };
 
-            if (System.IO.File.Exists(Server.MapPath(model.Item.FilePath)))
+            try
             {
-                System.IO.File.Delete(Server.MapPath(model.Item.FilePath));
+                if (System.IO.File.Exists(Server.MapPath(model.Item.FilePath)))
+                {
+                    System.IO.File.Delete(Server.MapPath(model.Item.FilePath));
+                }
             }
+            catch(Exception e)
+            {
+                //return e.ToString();
+            }
+            
             //try
             //{
                 _cmsRepository.deleteSiteMapDocuments(id);
