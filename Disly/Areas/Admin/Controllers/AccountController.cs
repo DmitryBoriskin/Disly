@@ -77,7 +77,7 @@ namespace Disly.Areas.Admin.Controllers
                     // Если пользователь найден
                     if (AccountInfo != null)
                     {
-                        FormsAuthentication.SetAuthCookie(AccountInfo.id.ToString(), false);
+                        FormsAuthentication.SetAuthCookie(AccountInfo.Id.ToString(), false);
                         return RedirectToAction("Index", "Main");
                     }
                 }
@@ -122,16 +122,16 @@ namespace Disly.Areas.Admin.Controllers
                         if (password.Verify(_pass.ToCharArray()))
                         {
                             // Удачная попытка, Авторизация
-                            FormsAuthentication.SetAuthCookie(AccountInfo.id.ToString(), _remember);
+                            FormsAuthentication.SetAuthCookie(AccountInfo.Id.ToString(), _remember);
 
                             HttpCookie MyCookie = new HttpCookie(".ASPXAUTHMORE");
-                            MyCookie.Value = HttpUtility.UrlEncode(AccountInfo.id.ToString(), System.Text.Encoding.UTF8);
+                            MyCookie.Value = HttpUtility.UrlEncode(AccountInfo.Id.ToString(), System.Text.Encoding.UTF8);
                             MyCookie.Domain = "." + Settings.BaseURL;
                             Response.Cookies.Add(MyCookie);
 
 
                             // Записываем данные об авторизации пользователя
-                            _accountRepository.SuccessLogin(AccountInfo.id, RequestUserInfo.IP);
+                            _accountRepository.SuccessLogin(AccountInfo.Id, RequestUserInfo.IP);
 
                             return RedirectToAction("Index", "Main");
                         }
@@ -139,13 +139,13 @@ namespace Disly.Areas.Admin.Controllers
                         {
                             // Неудачная попытка
                             // Записываем данные о попытке авторизации и плучаем кол-во неудавшихся попыток входа
-                            int attemptNum = _accountRepository.FailedLogin(AccountInfo.id, RequestUserInfo.IP);
+                            int attemptNum = _accountRepository.FailedLogin(AccountInfo.Id, RequestUserInfo.IP);
                             if (attemptNum == maxLoginError)
                             {
                                 #region Оповещение о блокировке
                                 // Формируем код востановления пароля
                                 Guid RestoreCode = Guid.NewGuid();
-                                _accountRepository.setRestorePassCode(AccountInfo.id, RestoreCode, RequestUserInfo.IP);
+                                _accountRepository.setRestorePassCode(AccountInfo.Id, RestoreCode, RequestUserInfo.IP);
 
                                 // оповещение на e-mail
                                 string Massege = String.Empty;
@@ -226,7 +226,7 @@ namespace Disly.Areas.Admin.Controllers
                 {
                     // Формируем код востановления пароля
                     Guid RestoreCode = Guid.NewGuid();
-                    _accountRepository.setRestorePassCode(AccountInfo.id, RestoreCode, RequestUserInfo.IP);
+                    _accountRepository.setRestorePassCode(AccountInfo.Id, RestoreCode, RequestUserInfo.IP);
 
                     #region оповещение на e-mail
                     string Massege = String.Empty;
@@ -340,7 +340,7 @@ namespace Disly.Areas.Admin.Controllers
         public ActionResult logOff()
         {
             AccountModel AccountInfo = _accountRepository.getCmsAccount(new Guid(User.Identity.Name));
-            _accountRepository.insertLog(AccountInfo.id, RequestUserInfo.IP, "log_off", AccountInfo.id, "", "account","");
+            _accountRepository.insertLog(AccountInfo.Id, RequestUserInfo.IP, "log_off", AccountInfo.Id, "", "account","");
 
             HttpCookie MyCookie = new HttpCookie(".ASPXAUTHMORE");
             MyCookie.Expires = DateTime.Now.AddDays(-1d);

@@ -60,7 +60,7 @@ namespace Disly.Areas.Admin.Controllers
 
                 AppLogger.Debug("CoreController: Не получилось определить Domain", ex);
             }
-            ViewBag.Domain = Domain;            
+            ViewBag.Domain = Domain;
 
             StartUrl = "/Admin/" + (String)RouteData.Values["controller"] + "/";
 
@@ -80,12 +80,22 @@ namespace Disly.Areas.Admin.Controllers
             AccountInfo.Domains = _accountRepository.getUserDomains(_userId);
 
             #endregion
+
             #region Права пользователя
-            UserResolutionInfo = _accountRepository.getCmsUserResolutioInfo(_userId, ControllerName);
-            // Если нет прав на проссмотр, то направляем на главную
-            try { if (!UserResolutionInfo.Read) filterContext.Result = Redirect("/Admin/"); }
-            catch { }
+
+            if(ControllerName.ToLower() != "templates" && ControllerName.ToLower() != "documents" && ControllerName.ToLower() != "services")
+            {
+                UserResolutionInfo = _accountRepository.getCmsUserResolutioInfo(_userId, ControllerName);
+                if (UserResolutionInfo == null)
+                    throw new Exception("У вас нет прав доступа к странице!");
+
+                // Если нет прав на проссмотр, то направляем на главную
+                if (!UserResolutionInfo.Read)
+                    filterContext.Result = Redirect("/Admin/");
+            }
+
             #endregion
+
             #region Ограничение пользователя (не администратора портала и не разработчика) на доступ только к своим сайтам (доменам)
             int IsRedirect = 0;
 
@@ -93,7 +103,7 @@ namespace Disly.Areas.Admin.Controllers
 
             if (AccountInfo.Group.ToLower() != "developer" && AccountInfo.Group.ToLower() != "administrator")
             {
-                if (AccountInfo.Domains != null)
+                if (AccountInfo.Domains != null && AccountInfo.Domains.Count() > 0)
                 {
                     foreach (DomainList domain in AccountInfo.Domains)
                     {
@@ -199,9 +209,16 @@ namespace Disly.Areas.Admin.Controllers
 
         public static ImageCodecInfo GetEncoderInfo(String mimeType)
         {
-            foreach (var enc in ImageCodecInfo.GetImageEncoders())
-                if (enc.MimeType.ToLower() == mimeType.ToLower())
-                    return enc;
+            var codecs = ImageCodecInfo.GetImageEncoders();
+            if (codecs != null && codecs.Count() > 0)
+            {
+                foreach (var enc in codecs)
+                {
+                    if (enc.MimeType.ToLower() == mimeType.ToLower())
+                        return enc;
+                }
+                    
+            }
             return null;
         }
 
@@ -260,6 +277,32 @@ namespace Disly.Areas.Admin.Controllers
             return result;
         }
 
+        public bool AttachedFileExtAllowed(string fileName)
+        {
+            //new string[] { "jpeg", "jpg", "png", "gif", "pdf", "rtf", "txt", "doc", "docx", "xls", "xlsx", "ods", "odt", "tar", "zip", "7z" };
+            string[] exts = Settings.DocTypes.Split(','); 
+
+            var ext = fileName.Split('.').Any() ? fileName.Split('.').Last() : "";
+
+            if (!string.IsNullOrEmpty(ext) && exts.Contains(ext.ToLower()))
+                return true;
+
+            return false;
+        }
+
+        public bool AttachedPicExtAllowed(string fileName)
+        {
+            //new string[] { "jpeg", "jpg", "png", "gif"};
+            string[] exts = Settings.PicTypes.Split(',');
+
+            var ext = fileName.Split('.').Any() ? fileName.Split('.').Last() : "";
+
+            if (!string.IsNullOrEmpty(ext) && exts.Contains(ext.ToLower()))
+                return true;
+
+            return false;
+        }
+
         [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = true)]
         public class MultiButtonAttribute : ActionNameSelectorAttribute
         {
@@ -271,5 +314,7 @@ namespace Disly.Areas.Admin.Controllers
                     controllerContext.HttpContext.Request[MatchFormKey] == MatchFormValue;
             }
         }
+
+
     }
 }

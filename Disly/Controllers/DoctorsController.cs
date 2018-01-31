@@ -65,7 +65,7 @@ namespace Disly.Controllers
             model.PeoplePosts = _repository.getPeoplePosts();//Domain
 
             #region Редирект на регистрацию
-            if (model.DoctorsList != null)
+            if (model.DoctorsList != null && model.DoctorsList.Count() > 0)
             {
                 foreach (var d in model.DoctorsList)
                 {

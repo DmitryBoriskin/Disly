@@ -4,7 +4,7 @@
 }
 <ol class="breadcrumb">
     <li><a href="/admin/sitemap/">Главная</a></li>
-    @if (Model != null)
+    @if (Model != null && Model.Count() > 0)
     {
         foreach (var item in Model)
         {

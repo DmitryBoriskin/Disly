@@ -24,6 +24,10 @@ namespace Disly.Areas.Admin.Controllers
                 ActionName = ActionName,
                 GroupList = _cmsRepository.getUsersGroupList()
             };
+            if (AccountInfo != null)
+            {
+                model.Menu = _cmsRepository.getCmsMenu(AccountInfo.Id);
+            }
 
             #region Метатеги
             ViewBag.Title = UserResolutionInfo.Title;

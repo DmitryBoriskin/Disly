@@ -25,9 +25,12 @@
                     <div class="form-group">
                         <label for="itemTypes-select">Типы мед. учреждений:</label>
                         <select name="Item.Types" id="itemTypes-select" class="form-control select2" multiple>
-                            @foreach (var type in Model.Types)
+                            @if (Model.Types != null && Model.Types.Count() > 0)
                             {
-                                <option value="@type.Id" @(Model.Item != null && Model.Item.Types != null && Model.Item.Types.Any(s => s == type.Id) ? "selected" : null)>@type.Title</option>
+                                foreach (var type in Model.Types)
+                                {
+                                    <option value="@type.Id" @(Model.Item != null && Model.Item.Types != null && Model.Item.Types.Any(s => s == type.Id) ? "selected" : null)>@type.Title</option>
+                                }
                             }
                         </select>
                     </div>
@@ -187,14 +190,14 @@
             @Html.TextBoxFor(m => m.Item.Oid, new { type = "text", title = "ОИД" })
 
             @*@Html.TextBox("upload", null, new { type = "file", title = "Изображение", data_name = fileName, data_size = fileSize, data_url = fileUrl, accept = ".jpg,.jpeg,.png,.gif" })
-            @Html.TextBoxFor(m => m.Item.Logo.Url, new { type = "hidden", value = fileUrl })*@
+                @Html.TextBoxFor(m => m.Item.Logo.Url, new { type = "hidden", value = fileUrl })*@
             @Html.TextBoxFor(m => m.Item.Logo.Url, new { type = "file", data_posted_name = "upload", data_url = fileUrl, title = "Изображение", accept = ".jpg,.jpeg,.png,.gif" })
 
             @Html.CheckBoxFor(m => m.Item.Disabled, new { type = "checkbox", title = "Запретить просмотр", data_toggle = "toggle", data_on = "запретить просмотр", data_onstyle = "danger", data_off = "показывать на сайте", data_offstyle = "success", data_width = "248" })
-            
+
             @if (Model.Item != null)
             {
-                if (Model.Item.SiteGuid.ToString()!= Guid.Empty.ToString())
+                if (Model.Item.SiteGuid.ToString() != Guid.Empty.ToString())
                 {
                     <br />
                     <div class="alert alert-info">

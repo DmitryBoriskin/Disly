@@ -38,8 +38,13 @@ namespace Disly.Areas.Admin.Controllers
                 Types = _cmsRepository.getOrgTypesList(new OrgTypeFilter() { }),
                 DepartmentAffiliations = _cmsRepository.getDepartmentAffiliations(),
                 MedicalServices = _cmsRepository.getMedicalServices(),
-                SectionResolution = _accountRepository.getCmsUserResolutioInfo(AccountInfo.id, "structure")
+               
             };
+            if (AccountInfo != null)
+            {
+                model.Menu = _cmsRepository.getCmsMenu(AccountInfo.Id);
+                model.SectionResolution = _accountRepository.getCmsUserResolutioInfo(AccountInfo.Id, "structure");
+            }
 
             ViewBag.OrgId = orgId;
 
@@ -180,10 +185,7 @@ namespace Disly.Areas.Admin.Controllers
 
                 if (upload != null && upload.ContentLength > 0)
                 {
-                    string fileExtension = upload.FileName.Substring(upload.FileName.LastIndexOf(".")).ToLower();
-
-                    var validExtension = (!string.IsNullOrEmpty(Settings.PicTypes)) ? Settings.PicTypes.Split(',') : "jpg,jpeg,png,gif".Split(',');
-                    if (!validExtension.Contains(fileExtension.Replace(".", "")))
+                    if (!AttachedPicExtAllowed(upload.FileName))
                     {
                         model.ErrorInfo = new ErrorMessage()
                         {
@@ -197,6 +199,8 @@ namespace Disly.Areas.Admin.Controllers
 
                         return View("Item", model);
                     }
+
+                    string fileExtension = upload.FileName.Substring(upload.FileName.LastIndexOf(".")).ToLower();
 
                     Photo photoNew = new Photo()
                     {
@@ -887,7 +891,7 @@ namespace Disly.Areas.Admin.Controllers
             };
 
             #region for test
-            if (model.OrgsTypes != null)
+            if (model.OrgsTypes != null && model.OrgsTypes.Count() > 0)
             {
                 foreach (var orgtype in model.OrgsTypes)
                 {
@@ -995,10 +999,7 @@ namespace Disly.Areas.Admin.Controllers
 
                 if (upload != null && upload.ContentLength > 0)
                 {
-                    string fileExtension = upload.FileName.Substring(upload.FileName.LastIndexOf(".")).ToLower();
-
-                    var validExtension = (!string.IsNullOrEmpty(Settings.PicTypes)) ? Settings.PicTypes.Split(',') : "jpg,jpeg,png,gif".Split(',');
-                    if (!validExtension.Contains(fileExtension.Replace(".", "")))
+                    if (!AttachedPicExtAllowed(upload.FileName))
                     {
                         model.ErrorInfo = new ErrorMessage()
                         {
@@ -1011,6 +1012,9 @@ namespace Disly.Areas.Admin.Controllers
                         };
                         return View("Item", model);
                     }
+
+                    string fileExtension = upload.FileName.Substring(upload.FileName.LastIndexOf(".")).ToLower();
+
                     Photo photo = new Photo
                     {
                         Name = aliasname + fileExtension,

@@ -50,7 +50,7 @@
             </div>
         }
 
-        @if (Model.List != null)
+        @if (Model.List != null && Model.List.Data != null && Model.List.Data.Count() > 0)
         {
             <div class="sort_list">
                 <table id="sm_list" class="table table-striped">

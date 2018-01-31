@@ -27,6 +27,10 @@ namespace Disly.Areas.Admin.Controllers
                 ControllerName = ControllerName,
                 ActionName = ActionName
             };
+            if (AccountInfo != null)
+            {
+                model.Menu = _cmsRepository.getCmsMenu(AccountInfo.Id);
+            }
 
             #region Метатеги
             ViewBag.Title = UserResolutionInfo.Title;
@@ -145,15 +149,16 @@ namespace Disly.Areas.Admin.Controllers
                     break;
             }
 
-            string fileExtension = upload.FileName.Substring(upload.FileName.LastIndexOf(".")).ToLower();
-
-            var validExtension = (!string.IsNullOrEmpty(Settings.PicTypes)) ? Settings.PicTypes.Split(',') : "jpg,jpeg,png,gif".Split(',');
-            if (!validExtension.Contains(fileExtension.Replace(".", "")))
+            // var validExtension = (!string.IsNullOrEmpty(Settings.PicTypes)) ? Settings.PicTypes.Split(',') : "jpg,jpeg,png,gif".Split(',');
+            //if (!validExtension.Contains(fileExtension.Replace(".", "")))
+            if (!AttachedPicExtAllowed(upload.FileName))
             {
                 return null;
             }
 
             string fileName = Transliteration.Translit(upload.FileName.Substring(0, upload.FileName.LastIndexOf(".")));
+
+            string fileExtension = upload.FileName.Substring(upload.FileName.LastIndexOf(".")).ToLower();
 
             Photo photoNew = new Photo()
             {

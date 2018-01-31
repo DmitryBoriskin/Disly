@@ -2,6 +2,7 @@
 using Disly.Areas.Admin.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
@@ -25,6 +26,10 @@ namespace Disly.Areas.Admin.Controllers
                 ControllerName = ControllerName,
                 ActionName = ActionName
             };
+            if (AccountInfo != null)
+            {
+                model.Menu = _cmsRepository.getCmsMenu(AccountInfo.Id);
+            }
 
             #region Метатеги
             ViewBag.Title = UserResolutionInfo.Title;
@@ -191,11 +196,14 @@ namespace Disly.Areas.Admin.Controllers
                 if (!string.IsNullOrEmpty(back_model.Item.DomainListString))
                 {
                     string[] dopDomains = back_model.Item.DomainListString.Replace(" ","").Split(';');
-                    foreach (var d in dopDomains)
+                    if (dopDomains != null && dopDomains.Count() > 0)
                     {
-                        if (!string.IsNullOrEmpty(d))
+                        foreach (var d in dopDomains)
                         {
-                            domains.Add(d);
+                            if (!string.IsNullOrEmpty(d))
+                            {
+                                domains.Add(d);
+                            }
                         }
                     }
                     back_model.Item.DomainListArray = domains;

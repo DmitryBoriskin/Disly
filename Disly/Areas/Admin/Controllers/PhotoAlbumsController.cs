@@ -41,6 +41,10 @@ namespace Disly.Areas.Admin.Controllers
                 ControllerName = ControllerName,
                 ActionName = ActionName
             };
+            if (AccountInfo != null)
+            {
+                model.Menu = _cmsRepository.getCmsMenu(AccountInfo.Id);
+            }
 
             //Справочник всех доступных категорий
             MaterialsGroup[] GroupsValues = _cmsRepository.getAllMaterialGroups();
@@ -145,10 +149,7 @@ namespace Disly.Areas.Admin.Controllers
                 var defaultPreviewSizes = new string[] { "540", "360" };
                 if (upload != null && upload.ContentLength > 0)
                 {
-                    string fileExtension = upload.FileName.Substring(upload.FileName.LastIndexOf(".")).ToLower();
-
-                    var validExtension = (!string.IsNullOrEmpty(Settings.PicTypes)) ? Settings.PicTypes.Split(',') : "jpg,jpeg,png,gif".Split(',');
-                    if (!validExtension.Contains(fileExtension.Replace(".", "")))
+                    if (!AttachedPicExtAllowed(upload.FileName))
                     {
                         model.ErrorInfo = new ErrorMessage()
                         {
@@ -161,6 +162,8 @@ namespace Disly.Areas.Admin.Controllers
                         };
                         return View("Item", model);
                     }
+
+                    string fileExtension = upload.FileName.Substring(upload.FileName.LastIndexOf(".")).ToLower();
 
                     var sizes = (!string.IsNullOrEmpty(Settings.MaterialPreviewImgSize)) ? Settings.MaterialPreviewImgSize.Split(',') : defaultPreviewSizes;
                     int.TryParse(sizes[0], out width);
@@ -203,7 +206,7 @@ namespace Disly.Areas.Admin.Controllers
                 }
                 if (status)
                 {
-                    #region save-photos                    
+                    #region save-photos
                     int counter = 0;
                     string serverPath = savePath;
 

@@ -15,8 +15,10 @@
             </div>
         </div>
         <div class="filtr-list">
-            @foreach (Catalog_list Item in Model.Items)
+            @if (Model.Items != null && Model.Items.Count() > 0)
             {
+                foreach (Catalog_list Item in Model.Items)
+                {
                 <div class="filtr-item @Item.selected">
                     <div class="filtr-item_link">
                         @if (!Model.ReadOnly || Model.AccountGroup.ToLower().Equals("developer"))
@@ -26,6 +28,7 @@
                         <a href="@Item.link">@Item.text</a>
                     </div>
                 </div>
+                }
             }
         </div>
     </div>

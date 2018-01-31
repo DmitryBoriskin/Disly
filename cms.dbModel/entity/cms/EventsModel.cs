@@ -131,6 +131,11 @@ namespace cms.dbModel.entity
         /// Связь с другими объектами/сущностями
         /// </summary>
         public ObjectLinks Links { get; set; }
+
+        /// <summary>
+        /// Прикрепленные документы
+        /// </summary>
+        public DocumentsModel[] Documents { get; set; }
     }
 
     /// <summary>

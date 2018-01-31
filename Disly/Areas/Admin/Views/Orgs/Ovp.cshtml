@@ -137,7 +137,7 @@
                         <th>Должность</th>
                         <th></th>
                     </tr>
-                    @if (Model.DepartmentItem.Peoples != null)
+                    @if (Model.DepartmentItem.Peoples != null && Model.DepartmentItem.Peoples.Count() > 0)
                     {
                         foreach (var item in Model.DepartmentItem.Peoples)
                         {

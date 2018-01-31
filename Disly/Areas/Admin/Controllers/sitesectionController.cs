@@ -38,6 +38,10 @@ namespace Disly.Areas.Admin.Controllers
                     new SiteMapMenu { Value = "spec", Text = "Специалисты" }
                 }
             };
+            if (AccountInfo != null)
+            {
+                model.Menu = _cmsRepository.getCmsMenu(AccountInfo.Id);
+            }
 
             //Справочник всех доступных категорий
             MaterialsGroup[] GroupsValues = _cmsRepository.getAllMaterialGroups();

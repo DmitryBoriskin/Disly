@@ -3,11 +3,11 @@
 <div class="content">
     <h1>@ViewBag.Title</h1>
     <div class="cms_menu-list">
-        @if (Model.List != null)
+        @if (Model.List != null && Model.List.Count() > 0)
         {
             foreach (cmsMenuModel menuGroup in Model.List)
             {
-                if (menuGroup.GroupItems != null)
+                if (menuGroup.GroupItems != null && menuGroup.GroupItems.Count() > 0)
                 {
                     <div class="cms_menu-title">@menuGroup.GroupName</div>
                     <div class="sortable ui-sortable" data-service="/Admin/Services/ChangePermit?group=cmsMenu">

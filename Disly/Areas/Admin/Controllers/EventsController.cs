@@ -38,6 +38,11 @@ namespace Disly.Areas.Admin.Controllers
                 ActionName = ActionName
             };
 
+            if (AccountInfo != null)
+            {
+                model.Menu = _cmsRepository.getCmsMenu(AccountInfo.Id);
+            }
+
             #region Метатеги
             ViewBag.Title = UserResolutionInfo.Title;
             ViewBag.Description = "";
@@ -191,12 +196,11 @@ namespace Disly.Areas.Admin.Controllers
                 string savePath = Settings.UserFiles + Domain + Settings.EventsDir;
                 if (upload != null && upload.ContentLength > 0)
                 {
-                    string fileExtension = upload.FileName.Substring(upload.FileName.LastIndexOf(".")).ToLower();
-
-                    var validExtension = (!string.IsNullOrEmpty(Settings.PicTypes)) ? Settings.PicTypes.Split(',') : "jpg,jpeg,png,gif".Split(',');
-                    if (!validExtension.Contains(fileExtension.Replace(".", "")))
+                    if (!AttachedPicExtAllowed(upload.FileName))
                     {
-                        model.Item = _cmsRepository.getEvent(Id);
+                        model.Item = (_cmsRepository.getEvent(Id) != null) ? _cmsRepository.getEvent(Id)
+                           : new EventsModel() { Id = Id };
+
                         model.ErrorInfo = new ErrorMessage()
                         {
                             title = "Ошибка",
@@ -209,6 +213,8 @@ namespace Disly.Areas.Admin.Controllers
 
                         return View("Item", model);
                     }
+
+                    string fileExtension = upload.FileName.Substring(upload.FileName.LastIndexOf(".")).ToLower();
 
                     var sizes = (!string.IsNullOrEmpty(Settings.MaterialPreviewImgSize)) ? Settings.MaterialPreviewImgSize.Split(',') : defaultPreviewSizes;
                     int.TryParse(sizes[0], out width);

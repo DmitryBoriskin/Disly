@@ -19,14 +19,17 @@
         <div class="form-group">
             <label for="itemGroups-select">Специализация:</label>
             <select name="Item.Specialisations" id="itemGroups-select" class="form-control select2" multiple required>
-                @foreach (var post in Model.EmployeePostList)
+                @if (Model.EmployeePostList != null && Model.EmployeePostList.Count() > 0)
                 {
-                    <option value="@post.Id" @(Model.Item != null && Model.Item.Specialisations != null && Model.Item.Specialisations.Any(s => s == post.Id) ? "selected" : null)>@post.Name</option>
+                    foreach (var post in Model.EmployeePostList)
+                    {
+                        <option value="@post.Id" @(Model.Item != null && Model.Item.Specialisations != null && Model.Item.Specialisations.Any(s => s == post.Id) ? "selected" : null)>@post.Name</option>
+                    }
                 }
             </select>
         </div>
 
-        @if (Model.EmployeeList != null)
+        @if (Model.EmployeeList != null && Model.EmployeeList.Count() > 0)
         {
             <div class="form-group">
                 <label for="itemGroups-select">Главные специалисты:</label>
@@ -41,9 +44,12 @@
             <div class="form-group">
                 <label for="itemGroups-select">Экспертный совет:</label>
                 <select name="Item.EmployeeExpSoviet" id="itemGroups-select" class="form-control select2" multiple required>
-                    @foreach (var emp in Model.AllDoctors)
+                    @if (Model.AllDoctors != null && Model.AllDoctors.Count() > 0)
                     {
-                        <option value="@emp.Id" @(Model.Item != null && Model.Item.EmployeeExpSoviet != null && Model.Item.EmployeeExpSoviet.Any(s => s == emp.Id) ? "selected" : null)>@emp.Fullname</option>
+                        foreach (var emp in Model.AllDoctors)
+                        {
+                            <option value="@emp.Id" @(Model.Item != null && Model.Item.EmployeeExpSoviet != null && Model.Item.EmployeeExpSoviet.Any(s => s == emp.Id) ? "selected" : null)>@emp.Fullname</option>
+                        }
                     }
                 </select>
             </div>

@@ -86,9 +86,9 @@ namespace cms.dbase
                     {
                         query.Set(p => p.n_sort, p => p.n_sort - 1).Update();
                     }
-                    data
-                        .Where(w => w.id == id)
-                        .Delete();
+
+                    data.Where(w => w.id == id).Delete();
+
                     return true;
                 }
                 else return false;

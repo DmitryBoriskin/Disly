@@ -1,6 +1,7 @@
-﻿@{
+﻿@model DocumentsViewModel
+@{
     Layout = "~/Areas/Admin/Views/Shared/_popUp.cshtml";}
-@{    
+@{
     var controller = "/" + @ViewBag.ControllerName + "/";
     string actionName = ViewBag.ActionName;
 }
@@ -22,7 +23,7 @@
             <div class="col-xs-4">
                 <div class="form-group">
                     <label for="Item_Desc">Документы:</label>
-                    <input name="upload" type="file" multiple/>
+                    <input name="upload" type="file" multiple accept=".jpeg,.jpg,.png,.gif,.pdf,.rtf,.txt,.doc,.docx,.xls,.xlsx,.ods,.odt,.tar,.zip,.7z"/>
                 </div>
             </div>
             <div class="col-xs-8">
@@ -32,11 +33,10 @@
             </div>
         </div>
 
-        @if (Model.List != null)
+        @if (Model.List != null && Model.List.Count() > 0)
         {
             <table class="table table-striped ">
                 <tbody class="Sortable ui-sortable" data-service="/Admin/Services/ChangePermit?group=Documents">
-
 
                     @foreach (DocumentsModel item in Model.List)
                     {

@@ -6,7 +6,7 @@ using System.Web.Routing;
 
 namespace Disly.Areas.Admin.Controllers
 {
-    public class cmsMenuController : CoreController
+    public class CmsMenuController : CoreController
     {
         cmsMenuViewModel model;
 
@@ -22,6 +22,10 @@ namespace Disly.Areas.Admin.Controllers
                 ControllerName = ControllerName,
                 ActionName = ActionName
             };
+            if (AccountInfo != null)
+            {
+                model.Menu = _cmsRepository.getCmsMenu(AccountInfo.Id);
+            }
 
             #region Метатеги
             ViewBag.Title = "Структура CMS";
@@ -36,7 +40,7 @@ namespace Disly.Areas.Admin.Controllers
         /// <returns></returns>
         public ActionResult Index()
         {
-            model.List = _cmsRepository.getCmsMenu(AccountInfo.id);
+            model.List = _cmsRepository.getCmsMenu(AccountInfo.Id);
 
             return View(model);
         }
@@ -127,7 +131,7 @@ namespace Disly.Areas.Admin.Controllers
                 new ErrorMassegeBtn { url = "#", text = "ок", action = "false" }
             };
 
-            model.List = _cmsRepository.getCmsMenu(AccountInfo.id);
+            model.List = _cmsRepository.getCmsMenu(AccountInfo.Id);
             model.ErrorInfo = userMassege;
 
             return View("Index", model);

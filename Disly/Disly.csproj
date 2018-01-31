@@ -408,6 +408,9 @@
     <Content Include="Content\plugins\tinymce\plugins\fullscreen\plugin.min.js" />
     <Content Include="Content\css\theme\green_portal.less" />
     <Content Include="Areas\Admin\Views\Materials\RssList.cshtml" />
+    <Content Include="Areas\Admin\Views\Shared\Templates\Filtr.cshtml" />
+    <Content Include="Areas\Admin\Views\Shared\Templates\Menu.cshtml" />
+    <Content Include="Areas\Admin\Views\Shared\Templates\Pager.cshtml" />
     <None Include="Content\plugins\tinymce\plugins\gallery\plugin.min.js_korkin" />
     <Content Include="Content\plugins\tinymce\plugins\help\img\logo.png" />
     <Content Include="Content\plugins\tinymce\plugins\help\plugin.min.js" />
@@ -566,7 +569,7 @@
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
     <Compile Include="Areas\Admin\Controllers\AccountController.cs" />
     <Compile Include="Areas\Admin\Controllers\BannersController.cs" />
-    <Compile Include="Areas\Admin\Controllers\cmsMenuController.cs" />
+    <Compile Include="Areas\Admin\Controllers\CmsMenuController.cs" />
     <Compile Include="Areas\Admin\Controllers\DocumentsController .cs" />
     <Compile Include="Areas\Admin\Controllers\WorksheetController.cs" />
     <Compile Include="Areas\Admin\Models\AnketaViewModel.cs" />
@@ -728,7 +731,6 @@
     <Content Include="Content\fonts\Ubuntu\ubuntu_regular.woff" />
     <Content Include="Content\fonts\Ubuntu\ubuntu_regular.woff2" />
     <Content Include="Areas\Admin\Views\Shared\Partial\Modal.cshtml" />
-    <Content Include="Areas\Admin\Views\Shared\Partial\Filter.cshtml" />
     <Content Include="Views\Error\Index.cshtml" />
     <Content Include="Views\Page\Index.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
@@ -743,7 +745,6 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Services\ChangePass.cshtml" />
     <Content Include="Areas\Admin\Views\Services\Log.cshtml" />
-    <Content Include="Areas\Admin\Views\Services\UserResolutions.cshtml" />
     <Content Include="Areas\Admin\Views\Services\GroupClaims.cshtml" />
     <Content Include="Areas\Admin\Views\Sites\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Sites\Item.cshtml" />
@@ -752,7 +753,6 @@
     <Content Include="Areas\Admin\Views\PortalUsers\Item.cshtml" />
     <Content Include="Areas\Admin\Views\Shared\Templates\Filtr\Default.cshtml" />
     <Content Include="Areas\Admin\Views\Shared\_popUp.cshtml" />
-    <Content Include="Areas\Admin\Views\Services\LogUser.cshtml" />
     <Content Include="Areas\Admin\Views\Shared\Templates\Pager\Default.cshtml" />
     <Content Include="Areas\Admin\Views\Image\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Services\GetFile.cshtml" />
