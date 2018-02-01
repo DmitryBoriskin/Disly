@@ -21,7 +21,7 @@ using LinqToDB.Mapping;
 namespace Integration.Frmp.models
 {
 	/// <summary>
-	/// Database       : DislyMVC
+	/// Database       : DislyMVCImport
 	/// Data Source    : chuvashia.com
 	/// Server Version : 11.00.3000
 	/// </summary>
