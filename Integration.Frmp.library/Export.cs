@@ -31,7 +31,11 @@ namespace Integration.Frmp.library
             try
             {
                 DirectoryInfo info = new DirectoryInfo(param.DirName);
-                var fileInfo = info.GetFiles(param.FileName).OrderByDescending(p => p.CreationTime).FirstOrDefault();
+                
+                FileInfo[] files = info.GetFiles("*.xml");
+
+                //var fileInfo = info.GetFiles(param.FileName).OrderByDescending(p => p.CreationTime).FirstOrDefault();
+                var fileInfo = files.OrderByDescending(p => p.CreationTime).FirstOrDefault();
 
                 SrvcLogger.Debug("{PREPARING}", "Файл для импорта данных '" + fileInfo.FullName + "'");
                 SrvcLogger.Debug("{PREPARING}", "Начало чтения XML-данных");
@@ -287,46 +291,7 @@ namespace Integration.Frmp.library
                         //    photo = ImageResizing(snils, employees[i].picture);
                         //}
                         #endregion
-
-                        #region comments
-                        //// проверим существует ли запись с таким СНИЛС в таблице dbo.import_frmp_peoples
-                        //var query = db.ImportFrmpPeopless.Where(w => w.CSnils.Equals(snils));
-                        //bool isExist = query.Any();
-
-                        //// записываем данные в таблицу dbo.import_frmp_peoples
-                        //if (!isExist)
-                        //{
-                        //    db.ImportFrmpPeopless
-                        //        .Value(v => v.Id, id)
-                        //        .Value(v => v.CSurname, surname)
-                        //        .Value(v => v.CName, name)
-                        //        .Value(v => v.CPatronymic, patroname)
-                        //        .Value(v => v.CSnils, snils)
-                        //        .Value(v => v.BSex, sex)
-                        //        .Value(v => v.DBirthdate, birthDate)
-                        //        .Value(v => v.DModify, modifyDate)
-                        //        .Value(v => v.XmlInfo, stringXml)
-                        //        .Value(v => v.CPhoto, photo)
-                        //        .Insert();
-                        //}
-
-
-                        //// записываем данные в таблицу dbo.import_frmp_orgs_peoples
-                        //var queryLink = db.ImportFrmpOrgsPeopless
-                        //        .Where(w => w.FGuid.Equals(orgId))
-                        //        .Where(w => w.FPeople.Equals(id));
-
-                        //// проверим существует ли связь сотрудника с организацией
-                        //bool isLinkExist = queryLink.Any();
-                        //if (!isLinkExist)
-                        //{
-                        //    db.ImportFrmpOrgsPeopless
-                        //        .Value(v => v.FGuid, orgId)
-                        //        .Value(v => v.FPeople, id)
-                        //        .Insert();
-                        //}
-                        #endregion
-
+                        
                         #region trying buklcopy
                         importPeopleInfos.Add(new ImportFrmpPeopleInfos
                         {
@@ -439,39 +404,6 @@ namespace Integration.Frmp.library
                     //count++;
                     foreach (var p in item.Posts)
                     {
-                        #region comments
-                        //var isExists = db.ImportFrmpPeoplePostsLinks
-                        //    .Where(w => w.FPeople.Equals(item.Id))
-                        //    .Where(w => w.FEmployeePost.Equals(p.Post.ID))
-                        //    .Where(w => w.FOrgGuid.Equals(p.OrgId));
-
-                        //if (p.OrgId != Guid.Empty)
-                        //{
-                        //    if (!isExists.Any())
-                        //    {
-                        //        db.ImportFrmpPeoplePostsLinks
-                        //            .Value(v => v.FPeople, item.Id)
-                        //            .Value(v => v.FEmployeePost, p.Post.ID)
-                        //            .Value(v => v.NType, p.PositionType.ID)
-                        //            .Value(v => v.FOrgGuid, p.OrgId)
-                        //            .Insert();
-                        //    }
-                        //    else
-                        //    {
-                        //        db.ImportFrmpPeoplePostsLinks
-                        //            .Where(w => w.FPeople.Equals(item.Id))
-                        //            .Where(w => w.FEmployeePost.Equals(p.Post.ID))
-                        //            .Where(w => w.FOrgGuid.Equals(p.OrgId))
-                        //            .Set(u => u.NType, p.PositionType.ID)
-                        //            .Set(u => u.FOrgGuid, p.OrgId)
-                        //            .Update();
-                        //    }
-                        //}
-
-                        //if (count % 1000 == 0)
-                        //    SrvcLogger.Debug("{WORK}", string.Format("Обработанно {0} связей сотрудников и должностей", count));
-                        #endregion
-
                         if (p.OrgId != Guid.Empty)
                         {
                             list.Add(new ImportFrmpPeoplePostsLink
