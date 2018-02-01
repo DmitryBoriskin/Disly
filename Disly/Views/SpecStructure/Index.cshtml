@@ -1,9 +1,6 @@
 ﻿@model SpecStructureViewModel
 @{
-    if (Model.SitesInfo.Alias == "main")
-    {
-        Layout = "/views/_portal/shared/_layout.cshtml";
-    }
+    Layout = ViewBag.Layout;
 }
 @{
     // Model.CurrentPage == null Проверяем в контроллере, он не должен быть null

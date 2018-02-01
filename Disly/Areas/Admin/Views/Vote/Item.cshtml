@@ -44,7 +44,7 @@
                             </tr>
                         </thead>
                         <tbody data-service="/Admin/Services/ChangePermit?group=vote_answer&menuSort=@Model.Item.Id">
-                            @if (Model.Item.Answer != null)
+                            @if (Model.Item.Answer != null && Model.Item.Answer.Count() > 0)
                             {
                                 foreach (var item in Model.Item.Answer)
                                 {

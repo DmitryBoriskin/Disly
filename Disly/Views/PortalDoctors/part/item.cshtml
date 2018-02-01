@@ -32,7 +32,6 @@
         <ol>
             @if (Model.DoctorsItem.EmployeeInfo.EmployeeRecords != null && Model.DoctorsItem.EmployeeInfo.EmployeeRecords.Count() > 0)
             {
-
                 var postsByOrg = Model.DoctorsItem.EmployeeInfo.EmployeeRecords.Where(p => p.Organisation != null).Any() ?
                     Model.DoctorsItem.EmployeeInfo.EmployeeRecords.Where(p => p.Organisation != null).GroupBy(p => p.Organisation) : null;
                 if (postsByOrg != null)

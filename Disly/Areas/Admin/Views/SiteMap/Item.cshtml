@@ -42,12 +42,12 @@
             @Html.Hidden("Item_ParentId", parent)
 
             @*@Html.TextBox("upload", null, new { type = "file", title = "Изображение", data_name = fileName, data_size = fileSize, data_url = fileUrl, accept = ".jpg,.jpeg,.png,.gif" })
-            @Html.TextBoxFor(m => m.Item.Photo.Url, new { type = "hidden", value = fileUrl })*@
+                @Html.TextBoxFor(m => m.Item.Photo.Url, new { type = "hidden", value = fileUrl })*@
 
             @Html.TextBoxFor(m => m.Item.Photo.Url, new { type = "file", data_posted_name = "upload", data_url = fileUrl, title = "Картинка для предпросмотра", accept = ".jpg,.jpeg,.png,.gif" })
 
             <div class="group-block" title="Текст">
-                @Html.TextAreaFor(m => m.Item.Text, new { @type = "editor", @height = "300" ,data_dir= ViewBag.DataPath})
+                @Html.TextAreaFor(m => m.Item.Text, new { @type = "editor", @height = "300", data_dir = ViewBag.DataPath })
             </div>
             <div class="row">
                 <div class="col-sm-5">
@@ -85,7 +85,7 @@
                 }
             </div>
 
-            @if (Model.Childrens != null)
+            @if (Model.Childrens != null && Model.Childrens.Count() > 0)
             {
                 <div class="sort_list">
                     <table id="sm_list" class="table table-striped">
@@ -133,14 +133,28 @@
                 @Html.DropDownListFor(m => m.Item.FrontSection, new SelectList(Model.FrontSectionList, "Value", "Text", "page"), new { @title = "Шаблон", @class = "selectpicker", @data_help = "Выбор шаблона страницы", @required = "" })
             }
 
-            @if (Model.Account.Group.ToLower().Equals("developer") || Model.Account.Group.ToLower().Equals("administrator"))
-            {
-                @Html.DropDownListFor(m => m.Item.MenuGroups, (MultiSelectList)ViewBag.GroupMenu, new { @title = "Группы меню", @class = "selectpicker", @multiple = "multiple" })
-            }
-            else
-            {
-                @Html.DropDownListFor(m => m.Item.MenuGroups, (MultiSelectList)ViewBag.GroupMenuAviable, new { @title = "Группы меню", @class = "selectpicker", @multiple = "multiple" })
-            }
+            @*@if ((Model.Account.Group.ToLower().Equals("developer") || Model.Account.Group.ToLower().Equals("administrator")))
+                {
+                    @Html.DropDownListFor(m => m.Item.MenuGroups, (MultiSelectList)ViewBag.GroupMenu, new { @title = "Группы меню", @class = "selectpicker", @multiple = "multiple" })
+                }
+                else
+                {
+                    @Html.DropDownListFor(m => m.Item.MenuGroups, (MultiSelectList)ViewBag.GroupMenuAviable, new { @title = "Группы меню", @class = "selectpicker", @multiple = "multiple" })
+                }*@
+            <div>
+                <select id="Item_MenuGroups" name="Item_MenuGroups" class="selectpicker" title="Группы меню" multiple>
+                    @if (Model.MenuTypes != null && Model.MenuTypes.Count() > 0)
+                    {
+                        foreach (var item in Model.MenuTypes)
+                        {
+                            string Locked = (item.available || (Model.Account.Group.ToLower().Equals("developer") || Model.Account.Group.ToLower().Equals("administrator"))) ? "" : "style=display:none";
+                            string Selcted = (Model.Item.MenuGroups != null && Model.Item.MenuGroups.Contains(item.value)) ? "selected=selected" : "";
+                            <option value="@item.value" @Locked @Selcted>@item.text</option>
+                        }
+                    }
+                </select>
+            </div>
+
 
             <div class="group-block" title="Мета теги">
                 @Html.TextAreaFor(m => m.Item.Keyw, new { type = "text", title = "Ключевые слова", data_help = "Данный тег используется при создании краткого описания страницы, используется поисковыми системами для индексации, а также при создании аннотации в выдаче по запросу. При отсутствии тега поисковые системы выдают в аннотации первую строку документа или отрывок, содержащий ключевые слова." })
@@ -159,13 +173,13 @@
                 @Html.CheckBoxFor(m => m.Item.Blocked, new { type = "checkbox", title = "Запретить удаление страницы", data_toggle = "toggle", data_on = "запретить удаление", data_onstyle = "danger", data_off = "разрешить удаление", data_offstyle = "success", data_width = "248", @data_help = "Запрещает удаление страницы, а также изменение некоторых ее свойств." })
             }
 
-            @if (Model.Item != null)
-            {
-                <div class="topIndent-20">
+            <div class="topIndent-20">
+                @if (Model.Item != null)
+                {
                     @Html.ActionLink("Документы", "index", "documents", new { @id = Model.Item.Id }, new { @id = "LogLists", @class = "button pop-up_frame icon-attach", @data_class = "LogList", @title = "Документы" })
-                    @Html.ActionLink("Журнал изменений", "log", "services", new { @id = Model.Item.Id }, new { @id = "LogLists", @class = "button pop-up_frame icon-archive", @data_class = "LogList", @title = "Журнал изменений" })
-                </div>
-            }
+                }
+                @Html.ActionLink("Журнал изменений", "log", "services", new { @id = Model.Item.Id }, new { @id = "LogLists", @class = "button pop-up_frame icon-archive", @data_class = "LogList", @title = "Журнал изменений" })
+            </div>
             @if (Model.Item.Title == null)
             {
                 @Html.TextBoxFor(m => m.Item.OldId, new { @title = "Идентификатор в старой БД" })
@@ -203,5 +217,5 @@ else
             <button type="submit" name="action" value="delete-btn" data-action="delete" class="button icon-delete">Удалить</button>
         }
     }
-    <button type="submit" name="action" value="cancel-btn"  data-action="cancel" class="button icon-cancel">Назад</button>
+    <button type="submit" name="action" value="cancel-btn" data-action="cancel" class="button icon-cancel">Назад</button>
 </div>

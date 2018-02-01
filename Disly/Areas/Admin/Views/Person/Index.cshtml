@@ -4,7 +4,7 @@
 {
     <div class="content">
         <h1>@Model.UserResolution.Title</h1>
-        @if (Model.List != null)
+        @if (Model.List != null && Model.List.Data != null && Model.List.Data.Count() > 0)
         {
             <div class="list-item row">
                 <div class="col-md-12"><span>ФИО</span></div>

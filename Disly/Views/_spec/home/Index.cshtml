@@ -1,6 +1,6 @@
 ﻿@model HomePageViewModel
 @{
-    Layout = "/views/_spec/shared/_layout.cshtml";
+    Layout = ViewBag.Layout;
     var slider = (Model.BannerArray != null) ?
     Model.BannerArray
     .Where(w => w.SectionAlias.Equals("slider"))
@@ -146,15 +146,8 @@
                 </div>                
             </div>        
     }
-
-
-
-
-
     @if (sitemapPlates != null && sitemapPlates.Count() > 0)
     {
-        
-
         <div class="container">
             <div class="col-md-12">
                 <div class="top_line">
@@ -188,4 +181,47 @@
         </div>            
     }
 
+
+@{
+    var photo = (Model.Materials != null) ? Model.Materials.Where(w => w.GroupAlias.Equals("photo")) : null;
+    var photo_it = (photo != null && photo.Count() > 0) ? photo.FirstOrDefault() : null;
+    var video = (Model.Materials != null) ? Model.Materials.Where(w => w.GroupAlias.Equals("video")) : null;
+    var video_it = (video != null) ? video.FirstOrDefault() : null;
+}
+<div class="container">
+    <div class="block">
+        <div class="col-md-12">
+            <h2><a href="/press/photo">Фото</a></h2>
+            @if (photo_it != null)
+            {
+                string _img = photo_it.Photo;
+                <div class="block_item">
+                    <a href="/press/@photo_it.Date.Year/@photo_it.Date.Month/@photo_it.Date.Day/@photo_it.Alias">
+                        <img src="@_img" />
+                    </a>                    
+                    <div class="block_item_info"><a href="/press/@photo_it.Date.Year/@photo_it.Date.Month/@photo_it.Date.Day/@photo_it.Alias">@video_it.Title</a></div>
+                </div>
+                     }
+
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="block">
+        <div class="col-md-12">
+            <h2><a href="/press/video">Видео</a></h2>
+            @if (video_it != null)
+            {
+                string _img = video_it.Photo;
+                <div class="block_item">
+                    <a href="/press/@video_it.Date.Year/@video_it.Date.Month/@video_it.Date.Day/@video_it.Alias">
+                        <img src="@_img" />
+                    </a>                    
+                    <div class="block_item_info"><a href="/press/@video_it.Date.Year/@video_it.Date.Month/@video_it.Date.Day/@video_it.Alias">@video_it.Title</a></div>
+                </div>
+            }
+
+        </div>
+    </div>
+</div>
 

@@ -1,9 +1,6 @@
 ﻿@model NewsViewModel
 @{
-    if (Model.SitesInfo.Alias == "main")
-    {
-        Layout = "/views/_portal/shared/_layout.cshtml";
-    }
+    Layout = ViewBag.Layout;
 
     string _allactiv = (String.IsNullOrEmpty(ViewBag.CurrentCategory)) ? "class=active" : "";
 }

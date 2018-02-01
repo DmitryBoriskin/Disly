@@ -9,24 +9,36 @@ namespace Disly.Areas.Admin.Controllers
     public class TemplatesController : CoreController
     {
 
-        public ActionResult AdminMenu(string viewName = "Templates/Menu/Default")
-        {
-            cmsMenuModel[] Menu = _cmsRepository.getCmsMenu(AccountInfo.id);
+        //public ActionResult AdminMenu(string viewName = "Templates/Menu/Default")
+        //{
+        //    cmsMenuModel[] Menu = _cmsRepository.getCmsMenu(AccountInfo.Id);
 
-            return View(viewName, Menu);
-        }
+        //    return View(viewName, Menu);
+        //}
 
         public ActionResult Filtr(string Title, string Alias, string Icon, string Url, Catalog_list[] Items, string BtnName = "Добавить", string viewName = "Templates/Filtr/Default", bool readOnly = true)
         {
             string Link = Request.Url.PathAndQuery.ToLower();
             string nowValue = Request.QueryString[Alias];
 
-            for (int i = 0; i < Items.Length; i++)
+
+            //for (int i = 0; i < Items.Length; i++)
+            //{
+            //    Items[i].link = addFiltrParam(Link, Alias.ToLower(), Items[i].value.ToLower());
+            //    Items[i].url = Url.ToLower() + Items[i].value.ToLower() + "/";
+            //    Items[i].selected = (nowValue == Items[i].value.ToLower()) ? "now" : String.Empty;
+            //}
+
+            if (Items != null && Items.Count() > 0)
             {
-                Items[i].link = addFiltrParam(Link, Alias.ToLower(), Items[i].value.ToLower());
-                Items[i].url = Url.ToLower() + Items[i].value.ToLower() + "/";
-                Items[i].selected = (nowValue == Items[i].value.ToLower()) ? "now" : String.Empty;
+                foreach (var item in Items)
+                {
+                    item.link = addFiltrParam(Link, Alias.ToLower(), item.value.ToLower());
+                    item.url = Url.ToLower() + item.value.ToLower() + "/";
+                    item.selected = (nowValue == item.value.ToLower()) ? "now" : String.Empty;
+                }
             }
+
             Link = addFiltrParam(Link, Alias.ToLower(), "");
 
             FiltrModel Model = new FiltrModel()

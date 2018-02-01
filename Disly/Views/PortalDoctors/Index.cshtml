@@ -1,27 +1,24 @@
 ﻿@model PortalDoctorsViewModel
-    @{
-        if (Model.SitesInfo.Alias == "main")
+@{
+    Layout = ViewBag.Layout;
+}
+<div class="type-page">
+    <div class="container">
+        @Html.Partial("services/breadcrumbs")
+        @if (Model.DoctorsItem != null)
         {
-            Layout = "/views/_portal/shared/_layout.cshtml";
+            <h1>@Model.DoctorsItem.FIO</h1>
+            if (Model.DoctorsItem.EmployeeInfo != null)
+            {
+                @Html.Partial("part/item")
+            }
         }
-    }
-    <div class="type-page">
-        <div class="container">
-            @Html.Partial("services/breadcrumbs")
-            @if (Model.DoctorsItem != null)
+        else
+        {
+            if (Model.DoctorsList != null)
             {
-                <h1>@Model.DoctorsItem.FIO</h1>
-                if (Model.DoctorsItem.EmployeeInfo != null)
-                {
-                    @Html.Partial("part/item")
-                }
+                @Html.Partial("part/list")
             }
-            else
-            {
-                if (Model.DoctorsList != null)
-                {
-                    @Html.Partial("part/list")
-                }
-            }
-        </div>
+        }
     </div>
+</div>

@@ -1,9 +1,6 @@
 ﻿@model DoctorsViewModel
 @{
-    if (Model.SitesInfo.Alias == "main")
-    {
-        Layout = "/views/_portal/shared/_layout.cshtml";
-    }
+    Layout = ViewBag.Layout;
 }
 <div class="type-page">
     <div class="container">
@@ -18,6 +15,7 @@
         }
         else
         {
+            <h1>@ViewBag.Title</h1>
             if (Model.DoctorsList != null)
             {
                 @Html.Partial("part/list")

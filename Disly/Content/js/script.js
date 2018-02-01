@@ -1,6 +1,7 @@
 ﻿$(document).ready(function () {
     $('.select2').select2();
 
+  
 
     $('input[data-type=date').datepicker({ onSelect: function (dateText, inst) { $(this).attr('value', dateText); } });
 
@@ -79,7 +80,7 @@
             var _size = $('#rss_param_size').val();
             var _rsslink = $('#rss_param_link');
             var new_rsslink = '/press/rss';
-            if (_group != '') {
+            if (_group != '' && _group!= undefined) {
                 new_rsslink = new_rsslink + "/" + _group;
             }
             //new_rsslink = new_rsslink + "?";
@@ -90,7 +91,7 @@
             //if (_end != '') {
             //    new_rsslink = new_rsslink + "&dateend=" + _end;
             //}
-            if (_size != '') {
+            if (_size != '' && _group != undefined) {
                 new_rsslink = new_rsslink + "?size=" + _size;
             }
             _rsslink.attr('href', "http://" + _rsslink.attr('data-domain') + new_rsslink);
@@ -146,7 +147,7 @@ function GeoCollection(obj) {
         var idmaparea = obj.find('.maplist').attr('id');
         myMap = new ymaps.Map(idmaparea, {
             center: [x_center / point_count, y_center / point_count],
-            zoom: 14,
+            zoom: 8,
             controls: []
         }, {
                 searchControlProvider: 'yandex#search'
@@ -173,6 +174,13 @@ function GeoCollection(obj) {
                 });                
             });
         });
+        
+        
+        myMap.setBounds(myMap.getBounds(), { checkZoomRange: true }).then(function () {
+            if (myMap.getZoom() > 14) myMap.setZoom(14); // Если значение zoom превышает 15, то устанавливаем 15.
+        });
+
+
         myMap.geoObjects.add(gCollection);
 
 

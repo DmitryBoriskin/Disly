@@ -6,6 +6,11 @@
         @if (Model.DoctorsList != null && Model.DoctorsList.Doctors.Count() > 0)
         {
             <table class="table">
+                <tr>
+                    <th>Изображение</th>
+                    <th>ФИО</th>
+                    <th>Должность</th>
+                </tr>
 
                 @foreach (var item in Model.DoctorsList.Doctors)
                 {
@@ -25,11 +30,12 @@
                         </td>
                         <td>
                             <a class="adminlist_name" href="@link">@item.FIO</a>
-
+                        </td>
+                        <td>
                             @if (item.Posts != null && item.Posts.Count() > 0)
                             {
                                 var postsByOrg = item.Posts.Where(p => p.OrgId != null).Any() ?
-                                    item.Posts.Where(p => p.OrgId != null).OrderBy(p=>p.Type).GroupBy(p => p.OrgId) : null;
+                                    item.Posts.Where(p => p.OrgId != null).OrderBy(p => p.Type).GroupBy(p => p.OrgId) : null;
                                 if (postsByOrg != null)
                                 {
                                     foreach (var postByOrg in postsByOrg)
@@ -56,23 +62,12 @@
                                 }
                             }
                         </td>
-                        <td>
-                            @if (item.IsRedirectUrl)
-                            {
-                                <a target="_blank" href="/RedirectRegistry/Doctors/@item.Id/?oid=@Model.Oid">Расписание</a>
-                            }
-                            else
-                            {
-                                <p>По графику</p>
-                            }
-                        </td>
                     </tr>
                 }
             </table>
         }
 
     </div>
-    <div class="col-md-1"></div>
     <div class="col-md-3 col-md-push-1">
         <form role="form" class="filtr_news" action="/@ViewBag.ControllerName/">
             <div class="row">

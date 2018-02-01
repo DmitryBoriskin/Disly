@@ -39,7 +39,7 @@ namespace cms.dbase
                     Where(w => w.c_email == Email).
                     Select(s => new AccountModel
                     {
-                        id = s.id,
+                        Id = s.id,
                         Mail = s.c_email,
                         Salt = s.c_salt,
                         Hash = s.c_hash,
@@ -63,7 +63,7 @@ namespace cms.dbase
                     Where(w => w.id == Id).
                     Select(s => new AccountModel
                     {
-                        id = s.id,
+                        Id = s.id,
                         Mail = s.c_email,
                         Salt = s.c_salt,
                         Hash = s.c_hash,
@@ -112,11 +112,13 @@ namespace cms.dbase
                     {
                         SiteId = s.f_site,
                         DomainName = s.c_name
-                    })
-                    .ToArray();
+                    });
 
-                if (!data.Any()) { return null; }
-                else { return data; }
+
+                if (data.Any())
+                    return data.ToArray();
+
+                return null;
             }
         }
 
@@ -138,9 +140,12 @@ namespace cms.dbase
                         Write = s.b_write,
                         Change = s.b_change,
                         Delete = s.b_delete
-                    }).ToArray();
-                if (!data.Any()) { return null; }
-                else { return data.First(); }
+                    });
+
+                if (data.Any())
+                    return data.FirstOrDefault();
+
+                return null;
             }
         }
 

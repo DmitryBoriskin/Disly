@@ -79,13 +79,9 @@ namespace Disly.Controllers
             {
                 case "typelist":
                     if (id.HasValue)
-                    {
-                        // список организаций
-                        model.OrgList = _repository.getOrgModels(id.Value);
-
+                    {                        
                         // название типа организаций
                         ViewBag.TypeTitle = _repository.getOrgTypeName(id.Value);
-
                         model.Breadcrumbs.Add(new Breadcrumbs
                         {
                             Title = ViewBag.TypeTitle,
@@ -99,11 +95,7 @@ namespace Disly.Controllers
                 case "affiliation":
                     if (id.HasValue)
                     {
-                        model.OrgList = _repository.getOrgModels(null)
-                            .Where(w => w.Affiliation.Equals(id)).ToArray();
-
                         ViewBag.TypeTitle = _repository.getAffiliationDepartment(id.Value);
-
                         model.Breadcrumbs.Add(new Breadcrumbs
                         {
                             Title = ViewBag.TypeTitle,
@@ -118,13 +110,11 @@ namespace Disly.Controllers
                     if (id.HasValue)
                     {
                         ViewBag.TypeTitle = _repository.getMedicalServiceTitle(id.Value);
-
                         model.Breadcrumbs.Add(new Breadcrumbs
                         {
                             Title = ViewBag.TypeTitle,
                             Url = ""
-                        });
-                        model.OrgList = _repository.getOrgPortalModels(id.Value);
+                        });                        
                     }
                     else
                         model.MedicalServices = _repository.getMedicalServices(null);
@@ -135,15 +125,15 @@ namespace Disly.Controllers
                     {
                         // список организаций
                         model.OrgList = _repository.getOrgModels(id.Value);
-
                         ViewBag.TypeTitle = _repository.getOrgTypeName(id.Value);
                     }
-                    else
-                        model.OrgList = _repository.getOrgModels(null);
-
                     break;
             }
-
+            if(id.HasValue || !id.HasValue && String.IsNullOrEmpty(tab))
+            {
+                model.OrgList = _repository.getOrgsModel(tab, id.ToString());
+            }
+            
             return View(model);
         }
     }

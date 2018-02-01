@@ -40,6 +40,7 @@ namespace cms.dbModel
         public abstract MaterialsGroup[] getMaterialsGroup();
 
         //Departments and structure
+        public abstract StructureModel[] getStructureList();
         public abstract StructureModel[] getStructures(); //string domain
         public abstract DopAddres[] getDopAddresStructur(Guid StrucId);
         public abstract StructureModel getStructureItem(int num); //string domain,
@@ -61,6 +62,9 @@ namespace cms.dbModel
         //лпу
         public abstract OrgType[] getOrgTypes();
         public abstract OrgFrontModel[] getOrgModels(Guid? type);
+        public abstract OrgFrontModel[] getOrgsModel(string tab, string idtype);
+        public abstract OrgsAdministrative getLeaderOrg(Guid OrgId);
+        public abstract string spotDomainContent(Guid? ContentId);
         public abstract string getOrgTypeName(Guid id);
         public abstract DepartmentAffiliationModel[] getDepartmentAffiliations();
         public abstract string getAffiliationDepartment(Guid id);

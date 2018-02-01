@@ -10,7 +10,7 @@
     <div class="content">
         <h1>@ViewBag.Title</h1>
 
-        @if (Model.Sections != null)
+        @if (Model.Sections != null && Model.Sections.Count() > 0)
         {
             <h4 class="nesting_title">Секции баннеров</h4>
             <div class="sort_list">
@@ -54,7 +54,7 @@
                     </div>
                 </div>
             </div>
-            if (Model.SectionItem.BannerList != null && Model.SectionItem.BannerList.Data != null)
+            if (Model.SectionItem.BannerList != null && Model.SectionItem.BannerList.Data != null && Model.SectionItem.BannerList.Data.Count() > 0)
             {
                 <div class="sort_list">
                     <div class="sort_parent" data-service="/admin/services/changepermit?group=banners">
@@ -103,7 +103,7 @@
         }
     </div>
     <div class="dop_info-block">
-        @if (Model.Sections != null)
+        @if (Model.Sections != null && Model.Sections.Count() > 0)
         {
             <div class="alert alert-info">
                 <table class="table">

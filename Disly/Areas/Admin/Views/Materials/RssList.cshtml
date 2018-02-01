@@ -10,7 +10,7 @@
     <div class="content">
         <h1>@ViewBag.Title</h1>
 
-        @if (Model.RssObject != null)
+        @if (Model.RssObject != null && Model.RssObject.Count() > 0)
         {
             <div class="list-rss">
                 @foreach (RssItem Item in Model.RssObject)
@@ -55,7 +55,7 @@
                 <button class="rss_add" type="submit" name="action" value="add-rss" title="Добавить rss ленту"></button>
             </div>
             <div class="col-md-12">
-                @if (Model.RssChannelList != null)
+                @if (Model.RssChannelList != null && Model.RssChannelList.Count() > 0)
                 {
                     <ul class="rss_list">
                         @foreach (var item in Model.RssChannelList)

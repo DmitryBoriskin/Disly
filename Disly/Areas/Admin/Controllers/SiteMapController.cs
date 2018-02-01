@@ -45,6 +45,10 @@ namespace Disly.Areas.Admin.Controllers
                 FrontSectionList = _cmsRepository.getSiteMapFrontSectionList(Domain),
                 MenuTypes = _cmsRepository.getSiteMapMenuTypes()
             };
+            if (AccountInfo != null)
+            {
+                model.Menu = _cmsRepository.getCmsMenu(AccountInfo.Id);
+            }
 
             #region Метатеги
             ViewBag.Title = UserResolutionInfo.Title;
@@ -104,19 +108,22 @@ namespace Disly.Areas.Admin.Controllers
                 ViewBag.DataPath = ViewBag.DataPath + model.Item.Path + "/" + model.Item.Alias + "/";
             }
             ViewBag.DataPath = ViewBag.DataPath.Replace("//", "/");
-            var mg = new MultiSelectList(model.MenuTypes, "value", "text", model.Item != null ? model.Item.MenuGroups : null);
-            ViewBag.GroupMenu = mg;
-
-            var aviable = (model.MenuTypes != null) ?
-                        (model.MenuTypes.Where(p => p.available).Any()) ?
-                                    model.MenuTypes.Where(p => p.available).ToArray() : new Catalog_list[] { }
-                                        : new Catalog_list[] { };
-            var mgAviable = new MultiSelectList(aviable, "value", "text", model.Item != null ? model.Item.MenuGroups : null);
-            ViewBag.GroupMenuAviable = mgAviable;
+            //var mg = new MultiSelectList(model.MenuTypes, "value", "text", model.Item != null ? model.Item.MenuGroups : null);
+            //ViewBag.GroupMenu = mg;
 
 
-            if (model.Item != null)
-                model.Item.MenuGroups = null;
+            //var aviable = (model.MenuTypes != null) ?
+            //            (model.MenuTypes.Where(p => p.available).Any()) ?
+            //                        model.MenuTypes.Where(p => p.available).ToArray() : new Catalog_list[] { }
+            //                            : new Catalog_list[] { };
+
+
+            //var mgAviable = new MultiSelectList(aviable, "value", "text", model.Item != null ? model.Item.MenuGroups : null);
+            //ViewBag.GroupMenuAviable = mgAviable;
+
+
+            //if (model.Item != null)
+            //    model.Item.MenuGroups = null;
 
             if (!string.IsNullOrEmpty(Request.QueryString["parent"]))
             {
@@ -146,10 +153,12 @@ namespace Disly.Areas.Admin.Controllers
         [HttpPost]
         [ValidateInput(false)]
         [MultiButton(MatchFormKey = "action", MatchFormValue = "save-btn")]
-        public ActionResult Item(Guid id, SiteMapViewModel back_model, HttpPostedFileBase upload)
+        public ActionResult Item(Guid id, SiteMapViewModel back_model, HttpPostedFileBase upload, string[] Item_MenuGroups)
         {
             ErrorMessage userMessage = new ErrorMessage();
             userMessage.title = "Информация";
+
+            back_model.Item.MenuGroups = Item_MenuGroups;
 
             #region Импорт со старой базы
             if (back_model.Item.OldId != null)
@@ -233,10 +242,7 @@ namespace Disly.Areas.Admin.Controllers
 
                     if (upload != null && upload.ContentLength > 0)
                     {
-                        string fileExtension = upload.FileName.Substring(upload.FileName.LastIndexOf(".")).ToLower();
-
-                        var validExtension = (!string.IsNullOrEmpty(Settings.PicTypes)) ? Settings.PicTypes.Split(',') : "jpg,jpeg,png,gif".Split(',');
-                        if (!validExtension.Contains(fileExtension.Replace(".", "")))
+                        if (!AttachedPicExtAllowed(upload.FileName))
                         {
                             model.Item = _cmsRepository.getSiteMapItem(id);
 
@@ -252,6 +258,8 @@ namespace Disly.Areas.Admin.Controllers
 
                             return View("Item", model);
                         }
+
+                        string fileExtension = upload.FileName.Substring(upload.FileName.LastIndexOf(".")).ToLower();
 
                         Photo photoNew = new Photo()
                         {

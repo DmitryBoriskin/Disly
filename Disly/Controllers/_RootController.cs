@@ -100,8 +100,11 @@ namespace Disly.Controllers
             ActionName = filterContext.RouteData.Values["Action"].ToString().ToLower();
 
             ViewBag.Layout = "~/Views/Shared/_Layout.cshtml";//основной шаблон
-
-            IsSpecVersion = HttpContext.Request.Cookies["spec_version"] != null;
+            if (HttpContext.Request.Cookies["spec_version"] != null)
+            {
+                IsSpecVersion = HttpContext.Request.Cookies["spec_version"].Value == "true";
+            }
+            
             if (Domain == "main")
             {
                 ViewBag.Layout = "/views/_portal/shared/_layout.cshtml";//шаблон для главного сайта
@@ -205,12 +208,6 @@ namespace Disly.Controllers
                 SearchText = (String.IsNullOrEmpty(Request.QueryString["searchtext"])) ? String.Empty : Request.QueryString["searchtext"],
                 Disabled = (String.IsNullOrEmpty(Request.QueryString["disabled"])) ? false : Convert.ToBoolean(Request.QueryString["disabled"])
             };
-
-#warning  Зачем прибавляли 1 день?
-            //if (result.Date != DateNull && result.DateEnd == DateNull)
-            //{
-            //    result.DateEnd = ((DateTime)result.Date).AddDays(1);
-            //}
 
             return result;
         }

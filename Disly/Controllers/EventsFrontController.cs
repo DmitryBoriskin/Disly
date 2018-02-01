@@ -79,6 +79,9 @@ namespace Disly.Controllers
                     Url = ""
                 });
             }
+            if (model.Item != null)
+                model.Item.Documents = _repository.getAttachDocuments(model.Item.Id);
+
             return View("Item", model);
         }
 

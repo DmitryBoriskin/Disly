@@ -37,6 +37,11 @@ namespace Disly.Areas.Admin.Controllers
                 ActionName = ActionName
             };
 
+            if (AccountInfo != null)
+            {
+                model.Menu = _cmsRepository.getCmsMenu(AccountInfo.Id);
+            }
+
             #region Метатеги
             ViewBag.Title = UserResolutionInfo.Title;
             ViewBag.Description = "";
@@ -55,7 +60,7 @@ namespace Disly.Areas.Admin.Controllers
             {
                 // Наполняем модель списком секций
                 var sections = _cmsRepository.getSections();
-                if (sections != null)
+                if (sections != null && sections.Count() > 0)
                 {
                     foreach (var section in sections)
                     {
@@ -173,12 +178,11 @@ namespace Disly.Areas.Admin.Controllers
 
                 if (upload != null && upload.ContentLength > 0)
                 {
-                    string fileExtension = upload.FileName.Substring(upload.FileName.LastIndexOf(".")).ToLower();
 
-                    var validExtension = (!string.IsNullOrEmpty(Settings.PicTypes)) ? Settings.PicTypes.Split(',') : "jpg,jpeg,png,gif".Split(',');
-                    if (!validExtension.Contains(fileExtension.Replace(".", "")))
+                    if (!AttachedPicExtAllowed(upload.FileName))
                     {
-                        model.Item = _cmsRepository.getBannerItem(id);
+                        model.Item = (_cmsRepository.getBannerItem(id) != null)? _cmsRepository.getBannerItem(id)
+                            : new BannersModel() { Id = id };
                         model.ErrorInfo = new ErrorMessage()
                         {
                             title = "Ошибка",
@@ -192,6 +196,8 @@ namespace Disly.Areas.Admin.Controllers
 
                         return View("Item", model);
                     }
+
+                    string fileExtension = upload.FileName.Substring(upload.FileName.LastIndexOf(".")).ToLower();
 
                     Photo photoNew = new Photo()
                     {
@@ -251,7 +257,6 @@ namespace Disly.Areas.Admin.Controllers
             {
                 model.Item.Photo = Files.getInfoImage(model.Item.Photo.Url);
             }
-
 
             return View(model);
         }

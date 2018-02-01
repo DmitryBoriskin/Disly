@@ -38,6 +38,10 @@ namespace Disly.Areas.Admin.Controllers
                 ControllerName = ControllerName,
                 ActionName = ActionName
             };
+            if (AccountInfo != null)
+            {
+                model.Menu = _cmsRepository.getCmsMenu(AccountInfo.Id);
+            }
 
             //Справочник всех доступных категорий
             MaterialsGroup[] GroupsValues = _cmsRepository.getAllMaterialGroups();
@@ -184,12 +188,10 @@ namespace Disly.Areas.Admin.Controllers
                 string savePath = Settings.UserFiles + Domain + Settings.MaterialsDir; //+2017_09
                 if (upload != null && upload.ContentLength > 0)
                 {
-                    string fileExtension = upload.FileName.Substring(upload.FileName.LastIndexOf(".")).ToLower();
-
-                    var validExtension = (!string.IsNullOrEmpty(Settings.PicTypes)) ? Settings.PicTypes.Split(',') : "jpg,jpeg,png,gif".Split(',');
-                    if (!validExtension.Contains(fileExtension.Replace(".", "")))
+                    if (!AttachedPicExtAllowed(upload.FileName))
                     {
-                        model.Item = _cmsRepository.getMaterial(Id);
+                        model.Item = (_cmsRepository.getMaterial(Id) != null) ? _cmsRepository.getMaterial(Id)
+                          : new MaterialsModel() { Id = Id };
 
                         model.ErrorInfo = new ErrorMessage()
                         {
@@ -203,6 +205,7 @@ namespace Disly.Areas.Admin.Controllers
                         return View("Item", model);
                     }
 
+                    string fileExtension = upload.FileName.Substring(upload.FileName.LastIndexOf(".")).ToLower();
                     var sizes = (!string.IsNullOrEmpty(Settings.MaterialPreviewImgSize)) ? Settings.MaterialPreviewImgSize.Split(',') : defaultPreviewSizes;
                     int.TryParse(sizes[0], out width);
                     int.TryParse(sizes[1], out height);
@@ -355,7 +358,7 @@ namespace Disly.Areas.Admin.Controllers
             ViewBag.Title = "Импорт из RSS";
             //список подключенных rss лент  + очистка объектов прошлой выборки из базы
             model.RssChannelList = _cmsRepository.getRssChannelMiniList();
-            if (model.RssChannelList != null)
+            if (model.RssChannelList != null && model.RssChannelList.Count() > 0)
             {
                 foreach (var item in model.RssChannelList)
                 {
@@ -424,7 +427,7 @@ namespace Disly.Areas.Admin.Controllers
                                           ).ToList();
 
             RssImportModel importModel = channel[0];
-            if (importModel.items != null)
+            if (importModel.items != null && importModel.items.Count() > 0)
             {
                 foreach (RssItem rssItem in importModel.items)
                 {

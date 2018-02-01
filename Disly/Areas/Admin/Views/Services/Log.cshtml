@@ -18,20 +18,23 @@
                 </div>
             </div>
         </div>
-    <div class="scrollbar log-list">
-        @foreach (cmsLogModel ItemLog in Model)
-        {
-            <div class="log-item">
-                <div class="date-col">
-                    @ItemLog.Date
-                </div><div class="action-col">
-                    @ItemLog.Action
-                </div><div class="user-col">
-                    <a target="_blank" title="" href="/Users/edit/@ItemLog.UserId">@ItemLog.Surname @ItemLog.Name</a>
+        <div class="scrollbar log-list">
+            @if (Model != null && Model.Count() > 0)
+            {
+                foreach (cmsLogModel ItemLog in Model)
+                {
+                <div class="log-item">
+                    <div class="date-col">
+                        @ItemLog.Date
+                    </div><div class="action-col">
+                        @ItemLog.Action
+                    </div><div class="user-col">
+                        <a target="_blank" title="" href="/Users/edit/@ItemLog.UserId">@ItemLog.Surname @ItemLog.Name</a>
+                    </div>
                 </div>
-            </div>
-        }
-    </div>
+                }
+            }
+        </div>
     }
     else
     {

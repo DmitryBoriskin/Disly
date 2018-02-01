@@ -25,6 +25,10 @@ namespace Disly.Areas.Admin.Controllers
                 ActionName = ActionName,
                 EmployeePosts = _cmsRepository.getEmployeePosts()
             };
+            if (AccountInfo != null)
+            {
+                model.Menu = _cmsRepository.getCmsMenu(AccountInfo.Id);
+            }
 
             #region Метатеги
             ViewBag.Title = UserResolutionInfo.Title;
@@ -120,10 +124,7 @@ namespace Disly.Areas.Admin.Controllers
 
                 if (upload != null && upload.ContentLength > 0)
                 {
-                    string fileExtension = upload.FileName.Substring(upload.FileName.LastIndexOf(".")).ToLower();
-
-                    var validExtension = (!string.IsNullOrEmpty(Settings.PicTypes)) ? Settings.PicTypes.Split(',') : "jpg,jpeg,png,gif".Split(',');
-                    if (!validExtension.Contains(fileExtension.Replace(".", "")))
+                    if (!AttachedPicExtAllowed(upload.FileName))
                     {
                         model.ErrorInfo = new ErrorMessage()
                         {
@@ -137,6 +138,8 @@ namespace Disly.Areas.Admin.Controllers
 
                         return View("Item", model);
                     }
+
+                    string fileExtension = upload.FileName.Substring(upload.FileName.LastIndexOf(".")).ToLower();
 
                     Photo photo = new Photo
                     {

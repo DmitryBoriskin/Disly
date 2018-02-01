@@ -28,6 +28,9 @@
     <title> @ViewBag.Title - @Model.SitesInfo.Title</title>
     @*<link href="~/fonts/FontAwesome/font-awesome.css" rel="stylesheet">*@
     @Styles.Render("~/Content/style_spec")
+    
+    <link href="~/Content/plugins/mobileGallery/swipebox.css" rel="stylesheet" />    
+    
     @Scripts.Render("~/bundles/modernizr")     
 </head>
 <body>
@@ -56,7 +59,7 @@
         <span class="mgl20">
             Изображения
             <span class="img-outer">
-                <button class="btn btn-default" id="img-onoff"><span class="glyphicon glyphicon-picture"></span><span id="img-onoff-text"> Отключить</span></button>
+                <button class="btn btn-default" id="img-onoff"><span id="img-onoff-text"> Отключить</span></button>
             </span>
         </span>
     </div>
@@ -151,7 +154,9 @@
 
     
     @Scripts.Render("~/bundles/jquery_spec")
+    <script src="~/Content/plugins/mobileGallery/js/jquery.swipebox.js"></script>
     @Scripts.Render("~/Content/js_spec")     
+    
     @RenderSection("scripts", required: false)
 </body>
 </html>

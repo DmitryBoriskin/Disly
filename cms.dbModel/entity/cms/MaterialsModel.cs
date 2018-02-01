@@ -94,6 +94,11 @@ namespace cms.dbModel.entity
         public string Desc { get; set; }
 
         /// <summary>
+        /// Прикрепленные документы
+        /// </summary>
+        public DocumentsModel[] Documents { get; set; }
+
+        /// <summary>
         /// Флаг важности
         /// </summary>
         [Required]

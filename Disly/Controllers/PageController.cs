@@ -35,9 +35,16 @@ namespace Disly.Controllers
             //#endregion
 
             //#region Создаем переменные (значения по умолчанию)
-            string PageTitle = model.CurrentPage.Title;
-            string PageDesc = model.CurrentPage.Desc;
-            string PageKeyw = model.CurrentPage.Keyw;
+            string PageTitle = "";
+            string PageDesc = "";
+            string PageKeyw = "";
+            if (currentPage != null)
+            {
+                PageTitle = currentPage.Title;
+                PageDesc = currentPage.Desc;
+                PageKeyw = currentPage.Keyw;
+            }
+            
             //#endregion
 
             #region Метатеги

@@ -1,9 +1,6 @@
 ﻿@model EventViewModel
 @{
-    if (Model.SitesInfo.Alias == "main")
-    {
-        Layout = "/views/_portal/shared/_layout.cshtml";
-    }
+    Layout = ViewBag.Layout;
 }
 <div class="type-page">
     <div class="container">

@@ -4,7 +4,9 @@ $(document).ready(function () {
 
     $('.default-site').click(function (e) {
         e.preventDefault();
-        $.removeCookie("spec_version");
+        $.cookie("spec_version", null, {
+            path:'/'
+        });
         location.reload();
     });
 
@@ -79,6 +81,12 @@ $(document).ready(function () {
             GeoCollection($(this));
         });
     }
+
+    $('input[data-type=date').datepicker({ onSelect: function (dateText, inst) { $(this).attr('value', dateText); } });
+
+    
+
+
 });
 
 function EditColor(newclass) {
@@ -174,3 +182,6 @@ function GeoCollection(obj) {
 
 }
 
+function PhGall() {
+    $(".swipebox").swipebox();
+}

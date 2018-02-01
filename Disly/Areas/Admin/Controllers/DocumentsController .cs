@@ -36,6 +36,10 @@ namespace Disly.Areas.Admin.Controllers
                 ControllerName = ControllerName,
                 ActionName = ActionName
             };
+            if (AccountInfo != null)
+            {
+                model.Menu = _cmsRepository.getCmsMenu(AccountInfo.Id);
+            }
 
             //Справочник всех доступных категорий
             MaterialsGroup[] GroupsValues = _cmsRepository.getAllMaterialGroups();
@@ -62,37 +66,56 @@ namespace Disly.Areas.Admin.Controllers
         public ActionResult Create(Guid id, IEnumerable<HttpPostedFileBase> upload)
         {
             string savePath = Settings.UserFiles + Domain + "/sitemap/doc/" + id + "/";
-            foreach (HttpPostedFileBase doc in upload)
+            if(upload != null && upload.Count() > 0)
             {
-                if (doc != null && doc.ContentLength > 0)
+                foreach (var doc in upload)
                 {
-                    int idx = doc.FileName.LastIndexOf('.');
-                    string Title = doc.FileName.Substring(0, idx);
-                    string TransTitle = Transliteration.Translit(Title);
-                    string FileName = TransTitle + Path.GetExtension(doc.FileName);
-
-                    if (System.IO.File.Exists(Server.MapPath(Path.Combine(savePath, FileName))))
+                    if (doc != null && doc.ContentLength > 0)
                     {
-                        FileName = TransTitle + "(1)" + Path.GetExtension(doc.FileName);
-                        Title = Title + "(1)";
+                        if (!AttachedFileExtAllowed(doc.FileName))
+                        {
+                            model.ErrorInfo = new ErrorMessage()
+                            {
+                                title = "Ошибка",
+                                info = "Вы не можете загружать файлы данного формата",
+                                buttons = new ErrorMassegeBtn[]
+                                {
+                                //Без перезагрузки, просто отменяем
+                                new ErrorMassegeBtn { url = "#", text = "ок", action = "false", style="primary" }
+                                }
+                            };
+
+                            return View("Item", model);
+                        }
+                        int idx = doc.FileName.LastIndexOf('.');
+                        string Title = doc.FileName.Substring(0, idx);
+
+                        string TransTitle = Transliteration.Translit(Title);
+                        string FileName = TransTitle + Path.GetExtension(doc.FileName);
+
+                        if (System.IO.File.Exists(Server.MapPath(Path.Combine(savePath, FileName))))
+                        {
+                            FileName = TransTitle + "(1)" + Path.GetExtension(doc.FileName);
+                            Title = Title + "(1)";
+                        }
+                        string FullName = savePath + FileName;
+                        if (!Directory.Exists(Server.MapPath(savePath)))
+                        {
+                            Directory.CreateDirectory(Server.MapPath(savePath));
+                        }
+                        //сохраняем оригинал
+                        doc.SaveAs(Server.MapPath(Path.Combine(savePath, FileName)));
+
+
+                        DocumentsModel docModel = new DocumentsModel()
+                        {
+                            FilePath = FullName,
+                            Title = Title,
+                            LinkId = id
+                        };
+
+                        _cmsRepository.insDocuments(docModel);
                     }
-                    string FullName = savePath + FileName;
-                    if (!Directory.Exists(Server.MapPath(savePath)))
-                    {
-                        Directory.CreateDirectory(Server.MapPath(savePath));
-                    }
-                    //сохраняем оригинал
-                    doc.SaveAs(Server.MapPath(Path.Combine(savePath, FileName)));
-
-
-                    DocumentsModel docModel = new DocumentsModel()
-                    {
-                        FilePath = FullName,
-                        Title = Title,
-                        LinkId = id
-                    };
-
-                    _cmsRepository.insDocuments(docModel);
                 }
             }
 
@@ -110,16 +133,14 @@ namespace Disly.Areas.Admin.Controllers
                 Item = _cmsRepository.getDocumentsPath(id)
             };
 
-            if (System.IO.File.Exists(Server.MapPath(model.Item.FilePath)))
+            var res = _cmsRepository.deleteSiteMapDocuments(id);
+
+            if (res && System.IO.File.Exists(Server.MapPath(model.Item.FilePath)))
             {
                 System.IO.File.Delete(Server.MapPath(model.Item.FilePath));
             }
-            try
-            {
-                _cmsRepository.deleteSiteMapDocuments(id);
-                return "";
-            }
-            catch { return "Не удалось удалить доменное имя."; }
+
+            return "";
         }
 
     }
