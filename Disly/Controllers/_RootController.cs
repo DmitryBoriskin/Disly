@@ -168,30 +168,28 @@ namespace Disly.Controllers
         public FilterParams getFilter(int defaultPageSize = 20)
         {
             string return_url = HttpUtility.UrlDecode(Request.Url.Query);
-            // если в URL номер страницы равен значению по умолчанию - удаляем его из URL
-            try
+
+
+            var queryParams = new Dictionary<string, string>();
+            var qparams = HttpUtility.ParseQueryString(Request.QueryString.ToString());
+            foreach (var p in qparams.AllKeys)
             {
-                return_url = (Convert.ToInt32(Request.QueryString["page"]) == 1) ? addFiltrParam(return_url, "page", String.Empty) : return_url;
+                queryParams.Add(p, qparams[p]);
             }
-            catch
-            {
-                return_url = addFiltrParam(return_url, "page", String.Empty);
-            }
-            try
-            {
-                return_url = (Convert.ToInt32(Request.QueryString["size"]) == defaultPageSize) ? addFiltrParam(return_url, "size", String.Empty) : return_url;
-            }
-            catch
-            {
-                return_url = addFiltrParam(return_url, "size", String.Empty);
-            }
-            return_url = (!Convert.ToBoolean(Request.QueryString["disabled"])) ? addFiltrParam(return_url, "disabled", String.Empty) : return_url;
-            return_url = String.IsNullOrEmpty(Request.QueryString["tab"]) ? addFiltrParam(return_url, "tab", String.Empty) : return_url;
-            return_url = String.IsNullOrEmpty(Request.QueryString["searchtext"]) ? addFiltrParam(return_url, "searchtext", String.Empty) : return_url;
-           
-            // Если парамметры из адресной строки равны значениям по умолчанию - удаляем их из URL
-            if (return_url.ToLower() != HttpUtility.UrlDecode(Request.Url.Query).ToLower())
-                Response.Redirect(StartUrl + return_url);
+
+            //Формируем строку с параметрами фильтра без пейджера
+            var urlParams = String.Join("&", queryParams
+                .Where(p => p.Key != "page")
+                .Select(p => String.Format("{0}={1}", p.Key, p.Value))
+                );
+
+            var page = 1;
+            int.TryParse(Request.QueryString["page"], out page);
+ 
+            return_url = Request.Path + "?" + (!String.IsNullOrWhiteSpace(urlParams) ? urlParams + "&" : null);
+            if (page > 1)
+                return_url = return_url + "page=" + page;
+
 
             DateTime? DateNull = new DateTime?();
 

@@ -59,10 +59,9 @@ namespace Disly.Controllers
             filter.Disabled = false;
             model.List = _repository.getMaterialsList(filter);
 
-            ViewBag.Filter = filter;
-            ViewBag.NewsSearchArea = filter.SearchText;
-            ViewBag.NewsSearchDateStart = filter.Date;
-            ViewBag.NewsSearchDateFin = filter.DateEnd;
+            ViewBag.FilterSearchText = filter.SearchText;
+            ViewBag.FilterDate = filter.Date;
+            ViewBag.FilterDateEnd = filter.DateEnd;
 
             return View(_ViewName, model);
         }
@@ -98,15 +97,32 @@ namespace Disly.Controllers
 
         public ActionResult Category(string category)
         {
+            #region currentPage
+            currentPage = _repository.getSiteMap("Press");
+            if (currentPage == null)
+                throw new Exception("model.CurrentPage == null");
+
+            if (currentPage != null)
+            {
+                ViewBag.Title = currentPage.Title;
+                ViewBag.Description = currentPage.Desc;
+                ViewBag.KeyWords = currentPage.Keyw;
+
+                model.CurrentPage = currentPage;
+            }
+            #endregion
+
             string _ViewName = (ViewName != String.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";
 
-            ViewBag.CurrentCategory = category;
             var filter = getFilter();
             filter.Disabled = false;
             filter.Category = category;
-            ViewBag.Filter = filter;
-
             model.List = _repository.getMaterialsList(filter);
+
+            ViewBag.FilterCategory = filter.Category;
+            ViewBag.FilterSearchText = filter.SearchText;
+            ViewBag.FilterDate = filter.Date;
+            ViewBag.FilterDateEnd = filter.DateEnd;
 
             return View(_ViewName, model);
         }
