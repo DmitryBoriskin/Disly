@@ -80,7 +80,7 @@ namespace Disly.Areas.Admin.Controllers
                     // наполняем модель списка баннеров
                     var bannersList = _cmsRepository.getBanners(id.Value, filter);
                     sectionItem.BannerList = bannersList;
-                    sectionItem.CountBanners = (bannersList != null) ? bannersList.Pager.items_count : 0;
+                    sectionItem.CountBanners = (bannersList != null) ? bannersList.Pager.ItemsCount : 0;
                 }
                 model.SectionItem = sectionItem;
             }

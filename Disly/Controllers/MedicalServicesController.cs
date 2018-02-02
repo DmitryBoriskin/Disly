@@ -16,11 +16,6 @@ namespace Disly.Controllers
         {
             base.OnActionExecuting(filterContext);
 
-            currentPage = _repository.getSiteMap("MedicalServices");
-
-            if (currentPage == null)
-                throw new Exception("model.CurrentPage == null");
-
             model = new MedicalServicesViewModel
             {
                 SitesInfo = siteModel,
@@ -31,29 +26,37 @@ namespace Disly.Controllers
             };
 
             #region Создаем переменные (значения по умолчанию)
-            string PageTitle = model.CurrentPage.Title;
-            string PageDesc = model.CurrentPage.Desc;
-            string PageKeyw = model.CurrentPage.Keyw;
-            #endregion
-
-            #region Метатеги
-            ViewBag.Title = PageTitle;
-            ViewBag.Description = PageDesc;
-            ViewBag.KeyWords = PageKeyw;
+            ViewBag.Title = "Страница";
+            ViewBag.Description = "Страница без названия";
+            ViewBag.KeyWords = "";
             #endregion
         }
 
         // GET: PortalMedicalServices
         public ActionResult Index(string tab)
         {
-            var page = model.CurrentPage.FrontSection;
+            var page = "";
 
-            model.Type = tab;
+            #region currentPage
+            currentPage = _repository.getSiteMap("MedicalServices");
+            if (currentPage == null)
+                throw new Exception("model.CurrentPage == null");
+
+            if (currentPage != null)
+            {
+                ViewBag.Title = currentPage.Title;
+                ViewBag.Description = currentPage.Desc;
+                ViewBag.KeyWords = currentPage.Keyw;
+
+                model.CurrentPage = currentPage;
+                page = currentPage.FrontSection;
+            }
+            #endregion
 
             //Хлебные крошки
             model.Breadcrumbs.Add(new Breadcrumbs
             {
-                Title = model.CurrentPage.Title,
+                Title = ViewBag.Title,
                 Url = ""
             });
 
@@ -62,6 +65,7 @@ namespace Disly.Controllers
             model.Nav.Add(new PageTabsViewModel { Page = page, Title = "Медицинские услуги" });
             model.Nav.Add(new PageTabsViewModel { Page = page, Title = "Дополнительно", Alias = "info" });
 
+            model.Type = tab;
             //Обработка активных табов
             if (model.Nav != null && model.Nav.Where(s => s.Alias == tab).Any())
             {

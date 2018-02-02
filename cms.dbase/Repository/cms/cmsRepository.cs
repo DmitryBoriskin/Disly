@@ -796,10 +796,16 @@ namespace cms.dbase
 
                     SitesModel[] sitesInfo = List.ToArray();
 
-                    return new SitesList
+                    return new SitesList()
                     {
                         Data = sitesInfo,
-                        Pager = new Pager { page = filtr.Page, size = filtr.Size, items_count = ItemCount, page_count = ItemCount / filtr.Size }
+                        Pager = new Pager()
+                        {
+                            Page = filtr.Page,
+                            Size = filtr.Size,
+                            ItemsCount = ItemCount,
+                            //PageCount = ItemCount / filtr.Size
+                        }
                     };
                 }
                 return null;
@@ -1257,6 +1263,7 @@ namespace cms.dbase
 
             }
         }
+
         /// <summary>
         /// Служит для определения идентификатора сайта
         /// </summary>
@@ -1377,15 +1384,15 @@ namespace cms.dbase
 
                     UsersModel[] usersInfo = List.ToArray();
 
-                    return new UsersList
+                    return new UsersList()
                     {
                         Data = usersInfo,
-                        Pager = new Pager
+                        Pager = new Pager()
                         {
-                            page = filtr.Page,
-                            size = filtr.Size,
-                            items_count = ItemCount,
-                            page_count = (ItemCount % filtr.Size > 0) ? (ItemCount / filtr.Size) + 1 : ItemCount / filtr.Size
+                            Page = filtr.Page,
+                            Size = filtr.Size,
+                            ItemsCount = ItemCount,
+                            //PageCount = (ItemCount % filtr.Size > 0) ? (ItemCount / filtr.Size) + 1 : ItemCount / filtr.Size
                         }
                     };
                 }

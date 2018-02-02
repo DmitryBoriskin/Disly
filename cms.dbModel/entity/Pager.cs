@@ -4,13 +4,35 @@ namespace cms.dbModel.entity
 {
     public class Pager
     {
+
+        /// <summary>
+        /// Текущая страница
+        /// </summary>
         [Required]
-        public int page { get; set; }
+        public int Page { get; set; }
+
+        /// <summary>
+        /// Кол-во эл-тов на странице
+        /// </summary>
         [Required]
-        public int size { get; set; }
+        public int Size { get; set; }
+
+        /// <summary>
+        /// Кол-во эл-тов
+        ///// </summary>
         [Required]
-        public int page_count { get; set; }
+        public int ItemsCount { get; set; }
+
+        /// <summary>
+        /// Кол-во страниц
+        /// </summary>
         [Required]
-        public int items_count { get; set; }
+        public int PageCount
+        {
+            get
+            {
+                return ItemsCount / Size + (ItemsCount % Size == 0 ? 0 : 1);
+            }
+        }
     }
 }

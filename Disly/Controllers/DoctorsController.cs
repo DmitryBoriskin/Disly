@@ -21,11 +21,6 @@ namespace Disly.Controllers
         {
             base.OnActionExecuting(filterContext);
 
-            currentPage = _repository.getSiteMap("Doctors");
-
-            if (currentPage == null)
-                throw new Exception("model.CurrentPage == null");
-
             model = new DoctorsViewModel
             {
                 SitesInfo = siteModel,
@@ -39,15 +34,9 @@ namespace Disly.Controllers
             model.DoctorsRegistry = repoRegistry.getVDoctors(model.Oid);
 
             #region Создаем переменные (значения по умолчанию)
-            string PageTitle = model.CurrentPage.Title;
-            string PageDesc = model.CurrentPage.Desc;
-            string PageKeyw = model.CurrentPage.Keyw;
-            #endregion
-
-            #region Метатеги
-            ViewBag.Title = PageTitle;
-            ViewBag.Description = PageDesc;
-            ViewBag.KeyWords = PageKeyw;
+            ViewBag.Title = "Страница";
+            ViewBag.Description = "Страница без названия";
+            ViewBag.KeyWords = "";
             #endregion
         }
 
@@ -57,6 +46,21 @@ namespace Disly.Controllers
         /// <returns></returns>
         public ActionResult Index()
         {
+            #region currentPage
+            currentPage = _repository.getSiteMap("Doctors");
+            if (currentPage == null)
+                throw new Exception("model.CurrentPage == null");
+
+            if (currentPage != null)
+            {
+                ViewBag.Title = currentPage.Title;
+                ViewBag.Description = currentPage.Desc;
+                ViewBag.KeyWords = currentPage.Keyw;
+
+                model.CurrentPage = currentPage;
+            }
+            #endregion
+
             string _ViewName = (ViewName != String.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";
 
             var filter = getFilter();
@@ -92,6 +96,19 @@ namespace Disly.Controllers
         /// <returns></returns>
         public ActionResult Item(Guid id)
         {
+            #region currentPage
+            currentPage = _repository.getSiteMap("Doctors");
+            if (currentPage == null)
+                throw new Exception("model.CurrentPage == null");
+
+            if (currentPage != null)
+            {
+                ViewBag.Title = currentPage.Title;
+                ViewBag.Description = currentPage.Desc;
+                ViewBag.KeyWords = currentPage.Keyw;
+            }
+            #endregion
+
             string _ViewName = (ViewName != String.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";
 
             var filter = getFilter();

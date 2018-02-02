@@ -4,13 +4,10 @@
     {
         Layout = "/views/_portal/shared/_layout.cshtml";
     }
+    //var newItemBtnLink = (Model.CurrentPage != null)
+    //       ? string.Format("{0}form?type=review", Model.CurrentPage.Path) : "";
 }
-@using System.Text.RegularExpressions;
-@{
-    int maxChars = 126;
-    var newItemBtnLink = (Model.CurrentPage != null)
-      ? string.Format("{0}form?type=appeal", Model.CurrentPage.Path) : "";
-}
+
 <div class="container">
     <div class="row">
         <div class="col-md-12">
@@ -22,92 +19,35 @@
             <div class="row padding-top-30">
                 <div class="col-md-8">
                     @*<div class="text-left"><a class="btn sub btn-primary" href="@newItemBtnLink">Оставить отзыв</a><br /><br /></div>*@
-                    <div class="text-left"><a class="btn sub btn-primary" href="#feedback-send-form">Задать вопрос</a><br /><br /></div>
+                    <div class="text-left"><a class="btn sub btn-primary" href="#feedback-send-form">Оставить отзыв</a><br /><br /></div>
 
                     <div class="feedback_list">
                         @if (Model.List != null)
                         {
                             if (Model.List.Data != null)
                             {
-                                foreach (var item in Model.List.Data)
-                                {
-                                    var title = !string.IsNullOrWhiteSpace(item.Title) ? Regex.Replace(item.Title, @"<[^>]*>", "") : null;
-                                    var teaser = item.Text.Length > maxChars ? item.Text.Substring(0, maxChars) + " ..." : item.Text;
-
-                                    <div id="feedback_@item.Id" class="feedback_item">
-                                        <div class="feedback-item-date"><span>@item.Date.ToString("dd.MM.yyyy")</span></div>
-                                        <div class="feedback-item-title" href="/"><b>@title</b></div>
-                                        <div class="feedback-item-teaser" href="/">@Html.Raw(teaser)</div>
-                                        <div class="collapse feedback-item_info" id="collapseExample_@item.Id">
-                                            <div class="feedback-item-question"><b>Обращение:</b></div>
-                                            <div class="feedback-item-text">@Html.Raw(item.Text)</div>
-                                            @if (item.Anonymous)
-                                            {
-                                                <div class="feedback-item-sender">Аноним</div>
-                                            }
-                                            else
-                                            {
-                                                <div class="feedback-item-sender">@item.SenderName</div>
-                                            }
-                                            @if (item.Answer != null)
-                                            {
-                                                <div class="feedback-item-question"><b>Ответ:</b></div>
-                                                <div class="feedback-item-answer">@Html.Raw(item.Answer)</div>
-                                                <div class="feedback-item-answerer">@item.Answerer</div>
-                                            }
-                                        </div>
-                                        <div class="pull-right">
-                                            <a class="feedback-item-more" role="button" data-toggle="collapse" href="#collapseExample_@item.Id" aria-expanded="false" aria-controls="collapseExample_@item.Id">&nbsp;</a>
-                                        </div>
-                                    </div>
-                                }
+                                @Html.Partial("Part/List", Model.List.Data)
                             }
-                            Html.RenderAction("Pager", "Service", new { @Model = Model.List.Pager });
+                            //Html.RenderAction("Pager", "Service", new { @Model = Model.List.Pager });
+                            if (Model.List != null && Model.List.Pager != null)
+                            {
+                                @Html.Partial("Partial/Pager", Model.List.Pager)
+                            }
                         }
                         else
                         {
-                            <div class="col-md-12 topIndent-20"><br />На данный момент еще не задано ни одного вопроса. Вы можете быть первым!</div>
+                            <div class="col-md-12 topIndent-20"><br />На данный момент еще не оставлено ни одного отзыва. Вы можете быть первым!</div>
                         }
                     </div>
                 </div>
                 <div class="col-md-1"></div>
                 <div class="col-md-3">
-                    <form role="form" class="filtr_news" action="/@ViewBag.ControllerName/@ViewBag.Filter.Category/">
-                        <div class="row">
-
-                            <div class="col-sm-12">
-                                <div class="form-group search_news">
-                                    <label class="label_filtr" for="search_news">Ключевые слова</label>
-                                    <input type="text" class="filtr_data form-control" name="searchtext" id="search_news" value="@ViewBag.Filter.SearchText" />
-                                </div>
-                            </div>
-
-                            <div class="form-group col-sm-6 col-md-6 data_start_wr">
-                                <label class="label_filtr" for="data_start">Дата начала</label>
-                                <div class='input-group date' id="date-begin">
-                                    <input type='text' class="form-control" name="date" data-type="date" data-mask="99.99.9999" placeholder="дд.мм.гггг" value="@ViewBag.Filter.Date" />
-                                </div>
-                            </div>
-
-                            <div class="form-group col-sm-6 col-md-6 date-end_wr">
-                                <label class="label_filtr" for="data_fin">Дата конца</label>
-                                <div class='input-group date' id="date-end">
-                                    <input type='text' class="form-control" name="dateend" data-type="date" data-mask="99.99.9999" placeholder="дд.мм.гггг" value="@ViewBag.Filter.DateEnd" />
-
-                                </div>
-                            </div>
-
-                            <div class="col-sm-12 control-filter">
-                                <a class="btn btn-default pull-right" href="/@ViewBag.ControllerName">Очистить</a>
-                                <button class="btn sub btn-primary" type="submit">Применить</button>
-                            </div>
-                        </div>
-                    </form>
+                    @Html.Partial("Part/Filter")
                 </div>
             </div>
 
         </div>
     </div>
 </div>
-<div  id="feedback-send-form"></div>
-@Html.Partial("Form")
+<div id="feedback-send-form"></div>
+@Html.Partial("Part/Form")

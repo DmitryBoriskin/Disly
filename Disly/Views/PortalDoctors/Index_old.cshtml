@@ -190,7 +190,11 @@
                                     }
                                 </table>
 
-                                Html.RenderAction("Pager", "Service", new { @Model = Model.DoctorsList.Pager });
+                                //Html.RenderAction("Pager", "Service", new { @Model = Model.DoctorsList.Pager });
+                                if (Model.DoctorsList != null && Model.DoctorsList.Pager != null)
+                                {
+                                    @Html.Partial("Part/Pager", Model.DoctorsList.Pager)
+                                }
                             }
                         </div>
                     </div>

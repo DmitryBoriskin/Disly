@@ -14,38 +14,21 @@ namespace Disly.Controllers
         {
             base.OnActionExecuting(filterContext);
 
-            currentPage = _repository.getSiteMap("Events");
-
-            if (currentPage == null)
-                throw new Exception("model.CurrentPage == null");
-
             model = new EventViewModel
             {
                 SitesInfo = siteModel,
                 SiteMapArray = siteMapArray,
                 BannerArray = bannerArray,
                 CurrentPage = currentPage,
-                Child = _repository.getSiteMapChild(currentPage.Id),
                 Breadcrumbs = new List<Breadcrumbs>()
             };
 
             #region Создаем переменные (значения по умолчанию)
-            string PageTitle = model.CurrentPage.Title;
-            string PageDesc = model.CurrentPage.Desc;
-            string PageKeyw = model.CurrentPage.Keyw;
+            ViewBag.Title = "Страница";
+            ViewBag.Description = "Страница без названия";
+            ViewBag.KeyWords = "";
             #endregion
 
-            #region Метатеги
-            ViewBag.Title = PageTitle;
-            ViewBag.Description = PageDesc;
-            ViewBag.KeyWords = PageKeyw;
-            #endregion
-
-            model.Breadcrumbs.Add(new Breadcrumbs
-            {
-                Title = model.CurrentPage.Title,
-                Url = string.Format("/{0}/", model.CurrentPage.FrontSection)
-            });
         }
 
         /// <summary>
@@ -54,9 +37,30 @@ namespace Disly.Controllers
         /// <returns></returns>
         public ActionResult Index()
         {
+            #region currentPage
+            currentPage = _repository.getSiteMap("Events");
+            if (currentPage == null)
+                throw new Exception("model.CurrentPage == null");
+
+            if (currentPage != null)
+            {
+                ViewBag.Title = currentPage.Title;
+                ViewBag.Description = currentPage.Desc;
+                ViewBag.KeyWords = currentPage.Keyw;
+
+                model.CurrentPage = currentPage;
+                model.Child = _repository.getSiteMapChild(currentPage.Id);
+            }
+
+            model.Breadcrumbs.Add(new Breadcrumbs
+            {
+                Title = ViewBag.Title,
+                Url = ""
+            });
+            #endregion
 
             var filter = getFilter();
-            filter.Date = DateTime.Now;
+            //filter.Date = DateTime.Now;
             model.List = _repository.getEvents(filter);
 
             ViewBag.Filter = filter;
@@ -70,7 +74,31 @@ namespace Disly.Controllers
         // GET: /events/{num}/{alias}
         public ActionResult Item(int num, string alias)
         {
+            var page = "";
+
+            #region currentPage
+            currentPage = _repository.getSiteMap("Events");
+            if (currentPage == null)
+                throw new Exception("model.CurrentPage == null");
+
+            if (currentPage != null)
+            {
+                ViewBag.Title = currentPage.Title;
+                ViewBag.Description = currentPage.Desc;
+                ViewBag.KeyWords = currentPage.Keyw;
+
+                model.CurrentPage = currentPage;
+                page = currentPage.FrontSection;
+            }
+            #endregion
+
             model.Item = _repository.getEvent(num, alias);
+
+            model.Breadcrumbs.Add(new Breadcrumbs
+            {
+                Title = ViewBag.Title,
+                Url = string.Format("/{0}/", page)
+            });
             if (model.Item != null)
             {
                 model.Breadcrumbs.Add(new Breadcrumbs
@@ -78,9 +106,10 @@ namespace Disly.Controllers
                     Title = model.Item.Title,
                     Url = ""
                 });
-            }
-            if (model.Item != null)
+
                 model.Item.Documents = _repository.getAttachDocuments(model.Item.Id);
+            }
+            
 
             return View("Item", model);
         }

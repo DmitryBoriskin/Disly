@@ -863,15 +863,15 @@ namespace cms.dbase
                             });
 
                     if (materialsList.Any())
-                        return new MaterialsList
+                        return new MaterialsList()
                         {
                             Data = materialsList.ToArray(),
-                            Pager = new Pager
+                            Pager = new Pager()
                             {
-                                page = filter.Page,
-                                size = filter.Size,
-                                items_count = itemCount,
-                                page_count = (itemCount % filter.Size > 0) ? (itemCount / filter.Size) + 1 : itemCount / filter.Size
+                                Page = filter.Page,
+                                Size = filter.Size,
+                                ItemsCount = itemCount,
+                                //PageCount = (itemCount % filter.Size > 0) ? (itemCount / filter.Size) + 1 : itemCount / filter.Size
                             }
                         };
                 }
@@ -2301,15 +2301,15 @@ namespace cms.dbase
 
                 if (doctors2.Any())
                 {
-                    return new DoctorList
+                    return new DoctorList()
                     {
                         Doctors = doctors2.ToArray(),
-                        Pager = new Pager
+                        Pager = new Pager()
                         {
-                            page = filter.Page,
-                            size = filter.Size,
-                            items_count = itemCount,
-                            page_count = (itemCount % filter.Size > 0) ? (itemCount / filter.Size) + 1 : itemCount / filter.Size
+                            Page = filter.Page,
+                            Size = filter.Size,
+                            ItemsCount = itemCount,
+                            //PageCount = (itemCount % filter.Size > 0) ? (itemCount / filter.Size) + 1 : itemCount / filter.Size
                         }
                     };
                 }
@@ -2359,15 +2359,15 @@ namespace cms.dbase
                         });
                     feedbacks = List.ToArray();
 
-                    return new FeedbacksList
+                    return new FeedbacksList()
                     {
                         Data = feedbacks,
-                        Pager = new Pager
+                        Pager = new Pager()
                         {
-                            page = filtr.Page,
-                            size = filtr.Size,
-                            items_count = ItemCount,
-                            page_count = (ItemCount % filtr.Size > 0) ? (ItemCount / filtr.Size) + 1 : ItemCount / filtr.Size
+                            Page = filtr.Page,
+                            Size = filtr.Size,
+                            ItemsCount = ItemCount,
+                            //PageCount = (ItemCount % filtr.Size > 0) ? (ItemCount / filtr.Size) + 1 : ItemCount / filtr.Size
                         }
                     };
                 }
@@ -2485,7 +2485,7 @@ namespace cms.dbase
                         cdFeedback.c_answer = feedback.Answer;
                         cdFeedback.c_answerer = feedback.Answerer;
                         cdFeedback.b_disabled = feedback.Disabled;
-                        //c_code = feedback.AnswererCode Возможно можно будет удалить
+                        cdFeedback.c_code = feedback.AnswererCode;
 
                         db.Update(cdFeedback);
                         tran.Commit();
@@ -2551,13 +2551,15 @@ namespace cms.dbase
             {
                 var contentType = ContentType.EVENT.ToString().ToLower();
 
-                var eventIds = (from s in db.cms_sitess
+                var eventFilter = (from s in db.cms_sitess
                                 join cct in db.content_content_links on s.f_content equals cct.f_link
                                 join e in db.content_eventss on cct.f_content equals e.id
                                 where s.c_alias.Equals(domain) && cct.f_content_type.Equals(contentType)
                                 select e.id);
 
-                if (!eventIds.Any()) return null;
+                if (!eventFilter.Any())
+                    return null;
+                var eventIds = eventFilter.ToArray();
 
                 var query = db.content_eventss
                     .Where(w => eventIds.Contains(w.id))
@@ -2605,15 +2607,15 @@ namespace cms.dbase
 
                 if (eventList.Any())
                 {
-                    return new EventsList
+                    return new EventsList()
                     {
                         Data = eventList.ToArray(),
-                        Pager = new Pager
+                        Pager = new Pager()
                         {
-                            page = filter.Page,
-                            size = filter.Size,
-                            items_count = itemCount,
-                            page_count = (itemCount % filter.Size > 0) ? (itemCount / filter.Size) + 1 : itemCount / filter.Size
+                            Page = filter.Page,
+                            Size = filter.Size,
+                            ItemsCount = itemCount,
+                            //PageCount = (itemCount % filter.Size > 0) ? (itemCount / filter.Size) + 1 : itemCount / filter.Size
                         }
                     };
                 }
@@ -2931,15 +2933,15 @@ namespace cms.dbase
                 if (vacancyList.Any())
                 {
                     int itemCount = query.Count();
-                    return new VacanciesList
+                    return new VacanciesList()
                     {
                         Data = vacancyList.ToArray(),
-                        Pager = new Pager
+                        Pager = new Pager()
                         {
-                            page = filter.Page,
-                            size = filter.Size,
-                            items_count = itemCount,
-                            page_count = (itemCount % filter.Size > 0) ? (itemCount / filter.Size) + 1 : itemCount / filter.Size
+                            Page = filter.Page,
+                            Size = filter.Size,
+                            ItemsCount = itemCount,
+                            //PageCount = (itemCount % filter.Size > 0) ? (itemCount / filter.Size) + 1 : itemCount / filter.Size
                         }
                     };
                 }

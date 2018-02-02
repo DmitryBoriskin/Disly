@@ -167,27 +167,27 @@
 
             </div>
 
-            }
-            else
-            {
+    }
+    else
+    {
                 <div class="content">
                     <div class="alert alert-danger">
                         <strong>У вас недостаточно прав!</strong>
                         <p>Возможно запись была заблокирована администратором портала.</p>
                     </div>
                 </div>
-            }
+    }
 
-            }
-            else
-            {
+}
+else
+{
             <div class="content">
                 <div class="alert alert-danger">
                     <strong>Ошибка!</strong>
                     <p>Не действительный Id записи.</p>
                 </div>
             </div>
-            }
+}
 
             <div class="buttons">
                 @if ((Model.Item != null && Model.UserResolution.Change) || (Model.Item == null && Model.UserResolution.Write))

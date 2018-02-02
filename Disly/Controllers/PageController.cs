@@ -34,23 +34,10 @@ namespace Disly.Controllers
             //string _alias = UrlPath.Substring(UrlPath.LastIndexOf("/") + 1);
             //#endregion
 
-            //#region Создаем переменные (значения по умолчанию)
-            string PageTitle = "";
-            string PageDesc = "";
-            string PageKeyw = "";
-            if (currentPage != null)
-            {
-                PageTitle = currentPage.Title;
-                PageDesc = currentPage.Desc;
-                PageKeyw = currentPage.Keyw;
-            }
-            
-            //#endregion
-
-            #region Метатеги
-            ViewBag.Title = PageTitle;
-            ViewBag.Description = PageDesc;
-            ViewBag.KeyWords = PageKeyw;
+            #region Создаем переменные (значения по умолчанию)
+            ViewBag.Title = "Страница";
+            ViewBag.Description = "Страница без названия";
+            ViewBag.KeyWords = "";
             #endregion
         }
 
@@ -60,6 +47,15 @@ namespace Disly.Controllers
         /// <returns></returns>
         public ActionResult Index()
         {
+            #region currentPage
+            if (currentPage != null)
+            {
+                ViewBag.Title = currentPage.Title;
+                ViewBag.Description = currentPage.Desc;
+                ViewBag.KeyWords = currentPage.Keyw;
+            }
+            #endregion
+
             string _ViewName = (ViewName != String.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";
 
             model.Item = _repository.getSiteMap(_path,_alias); //,Domain
