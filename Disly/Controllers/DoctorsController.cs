@@ -6,6 +6,7 @@ using System.IO;
 using System.Web.Mvc;
 using System.Xml.Serialization;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace Disly.Controllers
 {
@@ -125,13 +126,26 @@ namespace Disly.Controllers
                             .Any();
                 #endregion
 
+                #region Список записей по организациям
+                List<CardRecord> listRecords = new List<CardRecord>();
+
+                XmlSerializer serial = new XmlSerializer(typeof(Employee));
+
+                using (TextReader reader = new StringReader(model.DoctorsItem.XmlInfo.FirstOrDefault()))
+                {
+                    var result = (Employee)serial.Deserialize(reader);
+                    listRecords.AddRange(result.EmployeeRecords);
+                }
+                #endregion
+
                 // десериализация xml
                 XmlSerializer serializer = new XmlSerializer(typeof(Employee));
 
-                using (TextReader reader = new StringReader(model.DoctorsItem.XmlInfo))
+                using (TextReader reader = new StringReader(model.DoctorsItem.XmlInfo.FirstOrDefault()))
                 {
                     var result = (Employee)serializer.Deserialize(reader);
                     model.DoctorsItem.EmployeeInfo = result;
+                    model.DoctorsItem.EmployeeInfo.EmployeeRecords = listRecords.ToArray();
                 }
             }
 

@@ -208,9 +208,9 @@ namespace Disly.Controllers
                     AnswererCode = AnswererCode,
                     FbType = bindData.FbType
                 };
-                //var res = _repository.insertFeedbackItem(newMessage);
+                var res = _repository.insertFeedbackItem(newMessage);
 
-                var res = false;
+                //var res = false;
                 var fileLink = "";
                 if (res)
                 {

@@ -437,7 +437,7 @@ namespace cms.dbModel.entity
         /// <summary>
         /// Инфа в формате xml
         /// </summary>
-        public string XmlInfo { get; set; }
+        public string[] XmlInfo { get; set; }
 
         /// <summary>
         /// Десериализованная инфа по сотруднику
