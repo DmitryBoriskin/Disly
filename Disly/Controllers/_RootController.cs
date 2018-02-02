@@ -136,6 +136,7 @@ namespace Disly.Controllers
             ViewBag.Concept = Concept = Settings.Concept;
             ViewBag.Coordination = Coordination = Settings.Coordination;
             ViewBag.ControllerName = ControllerName;
+            ViewBag.ActionName = ActionName;
         }
 
         public RootController()

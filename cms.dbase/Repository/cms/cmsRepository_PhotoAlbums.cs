@@ -41,15 +41,15 @@ namespace cms.dbase
                                             Text = s.c_text,
                                             PreviewImage = new Photo() { Url = s.c_preview }
                                             });
-                        return new PhotoAlbumList
+                        return new PhotoAlbumList()
                         {
                             Data = photoalbumsList.ToArray(),
-                            Pager = new Pager
+                            Pager = new Pager()
                             {
-                                page = filter.Page,
-                                size = filter.Size,
-                                items_count = itemCount,
-                                page_count = (itemCount % filter.Size > 0) ? (itemCount / filter.Size) + 1 : itemCount / filter.Size
+                                Page = filter.Page,
+                                Size = filter.Size,
+                                ItemsCount = itemCount,
+                                //PageCount = (itemCount % filter.Size > 0) ? (itemCount / filter.Size) + 1 : itemCount / filter.Size
                             }
                         };
                 }

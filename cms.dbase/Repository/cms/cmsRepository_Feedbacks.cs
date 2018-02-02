@@ -46,15 +46,15 @@ namespace cms.dbase
 
                     FeedbackModel[] eventsInfo = List.ToArray();
 
-                    return new FeedbacksList
+                    return new FeedbacksList()
                     {
                         Data = eventsInfo,
-                        Pager = new Pager
+                        Pager = new Pager()
                         {
-                            page = filtr.Page,
-                            size = filtr.Size,
-                            items_count = ItemCount,
-                            page_count = (ItemCount % filtr.Size > 0) ? (ItemCount / filtr.Size) + 1 : ItemCount / filtr.Size
+                            Page = filtr.Page,
+                            Size = filtr.Size,
+                            ItemsCount = ItemCount,
+                            //PageCount = (ItemCount % filtr.Size > 0) ? (ItemCount / filtr.Size) + 1 : ItemCount / filtr.Size
                         }
                     };
                 }

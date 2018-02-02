@@ -1,0 +1,40 @@
+﻿@model FeedbackModel[]
+@using System.Text.RegularExpressions;
+@{
+    Layout = null;
+    int maxChars = 126;
+}
+
+@foreach (var item in Model)
+{
+    var title = !string.IsNullOrWhiteSpace(item.Title) ? Regex.Replace(item.Title, @"<[^>]*>", "") : null;
+    var teaser = item.Text.Length > maxChars ? item.Text.Substring(0, maxChars) + " ..." : item.Text;
+
+    <div id="feedback_@item.Id" class="feedback_item">
+        <div class="feedback-item-date"><span>@item.Date.ToString("dd.MM.yyyy")</span></div>
+        <div class="feedback-item-title" href="/"><b>@title</b></div>
+        <div class="feedback-item-teaser" href="/">@Html.Raw(teaser)</div>
+
+        <div class="collapse feedback-item_info" id="collapseExample_@item.Id">
+            <div class="feedback-item-question"><b>Обращение:</b></div>
+            <div class="feedback-item-text">@Html.Raw(item.Text)</div>
+            @if (item.Anonymous)
+                {
+                <div class="feedback-item-sender">Аноним</div>
+            }
+            else
+            {
+                <div class="feedback-item-sender">@item.SenderName</div>
+            }
+            @if (item.Answer != null)
+                {
+                <div class="feedback-item-question"><b>Ответ:</b></div>
+                    <div class="feedback-item-answer">@Html.Raw(item.Answer)</div>
+                                                <div class="feedback-item-answerer">@item.Answerer</div>
+            }
+        </div>
+        <div class="pull-right">
+            <a class="feedback-item-more" role="button" data-toggle="collapse" href="#collapseExample_@item.Id" aria-expanded="false" aria-controls="collapseExample_@item.Id"></a>
+        </div>
+    </div>
+}

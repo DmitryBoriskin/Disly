@@ -51,7 +51,11 @@
                     </div>
                 </div>
             }
-            Html.RenderAction("Pager", "Templates", new { @Model = Model.List.Pager });
+            //Html.RenderAction("Pager", "Templates", new { @Model = Model.List.Pager });
+            if (Model.List != null && Model.List.Pager != null)
+            {
+                @Html.Partial("Partial/Pager", Model.List.Pager)
+            }
         }
         else
         {
