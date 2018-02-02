@@ -51,17 +51,23 @@ namespace Disly.Controllers
         /// <returns></returns>
         public ActionResult Appeallist(string sendStatus = "new", string message = "")
         {
+            #region currentPage
             currentPage = _repository.getSiteMap(_path, _alias);
             if (currentPage == null)
                 throw new Exception("model.CurrentPage == null");
 
-            model.CurrentPage = currentPage;
-            model.Child = (currentPage.ParentId.HasValue) ? _repository.getSiteMapChild(currentPage.ParentId.Value) : null;
+            if (currentPage != null)
+            {
+                ViewBag.Title = currentPage.Title;
+                ViewBag.Description = currentPage.Desc;
+                ViewBag.KeyWords = currentPage.Keyw;
 
-            ViewBag.Title = currentPage.Title;
-            ViewBag.Description = currentPage.Desc;
-            ViewBag.KeyWords = currentPage.Keyw;
+                model.CurrentPage = currentPage;
+                model.Child = (currentPage.ParentId.HasValue) ? _repository.getSiteMapChild(currentPage.ParentId.Value) : null;
+            }
+            #endregion
 
+            
 
             var filter = getFilter();
             filter.Disabled = false;
@@ -89,16 +95,21 @@ namespace Disly.Controllers
         /// <returns></returns>
         public ActionResult Reviewlist(string sendStatus = "new")
         {
+            #region currentPage
             currentPage = _repository.getSiteMap(_path, _alias);
             if (currentPage == null)
                 throw new Exception("model.CurrentPage == null");
 
-            model.CurrentPage = currentPage;
-            model.Child = (currentPage.ParentId.HasValue) ? _repository.getSiteMapChild(currentPage.ParentId.Value) : null;
+            if (currentPage != null)
+            {
+                ViewBag.Title = currentPage.Title;
+                ViewBag.Description = currentPage.Desc;
+                ViewBag.KeyWords = currentPage.Keyw;
 
-            ViewBag.Title = currentPage.Title;
-            ViewBag.Description = currentPage.Desc;
-            ViewBag.KeyWords = currentPage.Keyw;
+                model.CurrentPage = currentPage;
+                model.Child = (currentPage.ParentId.HasValue) ? _repository.getSiteMapChild(currentPage.ParentId.Value) : null;
+            }
+            #endregion
 
             var filter = getFilter();
             filter.Disabled = false;
@@ -197,8 +208,9 @@ namespace Disly.Controllers
                     AnswererCode = AnswererCode,
                     FbType = bindData.FbType
                 };
-                var res = _repository.insertFeedbackItem(newMessage);
+                //var res = _repository.insertFeedbackItem(newMessage);
 
+                var res = false;
                 var fileLink = "";
                 if (res)
                 {
@@ -287,17 +299,26 @@ namespace Disly.Controllers
             else
                 formStatus = "captcha";
 
+          //В случае ошибок в форме
+            var _alias = "appeallist";
+            if (bindData.FbType != FeedbackType.appeal)
+                _alias = "reviewlist";
 
+            #region currentPage
             currentPage = _repository.getSiteMap(_path, _alias);
             if (currentPage == null)
                 throw new Exception("model.CurrentPage == null");
 
-            model.CurrentPage = currentPage;
-            model.Child = (currentPage.ParentId.HasValue) ? _repository.getSiteMapChild(currentPage.ParentId.Value) : null;
+            if (currentPage != null)
+            {
+                ViewBag.Title = currentPage.Title;
+                ViewBag.Description = currentPage.Desc;
+                ViewBag.KeyWords = currentPage.Keyw;
 
-            ViewBag.Title = currentPage.Title;
-            ViewBag.Description = currentPage.Desc;
-            ViewBag.KeyWords = currentPage.Keyw;
+                model.CurrentPage = currentPage;
+                model.Child = (currentPage.ParentId.HasValue) ? _repository.getSiteMapChild(currentPage.ParentId.Value) : null;
+            }
+            #endregion
 
             var filter = getFilter();
             filter.Disabled = false;
@@ -360,7 +381,7 @@ namespace Disly.Controllers
         }
 
         /// <summary>
-        /// Отправка ответа на обращение
+        /// Отправка ответа на обращение (также емайл пользователю и администратору). меняем код доступа
         /// </summary>
         /// <param name="bindData"></param>
         /// <returns></returns>

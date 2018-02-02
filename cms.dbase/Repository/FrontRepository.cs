@@ -2511,13 +2511,15 @@ namespace cms.dbase
             {
                 var contentType = ContentType.EVENT.ToString().ToLower();
 
-                var eventIds = (from s in db.cms_sitess
+                var eventFilter = (from s in db.cms_sitess
                                 join cct in db.content_content_links on s.f_content equals cct.f_link
                                 join e in db.content_eventss on cct.f_content equals e.id
                                 where s.c_alias.Equals(domain) && cct.f_content_type.Equals(contentType)
                                 select e.id);
 
-                if (!eventIds.Any()) return null;
+                if (!eventFilter.Any())
+                    return null;
+                var eventIds = eventFilter.ToArray();
 
                 var query = db.content_eventss
                     .Where(w => eventIds.Contains(w.id))

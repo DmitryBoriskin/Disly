@@ -72,49 +72,35 @@ namespace Disly.Areas.Admin.Controllers
                 {
                     if (doc != null && doc.ContentLength > 0)
                     {
-                        if (!AttachedFileExtAllowed(doc.FileName))
+                        if (AttachedFileExtAllowed(doc.FileName))
                         {
-                            model.ErrorInfo = new ErrorMessage()
+                            int idx = doc.FileName.LastIndexOf('.');
+                            string Title = doc.FileName.Substring(0, idx);
+
+                            string TransTitle = Transliteration.Translit(Title);
+                            string FileName = TransTitle + Path.GetExtension(doc.FileName);
+
+                            if (System.IO.File.Exists(Server.MapPath(Path.Combine(savePath, FileName))))
                             {
-                                title = "Ошибка",
-                                info = "Вы не можете загружать файлы данного формата",
-                                buttons = new ErrorMassegeBtn[]
-                                {
-                                //Без перезагрузки, просто отменяем
-                                new ErrorMassegeBtn { url = "#", text = "ок", action = "false", style="primary" }
-                                }
+                                FileName = TransTitle + "(1)" + Path.GetExtension(doc.FileName);
+                                Title = Title + "(1)";
+                            }
+                            string FullName = savePath + FileName;
+                            if (!Directory.Exists(Server.MapPath(savePath)))
+                            {
+                                Directory.CreateDirectory(Server.MapPath(savePath));
+                            }
+                            //сохраняем оригинал
+                            doc.SaveAs(Server.MapPath(Path.Combine(savePath, FileName)));
+                            DocumentsModel docModel = new DocumentsModel()
+                            {
+                                FilePath = FullName,
+                                Title = Title,
+                                LinkId = id
                             };
 
-                            return View("Item", model);
+                            _cmsRepository.insDocuments(docModel);
                         }
-                        int idx = doc.FileName.LastIndexOf('.');
-                        string Title = doc.FileName.Substring(0, idx);
-
-                        string TransTitle = Transliteration.Translit(Title);
-                        string FileName = TransTitle + Path.GetExtension(doc.FileName);
-
-                        if (System.IO.File.Exists(Server.MapPath(Path.Combine(savePath, FileName))))
-                        {
-                            FileName = TransTitle + "(1)" + Path.GetExtension(doc.FileName);
-                            Title = Title + "(1)";
-                        }
-                        string FullName = savePath + FileName;
-                        if (!Directory.Exists(Server.MapPath(savePath)))
-                        {
-                            Directory.CreateDirectory(Server.MapPath(savePath));
-                        }
-                        //сохраняем оригинал
-                        doc.SaveAs(Server.MapPath(Path.Combine(savePath, FileName)));
-
-
-                        DocumentsModel docModel = new DocumentsModel()
-                        {
-                            FilePath = FullName,
-                            Title = Title,
-                            LinkId = id
-                        };
-
-                        _cmsRepository.insDocuments(docModel);
                     }
                 }
             }

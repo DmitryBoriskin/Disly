@@ -15,11 +15,6 @@ namespace Disly.Controllers
         {
             base.OnActionExecuting(filterContext);
 
-            currentPage = _repository.getSiteMap("LPU");
-
-            if (currentPage == null)
-                throw new Exception("model.CurrentPage == null");
-
             model = new LPUViewModel
             {
                 SitesInfo = siteModel,
@@ -30,21 +25,31 @@ namespace Disly.Controllers
             };
 
             #region Создаем переменные (значения по умолчанию)
-            string PageTitle = model.CurrentPage.Title;
-            string PageDesc = model.CurrentPage.Desc;
-            string PageKeyw = model.CurrentPage.Keyw;
+            ViewBag.Title = "Страница";
+            ViewBag.Description = "Страница без названия";
+            ViewBag.KeyWords = "";
             #endregion
 
-            #region Метатеги
-            ViewBag.Title = PageTitle;
-            ViewBag.Description = PageDesc;
-            ViewBag.KeyWords = PageKeyw;
-            #endregion
         }
 
         // GET: LPU
         public ActionResult Index(string tab, Guid? id)
         {
+            #region currentPage
+            currentPage = _repository.getSiteMap("LPU");
+            if (currentPage == null)
+                throw new Exception("model.CurrentPage == null");
+
+            if (currentPage != null)
+            {
+                ViewBag.Title = currentPage.Title;
+                ViewBag.Description = currentPage.Desc;
+                ViewBag.KeyWords = currentPage.Keyw;
+
+                model.CurrentPage = currentPage;
+            }
+            #endregion
+
             model.Type = tab;
             var page = model.CurrentPage.FrontSection;
 
@@ -133,7 +138,7 @@ namespace Disly.Controllers
             {
                 model.OrgList = _repository.getOrgsModel(tab, id.ToString());
             }
-            
+
             return View(model);
         }
     }
