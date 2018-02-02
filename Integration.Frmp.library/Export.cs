@@ -162,33 +162,7 @@ namespace Integration.Frmp.library
                                         //string oid = org.OID; // OID
                 string kpp = org.KPP; // кпп
                                       //string orgn = org.OGRN; // OGRN
-
-                #region commments
-                // проверим существует ли запись с таким идентификатором в базе
-                //var query = db.ImportFrmpOrgss.Where(w => w.COid.Equals(oid));
-                //var query = db.ImportFrmpOrgss.Where(w => w.Guid.Equals(id));
-
-                //bool isExist = query.Any();
-                //if (!isExist)
-                //{
-                //    db.ImportFrmpOrgss
-                //        .Value(v => v.Guid, id)
-                //        //.Value(v => v.COid, oid)
-                //        .Value(v => v.CName, name)
-                //        .Value(v => v.DModify, DateTime.Now)
-                //        .Insert();
-                //}
-                //else
-                //{
-                //    db.ImportFrmpOrgss
-                //        .Where(w => w.Guid.Equals(id))
-                //        //.Where(w => w.COid.ToLower().Equals(oid))
-                //        .Set(u => u.CName, name)
-                //        .Set(u => u.DModify, DateTime.Now)
-                //        .Update();
-                //}
-                #endregion
-
+                                      
                 list.Add(new ImportFrmpOrgs
                 {
                     Guid = id,
@@ -228,29 +202,7 @@ namespace Integration.Frmp.library
                 int id = post.ID; // идентификатор
                 int? parent = post.Parent; // родитель
                 string name = post.Name; // название
-
-                #region comments
-                //var query = db.ImportFrmpPostss
-                //    .Where(w => w.Id.Equals(id));
-
-                //if (!query.Any())
-                //{
-                //    db.ImportFrmpPostss
-                //        .Value(v => v.Id, id)
-                //        .Value(v => v.Parent, parent)
-                //        .Value(v => v.Name, name)
-                //        .Insert();
-                //}
-                //else
-                //{
-                //    db.ImportFrmpPostss
-                //        .Where(w => w.Id.Equals(id))
-                //        .Set(u => u.Parent, parent)
-                //        .Set(u => u.Name, name)
-                //        .Update();
-                //}
-                #endregion
-
+                
                 list.Add(new ImportFrmpPosts
                 {
                     Id = id,

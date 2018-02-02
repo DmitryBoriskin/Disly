@@ -3,6 +3,7 @@ using PhotoImport.Services;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 
@@ -77,6 +78,8 @@ namespace PhotoImport
 
                     // путь до старой директории
                     string oldDirectory = (_params.OldDirectory + album.Org + album.Folder.Replace(".", "")).Replace("/", "\\");
+                    
+                    ServiceLogger.Debug("{work}", String.Format("oldDirectory: {0}", oldDirectory));
 
                     if (Directory.Exists(oldDirectory))
                     {
@@ -93,6 +96,8 @@ namespace PhotoImport
 
                         // путь для сохранения альбома
                         string savePath = _params.NewDirectory + localPath;
+                        
+                        ServiceLogger.Debug("{work}", String.Format("savePath: {0}", savePath));
 
                         // создадим папку для нового альбома
                         if (!Directory.Exists(savePath))
@@ -130,25 +135,29 @@ namespace PhotoImport
                             if (allowedExtensions.Contains(img.Extension.ToLower()))
                             {
                                 count++;
-
+                                
+                                ImageCodecInfo myImageCodecInfo = GetEncoderInfo("image/jpeg");
+                                EncoderParameters myEncoderParameters = new EncoderParameters(1);
+                                myEncoderParameters.Param[0] = new EncoderParameter(Encoder.Quality, 70L);
+                                
                                 // превьюшка для фотки
                                 Bitmap imgPrev = (Bitmap)Bitmap.FromFile(img.FullName);
                                 imgPrev = Imaging.Resize(imgPrev, 120, 120, "center", "center");
-                                imgPrev.Save(savePath + "prev_" + count + img.Extension);
+                                imgPrev.Save(savePath + "prev_" + count + ".jpg", myImageCodecInfo, myEncoderParameters);
 
                                 // основное изображение
                                 Bitmap imgReal = (Bitmap)Bitmap.FromFile(img.FullName);
                                 imgReal = Imaging.Resize(imgReal, 2000, "width");
-                                imgReal.Save(savePath + count + img.Extension);
+                                imgReal.Save(savePath + count + ".jpg", myImageCodecInfo, myEncoderParameters);
 
                                 // сохраняем превьюшку для альбома
                                 if (count == 1)
                                 {
                                     Bitmap albumPrev = (Bitmap)Bitmap.FromFile(img.FullName);
                                     albumPrev = Imaging.Resize(albumPrev, 540, 360, "center", "center");
-                                    albumPrev.Save(savePath + "albumprev" + img.Extension);
+                                    albumPrev.Save(savePath + "albumprev" + ".jpg", myImageCodecInfo, myEncoderParameters);
 
-                                    _previewAlbum = localPath + "albumprev" + img.Extension;
+                                    _previewAlbum = localPath + "albumprev" + ".jpg";
                                     repository.UpdatePreviewAlbum(id, _previewAlbum);
                                 }
 
@@ -159,8 +168,8 @@ namespace PhotoImport
                                     AlbumId = id,
                                     Title = count + img.Extension,
                                     Date = img.LastWriteTime,
-                                    Preview = localPath + "prev_" + count + img.Extension,
-                                    Original = localPath + count + img.Extension,
+                                    Preview = localPath + "prev_" + count + ".jpg",
+                                    Original = localPath + count + ".jpg",
                                     Sort = count
                                 };
 
@@ -171,23 +180,25 @@ namespace PhotoImport
 
                         try
                         {
-                            MaterialsUpdate(newAlbum, org);
+                            //MaterialsUpdate(newAlbum, org);
                         }
                         catch (Exception e)
                         {
-                            Console.WriteLine("Error updating materials with album id: " + newAlbum.Id);
-                            Console.WriteLine(e.ToString());
+                            ServiceLogger.Debug("{work}", String.Format("Error updating materials with album id: {0}", newAlbum.Id));
+                            ServiceLogger.Debug("{work}", e.ToString());
                         }
                     }
 
                     // сколько альбомов обработанно
                     if (currentAlbumNumber % 10 == 0)
-                        Console.WriteLine("Processed " + currentAlbumNumber + " of " + countAlbums);
+                    {
+                        ServiceLogger.Debug("{work}", String.Format("Processed {0} of {1}", currentAlbumNumber, countAlbums));
+                    }
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine("Error on iteration: " + currentAlbumNumber + " of " + countAlbums);
-                    Console.WriteLine(e.ToString());
+                    ServiceLogger.Debug("{work}", String.Format("Error on iteration: {0} of {1}", currentAlbumNumber, countAlbums));
+                    ServiceLogger.Debug("{work}", e.ToString());
                 }
             }
         }
@@ -209,6 +220,19 @@ namespace PhotoImport
                 item.Text += iframe;
                 repository.UpdateMaterial(item);
             }
+        }
+
+        /// <summary>
+        /// Получает инфу для кодирования
+        /// </summary>
+        /// <param name="mimeType"></param>
+        /// <returns></returns>
+        private static ImageCodecInfo GetEncoderInfo(String mimeType)
+        {
+            foreach (var enc in ImageCodecInfo.GetImageEncoders())
+                if (enc.MimeType.ToLower() == mimeType.ToLower())
+                    return enc;
+            return null;
         }
     }
 }
