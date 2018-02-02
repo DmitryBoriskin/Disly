@@ -154,15 +154,15 @@ namespace cms.dbase
                             });
 
                     if (materialsList.Any())
-                        return new MaterialsList
+                        return new MaterialsList()
                         {
                             Data = materialsList.ToArray(),
-                            Pager = new Pager
+                            Pager = new Pager()
                             {
-                                page = filtr.Page,
-                                size = filtr.Size,
-                                items_count = itemCount,
-                                page_count = (itemCount % filtr.Size > 0) ? (itemCount / filtr.Size) + 1 : itemCount / filtr.Size
+                                Page = filtr.Page,
+                                Size = filtr.Size,
+                                ItemsCount = itemCount,
+                                //PageCount = (itemCount % filtr.Size > 0) ? (itemCount / filtr.Size) + 1 : itemCount / filtr.Size
                             }
                         };
                 }

@@ -1,6 +1,7 @@
 ﻿using cms.dbase;
 using cms.dbModel.entity;
 using Disly.Models;
+using Newtonsoft.Json;
 using System;
 using System.IO;
 using System.Linq;
@@ -18,11 +19,6 @@ namespace Disly.Controllers
         {
             base.OnActionExecuting(filterContext);
 
-            currentPage = _repository.getSiteMap(_path, _alias);
-
-            if (currentPage == null)
-                throw new Exception("model.CurrentPage == null");
-
             model = new FeedbackViewModel
             {
                 SitesInfo = siteModel,
@@ -32,19 +28,10 @@ namespace Disly.Controllers
                 CurrentPage = currentPage
             };
 
-            if (model.CurrentPage == null)
-                throw new Exception("model.CurrentPage == null");
-
             #region Создаем переменные (значения по умолчанию)
-            string PageTitle = model.CurrentPage.Title;
-            string PageDesc = model.CurrentPage.Desc;
-            string PageKeyw = model.CurrentPage.Keyw;
-            #endregion
-
-            #region Метатеги
-            ViewBag.Title = PageTitle;
-            ViewBag.Description = PageDesc;
-            ViewBag.KeyWords = PageKeyw;
+            ViewBag.Title = "Обратная связь";
+            ViewBag.Description = "Обратная связь с сайтом";
+            ViewBag.KeyWords = "Часто задаваемые вопросы, отзывы, задать вопрос";
             #endregion
 
         }
@@ -62,27 +49,43 @@ namespace Disly.Controllers
         /// Список обращений
         /// </summary>
         /// <returns></returns>
-        public ActionResult Appeallist()
+        public ActionResult Appeallist(string sendStatus = "new", string message = "")
         {
+            #region currentPage
+            currentPage = _repository.getSiteMap(_path, _alias);
+            if (currentPage == null)
+                throw new Exception("model.CurrentPage == null");
+
+            if (currentPage != null)
+            {
+                ViewBag.Title = currentPage.Title;
+                ViewBag.Description = currentPage.Desc;
+                ViewBag.KeyWords = currentPage.Keyw;
+
+                model.CurrentPage = currentPage;
+                model.Child = (currentPage.ParentId.HasValue) ? _repository.getSiteMapChild(currentPage.ParentId.Value) : null;
+            }
+            #endregion
+
+            
+
             var filter = getFilter();
             filter.Disabled = false;
-            //Только вопросы
-            filter.Type = FeedbackType.appeal.ToString();
+            filter.Type = FeedbackType.appeal.ToString();             //Только вопросы
             model.List = _repository.getFeedbacksList(filter);
 
-            model.Child = (model.CurrentPage != null && model.CurrentPage.ParentId.HasValue) ? _repository.getSiteMapChild(model.CurrentPage.ParentId.Value) : null;
+            #region sort filters ViewBag
+            ViewBag.FilterSearchText = filter.SearchText;
+            ViewBag.FilterDate = filter.Date;
+            ViewBag.FilterDateEnd = filter.DateEnd;
+            #endregion
 
-            ViewBag.Filter = filter;
-            ViewBag.NewsSearchArea = filter.SearchText;
-            ViewBag.NewsSearchDateStart = filter.Date;
-            ViewBag.NewsSearchDateFin = filter.DateEnd;
-
+            ViewBag.FbType = FeedbackType.appeal;
+            ViewBag.FormStatus = sendStatus;
             ViewBag.IsAgree = false;
             ViewBag.Anonymous = false;
             ViewBag.captchaKey = Settings.CaptchaKey;
-            ViewBag.FbType = FeedbackType.appeal;
 
-            //return View(_ViewName, model);
             return View(model);
         }
 
@@ -90,8 +93,23 @@ namespace Disly.Controllers
         /// Список отзывов
         /// </summary>
         /// <returns></returns>
-        public ActionResult Reviewlist()
+        public ActionResult Reviewlist(string sendStatus = "new")
         {
+            #region currentPage
+            currentPage = _repository.getSiteMap(_path, _alias);
+            if (currentPage == null)
+                throw new Exception("model.CurrentPage == null");
+
+            if (currentPage != null)
+            {
+                ViewBag.Title = currentPage.Title;
+                ViewBag.Description = currentPage.Desc;
+                ViewBag.KeyWords = currentPage.Keyw;
+
+                model.CurrentPage = currentPage;
+                model.Child = (currentPage.ParentId.HasValue) ? _repository.getSiteMapChild(currentPage.ParentId.Value) : null;
+            }
+            #endregion
 
             var filter = getFilter();
             filter.Disabled = false;
@@ -99,19 +117,19 @@ namespace Disly.Controllers
             filter.Type = FeedbackType.review.ToString();
             model.List = _repository.getFeedbacksList(filter);
 
-            model.Child = (model.CurrentPage != null && model.CurrentPage.ParentId.HasValue) ? _repository.getSiteMapChild(model.CurrentPage.ParentId.Value) : null;
 
-            ViewBag.Filter = filter;
-            ViewBag.NewsSearchArea = filter.SearchText;
-            ViewBag.NewsSearchDateStart = filter.Date;
-            ViewBag.NewsSearchDateFin = filter.DateEnd;
+            #region sort filters ViewBag
+            ViewBag.FilterSearchText = filter.SearchText;
+            ViewBag.FilterDate = filter.Date;
+            ViewBag.FilterDateEnd = filter.DateEnd;
+            #endregion
 
+            ViewBag.FbType = FeedbackType.review;
+            ViewBag.FormStatus = sendStatus;
             ViewBag.IsAgree = false;
             ViewBag.Anonymous = false;
             ViewBag.captchaKey = Settings.CaptchaKey;
-            ViewBag.FbType = FeedbackType.review;
 
-            //return View(_ViewName, model);
             return View(model);
         }
 
@@ -163,22 +181,13 @@ namespace Disly.Controllers
         [MultiButton(MatchFormKey = "action", MatchFormValue = "send-btn")]
         public ActionResult SendForm(FeedbackFormViewModel bindData)
         {
-            model.Child = null;
-
-            #region временная мера
-            try
-            {
-                model.Child = (model.CurrentPage != null) ? _repository.getSiteMapChild(model.CurrentPage.Id) : null;
-            }
-            catch { } 
-            #endregion
-
-
             var newId = Guid.NewGuid();
             string PrivateKey = Settings.SecretKey;
             string EncodedResponse = Request["g-Recaptcha-Response"];
             bool IsCaptchaValid = (ReCaptchaClass.Validate(PrivateKey, EncodedResponse) == "True" ? true : false);
 
+            var formStatus = "new";
+            
             if (ModelState.IsValid && IsCaptchaValid)
             {
                 var AnswererCode = Guid.NewGuid();
@@ -199,7 +208,10 @@ namespace Disly.Controllers
                     AnswererCode = AnswererCode,
                     FbType = bindData.FbType
                 };
-                var res = _repository.insertFeedbackItem(newMessage);
+                //var res = _repository.insertFeedbackItem(newMessage);
+
+                var res = false;
+                var fileLink = "";
                 if (res)
                 {
                     var savedFileName = "";
@@ -211,12 +223,16 @@ namespace Disly.Controllers
 
                         savedFileName = Path.Combine(Server.MapPath(savePath), Path.GetFileName(bindData.FileToUpload.FileName));
                         bindData.FileToUpload.SaveAs(savedFileName);
+                        fileLink = "<a href=\"" + Settings.BaseURL + savePath + Path.GetFileName(bindData.FileToUpload.FileName) + "\">" + bindData.FileToUpload.FileName + "</a>";
                     }
 
                     #region отправка сообщение на e-mail.ru
                     // domen_ru/feedback/answerform?id=db4609c2-c5dc-4f4a-9d6a-542192ec7cb3&code=b6614768-fa5f-4a27-bd09-d07a3e6db1a9
-                    var url = (Settings.BaseURL == "localhost") ? Settings.BaseURL : string.Concat(Domain, Settings.BaseURL);
-                    var answerLink = string.Format("{0}/feedback/answerform?id={1}&code={2}", url, newId, AnswererCode);
+                    var domainUrl = _repository.getSiteDefaultDomain(Domain);
+                    if (string.IsNullOrEmpty(domainUrl))
+                        domainUrl = Settings.BaseURL;
+
+                    var answerLink = string.Format("http://{0}/feedback/answerform?id={1}&code={2}", domainUrl, newId, AnswererCode);
 
                     var msgText = string.Format(
                         "<div style=\"background-color:#fcf8e3;padding:15px;border:1px solid #eee; border-radius:4px;\">"
@@ -233,7 +249,10 @@ namespace Disly.Controllers
                         + "<b>Текст обращения:</b><br />{5}"
                         + "</p>"
                         + "<p>"
-                        + "Ответить на сообщение можно по ссылке: <a href=\"{6}\">Ответить на обращение</a>"
+                        + "Ответить на обращение можно по ссылке: <a href=\"{6}\">Ответить на обращение</a>"
+                        + "</p>"
+                        + "<p>"
+                        + "Прикрепленый файл: {7}"
                         + "</p>"
                         + "</div>"
 
@@ -247,7 +266,8 @@ namespace Disly.Controllers
                         bindData.SenderContacts,
                         bindData.Theme,
                         bindData.Text,
-                        answerLink
+                        answerLink,
+                        fileLink
                         );
 
                     Mailer letter = new Mailer();
@@ -266,29 +286,67 @@ namespace Disly.Controllers
                     var errorText = letter.SendMail();
                     #endregion
 
-                    ViewBag.FormStatus = "send";
+                    formStatus = "send";
+
+                    if (bindData.FbType == FeedbackType.review)
+                        return RedirectToAction("Reviewlist", new { sendStatus = formStatus });
+
+                    return RedirectToAction("Appeallist", new { sendStatus = formStatus });
                 }
+                else
+                    formStatus = "error";
             }
             else
-            {
-                ViewBag.FormStatus = "captcha";
-                ViewBag.SenderName = bindData.SenderName;
-                ViewBag.SenderEmail = bindData.SenderEmail;
-                ViewBag.SenderContacts = bindData.SenderContacts;
-                ViewBag.FbType = bindData.FbType;
-                ViewBag.Theme = bindData.Theme;
-                ViewBag.Text = bindData.Text;
-            }
+                formStatus = "captcha";
 
+          //В случае ошибок в форме
+            var _alias = "appeallist";
+            if (bindData.FbType != FeedbackType.appeal)
+                _alias = "reviewlist";
+
+            #region currentPage
+            currentPage = _repository.getSiteMap(_path, _alias);
+            if (currentPage == null)
+                throw new Exception("model.CurrentPage == null");
+
+            if (currentPage != null)
+            {
+                ViewBag.Title = currentPage.Title;
+                ViewBag.Description = currentPage.Desc;
+                ViewBag.KeyWords = currentPage.Keyw;
+
+                model.CurrentPage = currentPage;
+                model.Child = (currentPage.ParentId.HasValue) ? _repository.getSiteMapChild(currentPage.ParentId.Value) : null;
+            }
+            #endregion
+
+            var filter = getFilter();
+            filter.Disabled = false;
+            //Только отзывы
+            filter.Type = bindData.FbType.ToString();
+            model.List = _repository.getFeedbacksList(filter);
+
+            #region sort filters ViewBag
+            ViewBag.FilterSearchText = filter.SearchText;
+            ViewBag.FilterDate = filter.Date;
+            ViewBag.FilterDateEnd = filter.DateEnd;
+            #endregion
+
+            #region postback data
+            ViewBag.SenderName = bindData.SenderName;
+            ViewBag.SenderEmail = bindData.SenderEmail;
+            ViewBag.SenderContacts = bindData.SenderContacts;
+            ViewBag.FbType = bindData.FbType;
+            ViewBag.Theme = bindData.Theme;
+            ViewBag.Text = bindData.Text;
+            #endregion
+
+            ViewBag.FormStatus = formStatus;
             ViewBag.IsAgree = false;
             ViewBag.Anonymous = false;
             ViewBag.captchaKey = Settings.CaptchaKey;
 
-            //return View(_ViewName, model);
-            if (bindData.FbType == FeedbackType.review)
-                return RedirectToAction("Reviewlist");
-
-            return RedirectToAction("Appeallist");
+            return View(model);
         }
 
         /// <summary>
@@ -323,7 +381,7 @@ namespace Disly.Controllers
         }
 
         /// <summary>
-        /// Отправка ответа на обращение
+        /// Отправка ответа на обращение (также емайл пользователю и администратору). меняем код доступа
         /// </summary>
         /// <param name="bindData"></param>
         /// <returns></returns>
@@ -331,7 +389,7 @@ namespace Disly.Controllers
         [MultiButton(MatchFormKey = "action", MatchFormValue = "answer-btn")]
         public ActionResult AnswerForm(FeedbackAnswerFormViewModel bindData)
         {
-
+            var errorText = "";
             ViewBag.ByEmail = true;
             ViewBag.captchaKey = Settings.CaptchaKey;
 
@@ -345,19 +403,31 @@ namespace Disly.Controllers
 
             if (ModelState.IsValid && IsCaptchaValid)
             {
+                var newAnswererCode = Guid.NewGuid();
                 feedbackItem.Answer = bindData.Answer;
                 feedbackItem.Answerer = bindData.Answerer;
                 feedbackItem.Disabled = !bindData.Publish;
+                feedbackItem.AnswererCode = newAnswererCode;
 
                 var res = _repository.updateFeedbackItem(feedbackItem);
                 if (res)
                 {
-                    //Если стоит галочка отправить ответ по емайл
+                    var page = "appeallist";
+                    if (feedbackItem.FbType == FeedbackType.review)
+                        page = "reviewlist";
+
+                    var domainUrl = _repository.getSiteDefaultDomain(Domain);
+                    if (string.IsNullOrEmpty(domainUrl))
+                        domainUrl = Settings.BaseURL;
+
+                    // domen_ru/feedback/reviewlist#feedback_b1d60415-d600-44bf-82f3-27d56f371fb1
+                    var feedbackLink = string.Format("http://{0}/feedback/{1}#feedback_{2}", domainUrl, page, bindData.Id);
+
+                    //Если стоит галочка отправить ответ по емайл? тому кто задал вопрос
                     if (bindData.ByEmail)
                     {
-                        #region отправка сообщение на e-mail.ru
-                        var answerLink = string.Format("www.{0}/feedback/#feedback_{1}", Domain, bindData.Id);
-                        var msgText = string.Format(
+                        #region отправка сообщения на e-mail.ru
+                        var msgText1 = string.Format(
                         "<div>"
                         + "<p style=\"padding-bottom:30px;\">Уважаемый {0}!</p>"
                         + "Ваше обращение:"
@@ -388,18 +458,57 @@ namespace Disly.Controllers
                         feedbackItem.Text,
                         feedbackItem.Answerer,
                         feedbackItem.Answer,
-                        answerLink
+                        feedbackLink
                         );
 
-                        Mailer letter = new Mailer();
-                        letter.isSsl = true;
-                        letter.Theme = "Сайт " + Domain + ": Обратная связь";
-                        letter.Text = msgText;
-                        letter.MailTo = feedbackItem.SenderEmail;
+                        Mailer letter1 = new Mailer();
+                        letter1.isSsl = true;
+                        letter1.Theme = "Сайт " + Domain + ": Обратная связь";
+                        letter1.Text = msgText1;
+                        letter1.MailTo = feedbackItem.SenderEmail;
 
-                        var errorText = letter.SendMail();
+                        errorText = letter1.SendMail();
                         #endregion
                     }
+
+                    #region отправка сообщения о редактировании, с новым кодом доступа
+                    // domen_ru/feedback/answerform?id=db4609c2-c5dc-4f4a-9d6a-542192ec7cb3&code=b6614768-fa5f-4a27-bd09-d07a3e6db1a9
+                    var answerEditLink = string.Format("http://{0}/feedback/answerform?id={1}&code={2}", domainUrl, bindData.Id, newAnswererCode);
+
+                    var msgText2 = string.Format(
+                        "<div style=\"background-color:#fcf8e3;padding:15px;border:1px solid #eee; border-radius:4px;\">"
+                        + "<p>Уважаемый администратор сайта {0}!<br /><br />"
+                        + "На сообщение (обратная связь):<br />"
+                        + "<a href=\"{1}\">{2}</a><br /><br />"
+                        + "специалистом был дан ответ.<br /> Чтобы отредактировать ответ на обращение, перейдите по ссылке: "
+                         + "<a href=\"{3}\">Редактировать</a>"
+                        + "</p>"
+
+                        + "<hr />"
+                        + "<div style=\"font-size:12px;line-height:16px;color:#9c9c9c;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;\">"
+                        + "Сообщение было создано почтовым роботом. Пожалуйста, не отвечайте на него."
+                        + "</div>",
+                        Domain,
+                        feedbackLink,
+                        feedbackLink,
+                        answerEditLink
+                        );
+
+                    Mailer letter2 = new Mailer();
+                    letter2.isSsl = true;
+                    letter2.Theme = "Сайт " + Domain + ": Обратная связь";
+                    letter2.Text = msgText2;
+                    letter2.MailTo = Settings.mailTo;
+
+                    var admins = _repository.getSiteAdmins();
+                    if (admins != null)
+                    {
+                        letter2.MailTo = string.Join(";", admins.Select(s => s.EMail.ToString()));
+                    }
+
+                    errorText += "<br />" + letter2.SendMail();
+                    #endregion
+
                     ViewBag.FormStatus = "send";
                 }
             }

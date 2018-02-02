@@ -38,15 +38,15 @@ namespace cms.dbase
                                 .Take(filtr.Size);
                     SiteSectionModel[] SiteSectionInfo = List.ToArray();
 
-                    return new SiteSectionList
+                    return new SiteSectionList()
                     {
                         Data = SiteSectionInfo,
-                        Pager = new Pager
+                        Pager = new Pager()
                         {
-                            page = filtr.Page,
-                            size = filtr.Size,
-                            items_count = ItemCount,
-                            page_count = (ItemCount % filtr.Size > 0) ? (ItemCount / filtr.Size) + 1 : ItemCount / filtr.Size
+                            Page = filtr.Page,
+                            Size = filtr.Size,
+                            ItemsCount = ItemCount,
+                            //PageCount = (ItemCount % filtr.Size > 0) ? (ItemCount / filtr.Size) + 1 : ItemCount / filtr.Size
                         }
                     };
 

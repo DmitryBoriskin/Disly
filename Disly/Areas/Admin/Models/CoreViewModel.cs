@@ -66,4 +66,38 @@ namespace Disly.Areas.Admin.Models
         public string url { get; set; }
         public bool isChecked { get; set; }
     }
+
+
 }
+///// <summary>
+///// Пейджер
+///// </summary>
+//public class PagerModel1
+//{
+//    /// <summary>
+//    /// Кол-во эл-тов
+//    /// </summary>
+//    public int ItemsCount { get; set; }
+
+//    /// <summary>
+//    /// Кол-во эл-тов на странице
+//    /// </summary>
+//    public int PageSize { get; set; }
+
+//    /// <summary>
+//    /// Текущая страница
+//    /// </summary>
+//    public int Page { get; set; }
+
+//    /// <summary>
+//    /// Кол-во страниц
+//    /// </summary>
+//    public int PageCount
+//    {
+//        get
+//        {
+//            return ItemsCount / PageSize + (ItemsCount % PageSize == 0 ? 0 : 1);
+//        }
+//    }
+//}
+    

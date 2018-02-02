@@ -21,31 +21,19 @@ namespace Disly.Controllers
         {
             base.OnActionExecuting(filterContext);
 
-            currentPage = _repository.getSiteMap("SpecStructure");
-
-            if (currentPage == null)
-                throw new Exception("model.CurrentPage == null");
-
             model = new SpecStructureViewModel
             {
                 SitesInfo = siteModel,
                 SiteMapArray = siteMapArray,
                 BannerArray = bannerArray,
                 CurrentPage = currentPage,
-                // Breadcrumbs = breadcrumb,
                 Breadcrumbs = new List<Breadcrumbs>()
             };
 
             #region Создаем переменные (значения по умолчанию)
-            string PageTitle = model.CurrentPage.Title;
-            string PageDesc = model.CurrentPage.Desc;
-            string PageKeyw = model.CurrentPage.Keyw;
-            #endregion
-
-            #region Метатеги
-            ViewBag.Title = PageTitle;
-            ViewBag.Description = PageDesc;
-            ViewBag.KeyWords = PageKeyw;
+            ViewBag.Title = "Струтура";
+            ViewBag.Description = "Струтура сайта главного специалиста";
+            ViewBag.KeyWords = "";
             #endregion
         }
 
@@ -55,6 +43,22 @@ namespace Disly.Controllers
         /// <returns></returns>
         public ActionResult Index(string tab)
         {
+            #region currentPage
+            currentPage = _repository.getSiteMap("SpecStructure");
+            if (currentPage == null)
+                throw new Exception("model.CurrentPage == null");
+
+            if (currentPage != null)
+            {
+                ViewBag.Title = currentPage.Title;
+                ViewBag.Description = currentPage.Desc;
+                ViewBag.KeyWords = currentPage.Keyw;
+
+                model.CurrentPage = currentPage;
+            }
+            #endregion
+
+
             if ((model.SitesInfo == null) || (model.SitesInfo != null && model.SitesInfo.Type != ContentLinkType.SPEC.ToString().ToLower()))
                 return RedirectToRoute("Error", new { httpCode = 405 });
 
@@ -131,6 +135,7 @@ namespace Disly.Controllers
             ViewBag.SearchText = filter.SearchText;
             ViewBag.DepartGroup = filter.Group;
             ViewBag.Position = filter.Type;
+
 
             return View(_ViewName, model);
         }

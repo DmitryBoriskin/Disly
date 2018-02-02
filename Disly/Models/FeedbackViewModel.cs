@@ -1,4 +1,5 @@
 ﻿using cms.dbModel.entity;
+using Newtonsoft.Json;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Web;
@@ -62,6 +63,7 @@ namespace Disly.Models
         /// <summary>
         /// Загруженный файл
         /// </summary>
+        [JsonIgnore]
         public HttpPostedFileBase FileToUpload { get; set; }
         /// <summary>
         /// Согласен на обработку данных

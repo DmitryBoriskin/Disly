@@ -59,15 +59,15 @@ namespace cms.dbase
 
                         var siteMapList = list.OrderBy(o => o.Sort).ToArray();
 
-                        return new SiteMapList
+                        return new SiteMapList()
                         {
                             Data = siteMapList,
-                            Pager = new Pager
+                            Pager = new Pager()
                             {
-                                page = filtr.Page,
-                                size = filtr.Size,
-                                items_count = itemCount,
-                                page_count = (itemCount % filtr.Size > 0) ? (itemCount / filtr.Size) + 1 : itemCount / filtr.Size
+                                Page = filtr.Page,
+                                Size = filtr.Size,
+                                ItemsCount = itemCount,
+                                //PageCount = (itemCount % filtr.Size > 0) ? (itemCount / filtr.Size) + 1 : itemCount / filtr.Size
                             }
                         };
                     }
@@ -114,15 +114,15 @@ namespace cms.dbase
 
                         var siteMapList = list.ToArray();
 
-                        return new SiteMapList
+                        return new SiteMapList()
                         {
                             Data = siteMapList,
-                            Pager = new Pager
+                            Pager = new Pager()
                             {
-                                page = filtr.Page,
-                                size = filtr.Size,
-                                items_count = itemCount,
-                                page_count = (itemCount % filtr.Size > 0) ? (itemCount / filtr.Size) + 1 : itemCount / filtr.Size
+                                Page = filtr.Page,
+                                Size = filtr.Size,
+                                ItemsCount = itemCount,
+                                //PageCount = (itemCount % filtr.Size > 0) ? (itemCount / filtr.Size) + 1 : itemCount / filtr.Size
                             }
                         };
                     }

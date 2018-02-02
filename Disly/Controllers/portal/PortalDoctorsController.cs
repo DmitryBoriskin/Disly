@@ -15,11 +15,6 @@ namespace Disly.Controllers
         {
             base.OnActionExecuting(filterContext);
 
-            currentPage = _repository.getSiteMap("PortalDoctors");
-
-            //if (currentPage == null)
-            //    throw new Exception("model.CurrentPage == null");
-
             model = new PortalDoctorsViewModel
             {
                 SitesInfo = siteModel,
@@ -29,22 +24,31 @@ namespace Disly.Controllers
                 CurrentPage = currentPage
             };
 
-            //#region Создаем переменные (значения по умолчанию)
-            //string PageTitle = model.CurrentPage.Title;
-            //string PageDesc = model.CurrentPage.Desc;
-            //string PageKeyw = model.CurrentPage.Keyw;
-            //#endregion
-
-            //#region Метатеги
-            //ViewBag.Title = PageTitle;
-            //ViewBag.Description = PageDesc;
-            //ViewBag.KeyWords = PageKeyw;
-            //#endregion
+            #region Создаем переменные (значения по умолчанию)
+            ViewBag.Title = "Страница";
+            ViewBag.Description = "Страница без названия";
+            ViewBag.KeyWords = "";
+            #endregion
         }
 
         // GET: PortalDoctors
         public ActionResult Index()
         {
+            #region currentPage
+            currentPage = _repository.getSiteMap("PortalDoctors");
+            if (currentPage == null)
+                throw new Exception("model.CurrentPage == null");
+
+            if (currentPage != null)
+            {
+                ViewBag.Title = currentPage.Title;
+                ViewBag.Description = currentPage.Desc;
+                ViewBag.KeyWords = currentPage.Keyw;
+
+                model.CurrentPage = currentPage;
+            }
+            #endregion
+
             var filter = getFilter();
             model.DoctorsList = _repository.getDoctorsList(filter);
             model.PeoplePosts = _repository.getPeoplePosts();
@@ -58,6 +62,21 @@ namespace Disly.Controllers
         // GET: portaldoctors/id
         public ActionResult Item(Guid id)
         {
+            #region currentPage
+            currentPage = _repository.getSiteMap("PortalDoctors");
+            if (currentPage == null)
+                throw new Exception("model.CurrentPage == null");
+
+            if (currentPage != null)
+            {
+                ViewBag.Title = currentPage.Title;
+                ViewBag.Description = currentPage.Desc;
+                ViewBag.KeyWords = currentPage.Keyw;
+
+                model.CurrentPage = currentPage;
+            }
+            #endregion
+
             string _ViewName = (ViewName != String.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";
 
             model.DoctorsItem = _repository.getPeopleItem(id);

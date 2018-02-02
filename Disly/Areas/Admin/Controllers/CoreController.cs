@@ -8,9 +8,9 @@ using System.Web.Security;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web;
-using System.IO;
 using Portal.Code;
 using System.Drawing.Imaging;
+using System.Collections.Generic;
 
 namespace Disly.Areas.Admin.Controllers
 {
@@ -22,7 +22,7 @@ namespace Disly.Areas.Admin.Controllers
         /// </summary>
         protected AccountRepository _accountRepository { get; private set; }
         protected cmsRepository _cmsRepository { get; private set; }
-              
+
         public string Domain;
         public string StartUrl;
         public AccountModel AccountInfo;
@@ -44,15 +44,16 @@ namespace Disly.Areas.Admin.Controllers
             cmsRepository.DislyEvent += CmsRepository_DislyEvent;
 
             base.OnActionExecuting(filterContext);
-            
+
             ControllerName = filterContext.RouteData.Values["Controller"].ToString().ToLower();
             ActionName = filterContext.RouteData.Values["Action"].ToString().ToLower();
             Guid _PageId;
 
-            try {
+            try
+            {
                 Domain = _cmsRepository.getSiteId(Request.Url.Host.ToLower().Replace("www.", ""));
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 if (Request.Url.Host.ToLower().Replace("www.", "") != ConfigurationManager.AppSettings["BaseURL"])
                     filterContext.Result = Redirect("/Error/");
@@ -65,7 +66,7 @@ namespace Disly.Areas.Admin.Controllers
             StartUrl = "/Admin/" + (String)RouteData.Values["controller"] + "/";
 
             #region Настройки сайта            
-                
+
             //SettingsInfo = _cmsRepository.getCmsSettings();
             // Сайт, на котором находимся
             //if (Domain != String.Empty) SettingsInfo.ThisSite = _cmsRepository.getSite(Domain);
@@ -83,7 +84,7 @@ namespace Disly.Areas.Admin.Controllers
 
             #region Права пользователя
 
-            if(ControllerName.ToLower() != "templates" && ControllerName.ToLower() != "documents" && ControllerName.ToLower() != "services")
+            if (ControllerName.ToLower() != "templates" && ControllerName.ToLower() != "documents" && ControllerName.ToLower() != "services")
             {
                 UserResolutionInfo = _accountRepository.getCmsUserResolutioInfo(_userId, ControllerName);
                 if (UserResolutionInfo == null)
@@ -110,10 +111,10 @@ namespace Disly.Areas.Admin.Controllers
                         if (domain.SiteId == Domain) { IsRedirect++; }
                     }
                 }
-                
+
 
                 //перенаправляем на первый из своих доменов
-                if(IsRedirect==0)
+                if (IsRedirect == 0)
                 {
                     string url = "http://" + AccountInfo.Domains[0].DomainName + "/Admin/";
                     Response.Redirect(url, true);
@@ -157,34 +158,34 @@ namespace Disly.Areas.Admin.Controllers
 
         public CoreController()
         {
-                _accountRepository = new AccountRepository("cmsdbConnection");
+            _accountRepository = new AccountRepository("cmsdbConnection");
 
-                Guid userId = Guid.Empty;
-                var domainUrl = "";
+            Guid userId = Guid.Empty;
+            var domainUrl = "";
 
-                if (System.Web.HttpContext.Current != null)
+            if (System.Web.HttpContext.Current != null)
+            {
+                var context = System.Web.HttpContext.Current;
+
+                if (context.Request != null && context.Request.Url != null && !string.IsNullOrEmpty(context.Request.Url.Host))
+                    domainUrl = context.Request.Url.Host.ToLower().Replace("www.", "");
+
+                if (context.User != null && context.User.Identity != null && !string.IsNullOrEmpty(context.User.Identity.Name))
                 {
-                    var context = System.Web.HttpContext.Current;
-
-                    if (context.Request != null && context.Request.Url != null && !string.IsNullOrEmpty(context.Request.Url.Host))
-                        domainUrl = context.Request.Url.Host.ToLower().Replace("www.", "");
-
-                    if (context.User != null && context.User.Identity != null && !string.IsNullOrEmpty(context.User.Identity.Name))
+                    try
                     {
-                        try
-                        {
-                            userId = Guid.Parse(System.Web.HttpContext.Current.User.Identity.Name);
-                        }
-                        catch (Exception ex)
-                        {
-                            throw new Exception("Не удалось определить идентификатор пользователя" + ex);
-                        }
+                        userId = Guid.Parse(System.Web.HttpContext.Current.User.Identity.Name);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new Exception("Не удалось определить идентификатор пользователя" + ex);
                     }
                 }
-                _cmsRepository = new cmsRepository("cmsdbConnection", userId, RequestUserInfo.IP, domainUrl);
+            }
+            _cmsRepository = new cmsRepository("cmsdbConnection", userId, RequestUserInfo.IP, domainUrl);
 
         }
-        
+
         public string addFiltrParam(string query, string name, string val)
         {
             //string search_Param = @"\b" + name + @"=[\w]*[\b]*&?";
@@ -195,7 +196,7 @@ namespace Disly.Areas.Admin.Controllers
             Regex normalQuery = new Regex(normal_Query);
             query = delParam.Replace(query, String.Empty);
             query = normalQuery.Replace(query, String.Empty);
-            
+
             if (val != String.Empty)
             {
                 if (query.IndexOf("?") > -1) query += "&" + name + "=" + val;
@@ -217,7 +218,7 @@ namespace Disly.Areas.Admin.Controllers
                     if (enc.MimeType.ToLower() == mimeType.ToLower())
                         return enc;
                 }
-                    
+
             }
             return null;
         }
@@ -232,15 +233,18 @@ namespace Disly.Areas.Admin.Controllers
             {
                 return_url = (Convert.ToInt32(Request.QueryString["page"]) == 1) ? addFiltrParam(return_url, "page", String.Empty) : return_url;
             }
-            catch {
+            catch
+            {
                 return_url = addFiltrParam(return_url, "page", String.Empty);
             }
-            try {
+            try
+            {
                 return_url = (Convert.ToInt32(Request.QueryString["size"]) == defaultPageSize) ? addFiltrParam(return_url, "size", String.Empty) : return_url;
             }
-            catch {
+            catch
+            {
                 return_url = addFiltrParam(return_url, "size", String.Empty);
-            }                
+            }
             return_url = (!Convert.ToBoolean(Request.QueryString["disabled"])) ? addFiltrParam(return_url, "disabled", String.Empty) : return_url;
             return_url = String.IsNullOrEmpty(Request.QueryString["searchtext"]) ? addFiltrParam(return_url, "searchtext", String.Empty) : return_url;
             // Если парамметры из адресной строки равны значениям по умолчанию - удаляем их из URL
@@ -268,7 +272,7 @@ namespace Disly.Areas.Admin.Controllers
             {
                 result.Disabled = Convert.ToBoolean(Request.QueryString["disabled"]);
             }
-            
+
             //if (result.Date != DateNull && result.DateEnd == DateNull)
             //{
             //    result.DateEnd = ((DateTime)result.Date).AddDays(1);
@@ -277,10 +281,15 @@ namespace Disly.Areas.Admin.Controllers
             return result;
         }
 
+        /// <summary>
+        /// Проверка прикрепляемых файлов на допустимые форматы
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <returns></returns>
         public bool AttachedFileExtAllowed(string fileName)
         {
             //new string[] { "jpeg", "jpg", "png", "gif", "pdf", "rtf", "txt", "doc", "docx", "xls", "xlsx", "ods", "odt", "tar", "zip", "7z" };
-            string[] exts = Settings.DocTypes.Split(','); 
+            string[] exts = Settings.DocTypes.Split(',');
 
             var ext = fileName.Split('.').Any() ? fileName.Split('.').Last() : "";
 
@@ -289,7 +298,12 @@ namespace Disly.Areas.Admin.Controllers
 
             return false;
         }
-
+        
+        /// <summary>
+        /// Проверка прикрепляемых изображений на допустимые форматы
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <returns></returns>
         public bool AttachedPicExtAllowed(string fileName)
         {
             //new string[] { "jpeg", "jpg", "png", "gif"};
@@ -314,7 +328,6 @@ namespace Disly.Areas.Admin.Controllers
                     controllerContext.HttpContext.Request[MatchFormKey] == MatchFormValue;
             }
         }
-
 
     }
 }

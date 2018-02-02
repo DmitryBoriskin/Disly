@@ -214,15 +214,15 @@ namespace cms.dbase
 
                     UsersModel[] usersInfo = List.ToArray();
 
-                    return new UsersList
+                    return new UsersList()
                     {
                         Data = usersInfo,
-                        Pager = new Pager
+                        Pager = new Pager()
                         {
-                            page = filtr.Page,
-                            size = filtr.Size,
-                            items_count = ItemCount,
-                            page_count = (ItemCount % filtr.Size > 0) ? (ItemCount / filtr.Size) + 1 : ItemCount / filtr.Size
+                            Page = filtr.Page,
+                            Size = filtr.Size,
+                            ItemsCount = ItemCount,
+                            //PageCount = (ItemCount % filtr.Size > 0) ? (ItemCount / filtr.Size) + 1 : ItemCount / filtr.Size
                         }
                     };
                 }

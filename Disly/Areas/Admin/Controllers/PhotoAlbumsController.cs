@@ -439,10 +439,10 @@ namespace Disly.Areas.Admin.Controllers
                     Data = null,
                     Pager = new Pager()
                     {
-                        items_count = 0,
-                        page_count = 1,
-                        page = 1,
-                        size = 30
+                        Page = 1,
+                        Size = 30,
+                        ItemsCount = 0,
+                        //PageCount = 1,
                     }
                 };
 
