@@ -36,8 +36,8 @@ namespace Disly.Controllers
         {
             #region currentPage
             currentPage = _repository.getSiteMap("PortalDoctors");
-            //if (currentPage == null)
-            //    throw new Exception("model.CurrentPage == null");
+            if (currentPage == null)
+                throw new Exception("model.CurrentPage == null");
 
             if (currentPage != null)
             {
