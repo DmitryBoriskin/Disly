@@ -194,7 +194,7 @@ namespace cms.dbase
             string siteId = _domain;
             using (var db = new CMSdb(_context))
             {
-                
+
 
                 var query = (from s in db.front_site_sections
                              join v in db.front_page_viewss
@@ -202,10 +202,11 @@ namespace cms.dbase
                              where (s.f_site.Equals(siteId) && s.f_front_section.Equals(siteSection))
                              select v);
                 if (query.Any())
-                    return query.Select(s => new SiteSectionModel {
-                                Url=s.c_url,
-                                UrlSpec=s.c_url_spec
-                            }).FirstOrDefault();
+                    return query.Select(s => new SiteSectionModel
+                    {
+                        Url = s.c_url,
+                        UrlSpec = s.c_url_spec
+                    }).FirstOrDefault();
                 return null;
             }
         }
@@ -261,15 +262,16 @@ namespace cms.dbase
         }
 
 
-        public override string getSiteDefaultDomain( string siteId)
+        public override string getSiteDefaultDomain(string siteId)
         {
             using (var db = new CMSdb(_context))
             {
                 var data = db.cms_sites_domainss
                     .Where(w => w.f_site == siteId)
                     .Where(w => w.b_default == true);
-                
-                try {
+
+                try
+                {
                     return data.Select(p => p.c_domain).SingleOrDefault();
                 }
                 catch (Exception ex)
@@ -817,7 +819,7 @@ namespace cms.dbase
                         }
 
                         var category = db.content_materials_groupss.Where(w => w.c_alias == filter.Category);
-                        if(category.Any())
+                        if (category.Any())
                         {
                             var cat = category.First().id;
                             query = query
@@ -826,9 +828,9 @@ namespace cms.dbase
                                                 .Where(o => o.f_group == cat),
                                                 e => e.id, o => o.f_material, (o, e) => o
                                              );
-                        //query = query.Where(w => w.d_date <= DateTime.Now && w.);
+                            //query = query.Where(w => w.d_date <= DateTime.Now && w.);
                         }
-                        
+
                     }
 
                     query = query.OrderByDescending(w => w.d_date);
@@ -922,8 +924,8 @@ namespace cms.dbase
                         Id = s.id,
                         Title = s.c_title,
                         Text = s.c_text,
-                        Url=s.c_url,
-                        UrlName=s.c_url_name,
+                        Url = s.c_url,
+                        UrlName = s.c_url_name,
                         Date = s.d_date,
                         PreviewImage = new Photo
                         {
@@ -984,12 +986,13 @@ namespace cms.dbase
                 if (query.Any())
                 {
                     return query
-                        .OrderBy(o=>o.n_sort)
-                        .Select(s => new StructureModel() {
-                        Title=s.c_title,
-                        TitleShort=s.c_title_short,
-                        Num=s.num
-                    }).ToArray();
+                        .OrderBy(o => o.n_sort)
+                        .Select(s => new StructureModel()
+                        {
+                            Title = s.c_title,
+                            TitleShort = s.c_title_short,
+                            Num = s.num
+                        }).ToArray();
                 }
                 return null;
 
@@ -1210,7 +1213,7 @@ namespace cms.dbase
             {
                 var query = db.content_departmentss
                             .Where(w => w.f_structure == Id)
-                            .OrderBy(o=>o.c_title)
+                            .OrderBy(o => o.c_title)
                             .Select(s => new Departments()
                             {
                                 Id = s.id,
@@ -1387,7 +1390,7 @@ namespace cms.dbase
                             OrgUrl = (ep2.p.s != null && !string.IsNullOrEmpty(ep2.p.s.c_alias)) ? getSiteDefaultDomain(ep2.p.s.c_alias) : null,
                             Type = ep2.pepl.n_type
                         }).ToArray()
-                    }).OrderBy(o=>o.FIO);
+                    }).OrderBy(o => o.FIO);
 
                 if (data2.Any())
                     return data2.ToArray();
@@ -1405,15 +1408,56 @@ namespace cms.dbase
         {
             using (var db = new CMSdb(_context))
             {
+                #region comment
+                //var query = (from p in db.content_peoples
+                //             join pol in db.content_people_org_links on p.id equals pol.f_people into pol2
+                //             from pol in pol2.DefaultIfEmpty()
+                //             join pdl in db.content_people_department_links on pol.id equals pdl.f_people into pdl2
+                //             from pdl in pdl2.DefaultIfEmpty()
+                //             join d in db.content_departmentss on pdl.f_department equals d.id into d2
+                //             from d in d2.DefaultIfEmpty()
+                //             join os in db.content_org_structures on d.f_structure equals os.id into os2
+                //             from os in os2.DefaultIfEmpty()
+                //             join msel in db.content_main_specialist_employees_links on p.id equals msel.f_people into msel2
+                //             from msel in msel2.DefaultIfEmpty()
+                //             join s in db.cms_sitess on msel.f_main_specialist equals s.f_content into s2
+                //             from s in s2.DefaultIfEmpty()
+                //             join ms in db.content_main_specialistss on msel.f_main_specialist equals ms.id into ms2
+                //             from ms in ms2.DefaultIfEmpty()
+                //             where p.id.Equals(id)
+                //             select new People
+                //             {
+                //                 Id = p.id,
+                //                 SNILS = p.c_snils,
+                //                 FIO = p.c_surname + " " + p.c_name + " " + p.c_patronymic,
+                //                 XmlInfo = p.xml_info,
+                //                 Photo = p.c_photo,
+                //                 StructureId = os.num,
+                //                 DepartmentId = d.id,
+                //                 DepartmentTitle = d.c_title,
+                //                 GsUrl = (!string.IsNullOrEmpty(s.c_alias)) ? getSiteDefaultDomain(s.c_alias) : null,
+                //                 MainSpec = new MainSpecialistModel()
+                //                 {
+                //                     Name = ms.c_name
+                //                 }
+                //             });
+
+                //if (query.Any())
+                //    return query.FirstOrDefault();
+
+                //return null;
+                #endregion
+
+                var xmlInfos = db.content_people_infoss
+                    .Where(w => w.f_people.Equals(id))
+                    .Select(s => s.c_xml)
+                    .ToArray();
+
                 var query = (from p in db.content_peoples
                              join pol in db.content_people_org_links on p.id equals pol.f_people into pol2
                              from pol in pol2.DefaultIfEmpty()
                              join pdl in db.content_people_department_links on pol.id equals pdl.f_people into pdl2
                              from pdl in pdl2.DefaultIfEmpty()
-                             join d in db.content_departmentss on pdl.f_department equals d.id into d2
-                             from d in d2.DefaultIfEmpty()
-                             join os in db.content_org_structures on d.f_structure equals os.id into os2
-                             from os in os2.DefaultIfEmpty()
                              join msel in db.content_main_specialist_employees_links on p.id equals msel.f_people into msel2
                              from msel in msel2.DefaultIfEmpty()
                              join s in db.cms_sitess on msel.f_main_specialist equals s.f_content into s2
@@ -1421,27 +1465,21 @@ namespace cms.dbase
                              join ms in db.content_main_specialistss on msel.f_main_specialist equals ms.id into ms2
                              from ms in ms2.DefaultIfEmpty()
                              where p.id.Equals(id)
-                             select new People
-                             {
-                                 Id = p.id,
-                                 SNILS = p.c_snils,
-                                 FIO = p.c_surname + " " + p.c_name + " " + p.c_patronymic,
-                                 XmlInfo = p.xml_info,
-                                 Photo = p.c_photo,
-                                 StructureId = os.num,
-                                 DepartmentId = d.id,
-                                 DepartmentTitle = d.c_title,
-                                 GsUrl = (!string.IsNullOrEmpty(s.c_alias)) ? getSiteDefaultDomain(s.c_alias) : null,
-                                 MainSpec = new MainSpecialistModel()
-                                 {
-                                     Name = ms.c_name
-                                 }
-                             });
+                             select new { p, s.c_alias, ms.c_name });
 
-                if (query.Any())
-                    return query.FirstOrDefault();
+                var data = query.ToArray()
+                    .GroupBy(p => new { p.p.id })
+                    .Select(s => new People
+                    {
+                        Id = s.Key.id,
+                        FIO = s.First().p.c_surname + " " + s.First().p.c_name + " " + s.First().p.c_patronymic,
+                        Photo = s.First().p.c_photo,
+                        GsUrl = !String.IsNullOrWhiteSpace(s.First().c_alias) ? getSiteDefaultDomain(s.First().c_alias) : null,
+                        MainSpec = new MainSpecialistModel { Name = s.First().c_name },
+                        XmlInfo = xmlInfos
+                    });
 
-                return null;
+                return data.SingleOrDefault();
             }
         }
 
@@ -1529,14 +1567,14 @@ namespace cms.dbase
         /// <returns></returns>
         public override OrgsModel getOrgInfo(string siteId)
         {
-            string domain = !string.IsNullOrEmpty(siteId)? siteId: _domain;
+            string domain = !string.IsNullOrEmpty(siteId) ? siteId : _domain;
             using (var db = new CMSdb(_context))
             {
                 var data = db.cms_sitess.Where(w => w.c_alias == domain)
                              .Join(db.content_orgss, e => e.f_content, o => o.id, (e, o) => o)
                              .Select(s => new OrgsModel
                              {
-                                 Title = !string.IsNullOrEmpty(s.c_title_short)? s.c_title_short: s.c_title,
+                                 Title = !string.IsNullOrEmpty(s.c_title_short) ? s.c_title_short : s.c_title,
                                  Address = s.c_adress,
                                  Phone = s.c_phone,
                                  Fax = s.c_fax,
@@ -1822,7 +1860,7 @@ namespace cms.dbase
                                  where a.id == null || a.f_org.Equals(o.id) && a.b_leader
                                  join s in db.cms_sitess on o.id equals s.f_content into ss
                                  from s in ss.DefaultIfEmpty()
-                                 where ( s.id == null || s.f_content.Equals(o.id))//s.c_alias!="main" &&
+                                 where (s.id == null || s.f_content.Equals(o.id))//s.c_alias!="main" &&
                                  join p in db.content_people_org_links on a.f_people equals p.id into ts
                                  from p in ts.DefaultIfEmpty()
                                  where p.id == null || p.id == a.f_people
@@ -1837,7 +1875,7 @@ namespace cms.dbase
                                      Email = o.c_email,
                                      Address = o.c_adress,
                                      Logo = o.c_logo,
-                                     Link = (!string.IsNullOrEmpty(s.c_alias))? getSiteDefaultDomain(s.c_alias) : null,
+                                     Link = (!string.IsNullOrEmpty(s.c_alias)) ? getSiteDefaultDomain(s.c_alias) : null,
                                      Leader = new OrgsAdministrative
                                      {
                                          id = p.f_people,
@@ -1861,8 +1899,8 @@ namespace cms.dbase
                                  join a in db.content_orgs_adminstrativs on o.id equals a.f_org into ps
                                  from a in ps.DefaultIfEmpty()
                                  where a.id == null || a.f_org.Equals(o.id) && a.b_leader
-                                 join s in db.cms_sitess on o.id equals s.f_content into ss 
-                                 from s in ss.DefaultIfEmpty()                                 
+                                 join s in db.cms_sitess on o.id equals s.f_content into ss
+                                 from s in ss.DefaultIfEmpty()
                                  join p in db.content_people_org_links on a.f_people equals p.id into ts
                                  from p in ts.DefaultIfEmpty()
                                  where p.id == null || p.id == a.f_people
@@ -1922,9 +1960,10 @@ namespace cms.dbase
                             query = query.Join(db.content_orgs_medical_services_linkss.Where(w => w.f_medical_service == Guid.Parse(idtype)), n => n.id, m => m.f_org, (n, m) => n);
                             break;
                     }
-                }                
+                }
                 //query = query.OrderBy(o => new { o.n_sort, o.c_title });
-                var data = query.Select(o => new OrgFrontModel() {
+                var data = query.Select(o => new OrgFrontModel()
+                {
                     //Id = o.id,
                     Title = o.c_title,
                     Phone = o.c_phone,
@@ -1932,9 +1971,9 @@ namespace cms.dbase
                     Fax = o.c_fax,
                     Email = o.c_email,
                     Address = o.c_adress,
-                    Logo = o.c_logo,                    
+                    Logo = o.c_logo,
                     Link = o.c_domain,
-                    Leader=new OrgsAdministrative
+                    Leader = new OrgsAdministrative
                     {
                         Surname = o.c_surname,
                         Name = o.c_name,
@@ -1957,7 +1996,8 @@ namespace cms.dbase
                 var query = db.content_orgs_adminstrativs.Where(w => w.f_org == OrgId && w.b_leader == true);
                 if (query.Any())
                 {
-                    return query.Select(s => new OrgsAdministrative {
+                    return query.Select(s => new OrgsAdministrative
+                    {
                         //id = s.f_people,
                         Surname = s.c_surname,
                         Name = s.c_name,
@@ -1978,11 +2018,11 @@ namespace cms.dbase
                 if (site.Any())
                 {
                     string SiteId = site.Single().c_alias;
-                    var domains = db.cms_sites_domainss.Where(w => w.f_site == SiteId).OrderByDescending(o=>o.b_default);
+                    var domains = db.cms_sites_domainss.Where(w => w.f_site == SiteId).OrderByDescending(o => o.b_default);
                     if (domains.Any())
                     {
                         return domains.First().c_domain;
-                    }                                        
+                    }
                 }
                 return null;
             }
@@ -2223,7 +2263,7 @@ namespace cms.dbase
                                        id = ep.id,
                                        name = ep.c_name,
                                        org = pol.f_org,
-                                       title = !string.IsNullOrEmpty(o.c_title_short)? o.c_title_short: o.c_title,
+                                       title = !string.IsNullOrEmpty(o.c_title_short) ? o.c_title_short : o.c_title,
                                        domain = s.c_alias
                                    },
                                    pepl = new
@@ -2253,7 +2293,7 @@ namespace cms.dbase
                             Id = ep2.ep.id,
                             Name = ep2.ep.name,
                             OrgId = ep2.ep.org,
-                            OrgUrl = !string.IsNullOrEmpty(ep2.ep.domain)? getSiteDefaultDomain(ep2.ep.domain): null,
+                            OrgUrl = !string.IsNullOrEmpty(ep2.ep.domain) ? getSiteDefaultDomain(ep2.ep.domain) : null,
                             OrgTitle = ep2.ep.title,
                             Type = ep2.pepl.type
                         }).ToArray()
@@ -2851,8 +2891,8 @@ namespace cms.dbase
             {
                 var query = db.content_vacanciess
                      .Where(w => w.b_disabled == false);
-                
-                if(!string.IsNullOrEmpty(filter.Domain))
+
+                if (!string.IsNullOrEmpty(filter.Domain))
                 {
                     query = query.Where(w => w.f_site == filter.Domain);
                 }
