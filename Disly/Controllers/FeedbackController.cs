@@ -163,8 +163,16 @@ namespace Disly.Controllers
         [MultiButton(MatchFormKey = "action", MatchFormValue = "send-btn")]
         public ActionResult SendForm(FeedbackFormViewModel bindData)
         {
+            model.Child = null;
 
-            model.Child = (model.CurrentPage != null) ? _repository.getSiteMapChild(model.CurrentPage.Id) : null;
+            #region временная мера
+            try
+            {
+                model.Child = (model.CurrentPage != null) ? _repository.getSiteMapChild(model.CurrentPage.Id) : null;
+            }
+            catch { } 
+            #endregion
+
 
             var newId = Guid.NewGuid();
             string PrivateKey = Settings.SecretKey;
