@@ -350,19 +350,23 @@ namespace Disly.Areas.Admin.Controllers
 
                 if (back_model.StructureItem.GeopointX != null) { MapX = (double)back_model.StructureItem.GeopointX; }
                 if (back_model.StructureItem.GeopointY != null) { MapY = (double)back_model.StructureItem.GeopointY; }
-                ViewBag.Titlecoord = back_model.StructureItem.Title;
-                ViewBag.Xcoord = MapX;
-                ViewBag.Ycoord = MapY;
-                try
-                {
+           
+                //try
+                //{
                     if (back_model.StructureItem.Adress != String.Empty && (MapX == 0 || MapY == 0))
                     {
                         var CoordResult = Spots.Coords(back_model.StructureItem.Adress);
                         back_model.StructureItem.GeopointX = CoordResult.GeopointX;
                         back_model.StructureItem.GeopointY = CoordResult.GeopointY;
                     }
-                }
-                catch { }
+                //}
+                //catch { }
+
+                ViewBag.Titlecoord = back_model.StructureItem.Title;
+                ViewBag.Xcoord = back_model.StructureItem.GeopointX;
+                ViewBag.Ycoord = back_model.StructureItem.GeopointY;
+
+
                 #endregion
 
 
@@ -519,6 +523,10 @@ namespace Disly.Areas.Admin.Controllers
                     }
                 }
                 #endregion
+
+
+                ViewBag.Xcoord = model.StructureItem.GeopointX;
+                ViewBag.Ycoord = model.StructureItem.GeopointY;
 
                 if (!model.StructureItem.Ovp)
                 {
@@ -837,7 +845,12 @@ namespace Disly.Areas.Admin.Controllers
             string IdDepartment = Request["DepartmentItem.Id"];
             string PhoneLabel = Request["new_phone_label"];
             string PhoneValue = Request["new_phone_value"];
-            _cmsRepository.insDepartmentsPhone(Guid.Parse(IdDepartment), PhoneLabel, PhoneValue); //, AccountInfo.id, RequestUserInfo.IP
+            if(!String.IsNullOrEmpty(PhoneLabel) || !String.IsNullOrEmpty(PhoneValue))
+            {
+                _cmsRepository.insDepartmentsPhone(Guid.Parse(IdDepartment), PhoneLabel, PhoneValue); //, AccountInfo.id, RequestUserInfo.IP
+            }
+            
+
             return Redirect(((System.Web.HttpRequestWrapper)Request).RawUrl);
         }
 

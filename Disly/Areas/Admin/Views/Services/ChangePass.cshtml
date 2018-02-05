@@ -28,10 +28,16 @@
             </div>
             <div class="row">
                 <div class="col-xs-6">
-                    @Html.TextBoxFor(m => Model.Password.Password, new { @class = "uc_input", type = "password", minlength = "6", maxlength = "16", autocomplete = "off", @title = "Новый пароль" })
+                    <div class="input-group">
+                        <label>Новый пароль</label>
+                        @Html.TextBoxFor(m => Model.Password.Password, new { @class = "form-control", type = "password", minlength = "6", maxlength = "16", autocomplete = "off", @title = "Новый пароль" })
+                    </div>                    
                 </div>
                 <div class="col-xs-6">
-                    @Html.TextBoxFor(m => Model.Password.PasswordConfirm, new { @class = "uc_input", type = "password", minlength = "6", maxlength = "16", autocomplete = "off", @title = "Подтверждение пароля" })
+                    <div class="input-group">
+                        <label>Повторите пароль</label>
+                        @Html.TextBoxFor(m => Model.Password.PasswordConfirm, new { @class = "form-control", type = "password", minlength = "6", maxlength = "16", autocomplete = "off", @title = "Подтверждение пароля" })
+                    </div>                         
                 </div>
             </div>
             <div>

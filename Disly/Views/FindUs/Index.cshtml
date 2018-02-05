@@ -80,7 +80,7 @@
                                 {
                                     <div class="geo_area">
                                         <div style=" width: 100%; height: 300px; padding: 0; margin: 0;" class="maplist" id="maplist-@item.Id"></div>
-                                        @if (item.GeopointX != 0 && item.GeopointY != 0)
+                                        @if (item.GeopointX != 0 && item.GeopointY != 0 && item.GeopointX!=null && item.GeopointY!=null)
                                         {
                                             <div class="geopoint" data-title="@item.Title" data-addres="@item.Adress" data-x="@item.GeopointX.ToString().Replace(",", ".")" data-y="@item.GeopointY.ToString().Replace(",", ".")"></div>
                                         }
@@ -91,7 +91,7 @@
                                             {
                                                 foreach (var dopadres in item.DopAddres)
                                                 {
-                                                    if (dopadres.GeopointX != 0 && dopadres.GeopointY != 0 )
+                                                    if (dopadres.GeopointX != 0 && dopadres.GeopointY != 0 && dopadres.GeopointY != null && dopadres.GeopointX != null)
                                                     {
                                                         <div class="geopoint" data-title="@dopadres.Title" data-addres="@dopadres.Address" data-x="@dopadres.GeopointX.ToString().Replace(",", ".")" data-y="@dopadres.GeopointY.ToString().Replace(",", ".")"></div>
                                                     }
