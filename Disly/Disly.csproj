@@ -945,6 +945,7 @@
     <Content Include="Views\Feedback\part\Filter.cshtml" />
     <Content Include="Views\Feedback\part\List.cshtml" />
     <Content Include="Views\Shared\partial\Pager.cshtml" />
+    <Content Include="Views\Press\part\Filter.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

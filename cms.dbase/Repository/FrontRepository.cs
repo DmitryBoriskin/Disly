@@ -1408,46 +1408,6 @@ namespace cms.dbase
         {
             using (var db = new CMSdb(_context))
             {
-                #region comment
-                //var query = (from p in db.content_peoples
-                //             join pol in db.content_people_org_links on p.id equals pol.f_people into pol2
-                //             from pol in pol2.DefaultIfEmpty()
-                //             join pdl in db.content_people_department_links on pol.id equals pdl.f_people into pdl2
-                //             from pdl in pdl2.DefaultIfEmpty()
-                //             join d in db.content_departmentss on pdl.f_department equals d.id into d2
-                //             from d in d2.DefaultIfEmpty()
-                //             join os in db.content_org_structures on d.f_structure equals os.id into os2
-                //             from os in os2.DefaultIfEmpty()
-                //             join msel in db.content_main_specialist_employees_links on p.id equals msel.f_people into msel2
-                //             from msel in msel2.DefaultIfEmpty()
-                //             join s in db.cms_sitess on msel.f_main_specialist equals s.f_content into s2
-                //             from s in s2.DefaultIfEmpty()
-                //             join ms in db.content_main_specialistss on msel.f_main_specialist equals ms.id into ms2
-                //             from ms in ms2.DefaultIfEmpty()
-                //             where p.id.Equals(id)
-                //             select new People
-                //             {
-                //                 Id = p.id,
-                //                 SNILS = p.c_snils,
-                //                 FIO = p.c_surname + " " + p.c_name + " " + p.c_patronymic,
-                //                 XmlInfo = p.xml_info,
-                //                 Photo = p.c_photo,
-                //                 StructureId = os.num,
-                //                 DepartmentId = d.id,
-                //                 DepartmentTitle = d.c_title,
-                //                 GsUrl = (!string.IsNullOrEmpty(s.c_alias)) ? getSiteDefaultDomain(s.c_alias) : null,
-                //                 MainSpec = new MainSpecialistModel()
-                //                 {
-                //                     Name = ms.c_name
-                //                 }
-                //             });
-
-                //if (query.Any())
-                //    return query.FirstOrDefault();
-
-                //return null;
-                #endregion
-
                 var xmlInfos = db.content_people_infoss
                     .Where(w => w.f_people.Equals(id))
                     .Select(s => s.c_xml)
