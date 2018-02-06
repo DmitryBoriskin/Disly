@@ -91,12 +91,12 @@ namespace Disly.Areas.Admin.Controllers
         public ActionResult Search(string searchtext, bool disabled, string size, DateTime? date, DateTime? dateend)
         {
             string query = HttpUtility.UrlDecode(Request.Url.Query);
-            query = addFiltrParam(query, "searchtext", searchtext);
-            query = addFiltrParam(query, "disabled", disabled.ToString().ToLower());
-            query = (date == null) ? addFiltrParam(query, "date", String.Empty) : addFiltrParam(query, "date", ((DateTime)date).ToString("dd.MM.yyyy").ToLower());
-            query = (dateend == null) ? addFiltrParam(query, "dateend", String.Empty) : addFiltrParam(query, "dateend", ((DateTime)dateend).ToString("dd.MM.yyyy").ToString().ToLower());
-            query = addFiltrParam(query, "page", String.Empty);
-            query = addFiltrParam(query, "size", size);
+            query = AddFiltrParam(query, "searchtext", searchtext);
+            query = AddFiltrParam(query, "disabled", disabled.ToString().ToLower());
+            query = (date == null) ? AddFiltrParam(query, "date", String.Empty) : AddFiltrParam(query, "date", ((DateTime)date).ToString("dd.MM.yyyy").ToLower());
+            query = (dateend == null) ? AddFiltrParam(query, "dateend", String.Empty) : AddFiltrParam(query, "dateend", ((DateTime)dateend).ToString("dd.MM.yyyy").ToString().ToLower());
+            query = AddFiltrParam(query, "page", String.Empty);
+            query = AddFiltrParam(query, "size", size);
 
             return Redirect(StartUrl + query);
         }
@@ -118,7 +118,7 @@ namespace Disly.Areas.Admin.Controllers
         {
             //  При создании записи сбрасываем номер страницы
             string query = HttpUtility.UrlDecode(Request.Url.Query);
-            query = addFiltrParam(query, "page", String.Empty);
+            query = AddFiltrParam(query, "page", String.Empty);
 
             return Redirect(StartUrl + "Item/" + Guid.NewGuid() + "/" + query);
         }

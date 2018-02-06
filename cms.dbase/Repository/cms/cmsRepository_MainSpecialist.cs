@@ -333,7 +333,7 @@ namespace cms.dbase
             {
                 var query = (from s in db.cms_sitess
                              join ms in db.content_main_specialistss on s.f_content equals ms.id
-                             where s.c_alias.Equals(domain)
+                             where s.c_alias.ToLower().Equals(domain)
                              select ms.id);
 
                 if (!query.Any()) return null;

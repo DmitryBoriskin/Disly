@@ -102,7 +102,7 @@ namespace Disly.Areas.Admin.Controllers
 
             SiteInfo = _cmsRepository.getSite(Domain); // информация по сайту
 
-            if (AccountInfo.Group.ToLower() != "developer" && AccountInfo.Group.ToLower() != "administrator")
+            if (AccountInfo.Group != "developer" && AccountInfo.Group != "administrator")
             {
                 if (AccountInfo.Domains != null && AccountInfo.Domains.Count() > 0)
                 {
@@ -186,99 +186,174 @@ namespace Disly.Areas.Admin.Controllers
 
         }
 
-        public string addFiltrParam(string query, string name, string val)
+        /// <summary>
+        /// Формируем новую строку запроса из queryStr="?size=40&searchtext=поиск&page=2" исключая exclude
+        /// </summary>
+        /// <param name="queryStr"></param>
+        /// <param name="exclude"></param>
+        /// <returns></returns>
+        public string UrlQueryExclude(string queryStr, string exclude)
         {
-            //string search_Param = @"\b" + name + @"=[\w]*[\b]*&?";
-            string search_Param = @"\b" + name + @"=(.*?)(&|$)";
-            string normal_Query = @"&$";
+            var qparams = HttpUtility.ParseQueryString(queryStr);
 
-            Regex delParam = new Regex(search_Param, RegexOptions.CultureInvariant);
-            Regex normalQuery = new Regex(normal_Query);
-            query = delParam.Replace(query, String.Empty);
-            query = normalQuery.Replace(query, String.Empty);
-
-            if (val != String.Empty)
+            var queryParams = new Dictionary<string, string>();
+            if (qparams.AllKeys != null && qparams.AllKeys.Count() > 0)
             {
-                if (query.IndexOf("?") > -1) query += "&" + name + "=" + val;
-                else query += "?" + name + "=" + val;
-            }
-
-            query = query.Replace("?&", "?").Replace("&&", "&");
-
-            return query;
-        }
-
-        public static ImageCodecInfo GetEncoderInfo(String mimeType)
-        {
-            var codecs = ImageCodecInfo.GetImageEncoders();
-            if (codecs != null && codecs.Count() > 0)
-            {
-                foreach (var enc in codecs)
+                foreach (var p in qparams.AllKeys)
                 {
-                    if (enc.MimeType.ToLower() == mimeType.ToLower())
-                        return enc;
+                    if (p != null)
+                        queryParams.Add(p, qparams[p]);
                 }
-
             }
-            return null;
+
+            var urlParams = String.Join("&", queryParams
+                            .Where(p => p.Key != exclude)
+                            .Select(p => String.Format("{0}={1}", p.Key, p.Value))
+                            );
+
+            return urlParams;
         }
 
-
-#warning В будущем переписать используя json объект 
-        public FilterParams getFilter(int defaultPageSize = 20)
+        public string AddFiltrParam(string query, string name, string val)
         {
-            string return_url = HttpUtility.UrlDecode(Request.Url.Query);
-            // если в URL номер страницы равен значению по умолчанию - удаляем его из URL
-            try
-            {
-                return_url = (Convert.ToInt32(Request.QueryString["page"]) == 1) ? addFiltrParam(return_url, "page", String.Empty) : return_url;
-            }
-            catch
-            {
-                return_url = addFiltrParam(return_url, "page", String.Empty);
-            }
-            try
-            {
-                return_url = (Convert.ToInt32(Request.QueryString["size"]) == defaultPageSize) ? addFiltrParam(return_url, "size", String.Empty) : return_url;
-            }
-            catch
-            {
-                return_url = addFiltrParam(return_url, "size", String.Empty);
-            }
-            return_url = (!Convert.ToBoolean(Request.QueryString["disabled"])) ? addFiltrParam(return_url, "disabled", String.Empty) : return_url;
-            return_url = String.IsNullOrEmpty(Request.QueryString["searchtext"]) ? addFiltrParam(return_url, "searchtext", String.Empty) : return_url;
-            // Если парамметры из адресной строки равны значениям по умолчанию - удаляем их из URL
-            if (return_url.ToLower() != HttpUtility.UrlDecode(Request.Url.Query).ToLower())
-                Response.Redirect(StartUrl + return_url);
+            //var q1 = query;
+            ////string search_Param = @"\b" + name + @"=[\w]*[\b]*&?";
+            //string search_Param = @"\b" + name + @"=(.*?)(&|$)";
+            //string normal_Query = @"&$";
 
-            DateTime? DateNull = new DateTime?();
+            //Regex delParam = new Regex(search_Param, RegexOptions.CultureInvariant);
+            //Regex normalQuery = new Regex(normal_Query);
+            //query = delParam.Replace(query, String.Empty);
+            //query = normalQuery.Replace(query, String.Empty);
 
-            FilterParams result = new FilterParams()
-            {
-                Domain = Domain,
-                Page = (Convert.ToInt32(Request.QueryString["page"]) > 0) ? Convert.ToInt32(Request.QueryString["page"]) : 1,
-                Size = (Convert.ToInt32(Request.QueryString["size"]) > 0) ? Convert.ToInt32(Request.QueryString["size"]) : defaultPageSize,
-                Type = (String.IsNullOrEmpty(Request.QueryString["type"])) ? String.Empty : Request.QueryString["type"],
-                Category = (String.IsNullOrEmpty(Request.QueryString["category"])) ? String.Empty : Request.QueryString["category"],
-                Group = (String.IsNullOrEmpty(Request.QueryString["group"])) ? String.Empty : Request.QueryString["group"],
-                Lang = (String.IsNullOrEmpty(Request.QueryString["lang"])) ? String.Empty : Request.QueryString["lang"],
-                Date = (String.IsNullOrEmpty(Request.QueryString["date"])) ? DateNull : DateTime.Parse(Request.QueryString["date"]),
-                DateEnd = (String.IsNullOrEmpty(Request.QueryString["dateend"])) ? DateNull : DateTime.Parse(Request.QueryString["dateend"]),
-                SearchText = (String.IsNullOrEmpty(Request.QueryString["searchtext"])) ? String.Empty : Request.QueryString["searchtext"]
-                //,
-                //Disabled = (String.IsNullOrEmpty(Request.QueryString["disabled"])) ? Nullable : Convert.ToBoolean(Request.QueryString["disabled"])
-            };
-            if (!String.IsNullOrEmpty(Request.QueryString["disabled"]))
-            {
-                result.Disabled = Convert.ToBoolean(Request.QueryString["disabled"]);
-            }
-
-            //if (result.Date != DateNull && result.DateEnd == DateNull)
+            //if (val != String.Empty)
             //{
-            //    result.DateEnd = ((DateTime)result.Date).AddDays(1);
+            //    if (query.IndexOf("?") > -1) query += "&" + name + "=" + val;
+            //    else query += "?" + name + "=" + val;
             //}
 
-            return result;
+            //query = query.Replace("?&", "?").Replace("&&", "&");
+
+            //return query;
+
+            var returnUrl = "";
+            //Формируем строку с параметрами фильтра без пейджера и параметра(чтоб убрать дублирование)
+            returnUrl = UrlQueryExclude(query, "page");
+            returnUrl = UrlQueryExclude(query, name);
+
+            var page = 1;
+            if(!string.IsNullOrEmpty(Request.QueryString["page"]))
+                int.TryParse(Request.QueryString["page"], out page);
+
+            //Добавляем параметр name
+            if (!string.IsNullOrEmpty(name) && !string.IsNullOrEmpty(val))
+                returnUrl = !string.IsNullOrEmpty(returnUrl)
+                    ? string.Format("{0}&{1}={2}", returnUrl, name, val)
+                    : string.Format("{0}={1}", name, val);
+
+            //Добавляем page
+            if (page > 1)
+                returnUrl = !string.IsNullOrEmpty(returnUrl)
+                    ? string.Format("{0}&page={1}", returnUrl, page) 
+                    : string.Format("page={0}", page);
+
+
+            if (!string.IsNullOrEmpty(returnUrl))
+            {
+                var s = (returnUrl.IndexOf("?") > -1)? "&" : "?";
+                returnUrl = s + returnUrl;
+            }
+
+            return returnUrl.ToLower();
+        }
+
+
+        /// <summary>
+        /// Формирование фильтра по сторке url
+        /// </summary>
+        /// <param name="defaultPageSize"></param>
+        /// <returns></returns>
+        public FilterParams getFilter(int defaultPageSize = 20)
+        {
+
+            //string return_url = HttpUtility.UrlDecode(Request.Url.Query);
+            //// если в URL номер страницы равен значению по умолчанию - удаляем его из URL
+            //try
+            //{
+            //    return_url = (Convert.ToInt32(Request.QueryString["page"]) == 1) ? addFiltrParam(return_url, "page", String.Empty) : return_url;
+            //}
+            //catch
+            //{
+            //    return_url = addFiltrParam(return_url, "page", String.Empty);
+            //}
+            //try
+            //{
+            //    return_url = (Convert.ToInt32(Request.QueryString["size"]) == defaultPageSize) ? addFiltrParam(return_url, "size", String.Empty) : return_url;
+            //}
+            //catch
+            //{
+            //    return_url = addFiltrParam(return_url, "size", String.Empty);
+            //}
+            //return_url = (!Convert.ToBoolean(Request.QueryString["disabled"])) ? addFiltrParam(return_url, "disabled", String.Empty) : return_url;
+            //return_url = String.IsNullOrEmpty(Request.QueryString["searchtext"]) ? addFiltrParam(return_url, "searchtext", String.Empty) : return_url;
+            //// Если парамметры из адресной строки равны значениям по умолчанию - удаляем их из URL
+            //if (return_url.ToLower() != HttpUtility.UrlDecode(Request.Url.Query).ToLower())
+            //    Response.Redirect(StartUrl + return_url);
+
+            FilterParams fltr = new FilterParams()
+            {
+                Domain = Domain,
+                Type = Request.QueryString["type"],
+                Category = Request.QueryString["category"],
+                Group = Request.QueryString["group"],
+                Lang = Request.QueryString["lang"],
+                SearchText = Request.QueryString["searchtext"],
+                Page = 1,
+                Size = defaultPageSize,
+                Disabled = null
+            };
+
+            if (!String.IsNullOrEmpty(Request.QueryString["disabled"]))
+            {
+                var disabled = false;
+                bool.TryParse(Request.QueryString["disabled"], out disabled);
+                fltr.Disabled = disabled;
+            }
+
+            if (!String.IsNullOrEmpty(Request.QueryString["page"]))
+            {
+                int page = 1;
+                int.TryParse(Request.QueryString["page"], out page);
+                if (page > 1)
+                    fltr.Page = page;
+            }
+            if (!String.IsNullOrEmpty(Request.QueryString["size"]))
+            {
+                int size = defaultPageSize;
+                int.TryParse(Request.QueryString["size"], out size);
+                if (size > 0)
+                    fltr.Size = size;
+            }
+
+            if (!String.IsNullOrEmpty(Request.QueryString["date"]))
+            {
+                DateTime date = DateTime.MinValue;
+                DateTime.TryParse(Request.QueryString["date"], out date);
+
+                if (date != DateTime.MinValue)
+                    fltr.Date = date;
+            }
+
+            if (!String.IsNullOrEmpty(Request.QueryString["dateend"]))
+            {
+                DateTime dateend = DateTime.MinValue;
+                DateTime.TryParse(Request.QueryString["dateend"], out dateend);
+
+                if (dateend != DateTime.MinValue)
+                    fltr.DateEnd = dateend;
+            }
+
+            return fltr;
         }
 
         /// <summary>
@@ -316,6 +391,27 @@ namespace Disly.Areas.Admin.Controllers
 
             return false;
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="mimeType"></param>
+        /// <returns></returns>
+        public static ImageCodecInfo GetEncoderInfo(String mimeType)
+        {
+            var codecs = ImageCodecInfo.GetImageEncoders();
+            if (codecs != null && codecs.Count() > 0)
+            {
+                foreach (var enc in codecs)
+                {
+                    if (enc.MimeType.ToLower() == mimeType.ToLower())
+                        return enc;
+                }
+
+            }
+            return null;
+        }
+
 
         [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = true)]
         public class MultiButtonAttribute : ActionNameSelectorAttribute

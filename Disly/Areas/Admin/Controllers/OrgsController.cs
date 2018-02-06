@@ -59,7 +59,7 @@ namespace Disly.Areas.Admin.Controllers
         public ActionResult Index()
         {
             #region администратор сайта
-            if (model.Account.Group.ToLower() == "admin")
+            if (model.Account.Group == "admin")
             {
                 if (orgId != null)
                 {
@@ -94,8 +94,8 @@ namespace Disly.Areas.Admin.Controllers
         public ActionResult Search(string searchtext, bool disabled, string size, DateTime? date, DateTime? dateend)
         {
             string query = HttpUtility.UrlDecode(Request.Url.Query);
-            query = addFiltrParam(query, "searchtext", searchtext);
-            query = addFiltrParam(query, "disabled", disabled.ToString().ToLower());
+            query = AddFiltrParam(query, "searchtext", searchtext);
+            query = AddFiltrParam(query, "disabled", disabled.ToString().ToLower());
             return Redirect(StartUrl + query);
         }
 
@@ -116,7 +116,7 @@ namespace Disly.Areas.Admin.Controllers
         {
             //  При создании записи сбрасываем номер страницы
             string query = HttpUtility.UrlDecode(Request.Url.Query);
-            query = addFiltrParam(query, "page", String.Empty);
+            query = AddFiltrParam(query, "page", String.Empty);
             return Redirect(StartUrl + "item/" + Guid.NewGuid() + "/" + query);
         }
 
@@ -124,7 +124,7 @@ namespace Disly.Areas.Admin.Controllers
         public ActionResult Item(Guid Id)
         {
             #region администратор сайта
-            if (model.Account.Group.ToLower() == "admin")
+            if (model.Account.Group == "admin")
             {
                 if (orgId != null && !Id.Equals((Guid)orgId))
                 {
@@ -306,7 +306,7 @@ namespace Disly.Areas.Admin.Controllers
             if (model.StructureItem != null)
             {
                 #region администратор сайта
-                if (model.Account.Group.ToLower() == "admin")
+                if (model.Account.Group == "admin")
                 {
                     if (orgId != null)
                     {
@@ -504,7 +504,7 @@ namespace Disly.Areas.Admin.Controllers
             if (model.StructureItem != null)
             {
                 #region администратор сайта
-                if (model.Account.Group.ToLower() == "admin")
+                if (model.Account.Group == "admin")
                 {
                     if (orgId != null)
                     {
@@ -700,7 +700,7 @@ namespace Disly.Areas.Admin.Controllers
         public ActionResult Department(Guid id)
         {
             #region администратор сайта
-            if (model.Account.Group.ToLower() == "admin")
+            if (model.Account.Group == "admin")
             {
                 if (orgId != null)
                 {
@@ -941,7 +941,7 @@ namespace Disly.Areas.Admin.Controllers
             if (model.AdministrativItem != null)
             {
                 #region администратор сайта
-                if (model.Account.Group.ToLower() == "admin")
+                if (model.Account.Group == "admin")
                 {
                     if (orgId != null)
                     {

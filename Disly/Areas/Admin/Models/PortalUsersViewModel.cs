@@ -10,5 +10,8 @@ namespace Disly.Areas.Admin.Models
         public UsersModel Item { get; set; }
         public Catalog_list[] GroupList { get; set; }
         public PasswordModel Password { get; set; }
+
+        public FiltrModel Filter {get; set;}
     }
+
 }

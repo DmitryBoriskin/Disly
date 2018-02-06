@@ -411,6 +411,8 @@
     <Content Include="Areas\Admin\Views\Shared\Templates\Filtr.cshtml" />
     <Content Include="Areas\Admin\Views\Shared\Templates\Menu.cshtml" />
     <Content Include="Areas\Admin\Views\Shared\Partial\Pager.cshtml" />
+    <Content Include="Areas\Admin\Views\Shared\Partial\Filtr.cshtml" />
+    <Content Include="Areas\Admin\Views\Materials\Modal\Group.cshtml" />
     <None Include="Content\plugins\tinymce\plugins\gallery\plugin.min.js_korkin" />
     <Content Include="Content\plugins\tinymce\plugins\help\img\logo.png" />
     <Content Include="Content\plugins\tinymce\plugins\help\plugin.min.js" />

@@ -40,7 +40,7 @@ namespace cms.dbase
                             Site = s.f_site,
                             FrontSection = s.f_front_section,
                             Path = s.c_path,
-                            Alias = s.c_alias,
+                            Alias = s.c_alias.ToLower(),
                             Title = s.c_title,
                             Text = s.c_text,
                             Preview = s.c_preview,
@@ -96,7 +96,7 @@ namespace cms.dbase
                             Site = s.f_site,
                             FrontSection = s.f_front_section,
                             Path = s.c_path,
-                            Alias = s.c_alias,
+                            Alias = s.c_alias.ToLower(),
                             Title = s.c_title,
                             Text = s.c_text,
                             Preview = s.c_preview,
@@ -148,7 +148,7 @@ namespace cms.dbase
                         Site = s.f_site,
                         FrontSection = s.f_front_section,
                         Path = s.c_path,
-                        Alias = s.c_alias,
+                        Alias = s.c_alias.ToLower(),
                         Title = s.c_title,
                         Text = s.c_text,
                         Preview = s.c_preview,
@@ -237,8 +237,8 @@ namespace cms.dbase
         {
             using (var db = new CMSdb(_context))
             {
-                int _count=0;                
-                var query = db.content_sitemaps.Where(w => w.c_alias == alias && w.id!=ThisGuid && w.f_site==_domain);
+                int _count = 0;
+                var query = db.content_sitemaps.Where(w => w.c_alias.ToLower() == alias && w.id!=ThisGuid && w.f_site==_domain);
                 query = (String.IsNullOrEmpty(ParentId)) 
                     ? query.Where(w => w.uui_parent == null) 
                     : query.Where(w => w.uui_parent == Guid.Parse(ParentId));
@@ -302,7 +302,7 @@ namespace cms.dbase
                             .Value(p => p.f_site, item.Site)
                             .Value(p => p.f_front_section, item.FrontSection)
                             .Value(p => p.c_path, item.Path)
-                            .Value(p => p.c_alias, item.Alias)
+                            .Value(p => p.c_alias, item.Alias.ToLower())
                             .Value(p => p.c_title, item.Title)
                             .Value(p => p.c_preview, item.Preview)
                             .Value(p => p.c_url, item.Url)
@@ -387,7 +387,7 @@ namespace cms.dbase
                             .Set(u => u.f_site, item.Site)
                             .Set(u => u.f_front_section, item.FrontSection)
                             .Set(u => u.c_path, item.Path)
-                            .Set(u => u.c_alias, item.Alias)
+                            .Set(u => u.c_alias, item.Alias.ToLower())
                             .Set(u => u.c_title, item.Title)
                             .Set(u => u.c_text, item.Text)
                             .Set(u => u.c_preview, item.Preview)
@@ -403,11 +403,11 @@ namespace cms.dbase
                         #region обновим алиасы для дочерних эл-тов
                         // заменяемый путь 
                         string _oldPath = oldRecord.c_path.Equals("/") ?
-                            oldRecord.c_path + oldRecord.c_alias : oldRecord.c_path + "/" + oldRecord.c_alias;
+                            oldRecord.c_path + oldRecord.c_alias.ToLower() : oldRecord.c_path + "/" + oldRecord.c_alias.ToLower();
 
                         // новый путь
                         string _newPath = item.Path.Equals("/") ?
-                            item.Path + item.Alias : item.Path + "/" + item.Alias;
+                            item.Path + item.Alias : item.Path + "/" + item.Alias.ToLower();
 
                         // список дочерних эл-тов для обновления алиаса
                         var listToUpdate = db.content_sitemaps
@@ -599,7 +599,7 @@ namespace cms.dbase
                 const string ORG = "org";
 
                 var type = db.cms_sitess
-                    .Where(w => w.c_alias.Equals(domain))
+                    .Where(w => w.c_alias.ToLower().Equals(domain))
                     .Select(s => s.c_content_type).SingleOrDefault();
 
                 IQueryable<front_page_views> query;
@@ -654,7 +654,7 @@ namespace cms.dbase
                         Id = s.id,
                         Text = s.c_title,
                         Sort = s.n_sort,
-                        Value = s.c_alias
+                        Value = s.c_alias.ToLower()
                     });
 
                 if (!query.Any()) return null;
@@ -674,9 +674,9 @@ namespace cms.dbase
                     .OrderBy(o => o.n_sort)
                     .Select(s => new Catalog_list
                     {
-                        text = s.c_title,
-                        value = s.id.ToString(),
-                        available = s.b_available
+                        Text = s.c_title,
+                        Value = s.id.ToString(),
+                        Available = s.b_available
                     });
                 if (!data.Any()) { return null; }
                 else { return data.ToArray(); }
@@ -789,7 +789,7 @@ namespace cms.dbase
                         {
                             Title = s.c_title,
                             Path = s.c_path,
-                            Alias = s.c_alias,
+                            Alias = s.c_alias.ToLower(),
                             Sort = s.n_sort
                         }).FirstOrDefault();
 
@@ -943,7 +943,7 @@ namespace cms.dbase
                     {
                         Id = s.id,
                         Path = s.c_path,
-                        Alias = s.c_alias,
+                        Alias = s.c_alias.ToLower(),
                         Title = s.c_title,
                         Disabled = s.b_disabled,
                         Blocked = s.b_blocked,
