@@ -225,7 +225,7 @@ namespace cms.dbase
                         var EndDate = (eventData.DateEnd.HasValue) ? eventData.DateEnd.Value : eventData.DateBegin;
                         cdEvent = new content_events
                         {
-                            id = eventData.Id,
+                            id = eventData.Id,                               
                             c_alias = eventData.Alias.ToLower(),
                             c_title = eventData.Title,
                             c_text = eventData.Text,
@@ -255,6 +255,7 @@ namespace cms.dbase
                                 cdEvent.n_date_end_year = eventData.DateEnd.Value.Year;
                         }
 
+
                         var cdContentLink = new content_content_link()
                         {
                             id = Guid.NewGuid(),
@@ -264,8 +265,10 @@ namespace cms.dbase
                             f_link_type = eventData.ContentLinkType,
                             b_origin = true
                         };
-
+                        var query_str = db.LastQuery;
                         db.Insert(cdEvent);
+                       
+
                         db.Insert(cdContentLink);
 
                         //логирование
