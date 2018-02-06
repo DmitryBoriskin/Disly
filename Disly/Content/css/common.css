@@ -1312,11 +1312,11 @@ a.sitemap-plate.sitemap-plate-image {
     padding-top: 22px;
     padding-bottom: 15px;
 }
-.org_item h4{line-height:22px;}
+.org_item h4{line-height:22px;text-transform:none;}
 .org_item_post {
     color: #808080;
 }
-
+.medical_services {display:block;}
 .org_item:not(:last-child) {
     border-bottom: 1px solid #e6e6e6;
 }

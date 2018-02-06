@@ -372,7 +372,7 @@ namespace cms.dbase
                 if (data.Any())
                 {
                     var data1 = data.Single();
-                    data1.Important = db.content_content_links.Where(w => w.f_content == id && w.b_important==true).Any();
+                    data1.Important = db.content_content_links.Where(w => w.f_content == id && w.f_link== data.First().ContentLink && w.b_important==true).Any();
                     return data1;
                 }                    
                 else
@@ -543,7 +543,7 @@ namespace cms.dbase
                         }
                         //признак важности
                         db.content_content_links
-                            .Where(w => w.f_content == material.Id)
+                            .Where(w => w.f_content == material.Id && w.f_link == material.ContentLink && w.f_content_type == "material")
                             .Set(s => s.b_important, material.Important)
                             .Update();
 

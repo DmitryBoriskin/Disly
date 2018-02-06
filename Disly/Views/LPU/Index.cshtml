@@ -43,14 +43,24 @@
 
         @if (Model.MedicalServices != null)
         {
+
             <div class="row">
-                @foreach (var item in Model.MedicalServices)
-                {
-                    string link = "/lpu?tab=services&id=" + item.Id;
-                    <div class="col-md-6">
-                        <a href="@link">@item.Title</a>
-                    </div>
-                }
+                <div class="col-md-6">                    
+                    @foreach (var item in ViewBag.Column1)
+                    {
+                        string link = "/lpu?tab=services&id=" + item.Id;                        
+                        <a class="medical_services" href="@link">@item.Title</a>                        
+                    }
+                </div>
+                <div class="col-md-6">
+                    @foreach (var item in ViewBag.Column2)
+                    {
+                        string link = "/lpu?tab=services&id=" + item.Id;
+                        <a class="medical_services" href="@link">@item.Title</a>
+                    }
+                </div>
+            
+                
             </div>
         }
         @if (!string.IsNullOrWhiteSpace(title))
