@@ -150,9 +150,9 @@
                     }
                 </div>
                 <div class="col-md-3">
-                    @if (news != null && smi.Count() > 0)
+                    @if (news != null && news.Count() > 0)
                     {
-                        foreach (var item in smi.ToList()) //for (int j = 0; j < 2; j++)
+                        foreach (var item in news.ToList()) //for (int j = 0; j < 2; j++)
                         {                            
                             string link = "/press/" + item.Date.Year + "/" + item.Date.Month + "/" + item.Date.Day + "/" + item.Alias;
                             <div class="module-material-item">
