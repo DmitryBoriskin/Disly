@@ -59,9 +59,9 @@
 <div class="news-module">
     <div class="row">
         <div class="col-md-6">
-            @if (news != null && news.FirstOrDefault() != null)
+            @if (Model.ImportantMaterials != null)
             {
-                var news_it = news.FirstOrDefault();
+                var news_it = Model.ImportantMaterials;
 
                 string link = "/press/" + news_it.Date.Year + "/" + news_it.Date.Month + "/" + news_it.Date.Day + "/" + news_it.Alias;
                 string photo = !string.IsNullOrEmpty(news_it.Photo) ? news_it.Photo : "~/Content/img/temporal.jpg";

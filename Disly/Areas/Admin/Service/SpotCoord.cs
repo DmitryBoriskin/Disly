@@ -34,7 +34,7 @@ namespace Disly.Areas.Admin.Service
             coord = coord.Replace(" ", ";");
             string[] arrCoord = coord.Split(';');
 
-            if(arrCoord != null && arrCoord.Count() > 2)
+            if(arrCoord != null && arrCoord.Count() > 1)
             {
                 foreach (string qwerty in arrCoord)
                 {

@@ -837,12 +837,14 @@ namespace cms.dbase
                 var query = db.content_org_structure_adresss.Where(w => w.f_org_structure == StrucId);
                 if (query.Any())
                 {
-                    return query.Select(s => new DopAddres()
-                    {
-                        Id=s.id,
-                        Address=s.c_adress,
-                        Title=s.c_title
-                    }).ToArray();
+                    return query
+                            .OrderBy(o=>o.c_title)
+                            .Select(s => new DopAddres()
+                            {
+                                Id=s.id,
+                                Address=s.c_adress,
+                                Title=s.c_title
+                            }).ToArray();
                 }
                 return null;
             }

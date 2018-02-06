@@ -47,6 +47,18 @@ namespace Disly.Areas.Admin.Controllers
             //Справочник всех доступных категорий
             Groups = _cmsRepository.getAllMaterialGroups();
 
+            model.NewInMedicin = new SelectList(
+              new List<SelectListItem>
+              {
+                        new SelectListItem { Text = "не выбрано", Value =""},
+                        new SelectListItem { Text = "Мира", Value ="world"},
+                        new SelectListItem { Text = "России", Value ="russia"},
+                        new SelectListItem { Text = "Чувашии", Value = "chuvashia" }
+              }, "Value", "Text"
+          );
+
+
+
             #region Метатеги
             ViewBag.Title = UserResolutionInfo.Title;
             ViewBag.Description = "";
@@ -127,9 +139,21 @@ namespace Disly.Areas.Admin.Controllers
                     Id = Id,
                     Date = DateTime.Now
                 };
+           
             }
-
-
+            else
+            {
+                model.NewInMedicin = new SelectList(
+                      new List<SelectListItem>
+                      {
+                        new SelectListItem { Text = "не выбрано", Value =""},
+                        new SelectListItem { Text = "Мира", Value ="world"},
+                        new SelectListItem { Text = "России", Value ="russia"},
+                        new SelectListItem { Text = "Чувашии", Value = "chuvashia" }
+                      }, "Value", "Text",model.Item.SmiType
+                  );
+            }
+            
             if (model.Item.PreviewImage != null && model.Item.PreviewImage != null && !string.IsNullOrEmpty(model.Item.PreviewImage.Url))
             {
                 var photo = model.Item.PreviewImage;
@@ -272,6 +296,8 @@ namespace Disly.Areas.Admin.Controllers
                 }
 
                 //Определяем Insert или Update
+                bindData.Item.ContentLink = SiteInfo.ContentId;
+                bindData.Item.ContentLinkType = SiteInfo.Type;
                 if (getMaterial != null)
                 {
                     userMessage.info = "Запись обновлена";
@@ -280,9 +306,7 @@ namespace Disly.Areas.Admin.Controllers
 
                 else
                 {
-                    userMessage.info = "Запись добавлена";
-                    bindData.Item.ContentLink = SiteInfo.ContentId;
-                    bindData.Item.ContentLinkType = SiteInfo.Type;
+                    userMessage.info = "Запись добавлена";                    
                     res = _cmsRepository.insertCmsMaterial(bindData.Item);
                 }
                 //Сообщение пользователю
@@ -321,6 +345,16 @@ namespace Disly.Areas.Admin.Controllers
                 model.Item.PreviewImage = Files.getInfoImage(model.Item.PreviewImage.Url);
                 model.Item.PreviewImage.Source = photo.Source;
             }
+            model.NewInMedicin = new SelectList(
+                   new List<SelectListItem>
+                   {
+                        new SelectListItem { Text = "не выбрано", Value =""},
+                        new SelectListItem { Text = "Мира", Value ="world"},
+                        new SelectListItem { Text = "России", Value ="russia"},
+                        new SelectListItem { Text = "Чувашии", Value = "chuvashia" }
+                   }, "Value", "Text", model.Item.SmiType
+               );
+
             model.ErrorInfo = userMessage;
 
             ViewBag.AllGroups = Groups;

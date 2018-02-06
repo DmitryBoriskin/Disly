@@ -32,7 +32,7 @@
                         {
                             <div class="col-md-4">
                                 <div class="depart_phone_wr">
-                                    @Html.TextBoxFor(m => m.DepartmentItem.Phones[i].Value, new { type = "text", title = @Model.DepartmentItem.Phones[i].Label })
+                                    @Html.TextBoxFor(m => m.DepartmentItem.Phones[i].Value, new { type = "text", disabled = "disabled", title = @Model.DepartmentItem.Phones[i].Label })
                                     <a class="depart_phone_del" data-id="@Model.DepartmentItem.Phones[i].Id"></a>
                                 </div>
                             </div>

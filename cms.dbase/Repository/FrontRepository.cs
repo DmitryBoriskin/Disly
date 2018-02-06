@@ -766,16 +766,54 @@ namespace cms.dbase
         }
 
         /// <summary>
+        /// Получаем главную новость сайта
+        /// </summary>
+        /// <returns></returns>
+        public override MaterialFrontModule getMaterialsImportant()
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var contentType = ContentType.MATERIAL.ToString().ToLower();
+
+                var materials = db.content_content_links.Where(e => e.f_content_type == contentType && e.b_important==true)
+                    .Join(db.cms_sitess.Where(o => o.c_alias ==_domain),
+                            e => e.f_link,
+                            o => o.f_content,
+                            (e, o) => e.f_content
+                            );
+
+                if (!materials.Any())
+                    return null;
+
+                var query = db.content_materialss
+                        .Where(w => materials.Contains(w.id));
+                if (query.Any())
+                {
+                    return query.Select(s => new MaterialFrontModule {
+                        Title = s.c_title,
+                        Alias = s.c_alias,
+                        Date = s.d_date,                        
+                        Photo = s.c_preview
+                    }).Single();
+                }
+                return null;
+
+
+
+            }
+        }
+
+        /// <summary>
         /// Получим список новостей для определенной сущности
         /// </summary>
         /// <param name="filter">Фильтр</param>
         /// <returns></returns>
-        public override MaterialsList getMaterialsList(FilterParams filter)
+        public override MaterialsList getMaterialsList(MaterialFilter filter)
         {
             using (var db = new CMSdb(_context))
             {
                 if (!string.IsNullOrEmpty(filter.Domain))
-                {
+                {                    
                     var contentType = ContentType.MATERIAL.ToString().ToLower();
 
                     //Запрос типа:
@@ -809,6 +847,11 @@ namespace cms.dbase
                     if (filter.DateEnd != null)
                     {
                         query = query.Where(w => w.d_date <= filter.DateEnd);
+                    }
+
+                    if (!String.IsNullOrEmpty(filter.SmiType))
+                    {
+                        query = query.Where(w => w.c_smi_type == filter.SmiType);
                     }
 
                     if (!String.IsNullOrEmpty(filter.Category))

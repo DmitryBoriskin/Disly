@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Web;
+using System.Web.Mvc;
 
 /// <summary>
 /// Типы контента
@@ -24,3 +25,4 @@ public enum ContentLinkType
     SPEC = 3,
     SITE = 4
 }
+

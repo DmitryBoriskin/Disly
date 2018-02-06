@@ -353,10 +353,11 @@ namespace cms.dbase
                         Desc = s.c_desc,
                         Disabled = s.b_disabled,
                         Important = s.b_important,
+                        SmiType=s.c_smi_type,
                         CountSee = s.n_count_see,
                         Locked = s.b_locked,
                         ContentLink = (Guid)s.f_content_origin,
-                        ContentLinkType = s.c_content_type_origin,
+                        ContentLinkType = s.c_content_type_origin,                        
                         GroupsId = s.fkcontentmaterialsgroupslinkmaterials
                                     .Select(g =>
                                     g.f_group).ToArray(),
@@ -369,7 +370,11 @@ namespace cms.dbase
                     });
 
                 if (data.Any())
-                    return data.First();
+                {
+                    var data1 = data.Single();
+                    data1.Important = db.content_content_links.Where(w => w.f_content == id && w.b_important==true).Any();
+                    return data1;
+                }                    
                 else
                     return null;
             }
@@ -416,7 +421,8 @@ namespace cms.dbase
                             n_year = material.Date.Year,
                             f_content_origin = material.ContentLink,
                             c_content_type_origin = material.ContentLinkType,
-                            b_locked = material.Locked
+                            b_locked = material.Locked,
+                            c_smi_type=material.SmiType
                         };
 
                         // добавляем принадлежность к сущности(ссылку на организацию/событие/персону)
@@ -427,11 +433,28 @@ namespace cms.dbase
                             f_content_type = ContentType.MATERIAL.ToString().ToLower(),
                             f_link = material.ContentLink,
                             f_link_type = material.ContentLinkType,
-                            b_origin = true
+                            b_origin = true,
+                            b_important= material.Important
                         };
+
+                        #region удаляем признак важности в остальных новостях
+                        if (material.Important)
+                        {
+                            
+                            var q1 = db.content_content_links
+                                .Where(w => w.f_link == material.ContentLink && w.f_content_type == "material" && w.b_important == true);
+
+                            q1.Set(w => w.b_important, false)
+                                .Update();
+                        } 
+                        #endregion
 
                         db.Insert(cdMaterial);
                         db.Insert(cdMaterialLink);
+
+
+                     
+
 
                         db_updateMaterialGroups(db, material.Id, material.GroupsId);
 
@@ -498,15 +521,34 @@ namespace cms.dbase
                         cdMaterial.c_url_name = material.UrlName;
                         cdMaterial.c_desc = material.Desc;
                         cdMaterial.c_keyw = material.Keyw;
-                        cdMaterial.b_important = material.Important;
+                        //cdMaterial.b_important = material.Important;
                         cdMaterial.b_disabled = material.Disabled;
                         cdMaterial.n_day = material.Date.Day;
                         cdMaterial.n_month = material.Date.Month;
                         cdMaterial.n_year = material.Date.Year;
                         cdMaterial.b_locked = material.Locked;
+                        cdMaterial.c_smi_type = material.SmiType;
 
                         db.Update(cdMaterial);
                         db_updateMaterialGroups(db, material.Id, material.GroupsId);
+
+                        #region главная новость
+                        if (material.Important)
+                        {
+                            //удаляем признак важности в остальных новостях
+                            db.content_content_links
+                                .Where(w => w.f_link == material.ContentLink && w.f_content_type == "material" && w.b_important == true)
+                                .Set(w => w.b_important, false)
+                                .Update();
+                        }
+                        //признак важности
+                        db.content_content_links
+                            .Where(w => w.f_content == material.Id)
+                            .Set(s => s.b_important, material.Important)
+                            .Update();
+
+                        #endregion
+
 
                         var log = new LogModel()
                         {
