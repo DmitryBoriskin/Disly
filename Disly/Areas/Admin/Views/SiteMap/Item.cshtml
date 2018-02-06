@@ -147,9 +147,9 @@
                     {
                         foreach (var item in Model.MenuTypes)
                         {
-                            string Locked = (item.available || (Model.Account.Group.ToLower().Equals("developer") || Model.Account.Group.ToLower().Equals("administrator"))) ? "" : "style=display:none";
-                            string Selcted = (Model.Item.MenuGroups != null && Model.Item.MenuGroups.Contains(item.value)) ? "selected=selected" : "";
-                            <option value="@item.value" @Locked @Selcted>@item.text</option>
+                            string Locked = (item.Available || (Model.Account.Group.ToLower().Equals("developer") || Model.Account.Group.ToLower().Equals("administrator"))) ? "" : "style=display:none";
+                            string Selcted = (Model.Item.MenuGroups != null && Model.Item.MenuGroups.Contains(item.Value)) ? "selected=selected" : "";
+                            <option value="@item.Value" @Locked @Selcted>@item.Text</option>
                         }
                     }
                 </select>

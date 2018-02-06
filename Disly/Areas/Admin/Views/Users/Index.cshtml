@@ -29,12 +29,7 @@
 
     <div class="dop_info-block">
         <div class="dop-caption">Фильтр</div>
-        @Html.TextBox("searchtext", Request.QueryString["searchtext"], new { @title = "Поиск", @placeholder = "Поиск по ФИО и E-Mail", @MaxLength = "512" })
-        @Html.CheckBox("disabled", Convert.ToBoolean(Request.QueryString["disabled"]), new { @title = "Отображать", @data_on = "Только запрещенные", @data_onstyle = "danger", @data_off = "Все записи", @data_width = "270" })
-        <div class="row">
-            <div class="col-md-6"><button type="submit" name="action" value="search-btn" class="button btn-primary">Применить</button></div>
-            <div class="col-md-6"><button type="submit" name="action" value="clear-btn" class="button btn-default">Сбросить</button></div>
-        </div>
+        @Html.Partial("Part/SearchFilter")
     </div>
     
     <div class="buttons">

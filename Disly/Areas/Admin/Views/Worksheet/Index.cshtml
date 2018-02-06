@@ -38,16 +38,7 @@
 
     <div class="dop_info-block">
         <div class="dop-caption">Фильтр</div>
-        @Html.TextBox("filter", Request.QueryString["filter"], new { @class = "uc_input", @title = "Поиск по ключевым словам", @placeholder = "поиск...", @MaxLength = "512" })
-        @Html.CheckBox("enabeld", String.IsNullOrEmpty(Request.QueryString["enabeld"]), new { @class = "uc_input", @title = "Отображать", @data_on = "Все записи", @data_off = "Только запрещенные", @data_width = "270" })
-        <div class="row">
-            <div class="col-xs-6">@Html.TextBox("datestart", Request.QueryString["datestart"], new { @class = "uc_input", @data_type = "date", @title = "Дата публикации с", @placeholder = "дд.мм.гггг" })</div>
-            <div class="col-xs-6">@Html.TextBox("dateend", Request.QueryString["dateend"], new { @class = "uc_input", @data_type = "date", @title = "по", @placeholder = "дд.мм.гггг" })</div>
-        </div>
-        <div class="row">
-            <div class="col-md-6"><button type="submit" name="action" value="search-btn" class="button btn-primary">Применить</button></div>
-            <div class="col-md-6"><button type="submit" name="action" value="clear-btn" class="button btn-default">Сбросить</button></div>
-        </div>
+        @Html.Partial("Part/SearchFilter")
     </div>
 
     <div class="buttons">

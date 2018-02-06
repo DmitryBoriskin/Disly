@@ -80,9 +80,6 @@ namespace Disly.Areas.Admin.Controllers
                 :
                 ViewBag.DataPath + model.Item.DateBegin.ToString("yyyy") + "/" + model.Item.DateBegin.ToString("MM") + "/" + model.Item.DateBegin.ToString("dd") + "/";
 
-
-
-
             if (model.Item == null)
                 model.Item = new EventsModel()
                 {
@@ -121,19 +118,23 @@ namespace Disly.Areas.Admin.Controllers
 
 
         /// <summary>
-        /// Формируем строку фильтра
+        /// 
         /// </summary>
-        /// <param name="title_serch">Поиск по названию</param>
+        /// <param name="searchtext"></param>
+        /// <param name="disabled"></param>
+        /// <param name="size"></param>
+        /// <param name="date"></param>
+        /// <param name="dateend"></param>
         /// <returns></returns>
         [HttpPost]
         [MultiButton(MatchFormKey = "action", MatchFormValue = "search-btn")]
-        public ActionResult Search(string filter, bool enabeld, string size)
+        public ActionResult Search(string searchtext, bool disabled, string size, DateTime? date, DateTime? dateend)
         {
             string query = HttpUtility.UrlDecode(Request.Url.Query);
-            query = AddFiltrParam(query, "filter", filter);
-            if (enabeld) query = AddFiltrParam(query, "enabeld", String.Empty);
-            else query = AddFiltrParam(query, "enabeld", enabeld.ToString().ToLower());
-
+            query = AddFiltrParam(query, "searchtext", searchtext);
+            query = AddFiltrParam(query, "disabled", disabled.ToString().ToLower());
+            query = (date.HasValue) ? AddFiltrParam(query, "date", date.Value.ToString("dd.MM.yyyy").ToLower()) : null;
+            query = (dateend.HasValue) ? AddFiltrParam(query, "dateend", dateend.Value.ToString("dd.MM.yyyy").ToLower()) : null;
             query = AddFiltrParam(query, "page", String.Empty);
             query = AddFiltrParam(query, "size", size);
 

@@ -85,9 +85,13 @@ namespace Disly.Areas.Admin.Controllers
         }
 
         /// <summary>
-        /// Формируем строку фильтра
+        /// 
         /// </summary>
-        /// <param name="title_serch">Поиск по названию</param>
+        /// <param name="searchtext"></param>
+        /// <param name="disabled"></param>
+        /// <param name="size"></param>
+        /// <param name="date"></param>
+        /// <param name="dateend"></param>
         /// <returns></returns>
         [HttpPost]
         [MultiButton(MatchFormKey = "action", MatchFormValue = "search-btn")]
@@ -96,6 +100,11 @@ namespace Disly.Areas.Admin.Controllers
             string query = HttpUtility.UrlDecode(Request.Url.Query);
             query = AddFiltrParam(query, "searchtext", searchtext);
             query = AddFiltrParam(query, "disabled", disabled.ToString().ToLower());
+            query = (date.HasValue) ? AddFiltrParam(query, "date", date.Value.ToString("dd.MM.yyyy").ToLower()) : null;
+            query = (dateend.HasValue) ? AddFiltrParam(query, "dateend", dateend.Value.ToString("dd.MM.yyyy").ToLower()) : null;
+            query = AddFiltrParam(query, "page", String.Empty);
+            query = AddFiltrParam(query, "size", size);
+
             return Redirect(StartUrl + query);
         }
 
