@@ -45,6 +45,9 @@ namespace Disly.Controllers
 
             if (model.SitesInfo.Alias == "main" && !IsSpecVersion)
             {
+
+                model.ImportantMaterials = _repository.getMaterialsImportant();
+
                 _ViewName = _ViewName.ToLower().Replace("views/", "views/_portal/");//спец вьюха для главного сайта 
             }
             return View(_ViewName, model);

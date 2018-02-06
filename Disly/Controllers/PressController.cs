@@ -1,6 +1,7 @@
 ﻿using cms.dbase;
 using Disly.Models;
 using System;
+using System.Collections.Generic;
 using System.Web;
 using System.Web.Mvc;
 
@@ -57,7 +58,10 @@ namespace Disly.Controllers
             ViewBag.Category = (RouteData.Values["category"] != null) ? RouteData.Values["category"] : String.Empty;
             var filter = getFilter();
             filter.Disabled = false;
-            model.List = _repository.getMaterialsList(filter);
+            MaterialFilter filternews = FilterParams.Extend<MaterialFilter>(filter);
+            filternews.SmiType = (String.IsNullOrEmpty(Request.QueryString["smitype"])) ? String.Empty : Request.QueryString["smitype"];
+
+            model.List = _repository.getMaterialsList(filternews);
 
             ViewBag.FilterSearchText = filter.SearchText;
             ViewBag.FilterDate = filter.Date;
@@ -117,12 +121,30 @@ namespace Disly.Controllers
             var filter = getFilter();
             filter.Disabled = false;
             filter.Category = category;
-            model.List = _repository.getMaterialsList(filter);
+            MaterialFilter filternews = FilterParams.Extend<MaterialFilter>(filter);
+            filternews.SmiType = (String.IsNullOrEmpty(Request.QueryString["smitype"])) ? String.Empty : Request.QueryString["smitype"];
+            model.List = _repository.getMaterialsList(filternews);
 
             ViewBag.FilterCategory = filter.Category;
             ViewBag.FilterSearchText = filter.SearchText;
             ViewBag.FilterDate = filter.Date;
             ViewBag.FilterDateEnd = filter.DateEnd;
+
+            if(filter.Category== "new-in-medicine")
+            {
+
+                model.NewInMedicin = new SelectList(
+                   new List<SelectListItem>
+                   {
+                                new SelectListItem { Text = "не выбрано", Value =""},
+                                new SelectListItem { Text = "Мира", Value ="world"},
+                                new SelectListItem { Text = "России", Value ="russia"},
+                                new SelectListItem { Text = "Чувашии", Value = "chuvashia" }
+                   }, "Value", "Text", filternews.SmiType
+              );
+            }
+            
+
 
             return View(_ViewName, model);
         }
@@ -134,7 +156,11 @@ namespace Disly.Controllers
             ViewBag.Category = (RouteData.Values["category"] != null) ? RouteData.Values["category"] : String.Empty;
             var filter = getFilter();
             filter.Disabled = false;
-            model.List = _repository.getMaterialsList(filter);
+
+            MaterialFilter filternews = FilterParams.Extend<MaterialFilter>(filter);
+            filternews.SmiType = (String.IsNullOrEmpty(Request.QueryString["smitype"])) ? String.Empty : Request.QueryString["smitype"];
+
+            model.List = _repository.getMaterialsList(filternews);
 
             ViewBag.Filter = filter;
             ViewBag.NewsSearchArea = filter.SearchText;
@@ -152,7 +178,11 @@ namespace Disly.Controllers
             Response.ContentType = "text/xml";
             var filter = getFilter();
             filter.Disabled = false;
-            model.List = _repository.getMaterialsList(filter);
+
+            MaterialFilter filternews = FilterParams.Extend<MaterialFilter>(filter);
+            filternews.SmiType = (String.IsNullOrEmpty(Request.QueryString["smitype"])) ? String.Empty : Request.QueryString["smitype"];
+
+            model.List = _repository.getMaterialsList(filternews);
             if (model.List != null)
             {
                 ViewBag.LastDatePublish = model.List.Data[0].Date;

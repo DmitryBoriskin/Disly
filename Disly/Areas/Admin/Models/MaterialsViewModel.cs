@@ -1,5 +1,6 @@
 ﻿using cms.dbModel.entity;
 using System.Collections.Generic;
+using System.Web.Mvc;
 
 namespace Disly.Areas.Admin.Models
 {
@@ -30,5 +31,8 @@ namespace Disly.Areas.Admin.Models
         public RssItem[] RssObject { get; set; }        
         public RssChannel RssChannel { get; set; }
         public RssChannel[] RssChannelList { get; set; }
+
+
+        public SelectList NewInMedicin { get; set; }
     }
 }
