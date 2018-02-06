@@ -40,13 +40,13 @@ namespace cms.dbase
             using (var db = new CMSdb(_context))
             {
                 var data = db.cms_sitess
-                    .Where(w => w.c_alias.Equals(domain))
+                    .Where(w => w.c_alias.ToLower().Equals(domain))
                     .Select(s => new SitesModel
                     {
                         Id = s.id,
                         Title = s.c_name,
                         LongTitle = s.c_name_long,
-                        Alias = s.c_alias,
+                        Alias = s.c_alias.ToLower(),
                         Adress = s.c_adress,
                         Phone = s.c_phone,
                         Fax = s.c_fax,
@@ -94,7 +94,7 @@ namespace cms.dbase
                 {
                     Title = s.c_title,
                     Text = s.c_text,
-                    Alias = s.c_alias,
+                    Alias = s.c_alias.ToLower(),
                     Path = s.c_path,
                     Id = s.id,
                     FrontSection = s.f_front_section,
@@ -127,7 +127,7 @@ namespace cms.dbase
                         Id = s.id,
                         Title = s.c_title,
                         Text = s.c_text,
-                        Alias = s.c_alias,
+                        Alias = s.c_alias.ToLower(),
                         Date = s.d_date,
                         Year = s.n_year,
                         Month = s.n_month,
@@ -221,13 +221,13 @@ namespace cms.dbase
             using (var db = new CMSdb(_context))
             {
                 var data = db.cms_sitess
-                    .Where(w => w.c_alias.Equals(domain))
+                    .Where(w => w.c_alias.ToLower().Equals(domain))
                     .Select(s => new SitesModel
                     {
                         Id = s.id,
                         Title = s.c_name,
                         LongTitle = s.c_name_long,
-                        Alias = s.c_alias,
+                        Alias = s.c_alias.ToLower(),
                         Adress = s.c_adress,
                         Phone = s.c_phone,
                         Fax = s.c_fax,
@@ -267,7 +267,7 @@ namespace cms.dbase
             using (var db = new CMSdb(_context))
             {
                 var data = db.cms_sites_domainss
-                    .Where(w => w.f_site == siteId)
+                    .Where(w => w.f_site.ToLower() == siteId)
                     .Where(w => w.b_default == true);
 
                 try
@@ -322,7 +322,7 @@ namespace cms.dbase
                     {
                         Title = s.c_title,
                         Path = s.c_path,
-                        Alias = s.c_alias,
+                        Alias = s.c_alias.ToLower(),
                         FrontSection = s.f_front_section
                     });
 
@@ -352,7 +352,7 @@ namespace cms.dbase
                         Site = s.f_site,
                         FrontSection = s.f_front_section,
                         Path = s.c_path,
-                        Alias = s.c_alias,
+                        Alias = s.c_alias.ToLower(),
                         Title = s.c_title,
                         Text = s.c_text,
                         Preview = s.c_preview,
@@ -489,7 +489,7 @@ namespace cms.dbase
                 {
                     Title = s.c_title,
                     Text = s.c_text,
-                    Alias = s.c_alias,
+                    Alias = s.c_alias.ToLower(),
                     Path = s.c_path,
                     Id = s.id,
                     FrontSection = s.f_front_section,
@@ -523,7 +523,7 @@ namespace cms.dbase
                 {
                     Title = s.c_title,
                     Text = s.c_text,
-                    Alias = s.c_alias,
+                    Alias = s.c_alias.ToLower(),
                     Path = s.c_path,
                     Id = s.id,
                     ParentId = s.uui_parent,
@@ -549,7 +549,7 @@ namespace cms.dbase
                 var query = db.content_sitemaps
                     .Where(w => w.f_site.Equals(_domain))
                     .Where(w => w.c_path.Equals(path))
-                    .Select(s => s.c_alias);
+                    .Select(s => s.c_alias.ToLower());
 
                 if (!query.Any()) return null;
                 return query.ToArray();
@@ -575,7 +575,7 @@ namespace cms.dbase
                     {
                         Id = s.id,
                         Title = s.c_title,
-                        Alias = s.c_alias,
+                        Alias = s.c_alias.ToLower(),
                         Path = s.c_path,
                         FrontSection = s.f_front_section,
                         Url = s.c_url,
@@ -605,7 +605,7 @@ namespace cms.dbase
                                  .Select(c => new SiteMapModel
                                  {
                                      Title = c.c_title,
-                                     Alias = c.c_alias,
+                                     Alias = c.c_alias.ToLower(),
                                      Path = c.c_path,
                                      FrontSection = c.f_front_section,
                                      Url = c.c_url
@@ -667,12 +667,12 @@ namespace cms.dbase
                     var getContentSitemaps = db.content_sitemaps
                                 .Where(w => w.f_site == domain)
                                 .Where(w => w.c_path == _path)
-                                .Where(w => w.c_alias == _alias)
+                                .Where(w => w.c_alias.ToLower() == _alias.ToLower())
                                 //.Take(1)
                                 .Select(w => new Breadcrumbs
                                 {
                                     Title = w.c_title,
-                                    Url = w.c_path + w.c_alias
+                                    Url = w.c_path + w.c_alias.ToLower()
                                 });
                     if (getContentSitemaps.Any())
                         try
@@ -713,7 +713,7 @@ namespace cms.dbase
 
                 // список id-новостей для данного сайта
                 var materialIds = db.content_content_links.Where(e => e.f_content_type == contentType)
-                    .Join(db.cms_sitess.Where(o => o.c_alias == domain),
+                    .Join(db.cms_sitess.Where(o => o.c_alias.ToLower() == domain),
                             e => e.f_link,
                             o => o.f_content,
                             (e, o) => e.f_content
@@ -745,7 +745,7 @@ namespace cms.dbase
                         .Select(s => new MaterialFrontModule
                         {
                             Title = s.c_title,
-                            Alias = s.c_alias,
+                            Alias = s.c_alias.ToLower(),
                             Date = s.d_date,
                             GroupName = s.group_title,
                             GroupAlias = s.group_alias,
@@ -820,7 +820,7 @@ namespace cms.dbase
                     //Select t.*, s.* from[dbo].[content_content_link] t left join[dbo].[cms_sites] s
                     //on t.f_link = s.f_content Where s.c_alias = 'main'
                     var materials = db.content_content_links.Where(e => e.f_content_type == contentType)
-                        .Join(db.cms_sitess.Where(o => o.c_alias == filter.Domain),
+                        .Join(db.cms_sitess.Where(o => o.c_alias.ToLower() == filter.Domain),
                                 e => e.f_link,
                                 o => o.f_content,
                                 (e, o) => e.f_content
@@ -861,7 +861,7 @@ namespace cms.dbase
                             query = query.Where(w => w.d_date <= DateTime.Now);
                         }
 
-                        var category = db.content_materials_groupss.Where(w => w.c_alias == filter.Category);
+                        var category = db.content_materials_groupss.Where(w => w.c_alias.ToLower() == filter.Category);
                         if (category.Any())
                         {
                             var cat = category.First().id;
@@ -887,7 +887,7 @@ namespace cms.dbase
                             {
                                 Id = s.id,
                                 Title = s.c_title,
-                                Alias = s.c_alias,
+                                Alias = s.c_alias.ToLower(),
                                 Year = s.n_year,
                                 Month = s.n_month,
                                 Day = s.n_day,
@@ -945,7 +945,7 @@ namespace cms.dbase
 
 
                 var materials = db.content_content_links.Where(e => e.f_content_type == contentType)
-                                                        .Join(db.cms_sitess.Where(o => o.c_alias == domain),
+                                                        .Join(db.cms_sitess.Where(o => o.c_alias.ToLower() == domain),
                                                                    e => e.f_link,
                                                                    o => o.f_content,
                                                                    (e, o) => e.f_content
@@ -1013,7 +1013,7 @@ namespace cms.dbase
                     .OrderBy(o => o.n_sort)
                     .Select(s => new MaterialsGroup
                     {
-                        Alias = s.c_alias,
+                        Alias = s.c_alias.ToLower(),
                         Title = s.c_title
                     });
 
@@ -1055,7 +1055,7 @@ namespace cms.dbase
                             join site in db.cms_sitess on str.f_ord equals site.f_content
                             join dep in db.content_departmentss on str.id equals dep.f_structure
                             orderby str.n_sort
-                            where site.c_alias.Equals(domain)
+                            where site.c_alias.ToLower().Equals(domain)
                             select new { str, dep };
 
                 var data = query.ToArray()
@@ -1139,7 +1139,7 @@ namespace cms.dbase
             using (var db = new CMSdb(_context))
             {
                 var data = db.content_org_structures.Where(w => w.num == num)
-                           .Join(db.cms_sitess.Where(o => o.c_alias == domain), o => o.f_ord, e => e.f_content, (e, o) => e)
+                           .Join(db.cms_sitess.Where(o => o.c_alias.ToLower() == domain), o => o.f_ord, e => e.f_content, (e, o) => e)
                            .Select(s => new StructureModel()
                            {
                                Id = s.id,
@@ -1408,7 +1408,7 @@ namespace cms.dbase
 
                 if (!string.IsNullOrEmpty(domain))
                 {
-                    data = data.Where(n => n.p.s.c_alias == domain);
+                    data = data.Where(n => n.p.s.c_alias.ToLower() == domain);
                 }
 
                 if (filter.Specialization != null && filter.Specialization.Count() > 0)
@@ -1515,7 +1515,7 @@ namespace cms.dbase
             string domain = _domain;
             using (var db = new CMSdb(_context))
             {
-                var data = db.cms_sitess.Where(w => w.c_alias == domain)
+                var data = db.cms_sitess.Where(w => w.c_alias.ToLower() == domain)
                            .Join(db.content_orgss, e => e.f_content, o => o.id, (e, o) => o)
                            .Join(db.content_org_structures, n => n.id, m => m.f_ord, (n, m) => m)
                            .Select(s => new StructureModel()
@@ -1546,7 +1546,7 @@ namespace cms.dbase
                              join pol in db.content_people_org_links on s.f_content equals pol.f_org
                              join pepl in db.content_people_employee_posts_links on pol.f_people equals pepl.f_people
                              join ep in db.content_employee_postss on pepl.f_post equals ep.id
-                             where s.c_alias.Equals(domain) && ep.b_doctor
+                             where s.c_alias.ToLower().Equals(domain) && ep.b_doctor
                              select new PeoplePost
                              {
                                  Id = ep.id,
@@ -1573,7 +1573,7 @@ namespace cms.dbase
             string domain = !string.IsNullOrEmpty(siteId) ? siteId : _domain;
             using (var db = new CMSdb(_context))
             {
-                var data = db.cms_sitess.Where(w => w.c_alias == domain)
+                var data = db.cms_sitess.Where(w => w.c_alias.ToLower() == domain)
                              .Join(db.content_orgss, e => e.f_content, o => o.id, (e, o) => o)
                              .Select(s => new OrgsModel
                              {
@@ -1772,7 +1772,7 @@ namespace cms.dbase
         {
             using (var db = new CMSdb(_context))
             {
-                var query = db.cms_sitess.Where(w => w.c_alias == domain);
+                var query = db.cms_sitess.Where(w => w.c_alias.ToLower() == domain);
                 if (query.Any())
                 {
                     var data = query.Single();
@@ -1814,7 +1814,7 @@ namespace cms.dbase
                 return
                     (from s in db.cms_sitess
                      join o in db.content_orgss on s.f_content equals o.id
-                     where s.c_alias.Equals(_domain)
+                     where s.c_alias.ToLower().Equals(_domain)
                      select o.f_oid
                     ).SingleOrDefault();
             }
@@ -2020,7 +2020,7 @@ namespace cms.dbase
                 var site = db.cms_sitess.Where(w => w.f_content == ContentId);
                 if (site.Any())
                 {
-                    string SiteId = site.Single().c_alias;
+                    string SiteId = site.Single().c_alias.ToLower();
                     var domains = db.cms_sites_domainss.Where(w => w.f_site == SiteId).OrderByDescending(o => o.b_default);
                     if (domains.Any())
                     {
@@ -2109,7 +2109,7 @@ namespace cms.dbase
                                  join o in db.content_orgss on s.f_content equals o.id
                                  join omsl in db.content_orgs_medical_services_linkss on o.id equals omsl.f_org
                                  join ms in db.content_medical_servicess on omsl.f_medical_service equals ms.id
-                                 where s.c_alias.Equals(domain)
+                                 where s.c_alias.ToLower().Equals(domain)
                                  orderby ms.n_sort
                                  select new MedicalService
                                  {
@@ -2172,7 +2172,7 @@ namespace cms.dbase
                                  Email = o.c_email,
                                  Address = o.c_adress,
                                  Logo = o.c_logo,
-                                 Link = s.c_alias,
+                                 Link = s.c_alias.ToLower(),
                                  Leader = new OrgsAdministrative
                                  {
                                      id = p.f_people,
@@ -2267,7 +2267,7 @@ namespace cms.dbase
                                        name = ep.c_name,
                                        org = pol.f_org,
                                        title = !string.IsNullOrEmpty(o.c_title_short) ? o.c_title_short : o.c_title,
-                                       domain = s.c_alias
+                                       domain = s.c_alias.ToLower()
                                    },
                                    pepl = new
                                    {
@@ -2525,7 +2525,7 @@ namespace cms.dbase
                         Id = s.id,
                         Count = s.n_count,
                         Title = s.c_title,
-                        Alias = s.c_alias,
+                        Alias = s.c_alias.ToLower(),
                         Text = s.c_text,
                         Url = s.c_url,
                         DateBegin = s.d_date,
@@ -2557,7 +2557,7 @@ namespace cms.dbase
                 var eventFilter = (from s in db.cms_sitess
                                 join cct in db.content_content_links on s.f_content equals cct.f_link
                                 join e in db.content_eventss on cct.f_content equals e.id
-                                where s.c_alias.Equals(domain) && cct.f_content_type.Equals(contentType)
+                                where s.c_alias.ToLower().Equals(domain) && cct.f_content_type.Equals(contentType)
                                 select e.id);
 
                 if (!eventFilter.Any())
@@ -2598,7 +2598,7 @@ namespace cms.dbase
                         Id = s.id,
                         Num = s.num,
                         Title = s.c_title,
-                        Alias = s.c_alias,
+                        Alias = s.c_alias.ToLower(),
                         DateBegin = s.d_date,
                         DateEnd = s.d_date_end,
                         PreviewImage = new Photo { Url = s.c_preview },
@@ -2646,7 +2646,7 @@ namespace cms.dbase
                         Num = s.num,
                         Title = s.c_title,
                         Text = s.c_text,
-                        Alias = s.c_alias,
+                        Alias = s.c_alias.ToLower(),
                         DateBegin = s.d_date,
                         DateEnd = s.d_date_end,
                         PreviewImage = new Photo { Url = s.c_preview },
@@ -2704,7 +2704,7 @@ namespace cms.dbase
                                  Id = ms.id,
                                  Name = ms.c_name,
                                  Desc = ms.c_desc,
-                                 Domain = s.c_alias,
+                                 Domain = s.c_alias.ToLower(),
                                  DomainUrl = getSiteDefaultDomain(s.c_alias)
                              }
                     );
@@ -2731,7 +2731,7 @@ namespace cms.dbase
         {
             using (var db = new CMSdb(_context))
             {
-                var query = db.cms_sitess.Where(w => w.c_alias == _domain && w.c_content_type == "spec")
+                var query = db.cms_sitess.Where(w => w.c_alias.ToLower() == _domain && w.c_content_type == "spec")
                                          .Join(
                                                  db.content_main_specialist_employees_links,
                                                  e => e.f_content,

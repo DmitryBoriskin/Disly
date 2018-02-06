@@ -70,6 +70,39 @@ namespace Disly.Areas.Admin.Controllers
             // Наполняем модель списка данными
             model.List = _cmsRepository.getSiteMapList(Domain, filter);
 
+            #region Group filter
+            var alias = "group";
+            var editGroupUrl = "/admin/services/sitemapmenu/";
+
+            string Link = Request.Url.Query;
+            string active = Request.QueryString[alias];
+
+            if(model.MenuTypes != null && model.MenuTypes.Count() > 0)
+            {
+                model.Filtr = new FiltrModel()
+                {
+                    Title = "Группы меню",
+                    Icon = "icon-th-list-3",
+                    BtnName = "Новая группа меню",
+                    Alias = alias,
+                    Url = editGroupUrl,
+                    ReadOnly = true,
+                    AccountGroup = (model.Account != null) ? model.Account.Group : "",
+                    Items = model.MenuTypes.Select(p =>
+                        new Catalog_list()
+                        {
+                            Text = p.Text,
+                            Value = p.Value,
+                            Link = AddFiltrParam(Link, alias, p.Value),
+                            Url = editGroupUrl + p.Value + "/",
+                            Selected = (active == p.Value) ? true : false
+                        })
+                        .ToArray(),
+                    Link = AddFiltrParam(Link, alias, "")
+                };
+            }
+            #endregion
+
             ViewBag.Group = filter.Group;
 
             return View(model);
@@ -276,7 +309,7 @@ namespace Disly.Areas.Admin.Controllers
                     {
                         //Если запись заблокирована от редактирования некоторых полей
                         var siteMapItem = _cmsRepository.getSiteMapItem(id);
-                        if (siteMapItem.Blocked && !model.Account.Group.ToLower().Equals("developer") && !model.Account.Group.ToLower().Equals("administrator"))
+                        if (siteMapItem.Blocked && !model.Account.Group.Equals("developer") && !model.Account.Group.Equals("administrator"))
                         {
                             siteMapItem.Disabled = back_model.Item.Disabled;
                             siteMapItem.DisabledMenu = back_model.Item.DisabledMenu;
@@ -338,8 +371,8 @@ namespace Disly.Areas.Admin.Controllers
             ViewBag.GroupMenu = mg;
 
             var aviable = (model.MenuTypes != null) ?
-                        (model.MenuTypes.Where(t => t.available).Any()) ?
-                                    model.MenuTypes.Where(t => t.available).ToArray() : new Catalog_list[] { }
+                        (model.MenuTypes.Where(t => t.Available).Any()) ?
+                                    model.MenuTypes.Where(t => t.Available).ToArray() : new Catalog_list[] { }
                                         : new Catalog_list[] { };
 
 

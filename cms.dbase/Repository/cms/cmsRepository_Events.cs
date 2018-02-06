@@ -64,7 +64,7 @@ namespace cms.dbase
                         Id = s.id,
                         Num = s.num,
                         Title = s.c_title,
-                        Alias = s.c_alias,
+                        Alias = s.c_alias.ToLower(),
                         Place = s.c_place,
                         EventMaker = s.c_organizer,
                         PreviewImage = new Photo()
@@ -100,7 +100,7 @@ namespace cms.dbase
                 {
                     var contentType = ContentType.EVENT.ToString().ToLower();
                     var events = db.content_content_links.Where(e => e.f_content_type == contentType)
-                            .Join(db.cms_sitess.Where(o => o.c_alias == filtr.Domain),
+                            .Join(db.cms_sitess.Where(o => o.c_alias.ToLower() == filtr.Domain),
                                     e => e.f_link,
                                     o => o.f_content,
                                     (e, o) => e.f_content
@@ -122,7 +122,7 @@ namespace cms.dbase
                         Id = s.id,
                         Num = s.num,
                         Title = s.c_title,
-                        Alias = s.c_alias,
+                        Alias = s.c_alias.ToLower(),
                         Place = s.c_place,
                         EventMaker = s.c_organizer,
                         PreviewImage = new Photo()
@@ -172,7 +172,7 @@ namespace cms.dbase
                 {
                     var contentType = ContentType.EVENT.ToString().ToLower();
                     var events = db.content_content_links.Where(e => e.f_content_type == contentType)
-                            .Join(db.cms_sitess.Where(o => o.c_alias == filtr.Domain),
+                            .Join(db.cms_sitess.Where(o => o.c_alias.ToLower() == filtr.Domain),
                                     e => e.f_link,
                                     o => o.f_content,
                                     (e, o) => e.f_content
@@ -226,7 +226,7 @@ namespace cms.dbase
                         cdEvent = new content_events
                         {
                             id = eventData.Id,
-                            c_alias = eventData.Alias,
+                            c_alias = eventData.Alias.ToLower(),
                             c_title = eventData.Title,
                             c_text = eventData.Text,
                             c_place = eventData.Place,
@@ -310,7 +310,7 @@ namespace cms.dbase
 
                         var EndDate = (eventData.DateEnd.HasValue) ? eventData.DateEnd.Value : eventData.DateBegin;
 
-                        cdEvent.c_alias = eventData.Alias;
+                        cdEvent.c_alias = eventData.Alias.ToLower();
                         cdEvent.c_title = eventData.Title;
                         cdEvent.c_text = eventData.Text;
                         cdEvent.c_place = eventData.Place;

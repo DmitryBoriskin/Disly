@@ -179,17 +179,27 @@ namespace cms.dbase
                 {
                     query = query.Where(w => w.b_disabled == filtr.Disabled.Value);
                 }
-                if (filtr.Group != String.Empty)
+                if (!string.IsNullOrEmpty(filtr.Group))
                 {
                     query = query.Where(w => w.f_group == filtr.Group);
                 }
-                foreach (string param in filtr.SearchText.Split(' '))
+
+                if(!string.IsNullOrEmpty(filtr.SearchText))
                 {
-                    if (param != String.Empty)
+                    var searchWords = filtr.SearchText.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+
+                    if (searchWords != null && searchWords.Count() > 0)
                     {
-                        query = query.Where(w => w.c_surname.Contains(param) || w.c_name.Contains(param) || w.c_patronymic.Contains(param) || w.c_email.Contains(param));
+                        foreach (string param in filtr.SearchText.Split(' '))
+                        {
+                            if (param != String.Empty)
+                            {
+                                query = query.Where(w => w.c_surname.Contains(param) || w.c_name.Contains(param) || w.c_patronymic.Contains(param) || w.c_email.Contains(param));
+                            }
+                        }
                     }
                 }
+
 
                 query = query.OrderBy(o => new { o.c_surname, o.c_name });
 
@@ -318,7 +328,7 @@ namespace cms.dbase
                         //цепление к сайтам если создается администратор портала или разработчик
                         if(Item.Group== "administrator" || Item.Group.ToLower() == "developer")
                         {
-                            string[] allsitesdomain = db.cms_sitess.Select(s => s.c_alias).ToArray();
+                            string[] allsitesdomain = db.cms_sitess.Select(s => s.c_alias.ToLower()).ToArray();
                             foreach (var singldomain in allsitesdomain)
                             {
                                 db.cms_user_site_links
@@ -634,7 +644,7 @@ namespace cms.dbase
                     using (var tran = db.BeginTransaction())
                     {
                         var getSite = db.cms_sitess.Where(s => s.id == data.LinkId);
-                        var alias = getSite.SingleOrDefault().c_alias;
+                        var alias = getSite.SingleOrDefault().c_alias.ToLower();
 
                         //Если существует
                         var linkExist = db.cms_user_site_links
@@ -698,8 +708,8 @@ namespace cms.dbase
                 var data = db.cms_users_groups.
                     Select(s => new Catalog_list
                     {
-                        text = s.c_title,
-                        value = s.c_alias
+                        Text = s.c_title,
+                        Value = s.c_alias.ToLower()
                     });
 
                 if (!data.Any()) { return null; }
@@ -715,11 +725,11 @@ namespace cms.dbase
             using (var db = new CMSdb(_context))
             {
                 var data = db.cms_users_groups
-                            .Where(w=>(w.c_alias!= "administrator" && w.c_alias.ToLower()!= "developer"))
+                            .Where(w=>(w.c_alias.ToLower() != "administrator" && w.c_alias.ToLower()!= "developer"))
                             .Select(s => new Catalog_list
                             {
-                                text = s.c_title,
-                                value = s.c_alias
+                                Text = s.c_title,
+                                Value = s.c_alias.ToLower()
                             });
 
                 if (!data.Any()) { return null; }
@@ -736,13 +746,13 @@ namespace cms.dbase
             using (var db = new CMSdb(_context))
             {
                 var data = db.cms_users_groups
-                    .Where(w => w.c_alias == alias)
+                    .Where(w => w.c_alias.ToLower() == alias.ToLower())
                     .Select(s => new GroupModel
                     {
-                        id = s.id,
+                        Id = s.id,
                         GroupName = s.c_title,
-                        Alias = s.c_alias,
-                        GroupResolutions = getGroupResolutions(s.c_alias)
+                        Alias = s.c_alias.ToLower(),
+                        GroupResolutions = getGroupResolutions(s.c_alias.ToLower())
                     });
 
                 if (!data.Any())
@@ -817,7 +827,7 @@ namespace cms.dbase
                         var cdGroup = new cms_users_group()
                         {
                             id = Guid.NewGuid(),
-                            c_alias = group.Alias,
+                            c_alias = group.Alias.ToLower(),
                             c_title = group.GroupName
                         };
                         db.Insert(cdGroup);
@@ -831,7 +841,7 @@ namespace cms.dbase
                                 var claims = new cms_resolutions_templates()
                                 {
                                     f_menu_id = template,
-                                    f_user_group = group.Alias,
+                                    f_user_group = group.Alias.ToLower(),
                                     b_read = false,
                                     b_write = false,
                                     b_change = false,
@@ -859,6 +869,8 @@ namespace cms.dbase
                 }
             }
         }
+
+
         /// <summary>
         /// Изменение прав для группы
         /// При этом необходимо всем пользователям этой группы поменять в другой таблице (раньше можно было отдельным пользователям давать отдельные права)
@@ -1001,6 +1013,9 @@ namespace cms.dbase
         /// <returns></returns>
         public override bool deleteGroup(string alias)
         {
+            if (string.IsNullOrEmpty(alias))
+                return false;
+
             using (var db = new CMSdb(_context))
             {
                 using (var tran = db.BeginTransaction())

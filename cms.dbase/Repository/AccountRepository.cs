@@ -43,7 +43,7 @@ namespace cms.dbase
                         Mail = s.c_email,
                         Salt = s.c_salt,
                         Hash = s.c_hash,
-                        Group = s.f_group,
+                        Group = s.f_group.ToLower(),
                         Surname = s.c_surname,
                         Name = s.c_name,
                         Patronymic = s.c_patronymic,
@@ -67,7 +67,7 @@ namespace cms.dbase
                         Mail = s.c_email,
                         Salt = s.c_salt,
                         Hash = s.c_hash,
-                        Group = s.f_group,
+                        Group = s.f_group.ToLower(),
                         Surname = s.c_surname,
                         Name = s.c_name,
                         Patronymic = s.c_patronymic,
@@ -132,7 +132,7 @@ namespace cms.dbase
             using (var db = new CMSdb(_context))
             {
                 var data = db.cms_sv_resolutionss
-                    .Where(w => (w.c_alias == _pageUrl && w.c_user_id == _userId))
+                    .Where(w => (w.c_alias.ToLower() == _pageUrl.ToLower() && w.c_user_id == _userId))
                     .Select(s => new ResolutionsModel
                     {
                         Title = s.c_title,

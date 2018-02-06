@@ -167,16 +167,22 @@ namespace Disly.Controllers
         
         public FilterParams getFilter(int defaultPageSize = 20)
         {
-            string return_url = HttpUtility.UrlDecode(Request.Url.Query);
+            string return_url = "";
+            //string return_url = HttpUtility.UrlDecode(Request.Url.Query);
 
 
             var queryParams = new Dictionary<string, string>();
             var qparams = HttpUtility.ParseQueryString(Request.QueryString.ToString());
-            foreach (var p in qparams.AllKeys)
+            if (qparams.AllKeys != null && qparams.AllKeys.Count() > 0)
             {
-                queryParams.Add(p, qparams[p]);
+                foreach (var p in qparams.AllKeys)
+                {
+                    if (p != null)
+                    {
+                        queryParams.Add(p, qparams[p]);
+                    }
+                }
             }
-
             //Формируем строку с параметрами фильтра без пейджера
             var urlParams = String.Join("&", queryParams
                 .Where(p => p.Key != "page")
@@ -211,27 +217,27 @@ namespace Disly.Controllers
             return result;
         }
 
-        public string addFiltrParam(string query, string name, string val)
-        {
-            //string search_Param = @"\b" + name + @"=[\w]*[\b]*&?";
-            string search_Param = @"\b" + name + @"=(.*?)(&|$)";
-            string normal_Query = @"&$";
+        //public string addFiltrParam(string query, string name, string val)
+        //{
+        //    //string search_Param = @"\b" + name + @"=[\w]*[\b]*&?";
+        //    string search_Param = @"\b" + name + @"=(.*?)(&|$)";
+        //    string normal_Query = @"&$";
 
-            Regex delParam = new Regex(search_Param, RegexOptions.CultureInvariant);
-            Regex normalQuery = new Regex(normal_Query);
-            query = delParam.Replace(query, String.Empty);
-            query = normalQuery.Replace(query, String.Empty);
+        //    Regex delParam = new Regex(search_Param, RegexOptions.CultureInvariant);
+        //    Regex normalQuery = new Regex(normal_Query);
+        //    query = delParam.Replace(query, String.Empty);
+        //    query = normalQuery.Replace(query, String.Empty);
 
-            if (val != String.Empty)
-            {
-                if (query.IndexOf("?") > -1) query += "&" + name + "=" + val;
-                else query += "?" + name + "=" + val;
-            }
+        //    if (val != String.Empty)
+        //    {
+        //        if (query.IndexOf("?") > -1) query += "&" + name + "=" + val;
+        //        else query += "?" + name + "=" + val;
+        //    }
 
-            query = query.Replace("?&", "?").Replace("&&", "&");
+        //    query = query.Replace("?&", "?").Replace("&&", "&");
 
-            return query;
-        }
+        //    return query;
+        //}
 
     }
 }

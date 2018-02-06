@@ -19,6 +19,15 @@ namespace Disly.Areas.Admin.Models
         /// </summary>
         public MaterialsModel Item { get; set; }
 
+        /// <summary>
+        /// Список доступных типов меню
+        /// </summary>
+        public Catalog_list[] Categories { get; set; }
+
+        /// <summary>
+        /// Список категорий для фильтрации
+        /// </summary>
+        public FiltrModel Filtr { get; set; }
 
         /// <summary>
         /// Список организаций, разбитых на группы
@@ -28,7 +37,7 @@ namespace Disly.Areas.Admin.Models
         /// <summary>
         /// rss канал
         /// </summary>
-        public RssItem[] RssObject { get; set; }        
+        public RssItem[] RssObject { get; set; }
         public RssChannel RssChannel { get; set; }
         public RssChannel[] RssChannelList { get; set; }
 

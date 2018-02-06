@@ -42,32 +42,32 @@ namespace cms.dbModel.entity
     public class Catalog_list
     {
         /// <summary>
-        /// Заголовок записи
+        /// Заголовок группы
         /// </summary>
-        public string text { get; set; }
+        public string Text { get; set; }
         /// <summary>
-        /// Значение записи (ключ для связи)
+        /// Значение 
         /// </summary>
-        public string value { get; set; }
+        public string Value { get; set; }
         /// <summary>
-        /// Иконка (иллюстрация)
+        /// Иконка
         /// </summary>
-        public string icon { get; set; }
+        public string Icon { get; set; }
         /// <summary>
         /// Ссылка, для применения фильтра
         /// </summary>
-        public string link { get; set; }
+        public string Link { get; set; }
         /// <summary>
-        /// Адрес формы для редактирования данной записи
+        /// Ссылка на редактирование группы
         /// </summary>
-        public string url { get; set; }
+        public string Url { get; set; }
         /// <summary>
         /// Выбрано
         /// </summary>
-        public string selected { get; set; }
+        public bool Selected { get; set; }
         /// <summary>
         /// Доступно для выбора пользователем
         /// </summary>
-        public bool available { get; set; }
+        public bool Available { get; set; }
     }
 }

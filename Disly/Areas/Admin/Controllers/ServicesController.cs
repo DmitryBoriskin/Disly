@@ -217,9 +217,9 @@ namespace Disly.Areas.Admin.Controllers
 
         [HttpPost]
         [MultiButton(MatchFormKey = "action", MatchFormValue = "delete-group-btn")]
-        public ActionResult DeleteGroup(string id)
+        public ActionResult DeleteGroup(GroupModel bindData)
         {
-            var res = _cmsRepository.deleteGroup(id);
+            var res = _cmsRepository.deleteGroup(bindData.Alias);
             if (res)
                 return PartialView("Modal/Success");
 

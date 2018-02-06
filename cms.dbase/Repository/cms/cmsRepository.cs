@@ -52,7 +52,7 @@ namespace cms.dbase
         {
             try
             {
-                var linkIdData = db.cms_sitess.Where(d => d.c_alias.Equals(domain)).SingleOrDefault();
+                var linkIdData = db.cms_sitess.Where(d => d.c_alias.ToLower().Equals(domain)).SingleOrDefault();
                 if (linkIdData != null)
                 {
                     return new SiteContentType()
@@ -83,7 +83,7 @@ namespace cms.dbase
                 using (var db = new CMSdb(_context))
                 {
                     var data = db.cms_sitess
-                                    .Where(w => w.c_alias == _domain);
+                                    .Where(w => w.c_alias.ToLower() == _domain);
 
                     var site = data.Single();
                     return site.id;
@@ -137,7 +137,7 @@ namespace cms.dbase
                             Id = s.id,
                             Title = s.c_name,
                             LongTitle = s.c_name_long,
-                            Alias = s.c_alias,
+                            Alias = s.c_alias.ToLower(),
                             Adress = s.c_adress,
                             Phone = s.c_phone,
                             Fax = s.c_fax,
@@ -148,7 +148,7 @@ namespace cms.dbase
                             {
                                 Url = s.c_logo
                             },
-                            DomainList = getSiteDomains(s.c_alias),
+                            DomainList = getSiteDomains(s.c_alias.ToLower()),
                             ContentId = (Guid)s.f_content,
                             Type = s.c_content_type,
                             SiteOff = s.b_site_off
@@ -177,13 +177,13 @@ namespace cms.dbase
             {
                 using (var db = new CMSdb(_context))
                 {
-                    var data = db.cms_sitess.Where(w => w.c_alias == domain)
+                    var data = db.cms_sitess.Where(w => w.c_alias.ToLower() == domain)
                         .Select(s => new SitesModel
                         {
                             Id = s.id,
                             Title = s.c_name,
                             LongTitle = s.c_name_long,
-                            Alias = s.c_alias,
+                            Alias = s.c_alias.ToLower(),
                             Adress = s.c_adress,
                             Phone = s.c_phone,
                             Fax = s.c_fax,
@@ -242,7 +242,7 @@ namespace cms.dbase
                             .Where(w => w.id.Equals(item.Id))
                             .Set(u => u.c_name, item.Title)
                             .Set(u => u.c_name_long, item.LongTitle)
-                            .Set(u => u.c_alias, item.Alias)
+                            .Set(u => u.c_alias, item.Alias.ToLower())
                             .Set(u => u.c_scripts, item.Scripts)
                             .Set(u => u.c_facebook, item.Facebook)
                             .Set(u => u.c_vk, item.Vk)
@@ -387,7 +387,7 @@ namespace cms.dbase
             {
                 bool result = false;
 
-                int count = db.cms_menus.Where(w => w.c_alias == alias).Count();
+                int count = db.cms_menus.Where(w => w.c_alias.ToLower() == alias.ToLower()).Count();
                 if (count > 0) result = true;
 
                 return result;
@@ -408,8 +408,8 @@ namespace cms.dbase
                     {
                         Num = s.num,
                         GroupName = s.c_title,
-                        Alias = s.c_alias,
-                        GroupItems = getCmsMenuItems(s.c_alias, user_id)
+                        Alias = s.c_alias.ToLower(),
+                        GroupItems = getCmsMenuItems(s.c_alias.ToLower(), user_id)
                     })
                     .OrderBy(o => o.Num);
 
@@ -434,7 +434,7 @@ namespace cms.dbase
                     {
                         id = s.c_menu_id,
                         Permit = s.n_permit,
-                        Alias = s.c_alias,
+                        Alias = s.c_alias.ToLower(),
                         Title = s.c_title,
                         Class = s.c_class,
                         Group = s.f_group
@@ -461,7 +461,7 @@ namespace cms.dbase
                     {
                         id = s.id,
                         Permit = s.n_permit,
-                        Alias = s.c_alias,
+                        Alias = s.c_alias.ToLower(),
                         Title = s.c_title,
                         Desc = s.c_desc,
                         Class = s.c_class,
@@ -486,7 +486,7 @@ namespace cms.dbase
                     {
                         num = s.num,
                         text = s.c_title,
-                        value = s.c_alias
+                        value = s.c_alias.ToLower()
                     })
                 .OrderBy(o => o.num);
 
@@ -514,7 +514,7 @@ namespace cms.dbase
                         .Value(p => p.id, id)
                         .Value(p => p.n_permit, Permit)
                         .Value(p => p.c_title, Item.Title)
-                        .Value(p => p.c_alias, Item.Alias)
+                        .Value(p => p.c_alias, Item.Alias.ToLower())
                         .Value(p => p.c_class, Item.Class)
                         .Value(p => p.f_group, Item.Group)
                         .Value(p => p.c_desc, Item.Desc)
@@ -535,8 +535,8 @@ namespace cms.dbase
 
                     //добавить права группы пользователей
                     Guid Dev_users = Guid.Parse("00000000-0000-0000-0000-000000000000");
-                    var data_group = db.cms_users_groups.Where(w => w.c_alias != "Developer").Select(s => new cms_users_group { id = s.id, c_alias = s.c_alias }).ToArray();//спсиок групп
-                    var data_group_develop = db.cms_users_groups.Where(w => w.c_alias == "Developer").Select(s => new cms_users_group { id = s.id, c_alias = s.c_alias }).ToArray();//спсиок групп
+                    var data_group = db.cms_users_groups.Where(w => w.c_alias.ToLower() != "developer").Select(s => new cms_users_group { id = s.id, c_alias = s.c_alias.ToLower() }).ToArray();//спсиок групп
+                    var data_group_develop = db.cms_users_groups.Where(w => w.c_alias.ToLower() == "developer").Select(s => new cms_users_group { id = s.id, c_alias = s.c_alias.ToLower() }).ToArray();//спсиок групп
                     var data_users = db.cms_userss.Where(w => w.id != Dev_users).Select(s => new cms_users { id = s.id }).ToArray();//спсиок пользователей
                     var data_users_develop = db.cms_userss.Where(w => w.id == Dev_users).Select(s => new cms_users { id = s.id }).ToArray();//разработчик системная учетная запись
 
@@ -545,7 +545,7 @@ namespace cms.dbase
                     {
                         db.cms_resolutions_templatess
                             .Value(v => v.f_menu_id, id)
-                            .Value(v => v.f_user_group, s.c_alias)
+                            .Value(v => v.f_user_group, s.c_alias.ToLower())
                             .Value(v => v.b_read, false)
                             .Value(v => v.b_write, false)
                             .Value(v => v.b_change, false)
@@ -556,7 +556,7 @@ namespace cms.dbase
                     {
                         db.cms_resolutions_templatess
                             .Value(v => v.f_menu_id, id)
-                            .Value(v => v.f_user_group, s.c_alias)
+                            .Value(v => v.f_user_group, s.c_alias.ToLower())
                             .Value(v => v.b_read, true)
                             .Value(v => v.b_write, true)
                             .Value(v => v.b_change, true)
@@ -626,7 +626,7 @@ namespace cms.dbase
                     {
                         data.Where(w => w.id == id)
                         .Set(p => p.c_title, Item.Title)
-                        .Set(p => p.c_alias, Item.Alias)
+                        .Set(p => p.c_alias, Item.Alias.ToLower())
                         .Set(p => p.c_class, Item.Class)
                         .Set(p => p.f_group, Item.Group)
                         .Set(p => p.c_desc, Item.Desc)
@@ -786,10 +786,10 @@ namespace cms.dbase
                         {
                             Id = s.id,
                             Title = s.c_name,
-                            Alias = s.c_alias,
+                            Alias = s.c_alias.ToLower(),
                             SiteOff = s.b_site_off,
                             Type = s.c_content_type,
-                            DomainList = getSiteDomains(s.c_alias)
+                            DomainList = getSiteDomains(s.c_alias.ToLower())
                         }).
                         Skip(filtr.Size * (filtr.Page - 1)).
                         Take(filtr.Size);
@@ -827,10 +827,10 @@ namespace cms.dbase
                     {
                         Id = s.id,
                         Title = s.c_name,
-                        Alias = s.c_alias,
+                        Alias = s.c_alias.ToLower(),
                         SiteOff = s.b_site_off,
                         Type = s.c_content_type,
-                        DomainList = getSiteDomains(s.c_alias),
+                        DomainList = getSiteDomains(s.c_alias.ToLower()),
                         Checked = ContentLinkExists(filtr.RelId.Value, filtr.RelType, s.id, ContentLinkType.SITE),
                         Origin = ContentLinkOrigin(filtr.RelId.Value, filtr.RelType, s.id, ContentLinkType.SITE)
                     });
@@ -863,10 +863,10 @@ namespace cms.dbase
                     {
                         Id = s.id,
                         Title = s.c_name,
-                        Alias = s.c_alias,
+                        Alias = s.c_alias.ToLower(),
                         SiteOff = s.b_site_off,
                         Type = s.c_content_type,
-                        DomainList = getSiteDomains(s.c_alias),
+                        DomainList = getSiteDomains(s.c_alias.ToLower()),
                         Checked = (filtr.UserId.HasValue)? s.fklinksitetousers.Any(u => u.f_user == filtr.UserId) ? true: false :false
                         });
 
@@ -909,7 +909,7 @@ namespace cms.dbase
                     {
                         db.cms_sitess
                           .Value(v => v.id, ins.Id)
-                          .Value(v => v.c_alias, ins.Alias)
+                          .Value(v => v.c_alias, ins.Alias.ToLower())
                           .Value(v => v.c_name, ins.Title)
                           .Value(v => v.c_name_long, ins.Title)
                           .Value(v => v.c_content_type, ins.Type)
@@ -925,14 +925,14 @@ namespace cms.dbase
                             {
                                 db.front_site_sections
                                     .Value(v => v.f_site, ins.Alias)
-                                    .Value(v => v.f_front_section, item.c_alias)
+                                    .Value(v => v.f_front_section, item.c_alias.ToLower())
                                     .Value(v => v.f_page_view, item.c_default_view)
                                     .Insert();
                             }
                         }
                         //назначение пользователям(разработчикам и администраторам портала) прав  к созданному сайту
-                        var UserList = db.cms_users_groups.Where(w => (w.c_alias == "Developer" || w.c_alias == "administrator"))
-                                         .Join(db.cms_userss,e=>e.c_alias,o=>o.f_group,(e,o)=>o).Select(s=>s.id).ToArray();
+                        var UserList = db.cms_users_groups.Where(w => (w.c_alias.ToLower() == "developer" || w.c_alias.ToLower() == "administrator"))
+                                         .Join(db.cms_userss,e=>e.c_alias.ToLower(), o=>o.f_group,(e,o)=>o).Select(s=>s.id).ToArray();
 
 
                         foreach (var item in UserList)

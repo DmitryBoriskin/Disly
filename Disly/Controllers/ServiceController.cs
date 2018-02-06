@@ -70,27 +70,27 @@ namespace Disly.Controllers
         //}
 
 
-        public string addFiltrParam(string query, string name, string val)
-        {
-            //string search_Param = @"\b" + name + @"=[\w]*[\b]*&?";
-            string search_Param = @"\b" + name + @"=(.*?)(&|$)";
-            string normal_Query = @"&$";
+        //public string addFiltrParam(string query, string name, string val)
+        //{
+        //    //string search_Param = @"\b" + name + @"=[\w]*[\b]*&?";
+        //    string search_Param = @"\b" + name + @"=(.*?)(&|$)";
+        //    string normal_Query = @"&$";
 
-            Regex delParam = new Regex(search_Param, RegexOptions.CultureInvariant);
-            Regex normalQuery = new Regex(normal_Query);
-            query = delParam.Replace(query, String.Empty);
-            query = normalQuery.Replace(query, String.Empty);
+        //    Regex delParam = new Regex(search_Param, RegexOptions.CultureInvariant);
+        //    Regex normalQuery = new Regex(normal_Query);
+        //    query = delParam.Replace(query, String.Empty);
+        //    query = normalQuery.Replace(query, String.Empty);
 
-            if (val != String.Empty)
-            {
-                if (query.IndexOf("?") > -1) query += "&" + name + "=" + val;
-                else query += "?" + name + "=" + val;
-            }
+        //    if (val != String.Empty)
+        //    {
+        //        if (query.IndexOf("?") > -1) query += "&" + name + "=" + val;
+        //        else query += "?" + name + "=" + val;
+        //    }
 
-            query = query.Replace("?&", "?").Replace("&&", "&");
+        //    query = query.Replace("?&", "?").Replace("&&", "&");
 
-            return query;
-        }
+        //    return query;
+        //}
 
 
         public ActionResult Photolist(Guid id)

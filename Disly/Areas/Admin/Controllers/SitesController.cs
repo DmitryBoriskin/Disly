@@ -145,11 +145,11 @@ namespace Disly.Areas.Admin.Controllers
         public ActionResult Search(string filter, bool disabled, string size)
         {
             string query = HttpUtility.UrlDecode(Request.Url.Query);
-            query = addFiltrParam(query, "searchtext", filter);
-            if (disabled) query = addFiltrParam(query, "disabled", String.Empty);
-            else query = addFiltrParam(query, "disabled", enabeld.ToString().ToLower());
-            query = addFiltrParam(query, "page", String.Empty);
-            query = addFiltrParam(query, "size", size);
+            query = AddFiltrParam(query, "searchtext", filter);
+            if (disabled) query = AddFiltrParam(query, "disabled", String.Empty);
+            else query = AddFiltrParam(query, "disabled", enabeld.ToString().ToLower());
+            query = AddFiltrParam(query, "page", String.Empty);
+            query = AddFiltrParam(query, "size", size);
             return Redirect(StartUrl + query);
         }
 
@@ -171,7 +171,7 @@ namespace Disly.Areas.Admin.Controllers
         {
             //  При создании записи сбрасываем номер страницы
             string query = HttpUtility.UrlDecode(Request.Url.Query);
-            query = addFiltrParam(query, "page", String.Empty);
+            query = AddFiltrParam(query, "page", String.Empty);
 
             return Redirect(StartUrl + "Master/" + Guid.NewGuid() + "/" + query);
         }

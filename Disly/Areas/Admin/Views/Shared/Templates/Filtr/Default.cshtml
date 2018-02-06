@@ -19,13 +19,13 @@
             {
                 foreach (Catalog_list Item in Model.Items)
                 {
-                <div class="filtr-item @Item.selected">
+                <div class="filtr-item @Item.Selected">
                     <div class="filtr-item_link">
                         @if (!Model.ReadOnly || Model.AccountGroup.ToLower().Equals("developer"))
                         {
-                            <a class="tree-btn pop-up_frame edit" href="@Item.url" title="Редактирование @Model.Title.ToLower()"> </a>
+                            <a class="tree-btn pop-up_frame edit" href="@Item.Url" title="Редактирование @Model.Title.ToLower()"> </a>
                         }
-                        <a href="@Item.link">@Item.text</a>
+                        <a href="@Item.Link">@Item.Text</a>
                     </div>
                 </div>
                 }
