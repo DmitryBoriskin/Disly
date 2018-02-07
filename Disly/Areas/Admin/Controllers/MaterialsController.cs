@@ -84,6 +84,7 @@ namespace Disly.Areas.Admin.Controllers
 
             #region Group filter
             var alias = "group";
+            var groupLink = "/admin/materials/";
             var editGroupUrl = "/admin/materials/groupinfo/";
 
             string Link = Request.Url.Query;
@@ -110,7 +111,7 @@ namespace Disly.Areas.Admin.Controllers
                             Selected = (active == p.Value) ? true : false
                         })
                         .ToArray(),
-                    Link = AddFiltrParam(Link, alias, "")
+                    Link = groupLink
                 };
             }
             #endregion

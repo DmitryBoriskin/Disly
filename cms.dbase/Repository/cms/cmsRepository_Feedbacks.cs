@@ -30,8 +30,11 @@ namespace cms.dbase
                 if (!string.IsNullOrEmpty(filtr.SearchText))
                     query = query.Where(p => p.c_title.Contains(filtr.SearchText));
 
+                if (!string.IsNullOrEmpty(filtr.Group))
+                    query = query.Where(p => p.c_type == filtr.Group);
+
                 if (filtr.Date.HasValue)
-                    query = query.Where(p => p.d_date > filtr.Date.Value.AddDays(1));
+                    query = query.Where(p => p.d_date > filtr.Date.Value);
 
                 if (filtr.Date.HasValue)
                     query = query.Where(p => p.d_date < filtr.DateEnd.Value.AddDays(1));
@@ -138,7 +141,7 @@ namespace cms.dbase
                         b_new = feedback.IsNew,
                         b_disabled = feedback.Disabled,
                         f_site = _domain,
-                        c_type = feedback.FbType.ToString()
+                        c_type = feedback.FbType.ToString().ToLower()
                     };
 
                     using (var tran = db.BeginTransaction())
@@ -178,6 +181,7 @@ namespace cms.dbase
                     cdFeedback.d_date = feedback.Date;
                     cdFeedback.b_new = feedback.IsNew;
                     cdFeedback.b_disabled = feedback.Disabled;
+                    cdFeedback.c_type = feedback.FbType.ToString().ToLower();
 
                     using (var tran = db.BeginTransaction())
                     {

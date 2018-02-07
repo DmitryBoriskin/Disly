@@ -55,7 +55,7 @@ namespace cms.dbase
                     query = query.Where(p => p.c_title.Contains(filtr.SearchText));
 
                 if(filtr.Date.HasValue)
-                    query = query.Where(p => p.d_date > filtr.Date.Value.AddDays(1));
+                    query = query.Where(p => p.d_date > filtr.Date.Value);
 
                 if (filtr.Date.HasValue)
                     query = query.Where(p => p.d_date < filtr.DateEnd.Value.AddDays(1));

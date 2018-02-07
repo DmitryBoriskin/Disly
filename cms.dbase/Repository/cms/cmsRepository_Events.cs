@@ -163,7 +163,7 @@ namespace cms.dbase
 
                 //Фильтр по дате
                 if (filtr.Date.HasValue)
-                    query = query.Where(s => s.d_date > filtr.Date.Value.AddDays(-1));
+                    query = query.Where(s => s.d_date > filtr.Date.Value);
 
                 if (filtr.DateEnd.HasValue)
                     query = query.Where(s => s.d_date < filtr.DateEnd.Value.AddDays(1));

@@ -57,7 +57,56 @@ namespace Disly.Areas.Admin.Controllers
         /// <returns></returns>
         public ActionResult Index(string category, string type)
         {
+            #region Group filter
+            var alias = "group";
+            var groupLink = "/admin/feedbacks/"; 
+            //var editGroupUrl = "";
+
+            string query = Request.Url.Query;
+            string active = Request.QueryString[alias];
+
+            var types = new Catalog_list[]
+            {
+                  new Catalog_list()
+                {
+                    Text = "Вопросы",
+                    Value = "appeal"
+                },
+                new Catalog_list()
+                {
+                    Text = "Отзывы",
+                    Value = "review"
+                }
+            };
+
+            if (types != null && types.Count() > 0)
+            {
+                model.Filtr = new FiltrModel()
+                {
+                    Title = "Группы",
+                    Icon = "icon-th-list-3",
+                    BtnName = "Новая группа",
+                    Alias = alias,
+                    //Url = editGroupUrl,
+                    ReadOnly = true,
+                    AccountGroup = (model.Account != null) ? model.Account.Group : "",
+                    Items = types.Select(p =>
+                        new Catalog_list()
+                        {
+                            Text = p.Text,
+                            Value = p.Value,
+                            Link = AddFiltrParam(query, alias, p.Value),
+                            //Url = editGroupUrl + p.Value + "/",
+                            Selected = (active == p.Value) ? true : false
+                        })
+                        .ToArray(),
+                    Link = groupLink
+                };
+            }
+            #endregion
+
             model.List = _cmsRepository.getFeedbacksList(filter);
+
             return View(model);
         }
 
@@ -89,16 +138,16 @@ namespace Disly.Areas.Admin.Controllers
         /// <returns></returns>
         [HttpPost]
         [MultiButton(MatchFormKey = "action", MatchFormValue = "search-btn")]
-        public ActionResult Search(string searchtext, bool enabled, string size, DateTime? datestart, DateTime? dateend)
+        public ActionResult Search(string searchtext, string group, bool enabled, string size, DateTime? datestart, DateTime? dateend)
         {
             string query = HttpUtility.UrlDecode(Request.Url.Query);
             query = AddFiltrParam(query, "searchtext", searchtext);
+            query = AddFiltrParam(query, "group", group);
             query = AddFiltrParam(query, "disabled", (!enabled).ToString().ToLower());
             if (datestart.HasValue)
                 query = AddFiltrParam(query, "datestart", datestart.Value.ToString("dd.MM.yyyy").ToLower());
             if (dateend.HasValue)
                 query = AddFiltrParam(query, "dateend", dateend.Value.ToString("dd.MM.yyyy").ToLower());
-            query = AddFiltrParam(query, "page", String.Empty);
             query = AddFiltrParam(query, "size", size);
 
             return Redirect(StartUrl + query);

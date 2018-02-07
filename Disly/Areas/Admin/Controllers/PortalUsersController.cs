@@ -54,6 +54,7 @@ namespace Disly.Areas.Admin.Controllers
             if(model.GroupList!= null && model.GroupList.Count()> 0)
             {
                 var alias = "group";
+                var groupLink = "/admin/portalusers/";
                 var editGroupUrl = "/admin/services/groupclaims/";
 
                 string Link = Request.Url.Query;
@@ -77,8 +78,8 @@ namespace Disly.Areas.Admin.Controllers
                             Url = editGroupUrl + p.Value + "/",
                             Selected = (active == p.Value.ToLower()) ? true : false
                         })
-                            .ToArray(),
-                    Link = AddFiltrParam(Link, alias, "")
+                        .ToArray(),
+                    Link = groupLink
                 };
             }
 

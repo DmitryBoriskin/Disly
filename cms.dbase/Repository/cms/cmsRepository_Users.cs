@@ -756,9 +756,9 @@ namespace cms.dbase
                     });
 
                 if (!data.Any())
-                    return null;
-                else
                     return data.FirstOrDefault();
+
+                return null;
             }
         }
         /// <summary>
