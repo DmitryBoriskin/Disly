@@ -194,6 +194,9 @@ namespace Disly.Areas.Admin.Controllers
         /// <returns></returns>
         public string UrlQueryExclude(string queryStr, string exclude)
         {
+            if (string.IsNullOrEmpty(queryStr))
+                return "";
+
             var qparams = HttpUtility.ParseQueryString(queryStr);
 
             var queryParams = new Dictionary<string, string>();

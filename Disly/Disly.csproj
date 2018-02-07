@@ -425,6 +425,7 @@
     <Content Include="Areas\Admin\Views\Vote\Part\SearchFilter.cshtml" />
     <Content Include="Areas\Admin\Views\Worksheet\Part\SearchFilter.cshtml" />
     <Content Include="Areas\Admin\Views\PortalUsers\Part\SearchFilter.cshtml" />
+    <Content Include="Areas\Admin\Views\Orgs\part\SearchFilter.cshtml" />
     <None Include="Content\plugins\tinymce\plugins\gallery\plugin.min.js_korkin" />
     <Content Include="Content\plugins\tinymce\plugins\help\img\logo.png" />
     <Content Include="Content\plugins\tinymce\plugins\help\plugin.min.js" />
