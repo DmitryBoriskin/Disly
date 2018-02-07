@@ -338,13 +338,13 @@ namespace Disly.Areas.Admin.Controllers
                     fltr.Size = size;
             }
 
-            if (!String.IsNullOrEmpty(Request.QueryString["date"]))
+            if (!String.IsNullOrEmpty(Request.QueryString["datestart"]))
             {
-                DateTime date = DateTime.MinValue;
-                DateTime.TryParse(Request.QueryString["date"], out date);
+                DateTime datestart = DateTime.MinValue;
+                var res = DateTime.TryParse(Request.QueryString["datestart"], out datestart);
 
-                if (date != DateTime.MinValue)
-                    fltr.Date = date;
+                if (datestart != DateTime.MinValue)
+                    fltr.Date = datestart;
             }
 
             if (!String.IsNullOrEmpty(Request.QueryString["dateend"]))
