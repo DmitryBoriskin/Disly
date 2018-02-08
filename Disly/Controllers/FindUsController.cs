@@ -1,6 +1,8 @@
 ﻿using cms.dbase;
+using cms.dbModel.entity;
 using Disly.Models;
 using System;
+using System.Collections.Generic;
 using System.Web.Mvc;
 
 namespace Disly.Controllers
@@ -19,7 +21,7 @@ namespace Disly.Controllers
             {
                 SitesInfo = siteModel,
                 SiteMapArray = siteMapArray,
-                Breadcrumbs = breadcrumb,
+                Breadcrumbs = new List<Breadcrumbs>(),
                 BannerArray = bannerArray,
                 CurrentPage = currentPage
             };
@@ -57,6 +59,12 @@ namespace Disly.Controllers
 
             model.OrgItem = _repository.getOrgInfo(null);
             model.Structures = _repository.getStructures();
+
+            model.Breadcrumbs.Add(new Breadcrumbs
+            {
+                Title = model.CurrentPage.Title,
+                Url = ""
+            });
 
             return View(_ViewName, model);
         }
