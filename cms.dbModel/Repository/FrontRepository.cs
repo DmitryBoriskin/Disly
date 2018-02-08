@@ -104,7 +104,8 @@ namespace cms.dbModel
 
         //Главные специалисты
 
-        public abstract MainSpecialistModel[] getMainSpecialistList(FilterParams filter);        
+        public abstract MainSpecialistModel[] getMainSpecialistList(FilterParams filter);
+        public abstract int getCountMainSpecialiasBySite(string domain);
 
         public abstract MainSpecialistModel[] getMainSpecialistContacts();
         public abstract People[] getMainSpecialistMembers(PeopleFilter filter);
