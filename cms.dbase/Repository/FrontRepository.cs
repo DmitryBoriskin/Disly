@@ -2724,6 +2724,23 @@ namespace cms.dbase
         }
 
         /// <summary>
+        /// Возвращает кол-во специалистов
+        /// </summary>
+        /// <param name="domain"></param>
+        /// <returns></returns>
+        public override int getCountMainSpecialiasBySite(string domain)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                return (from ms in db.content_main_specialistss
+                        join s in db.cms_sitess on ms.id equals s.f_content
+                        join l in db.content_main_specialist_employees_links on ms.id equals l.f_main_specialist
+                        where l.f_type.Equals("main") && s.c_alias.Equals(domain)
+                        select ms.c_name).Count();
+            }
+        }
+
+        /// <summary>
         /// 
         /// </summary>
         /// <returns></returns>

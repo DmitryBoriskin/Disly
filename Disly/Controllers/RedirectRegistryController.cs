@@ -25,7 +25,8 @@ namespace Disly.Controllers
                 SitesInfo = siteModel,
                 SiteMapArray = siteMapArray,
                 BannerArray = bannerArray,
-                CurrentPage = currentPage
+                CurrentPage = currentPage,
+                Breadcrumbs = new List<Breadcrumbs>()
             };
 
             #region Создаем переменные (значения по умолчанию)
@@ -56,6 +57,12 @@ namespace Disly.Controllers
             if (doctors == null || doctors.Length > 1)
             {
                 model.Doctors = doctors;
+
+                model.Breadcrumbs.Add(new Breadcrumbs
+                {
+                    Title = "Расписание",
+                    Url = ""
+                });
 
                 return View("~/Views/Doctors/Redirect.cshtml", model);
             }

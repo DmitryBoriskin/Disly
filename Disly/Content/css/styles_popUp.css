@@ -316,13 +316,34 @@ a.button  {
 .modal-org-list a, .modal-event-list a{
     font-size: 1.1em;
 }
-.org-type-check-all[data-state='half-checked']{
+
+.org-type-check-all, .sites-check-all{
     margin-left:10px;
     padding:1px 5px;
     background-color:#eee;
     border:1px solid #d2d2d2;
     border-radius:4px;
     cursor:pointer;
+}
+.modal-data{
+    padding:5px;
+}
+
+.org-type-check-all[data-state='half-checked'],
+.sites-check-all[data-state='half-checked']
+{
+    background-color:#eee;
+}
+
+.org-type-check-all[data-state='full-unchecked'],
+.sites-check-all[data-state='full-unchecked']
+{
+     background-color:#f8c4c4;
+}
+.org-type-check-all[data-state='full-checked'],
+.sites-check-all[data-state='full-checked']
+{
+     background-color:#c2d4e0;
 }
 
 .org-byType-tree {

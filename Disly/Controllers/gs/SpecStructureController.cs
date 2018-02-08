@@ -74,10 +74,12 @@ namespace Disly.Controllers
                 Url = ""
             });
 
+            int countSpec = _repository.getCountMainSpecialiasBySite(Domain);
+
             //Табы на странице
             model.Nav = new List<PageTabsViewModel>();
-            model.Nav.Add(new PageTabsViewModel { Page = page, Title = "Информация" });
-            model.Nav.Add(new PageTabsViewModel { Page = page, Title = "Главные специалисты", Alias = "specialists" });
+            model.Nav.Add(new PageTabsViewModel { Page = page, Title = "Положение о специалисте" });
+            model.Nav.Add(new PageTabsViewModel { Page = page, Title = countSpec > 1 ? "Главные специалисты" : "Главный специалист", Alias = "specialists" });
             model.Nav.Add(new PageTabsViewModel { Page = page, Title = "Экспертный состав", Alias = "experts" });
             model.Nav.Add(new PageTabsViewModel { Page = page, Title = "Специалисты / члены общества", Alias = "doctors" });
 

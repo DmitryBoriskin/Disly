@@ -1,6 +1,9 @@
 ﻿@model VacancyViewModel
 @{
-    Layout = ViewBag.Layout;
+    if (Model.SitesInfo.Alias == "main")
+    {
+        Layout = "/views/_portal/shared/_layout.cshtml";
+    }
 }
 @if (Model.List != null)
 {

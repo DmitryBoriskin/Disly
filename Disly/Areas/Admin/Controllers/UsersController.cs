@@ -85,13 +85,11 @@ namespace Disly.Areas.Admin.Controllers
         /// <returns></returns>
         [HttpPost]
         [MultiButton(MatchFormKey = "action", MatchFormValue = "search-btn")]
-        public ActionResult Search(string searchtext, bool disabled, string size, DateTime? date, DateTime? dateend)
+        public ActionResult Search(string searchtext, bool enabled, string size)
         {
             string query = HttpUtility.UrlDecode(Request.Url.Query);
             query = AddFiltrParam(query, "searchtext", searchtext);
-            query = AddFiltrParam(query, "disabled", disabled.ToString().ToLower());
-            query = (date.HasValue) ? AddFiltrParam(query, "date", date.Value.ToString("dd.MM.yyyy").ToLower()) : null;
-            query = (dateend.HasValue) ? AddFiltrParam(query, "dateend", dateend.Value.ToString("dd.MM.yyyy").ToLower()) : null;
+            query = AddFiltrParam(query, "disabled", (!enabled).ToString().ToLower());
             query = AddFiltrParam(query, "page", String.Empty);
             query = AddFiltrParam(query, "size", size);
 

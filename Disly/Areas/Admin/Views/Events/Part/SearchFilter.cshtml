@@ -1,12 +1,20 @@
-﻿<div class="dop-caption">Фильтр</div>
+﻿@{
+    var checkboxValue = false;
+    if (!string.IsNullOrEmpty(Request.QueryString["disabled"]))
+    {
+        bool.TryParse(Request.QueryString["disabled"], out checkboxValue);
+    }
+}
+
 <div class="row">
     <div class="col-md-12">
         @Html.TextBox("searchtext", Request.QueryString["searchtext"], new { @title = "Поиск по ключевым словам", @placeholder = "поиск...", @MaxLength = "512" })
-        @Html.CheckBox("enabeld", String.IsNullOrEmpty(Request.QueryString["enabeld"]), new { @class = "uc_input", @title = "Отображать", @data_on = "Все записи", @data_off = "Только запрещенные", @data_width = "270" })
+
+        @Html.CheckBox("enabled", !checkboxValue, new { type = "checkbox", title = "Отображать", data_toggle = "toggle", data_on = "Только разрешенные", data_off = "Только запрещенные", data_width = "248" })
     </div>
 </div>
 <div class="row">
-    <div class="col-xs-6">@Html.TextBox("datestart", Request.QueryString["datestart"], new { @class = "uc_input", @data_type = "date", @title = "Дата публикации с", @placeholder = "дд.мм.гггг" })</div>
+    <div class="col-xs-6">@Html.TextBox("datestart", Request.QueryString["datestart"], new { @class = "uc_input", @data_type = "date", @title = "Дата с", @placeholder = "дд.мм.гггг" })</div>
     <div class="col-xs-6">@Html.TextBox("dateend", Request.QueryString["dateend"], new { @class = "uc_input", @data_type = "date", @title = "по", @placeholder = "дд.мм.гггг" })</div>
 </div>
 <div class="row">
