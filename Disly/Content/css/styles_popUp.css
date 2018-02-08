@@ -325,6 +325,9 @@ a.button  {
     border-radius:4px;
     cursor:pointer;
 }
+.modal-data{
+    padding:5px;
+}
 
 .org-type-check-all[data-state='half-checked'],
 .sites-check-all[data-state='half-checked']
