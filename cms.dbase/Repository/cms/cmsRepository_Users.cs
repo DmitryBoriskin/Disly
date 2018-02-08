@@ -745,18 +745,21 @@ namespace cms.dbase
         {
             using (var db = new CMSdb(_context))
             {
-                var data = db.cms_users_groups
-                    .Where(w => w.c_alias.ToLower() == alias.ToLower())
-                    .Select(s => new GroupModel
-                    {
-                        Id = s.id,
-                        GroupName = s.c_title,
-                        Alias = s.c_alias.ToLower(),
-                        GroupResolutions = getGroupResolutions(s.c_alias.ToLower())
-                    });
+                if (!string.IsNullOrEmpty(alias))
+                {
+                    var data = db.cms_users_groups
+                        .Where(w => w.c_alias.ToLower() == alias.ToLower())
+                        .Select(s => new GroupModel
+                        {
+                            Id = s.id,
+                            GroupName = s.c_title,
+                            Alias = s.c_alias.ToLower(),
+                            GroupResolutions = getGroupResolutions(s.c_alias)
+                        });
 
-                if (!data.Any())
-                    return data.FirstOrDefault();
+                    if (data.Any())
+                        return data.FirstOrDefault();
+                }
 
                 return null;
             }
@@ -770,23 +773,25 @@ namespace cms.dbase
         {
             using (var db = new CMSdb(_context))
             {
-                var data = db.cms_sv_resolutions_templatess.
-                    Where(w => w.f_user_group == alias).
-                    OrderBy(o => new { o.f_group, o.n_permit }).
-                    Select(s => new ResolutionsModel()
-                    {
-                        Title = s.c_title,
-                        MenuId = s.id,
-                        Read = s.b_read,
-                        Write = s.b_write,
-                        Change = s.b_change,
-                        Delete = s.b_delete
-                    });
+                if(!string.IsNullOrEmpty(alias))
+                {
+                    var data = db.cms_sv_resolutions_templatess.
+                                        Where(w => w.f_user_group.ToLower() == alias.ToLower()).
+                                        OrderBy(o => new { o.f_group, o.n_permit }).
+                                        Select(s => new ResolutionsModel()
+                                        {
+                                            Title = s.c_title,
+                                            MenuId = s.id,
+                                            Read = s.b_read,
+                                            Write = s.b_write,
+                                            Change = s.b_change,
+                                            Delete = s.b_delete
+                                        });
+                    if (data.Any())
+                        return data.ToArray();
+                }
 
-                if (!data.Any())
-                    return null;
-                else
-                    return data.ToArray();
+                return null;
             }
         }
         /// <summary>
