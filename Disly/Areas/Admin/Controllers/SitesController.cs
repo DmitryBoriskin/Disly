@@ -359,7 +359,7 @@ namespace Disly.Areas.Admin.Controllers
         }
 
 
-        //Получение списка сайтов по параметрам для отображения в модальном окне
+        //Получение списка сайтов по параметрам для отображения в модальном окне при привязке банеров
         [HttpGet]
         public ActionResult SiteListModal(Guid objId, ContentType objType)
         {

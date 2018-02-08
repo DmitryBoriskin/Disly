@@ -1,4 +1,7 @@
 ﻿@model VoteViewModel
+@{
+    Layout = null;
+}
 <form action="/vote/@Model.Item.Id" target="/vote/@Model.Item.Id" class="vote_item" method="post">
     @if (Model.Item.Answer != null)
     {
