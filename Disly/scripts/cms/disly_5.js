@@ -2,6 +2,25 @@
 var change = 0;
 
 $(document).ready(function () {
+    //специфический для med.cap.ru
+    //показываем селект "новове в медеицине" если выбрана соответствующая категория
+    if ($('#itemGroups-select').length > 0) {
+        var NewInMedicin = $('#NewInMedicin');
+        SpotNewInMedicin();
+        $('#itemGroups-select').change(function() {           
+            SpotNewInMedicin();
+        });  
+        function SpotNewInMedicin() {
+            NewInMedicin.hide();
+            $('#itemGroups-select').find('option:selected').each(function() {
+                if ($(this).attr('value') == '6303b7c5-5404-4ec0-aed2-1c308992c78a') {
+                    NewInMedicin.show();
+                }
+            });
+        }
+     }   
+
+    
 
     $('#DomainSelect').change(function () {
         window.location.href = this.options[this.selectedIndex].value

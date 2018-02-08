@@ -586,14 +586,13 @@ a.link-close:before {
 div.dop-caption {
         overflow: hidden;
         display: block;
-        padding: 0 5px 10px;
         font: 20px Ubuntu;
         color: #2e5066;
     }
 
 div.dop-caption:before { 
     font-family:'fontello';
-    font-size:30px;
+    font-size:18px;
     color:#2e5066;
     padding-right:15px;
     text-decoration:none;

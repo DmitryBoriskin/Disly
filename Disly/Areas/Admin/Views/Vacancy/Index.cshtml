@@ -17,11 +17,7 @@
                 <div class="list-item @disabled">
                     <div class="li-desc">
                         <a title="@Item.Post" class="li-caption" href="/admin/vacancy/item/@Item.Id/@ViewBag.urlQuery">
-                            @Item.Post ,
-                            @if (!string.IsNullOrEmpty(Item.Profession))
-                            {
-                                @Item.Profession
-                            }                            
+                            @Item.Profession
                         </a><br />
                         <span>Дата: </span>@Convert.ToDateTime(Item.Date).ToString("dd.MM.yyyy")<br />
                         <span>Описание: </span>@if (!string.IsNullOrEmpty(Item.Desc) && Item.Desc.Length > maxChars)
@@ -51,16 +47,7 @@
 
     <div class="dop_info-block">
         <div class="dop-caption">Фильтр</div>
-        @Html.TextBox("filter", Request.QueryString["filter"], new { @class = "uc_input", @title = "Поиск по ключевым словам", @placeholder = "поиск...", @MaxLength = "512" })
-        @Html.CheckBox("enabeld", String.IsNullOrEmpty(Request.QueryString["enabeld"]), new { @class = "uc_input", @title = "Отображать", @data_on = "Все записи", @data_off = "Только запрещенные", @data_width = "270" })
-        <div class="row">
-            <div class="col-xs-6">@Html.TextBox("datestart", Request.QueryString["datestart"], new { @class = "uc_input", @data_type = "date", @title = "Дата публикации с", @placeholder = "дд.мм.гггг" })</div>
-            <div class="col-xs-6">@Html.TextBox("dateend", Request.QueryString["dateend"], new { @class = "uc_input", @data_type = "date", @title = "по", @placeholder = "дд.мм.гггг" })</div>
-        </div>
-        <div class="row">
-            <div class="col-md-6"><button type="submit" name="action" value="search-btn" class="button btn-primary">Применить</button></div>
-            <div class="col-md-6"><button type="submit" name="action" value="clear-btn" class="button btn-default">Сбросить</button></div>
-        </div>
+        @Html.Partial("Part/SearchFilter")
     </div>
 
     <div class="buttons">

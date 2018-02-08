@@ -9,9 +9,15 @@
 
     var queryParams = new Dictionary<string, string>();
     var qparams = HttpUtility.ParseQueryString(Request.QueryString.ToString());
-    foreach (var p in qparams.AllKeys)
+    if (qparams.AllKeys != null && qparams.AllKeys.Count() > 0)
     {
-        queryParams.Add(p, qparams[p]);
+        foreach (var p in qparams.AllKeys)
+        {
+            if (p != null)
+            {
+                queryParams.Add(p, qparams[p]);
+            }
+        }
     }
 
     var urlParams = String.Join("&", queryParams

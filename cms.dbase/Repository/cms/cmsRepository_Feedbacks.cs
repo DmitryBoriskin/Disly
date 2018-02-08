@@ -19,9 +19,33 @@ namespace cms.dbase
         {
             using (var db = new CMSdb(_context))
             {
-                var query = db.content_feedbackss
-                    .Where(w => w.f_site == _domain)
-                    .OrderByDescending(o => o.d_date);
+                var query = db.content_feedbackss.AsQueryable();
+
+
+                #region Filter
+
+                if (!string.IsNullOrEmpty(filtr.Domain))
+                    query = query.Where(p => p.f_site == filtr.Domain);
+
+                if (!string.IsNullOrEmpty(filtr.SearchText))
+                    query = query.Where(p => p.c_title.Contains(filtr.SearchText));
+
+                if (!string.IsNullOrEmpty(filtr.Group))
+                    query = query.Where(p => p.c_type == filtr.Group);
+
+                if (filtr.Date.HasValue)
+                    query = query.Where(p => p.d_date > filtr.Date.Value);
+
+                if (filtr.Date.HasValue)
+                    query = query.Where(p => p.d_date < filtr.DateEnd.Value.AddDays(1));
+
+                if (filtr.Disabled.HasValue)
+                    query = query.Where(p => p.b_disabled == filtr.Disabled);
+
+                #endregion
+
+
+                query = query.OrderByDescending(o => o.d_date);
 
                 if (query.Any())
                 {
@@ -117,7 +141,7 @@ namespace cms.dbase
                         b_new = feedback.IsNew,
                         b_disabled = feedback.Disabled,
                         f_site = _domain,
-                        c_type = feedback.FbType.ToString()
+                        c_type = feedback.FbType.ToString().ToLower()
                     };
 
                     using (var tran = db.BeginTransaction())
@@ -157,6 +181,7 @@ namespace cms.dbase
                     cdFeedback.d_date = feedback.Date;
                     cdFeedback.b_new = feedback.IsNew;
                     cdFeedback.b_disabled = feedback.Disabled;
+                    cdFeedback.c_type = feedback.FbType.ToString().ToLower();
 
                     using (var tran = db.BeginTransaction())
                     {

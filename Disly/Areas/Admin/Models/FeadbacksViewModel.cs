@@ -10,5 +10,7 @@
      {
          public FeedbacksList List { get; set; }
          public FeedbackModel Item { get; set; }
-     }
+
+         public FiltrModel Filtr { get; set; }
+    }
  }

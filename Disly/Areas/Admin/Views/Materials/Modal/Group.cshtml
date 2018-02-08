@@ -1,0 +1,46 @@
+﻿@model GroupModel
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_popUp.cshtml";
+}
+
+
+@using (Html.BeginForm( "GroupInfo", "/materials/", FormMethod.Post, new { @enctype = "multipart/form-data"}))
+{
+    <div class="row">
+        <div class="buttons">
+            <button type="submit" name="action" value="save-group-btn" class="button icon-save">Сохранить</button>
+            @if (Model != null)
+            {
+                <button type="submit" name="action" value="delete-group-btn" class="button icon-delete">Удалить</button>
+            }
+        </div>
+    </div>
+    <div class="alert alert-success" role="alert" style="display:none;"></div>
+
+    if (ViewBag.SuccesAlert != null)
+    {
+        <div class="alert alert-success" role="alert">@ViewBag.SuccesAlert</div>
+    }
+    if (ViewBag.DankerAlert != null)
+    {
+        <div class="alert alert-danger">@ViewBag.DankerAlert</div>
+    }
+
+    @Html.ValidationSummary(false, "", new { @class = "alert alert-danger" })
+
+    <div class="row form-group">
+        <div class="col-xs-3">
+            @if (Model == null)
+            {
+                @Html.TextBoxFor(m => m.Alias, new { @class = "uc_input form-control", @title = "Название группы (на английском)" })
+            }
+            else
+            {
+                @Html.TextBoxFor(m => m.Alias, new { @class = "uc_input form-control", @title = "Название группы (на английском)", @readonly = "readonly" })
+            }
+        </div>
+        <div class="col-xs-4">
+            @Html.TextBoxFor(m => m.GroupName, new { @class = "uc_input form-control", @title = "Отображаемое имя" })
+        </div>
+    </div>
+}

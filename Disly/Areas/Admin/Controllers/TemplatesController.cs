@@ -19,27 +19,19 @@ namespace Disly.Areas.Admin.Controllers
         public ActionResult Filtr(string Title, string Alias, string Icon, string Url, Catalog_list[] Items, string BtnName = "Добавить", string viewName = "Templates/Filtr/Default", bool readOnly = true)
         {
             string Link = Request.Url.PathAndQuery.ToLower();
-            string nowValue = Request.QueryString[Alias];
-
-
-            //for (int i = 0; i < Items.Length; i++)
-            //{
-            //    Items[i].link = addFiltrParam(Link, Alias.ToLower(), Items[i].value.ToLower());
-            //    Items[i].url = Url.ToLower() + Items[i].value.ToLower() + "/";
-            //    Items[i].selected = (nowValue == Items[i].value.ToLower()) ? "now" : String.Empty;
-            //}
+            string active = Request.QueryString[Alias];
 
             if (Items != null && Items.Count() > 0)
             {
                 foreach (var item in Items)
                 {
-                    item.link = addFiltrParam(Link, Alias.ToLower(), item.value.ToLower());
-                    item.url = Url.ToLower() + item.value.ToLower() + "/";
-                    item.selected = (nowValue == item.value.ToLower()) ? "now" : String.Empty;
+                    item.Link = AddFiltrParam(Link, Alias.ToLower(), item.Value.ToLower());
+                    item.Url = Url.ToLower() + item.Value.ToLower() + "/";
+                    item.Selected = (active == item.Value) ? true: false;
                 }
             }
 
-            Link = addFiltrParam(Link, Alias.ToLower(), "");
+            Link = AddFiltrParam(Link, Alias, "");
 
             FiltrModel Model = new FiltrModel()
             {

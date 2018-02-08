@@ -27,7 +27,7 @@ namespace cms.dbase
                         Id = s.id,
                         Count = s.n_count,
                         Title = s.c_title,
-                        Alias = s.c_alias,
+                        Alias = s.c_alias.ToLower(),
                         Text = s.c_text,
                         Url = s.c_url,
                         DateBegin = s.d_date,
@@ -48,6 +48,23 @@ namespace cms.dbase
             using (var db = new CMSdb(_context))
             {
                 var query = db.content_anketass.AsQueryable();
+
+                #region Filter
+
+                if (!string.IsNullOrEmpty(filtr.SearchText))
+                    query = query.Where(p => p.c_title.Contains(filtr.SearchText));
+
+                if(filtr.Date.HasValue)
+                    query = query.Where(p => p.d_date > filtr.Date.Value);
+
+                if (filtr.Date.HasValue)
+                    query = query.Where(p => p.d_date < filtr.DateEnd.Value.AddDays(1));
+
+                if(filtr.Disabled.HasValue)
+                    query = query.Where(p => p.b_disabled == filtr.Disabled);
+
+                #endregion
+
                 int itemCount = query.Count();
 
                 var List = query
@@ -58,7 +75,7 @@ namespace cms.dbase
                     {
                         Id = s.id,
                         Title = s.c_title,
-                        Alias = s.c_alias,
+                        Alias = s.c_alias.ToLower(),
                         Text = s.c_text,
                         Url = s.c_url,
                         DateBegin = s.d_date,
@@ -150,7 +167,7 @@ namespace cms.dbase
                         cdAnketa = new content_anketas
                         {
                             id = anketa.Id,
-                            c_alias = anketa.Alias,
+                            c_alias = anketa.Alias.ToLower(),
                             c_title = anketa.Title,
                             c_text = anketa.Text,
                             b_disabled = anketa.Disabled,
@@ -214,7 +231,7 @@ namespace cms.dbase
 
                         var EndDate = (anketa.DateEnd.HasValue) ? anketa.DateEnd.Value : anketa.DateBegin;
 
-                        cdAnketa.c_alias = anketa.Alias;
+                        cdAnketa.c_alias = anketa.Alias.ToLower();
                         cdAnketa.c_title = anketa.Title;
                         cdAnketa.c_text = anketa.Text;
                         cdAnketa.b_disabled = anketa.Disabled;

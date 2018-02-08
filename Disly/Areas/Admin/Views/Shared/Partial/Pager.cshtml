@@ -1,17 +1,19 @@
 ﻿@model Pager
 @{
     Layout = null;
-    //string urlParams = String.Join("&",
-    //            Request.QueryString.Keys.OfType<KeyValuePair<string, string>>()
-    //            .Where(p => p.Key != "page")
-    //            .Select(p => String.Format("{0}={1}", p.Key, p.Value))
-    //            );
 
     var queryParams = new Dictionary<string, string>();
     var qparams = HttpUtility.ParseQueryString(Request.QueryString.ToString());
-    foreach (var p in qparams.AllKeys)
+
+    if (qparams.AllKeys != null && qparams.AllKeys.Count() > 0)
     {
-        queryParams.Add(p, qparams[p]);
+        foreach (var p in qparams.AllKeys)
+        {
+            if (p != null)
+            {
+                queryParams.Add(p, qparams[p]);
+            }
+        }
     }
 
     var urlParams = String.Join("&", queryParams

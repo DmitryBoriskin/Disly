@@ -17,6 +17,7 @@ namespace Disly.Areas.Admin.Controllers
     {
         MaterialsViewModel model;
         FilterParams filter;
+        MaterialsGroup[] Groups;
 
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
@@ -44,8 +45,19 @@ namespace Disly.Areas.Admin.Controllers
             }
 
             //Справочник всех доступных категорий
-            MaterialsGroup[] GroupsValues = _cmsRepository.getAllMaterialGroups();
-            ViewBag.AllGroups = GroupsValues;
+            Groups = _cmsRepository.getAllMaterialGroups();
+
+            model.NewInMedicin = new SelectList(
+              new List<SelectListItem>
+              {
+                        new SelectListItem { Text = "не выбрано", Value =""},
+                        new SelectListItem { Text = "Мира", Value ="world"},
+                        new SelectListItem { Text = "России", Value ="russia"},
+                        new SelectListItem { Text = "Чувашии", Value = "chuvashia" }
+              }, "Value", "Text"
+          );
+
+
 
             #region Метатеги
             ViewBag.Title = UserResolutionInfo.Title;
@@ -61,6 +73,49 @@ namespace Disly.Areas.Admin.Controllers
             var mfilter = FilterParams.Extend<MaterialFilter>(filter);
             model.List = _cmsRepository.getMaterialsList(mfilter);
 
+            MaterialsGroup[] categories = Groups;
+            if (categories != null)
+
+                model.Categories = categories.Select(p => new Catalog_list()
+                {
+                    Text = p.Title,
+                    Value = p.Alias
+                }).ToArray();
+
+            #region Group filter
+            var alias = "group";
+            var groupLink = "/admin/materials/";
+            var editGroupUrl = "/admin/materials/groupinfo/";
+
+            string Link = Request.Url.Query;
+            string active = Request.QueryString[alias];
+
+            if (model.Categories != null && model.Categories.Count() > 0)
+            {
+                model.Filtr = new FiltrModel()
+                {
+                    Title = "Группы новостей",
+                    Icon = "icon-th-list-3",
+                    BtnName = "Новая группа новостей",
+                    Alias = alias,
+                    Url = editGroupUrl,
+                    ReadOnly = true,
+                    AccountGroup = (model.Account != null) ? model.Account.Group : "",
+                    Items = model.Categories.Select(p =>
+                        new Catalog_list()
+                        {
+                            Text = p.Text,
+                            Value = p.Value,
+                            Link = AddFiltrParam(Link, alias, p.Value),
+                            Url = editGroupUrl + p.Value + "/",
+                            Selected = (active == p.Value) ? true : false
+                        })
+                        .ToArray(),
+                    Link = groupLink
+                };
+            }
+            #endregion
+
             return View(model);
         }
 
@@ -70,12 +125,10 @@ namespace Disly.Areas.Admin.Controllers
         /// <returns></returns>
         public ActionResult Item(Guid Id)
         {
-            EventsModel[] events = null;
-            OrgsModel[] orgs = null;
             model.Item = _cmsRepository.getMaterial(Id);
 
             ViewBag.DataPath = Settings.UserFiles + Domain + Settings.MaterialsDir;
-            ViewBag.DataPath = (model.Item == null)? 
+            ViewBag.DataPath = (model.Item == null) ?
                 ViewBag.DataPath + DateTime.Today.ToString("yyyy") + "/" + DateTime.Today.ToString("MM") + "/" + DateTime.Today.ToString("dd") + "/"
                 :
                 ViewBag.DataPath + model.Item.Date.ToString("yyyy") + "/" + model.Item.Date.ToString("MM") + "/" + model.Item.Date.ToString("dd") + "/";
@@ -87,9 +140,20 @@ namespace Disly.Areas.Admin.Controllers
                     Id = Id,
                     Date = DateTime.Now
                 };
+           
             }
-
-            
+            else
+            {
+                model.NewInMedicin = new SelectList(
+                      new List<SelectListItem>
+                      {
+                        new SelectListItem { Text = "не выбрано", Value =""},
+                        new SelectListItem { Text = "Мира", Value ="world"},
+                        new SelectListItem { Text = "России", Value ="russia"},
+                        new SelectListItem { Text = "Чувашии", Value = "chuvashia" }
+                      }, "Value", "Text",model.Item.SmiType
+                  );
+            }
             
             if (model.Item.PreviewImage != null && model.Item.PreviewImage != null && !string.IsNullOrEmpty(model.Item.PreviewImage.Url))
             {
@@ -99,12 +163,14 @@ namespace Disly.Areas.Admin.Controllers
             }
 
             //Заполняем для модели связи с другими объектами
+            EventsModel[] events = null;
             var eventFilter = FilterParams.Extend<EventFilter>(filter);
             eventFilter.RelId = Id;
             eventFilter.RelType = ContentType.MATERIAL;
             var eventsList = _cmsRepository.getEventsList(eventFilter);
             events = (eventsList != null) ? eventsList.Data : null;
 
+            OrgsModel[] orgs = null;
             var orgfilter = FilterParams.Extend<OrgFilter>(filter);
             orgfilter.RelId = Id;
             orgfilter.RelType = ContentType.MATERIAL;
@@ -117,25 +183,33 @@ namespace Disly.Areas.Admin.Controllers
                 //Persons = null
             };
 
+            ViewBag.AllGroups = Groups;
+
             return View("Item", model);
         }
 
         /// <summary>
-        /// Формируем строку фильтра
+        /// 
         /// </summary>
-        /// <param name="title_serch">Поиск по названию</param>
+        /// <param name="searchtext"></param>
+        /// <param name="disabled"></param>
+        /// <param name="size"></param>
+        /// <param name="date"></param>
+        /// <param name="dateend"></param>
         /// <returns></returns>
         [HttpPost]
         [MultiButton(MatchFormKey = "action", MatchFormValue = "search-btn")]
-        public ActionResult Search(string searchtext, bool disabled, string size, DateTime? date, DateTime? dateend)
+        public ActionResult Search(string searchtext, string group, bool enabled, string size, DateTime? datestart, DateTime? dateend)
         {
             string query = HttpUtility.UrlDecode(Request.Url.Query);
-            query = addFiltrParam(query, "searchtext", searchtext);
-            query = addFiltrParam(query, "disabled", disabled.ToString().ToLower());
-            query = (date == null) ? addFiltrParam(query, "date", String.Empty) : addFiltrParam(query, "date", ((DateTime)date).ToString("dd.MM.yyyy").ToLower());
-            query = (dateend == null) ? addFiltrParam(query, "dateend", String.Empty) : addFiltrParam(query, "dateend", ((DateTime)dateend).ToString("dd.MM.yyyy").ToString().ToLower());
-            query = addFiltrParam(query, "page", String.Empty);
-            query = addFiltrParam(query, "size", size);
+            query = AddFiltrParam(query, "searchtext", searchtext);
+            query = AddFiltrParam(query, "disabled", (!enabled).ToString().ToLower());
+            if (datestart.HasValue)
+                query = AddFiltrParam(query, "datestart", datestart.Value.ToString("dd.MM.yyyy").ToLower());
+            if (dateend.HasValue)
+                query = AddFiltrParam(query, "dateend", dateend.Value.ToString("dd.MM.yyyy").ToLower());
+            query = AddFiltrParam(query, "page", String.Empty);
+            query = AddFiltrParam(query, "size", size);
 
             return Redirect(StartUrl + query);
         }
@@ -157,7 +231,7 @@ namespace Disly.Areas.Admin.Controllers
         {
             //  При создании записи сбрасываем номер страницы
             string query = HttpUtility.UrlDecode(Request.Url.Query);
-            query = addFiltrParam(query, "page", String.Empty);
+            query = AddFiltrParam(query, "page", String.Empty);
 
             return Redirect(StartUrl + "Item/" + Guid.NewGuid() + "/" + query);
         }
@@ -229,6 +303,8 @@ namespace Disly.Areas.Admin.Controllers
                 }
 
                 //Определяем Insert или Update
+                bindData.Item.ContentLink = SiteInfo.ContentId;
+                bindData.Item.ContentLinkType = SiteInfo.Type;
                 if (getMaterial != null)
                 {
                     userMessage.info = "Запись обновлена";
@@ -237,9 +313,7 @@ namespace Disly.Areas.Admin.Controllers
 
                 else
                 {
-                    userMessage.info = "Запись добавлена";
-                    bindData.Item.ContentLink = SiteInfo.ContentId;
-                    bindData.Item.ContentLinkType = SiteInfo.Type;
+                    userMessage.info = "Запись добавлена";                    
                     res = _cmsRepository.insertCmsMaterial(bindData.Item);
                 }
                 //Сообщение пользователю
@@ -278,7 +352,19 @@ namespace Disly.Areas.Admin.Controllers
                 model.Item.PreviewImage = Files.getInfoImage(model.Item.PreviewImage.Url);
                 model.Item.PreviewImage.Source = photo.Source;
             }
+            model.NewInMedicin = new SelectList(
+                   new List<SelectListItem>
+                   {
+                        new SelectListItem { Text = "не выбрано", Value =""},
+                        new SelectListItem { Text = "Мира", Value ="world"},
+                        new SelectListItem { Text = "России", Value ="russia"},
+                        new SelectListItem { Text = "Чувашии", Value = "chuvashia" }
+                   }, "Value", "Text", model.Item.SmiType
+               );
+
             model.ErrorInfo = userMessage;
+
+            ViewBag.AllGroups = Groups;
 
             return View("Item", model);
         }
@@ -324,6 +410,8 @@ namespace Disly.Areas.Admin.Controllers
             }
             model.ErrorInfo = userMessage;
 
+            ViewBag.AllGroups = Groups;
+
             return View(model);
             //return RedirectToAction("Index");
         }
@@ -365,7 +453,7 @@ namespace Disly.Areas.Admin.Controllers
                     XmlParser(item.RssLink);//запись в таблицу актуальных значений подключенных rss лент
                 }
             }
-            
+
             //вывод значений записанных в предыдущем шаге
             model.RssObject = _cmsRepository.getRssObjects();
 
@@ -392,7 +480,7 @@ namespace Disly.Areas.Admin.Controllers
                                    {
                                        title = s.Element("title").Value,
                                        link = s.Element("link").Value,
-                                       enclosure=(s.Element("enclosure")!=null)? s.Element("enclosure").Attribute("url").Value:null,
+                                       enclosure = (s.Element("enclosure") != null) ? s.Element("enclosure").Attribute("url").Value : null,
                                        yandex_full_text = (string)s.Element(yandex + "full-text").Value,
                                        pubDate = DateTime.TryParseExact((s.Element("pubDate").Value)
                                        , "ddd, dd MMM yyyy HH:mm:ss +ffff",
@@ -414,14 +502,14 @@ namespace Disly.Areas.Admin.Controllers
                                                 language = s.Element("language").Value,
                                                 copyright = s.Element("copyright").Value,
 
-                                   //             lastBuildDate = DateTime.TryParseExact((s.Element("lastbuilddate").Value)
-                                   //    , "ddd, dd MMM yyyy HH:mm:ss +ffff",
-                                   //    System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out dt) ?
-                                   //    DateTime.ParseExact((s.Element("lastbuilddate").Value)
-                                   //             , "ddd, dd MMM yyyy HH:mm:ss +ffff",
-                                   //    System.Globalization.CultureInfo.InvariantCulture) : DateTime.ParseExact((s.Element("lastbuilddate").Value)
-                                   //    , "ddd, dd MMM yyyy HH:mm:ss 'GMT'",
-                                   //System.Globalization.CultureInfo.InvariantCulture),
+                                                //             lastBuildDate = DateTime.TryParseExact((s.Element("lastbuilddate").Value)
+                                                //    , "ddd, dd MMM yyyy HH:mm:ss +ffff",
+                                                //    System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out dt) ?
+                                                //    DateTime.ParseExact((s.Element("lastbuilddate").Value)
+                                                //             , "ddd, dd MMM yyyy HH:mm:ss +ffff",
+                                                //    System.Globalization.CultureInfo.InvariantCulture) : DateTime.ParseExact((s.Element("lastbuilddate").Value)
+                                                //    , "ddd, dd MMM yyyy HH:mm:ss 'GMT'",
+                                                //System.Globalization.CultureInfo.InvariantCulture),
                                                 items = items
                                             }
                                           ).ToList();
@@ -453,7 +541,7 @@ namespace Disly.Areas.Admin.Controllers
                     _cmsRepository.insertRssObject(item);
                 }
             }
-            
+
             //}
             //catch { }
         }
@@ -477,10 +565,10 @@ namespace Disly.Areas.Admin.Controllers
 
                 RssChannel channel
                     = (from s in doc.Descendants("channel")
-                                                select new RssChannel()
-                                                {
-                                                    Title = s.Element("title").Value
-                                                }).FirstOrDefault();
+                       select new RssChannel()
+                       {
+                           Title = s.Element("title").Value
+                       }).FirstOrDefault();
 
                 if (_cmsRepository.insertRssLink(RssUrl, channel.Title))
                 {
@@ -507,7 +595,7 @@ namespace Disly.Areas.Admin.Controllers
         public ActionResult RealizeRssImport(Guid id)
         {
             MaterialsModel data = _cmsRepository.getRssMaterial(id);
-            data.Alias= Transliteration.Translit(data.Title);
+            data.Alias = Transliteration.Translit(data.Title);
             data.Text = AdaptationXMLForHtml(data.Text);
             data.Title = AdaptationXMLForHtml(data.Title);
             data.ContentLink = SiteInfo.ContentId;
@@ -582,19 +670,54 @@ namespace Disly.Areas.Admin.Controllers
         }
         #endregion
 
-        //[HttpPost]
-        //[MultiButton(MatchFormKey = "action", MatchFormValue = "save-org-btn")]
-        //public ActionResult Orgs(MaterialsViewModel model)
-        //{
-        //    MaterialOrgType modelInsert = new MaterialOrgType
-        //    {
-        //        OrgTypes = model.OrgsByType,
-        //        Material = model.Item
-        //    };
+        [HttpGet]
+        public ActionResult GroupInfo(string id)
+        {
+            GroupModel model = _cmsRepository.getMaterialGroup(id);
 
-        //    _cmsRepository.insertMaterialsLinksToOrgs(modelInsert);
+            return PartialView("Modal/Group", model);
+        }
 
-        //    return PartialView("OrgsSaved");
-        //}
+        [HttpPost]
+        [MultiButton(MatchFormKey = "action", MatchFormValue = "create-group-btn")]
+        public ActionResult NewGroup(GroupModel bindData)
+        {
+            if (bindData != null)
+            {
+                if (ModelState.IsValid)
+                {
+                    var res = _cmsRepository.updateMaterialGroup(bindData);
+                    if (res)
+                        return PartialView("Modal/Success");
+                }
+            }
+
+            return PartialView("Modal/Error");
+        }
+
+        [HttpPost]
+        [MultiButton(MatchFormKey = "action", MatchFormValue = "save-group-btn")]
+        public ActionResult SaveGroup(GroupModel bindData)
+        {
+            if (bindData != null)
+            {
+                var res = _cmsRepository.updateMaterialGroup(bindData);
+                if (res)
+                    return PartialView("Modal/Success");
+            }
+
+            return PartialView("Modal/Error");
+        }
+
+        [HttpPost]
+        [MultiButton(MatchFormKey = "action", MatchFormValue = "delete-group-btn")]
+        public ActionResult DeleteGroup(GroupModel bindData)
+        {
+            var res = _cmsRepository.deleteMaterialGroup(bindData.Alias);
+            if (res)
+                return PartialView("Modal/Success");
+
+            return PartialView("Modal/Error");
+        }
     }
 }

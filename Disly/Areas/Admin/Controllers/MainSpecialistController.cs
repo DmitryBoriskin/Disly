@@ -50,7 +50,7 @@ namespace Disly.Areas.Admin.Controllers
             model.List = _cmsRepository.getMainSpecialistList(filter);
 
             #region администратор сайта
-            if (model.Account.Group.ToLower() == "admin")
+            if (model.Account.Group == "admin")
             {
                 if (mainSpecialist != null)
                 {
@@ -70,7 +70,7 @@ namespace Disly.Areas.Admin.Controllers
         public ActionResult Item(Guid id, string specialisations)
         {
             #region администратор сайта
-            if (model.Account.Group.ToLower() == "admin")
+            if (model.Account.Group == "admin")
             {
                 ViewBag.MainSpecId = mainSpecialist;
                 if (mainSpecialist != null && !id.Equals((Guid)mainSpecialist))
@@ -177,7 +177,7 @@ namespace Disly.Areas.Admin.Controllers
         {
             //  При создании записи сбрасываем номер страницы
             string query = HttpUtility.UrlDecode(Request.Url.Query);
-            query = addFiltrParam(query, "page", String.Empty);
+            query = AddFiltrParam(query, "page", String.Empty);
 
             return Redirect(StartUrl + "Item/" + Guid.NewGuid() + "/" + query);
         }
@@ -209,12 +209,24 @@ namespace Disly.Areas.Admin.Controllers
             return RedirectToAction("Index");
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="searchtext"></param>
+        /// <param name="disabled"></param>
+        /// <param name="size"></param>
+        /// <param name="date"></param>
+        /// <param name="dateend"></param>
+        /// <returns></returns>
         [HttpPost]
         [MultiButton(MatchFormKey = "action", MatchFormValue = "search-btn")]
-        public ActionResult Search(string searchtext, string size, DateTime? date, DateTime? dateend)
+        public ActionResult Search(string searchtext, string size)
         {
             string query = HttpUtility.UrlDecode(Request.Url.Query);
-            query = addFiltrParam(query, "searchtext", searchtext);
+            query = AddFiltrParam(query, "searchtext", searchtext);
+            query = AddFiltrParam(query, "page", String.Empty);
+            query = AddFiltrParam(query, "size", size);
+
             return Redirect(StartUrl + query);
         }
 

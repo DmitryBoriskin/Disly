@@ -63,9 +63,10 @@ namespace Disly.Controllers
             //Табы на странице
             model.Nav = new List<PageTabsViewModel>();
             model.Nav.Add(new PageTabsViewModel { Page = page, Title = "Все" });
+            model.Nav.Add(new PageTabsViewModel { Page = page, Title = "Медицинские услуги", Alias = "services" });
             model.Nav.Add(new PageTabsViewModel { Page = page, Title = "По типу медицинского учреждения", Alias = "typelist" });
             model.Nav.Add(new PageTabsViewModel { Page = page, Title = "По ведомственной принадлежности", Alias = "affiliation" });
-            model.Nav.Add(new PageTabsViewModel { Page = page, Title = "Медицинские услуги", Alias = "services" });
+            
 
             //Обработка активных табов
             if (model.Nav != null && model.Nav.Where(s => s.Alias == tab).Any())
@@ -122,7 +123,15 @@ namespace Disly.Controllers
                         });                        
                     }
                     else
+                    {
                         model.MedicalServices = _repository.getMedicalServices(null);
+
+                        int count_1_column = Convert.ToInt32(model.MedicalServices.Length / 2);
+                        ViewBag.Column1 = model.MedicalServices.Skip(0).Take(count_1_column);
+                        ViewBag.Column2 = model.MedicalServices.Skip(count_1_column);
+
+                    }
+                        
 
                     break;
                 default:

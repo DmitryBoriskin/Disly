@@ -59,7 +59,7 @@ namespace Disly.Areas.Admin.Controllers
         public ActionResult Index()
         {
             #region администратор сайта
-            if (model.Account.Group.ToLower() == "admin")
+            if (model.Account.Group == "admin")
             {
                 if (orgId != null)
                 {
@@ -85,17 +85,23 @@ namespace Disly.Areas.Admin.Controllers
         }
 
         /// <summary>
-        /// Формируем строку фильтра
+        /// 
         /// </summary>
-        /// <param name="title_serch">Поиск по названию</param>
+        /// <param name="searchtext"></param>
+        /// <param name="disabled"></param>
+        /// <param name="size"></param>
+        /// <param name="date"></param>
+        /// <param name="dateend"></param>
         /// <returns></returns>
         [HttpPost]
         [MultiButton(MatchFormKey = "action", MatchFormValue = "search-btn")]
-        public ActionResult Search(string searchtext, bool disabled, string size, DateTime? date, DateTime? dateend)
+        public ActionResult Search(string searchtext, string size)
         {
             string query = HttpUtility.UrlDecode(Request.Url.Query);
-            query = addFiltrParam(query, "searchtext", searchtext);
-            query = addFiltrParam(query, "disabled", disabled.ToString().ToLower());
+            query = AddFiltrParam(query, "searchtext", searchtext);
+            query = AddFiltrParam(query, "page", String.Empty);
+            query = AddFiltrParam(query, "size", size);
+
             return Redirect(StartUrl + query);
         }
 
@@ -116,7 +122,7 @@ namespace Disly.Areas.Admin.Controllers
         {
             //  При создании записи сбрасываем номер страницы
             string query = HttpUtility.UrlDecode(Request.Url.Query);
-            query = addFiltrParam(query, "page", String.Empty);
+            query = AddFiltrParam(query, "page", String.Empty);
             return Redirect(StartUrl + "item/" + Guid.NewGuid() + "/" + query);
         }
 
@@ -124,7 +130,7 @@ namespace Disly.Areas.Admin.Controllers
         public ActionResult Item(Guid Id)
         {
             #region администратор сайта
-            if (model.Account.Group.ToLower() == "admin")
+            if (model.Account.Group == "admin")
             {
                 if (orgId != null && !Id.Equals((Guid)orgId))
                 {
@@ -306,7 +312,7 @@ namespace Disly.Areas.Admin.Controllers
             if (model.StructureItem != null)
             {
                 #region администратор сайта
-                if (model.Account.Group.ToLower() == "admin")
+                if (model.Account.Group == "admin")
                 {
                     if (orgId != null)
                     {
@@ -350,19 +356,23 @@ namespace Disly.Areas.Admin.Controllers
 
                 if (back_model.StructureItem.GeopointX != null) { MapX = (double)back_model.StructureItem.GeopointX; }
                 if (back_model.StructureItem.GeopointY != null) { MapY = (double)back_model.StructureItem.GeopointY; }
-                ViewBag.Titlecoord = back_model.StructureItem.Title;
-                ViewBag.Xcoord = MapX;
-                ViewBag.Ycoord = MapY;
-                try
-                {
+           
+                //try
+                //{
                     if (back_model.StructureItem.Adress != String.Empty && (MapX == 0 || MapY == 0))
                     {
                         var CoordResult = Spots.Coords(back_model.StructureItem.Adress);
                         back_model.StructureItem.GeopointX = CoordResult.GeopointX;
                         back_model.StructureItem.GeopointY = CoordResult.GeopointY;
                     }
-                }
-                catch { }
+                //}
+                //catch { }
+
+                ViewBag.Titlecoord = back_model.StructureItem.Title;
+                ViewBag.Xcoord = back_model.StructureItem.GeopointX;
+                ViewBag.Ycoord = back_model.StructureItem.GeopointY;
+
+
                 #endregion
 
 
@@ -504,7 +514,7 @@ namespace Disly.Areas.Admin.Controllers
             if (model.StructureItem != null)
             {
                 #region администратор сайта
-                if (model.Account.Group.ToLower() == "admin")
+                if (model.Account.Group == "admin")
                 {
                     if (orgId != null)
                     {
@@ -519,6 +529,10 @@ namespace Disly.Areas.Admin.Controllers
                     }
                 }
                 #endregion
+
+
+                ViewBag.Xcoord = model.StructureItem.GeopointX;
+                ViewBag.Ycoord = model.StructureItem.GeopointY;
 
                 if (!model.StructureItem.Ovp)
                 {
@@ -700,7 +714,7 @@ namespace Disly.Areas.Admin.Controllers
         public ActionResult Department(Guid id)
         {
             #region администратор сайта
-            if (model.Account.Group.ToLower() == "admin")
+            if (model.Account.Group == "admin")
             {
                 if (orgId != null)
                 {
@@ -837,7 +851,12 @@ namespace Disly.Areas.Admin.Controllers
             string IdDepartment = Request["DepartmentItem.Id"];
             string PhoneLabel = Request["new_phone_label"];
             string PhoneValue = Request["new_phone_value"];
-            _cmsRepository.insDepartmentsPhone(Guid.Parse(IdDepartment), PhoneLabel, PhoneValue); //, AccountInfo.id, RequestUserInfo.IP
+            if(!String.IsNullOrEmpty(PhoneLabel) || !String.IsNullOrEmpty(PhoneValue))
+            {
+                _cmsRepository.insDepartmentsPhone(Guid.Parse(IdDepartment), PhoneLabel, PhoneValue); //, AccountInfo.id, RequestUserInfo.IP
+            }
+            
+
             return Redirect(((System.Web.HttpRequestWrapper)Request).RawUrl);
         }
 
@@ -941,7 +960,7 @@ namespace Disly.Areas.Admin.Controllers
             if (model.AdministrativItem != null)
             {
                 #region администратор сайта
-                if (model.Account.Group.ToLower() == "admin")
+                if (model.Account.Group == "admin")
                 {
                     if (orgId != null)
                     {

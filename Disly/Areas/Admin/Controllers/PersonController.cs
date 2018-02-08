@@ -63,21 +63,22 @@ namespace Disly.Areas.Admin.Controllers
         }
 
         /// <summary>
-        /// Формируем строку фильтра
+        /// 
         /// </summary>
-        /// <param name="title_serch">Поиск по названию</param>
-        /// <param name="search-btn">Поиск по доменному имени</param>
+        /// <param name="searchtext"></param>
+        /// <param name="disabled"></param>
+        /// <param name="size"></param>
+        /// <param name="date"></param>
+        /// <param name="dateend"></param>
         /// <returns></returns>
         [HttpPost]
         [MultiButton(MatchFormKey = "action", MatchFormValue = "search-btn")]
-        public ActionResult Search(string searchtext, string group, bool disabled, string size)
+        public ActionResult Search(string searchtext, string size)
         {
             string query = HttpUtility.UrlDecode(Request.Url.Query);
-            query = addFiltrParam(query, "searchtext", searchtext);
-            query = addFiltrParam(query, "disabled", disabled.ToString().ToLower());
-            query = addFiltrParam(query, "group", group);
-            query = addFiltrParam(query, "page", String.Empty);
-            query = addFiltrParam(query, "size", size);
+            query = AddFiltrParam(query, "searchtext", searchtext);
+            query = AddFiltrParam(query, "page", String.Empty);
+            query = AddFiltrParam(query, "size", size);
 
             return Redirect(StartUrl + query);
         }
@@ -99,7 +100,7 @@ namespace Disly.Areas.Admin.Controllers
         {
             //  При создании записи сбрасываем номер страницы
             string query = HttpUtility.UrlDecode(Request.Url.Query);
-            query = addFiltrParam(query, "page", String.Empty);
+            query = AddFiltrParam(query, "page", String.Empty);
 
             return Redirect(StartUrl + "Item/" + Guid.NewGuid() + "/" + query);
         }

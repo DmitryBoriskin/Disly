@@ -64,7 +64,7 @@ namespace cms.dbase
                         Id = s.id,
                         Num = s.num,
                         Title = s.c_title,
-                        Alias = s.c_alias,
+                        Alias = s.c_alias.ToLower(),
                         Place = s.c_place,
                         EventMaker = s.c_organizer,
                         PreviewImage = new Photo()
@@ -93,23 +93,89 @@ namespace cms.dbase
         {
             using (var db = new CMSdb(_context))
             {
-                var query = queryByEventFilter(db, filtr);
+                // var query = queryByEventFilter(db, filtr);
+
+                if (filtr == null)
+                    throw new Exception("cmsRepository > queryByEventFilter: Filter is null");
+
+                var query = db.content_sv_event_sites.AsQueryable();
+
+                #region Фильтр
+                //var query = db.content_eventss
+                //                  .AsQueryable();
+
+                //if (!string.IsNullOrEmpty(filtr.SearchText))
+                //{
+                //    query = query.Where(w => w.c_title.Contains(filtr.SearchText));
+                //}
+
+                //В таблице ищем связи оранизация - контент (новость/событие)
+                //if (filtr.RelId.HasValue && filtr.RelId.Value != Guid.Empty)
+                //{
+                //    var objctLinks = db.content_content_links
+                //        .Where(s => s.f_content == filtr.RelId.Value)
+                //        .Where(s => s.f_content_type == filtr.RelType.ToString().ToLower())
+                //        .Where(s => s.f_link_type == ContentLinkType.EVENT.ToString().ToLower());
+
+                //    if (!objctLinks.Any())
+                //        query = query.Where(o => o.id == Guid.Empty); //Делаем заранее ложный запрос
+                //    else
+                //    {
+                //        var objctsId = objctLinks.Select(o => o.f_link);
+                //        query = query.Where(o => objctsId.Contains(o.id));
+                //    }
+                //}
 
                 //Если указан домен, то выбираем записи, принадлежащие ему
+                //if (!string.IsNullOrEmpty(filtr.Domain))
+                //{
+                //    var contentType = ContentType.EVENT.ToString().ToLower();
+                //    var events = db.content_content_links.Where(e => e.f_content_type == contentType)
+                //            .Join(db.cms_sitess.Where(o => o.c_alias.ToLower() == filtr.Domain),
+                //                    e => e.f_link,
+                //                    o => o.f_content,
+                //                    (e, o) => e.f_content
+                //                    );
+
+                //    if (!events.Any())
+                //        return null;
+
+                //    query = query.Where(w => events.Contains(w.id));
+                //}
+
+
+                //Фильтр по домену
                 if (!string.IsNullOrEmpty(filtr.Domain))
                 {
-                    var contentType = ContentType.EVENT.ToString().ToLower();
-                    var events = db.content_content_links.Where(e => e.f_content_type == contentType)
-                            .Join(db.cms_sitess.Where(o => o.c_alias == filtr.Domain),
-                                    e => e.f_link,
-                                    o => o.f_content,
-                                    (e, o) => e.f_content
-                                    );
-
-                    if (!events.Any())
-                        return null;
-                    query = query.Where(w => events.Contains(w.id));
+                    query = query.Where(p => p.site_alias == filtr.Domain);
                 }
+
+                //Фильтр по привязке к др. контенту (организация и тп)
+                if (filtr.RelId.HasValue && filtr.RelId.Value != Guid.Empty)
+                {
+                    query = query.Where(s => s.f_content == filtr.RelId.Value)
+                                    .Where(s => s.f_content_type == filtr.RelType.ToString().ToLower());
+                }
+
+                //Фильтр по тексту
+                if (!string.IsNullOrEmpty(filtr.SearchText))
+                query = query.Where(s => s.c_title.ToLower().Contains(filtr.SearchText));
+
+                //Фильтр по дате
+                if (filtr.Date.HasValue)
+                    query = query.Where(s => s.d_date > filtr.Date.Value);
+
+                if (filtr.DateEnd.HasValue)
+                    query = query.Where(s => s.d_date < filtr.DateEnd.Value.AddDays(1));
+
+                //Фильтр по доступности
+                if (filtr.Disabled.HasValue)
+                    query = query.Where(s => s.b_disabled == filtr.Disabled.Value);
+                #endregion
+
+
+                //Сортировка
+                query = query.OrderByDescending(w => w.d_date);
 
                 int itemCount = query.Count();
 
@@ -119,10 +185,11 @@ namespace cms.dbase
                     .Take(filtr.Size)
                     .Select(s => new EventsModel
                     {
-                        Id = s.id,
+                        Id = s.event_id,
                         Num = s.num,
+                        SiteId = s.site_alias,
                         Title = s.c_title,
-                        Alias = s.c_alias,
+                        Alias = s.c_alias.ToLower(),
                         Place = s.c_place,
                         EventMaker = s.c_organizer,
                         PreviewImage = new Photo()
@@ -172,7 +239,7 @@ namespace cms.dbase
                 {
                     var contentType = ContentType.EVENT.ToString().ToLower();
                     var events = db.content_content_links.Where(e => e.f_content_type == contentType)
-                            .Join(db.cms_sitess.Where(o => o.c_alias == filtr.Domain),
+                            .Join(db.cms_sitess.Where(o => o.c_alias.ToLower() == filtr.Domain),
                                     e => e.f_link,
                                     o => o.f_content,
                                     (e, o) => e.f_content
@@ -225,8 +292,8 @@ namespace cms.dbase
                         var EndDate = (eventData.DateEnd.HasValue) ? eventData.DateEnd.Value : eventData.DateBegin;
                         cdEvent = new content_events
                         {
-                            id = eventData.Id,
-                            c_alias = eventData.Alias,
+                            id = eventData.Id,                               
+                            c_alias = eventData.Alias.ToLower(),
                             c_title = eventData.Title,
                             c_text = eventData.Text,
                             c_place = eventData.Place,
@@ -255,6 +322,7 @@ namespace cms.dbase
                                 cdEvent.n_date_end_year = eventData.DateEnd.Value.Year;
                         }
 
+
                         var cdContentLink = new content_content_link()
                         {
                             id = Guid.NewGuid(),
@@ -264,8 +332,10 @@ namespace cms.dbase
                             f_link_type = eventData.ContentLinkType,
                             b_origin = true
                         };
-
+                        var query_str = db.LastQuery;
                         db.Insert(cdEvent);
+                       
+
                         db.Insert(cdContentLink);
 
                         //логирование
@@ -310,7 +380,7 @@ namespace cms.dbase
 
                         var EndDate = (eventData.DateEnd.HasValue) ? eventData.DateEnd.Value : eventData.DateBegin;
 
-                        cdEvent.c_alias = eventData.Alias;
+                        cdEvent.c_alias = eventData.Alias.ToLower();
                         cdEvent.c_title = eventData.Title;
                         cdEvent.c_text = eventData.Text;
                         cdEvent.c_place = eventData.Place;

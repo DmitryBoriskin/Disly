@@ -26,6 +26,7 @@ namespace cms.dbModel.entity
         /// <summary>
         /// Профессия varchar(100)
         /// </summary>
+        [Required(ErrorMessage = "Поле не должно быть пустым.")]
         public string Profession { get; set; }
         /// <summary>
         /// Должностные обязанности varchar(2048)

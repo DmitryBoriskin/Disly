@@ -20,10 +20,26 @@ namespace cms.dbase
             {
                 var query = db.content_vacanciess.AsQueryable();
 
-                if(!string.IsNullOrEmpty(filtr.Domain))
-                {
-                    query = query.Where(w => w.f_site == _domain);
-                }
+
+                #region Filter
+
+                if (!string.IsNullOrEmpty(filtr.Domain))
+                    query = query.Where(p => p.f_site == filtr.Domain);
+
+                if (!string.IsNullOrEmpty(filtr.SearchText))
+                    query = query.Where(p => p.c_profession.Contains(filtr.SearchText) || p.c_post.Contains(filtr.SearchText));
+
+                if (filtr.Date.HasValue)
+                    query = query.Where(p => p.d_date > filtr.Date.Value);
+
+                if (filtr.Date.HasValue)
+                    query = query.Where(p => p.d_date < filtr.DateEnd.Value.AddDays(1));
+
+                if (filtr.Disabled.HasValue)
+                    query = query.Where(p => p.b_disabled == filtr.Disabled);
+
+                #endregion
+
 
                 query = query.OrderByDescending(o => o.d_date);
 

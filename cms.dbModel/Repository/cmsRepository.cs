@@ -82,6 +82,10 @@ namespace cms.dbModel
         // Материалы
         public abstract MaterialsGroup[] getAllMaterialGroups();
         public abstract MaterialsGroup[] getMaterialGroups(Guid materialId);
+        public abstract GroupModel getMaterialGroup(string alias);
+        public abstract bool updateMaterialGroup(GroupModel group);
+        public abstract bool deleteMaterialGroup(string alias);
+
 
         public abstract MaterialsList getMaterialsList(MaterialFilter filtr);
         public abstract MaterialsModel getMaterial(Guid id);

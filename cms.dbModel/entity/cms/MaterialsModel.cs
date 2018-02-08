@@ -134,6 +134,10 @@ namespace cms.dbModel.entity
         /// Признак импортированности материала из рсс ленты
         /// </summary>
         public bool ImportRss { get; set; }
+        /// <summary>
+        /// Сми о медицине(мира/России/Чувашии)
+        /// </summary>
+        public string SmiType { get; set; }
   
         //-------------------------------------------------------------
         /// <summary>

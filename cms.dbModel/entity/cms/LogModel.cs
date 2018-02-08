@@ -248,7 +248,11 @@ namespace cms.dbModel.entity
         /// <summary>
         /// Фотоальбомы
         /// </summary>
-        Anketa = 16
+        Anketa = 16,
+        /// <summary>
+        /// новостная группа
+        /// </summary>
+        MaterialGroup = 14
     }
 
     /// <summary>

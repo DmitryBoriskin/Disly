@@ -132,8 +132,8 @@
                 item.find("[type=checkbox]").not(":disabled")
                     .each(function () {
                         $(this).iCheck("uncheck");
-                        $(this).data("state", "full-unchecked");
                     });
+                $(this).data("state", "full-unchecked");
             }
         });
     });

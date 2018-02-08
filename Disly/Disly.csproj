@@ -411,6 +411,21 @@
     <Content Include="Areas\Admin\Views\Shared\Templates\Filtr.cshtml" />
     <Content Include="Areas\Admin\Views\Shared\Templates\Menu.cshtml" />
     <Content Include="Areas\Admin\Views\Shared\Partial\Pager.cshtml" />
+    <Content Include="Areas\Admin\Views\Shared\Partial\Filtr.cshtml" />
+    <Content Include="Areas\Admin\Views\Materials\Modal\Group.cshtml" />
+    <Content Include="Areas\Admin\Views\Events\Part\SearchFilter.cshtml" />
+    <Content Include="Areas\Admin\Views\Feedbacks\Part\SearchFilter.cshtml" />
+    <Content Include="Areas\Admin\Views\Materials\Part\SearchFilter.cshtml" />
+    <Content Include="Areas\Admin\Views\MainSpecialist\Part\SearchFilter.cshtml" />
+    <Content Include="Areas\Admin\Views\Person\Part\SearchFilter.cshtml" />
+    <Content Include="Areas\Admin\Views\PhotoAlbums\Part\SearchFilter.cshtml" />
+    <Content Include="Areas\Admin\Views\Sites\Part\SearchFilter.cshtml" />
+    <Content Include="Areas\Admin\Views\Users\Part\SearchFilter.cshtml" />
+    <Content Include="Areas\Admin\Views\Vacancy\Part\SearchFilter.cshtml" />
+    <Content Include="Areas\Admin\Views\Vote\Part\SearchFilter.cshtml" />
+    <Content Include="Areas\Admin\Views\Worksheet\Part\SearchFilter.cshtml" />
+    <Content Include="Areas\Admin\Views\PortalUsers\Part\SearchFilter.cshtml" />
+    <Content Include="Areas\Admin\Views\Orgs\part\SearchFilter.cshtml" />
     <None Include="Content\plugins\tinymce\plugins\gallery\plugin.min.js_korkin" />
     <Content Include="Content\plugins\tinymce\plugins\help\img\logo.png" />
     <Content Include="Content\plugins\tinymce\plugins\help\plugin.min.js" />
@@ -945,6 +960,7 @@
     <Content Include="Views\Feedback\part\Filter.cshtml" />
     <Content Include="Views\Feedback\part\List.cshtml" />
     <Content Include="Views\Shared\partial\Pager.cshtml" />
+    <Content Include="Views\Press\part\Filter.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

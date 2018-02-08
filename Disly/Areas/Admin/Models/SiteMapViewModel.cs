@@ -38,5 +38,10 @@ namespace Disly.Areas.Admin.Models
         /// Хлебные крошки 
         /// </summary>
         public BreadCrumbSiteMap[] BreadCrumbs { get; set; }
+
+        /// <summary>
+        /// Список категорий для фильтрации
+        /// </summary>
+        public FiltrModel Filtr {get; set;}
     }
 }
