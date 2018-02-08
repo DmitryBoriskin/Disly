@@ -881,6 +881,7 @@ namespace cms.dbase.models
 		[Column,        Nullable] public string c_odnoklassniki  { get; set; } // nvarchar(512)
 		[Column,        Nullable] public string c_twitter        { get; set; } // nvarchar(512)
 		[Column,        Nullable] public string c_theme          { get; set; } // nvarchar(256)
+		[Column,     NotNull    ] public bool   b_template       { get; set; } // bit
 
 		#region Associations
 
@@ -1223,16 +1224,16 @@ namespace cms.dbase.models
 		#region Associations
 
 		/// <summary>
-		/// FK_content_banners_cms_sites
-		/// </summary>
-		[Association(ThisKey="f_site", OtherKey="c_alias", CanBeNull=false, KeyName="FK_content_banners_cms_sites", BackReferenceName="contentbannerscmssitess")]
-		public cms_sites contentbannerscmssites { get; set; }
-
-		/// <summary>
 		/// FK_content_banners_content_banner_sections
 		/// </summary>
 		[Association(ThisKey="f_section", OtherKey="id", CanBeNull=false, KeyName="FK_content_banners_content_banner_sections", BackReferenceName="contentbannerscontentbannersectionss")]
 		public content_banner_sections contentbannerscontentbannersections { get; set; }
+
+		/// <summary>
+		/// FK_content_banners_cms_sites
+		/// </summary>
+		[Association(ThisKey="f_site", OtherKey="c_alias", CanBeNull=false, KeyName="FK_content_banners_cms_sites", BackReferenceName="contentbannerscmssitess")]
+		public cms_sites contentbannerscmssites { get; set; }
 
 		#endregion
 	}
@@ -1340,7 +1341,7 @@ namespace cms.dbase.models
 		[Column,     NotNull    ] public bool     b_annually            { get; set; } // bit
 		[Column,     NotNull    ] public string   c_title               { get; set; } // varchar(512)
 		[Column,        Nullable] public string   c_preview             { get; set; } // varchar(1024)
-		[Column,        Nullable] public string   c_text                { get; set; } // varchar(4096)
+		[Column,        Nullable] public string   c_text                { get; set; } // varchar(max)
 		[Column,        Nullable] public string   c_place               { get; set; } // varchar(512)
 		[Column,        Nullable] public string   c_organizer           { get; set; } // varchar(1024)
 		[Column,        Nullable] public string   c_url                 { get; set; } // varchar(1024)
@@ -1752,16 +1753,16 @@ namespace cms.dbase.models
 		#region Associations
 
 		/// <summary>
-		/// FK_content_orgs_medical_services_links_content_orgs
-		/// </summary>
-		[Association(ThisKey="f_org", OtherKey="id", CanBeNull=false, KeyName="FK_content_orgs_medical_services_links_content_orgs", BackReferenceName="contentorgsmedicalserviceslinkscontentorgss")]
-		public content_orgs contentorgsmedicalserviceslinkscontentorgs { get; set; }
-
-		/// <summary>
 		/// FK_content_orgs_medical_services_links_content_medical_services
 		/// </summary>
 		[Association(ThisKey="f_medical_service", OtherKey="id", CanBeNull=false, KeyName="FK_content_orgs_medical_services_links_content_medical_services", BackReferenceName="contentorgsmedicalserviceslinkscontentmedicalservicess")]
 		public content_medical_services contentorgsmedicalserviceslinkscontentmedicalservices { get; set; }
+
+		/// <summary>
+		/// FK_content_orgs_medical_services_links_content_orgs
+		/// </summary>
+		[Association(ThisKey="f_org", OtherKey="id", CanBeNull=false, KeyName="FK_content_orgs_medical_services_links_content_orgs", BackReferenceName="contentorgsmedicalserviceslinkscontentorgss")]
+		public content_orgs contentorgsmedicalserviceslinkscontentorgs { get; set; }
 
 		#endregion
 	}
@@ -2501,12 +2502,6 @@ namespace cms.dbase.models
 		/// </summary>
 		[Association(ThisKey="f_page_view", OtherKey="id", CanBeNull=false, KeyName="FK_site_front_section_page_views", BackReferenceName="sitefrontsectionpageviewss")]
 		public front_page_views sitefrontsectionpageviews { get; set; }
-
-		/// <summary>
-		/// FK_site_front_section
-		/// </summary>
-		[Association(ThisKey="f_site", OtherKey="c_alias", CanBeNull=false, KeyName="FK_site_front_section", BackReferenceName="sitefrontsections")]
-		public cms_sites sitefrontsection { get; set; }
 
 		/// <summary>
 		/// FK_front_section_site
