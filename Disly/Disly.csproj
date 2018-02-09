@@ -588,6 +588,7 @@
     <Compile Include="Areas\Admin\Controllers\WorksheetController.cs" />
     <Compile Include="Areas\Admin\Models\AnketaViewModel.cs" />
     <Compile Include="Controllers\gs\SpecStructureController.cs" />
+    <Compile Include="Controllers\gs\SpecContactsController.cs" />
     <Compile Include="Controllers\orgs\OrgGsMembersController.cs" />
     <Compile Include="Controllers\AnketaController.cs" />
     <Compile Include="Controllers\VacancyController.cs" />
@@ -667,6 +668,7 @@
     </Compile>
     <Compile Include="Areas\Admin\Models\CoreViewModel.cs" />
     <Compile Include="Models\EventViewModel.cs" />
+    <Compile Include="Models\gs\SpecContactsViewModel.cs" />
     <Compile Include="Models\gs\SpecStructureViewModel.cs" />
     <Compile Include="Models\base\ErrorViewModel.cs" />
     <Compile Include="Models\WorksheetViewModel.cs" />
@@ -961,6 +963,7 @@
     <Content Include="Views\Feedback\part\List.cshtml" />
     <Content Include="Views\Shared\partial\Pager.cshtml" />
     <Content Include="Views\Press\part\Filter.cshtml" />
+    <Content Include="Views\SpecContacts\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

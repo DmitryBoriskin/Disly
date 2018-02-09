@@ -261,7 +261,24 @@ namespace cms.dbase
             }
         }
 
+        public override string getSiteDefaultDomainByContentId(Guid contentId)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var data = db.cms_sites_domainss
+                    .Where(w => w.fksitesdomains.f_content == contentId)
+                    .Where(w => w.b_default == true);
 
+                try
+                {
+                    return data.Select(p => p.c_domain).SingleOrDefault();
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("FrontRepository > getSiteDefaultDomain : Обнаружено более одного домена по умолчанию " + contentId);
+                }
+            }
+        }
         public override string getSiteDefaultDomain(string siteId)
         {
             using (var db = new CMSdb(_context))
@@ -1364,11 +1381,6 @@ namespace cms.dbase
                 var search = !string.IsNullOrWhiteSpace(filter.SearchText)
                     ? filter.SearchText.ToLower().Split(' ') : null; // поиск по человеку
 
-
-                //var people = (from s in db.cms_sitess
-                //              join pol in db.content_people_org_links on s.f_content equals pol.f_org
-                //              join p in db.content_peoples on pol.f_people equals p.id
-                //              select new { p, pol, s });
                 var people = (from p in db.content_peoples
                               join pol in db.content_people_org_links on p.id equals pol.f_people
                               where !pol.b_dismissed
@@ -1428,9 +1440,7 @@ namespace cms.dbase
                         {
                             Id = ep2.ep.id,
                             Name = ep2.ep.c_name,
-                            OrgId = ep2.p.o.id,
-                            OrgTitle = !string.IsNullOrEmpty(ep2.p.o.c_title_short) ? ep2.p.o.c_title_short : ep2.p.o.c_title,
-                            OrgUrl = (ep2.p.s != null && !string.IsNullOrEmpty(ep2.p.s.c_alias)) ? getSiteDefaultDomain(ep2.p.s.c_alias) : null,
+                            Org = (ep2.p.o.id != null)? getOrgItem(ep2.p.o.id): null,
                             Type = ep2.pepl.n_type
                         }).ToArray()
                     }).OrderBy(o => o.FIO);
@@ -2295,9 +2305,7 @@ namespace cms.dbase
                         {
                             Id = ep2.ep.id,
                             Name = ep2.ep.name,
-                            OrgId = ep2.ep.org,
-                            OrgUrl = !string.IsNullOrEmpty(ep2.ep.domain) ? getSiteDefaultDomain(ep2.ep.domain) : null,
-                            OrgTitle = ep2.ep.title,
+                            Org = getOrgItem(ep2.ep.org),
                             Type = ep2.pepl.type
                         }).ToArray()
                     });
@@ -2827,6 +2835,7 @@ namespace cms.dbase
                         Title = s.c_title,
                         ShortTitle = s.c_title_short,
                         Phone = s.c_phone,
+                        Url = getSiteDefaultDomainByContentId(s.id),
                         PhoneReception = s.c_phone_reception,
                         Fax = s.c_fax,
                         Email = s.c_email,

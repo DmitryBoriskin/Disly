@@ -47,6 +47,11 @@ namespace cms.dbModel.entity
         public Photo Logo { get; set; }
 
         /// <summary>
+        /// Default url
+        /// </summary>
+        public string Url { get; set; }
+
+        /// <summary>
         /// Контактная информация
         /// </summary>
         public string Contacts { get; set; }
@@ -69,7 +74,7 @@ namespace cms.dbModel.entity
         /// <summary>
         /// Телефон
         /// </summary>
-        public string Phone { get; set; }        
+        public string Phone { get; set; }
 
         /// <summary>
         /// Телефон приёмного отделения
@@ -511,19 +516,24 @@ namespace cms.dbModel.entity
         public int Type { get; set; }
 
         /// <summary>
-        /// Идентификатор организации (поле f_guid)
+        /// Организация по данной должности
         /// </summary>
-        public Guid? OrgId { get; set; }
+        public OrgsModel Org { get; set; }
 
-        /// <summary>
-        /// Название организации
-        /// </summary>
-        public string OrgTitle { get; set; }
+        ///// <summary>
+        ///// Идентификатор организации (поле f_guid)
+        ///// </summary>
+        //public Guid? OrgId { get; set; }
 
-        /// <summary>
-        /// ссылка на Сайт организации 
-        /// </summary>
-        public string OrgUrl { get; set; }
+        ///// <summary>
+        ///// Название организации
+        ///// </summary>
+        //public string OrgTitle { get; set; }
+
+        ///// <summary>
+        ///// ссылка на Сайт организации 
+        ///// </summary>
+        //public string OrgUrl { get; set; }
     }
     
     /// <summary>

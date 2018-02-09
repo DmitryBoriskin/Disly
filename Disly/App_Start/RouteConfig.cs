@@ -179,6 +179,12 @@ namespace Disly
               url: "SpecStructure/",
               defaults: new { controller = "SpecStructure", action = "Index" }
            );
+            // Структура в гс
+            routes.MapRoute(
+              name: "SpecContacts",
+              url: "SpecContacts/",
+              defaults: new { controller = "SpecContacts", action = "Index" }
+           );
 
             // Главные специалисты на портале
             routes.MapRoute(
