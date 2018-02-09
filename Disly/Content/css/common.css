@@ -114,6 +114,7 @@ fieldset {
 .head_logo {
     padding-right: 20px;
     float: left;
+    max-width:250px;
 }
 .head_logo img{
     max-width:100%;
@@ -233,6 +234,7 @@ fieldset {
 .searchform_input_wr {
     width: 100%;
     padding-right: 110px;
+    background-color: #fff;
 }
 
 .searchform input {
@@ -254,16 +256,17 @@ fieldset {
 .searchform button {
     float: right;
     font-weight: normal;
-    padding: 10px 15px;
+    padding: 10px 15px 11px;
     color: #fff;
     border: none;
     line-height: 26px;
+    margin-top:-1px;
 }
 
 .searchform_close {
     float: right;
     font-size: 22px;
-    margin-left: 5px;
+    margin-left: 2px;
     line-height: 46px;
     vertical-align: middle;
     padding: 0 5px;
@@ -771,7 +774,8 @@ a.sitemap-plate.sitemap-plate-image {
 }
 /*  */
 .breadcrumb {
-    padding: 10px 0 6px !important;
+    padding: 6px 0 6px !important;
+    margin-top:4px;
     background-color: #fff;
 }
 

@@ -1,15 +1,26 @@
+.header_wr {
+  background-color: #003399;
+  margin-bottom: -4px;
+  padding-bottom: 4px;
+}
+.head_title span {
+  color: #fff;
+}
+#header .navbar-left a {
+  color: #fff;
+}
 a {
   color: #003399;
 }
 a:hover {
   color: #00194d;
 }
-.head_title span {
-  color: #00194d;
-}
+/*.head_title span {
+    color: @def1
+}*/
 .bottom_menu a:hover,
 .right_section a:hover {
-  color: #003399;
+  color: #ebedf2;
 }
 .bottom_menu a:hover:before,
 .right_section a:hover:before {
@@ -24,14 +35,30 @@ a:hover {
 .slider-text-block {
   background-color: #003399;
 }
+#header .navbar-left a:focus,
+#header .navbar-left a:active,
+#header .navbar-left a:hover,
 .menu-mini-icons a:hover,
 #header .navbar-left a:hover {
-  color: #003399 !important;
+  color: #ccd3e0 !important;
+  background-color: #003399;
+}
+.spec-version-link span {
+  color: #fff;
 }
 .searchform_show {
-  color: #003399;
+  color: #fff;
 }
-.seacrh_button:before {
+.searchform_show:hover {
+  color: #ccd3e0;
+}
+#header {
+  background-color: #003399;
+}
+.navbar-container.fixed-theme .spec-info {
+  color: #fff;
+}
+#header.navbar.navbar-fixed-top.fixed-theme .seacrh_button:before {
   color: #003399;
 }
 .top-slider-wrapper {

@@ -1,4 +1,4 @@
-/// <binding />
+/// <binding BeforeBuild='blue_dark' />
 "use strict";
 
 var gulp = require("gulp"),
