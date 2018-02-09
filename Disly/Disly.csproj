@@ -142,6 +142,7 @@
     <Content Include="Content\css\styles_login.css" />
     <Content Include="Content\css\styles_old.css" />
     <Content Include="Content\css\theme\blue.css" />
+    <Content Include="Content\css\theme\blue_dark.css" />
     <Content Include="Content\css\theme\green.css" />
     <Content Include="Content\css\theme\green_portal.css" />
     <Content Include="Content\css\theme\purple.css" />
@@ -425,6 +426,7 @@
     <Content Include="Areas\Admin\Views\Vote\Part\SearchFilter.cshtml" />
     <Content Include="Areas\Admin\Views\Worksheet\Part\SearchFilter.cshtml" />
     <Content Include="Areas\Admin\Views\PortalUsers\Part\SearchFilter.cshtml" />
+    <Content Include="Content\css\theme\blue_dark.less" />
     <Content Include="Areas\Admin\Views\Orgs\part\SearchFilter.cshtml" />
     <None Include="Content\plugins\tinymce\plugins\gallery\plugin.min.js_korkin" />
     <Content Include="Content\plugins\tinymce\plugins\help\img\logo.png" />
