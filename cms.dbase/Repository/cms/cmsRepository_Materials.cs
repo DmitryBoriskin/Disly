@@ -242,26 +242,6 @@ namespace cms.dbase
         {
             using (var db = new CMSdb(_context))
             {
-                //var query = db.content_materialss.AsQueryable();
-
-                //if (!string.IsNullOrEmpty(filtr.Domain))
-                //{
-                //    var contentType = ContentType.MATERIAL.ToString().ToLower();
-
-                //    var materials = db.content_content_links.Where(e => e.f_content_type == contentType)
-                //        .Join(db.cms_sitess.Where(o => o.c_alias.ToLower() == filtr.Domain),
-                //                e => e.f_link,
-                //                o => o.f_content,
-                //                (e, o) => e.f_content
-                //                );
-
-                //    if (!materials.Any())
-                //        return null;
-
-                //    query = query
-                //        .Where(w => materials.Contains(w.id));
-                //}
-
                 var query = db.content_sv_materials_links_sitess.AsQueryable();
 
                 #region Filter
@@ -271,21 +251,10 @@ namespace cms.dbase
                     query = query.Where(p => p.site_alias == filtr.Domain);
                 }
 
-                //Фильтр по привязке к др. контенту (организация и тп)
-                //if (filtr.RelId.HasValue && filtr.RelId.Value != Guid.Empty)
-                //{
-                //    query = query.Where(s => s.f_content == filtr.RelId.Value)
-                //                    .Where(s => s.f_content_type == filtr.RelType.ToString().ToLower());
-                //}
-
-                //Фильтр по тексту
-
                 if (!string.IsNullOrEmpty(filtr.Group))
                 {
-                    //query = query.Where(s => s.fkcontentmaterialsgroupslinkmaterials.Any(g => g.fkcontentmaterialsgroups.c_alias.ToLower() == filtr.Group));
                     query = query.Where(g => db.content_materials_groups_links
                                                 .Any(t => t.fkcontentmaterialsgroups.c_alias == filtr.Group && t.f_material == g.material_id));
-
                 }
 
                 if (!string.IsNullOrEmpty(filtr.SearchText))
@@ -346,6 +315,69 @@ namespace cms.dbase
                         }
                     };
 
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Возвращает список всех новостей
+        /// </summary>
+        /// <param name="filter"></param>
+        /// <returns></returns>
+        public override MaterialsList getAllMaterials(MaterialFilter filter)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var query = db.content_materialss.AsQueryable();
+
+                #region Filter
+                if (!string.IsNullOrEmpty(filter.Group))
+                    query = query.Where(g => db.content_materials_groups_links
+                                                .Any(t => t.fkcontentmaterialsgroups.c_alias == filter.Group && t.f_material == g.id));
+
+                if (!string.IsNullOrEmpty(filter.SearchText))
+                    query = query.Where(s => s.c_title.ToLower().Contains(filter.SearchText));
+
+                if (filter.Date.HasValue)
+                    query = query.Where(s => s.d_date > filter.Date.Value);
+
+                if (filter.DateEnd.HasValue)
+                    query = query.Where(s => s.d_date < filter.DateEnd.Value.AddDays(1));
+
+                if (filter.Disabled.HasValue)
+                    query = query.Where(s => s.b_disabled == filter.Disabled.Value);
+                #endregion
+
+                query = query.OrderByDescending(w => w.d_date);
+
+                int itemCount = query.Count();
+
+                var list = query
+                        .Skip(filter.Size * (filter.Page - 1))
+                        .Take(filter.Size)
+                        .Select(s => new MaterialsModel
+                        {
+                            Id = s.id,
+                            Title = s.c_title,
+                            Text = s.c_text,
+                            PreviewImage = new Photo { Url = s.c_preview },
+                            Date = s.d_date,
+                            CountSee = s.n_count_see
+                        });
+
+                if (list.Any())
+                {
+                    return new MaterialsList
+                    {
+                        Data = list.ToArray(),
+                        Pager = new Pager
+                        {
+                            Page = filter.Page,
+                            Size = filter.Size,
+                            ItemsCount = itemCount
+                        }
+                    };
+                }
                 return null;
             }
         }
@@ -549,7 +581,6 @@ namespace cms.dbase
                         cdMaterial.c_url_name = material.UrlName;
                         cdMaterial.c_desc = material.Desc;
                         cdMaterial.c_keyw = material.Keyw;
-                        //cdMaterial.b_important = material.Important;
                         cdMaterial.b_disabled = material.Disabled;
                         cdMaterial.n_day = material.Date.Day;
                         cdMaterial.n_month = material.Date.Month;

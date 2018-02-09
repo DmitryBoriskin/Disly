@@ -1,0 +1,81 @@
+﻿@model MaterialsViewModel
+@using System.Text.RegularExpressions;
+
+@{
+    int maxChars = 100;
+}
+
+@if (Model.UserResolution.Read)
+{
+    <div class="content">
+        <h1>@ViewBag.Title</h1>
+
+        @if (Model.List != null && Model.List.Data != null && Model.List.Data.Count() > 0)
+        {
+            foreach (MaterialsModel Item in Model.List.Data)
+            {
+                string ImgUrl = (Item.PreviewImage != null) ? Item.PreviewImage.Url : null;
+                string text = string.Empty;
+
+                if (ImgUrl == string.Empty || ImgUrl == null)
+                {
+                    ImgUrl = "/Content/img/nophoto.jpg";
+                }
+                else if (ImgUrl.IndexOf("http") == -1)
+                {
+                    if (!File.Exists(Server.MapPath(ImgUrl)))
+                    {
+                        ImgUrl = "/Content/img/nophoto.jpg";
+                    }
+                }
+                if (!string.IsNullOrEmpty(Item.Text))
+                {
+                    text = Regex.Replace(Item.Text, @"<[^>]*>", String.Empty);
+                    text = text.Length > maxChars ? text.Substring(0, maxChars) + " ..." : text;
+                }
+                string disabled = (Item.Disabled) ? "disabled" : "";
+
+                <div class="list-item @disabled">
+                    <a href="/admin/newsmonitoring/item/@Item.Id/@ViewBag.urlQuery">
+                        <img src="@ImgUrl" alt="@Item.Title" class="li-image" />
+                    </a>
+                    <div class="li-desc">
+                        @if (Item.Locked)
+                        {
+                            <span class="icon-lock" title="Заблокировано администратором портала"></span>
+                        }
+                        <a href="/admin/newsmonitoring/item/@Item.Id/@ViewBag.urlQuery" title="@Item.Title" class="li-caption">@Item.Title</a><br />
+                        <span>Дата: </span>@Convert.ToDateTime(Item.Date).ToString("dd.MM.yyyy")<br />
+                        <span>Текст: </span>@text<br />
+                        <span>Кол-во просмотров: </span>@Item.CountSee
+                    </div>
+                </div>
+            }
+            if (Model.List != null && Model.List.Pager != null)
+            {
+                @Html.Partial("Partial/Pager", Model.List.Pager)
+            }
+        }
+        else
+        {
+            <div class="alert alert-info">Не найдено ни одной записи.</div>
+        }
+    </div>
+
+
+    <div class="dop_info-block">
+        <div class="dop-caption">Фильтр</div>
+        @Html.Partial("Part/SearchFilter")
+
+        @if (Model.Filtr != null)
+        {
+            @Html.Partial("Partial/Filtr", Model.Filtr)
+        }
+    </div>
+
+    <div class="buttons"></div>
+}
+else
+{
+    <div class="content"><p>У вас недостаточно прав.</p></div>
+}
