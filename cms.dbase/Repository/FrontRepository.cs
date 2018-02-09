@@ -1546,7 +1546,7 @@ namespace cms.dbase
                              join pol in db.content_people_org_links on s.f_content equals pol.f_org
                              join pepl in db.content_people_employee_posts_links on pol.f_people equals pepl.f_people
                              join ep in db.content_employee_postss on pepl.f_post equals ep.id
-                             where s.c_alias.ToLower().Equals(domain) && ep.b_doctor
+                             where (domain.Equals("main") || s.c_alias.ToLower().Equals(domain)) && ep.b_doctor
                              select new PeoplePost
                              {
                                  Id = ep.id,
