@@ -70,15 +70,36 @@ namespace Disly.Areas.Admin.Controllers
             {
                 #region Сохранение изображений
 
+                #region сохраняем логотип
                 if (upload != null && upload.ContentLength > 0)
                 {
+                    if (AttachedPicExtAllowed(upload.FileName))//убеждаемся что закачивается изображение
+                    {
+                        string savePath = Settings.UserFiles + Domain + "/logo/";
 
-                    var photo = imageWorker(upload, 1);
-                    if (photo == null)
-                        return View("Item", model);
+                        if (!Directory.Exists(Server.MapPath(savePath)))
+                        {
+                            Directory.CreateDirectory(Server.MapPath(savePath));
+                        }
+                        int idx = upload.FileName.LastIndexOf('.');
+                        string Title = upload.FileName.Substring(0, idx);
 
-                    backModel.Item.Logo = photo;
-                }
+                        string TransTitle = Transliteration.Translit(Title);
+                        string FileName = TransTitle + Path.GetExtension(upload.FileName);
+
+
+                        //сохраняем оригинал
+                        upload.SaveAs(Server.MapPath(Path.Combine(savePath, FileName)));
+                        string FullName = savePath + FileName;
+                        backModel.Item.Logo = new Photo {Url= FullName };
+                    }
+                    //var photo = imageWorker(upload, 1);
+                    //if (photo == null)
+                    //    return View("Item", model);
+
+                    
+                } 
+                #endregion
 
                 #region Изображени под слайдером
                 if (uploadBack != null && uploadBack.ContentLength > 0)

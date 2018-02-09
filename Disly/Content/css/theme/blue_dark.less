@@ -5,17 +5,34 @@
 @light2: #ebedf2;
 @contrast: #e63964;
 @bottom-shadow: 0px 30px 36px -20px rgba(0,0,0,0.5);
+
+
+.header_wr {
+    background-color: @def2;
+    margin-bottom:-4px;
+    padding-bottom:4px;
+}
+.head_title span{
+    color:#fff;
+}
+#header .navbar-left a {
+    color: #fff;
+}
+
+
 a{color:@def2;}
 a:hover{
     color: @def1;
 }
-.head_title span {
+/*.head_title span {
     color: @def1
-}
+}*/
 .bottom_menu a:hover,
-.right_section a:hover{
-    color:@def2;
-    &:before{color:#ccc;}
+.right_section a:hover {
+    color: @light2;
+    &:before {
+        color: #ccc;
+    }
 }
 
 .media-heading {
@@ -25,13 +42,24 @@ a:hover{
 .slider-text-block {
     background-color: @def2;
 }
+
+
+#header .navbar-left a:focus, #header .navbar-left a:active, #header .navbar-left a:hover,
 .menu-mini-icons a:hover,
 #header .navbar-left a:hover {
-    color: @def2!important;
+    color: @light1!important;
+    background-color: @def2;
 }
-.searchform_show{color:@def2;}
+.spec-version-link span{color:#fff;}
+.searchform_show{color:#fff;}
+.searchform_show:hover{color:@light1}
 
-.seacrh_button:before {
+#header{
+    background-color:@def2;
+}
+.navbar-container.fixed-theme .spec-info{color:#fff;}
+
+#header.navbar.navbar-fixed-top.fixed-theme .seacrh_button:before {
     color: @def2;
 }
 
