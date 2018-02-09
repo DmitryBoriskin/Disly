@@ -142,6 +142,7 @@
     <Content Include="Content\css\styles_login.css" />
     <Content Include="Content\css\styles_old.css" />
     <Content Include="Content\css\theme\blue.css" />
+    <Content Include="Content\css\theme\blue_dark.css" />
     <Content Include="Content\css\theme\green.css" />
     <Content Include="Content\css\theme\green_portal.css" />
     <Content Include="Content\css\theme\purple.css" />
@@ -425,7 +426,15 @@
     <Content Include="Areas\Admin\Views\Vote\Part\SearchFilter.cshtml" />
     <Content Include="Areas\Admin\Views\Worksheet\Part\SearchFilter.cshtml" />
     <Content Include="Areas\Admin\Views\PortalUsers\Part\SearchFilter.cshtml" />
+    <Content Include="Content\css\theme\blue_dark.less" />
     <Content Include="Areas\Admin\Views\Orgs\part\SearchFilter.cshtml" />
+    <Content Include="Areas\Admin\Views\NewsMonitoring\Modal\Group.cshtml" />
+    <Content Include="Areas\Admin\Views\NewsMonitoring\Part\SearchFilter.cshtml" />
+    <Content Include="Areas\Admin\Views\NewsMonitoring\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\NewsMonitoring\Item.cshtml" />
+    <Content Include="Areas\Admin\Views\NewsMonitoring\OrgsSaved.cshtml" />
+    <Content Include="Areas\Admin\Views\NewsMonitoring\RssList.cshtml" />
+    <Content Include="Areas\Admin\Views\NewsMonitoring\Orgs.cshtml" />
     <None Include="Content\plugins\tinymce\plugins\gallery\plugin.min.js_korkin" />
     <Content Include="Content\plugins\tinymce\plugins\help\img\logo.png" />
     <Content Include="Content\plugins\tinymce\plugins\help\plugin.min.js" />
@@ -585,6 +594,7 @@
     <Compile Include="Areas\Admin\Controllers\BannersController.cs" />
     <Compile Include="Areas\Admin\Controllers\CmsMenuController.cs" />
     <Compile Include="Areas\Admin\Controllers\DocumentsController .cs" />
+    <Compile Include="Areas\Admin\Controllers\NewsMonitoringController.cs" />
     <Compile Include="Areas\Admin\Controllers\WorksheetController.cs" />
     <Compile Include="Areas\Admin\Models\AnketaViewModel.cs" />
     <Compile Include="Controllers\gs\SpecStructureController.cs" />

@@ -1,4 +1,4 @@
-/// <binding />
+/// <binding BeforeBuild='blue_dark' />
 "use strict";
 
 var gulp = require("gulp"),
@@ -19,6 +19,11 @@ gulp.task("blue", function () {
     return gulp.src('content/css/theme/blue.less')
                .pipe(less())
                .pipe(gulp.dest(paths.webroot + 'css/theme'))
+});
+gulp.task("blue_dark", function () {
+    return gulp.src('content/css/theme/blue_dark.less')
+        .pipe(less())
+        .pipe(gulp.dest(paths.webroot + 'css/theme'))
 });
 gulp.task("purple", function () {
     return gulp.src('content/css/theme/purple.less')

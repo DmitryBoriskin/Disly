@@ -1556,7 +1556,7 @@ namespace cms.dbase
                              join pol in db.content_people_org_links on s.f_content equals pol.f_org
                              join pepl in db.content_people_employee_posts_links on pol.f_people equals pepl.f_people
                              join ep in db.content_employee_postss on pepl.f_post equals ep.id
-                             where s.c_alias.ToLower().Equals(domain) && ep.b_doctor
+                             where (domain.Equals("main") || s.c_alias.ToLower().Equals(domain)) && ep.b_doctor
                              select new PeoplePost
                              {
                                  Id = ep.id,
@@ -2728,6 +2728,23 @@ namespace cms.dbase
                     return query.ToArray();
 
                 return null;
+            }
+        }
+
+        /// <summary>
+        /// Возвращает кол-во специалистов
+        /// </summary>
+        /// <param name="domain"></param>
+        /// <returns></returns>
+        public override int getCountMainSpecialiasBySite(string domain)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                return (from ms in db.content_main_specialistss
+                        join s in db.cms_sitess on ms.id equals s.f_content
+                        join l in db.content_main_specialist_employees_links on ms.id equals l.f_main_specialist
+                        where l.f_type.Equals("main") && s.c_alias.Equals(domain)
+                        select ms.c_name).Count();
             }
         }
 

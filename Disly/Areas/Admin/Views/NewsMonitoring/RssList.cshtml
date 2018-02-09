@@ -1,0 +1,86 @@
+﻿@model MaterialsViewModel
+@using System.Text.RegularExpressions;
+
+@{
+    int maxChars = 100;
+}
+
+@if (Model.UserResolution.Read)
+{
+    <div class="content">
+        <h1>@ViewBag.Title</h1>
+
+        @if (Model.RssObject != null && Model.RssObject.Count() > 0)
+        {
+            <div class="list-rss">
+                @foreach (RssItem Item in Model.RssObject)
+                {
+                    string ImgUrl = (Item.enclosure != null) ? Item.enclosure : null;
+                    <div class="list-item">
+                        @if (ImgUrl != null)
+                        {
+                            <a href="#">
+                                <img src="@ImgUrl" alt="@Item.title" class="li-image" />
+                            </a>
+                        }
+                        <div class="li-desc" >
+                            <a href="/admin/materials/item/@Item.id/@ViewBag.urlQuery" title="@Item.title" class="li-caption">@Item.title</a><br />
+                            <span>Дата: </span>@Convert.ToDateTime(Item.pubDate).ToString("dd.MM.yyyy")<br />
+                            <span>Ссылка на источник: </span><a href="@Item.link" target="_blank">@Item.link</a><br />
+                            <div class="li-status" style="text-align:right;">
+                                @if (Item.RssGuid==null)
+                                { <a class="import-rss-new button green" style="display:inline-block;" data-id="@Item.id" href="#">Импортировать</a>}
+                                else
+                                { <a class="import-old button green" style="display:inline-block;" href="/admin/materials/item/@Item.RssGuid">Редактировать</a>}
+                            </div>
+                        </div>
+                    </div>
+                }            
+            </div>            
+        }
+        else
+        {
+            <div class="alert alert-info">Не найдено ни одной записи.</div>
+        }
+    </div>
+
+
+    <div class="dop_info-block">
+        <div class="dop-caption">Добавить RSS:</div>
+        <div class="row">
+            <div class="col-md-9">
+                @Html.TextBox("RssUrl", null, new { @required = "required" })
+            </div>
+            <div class="col-md-3">
+                <button class="rss_add" type="submit" name="action" value="add-rss" title="Добавить rss ленту"></button>
+            </div>
+            <div class="col-md-12">
+                @if (Model.RssChannelList != null && Model.RssChannelList.Count() > 0)
+                {
+                    <ul class="rss_list">
+                        @foreach (var item in Model.RssChannelList)
+                        {
+                            <li>
+                                <a class="rss_link_unlock" href="@item.RssLink" target="_blank">@item.Title</a>
+                                <a class="rss_delete"  data-id="@item.id" href="#" title="Удалить"></a>
+                            </li>
+                        }
+                    </ul>
+                }
+            </div>
+        </div>
+      
+    </div>
+
+    <div class="buttons">
+        @if (Model.UserResolution.Write)
+        {
+            <button type="submit" name="action" value="insert-btn" class="button icon-create">Создать</button>
+            @*<button type="submit" name="action" value="rssimport-btn" class="button icon-create green">Импорт с других сайтов</button>*@
+        }
+    </div>
+}
+else
+{
+    <div class="content"><p>У вас недостаточно прав.</p></div>
+}
