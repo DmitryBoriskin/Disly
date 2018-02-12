@@ -706,5 +706,14 @@ namespace Disly.Areas.Admin.Controllers
 
             return PartialView("Modal/Error");
         }
+
+        /// <summary>
+        /// Привязка новости к главному порталу
+        /// </summary>
+        /// <param name="id"></param>
+        public void ToggleAttachToMain(Guid id)
+        {
+            _cmsRepository.toggleAttachMaterialToMainSite(id);
+        }
     }
 }
