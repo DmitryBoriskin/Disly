@@ -9,6 +9,7 @@ namespace cms.dbModel
     {
         public abstract string getSiteId(string DomainUrl);
         public abstract Guid currentSiteId();
+        public abstract string getSiteDefaultDomain(string siteId);
 
         public abstract SitesModel getSite(Guid Id);
         public abstract SitesModel getSite(string domain);
@@ -89,6 +90,7 @@ namespace cms.dbModel
 
         public abstract MaterialsList getMaterialsList(MaterialFilter filtr);
         public abstract MaterialsList getAllMaterials(MaterialFilter filter);
+        public abstract bool toggleAttachMaterialToMainSite(Guid id);
         public abstract MaterialsModel getMaterial(Guid id);
 
         public abstract bool insertCmsMaterial(MaterialsModel material);

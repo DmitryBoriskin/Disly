@@ -248,6 +248,7 @@ namespace cms.dbase
                         Odnoklassniki = s.c_odnoklassniki,
                         Twitter = s.c_twitter,
                         Theme = s.c_theme,
+                        DefaultDomain=getSiteDefaultDomain(domain),
                         BackGroundImg = new Photo
                         {
                             Url = s.c_background_img

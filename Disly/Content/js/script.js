@@ -277,7 +277,7 @@ function SearchDopWork() {
 
     function CommitSearchDop() {
         var SerachInp = $('.search-input_dop').val();
-        var EndUrl = "%20url%3Ahttp%3A%2F%2F" + SiteId + ".med.cap.ru*&web=0";
+        var EndUrl = "%20url%3Ahttp%3A%2F%2Fwww." + SiteDomain.replace("boriskiny","cap") + "*&web=0";
         var SearchText = SerachInp.replace(" ", "%20") + EndUrl;
         var Link = "/Search?searchid=2297106&text=" + SearchText + "&searchtext=" + SerachInp.replace(" ", "%20");
         if (SearchText != "") {

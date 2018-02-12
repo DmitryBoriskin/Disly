@@ -50,6 +50,8 @@ namespace Disly.Areas.Admin.Controllers
                 model.Menu = _cmsRepository.getCmsMenu(AccountInfo.Id);
             }
 
+            ViewBag.DefaultDomain = _cmsRepository.getSiteDefaultDomain(Domain);
+
             #region Метатеги
             ViewBag.Title = UserResolutionInfo.Title;
             ViewBag.Description = "";

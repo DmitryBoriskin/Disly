@@ -174,9 +174,9 @@
 
                                 <div class="row bottom-linkimg noprint">
                                     <div class="col-md-12">
-                                        <div class="col-sm-2">
+                                        @*<div class="col-sm-2">
                                             <div class="bottom-linkimg_head">Официальные сетевые ресурсы</div>
-                                        </div>
+                                        </div>*@
                                         @foreach (var item in bannerBottom)
                                         {
                                             string redirectLink = "/redirect/link/" + item.Id;
@@ -251,6 +251,11 @@
                                                     <a href="@Model.SitesInfo.Twitter" class="icon-twitter"></a>
                                                 }
                                             }
+                                           <div class="pull-right">
+                                               <div class="metrica">
+                                                   @Html.Raw(Model.SitesInfo.Scripts)
+                                               </div>                                      
+                                           </div>
                                         </div>
                                     </div>
                                 </div>
@@ -284,6 +289,7 @@
 
     <script type="text/javascript">
         var SiteId = "@Model.SitesInfo.Alias";
+        var SiteDomain = "@Model.SitesInfo.DefaultDomain";
     </script>
     @Html.Raw(Model.SitesInfo.Scripts)
 </body>
