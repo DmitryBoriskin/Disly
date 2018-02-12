@@ -114,7 +114,7 @@ fieldset {
 .head_logo {
     padding-right: 20px;
     float: left;
-    max-width:250px;
+    /*max-width:250px;*/
 }
 .head_logo img{
     max-width:100%;
@@ -544,6 +544,7 @@ select.form-control {
 }
 a.sitemap-plate.sitemap-plate-image {
     padding: 0;
+    background-color:inherit;
 }
 .sitemap-plate {
     padding: 10px 15px 15px;

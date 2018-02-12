@@ -2007,10 +2007,16 @@ namespace cms.dbase
 
                 if (!structureIds.Any()) return false;
 
+                
+
+
+                
+                var query1 = db.content_departmentss
+                    .Where(w => w.id.Equals(id));
+                //случай когда департамент создается т.е. его не существует в базе
+                if (!query1.Any()) return true;
                 // структура владеющая департаментом
-                var query = db.content_departmentss
-                    .Where(w => w.id.Equals(id))
-                    .Select(s => s.f_structure);
+                var query =query1.Select(s => s.f_structure);
 
                 if (!query.Any()) return false;
 
