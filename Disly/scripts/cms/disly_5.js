@@ -7,7 +7,7 @@ $(document).ready(function () {
     if ($('#itemGroups-select').length > 0) {
         var NewInMedicin = $('#NewInMedicin');
         SpotNewInMedicin();
-        $('#itemGroups-select').change(function() {           
+        $('#itemGroups-select').change(function() {
             SpotNewInMedicin();
         });  
         function SpotNewInMedicin() {
@@ -398,6 +398,7 @@ $(document).ready(function () {
             error: function () { alert("error"); },
             success: function (data) {
                 $Container.remove();
+                location.reload();
             }
             
         });
@@ -958,7 +959,7 @@ function Coords(x, y, title, desc, zoom) {
     });
 
 
-    //myMap.events.add('click', function (e) {        
+    //myMap.events.add('click', function (e) {
     //    var coords = e.get('coordPosition');
     //    var xMap = coords[0].toPrecision(6);
     //    var yMap = coords[1].toPrecision(6);

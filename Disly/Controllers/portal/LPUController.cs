@@ -62,11 +62,11 @@ namespace Disly.Controllers
 
             //Табы на странице
             model.Nav = new List<PageTabsViewModel>();
-            model.Nav.Add(new PageTabsViewModel { Page = page, Title = "Все" });
             model.Nav.Add(new PageTabsViewModel { Page = page, Title = "Медицинские услуги", Alias = "services" });
             model.Nav.Add(new PageTabsViewModel { Page = page, Title = "По типу медицинского учреждения", Alias = "typelist" });
             model.Nav.Add(new PageTabsViewModel { Page = page, Title = "По ведомственной принадлежности", Alias = "affiliation" });
-            
+            model.Nav.Add(new PageTabsViewModel { Page = page, Title = "Все" });
+
 
             //Обработка активных табов
             if (model.Nav != null && model.Nav.Where(s => s.Alias == tab).Any())
@@ -85,7 +85,7 @@ namespace Disly.Controllers
             {
                 case "typelist":
                     if (id.HasValue)
-                    {                        
+                    {
                         // название типа организаций
                         ViewBag.TypeTitle = _repository.getOrgTypeName(id.Value);
                         model.Breadcrumbs.Add(new Breadcrumbs
@@ -132,7 +132,7 @@ namespace Disly.Controllers
                         {
                             Title = ViewBag.TypeTitle,
                             Url = ""
-                        });                        
+                        });
                     }
                     else
                     {
@@ -153,12 +153,17 @@ namespace Disly.Controllers
                         model.OrgList = _repository.getOrgModels(id.Value);
                         ViewBag.TypeTitle = _repository.getOrgTypeName(id.Value);
                     }
+                    else
+                    {
+                        model.OrgList = _repository.getOrgsModel(tab);
+                    }
                     break;
             }
-            if(id.HasValue || !id.HasValue && String.IsNullOrEmpty(tab))
-            {
-                model.OrgList = _repository.getOrgsModel(tab, id.ToString());
-            }
+
+            //if (id.HasValue || !id.HasValue && String.IsNullOrEmpty(tab))
+            //{
+            //    model.OrgList = _repository.getOrgsModel(tab, id.Value);
+            //}
 
             return View(model);
         }

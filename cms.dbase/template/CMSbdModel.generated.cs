@@ -1557,16 +1557,16 @@ namespace cms.dbase.models
 		#region Associations
 
 		/// <summary>
-		/// fk_content_materials_groups_link_material
-		/// </summary>
-		[Association(ThisKey="f_material", OtherKey="id", CanBeNull=false, KeyName="fk_content_materials_groups_link_material", BackReferenceName="fkcontentmaterialsgroupslinkmaterials")]
-		public content_materials fkcontentmaterialsgroupslinkmaterial { get; set; }
-
-		/// <summary>
 		/// fk_content_materials_groups
 		/// </summary>
 		[Association(ThisKey="f_group", OtherKey="id", CanBeNull=false, KeyName="fk_content_materials_groups", BackReferenceName="fkcontentmaterialsgroupss")]
 		public content_materials_groups fkcontentmaterialsgroups { get; set; }
+
+		/// <summary>
+		/// fk_content_materials_groups_link_material
+		/// </summary>
+		[Association(ThisKey="f_material", OtherKey="id", CanBeNull=false, KeyName="fk_content_materials_groups_link_material", BackReferenceName="fkcontentmaterialsgroupslinkmaterials")]
+		public content_materials fkcontentmaterialsgroupslinkmaterial { get; set; }
 
 		#endregion
 	}
@@ -1684,6 +1684,7 @@ namespace cms.dbase.models
 		[Column,        Nullable] public string  c_phone_reception        { get; set; } // varchar(64)
 		[Column,        Nullable] public string  c_fax                    { get; set; } // varchar(64)
 		[Column,        Nullable] public string  c_email                  { get; set; } // varchar(128)
+		[Column,        Nullable] public string  c_www                    { get; set; } // nvarchar(64)
 		[Column,        Nullable] public string  c_director_post          { get; set; } // varchar(64)
 		[Column,        Nullable] public Guid?   f_director               { get; set; } // uniqueidentifier
 		[Column,        Nullable] public string  c_contacts               { get; set; } // nvarchar(max)
@@ -1916,10 +1917,10 @@ namespace cms.dbase.models
 		#region Associations
 
 		/// <summary>
-		/// FK_content_people_employee_posts_link_content_employee_posts
+		/// FK_content_people_employee_posts_link_content_people
 		/// </summary>
-		[Association(ThisKey="f_post", OtherKey="id", CanBeNull=false, KeyName="FK_content_people_employee_posts_link_content_employee_posts", BackReferenceName="contentpeopleemployeepostslinkcontentemployeepostss")]
-		public content_employee_posts contentpeopleemployeepostslinkcontentemployeeposts { get; set; }
+		[Association(ThisKey="f_people", OtherKey="id", CanBeNull=false, KeyName="FK_content_people_employee_posts_link_content_people", BackReferenceName="contentpeopleemployeepostslinkcontentpeoples")]
+		public content_people contentpeopleemployeepostslinkcontentpeople { get; set; }
 
 		/// <summary>
 		/// FK_content_people_employee_posts_link_content_orgs
@@ -1928,10 +1929,10 @@ namespace cms.dbase.models
 		public content_orgs contentpeopleemployeepostslinkcontentorgs { get; set; }
 
 		/// <summary>
-		/// FK_content_people_employee_posts_link_content_people
+		/// FK_content_people_employee_posts_link_content_employee_posts
 		/// </summary>
-		[Association(ThisKey="f_people", OtherKey="id", CanBeNull=false, KeyName="FK_content_people_employee_posts_link_content_people", BackReferenceName="contentpeopleemployeepostslinkcontentpeoples")]
-		public content_people contentpeopleemployeepostslinkcontentpeople { get; set; }
+		[Association(ThisKey="f_post", OtherKey="id", CanBeNull=false, KeyName="FK_content_people_employee_posts_link_content_employee_posts", BackReferenceName="contentpeopleemployeepostslinkcontentemployeepostss")]
+		public content_employee_posts contentpeopleemployeepostslinkcontentemployeeposts { get; set; }
 
 		#endregion
 	}
@@ -2734,9 +2735,10 @@ namespace cms.dbase.models
 					c_phone_reception        = Converter.ChangeTypeTo<string>(dataReader.GetValue(11), ms),
 					c_fax                    = Converter.ChangeTypeTo<string>(dataReader.GetValue(12), ms),
 					c_email                  = Converter.ChangeTypeTo<string>(dataReader.GetValue(13), ms),
-					c_adress                 = Converter.ChangeTypeTo<string>(dataReader.GetValue(14), ms),
-					c_logo                   = Converter.ChangeTypeTo<string>(dataReader.GetValue(15), ms),
-					f_department_affiliation = Converter.ChangeTypeTo<Guid?> (dataReader.GetValue(16), ms),
+					c_www                    = Converter.ChangeTypeTo<string>(dataReader.GetValue(14), ms),
+					c_adress                 = Converter.ChangeTypeTo<string>(dataReader.GetValue(15), ms),
+					c_logo                   = Converter.ChangeTypeTo<string>(dataReader.GetValue(16), ms),
+					f_department_affiliation = Converter.ChangeTypeTo<Guid?> (dataReader.GetValue(17), ms),
 				},
 				"[dbo].[get_lpu_list]");
 		}
@@ -2757,6 +2759,7 @@ namespace cms.dbase.models
 			                    public string c_phone_reception        { get; set; }
 			                    public string c_fax                    { get; set; }
 			                    public string c_email                  { get; set; }
+			                    public string c_www                    { get; set; }
 			                    public string c_adress                 { get; set; }
 			                    public string c_logo                   { get; set; }
 			                    public Guid?  f_department_affiliation { get; set; }
