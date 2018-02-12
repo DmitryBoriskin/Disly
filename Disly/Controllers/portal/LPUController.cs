@@ -95,7 +95,13 @@ namespace Disly.Controllers
                         });
                     }
                     else
+                    {
                         model.OrgTypes = _repository.getOrgTypes();
+
+                        int count_1_column = Convert.ToInt32(model.OrgTypes.Length / 2);
+                        ViewBag.Column1 = model.OrgTypes.Skip(0).Take(count_1_column);
+                        ViewBag.Column2 = model.OrgTypes.Skip(count_1_column);
+                    }
 
                     break;
                 case "affiliation":
@@ -109,7 +115,13 @@ namespace Disly.Controllers
                         });
                     }
                     else
+                    {
                         model.DepartmentAffiliations = _repository.getDepartmentAffiliations();
+
+                        int count_1_column = Convert.ToInt32(model.DepartmentAffiliations.Length / 2);
+                        ViewBag.Column1 = model.DepartmentAffiliations.Skip(0).Take(count_1_column);
+                        ViewBag.Column2 = model.DepartmentAffiliations.Skip(count_1_column);
+                    }
 
                     break;
                 case "services":
