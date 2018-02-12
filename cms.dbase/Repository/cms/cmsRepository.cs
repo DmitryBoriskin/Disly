@@ -44,6 +44,24 @@ namespace cms.dbase
             DislyEvent(null, eventArgs);
         }
 
+        public override string getSiteDefaultDomain(string siteId)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var data = db.cms_sites_domainss
+                    .Where(w => w.f_site.ToLower() == siteId)
+                    .Where(w => w.b_default == true);
+
+                try
+                {
+                    return data.Select(p => p.c_domain).SingleOrDefault();
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("FrontRepository > getSiteDefaultDomain : Обнаружено более одного домена по умолчанию " + siteId);
+                }
+            }
+        }
 
         #region private methods of class
 
