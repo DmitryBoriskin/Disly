@@ -126,6 +126,8 @@ namespace Disly.Controllers
                             .Any();
                 #endregion
 
+                var currentOrg = _repository.getOrgItem();
+
                 #region Список записей по организациям
                 List<CardRecord> listRecords = new List<CardRecord>();
 
@@ -135,6 +137,7 @@ namespace Disly.Controllers
                 {
                     var result = (Employee)serial.Deserialize(reader);
                     listRecords.AddRange(result.EmployeeRecords);
+                    listRecords.RemoveAll(w => !w.Organisation.Equals(currentOrg.Title));
                 }
                 #endregion
 

@@ -30,7 +30,7 @@ namespace cms.dbase
         {
             _context = ConnectionString;
             _domain = (!string.IsNullOrEmpty(DomainUrl)) ? getSiteId(DomainUrl) : "";
-            //_domain = "main";
+            //_domain = "cheb-gb2";
             LinqToDB.Common.Configuration.Linq.AllowMultipleQuery = true;
         }
         #region redirect methods
@@ -248,7 +248,7 @@ namespace cms.dbase
                         Odnoklassniki = s.c_odnoklassniki,
                         Twitter = s.c_twitter,
                         Theme = s.c_theme,
-                        DefaultDomain=getSiteDefaultDomain(domain),
+                        DefaultDomain = getSiteDefaultDomain(domain),
                         BackGroundImg = new Photo
                         {
                             Url = s.c_background_img
@@ -309,14 +309,14 @@ namespace cms.dbase
             {
                 var query = db.cms_userss
                     .Where(w => w.f_group == "admin")
-                    .Where(w => w.fklinkusertosites.Any(s=> s.f_site == _domain))
+                    .Where(w => w.fklinkusertosites.Any(s => s.f_site == _domain))
                     .Select(s => new UsersModel
-                     {
-                         Id = s.id,
-                         FIO = s.c_surname + " " + s.c_name + " " + s.c_patronymic,
-                         EMail = s.c_email
-                     });
-                
+                    {
+                        Id = s.id,
+                        FIO = s.c_surname + " " + s.c_name + " " + s.c_patronymic,
+                        EMail = s.c_email
+                    });
+
                 if (query.Any())
                     return query.ToArray();
 
@@ -796,8 +796,8 @@ namespace cms.dbase
             {
                 var contentType = ContentType.MATERIAL.ToString().ToLower();
 
-                var materials = db.content_content_links.Where(e => e.f_content_type == contentType && e.b_important==true)
-                    .Join(db.cms_sitess.Where(o => o.c_alias ==_domain),
+                var materials = db.content_content_links.Where(e => e.f_content_type == contentType && e.b_important == true)
+                    .Join(db.cms_sitess.Where(o => o.c_alias == _domain),
                             e => e.f_link,
                             o => o.f_content,
                             (e, o) => e.f_content
@@ -810,10 +810,11 @@ namespace cms.dbase
                         .Where(w => materials.Contains(w.id));
                 if (query.Any())
                 {
-                    return query.Select(s => new MaterialFrontModule {
+                    return query.Select(s => new MaterialFrontModule
+                    {
                         Title = s.c_title,
                         Alias = s.c_alias,
-                        Date = s.d_date,                        
+                        Date = s.d_date,
                         Photo = s.c_preview
                     }).Single();
                 }
@@ -834,7 +835,7 @@ namespace cms.dbase
             using (var db = new CMSdb(_context))
             {
                 if (!string.IsNullOrEmpty(filter.Domain))
-                {                    
+                {
                     var contentType = ContentType.MATERIAL.ToString().ToLower();
 
                     //Запрос типа:
@@ -1399,7 +1400,7 @@ namespace cms.dbase
                         {
                             Id = ep2.ep.id,
                             Name = ep2.ep.c_name,
-                            Org = (ep2.p.o.id != null)? getOrgItem(ep2.p.o.id): null,
+                            Org = (ep2.p.o.id != null) ? getOrgItem(ep2.p.o.id) : null,
                             Type = ep2.pepl.n_type
                         }).ToArray()
                     }).OrderBy(o => o.FIO);
@@ -2631,10 +2632,10 @@ namespace cms.dbase
                 var contentType = ContentType.EVENT.ToString().ToLower();
 
                 var eventFilter = (from s in db.cms_sitess
-                                join cct in db.content_content_links on s.f_content equals cct.f_link
-                                join e in db.content_eventss on cct.f_content equals e.id
-                                where s.c_alias.ToLower().Equals(domain) && cct.f_content_type.Equals(contentType)
-                                select e.id);
+                                   join cct in db.content_content_links on s.f_content equals cct.f_link
+                                   join e in db.content_eventss on cct.f_content equals e.id
+                                   where s.c_alias.ToLower().Equals(domain) && cct.f_content_type.Equals(contentType)
+                                   select e.id);
 
                 if (!eventFilter.Any())
                     return null;
@@ -2937,6 +2938,28 @@ namespace cms.dbase
 
                 if (!data.Any()) return null;
                 else return data.FirstOrDefault();
+            }
+        }
+
+        /// <summary>
+        /// Возвращает организацию по названию
+        /// </summary>
+        /// <param name="title"></param>
+        /// <returns></returns>
+        public override OrgsModel getOrgItem()
+        {
+            string domain = _domain;
+
+            using (var db = new CMSdb(_context))
+            {
+                return (from o in db.content_orgss
+                        join s in db.cms_sitess on o.id equals s.f_content
+                        where s.c_alias.Equals(domain)
+                        select new OrgsModel
+                        {
+                            Id = o.id,
+                            Title = o.c_title
+                        }).SingleOrDefault();
             }
         }
 
