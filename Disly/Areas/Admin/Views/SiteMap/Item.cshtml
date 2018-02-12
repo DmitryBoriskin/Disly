@@ -178,8 +178,17 @@
                     string relativePath = Model.Item.Path + Model.Item.Alias;
                     string absolutePath = "http://" + ViewBag.DefaultDomain + relativePath;
                 }
-                <textarea title="Относительная ссылка для использования во внешней части вашего сайта" cols="30" data-help="Относительная ссылка для использования во внешней части вашего сайта">@relativePath</textarea>
-                <textarea title="Абсолютная ссылка для размещения на других сайтах" cols="30" data-help="Абсолютная ссылка для размещения на других сайтах">@absolutePath</textarea>
+                <div>
+                    <small>Относительная ссылка для использования во внешней части вашего сайта:</small>
+                    <code>@relativePath</code>
+                </div>
+                <br />
+                <div>
+                    <small>Абсолютная ссылка для размещения на других сайтах:</small>
+                    <code>@absolutePath</code>
+                </div>
+                @*<textarea title="Относительная ссылка для использования во внешней части вашего сайта" cols="30" data-help="Относительная ссылка для использования во внешней части вашего сайта">@relativePath</textarea>*@
+                @*<textarea title="Абсолютная ссылка для размещения на других сайтах" cols="30" data-help="Абсолютная ссылка для размещения на других сайтах">@absolutePath</textarea>*@
             </div>
         </div>
     }
