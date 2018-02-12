@@ -282,6 +282,9 @@ namespace cms.dbase
         }
         public override string getSiteDefaultDomain(string siteId)
         {
+            if (string.IsNullOrEmpty(siteId))
+                return null;
+
             using (var db = new CMSdb(_context))
             {
                 var data = db.cms_sites_domainss
@@ -2780,8 +2783,8 @@ namespace cms.dbase
                                  Id = ms.id,
                                  Title = ms.c_name,
                                  Desc = ms.c_desc,
-                                 Domain = s.c_alias.ToLower(),
-                                 DomainUrl = getSiteDefaultDomain(s.c_alias)
+                                 Domain = (s != null)? s.c_alias.ToLower(): null,
+                                 DomainUrl = (s != null && !string.IsNullOrEmpty(s.c_alias))? getSiteDefaultDomain(s.c_alias): null
                              }
                     );
 
