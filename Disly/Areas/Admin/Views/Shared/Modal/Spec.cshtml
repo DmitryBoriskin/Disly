@@ -1,0 +1,111 @@
+﻿@model MainSpecModalViewModel
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_popUp.cshtml";
+}
+<div id="modal-spec-data" class="modal-data">
+    @if (Model != null)
+    {
+        <div class="text-right">
+            <span>Все на данной странице</span>
+            <span class="spec-check-all" data-state="half-checked">все</span>
+        </div>
+        <div class="scrollbar modal-spec-list">
+            @if (Model.SpecList != null && Model.SpecList.Count() > 0)
+            {
+                <table id="modal-spec-table" class="table table-striped" cellspacing="0" width="100%">
+                    <thead>
+                        <tr>
+                            <th width="95%">Название сайта</th>
+                            <th>Отметить</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.SpecList)
+                        {
+                            <tr class="spec-item-row">
+                                <td class="spec-item-html">
+                                    <a> @item.Title</a><br />
+                                </td>
+                                <td class="td-center">
+                                    <span class="spec-item-tooltip" data-toggle="tooltip" data-placement="left" title="Сохранено"></span>
+                                    <input type="checkbox" class="spec-item-chkbx iCheck" data-object-id="@Model.ObjctId" data-object-type="@Model.ObjctType" data-link-id="@item.Id" data-link-type="@ContentLinkType.SPEC.ToString()" data-init="false" @(item.Checked ? "checked" : null) @(item.Origin ? "disabled" : null) />
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+        </div>
+    }
+    else
+    {
+        <div id="log-list_title">
+            <div class="text-danger" role="alert">Список сайтов пуст или не доступен.</div>
+        </div>
+    }
+    </div>
+
+    <script>
+        $(document).ready(function () {
+
+            $("#modal-spec-table .iCheck").iCheck({
+                checkboxClass: 'icheckbox_square-blue',
+                radioClass: 'icheckbox_square-blue'
+                //increaseArea: '%' //optional
+            });
+            $('#modal-spec-table').DataTable(
+                {
+                    searching: true,
+                    ordering: true,
+                    columns: [
+                        null,
+                        { "searchable": false, "orderable": false }
+                    ],
+                    //paging: false
+                    language: {
+                        "processing": "Подождите...",
+                        "search": "Поиск:",
+                        "lengthMenu": "Показать _MENU_ записей",
+                        "info": "Записи с _START_ по _END_ из _TOTAL_ ",
+                        "infoEmpty": "Записи с 0 по 0 из 0",
+                        "infoFiltered": "(отфильтровано из _MAX_ записей)",
+                        "infoPostFix": "",
+                        "loadingRecords": "Загрузка записей...",
+                        "zeroRecords": "Записи отсутствуют.",
+                        "emptyTable": "В таблице отсутствуют данные",
+                        "paginate": {
+                            "first": "<<",
+                            "previous": "<",
+                            "next": ">",
+                            "last": ">>"
+                        },
+                        "aria": {
+                            "sortAscending": ": активировать для сортировки столбца по возрастанию",
+                            "sortDescending": ": активировать для сортировки столбца по убыванию"
+                        }
+                    }
+                });
+
+            $(".spec-check-all").on("click", function (e) {
+
+                var state = $(this).data("state");
+                var item = $("#modal-spec-table tbody");
+
+                if (state === "half-checked" || state === "full-unchecked") {
+                    console.log(state);
+                    item.find("[type=checkbox]").not(":disabled")
+                        .each(function () {
+                            $(this).iCheck("check");
+                        })
+                    $(this).data("state", "full-checked");
+                }
+                else {
+                    item.find("[type=checkbox]").not(":disabled")
+                        .each(function () {
+                            $(this).iCheck('uncheck');
+                        });
+                    $(this).data("state", "full-unchecked");
+                }
+            });
+        });
+    </script>

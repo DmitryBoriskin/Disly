@@ -1,4 +1,5 @@
-﻿using Disly.Areas.Admin.Models;
+﻿using cms.dbModel.entity;
+using Disly.Areas.Admin.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -47,7 +48,8 @@ namespace Disly.Areas.Admin.Controllers
         public ActionResult Index()
         {
             // наполняем модель данными
-            model.List = _cmsRepository.getMainSpecialistList(filter);
+            var sfilter = FilterParams.Extend<MainSpecialistFilter>(filter);
+            model.List = _cmsRepository.getMainSpecialistList(sfilter);
 
             #region администратор сайта
             if (model.Account.Group == "admin")
@@ -82,7 +84,7 @@ namespace Disly.Areas.Admin.Controllers
 
             model.Item = _cmsRepository.getMainSpecialistItem(id);
 
-            ViewBag.DataPath = ViewBag.DataPath + id.ToString()+"/";
+            ViewBag.DataPath = ViewBag.DataPath + id.ToString() + "/";
 
             if (model.Item != null)
             {
@@ -235,6 +237,43 @@ namespace Disly.Areas.Admin.Controllers
         public ActionResult ClearFiltr()
         {
             return Redirect(StartUrl);
+        }
+
+
+        //Получение списка организаций по параметрам для отображения в модальном окне
+        [HttpGet]
+        public ActionResult SpecListModal(Guid objId, ContentType objType)
+        {
+            var filtr = new MainSpecialistFilter()
+            {
+                Domain = null,
+                RelId = objId,
+                RelType = objType,
+                //Size = 1000
+            };
+
+            var model = new MainSpecModalViewModel()
+            {
+                ObjctId = objId,
+                ObjctType = objType,
+                SpecList = _cmsRepository.getMainSpecWithCheckedFor(filtr),
+            };
+
+            return PartialView("Modal/Spec", model);
+        }
+
+        [HttpPost]
+        public ActionResult UpdateLinkToSpec(ContentLinkModel data)
+        {
+            if (data != null)
+            {
+                var res = _cmsRepository.updateContentLink(data);
+                if (res)
+                    return Json("Success");
+            }
+
+            //return Response.Status = "OK";
+            return Json("An Error Has occourred"); //Ne
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using cms.dbModel.entity;
+using cms.dbModel.entity.cms;
 using Disly.Areas.Admin.Models;
 using Disly.Areas.Admin.Service;
 using System;
@@ -104,11 +105,20 @@ namespace Disly.Areas.Admin.Controllers
             orgfilter.RelType = ContentType.EVENT;
             var orgs = _cmsRepository.getOrgs(orgfilter);
 
+            MainSpecialistModel[] spec = null;
+            var specfilter = FilterParams.Extend<MainSpecialistFilter>(filter);
+            specfilter.RelId = Id;
+            specfilter.RelType = ContentType.EVENT;
+            var specList = _cmsRepository.getMainSpecialistList(specfilter);
+            spec = (specList != null) ?
+                (specList.Data != null) ? specList.Data.ToArray() : null
+                : null;
+
             model.Item.Links = new ObjectLinks()
             {
                 Events = (eventsList != null) ? eventsList.Data : null,
                 Orgs = orgs,
-                //Persons = null
+                Specs = spec
             };
 
             ViewBag.Backlink = StartUrl + Request.Url.Query;
@@ -365,7 +375,7 @@ namespace Disly.Areas.Admin.Controllers
             {
                 ObjctId = objId,
                 ObjctType = objType,
-                EventsList = _cmsRepository.getLastEventsListWithCheckedFor(filtr),
+                EventsList = _cmsRepository.getLastEventsListWithCheckedFor(filtr)                
             };
 
             //var model = new OrgsModalViewModel()

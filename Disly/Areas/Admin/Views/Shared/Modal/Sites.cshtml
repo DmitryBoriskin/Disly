@@ -7,7 +7,7 @@
     {
         <div class="text-right">
             <span>Все на данной странице</span>
-            <span class="sites-check-all" data-state="half-checked">все</span>
+            <span class="site-check-all" data-state="half-checked">все</span>
         </div>
         <div class="scrollbar modal-site-list">
             @if (Model.SitesList != null && Model.SitesList.Count() > 0)
@@ -109,7 +109,7 @@
                     }
                 });
 
-            $(".sites-check-all").on("click", function (e) {
+            $(".site-check-all").on("click", function (e) {
 
                 var state = $(this).data("state");
                 var item = $("#modal-site-table tbody");
