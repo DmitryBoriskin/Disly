@@ -159,7 +159,11 @@ namespace cms.dbModel.entity
         /// Название группы (для модуля внешней части)
         /// </summary>
         public string GroupName { get; set; }
-      
+
+        /// <summary>
+        /// Флаг привязки к главному порталу
+        /// </summary>
+        public bool IsAttacheToMainPortal { get; set; }
     }
 
     /// <summary>

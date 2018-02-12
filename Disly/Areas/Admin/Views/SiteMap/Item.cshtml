@@ -41,9 +41,6 @@
             @Html.HiddenFor(m => m.Item.ParentId)
             @Html.Hidden("Item_ParentId", parent)
 
-            @*@Html.TextBox("upload", null, new { type = "file", title = "Изображение", data_name = fileName, data_size = fileSize, data_url = fileUrl, accept = ".jpg,.jpeg,.png,.gif" })
-                @Html.TextBoxFor(m => m.Item.Photo.Url, new { type = "hidden", value = fileUrl })*@
-
             @Html.TextBoxFor(m => m.Item.Photo.Url, new { type = "file", data_posted_name = "upload", data_url = fileUrl, title = "Картинка для предпросмотра", accept = ".jpg,.jpeg,.png,.gif" })
 
             <div class="group-block" title="Текст">
@@ -132,15 +129,6 @@
             {
                 @Html.DropDownListFor(m => m.Item.FrontSection, new SelectList(Model.FrontSectionList, "Value", "Text", "page"), new { @title = "Шаблон", @class = "selectpicker", @data_help = "Выбор шаблона страницы", @required = "" })
             }
-
-            @*@if ((Model.Account.Group.ToLower().Equals("developer") || Model.Account.Group.ToLower().Equals("administrator")))
-                {
-                    @Html.DropDownListFor(m => m.Item.MenuGroups, (MultiSelectList)ViewBag.GroupMenu, new { @title = "Группы меню", @class = "selectpicker", @multiple = "multiple" })
-                }
-                else
-                {
-                    @Html.DropDownListFor(m => m.Item.MenuGroups, (MultiSelectList)ViewBag.GroupMenuAviable, new { @title = "Группы меню", @class = "selectpicker", @multiple = "multiple" })
-                }*@
             <div>
                 <select id="Item_MenuGroups" name="Item_MenuGroups" class="selectpicker" title="Группы меню" multiple>
                     @if (Model.MenuTypes != null && Model.MenuTypes.Count() > 0)
@@ -184,6 +172,24 @@
             {
                 @Html.TextBoxFor(m => m.Item.OldId, new { @title = "Идентификатор в старой БД" })
             }
+            <br />
+            <div class="group-block open" title="Ссылки">
+                @{
+                    string relativePath = Model.Item.Path + Model.Item.Alias;
+                    string absolutePath = "http://" + ViewBag.DefaultDomain + relativePath;
+                }
+                <div>
+                    <small>Относительная ссылка для использования во внешней части вашего сайта:</small>
+                    <code>@relativePath</code>
+                </div>
+                <br />
+                <div>
+                    <small>Абсолютная ссылка для размещения на других сайтах:</small>
+                    <code>@absolutePath</code>
+                </div>
+                @*<textarea title="Относительная ссылка для использования во внешней части вашего сайта" cols="30" data-help="Относительная ссылка для использования во внешней части вашего сайта">@relativePath</textarea>*@
+                @*<textarea title="Абсолютная ссылка для размещения на других сайтах" cols="30" data-help="Абсолютная ссылка для размещения на других сайтах">@absolutePath</textarea>*@
+            </div>
         </div>
     }
     else

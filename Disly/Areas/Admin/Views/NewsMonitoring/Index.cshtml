@@ -34,7 +34,7 @@
                     text = text.Length > maxChars ? text.Substring(0, maxChars) + " ..." : text;
                 }
                 string disabled = (Item.Disabled) ? "disabled" : "";
-                string btnTitle = Item.Important ? "Отвязать от главного портала" : "Привязать к главному порталу";
+                string btnTitle = Item.IsAttacheToMainPortal ? "Отвязать от главного портала" : "Привязать к главному порталу";
 
                 <div class="list-item @disabled">
                     <div class="monitor-desc">
@@ -53,7 +53,7 @@
                         </div>
                     </div>
                     <div class="pull-right monitor-attach">
-                        <button class="btn btn-attach-main @(Item.Important ? "btn-default" : "btn-primary")" data-item="@Item.Id">
+                        <button class="btn btn-attach-main @(Item.IsAttacheToMainPortal ? "btn-default" : "btn-primary")" data-item="@Item.Id">
                             @btnTitle
                         </button>
                     </div>

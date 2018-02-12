@@ -368,7 +368,7 @@ namespace cms.dbase
                             PreviewImage = new Photo { Url = s.c_preview },
                             Date = s.d_date,
                             CountSee = s.n_count_see,
-                            Important = db.content_content_links
+                            IsAttacheToMainPortal = db.content_content_links
                                             .Where(w => w.f_content.Equals(s.id))
                                             .Where(w => w.f_link.Equals(mainSiteId))
                                             .Select(ss => ss.id).Any()

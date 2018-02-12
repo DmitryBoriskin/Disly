@@ -246,6 +246,7 @@ namespace cms.dbase
                         PhoneReception = s.c_phone_reception,
                         Fax = s.c_fax,
                         Email = s.c_email,
+                        ExtUrl = s.c_www,
                         DirecorPost = s.c_director_post,
                         DirectorF = s.f_director,
                         Contacts = s.c_contacts,
@@ -305,6 +306,7 @@ namespace cms.dbase
                             .Value(s => s.c_phone_reception, model.PhoneReception)
                             .Value(s => s.c_fax, model.Fax)
                             .Value(s => s.c_email, model.Email)
+                            .Value(s=> s.c_www, model.ExtUrl)
                             .Value(s => s.c_director_post, model.DirecorPost)
                             .Value(s => s.f_director, model.DirectorF)
                             .Value(s => s.c_contacts, model.Contacts)
@@ -410,6 +412,7 @@ namespace cms.dbase
                             .Set(s => s.c_phone_reception, model.PhoneReception)
                             .Set(s => s.c_fax, model.Fax)
                             .Set(s => s.c_email, model.Email)
+                            .Set(s => s.c_www, model.ExtUrl)
                             .Set(s => s.c_director_post, model.DirecorPost)
                             .Set(s => s.f_director, model.DirectorF)
                             .Set(s => s.c_contacts, model.Contacts)
