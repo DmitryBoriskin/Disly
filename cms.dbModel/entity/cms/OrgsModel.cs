@@ -52,6 +52,11 @@ namespace cms.dbModel.entity
         public string Url { get; set; }
 
         /// <summary>
+        /// url внешнего сайта
+        /// </summary>
+        public string ExtUrl { get; set; }
+
+        /// <summary>
         /// Контактная информация
         /// </summary>
         public string Contacts { get; set; }
@@ -716,6 +721,11 @@ namespace cms.dbModel.entity
         /// Email
         /// </summary>
         public string Email { get; set; }
+
+        /// <summary>
+        /// Email
+        /// </summary>
+        public string ExtUrl { get; set; }
 
         /// <summary>
         /// Адрес

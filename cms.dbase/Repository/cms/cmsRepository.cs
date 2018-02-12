@@ -1138,8 +1138,13 @@ namespace cms.dbase
                 {
                     NewDomain = NewDomain.Trim().ToLower();
 
+                    var bdefault = true;
+
                     if (NewDomain == "localhost")
+                    {
                         db.cms_sites_domainss.Where(w => w.c_domain == NewDomain).Delete();
+                        bdefault = false;
+                    }
 
                     var data = db.cms_sites_domainss.Where(w => w.c_domain == NewDomain);
                     if (!data.Any())
@@ -1149,6 +1154,7 @@ namespace cms.dbase
                                      .Value(v => v.id, NewGuid)
                                      .Value(v => v.f_site, SiteId)
                                      .Value(v => v.c_domain, NewDomain)
+                                     .Value(v => v.b_default, bdefault)
                                      .Insert();
                         //логирование
                         var log = new LogModel()
@@ -1185,30 +1191,45 @@ namespace cms.dbase
                     var data = db.cms_sites_domainss.Where(w => w.id == id);
                     if (data.Any())
                     {
-
-                        string domainName = data.Select(s => s.c_domain).SingleOrDefault();
-                        if (!string.IsNullOrEmpty(domainName) && domainName.Trim().ToLower() == "localhost")
+                        var domain = data.SingleOrDefault();
+                        if(domain != null)
                         {
-                            return false;
+                            string domainName = domain.c_domain;
+                            if (!string.IsNullOrEmpty(domainName) && domainName.Trim().ToLower() == "localhost")
+                            {
+                                return false;
+                            }
+                            data.Delete();
+
+                            if (domain.b_default)
+                            {
+                                var toUpdate = db.cms_sites_domainss.Where(p => p.f_site == domain.f_site).FirstOrDefault();
+
+                                if (toUpdate != null)
+                                {
+                                    toUpdate.b_default = true;
+                                    db.Update(toUpdate);
+                                }
+                            }
+
+                           
+
+                            //логирование
+                            var log = new LogModel()
+                            {
+                                Site = _domain,
+                                Section = LogSection.Sites,
+                                Action = LogAction.delete_domain,
+                                PageId = id,
+                                PageName = domainName,
+                                UserId = _currentUserId,
+                                IP = _ip,
+                            };
+                            insertLog(log);
+
+                            tran.Commit();
+                            return true;
                         }
-
-                        data.Delete();
-
-                        //логирование
-                        var log = new LogModel()
-                        {
-                            Site = _domain,
-                            Section = LogSection.Sites,
-                            Action = LogAction.delete_domain,
-                            PageId = id,
-                            PageName = domainName,
-                            UserId = _currentUserId,
-                            IP = _ip,
-                        };
-                        insertLog(log);
-
-                        tran.Commit();
-                        return true;
                     }
                 return false;
                 }

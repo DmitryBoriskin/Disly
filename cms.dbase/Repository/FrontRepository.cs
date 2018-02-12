@@ -1932,6 +1932,7 @@ namespace cms.dbase
                                      PhoneReception = o.c_phone_reception,
                                      Fax = o.c_fax,
                                      Email = o.c_email,
+                                     ExtUrl = o.c_www,
                                      Address = o.c_adress,
                                      Logo = o.c_logo,
                                      Link = (!string.IsNullOrEmpty(s.c_alias)) ? getSiteDefaultDomain(s.c_alias) : null,
@@ -1973,6 +1974,7 @@ namespace cms.dbase
                                      PhoneReception = o.c_phone_reception,
                                      Fax = o.c_fax,
                                      Email = o.c_email,
+                                     ExtUrl = o.c_www,
                                      Address = o.c_adress,
                                      Logo = o.c_logo,
                                      Link = (!string.IsNullOrEmpty(s.c_alias)) ? getSiteDefaultDomain(s.c_alias) : null,
@@ -1998,28 +2000,46 @@ namespace cms.dbase
         }
 
 
-        public override OrgFrontModel[] getOrgsModel(string tab, string idtype)
+        public override OrgFrontModel[] getOrgsModel(string tab, Guid? idtype = null)
         {
             using (var db = new CMSdb(_context))
             {
                 //var query =db.content_orgss.Where(w=>w.b_disabled==false && w.id!=Guid.Parse("CC8442EF-CECE-4CD3-A544-DA319E03C981"));
                 var query = db.get_lpu_list();
 
-                if (!String.IsNullOrEmpty(idtype))
+                switch (tab)
                 {
-                    switch (tab)
-                    {
-                        case "typelist":
-                            query = query.Join(db.content_orgs_types_links.Where(w => w.f_type == Guid.Parse(idtype)), n => n.id, m => m.f_org, (n, m) => n);
-                            break;
-                        case "affiliation":
-                            query = query.Where(w => w.f_department_affiliation == Guid.Parse(idtype));
-                            break;
-                        case "services":
-                            query = query.Join(db.content_orgs_medical_services_linkss.Where(w => w.f_medical_service == Guid.Parse(idtype)), n => n.id, m => m.f_org, (n, m) => n);
-                            break;
-                    }
+                    case "typelist":
+                        if (idtype.HasValue)
+                        {
+                            query = query
+                              .Join(db.content_orgs_types_links
+                                  .Where(w => w.f_type == idtype.Value),
+                              n => n.id,
+                              m => m.f_org,
+                              (n, m) => n);
+                        }
+                        break;
+                    case "affiliation":
+                        if (idtype.HasValue)
+                        {
+                            query = query
+                                .Where(w => w.f_department_affiliation == idtype);
+                        }
+                        break;
+                    case "services":
+                        if (idtype.HasValue)
+                        {
+                            query = query
+                            .Join(db.content_orgs_medical_services_linkss
+                                 .Where(w => w.f_medical_service == idtype),
+                            n => n.id,
+                            m => m.f_org,
+                            (n, m) => n);
+                        }
+                        break;
                 }
+
                 //query = query.OrderBy(o => new { o.n_sort, o.c_title });
                 var data = query.Select(o => new OrgFrontModel()
                 {
@@ -2029,6 +2049,7 @@ namespace cms.dbase
                     PhoneReception = o.c_phone_reception,
                     Fax = o.c_fax,
                     Email = o.c_email,
+                    ExtUrl = o.c_www,
                     Address = o.c_adress,
                     Logo = o.c_logo,
                     Link = o.c_domain,
