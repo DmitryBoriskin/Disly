@@ -160,6 +160,8 @@ namespace cms.dbModel.entity
         /// Изображение под слайдером
         /// </summary>
         public Photo BackGroundImg { get; set; }
+
+        public string DefaultDomain { get; set; }
     }
 
     /// <summary>
