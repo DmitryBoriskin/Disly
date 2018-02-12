@@ -324,6 +324,13 @@ namespace cms.dbase
                             {
                                 Guid menuId = Guid.Parse(m);
 
+                                //реализуем логику что в группу "Плитка"можно добавить только 20 элементов
+                                if (menuId == Guid.Parse("76B9A197-708B-4B48-B851-F2606A5288D5"))
+                                {
+                                    var dop_query = db.content_sitemap_menutypess.Where(w => w.f_site == _domain && w.f_menutype == menuId).Count();
+                                    if (dop_query > 19) break;
+                                }
+
                                 var _maxSortMenu = db.content_sitemap_menutypess
                                     .Where(w => w.f_site.Equals(item.Site))
                                     .Where(w => w.f_menutype.Equals(menuId))
@@ -466,13 +473,22 @@ namespace cms.dbase
                                 //добавляем значения
                                 foreach (var m in item.MenuGroups)
                                 {
+                                    
                                     Guid menuId = Guid.Parse(m);
 
                                     if (!menuOld.Contains(menuId))
                                     {
+
+                                        //реализуем логику что в группу "Плитка"можно добавить только 20 элементов
+                                        if (menuId == Guid.Parse("76B9A197-708B-4B48-B851-F2606A5288D5"))
+                                        {
+                                            var dop_query = db.content_sitemap_menutypess.Where(w => w.f_site == _domain && w.f_menutype == menuId).Count();
+                                            if (dop_query > 19) break;                                            
+                                        }
+                                        
                                         var maxSortQuery = db.content_sitemap_menutypess
-                                            .Where(w => w.f_site.Equals(item.Site))
-                                            .Where(w => w.f_menutype.Equals(menuId));
+                                                             .Where(w => w.f_site.Equals(item.Site))
+                                                             .Where(w => w.f_menutype.Equals(menuId));
 
                                         int maxSort = maxSortQuery.Any() ? maxSortQuery.Select(s => s.n_sort).Max() : 0;
 
@@ -548,6 +564,14 @@ namespace cms.dbase
                                 foreach (var m in item.MenuGroups)
                                 {
                                     Guid menuId = Guid.Parse(m);
+
+
+                                    //реализуем логику что в группу "Плитка"можно добавить только 20 элементов
+                                    if (menuId == Guid.Parse("76B9A197-708B-4B48-B851-F2606A5288D5"))
+                                    {
+                                        var dop_query = db.content_sitemap_menutypess.Where(w => w.f_site == _domain && w.f_menutype == menuId).Count();
+                                        if (dop_query > 19) break;
+                                    }
 
                                     var _maxSortMenu = db.content_sitemap_menutypess
                                         .Where(w => w.f_site.Equals(item.Site))

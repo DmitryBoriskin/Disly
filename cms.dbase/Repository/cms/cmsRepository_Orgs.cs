@@ -96,6 +96,17 @@ namespace cms.dbase
                 return false;
             }
         }
+
+        public int getCountOrg()
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var query = db.content_orgss;
+                if (query.Any()) return query.Count();
+                return 0;
+            }
+        }
+
         /// <summary>
         /// Постраничный список организаций
         /// </summary>
