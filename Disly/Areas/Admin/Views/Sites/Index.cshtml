@@ -33,6 +33,14 @@
     <div class="dop_info-block">
         <div class="dop-caption">Фильтр</div>
         @Html.Partial("Part/SearchFilter")
+
+        
+        <div class="alert alert-info topIndent-20" role="alert">
+            <p>@Model.List.CountAllSites — сайтов</p>
+            <p>@Model.List.CountOrgSites — сайтов организаций</p>
+            <p>@Model.List.CountGsSites — сайтов главных специалистов</p>
+            <p>@Model.List.CountEventSites — сайтов событий</p>
+        </div>
     </div>
 
     <div class="buttons">

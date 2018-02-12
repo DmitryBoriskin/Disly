@@ -761,6 +761,12 @@ namespace cms.dbase
             {
                 var query = queryBySiteFilter(db, filtr);
 
+                var querycount = db.cms_sitess.Where(w => w.c_content_type != "temp");
+
+                int CountAllSites= querycount.Count();
+                int CountOrgSites = querycount.Where(w=>w.c_content_type=="org").Count(); 
+                int CountGsSites = querycount.Where(w => w.c_content_type == "spec").Count(); ;
+                int CountEventSites= querycount.Where(w => w.c_content_type == "event").Count();
 
                 if (filtr.Disabled != null) //в данном случае используется для определения отключенных/включенных сайтов
                 {
@@ -805,7 +811,11 @@ namespace cms.dbase
                             Size = filtr.Size,
                             ItemsCount = ItemCount,
                             //PageCount = ItemCount / filtr.Size
-                        }
+                        },
+                        CountAllSites=CountAllSites,
+                        CountOrgSites=CountOrgSites,
+                        CountGsSites=CountGsSites,
+                        CountEventSites=CountEventSites
                     };
                 }
                 return null;

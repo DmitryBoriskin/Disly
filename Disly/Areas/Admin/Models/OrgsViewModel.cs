@@ -11,7 +11,8 @@ namespace Disly.Areas.Admin.Models
     /// Модель, описывающая организации во внешней части
     /// </summary>
     public class OrgsViewModel : CoreViewModel
-    {                
+    {   
+        public int CountItem { get; set; }
         /// <summary>
         /// Единичная запись организации
         /// </summary>

@@ -744,6 +744,9 @@ a.sitemap-plate.sitemap-plate-image {
     position: absolute;
     width: 100%;
 }
+.event-item-module-opacity a:hover{
+    color:#fff;
+}
 
 .top-op {
     padding: 5px 15px;
