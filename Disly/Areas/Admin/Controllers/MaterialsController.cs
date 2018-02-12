@@ -167,6 +167,7 @@ namespace Disly.Areas.Admin.Controllers
             EventsModel[] events = null;
             var eventFilter = FilterParams.Extend<EventFilter>(filter);
             eventFilter.RelId = Id;
+            eventFilter.Domain = null;
             eventFilter.RelType = ContentType.MATERIAL;
             var eventsList = _cmsRepository.getEventsList(eventFilter);
             events = (eventsList != null) ? eventsList.Data : null;
@@ -261,7 +262,8 @@ namespace Disly.Areas.Admin.Controllers
 
                 // добавление необходимых полей перед сохранением модели
                 bindData.Item.Id = Id;
-                bindData.Item.ContentLink = SiteInfo.Id;
+                bindData.Item.ContentLink = SiteInfo.ContentId;
+                bindData.Item.ContentLinkType = SiteInfo.Type;
 
                 #region Сохранение изображения
                 var width = 0;
@@ -313,8 +315,7 @@ namespace Disly.Areas.Admin.Controllers
                 }
 
                 //Определяем Insert или Update
-                bindData.Item.ContentLink = SiteInfo.ContentId;
-                bindData.Item.ContentLinkType = SiteInfo.Type;
+               
                 if (getMaterial != null)
                 {
                     userMessage.info = "Запись обновлена";

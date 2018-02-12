@@ -382,7 +382,7 @@
                     elTooltip.tooltip('show');
                     if (_checked) {
                         if (listBlock.find("spec_" + _linkId).length === 0) {
-                            listBlock.append($("<li id='site_" + _linkId + "' class='icon-link'/>").html(_chkbxHtml));
+                            listBlock.append($("<li id='spec_" + _linkId + "' class='icon-link'/>").html(_chkbxHtml));
                         }
                     }
                     else {

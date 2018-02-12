@@ -98,6 +98,7 @@ namespace Disly.Areas.Admin.Controllers
             var eventFilter = FilterParams.Extend<EventFilter>(filter);
             eventFilter.RelId = Id;
             eventFilter.RelType = ContentType.EVENT;
+            eventFilter.Domain = null;
             var eventsList = _cmsRepository.getEventsList(eventFilter);
 
             var orgfilter = FilterParams.Extend<OrgFilter>(filter);
@@ -198,7 +199,10 @@ namespace Disly.Areas.Admin.Controllers
                 var res = false;
                 var getEvent = _cmsRepository.getEvent(Id);
 
+                // добавление необходимых полей перед сохранением модели
                 bindData.Item.Id = Id;
+                bindData.Item.ContentLink = SiteInfo.ContentId;
+                bindData.Item.ContentLinkType = SiteInfo.Type;
 
                 #region Сохранение изображения
                 var width = 0;
@@ -260,8 +264,6 @@ namespace Disly.Areas.Admin.Controllers
                 else
                 {
                     userMessage.info = "Запись добавлена";
-                    bindData.Item.ContentLink = SiteInfo.ContentId;
-                    bindData.Item.ContentLinkType = SiteInfo.Type;
                     res = _cmsRepository.insertCmsEvent(bindData.Item);
                 }
                 //Сообщение пользователю
@@ -375,7 +377,7 @@ namespace Disly.Areas.Admin.Controllers
             {
                 ObjctId = objId,
                 ObjctType = objType,
-                EventsList = _cmsRepository.getLastEventsListWithCheckedFor(filtr)                
+                EventsList = _cmsRepository.getLastEventsListWithCheckedFor(filtr)
             };
 
             //var model = new OrgsModalViewModel()
