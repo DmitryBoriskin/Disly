@@ -4,4 +4,3 @@ using System.Web;
 public class MaterialFilter : FilterParams {
     public string SmiType { get; set; }
 }
-public class MainSpecialistFilter : FilterParams { }

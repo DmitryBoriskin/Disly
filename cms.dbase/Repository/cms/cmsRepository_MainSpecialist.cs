@@ -63,18 +63,34 @@ namespace cms.dbase
         /// Получим список главных специалистов
         /// </summary>
         /// <returns></returns>
-        public override MainSpecialistList getMainSpecialistList(FilterParams filter)
+        public override MainSpecialistList getMainSpecialistList(MainSpecialistFilter filter)
         {
             using (var db = new CMSdb(_context))
             {
-                var query = db.content_main_specialistss
-                    .Select(s => s);
+                var query = db.content_main_specialistss.AsQueryable();
 
                 if (!string.IsNullOrWhiteSpace(filter.SearchText))
                 {
                     query = query
                         .Where(w => w.c_name.ToLower()
                         .Contains(filter.SearchText.ToLower()));
+                }
+
+                if(filter.RelId.HasValue && filter.RelId.Value !=  Guid.Empty)
+                {
+                    var spec = db.content_content_links
+                                    .Where(p => p.f_content == filter.RelId.Value)
+                                    .Where(p => p.f_content_type == filter.RelType.ToString().ToLower())
+                                    .Where(p => p.f_link_type == ContentLinkType.SPEC.ToString().ToLower())
+                                    .Select(p => p.f_link);
+
+                    if (spec.Any())
+                    {
+                        query = query.Where(s => spec.Contains(s.id));
+                    }
+                    else
+                        return null;
+
                 }
 
                 var itemCount = query.Count();
@@ -86,7 +102,7 @@ namespace cms.dbase
                     .Select(s => new MainSpecialistModel
                     {
                         Id = s.id,
-                        Name = s.c_name,
+                        Title = s.c_name,
                         Desc = s.c_desc
                     });
 
@@ -122,7 +138,7 @@ namespace cms.dbase
                     .Select(s => new MainSpecialistModel
                     {
                         Id = s.id,
-                        Name = s.c_name,
+                        Title = s.c_name,
                         Desc = s.c_desc,
                         SiteId = (from site in db.cms_sitess
                                   join cms in db.content_main_specialistss on site.f_content equals cms.id
@@ -213,7 +229,7 @@ namespace cms.dbase
             {
                 db.content_main_specialistss
                     .Value(v => v.id, item.Id)
-                    .Value(v => v.c_name, item.Name)
+                    .Value(v => v.c_name, item.Title)
                     .Value(v => v.c_desc, item.Desc)
                     .Insert();
 
@@ -244,7 +260,7 @@ namespace cms.dbase
             {
                 db.content_main_specialistss
                     .Where(w => w.id.Equals(item.Id))
-                    .Set(u => u.c_name, item.Name)
+                    .Set(u => u.c_name, item.Title)
                     .Set(u => u.c_desc, item.Desc)
                     .Update();
 
@@ -338,6 +354,38 @@ namespace cms.dbase
 
                 if (!query.Any()) return null;
                 return query.SingleOrDefault();
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="filtr"></param>
+        /// <returns></returns>
+        public override MainSpecialistShortModel[] getMainSpecWithCheckedFor(MainSpecialistFilter filtr)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var query = db.content_main_specialistss
+                                .Where(s => s.id != filtr.RelId); //Исключаем само гс
+
+                if (filtr.RelId.HasValue && filtr.RelId.Value != Guid.Empty)
+                {
+                    var List = query
+                    .Select(s => new MainSpecialistShortModel()
+                    {
+                        Id = s.id,
+                        Title = s.c_name,
+                        Checked = ContentLinkExists(filtr.RelId.Value, filtr.RelType, s.id, ContentLinkType.SPEC),
+                        Origin = ContentLinkOrigin(filtr.RelId.Value, filtr.RelType, s.id, ContentLinkType.SPEC)
+                    });
+
+                    if (List.Any())
+                        return List.ToArray();
+                }
+
+                return null;
+
             }
         }
     }

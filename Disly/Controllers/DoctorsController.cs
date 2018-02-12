@@ -65,7 +65,7 @@ namespace Disly.Controllers
 
             var filter = getFilter();
             var pfilter = FilterParams.Extend<PeopleFilter>(filter);
-            model.DoctorsList = _repository.getPeopleList(pfilter);
+            model.DoctorsList = _repository.getOrgPeopleList(pfilter);
             model.DepartmentsSelectList = _repository.getDeparatamentsSelectList(); //Domain
             model.PeoplePosts = _repository.getPeoplePosts();//Domain
 

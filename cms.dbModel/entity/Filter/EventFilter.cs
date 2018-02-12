@@ -4,11 +4,11 @@ using System.Web;
 public class EventFilter : FilterParams
 {
     /// <summary>
-    /// Должен передаваться либо MaterialId либо EventId
+    /// Id элемента, привязанного к событию
     /// </summary>
     public Guid? RelId { get; set; }
     /// <summary>
-    /// определяет в какой таблице связей искать связь с организацией
+    /// тип элемента, привязанного к событию
     /// </summary>
     public ContentType RelType { get; set; }
 }

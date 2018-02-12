@@ -93,84 +93,52 @@ namespace cms.dbase
         {
             using (var db = new CMSdb(_context))
             {
-                // var query = queryByEventFilter(db, filtr);
 
                 if (filtr == null)
                     throw new Exception("cmsRepository > queryByEventFilter: Filter is null");
 
-                var query = db.content_sv_event_sites.AsQueryable();
-
                 #region Фильтр
-                //var query = db.content_eventss
-                //                  .AsQueryable();
+                var query = db.content_eventss
+                                  .AsQueryable();
 
-                //if (!string.IsNullOrEmpty(filtr.SearchText))
-                //{
-                //    query = query.Where(w => w.c_title.Contains(filtr.SearchText));
-                //}
-
-                //В таблице ищем связи оранизация - контент (новость/событие)
-                //if (filtr.RelId.HasValue && filtr.RelId.Value != Guid.Empty)
-                //{
-                //    var objctLinks = db.content_content_links
-                //        .Where(s => s.f_content == filtr.RelId.Value)
-                //        .Where(s => s.f_content_type == filtr.RelType.ToString().ToLower())
-                //        .Where(s => s.f_link_type == ContentLinkType.EVENT.ToString().ToLower());
-
-                //    if (!objctLinks.Any())
-                //        query = query.Where(o => o.id == Guid.Empty); //Делаем заранее ложный запрос
-                //    else
-                //    {
-                //        var objctsId = objctLinks.Select(o => o.f_link);
-                //        query = query.Where(o => objctsId.Contains(o.id));
-                //    }
-                //}
-
-                //Если указан домен, то выбираем записи, принадлежащие ему
-                //if (!string.IsNullOrEmpty(filtr.Domain))
-                //{
-                //    var contentType = ContentType.EVENT.ToString().ToLower();
-                //    var events = db.content_content_links.Where(e => e.f_content_type == contentType)
-                //            .Join(db.cms_sitess.Where(o => o.c_alias.ToLower() == filtr.Domain),
-                //                    e => e.f_link,
-                //                    o => o.f_content,
-                //                    (e, o) => e.f_content
-                //                    );
-
-                //    if (!events.Any())
-                //        return null;
-
-                //    query = query.Where(w => events.Contains(w.id));
-                //}
-
-
-                //Фильтр по домену
-                if (!string.IsNullOrEmpty(filtr.Domain))
+                if (!string.IsNullOrEmpty(filtr.SearchText))
                 {
-                    query = query.Where(p => p.site_alias == filtr.Domain);
+                    query = query.Where(w => w.c_title.Contains(filtr.SearchText));
                 }
 
-                //Фильтр по привязке к др. контенту (организация и тп)
+                //В таблице ищем связи оранизация - контент(новость / событие)
                 if (filtr.RelId.HasValue && filtr.RelId.Value != Guid.Empty)
                 {
-                    query = query.Where(s => s.f_content == filtr.RelId.Value)
-                                    .Where(s => s.f_content_type == filtr.RelType.ToString().ToLower());
+                    var objctLinks = db.content_content_links
+                        .Where(s => s.f_content == filtr.RelId.Value)
+                        .Where(s => s.f_content_type == filtr.RelType.ToString().ToLower())
+                        .Where(s => s.f_link_type == ContentLinkType.EVENT.ToString().ToLower());
+
+                    if (!objctLinks.Any())
+                        query = query.Where(o => o.id == Guid.Empty); //Делаем заранее ложный запрос
+                    else
+                    {
+                        var objctsId = objctLinks.Select(o => o.f_link);
+                        query = query.Where(o => objctsId.Contains(o.id));
+                    }
                 }
 
-                //Фильтр по тексту
-                if (!string.IsNullOrEmpty(filtr.SearchText))
-                query = query.Where(s => s.c_title.ToLower().Contains(filtr.SearchText));
+                //Если указан домен, то выбираем записи, принадлежащие ему
+                if (!string.IsNullOrEmpty(filtr.Domain))
+                {
+                    var contentType = ContentType.EVENT.ToString().ToLower();
+                    var events = db.content_content_links.Where(e => e.f_content_type == contentType)
+                            .Join(db.cms_sitess.Where(o => o.c_alias.ToLower() == filtr.Domain),
+                                    e => e.f_link,
+                                    o => o.f_content,
+                                    (e, o) => e.f_content
+                                    );
 
-                //Фильтр по дате
-                if (filtr.Date.HasValue)
-                    query = query.Where(s => s.d_date > filtr.Date.Value);
+                    if (!events.Any())
+                        return null;
 
-                if (filtr.DateEnd.HasValue)
-                    query = query.Where(s => s.d_date < filtr.DateEnd.Value.AddDays(1));
-
-                //Фильтр по доступности
-                if (filtr.Disabled.HasValue)
-                    query = query.Where(s => s.b_disabled == filtr.Disabled.Value);
+                    query = query.Where(w => events.Contains(w.id));
+                }
                 #endregion
 
 
@@ -185,9 +153,9 @@ namespace cms.dbase
                     .Take(filtr.Size)
                     .Select(s => new EventsModel
                     {
-                        Id = s.event_id,
+                        Id = s.id,
                         Num = s.num,
-                        SiteId = s.site_alias,
+                        //SiteId = s.alias,
                         Title = s.c_title,
                         Alias = s.c_alias.ToLower(),
                         Place = s.c_place,
@@ -232,27 +200,9 @@ namespace cms.dbase
             {
                 var query = db.content_eventss
                                 .Where(s => s.id != filtr.RelId); // Само на себя событие не может ссылаться - это зацикливание
-                                
 
 
-                if (!string.IsNullOrEmpty(filtr.Domain))
-                {
-                    var contentType = ContentType.EVENT.ToString().ToLower();
-                    var events = db.content_content_links.Where(e => e.f_content_type == contentType)
-                            .Join(db.cms_sitess.Where(o => o.c_alias.ToLower() == filtr.Domain),
-                                    e => e.f_link,
-                                    o => o.f_content,
-                                    (e, o) => e.f_content
-                                    );
-
-                    if (!events.Any())
-                        return null;
-                    query = query.Where(w => events.Contains(w.id));
-                }
-
-                if (filtr.RelId.HasValue && filtr.RelId.Value != Guid.Empty)
-                {
-                    var List = query
+                var List = query
                     .OrderByDescending(s => s.d_date)
                     .Take(filtr.Size)
                     .Select(s => new EventsShortModel()
@@ -261,12 +211,12 @@ namespace cms.dbase
                         Title = s.c_title,
                         DateBegin = s.d_date,
                         Text = s.c_text,
-                        Checked = ContentLinkExists(filtr.RelId.Value, filtr.RelType, s.id, ContentLinkType.EVENT)
+                        Checked = ContentLinkExists(filtr.RelId.Value, filtr.RelType, s.id, ContentLinkType.EVENT),
+                        Origin = ContentLinkOrigin(filtr.RelId.Value, filtr.RelType, s.id, ContentLinkType.EVENT)
                     });
 
                     if (List.Any())
                         return List.ToArray();
-                }
 
                 return null;
 

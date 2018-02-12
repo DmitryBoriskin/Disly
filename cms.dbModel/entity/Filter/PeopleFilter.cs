@@ -12,4 +12,5 @@ public class PeopleFilter : FilterParams
     /// Фильтрация по организациям
     /// </summary>
     public Guid[] Orgs { get; set; }
+
 }

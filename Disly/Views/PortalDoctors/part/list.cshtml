@@ -34,23 +34,23 @@
                         <td>
                             @if (item.Posts != null && item.Posts.Count() > 0)
                             {
-                                var postsByOrg = item.Posts.Where(p => p.OrgId != null).Any() ?
-                                    item.Posts.Where(p => p.OrgId != null).OrderBy(p => p.Type).GroupBy(p => p.OrgId) : null;
+                                var postsByOrg = item.Posts.Where(p => p.Org != null).Any() ?
+                                    item.Posts.Where(p => p.Org != null).OrderBy(p => p.Type).GroupBy(p => p.Org.Id) : null;
                                 if (postsByOrg != null)
                                 {
                                     foreach (var postByOrg in postsByOrg)
                                     {
 
-                                        var org = postByOrg.Where(p => p.OrgId == postByOrg.Key).First();
-                                        string linkToOrg = string.Format("http://{0}", org.OrgUrl);
+                                        var org = postByOrg.Where(p => p.Org.Id == postByOrg.Key).First();
+                                        string linkToOrg = string.Format("http://{0}", org.Org.Url);
                                         <p>
                                             @if (!string.IsNullOrWhiteSpace(linkToOrg))
                                             {
-                                                <a target="_blank" href="@linkToOrg">@(org.OrgTitle):</a><br />
+                                                <a target="_blank" href="@linkToOrg">@(org.Org.Title):</a><br />
                                             }
                                             else
                                             {
-                                                <b>@(org.OrgTitle):</b><br />
+                                                <b>@(org.Org.Title):</b><br />
                                             }
 
                                             @foreach (var p in postByOrg)

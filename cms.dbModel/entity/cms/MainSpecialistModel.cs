@@ -4,6 +4,22 @@ using System.Collections.Generic;
 namespace cms.dbModel.entity.cms
 {
     /// <summary>
+    /// Список главных специалистов и пейджер
+    /// </summary>
+    public class MainSpecialistList
+    {
+        /// <summary>
+        /// Список главных специалистов
+        /// </summary>
+        public IEnumerable<MainSpecialistModel> Data { get; set; }
+
+        /// <summary>
+        /// Пейджер
+        /// </summary>
+        public Pager Pager { get; set; }
+    }
+    
+    /// <summary>
     /// Модель, описывающая главного специалиста
     /// </summary>
     public class MainSpecialistModel
@@ -16,7 +32,7 @@ namespace cms.dbModel.entity.cms
         /// <summary>
         /// Название
         /// </summary>
-        public string Name { get; set; }
+        public string Title { get; set; }
 
         /// <summary>
         /// Описание
@@ -56,18 +72,30 @@ namespace cms.dbModel.entity.cms
     }
 
     /// <summary>
-    /// Список главных специалистов и пейджер
+    /// Модель, описывающая главного специалиста для привязки
     /// </summary>
-    public class MainSpecialistList
+    public class MainSpecialistShortModel
     {
         /// <summary>
-        /// Список главных специалистов
+        /// Идентификатор
         /// </summary>
-        public IEnumerable<MainSpecialistModel> Data { get; set; }
+        public Guid Id { get; set; }
 
         /// <summary>
-        /// Пейджер
+        /// Название
         /// </summary>
-        public Pager Pager { get; set; }
+        public string Title { get; set; }
+
+        /// <summary>
+        /// Наличие связей с объектом
+        /// </summary>
+        public bool Checked { get; set; }
+
+        /// <summary>
+        /// Принадлежность к объекту( хозяин по отношению к объекту)
+        /// </summary>
+        public bool Origin { get; set; }
+
     }
+
 }

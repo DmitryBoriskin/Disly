@@ -61,10 +61,10 @@ namespace Disly.Controllers
             model.Item = _repository.getSiteMap(_path, _alias);
             if (model.Item != null)
             {
-                if (model.Item.FrontSection.ToLower() != "page")
-                {
-                    return Redirect("/" + model.Item.FrontSection);
-                }
+                //if (model.Item.FrontSection.ToLower() != "page")
+                //{
+                //    return Redirect("/" + model.Item.FrontSection);
+                //}
                 model.Child = _repository.getSiteMapChild(model.Item.Id);
                 model.Documents = _repository.getAttachDocuments(model.Item.Id);
             }

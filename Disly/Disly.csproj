@@ -435,6 +435,7 @@
     <Content Include="Areas\Admin\Views\NewsMonitoring\OrgsSaved.cshtml" />
     <Content Include="Areas\Admin\Views\NewsMonitoring\RssList.cshtml" />
     <Content Include="Areas\Admin\Views\NewsMonitoring\Orgs.cshtml" />
+    <Content Include="Areas\Admin\Views\Shared\Modal\Spec.cshtml" />
     <None Include="Content\plugins\tinymce\plugins\gallery\plugin.min.js_korkin" />
     <Content Include="Content\plugins\tinymce\plugins\help\img\logo.png" />
     <Content Include="Content\plugins\tinymce\plugins\help\plugin.min.js" />
@@ -597,7 +598,9 @@
     <Compile Include="Areas\Admin\Controllers\NewsMonitoringController.cs" />
     <Compile Include="Areas\Admin\Controllers\WorksheetController.cs" />
     <Compile Include="Areas\Admin\Models\AnketaViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\ModalViewModels\MainSpecModalViewModel.cs" />
     <Compile Include="Controllers\gs\SpecStructureController.cs" />
+    <Compile Include="Controllers\gs\SpecContactsController.cs" />
     <Compile Include="Controllers\orgs\OrgGsMembersController.cs" />
     <Compile Include="Controllers\AnketaController.cs" />
     <Compile Include="Controllers\VacancyController.cs" />
@@ -677,6 +680,7 @@
     </Compile>
     <Compile Include="Areas\Admin\Models\CoreViewModel.cs" />
     <Compile Include="Models\EventViewModel.cs" />
+    <Compile Include="Models\gs\SpecContactsViewModel.cs" />
     <Compile Include="Models\gs\SpecStructureViewModel.cs" />
     <Compile Include="Models\base\ErrorViewModel.cs" />
     <Compile Include="Models\WorksheetViewModel.cs" />
@@ -971,6 +975,7 @@
     <Content Include="Views\Feedback\part\List.cshtml" />
     <Content Include="Views\Shared\partial\Pager.cshtml" />
     <Content Include="Views\Press\part\Filter.cshtml" />
+    <Content Include="Views\SpecContacts\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

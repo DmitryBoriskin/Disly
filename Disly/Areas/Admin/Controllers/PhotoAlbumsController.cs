@@ -436,8 +436,7 @@ namespace Disly.Areas.Admin.Controllers
             filter.Size = size;
 
             PhotoAlbumList list = _cmsRepository.getPhotoAlbum(filter);
-            model.List = _cmsRepository.getPhotoAlbum(filter);
-
+            model.List = list;
 
             if (model.List == null)
                 model.List = new PhotoAlbumList()
@@ -448,7 +447,6 @@ namespace Disly.Areas.Admin.Controllers
                         Page = 1,
                         Size = 30,
                         ItemsCount = 0,
-                        //PageCount = 1,
                     }
                 };
 

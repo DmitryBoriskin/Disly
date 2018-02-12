@@ -1122,7 +1122,12 @@ div.ListItem img.photo-preview {
 
 /*Orgs*/
 
-
+#model-linksToOrgs-ul,
+#model-linksToSpec-ul,
+#model-linksToEvent-ul
+{
+   list-style: none;
+}
 
 
 

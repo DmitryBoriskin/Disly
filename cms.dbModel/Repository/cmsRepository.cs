@@ -257,7 +257,8 @@ namespace cms.dbModel
         // Главные специалисты
         public abstract EmployeePostModel[] getEmployeePosts();
         public abstract EmployeePostModel getEmployeePost(int id);
-        public abstract MainSpecialistList getMainSpecialistList(FilterParams filter);
+        public abstract MainSpecialistList getMainSpecialistList(MainSpecialistFilter filter);
+        public abstract MainSpecialistShortModel[] getMainSpecWithCheckedFor(MainSpecialistFilter filtr);
         public abstract MainSpecialistModel getMainSpecialistItem(Guid id);
         public abstract EmployeeModel[] getEmployeeList(int[] specialisations);
         public abstract EmployeeModel[] getEmployeeList();

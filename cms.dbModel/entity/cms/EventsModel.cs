@@ -139,7 +139,7 @@ namespace cms.dbModel.entity
     }
 
     /// <summary>
-    /// Модель, описывающая события для привязки к новостям/событиям/организации/персоне и т.д
+    /// Модель, описывающая события для привязки к новостям/событиям/организации/гс и т.д
     /// </summary>
     public class EventsShortModel
     {
@@ -167,5 +167,10 @@ namespace cms.dbModel.entity
         /// Наличие связей с объектом
         /// </summary>
         public bool Checked { get; set; }
+
+        /// <summary>
+        /// Принадлежность к объекту( хозяин по отношению к объекту)
+        /// </summary>
+        public bool Origin { get; set; }
     }
 }
