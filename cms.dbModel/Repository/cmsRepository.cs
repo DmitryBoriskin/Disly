@@ -89,6 +89,7 @@ namespace cms.dbModel
 
         public abstract MaterialsList getMaterialsList(MaterialFilter filtr);
         public abstract MaterialsList getAllMaterials(MaterialFilter filter);
+        public abstract bool toggleAttachMaterialToMainSite(Guid id);
         public abstract MaterialsModel getMaterial(Guid id);
 
         public abstract bool insertCmsMaterial(MaterialsModel material);

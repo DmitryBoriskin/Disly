@@ -318,7 +318,7 @@ namespace cms.dbase
                 return null;
             }
         }
-
+        
         /// <summary>
         /// Возвращает список всех новостей
         /// </summary>
@@ -328,6 +328,11 @@ namespace cms.dbase
         {
             using (var db = new CMSdb(_context))
             {
+                var mainSiteId = db.cms_sitess
+                                .Where(w => w.c_alias.Equals("main"))
+                                .Select(s => s.f_content)
+                                .SingleOrDefault();
+
                 var query = db.content_materialss.AsQueryable();
 
                 #region Filter
@@ -362,7 +367,11 @@ namespace cms.dbase
                             Text = s.c_text,
                             PreviewImage = new Photo { Url = s.c_preview },
                             Date = s.d_date,
-                            CountSee = s.n_count_see
+                            CountSee = s.n_count_see,
+                            Important = db.content_content_links
+                                            .Where(w => w.f_content.Equals(s.id))
+                                            .Where(w => w.f_link.Equals(mainSiteId))
+                                            .Select(ss => ss.id).Any()
                         });
 
                 if (list.Any())
@@ -379,6 +388,46 @@ namespace cms.dbase
                     };
                 }
                 return null;
+            }
+        }
+
+        /// <summary>
+        /// Привязывает или отвязывает новость у главного сайта
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public override bool toggleAttachMaterialToMainSite(Guid id)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                // идентификатор главного портала
+                var mainSiteId = db.cms_sitess
+                                .Where(w => w.c_alias.Equals("main"))
+                                .Select(s => s.f_content)
+                                .SingleOrDefault();
+
+                // существует ли связь новости с главным порталом
+                var link = db.content_content_links
+                                    .Where(w => w.f_content.Equals(id))
+                                    .Where(w => w.f_link.Equals(mainSiteId))
+                                    .Select(s => s)
+                                    .SingleOrDefault();
+
+                bool isExists = link != null;
+
+                if (isExists)
+                {
+                    return db.Delete(link) > 0;
+                }
+                else
+                {
+                    return db.content_content_links
+                        .Value(v => v.f_content, id)
+                        .Value(v => v.f_content_type, "material")
+                        .Value(v => v.f_link, mainSiteId)
+                        .Value(v => v.f_link_type, "org")
+                        .Insert() > 0;
+                }
             }
         }
 
