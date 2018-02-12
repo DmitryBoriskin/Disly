@@ -11,6 +11,7 @@ namespace cms.dbModel
         public abstract SiteSectionModel getView(string siteSection); //string siteId,
         public abstract SitesModel getSiteInfo(); //string domain
         public abstract string getSiteDefaultDomain(string siteId);
+        public abstract string getSiteDefaultDomainByContentId(Guid contentId);
         public abstract UsersModel[] getSiteAdmins();
         public abstract SiteMapModel[] getSiteMapList(); //string domain
         public abstract SiteMapModel[] getSiteMapListShort(string path); //string domain
@@ -50,6 +51,7 @@ namespace cms.dbModel
         public abstract Departments getOvpDepartaments(Guid id);
 
         //Persons
+        public abstract People[] getOrgPeopleList(PeopleFilter filter);
         public abstract People[] getPeopleList(PeopleFilter filter);
         public abstract People getPeopleItem(Guid id);
         public abstract string getPeopleSnils(Guid id);

@@ -39,22 +39,22 @@
                             <a class="adminlist_name" href="@link">@item.FIO</a>
                             @if (item.Posts != null && item.Posts.Count() > 0)
                             {
-                                var postsByOrg = item.Posts.Where(p => p.OrgId != null).Any() ?
-                                    item.Posts.Where(p => p.OrgId != null).GroupBy(p => p.OrgId) : null;
+                                var postsByOrg = item.Posts.Where(p => p.Org != null).Any() ?
+                                    item.Posts.Where(p => p.Org != null).GroupBy(p => p.Org.Id) : null;
                                 if (postsByOrg != null)
                                 {
                                     foreach (var postByOrg in postsByOrg)
                                     {
-                                        var org = postByOrg.Where(p => p.OrgId == postByOrg.Key).First();
+                                        var org = postByOrg.Where(p => p.Org.Id == postByOrg.Key).First();
                                         <p>
-                                            @if (!string.IsNullOrWhiteSpace(org.OrgUrl))
+                                            @if (!string.IsNullOrWhiteSpace(org.Org.Url))
                                             {
-                                                string linkToOrg = string.Format("http://{0}", org.OrgUrl);
-                                                <a target="_blank" href="@linkToOrg">@(org.OrgTitle):</a><br />
+                                                string linkToOrg = string.Format("http://{0}", org.Org.Url);
+                                                <a target="_blank" href="@linkToOrg">@(org.Org.Title):</a><br />
                                             }
                                             else
                                             {
-                                                <b>@(org.OrgTitle):</b><br />
+                                                <b>@(org.Org.Title):</b><br />
                                             }
 
                                             @foreach (var p in postByOrg)

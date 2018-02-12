@@ -13,6 +13,7 @@ public enum ContentType
     PHOTO = 3,
     BANNER = 4,
     ANKETA = 5
+
 }
 /// <summary>
 /// Типы объектов, которые могут иметь свои сайты(домены)

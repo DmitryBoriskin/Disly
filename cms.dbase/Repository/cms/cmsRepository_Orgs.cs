@@ -171,7 +171,7 @@ namespace cms.dbase
         /// Получаем полный список доступных организаций с отмеченными значениями(для кот есть связи для объекта)
         /// </summary>
         /// <param name="filtr">Фильтр</param>
-        /// <returns></returns>         
+        /// <returns></returns>
         public override OrgsShortModel[] getOrgsListWhithChekedFor(OrgFilter filtr)
         {
             using (var db = new CMSdb(_context))

@@ -88,6 +88,7 @@ namespace cms.dbModel
 
 
         public abstract MaterialsList getMaterialsList(MaterialFilter filtr);
+        public abstract MaterialsList getAllMaterials(MaterialFilter filter);
         public abstract MaterialsModel getMaterial(Guid id);
 
         public abstract bool insertCmsMaterial(MaterialsModel material);
@@ -255,7 +256,8 @@ namespace cms.dbModel
         // Главные специалисты
         public abstract EmployeePostModel[] getEmployeePosts();
         public abstract EmployeePostModel getEmployeePost(int id);
-        public abstract MainSpecialistList getMainSpecialistList(FilterParams filter);
+        public abstract MainSpecialistList getMainSpecialistList(MainSpecialistFilter filter);
+        public abstract MainSpecialistShortModel[] getMainSpecWithCheckedFor(MainSpecialistFilter filtr);
         public abstract MainSpecialistModel getMainSpecialistItem(Guid id);
         public abstract EmployeeModel[] getEmployeeList(int[] specialisations);
         public abstract EmployeeModel[] getEmployeeList();

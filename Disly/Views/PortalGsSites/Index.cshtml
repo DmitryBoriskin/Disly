@@ -29,20 +29,20 @@
                                         @if (!string.IsNullOrEmpty(item.DomainUrl))
                                         {
                                             var link = string.Format("http://{0}", item.DomainUrl);
-                                            <a target="_blank" href="@link" title="@item.Name">@item.Name</a>
+                                            <a target="_blank" href="@link" title="@item.Title">@item.Title</a>
                                         }
                                         else
                                         {
                                             <span>@item.Name</span>
                                         }
                                     </h3>
-                                    <div>
+                                    @*<div>
                                         @if(!string.IsNullOrEmpty(item.Desc)){
                                             var max = (item.Desc.Length > 250) ? 250 : item.Desc.Length;
 
                                             <span>@Html.Raw(item.Desc.Substring(0, max))</span>
                                         }
-                                    </div>
+                                    </div>*@
                                 </td>
                             </tr>
                         }

@@ -5,11 +5,6 @@
 <div>
     @if (Model != null)
     {
-        <div class="col-lg-12 content">
-            <div class="alert alert-info">
-                <p><span class="icon-info"></span> Выберите организации, к которым необходимо привязать запись.</p>
-            </div>
-        </div>
         <div class="scrollbar modal-org-list">
             @if (Model.OrgsTypes != null && Model.OrgsTypes.Count() > 0)
             {
@@ -38,7 +33,7 @@
                                                                     <span class="orgType-item-tooltip" data-toggle="tooltip" data-placement="right" title="Сохранено"></span>
                                                                     <input type="checkbox" class="orgType-item-chkbx iCheck" data-object-id="@Model.ObjctId" data-object-type="@Model.ObjctType" data-link-id="@item.Id" data-link-type="@ContentLinkType.ORG.ToString()" data-init="false" @(item.Checked ? "checked" : null) @(item.Origin? "disabled":null)/>
                                                                     <span class="orgType-item-html">
-                                                                        <a href="/Admin/orgs/item/@item.Id/" class="icon-location-5" target="_blank">@item.Title</a>
+                                                                        <a href="/Admin/orgs/item/@item.Id/" class="icon-link" target="_blank">@item.Title</a>
                                                                     </span>
                                                                 </label>
                                                             </div>

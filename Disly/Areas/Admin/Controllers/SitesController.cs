@@ -68,21 +68,30 @@ namespace Disly.Areas.Admin.Controllers
             {
                 case "org":
                     var data = _cmsRepository.getOrgItem(model.Item.ContentId);
-                    ViewBag.ContentLink = "/admin/orgs/item/" + data.Id;
-                    ViewBag.ContentType = "организации";
-                    ViewBag.ContentTitle = data.Title;
+                    if(data != null)
+                    {
+                        ViewBag.ContentLink = "/admin/orgs/item/" + data.Id;
+                        ViewBag.ContentType = "организации";
+                        ViewBag.ContentTitle = data.Title;
+                    }
                     break;
                 case "people":
                     var data_p = _cmsRepository.getPerson(model.Item.ContentId);
-                    ViewBag.ContentLink = "/admin/Person/item/" + data_p.Id;
-                    ViewBag.ContentType = "персоны";
-                    ViewBag.ContentTitle = data_p.FIO;
+                    if (data_p != null)
+                    {
+                        ViewBag.ContentLink = "/admin/Person/item/" + data_p.Id;
+                        ViewBag.ContentType = "персоны";
+                        ViewBag.ContentTitle = data_p.FIO;
+                    }
                     break;
                 case "event":
                     var data_e = _cmsRepository.getEvent(model.Item.ContentId);
-                    ViewBag.ContentLink = "/admin/events/item/" + data_e.Id;
-                    ViewBag.ContentType = "события";
-                    ViewBag.ContentTitle = data_e.Title;
+                    if (data_e != null)
+                    {
+                        ViewBag.ContentLink = "/admin/events/item/" + data_e.Id;
+                        ViewBag.ContentType = "события";
+                        ViewBag.ContentTitle = data_e.Title;
+                    }
                     break;
             }
             return View("Item", model);
@@ -126,9 +135,9 @@ namespace Disly.Areas.Admin.Controllers
 
             var orgfilter = FilterParams.Extend<OrgFilter>(filter);
             var evfilter = FilterParams.Extend<EventFilter>(filter);
-
+            var specfilter = FilterParams.Extend<MainSpecialistFilter>(filter);
             model.OrgsList = new SelectList(_cmsRepository.getOrgs(orgfilter), "Id", "Title", ContentId);
-            model.MainSpecialistList = new SelectList(_cmsRepository.getMainSpecialistList(filter).Data, "Id", "Name", ContentId);
+            model.MainSpecialistList = new SelectList(_cmsRepository.getMainSpecialistList(specfilter).Data, "Id", "Title", ContentId);
             model.EventsList = new SelectList(_cmsRepository.getEventsList(evfilter).Data, "Id", "Title", ContentId);
             #endregion
             return View("Master", model);
@@ -277,8 +286,9 @@ namespace Disly.Areas.Admin.Controllers
                 );
             var orgfilter = FilterParams.Extend<OrgFilter>(filter);
             var evfilter = FilterParams.Extend<EventFilter>(filter);
+            var specfilter = FilterParams.Extend<MainSpecialistFilter>(filter);
             model.OrgsList = new SelectList(_cmsRepository.getOrgs(orgfilter), "Id", "Title", ContentId);
-            model.MainSpecialistList = new SelectList(_cmsRepository.getMainSpecialistList(filter).Data, "Id", "Name", ContentId);
+            model.MainSpecialistList = new SelectList(_cmsRepository.getMainSpecialistList(specfilter).Data, "Id", "Name", ContentId);
             model.EventsList = new SelectList(_cmsRepository.getEventsList(evfilter).Data, "Id", "Title", ContentId);
             #endregion
 
@@ -368,7 +378,6 @@ namespace Disly.Areas.Admin.Controllers
                 Domain = Domain,
                 RelId = objId,
                 RelType = objType,
-                Size = 1000
             };
 
             var model = new SitesModalViewModel()

@@ -822,7 +822,6 @@ namespace cms.dbase
                 {
                     var List = query
                     .OrderBy(o => new { o.c_name })
-                    .Take(filtr.Size)
                     .Select(s => new SitesShortModel()
                     {
                         Id = s.id,
@@ -857,8 +856,6 @@ namespace cms.dbase
                     .OrderBy(o => new { o.c_name });
 
                 var data = query
-                    //.Skip(filtr.Size * (filtr.Page - 1))
-                    //.Take(filtr.Size)
                     .Select(s => new SitesShortModel
                     {
                         Id = s.id,

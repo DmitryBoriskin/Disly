@@ -306,7 +306,8 @@ a.button  {
     background: url('/Content/img/preloader.svg') center center no-repeat;
 }
 .modal-org-list, .modal-event-list,
-.modal-site-list, .modal-userGroupResolutions-list
+.modal-site-list, .modal-userGroupResolutions-list,
+.modal-spec-list
 {
     height:400px;
     overflow:hidden;
@@ -317,7 +318,10 @@ a.button  {
     font-size: 1.1em;
 }
 
-.org-type-check-all, .sites-check-all{
+.org-type-check-all,
+.site-check-all,
+.spec-check-all
+{
     margin-left:10px;
     padding:1px 5px;
     background-color:#eee;
@@ -330,20 +334,23 @@ a.button  {
 }
 
 .org-type-check-all[data-state='half-checked'],
-.sites-check-all[data-state='half-checked']
+.site-check-all[data-state='half-checked'],
+.spec-check-all[data-state='half-checked']
 {
     background-color:#eee;
 }
 
 .org-type-check-all[data-state='full-unchecked'],
-.sites-check-all[data-state='full-unchecked']
+.site-check-all[data-state='full-unchecked'],
+.spec-check-all[data-state='full-unchecked']
 {
      background-color:#f8c4c4;
 }
 .org-type-check-all[data-state='full-checked'],
-.sites-check-all[data-state='full-checked']
+.site-check-all[data-state='full-checked'],
+.spec-check-all[data-state='full-checked']
 {
-     background-color:#c2d4e0;
+     background-color:#8af3e0;
 }
 
 .org-byType-tree {
