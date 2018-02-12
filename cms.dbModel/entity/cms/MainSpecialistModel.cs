@@ -17,6 +17,7 @@ namespace cms.dbModel.entity.cms
         /// Пейджер
         /// </summary>
         public Pager Pager { get; set; }
+        public int AllCount { get; set; }
     }
     
     /// <summary>

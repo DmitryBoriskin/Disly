@@ -69,6 +69,9 @@ namespace cms.dbase
             {
                 var query = db.content_main_specialistss.AsQueryable();
 
+                int AllCount = 0;
+                if (query.Any()) AllCount = query.Count();
+
                 if (!string.IsNullOrWhiteSpace(filter.SearchText))
                 {
                     query = query
@@ -118,7 +121,8 @@ namespace cms.dbase
                             Size = filter.Size,
                             ItemsCount = itemCount,
                             //PageCount = (itemCount % filter.Size > 0) ? (itemCount / filter.Size) + 1 : itemCount / filter.Size
-                        }
+                        },
+                        AllCount= AllCount
                     };
                 }
             }

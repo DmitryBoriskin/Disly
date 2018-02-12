@@ -81,6 +81,7 @@ namespace Disly.Areas.Admin.Controllers
                 model.Item = _cmsRepository.getOrgItem((Guid)orgId);
             }
             model.OrgList = _cmsRepository.getOrgs(orgfilter);// список организаций
+            model.CountItem = _cmsRepository.getCountOrg();
             return View(model);
         }
 
