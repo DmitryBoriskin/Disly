@@ -200,7 +200,7 @@ namespace cms.dbase
                         .Select(s => new OrgsShortModel()
                         {
                             Id = s.id,
-                            Title = s.c_title,
+                            Title = !string.IsNullOrEmpty(s.c_title_short)? s.c_title_short: s.c_title,
                             Types = (s.contentorgstypeslinkorgs.Select(t => t.f_type).Any()) ?
                                 s.contentorgstypeslinkorgs.Select(t => t.f_type).ToArray() : null,
                             Checked = ContentLinkExists(filtr.RelId.Value, filtr.RelType, s.id, ContentLinkType.ORG),

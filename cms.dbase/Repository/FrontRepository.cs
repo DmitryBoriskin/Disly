@@ -2794,6 +2794,7 @@ namespace cms.dbase
                         .Where(w => w.Title.ToLower().Contains(filter.SearchText.ToLower()));
                 }
 
+                query = query.OrderBy(p => p.Title);
 
                 if (query.Any())
                     return query.ToArray();
@@ -2927,6 +2928,7 @@ namespace cms.dbase
                         PhoneReception = s.c_phone_reception,
                         Fax = s.c_fax,
                         Email = s.c_email,
+                        ExtUrl = s.c_www,
                         Contacts = s.c_contacts,
                         Address = s.c_adress,
                         GeopointX = s.n_geopoint_x,

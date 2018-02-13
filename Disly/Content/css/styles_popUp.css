@@ -212,9 +212,9 @@ a:hover:after {
     background: #005c99;
     border:none;
     outline:none;
-    border-radius:4px;
     -moz-border-radius:4px;
     -webkit-border-radius:4px;
+     border-radius:4px;
     color:#ffffff;
     font-size: 12px;
     line-height: 16px;
@@ -318,7 +318,7 @@ a.button  {
     font-size: 1.1em;
 }
 
-.org-type-check-all,
+.org-check-all,
 .site-check-all,
 .spec-check-all
 {
@@ -333,14 +333,14 @@ a.button  {
     padding:5px;
 }
 
-.org-type-check-all[data-state='half-checked'],
+.org-check-all[data-state='half-checked'],
 .site-check-all[data-state='half-checked'],
 .spec-check-all[data-state='half-checked']
 {
     background-color:#eee;
 }
 
-.org-type-check-all[data-state='full-unchecked'],
+.org-check-all[data-state='full-unchecked'],
 .site-check-all[data-state='full-unchecked'],
 .spec-check-all[data-state='full-unchecked']
 {

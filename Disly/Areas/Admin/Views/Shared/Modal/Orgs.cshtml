@@ -2,85 +2,64 @@
 @{
     Layout = "~/Areas/Admin/Views/Shared/_popUp.cshtml";
 }
-<div>
+<div id="modal-org-data" class="modal-data">
     @if (Model != null)
     {
+        <div class="text-right">
+            <span>Все на данной странице</span>
+            <span class="org-check-all" data-state="half-checked">все</span>
+        </div>
+
         <div class="scrollbar modal-org-list">
-
-
-            @if (Model.OrgsTypes != null && Model.OrgsTypes.Count() > 0)
+            @if (Model.OrgsList != null && Model.OrgsList.Count() > 0)
             {
-                <div class="row">
-                    <div class="col-lg-12">
-                        <ul class="org-byType-tree">
-                            @foreach (var orgtype in Model.OrgsTypes)
-                            {
-                                <li class="org-type-item">
-                                    <span class="org-type-item-active-el">@orgtype.Title</span>
 
-                                    @if (Model.OrgsList != null)
+                <table id="modal-org-table" class="table table-striped" cellspacing="0" width="100%">
+                    <thead>
+                        <tr>
+                            <th width="75%">Название</th>
+                            <th>Тип</th>
+                            <th>Отметить</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.OrgsList)
+                        {
+                            <tr class="org-item-row">
+                                <td class="org-item-html">
+                                    <a> @item.Title</a><br />
+                                </td>
+                                <td>
+                                    @if (item.Types != null && item.Types.Count() > 0 && Model.OrgsTypes != null && Model.OrgsTypes.Count() > 0)
                                     {
-                                        if (orgtype.Sort == 1000)
-                                        {
-                                            var list = Model.OrgsList.Where(t => t.Types == null);
-                                            if (list != null  && list.Count() > 0)
+                                        <ul>
+                                            @foreach (var type in item.Types)
                                             {
-                                                <span class="org-type-check-all" data-state="half-checked">все</span>
-                                                <ul>
-                                                    @foreach (var item in list)
-                                                    {
-                                                        <li>
-                                                            <div class="orgType-item checkbox">
-                                                                <label>
-                                                                    <span class="orgType-item-tooltip" data-toggle="tooltip" data-placement="right" title="Сохранено"></span>
-                                                                    <input type="checkbox" class="orgType-item-chkbx iCheck" data-object-id="@Model.ObjctId" data-object-type="@Model.ObjctType" data-link-id="@item.Id" data-link-type="@ContentLinkType.ORG.ToString()" data-init="false" @(item.Checked ? "checked" : null) @(item.Origin? "disabled":null)/>
-                                                                    <span class="orgType-item-html">
-                                                                        <a href="/Admin/orgs/item/@item.Id/" class="icon-link" target="_blank">@item.Title</a>
-                                                                    </span>
-                                                                </label>
-                                                            </div>
-                                                        </li>
-                                                    }
-                                                </ul>
-                                            }
-                                        }
-                                        else
-                                        {
-                                            var list = Model.OrgsList.Where(t => t.Types != null && t.Types.Contains(orgtype.Id));
-                                            if (list != null && list.Count() > 0)
+                                            var orgtype = Model.OrgsTypes.Where(t => t.Id == type);
+                                            if (orgtype != null)
                                             {
-                                                <span class="org-type-check-all" data-state="half-checked">все</span>
-                                                <ul>
-                                                    @foreach (var item in list)
-                                                    {
-                                                        <li>
-                                                            <div class="orgType-item checkbox">
-                                                                <label>
-                                                                    <span class="orgType-item-tooltip" data-toggle="tooltip" data-placement="top" title="Сохранено"></span>
-                                                                    <input type="checkbox" class="orgType-item-chkbx iCheck" data-object-id="@Model.ObjctId" data-object-type="@Model.ObjctType" data-link-id="@item.Id" data-link-type="@ContentLinkType.ORG.ToString()" data-init="false" @(item.Checked ? "checked" : null) @(item.Origin? "disabled":null)/>
-                                                                    <span class="orgType-item-html">
-                                                                        <a href="/Admin/orgs/item/@item.Id/" target="_blank">@item.Title</a>
-                                                                    </span>
-                                                                </label>
-                                                            </div>
-                                                        </li>
-                                                    }
-                                                </ul>
+                                            <li>@orgtype.First().Title</li>
+                                                }
                                             }
-                                        }
+                                        </ul>
                                     }
-                                </li>
-                            }
-                        </ul>
-                    </div>
+                                </td>
+
+                                <td class="td-center">
+                                    <span class="org-item-tooltip" data-toggle="tooltip" data-placement="left" title="Сохранено"></span>
+                                    <input type="checkbox" class="org-item-chkbx iCheck" data-object-id="@Model.ObjctId" data-object-type="@Model.ObjctType" data-link-id="@item.Id" data-link-type="@ContentLinkType.ORG.ToString()" data-init="false" @(item.Checked ? "checked" : null) @(item.Origin ? "disabled" : null) />
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <div id="log-list_title">
+                    <div class="alert alert-danger" role="alert">Список организаций для этой записи пуст.</div>
                 </div>
             }
-        </div>
-    }
-    else
-    {
-        <div id="log-list_title">
-            <div class="alert alert-danger" role="alert">Список организаций для этой записи пуст.</div>
         </div>
     }
 </div>
@@ -94,30 +73,47 @@
             radioClass: 'icheckbox_square-blue'
             //increaseArea: '%' //optional
         });
-        $(".org-byType-tree ul").addClass("hidden");
-        $(".org-byType-tree li").each(function () {
-            if ($(this).find("ul").length > 0) {
-                $(this).addClass("icon-down-dir");
-            
-                if($(this).find(":checked").length>0)
-                {
-                    $(this).find("ul").toggleClass("hidden");
-                }
-            }
-        });
 
-        $(".org-type-item-active-el").on("click", function (e) {
-            e.preventDefault();
-            $(this).closest(".org-type-item").find("ul").toggleClass("hidden");
-        });
+        $('#modal-org-table').DataTable(
+              {
+                  searching: true,
+                  ordering: true,
+                  columns: [
+                      null,
+                      null,
+                      { "searchable": false, "orderable": false }
+                  ],
+                  //paging: false
+                  language: {
+                      "processing": "Подождите...",
+                      "search": "Поиск:",
+                      "lengthMenu": "Показать _MENU_ записей",
+                      "info": "Записи с _START_ по _END_ из _TOTAL_ ",
+                      "infoEmpty": "Записи с 0 по 0 из 0",
+                      "infoFiltered": "(отфильтровано из _MAX_ записей)",
+                      "infoPostFix": "",
+                      "loadingRecords": "Загрузка записей...",
+                      "zeroRecords": "Записи отсутствуют.",
+                      "emptyTable": "В таблице отсутствуют данные",
+                      "paginate": {
+                          "first": "<<",
+                          "previous": "<",
+                          "next": ">",
+                          "last": ">>"
+                      },
+                      "aria": {
+                          "sortAscending": ": активировать для сортировки столбца по возрастанию",
+                          "sortDescending": ": активировать для сортировки столбца по убыванию"
+                      }
+                  }
+              });
 
-        $(".org-type-check-all").on("click", function (e) {
-          
+        $(".org-check-all").on("click", function (e)
+        {
             var state = $(this).data("state");
-            var item = $(this).closest(".org-type-item");
+            var item = $("#modal-org-table tbody");
 
-            if (state === "half-checked" || state === "full-unchecked")
-            {
+            if (state === "half-checked" || state === "full-unchecked") {
                 console.log(state);
                 item.find("[type=checkbox]").not(":disabled")
                     .each(function () {
@@ -128,7 +124,7 @@
             else {
                 item.find("[type=checkbox]").not(":disabled")
                     .each(function () {
-                        $(this).iCheck("uncheck");
+                        $(this).iCheck('uncheck');
                     });
                 $(this).data("state", "full-unchecked");
             }

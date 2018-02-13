@@ -227,6 +227,12 @@ namespace Disly.Areas.Admin.Controllers
                 #region обновление
                 if (ModelState.IsValid)
                 {
+                    if (!string.IsNullOrEmpty(back_model.Item.ExtUrl))
+                    {
+                        back_model.Item.ExtUrl = back_model.Item.ExtUrl.Replace("http://", "");
+                        back_model.Item.ExtUrl = back_model.Item.ExtUrl.Replace("https://", "");
+                    }
+
                     _cmsRepository.updateOrg(id, back_model.Item); //, AccountInfo.id, RequestUserInfo.IP
                     userMessege.info = "Запись сохранена";
                     userMessege.buttons = new ErrorMassegeBtn[]

@@ -139,7 +139,7 @@
     });
 
     //Привязка к организациям
-    $(".org-byType-tree .orgType-item-chkbx").on('ifToggled', function () {
+    $(".modal-org-list .org-item-chkbx").on('ifToggled', function () {
         var targetUrl = "/Admin/Orgs/UpdateLinkToOrg";
         var _objctId = $(this).data("objectId");
         var _objectType = $(this).data("objectType");
@@ -148,8 +148,8 @@
         var _checked = $(this).is(':checked');
 
         var el = $(this);
-        var elTooltip = $(this).closest(".orgType-item").find(".orgType-item-tooltip").first();
-        var _chkbxlabel = $(this).closest(".orgType-item").find("label .orgType-item-html").first().html();
+        var elTooltip = $(this).closest(".org-item-row").find(".org-item-tooltip").first();
+        var _chkbxlabel = $(this).closest(".org-item-row").find(".org-item-html").first().html();
 
         var listBlock = $("#model-linksToOrgs-ul", top.document);
 
@@ -198,7 +198,7 @@
                         //content.fadeOut("slow");
                         elTooltip.tooltip('hide');
                     }, 1000);
-                    location.reload();
+                    //location.reload();
                 });
         }
         catch (ex) {
