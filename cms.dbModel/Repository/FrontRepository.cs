@@ -112,6 +112,7 @@ namespace cms.dbModel
         public abstract MainSpecialistModel[] getMainSpecialistContacts();
         public abstract People[] getMainSpecialistMembers(PeopleFilter filter);
         public abstract OrgsModel getOrgItem(Guid id);
+        public abstract OrgsModel getOrgItem();
         
         
         public abstract MainSpecialistModel getMainSpecialistItem(Guid id);
