@@ -87,23 +87,30 @@ namespace Disly.Controllers
             List<CardRecord> listRecords = new List<CardRecord>();
 
             XmlSerializer serial = new XmlSerializer(typeof(Employee));
-
-            using (TextReader reader = new StringReader(model.DoctorsItem.XmlInfo.FirstOrDefault()))
+            if(model.DoctorsItem != null && model.DoctorsItem.XmlInfo != null)
             {
-                var result = (Employee)serial.Deserialize(reader);
-                listRecords.AddRange(result.EmployeeRecords);
+                using (TextReader reader = new StringReader(model.DoctorsItem.XmlInfo.FirstOrDefault()))
+                {
+                    var result = (Employee)serial.Deserialize(reader);
+                    listRecords.AddRange(result.EmployeeRecords);
+                }
             }
+            
             #endregion
 
             // десериализация xml
             XmlSerializer serializer = new XmlSerializer(typeof(Employee));
 
-            using (TextReader reader = new StringReader(model.DoctorsItem.XmlInfo.FirstOrDefault()))
+            if(model.DoctorsItem != null && model.DoctorsItem.XmlInfo != null)
             {
-                var result = (Employee)serializer.Deserialize(reader);
-                model.DoctorsItem.EmployeeInfo = result;
-                model.DoctorsItem.EmployeeInfo.EmployeeRecords = listRecords.ToArray();
+                using (TextReader reader = new StringReader(model.DoctorsItem.XmlInfo.FirstOrDefault()))
+                {
+                    var result = (Employee)serializer.Deserialize(reader);
+                    model.DoctorsItem.EmployeeInfo = result;
+                    model.DoctorsItem.EmployeeInfo.EmployeeRecords = listRecords.ToArray();
+                }
             }
+            
 
             return View("Index", model);
         }
