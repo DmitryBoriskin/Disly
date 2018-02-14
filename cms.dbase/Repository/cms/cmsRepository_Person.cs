@@ -25,7 +25,7 @@ namespace cms.dbase
                 var query = (from emp in db.content_peoples
                              join l in db.content_people_postss
                              on emp.id equals l.f_people
-                             join pe in db.content_employee_postss
+                             join pe in db.content_specializationss
                              on l.f_post equals pe.id
                              where emp.id.Equals(id)
                              select new { emp, pe });

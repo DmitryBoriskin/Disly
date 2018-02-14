@@ -1456,7 +1456,7 @@ namespace cms.dbase
                                            //.Where(w => (w.fkcontentpeopleorgdepartmentlinks == null || w.fkcontentpeopleorgdepartmentlinks.FirstOrDefault().f_department != idDepar))
                                            .Select(s => new People
                                            {
-                                               FIO = s.fkcontentpeopleorglink.c_surname + " " + s.fkcontentpeopleorglink.c_name + " " + s.fkcontentpeopleorglink.c_patronymic,
+                                               FIO = s.contentpeopleorglink.c_surname + " " + s.contentpeopleorglink.c_name + " " + s.contentpeopleorglink.c_patronymic,
                                                Id = s.id,
                                                IdLinkOrg = s.f_people
                                            }).ToArray();
@@ -1900,8 +1900,8 @@ namespace cms.dbase
                                            .Where(w => w.f_org == idOrg)
                                            .Select(s => new People
                                            {
-                                               FIO = s.fkcontentpeopleorglink.c_surname + " " + s.fkcontentpeopleorglink.c_name + " " + s.fkcontentpeopleorglink.c_patronymic,
-                                               Id = s.fkcontentpeopleorglink.id
+                                               FIO = s.contentpeopleorglink.c_surname + " " + s.contentpeopleorglink.c_name + " " + s.contentpeopleorglink.c_patronymic,
+                                               Id = s.contentpeopleorglink.id
                                                //Id = s.id,
                                                //IdLinkOrg = s.f_people
                                            }).ToArray();

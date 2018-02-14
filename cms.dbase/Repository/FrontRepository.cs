@@ -1354,7 +1354,7 @@ namespace cms.dbase
 
                 if (filter.Id != null && filter.Id.Count() > 0)
                 {
-                    people = people.Where(w => w.p.contentmainspecialistemployeeslinkcontentpeoples.Any(q => filter.Id.Contains(q.f_people)));
+                    people = people.Where(w => w.p.contentpeopleemployeepostslinkcontentpeoples.Any(q => filter.Id.Contains(q.f_people)));
                 }
 
                 if (search != null)
@@ -1371,7 +1371,7 @@ namespace cms.dbase
 
                 var data = (from p in people
                             join pepl in db.content_people_postss on p.p.id equals pepl.f_people
-                            join ep in db.content_employee_postss on pepl.f_post equals ep.id
+                            join ep in db.content_specializationss on pepl.f_post equals ep.id
                             join pdl in db.content_department_employeess on p.pol.id equals pdl.f_employee into ps
                             from pdl in ps.DefaultIfEmpty()
                                 //where p.s.c_alias.Equals(domain) &&
@@ -1459,7 +1459,7 @@ namespace cms.dbase
 
                 var data = (from p in people
                             join pepl in db.content_people_postss on p.p.id equals pepl.f_people
-                            join ep in db.content_employee_postss on pepl.f_post equals ep.id
+                            join ep in db.content_specializationss on pepl.f_post equals ep.id
                             join pdl in db.content_department_employeess on p.pol.id equals pdl.f_employee into ps
                             from pdl in ps.DefaultIfEmpty()
                                 //where p.s.c_alias.Equals(domain) &&
@@ -1512,7 +1512,7 @@ namespace cms.dbase
         {
             using (var db = new CMSdb(_context))
             {
-                var xmlInfos = db.content_people_infoss
+                var xmlInfos = db.content_people_infos
                     .Where(w => w.f_people.Equals(id))
                     .Select(s => s.c_xml)
                     .ToArray();
@@ -1522,7 +1522,7 @@ namespace cms.dbase
                              from pol in pol2.DefaultIfEmpty()
                              join pdl in db.content_department_employeess on pol.id equals pdl.f_employee into pdl2
                              from pdl in pdl2.DefaultIfEmpty()
-                             join msel in db.content_main_specialist_employees_links on p.id equals msel.f_people into msel2
+                             join msel in db.content_main_specialist_peoples on p.id equals msel.f_people into msel2
                              from msel in msel2.DefaultIfEmpty()
                              join s in db.cms_sitess on msel.f_main_specialist equals s.f_content into s2
                              from s in s2.DefaultIfEmpty()
@@ -1606,7 +1606,7 @@ namespace cms.dbase
                 var query = (from s in db.cms_sitess
                              join pol in db.content_org_employeess on s.f_content equals pol.f_org
                              join pepl in db.content_people_postss on pol.f_people equals pepl.f_people
-                             join ep in db.content_employee_postss on pepl.f_post equals ep.id
+                             join ep in db.content_specializationss on pepl.f_post equals ep.id
                              where (domain.Equals("main") || s.c_alias.ToLower().Equals(domain)) && ep.b_doctor
                              select new PeoplePost
                              {
@@ -2330,7 +2330,7 @@ namespace cms.dbase
                                from s in ss.DefaultIfEmpty()
                                where s.f_content == null || s.f_content == o.id
                                join pepl in db.content_people_postss on p.id equals pepl.f_people
-                               join ep in db.content_employee_postss on pepl.f_post equals ep.id
+                               join ep in db.content_specializationss on pepl.f_post equals ep.id
                                where (post == null || pepl.f_post.ToString().Equals(post)) && ep.b_doctor
                                orderby p.c_surname, p.c_name, p.c_patronymic, ep.c_name
                                select new
@@ -2815,7 +2815,7 @@ namespace cms.dbase
             {
                 return (from ms in db.content_main_specialistss
                         join s in db.cms_sitess on ms.id equals s.f_content
-                        join l in db.content_main_specialist_employees_links on ms.id equals l.f_main_specialist
+                        join l in db.content_main_specialist_peoples on ms.id equals l.f_main_specialist
                         where l.f_type.Equals("main") && s.c_alias.Equals(domain)
                         select ms.c_name).Count();
             }
@@ -2831,7 +2831,7 @@ namespace cms.dbase
             {
                 var query = db.cms_sitess.Where(w => w.c_alias.ToLower() == _domain && w.c_content_type == "spec")
                                          .Join(
-                                                 db.content_main_specialist_employees_links,
+                                                 db.content_main_specialist_peoples,
                                                  e => e.f_content,
                                                  o => o.f_main_specialist,
                                                  (e, o) => o
@@ -2845,7 +2845,7 @@ namespace cms.dbase
                                           .Select(s => new MainSpecialistModel()
                                           {
                                               Title = s.c_surname + " " + s.c_name + " " + s.c_patronymic,
-                                              Organization = getOrgItem(s.fkcontentpeopleorglinks.Select(ss => ss.f_org).Single())
+                                              Organization = getOrgItem(s.contentpeopleorglinks.Select(ss => ss.f_org).Single())
                                           });
                 if (query.Any())
                 {
@@ -2865,7 +2865,7 @@ namespace cms.dbase
             using (var db = new CMSdb(_context))
             {
                 var type = "main";
-                var people = (from s in db.content_main_specialist_employees_links
+                var people = (from s in db.content_main_specialist_peoples
 
                               join spec in db.content_main_specialistss on s.f_main_specialist equals spec.id
 
@@ -2988,17 +2988,17 @@ namespace cms.dbase
                                   join cms in db.content_main_specialistss on site.f_content equals cms.id
                                   where cms.id.Equals(s.id)
                                   select site.id).SingleOrDefault(),
-                        Specialisations = (from l in db.content_main_specialist_specialisations_links
+                        Specialisations = (from l in db.content_main_specialist_specialisationss
                                            join m in db.content_main_specialistss
                                            on l.f_main_specialist equals m.id
                                            where l.f_main_specialist.Equals(s.id)
                                            select l.f_specialisation).ToArray(),
-                        EmployeeMainSpecs = (from l in db.content_main_specialist_employees_links
+                        EmployeeMainSpecs = (from l in db.content_main_specialist_peoples
                                              join m in db.content_main_specialistss
                                              on l.f_main_specialist equals m.id
                                              where (l.f_main_specialist.Equals(s.id) && l.f_type.Equals("main"))
                                              select l.f_people).ToArray(),
-                        EmployeeExpSoviet = (from l in db.content_main_specialist_employees_links
+                        EmployeeExpSoviet = (from l in db.content_main_specialist_peoples
                                              join m in db.content_main_specialistss
                                              on l.f_main_specialist equals m.id
                                              where (l.f_main_specialist.Equals(s.id) && l.f_type.Equals("soviet"))
