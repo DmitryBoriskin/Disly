@@ -2294,6 +2294,27 @@ namespace cms.dbase
             }
         }
 
+        //private IQueryable<content_people> FindPeoplesQuery(IQueryable<content_people> query, FilterParams filter)
+        //{
+        //    if (!String.IsNullOrWhiteSpace(filter.SearchText))
+        //    {
+        //        var search = filter.SearchText.ToLower().Split(' ');
+
+        //        foreach (var s in search)
+        //        {
+        //            query = query.Where(w => w.c_surname.Contains(s)
+        //                                || w.c_name.Contains(s)
+        //                                || w.c_patronymic.Contains(s));
+        //        }
+        //    }
+        //    if (!String.IsNullOrWhiteSpace(filter.Type))
+        //    {
+        //        //query = query.Where(w => w.contentpeopleemployeepostslinkcontentpeoples.Where(ww => ww.f_post.Equals(2)));
+        //    }
+
+        //    return query;
+        //}
+
         /// <summary>
         /// Получаем список врачей для портала
         /// </summary>

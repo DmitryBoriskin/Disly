@@ -59,6 +59,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Mapping\DbQueryMap.cs" />
     <Compile Include="Repository\cms\cmsRepository.cs" />
     <Compile Include="Repository\cms\cmsRepository_Banners.cs" />
     <Compile Include="Repository\cms\cmsRepository_Anketa.cs" />

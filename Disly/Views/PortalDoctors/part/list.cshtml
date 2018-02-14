@@ -40,7 +40,6 @@
                                 {
                                     foreach (var postByOrg in postsByOrg)
                                     {
-
                                         var org = postByOrg.Where(p => p.Org.Id == postByOrg.Key).First();
                                         string linkToOrg = string.Format("http://{0}", org.Org.Url);
                                         <p>
@@ -65,8 +64,7 @@
                     </tr>
                 }
             </table>
-
-            //Html.RenderAction("Pager", "Service", new { @Model = Model.List.Pager });
+            
             if (Model.DoctorsList != null && Model.DoctorsList.Pager != null)
             {
                 @Html.Partial("Part/Pager", Model.DoctorsList.Pager)
