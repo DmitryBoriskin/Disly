@@ -63,7 +63,7 @@ namespace cms.dbModel.entity
 
 
 
-    public class StatisticFeedBackCount
+    public class StatisticFeedBack
     {
         public string Title { get; set; }
         public string Domain { get; set; }

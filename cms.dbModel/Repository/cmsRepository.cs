@@ -304,6 +304,7 @@ namespace cms.dbModel
         //статистика
         public abstract List<StatisticMaterial> getStatisticMaterials(FilterParams filter);
         public abstract List<StatisticMaterial> getStatisticMaterialsGs(FilterParams filter);
-        //public abstract List<StatisticMaterial> getStatisticMaterialsEvents(FilterParams filter);
+        public abstract List<StatisticFeedBack> getStatisticFeedBack();
+        
     }
 }

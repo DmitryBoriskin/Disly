@@ -11,5 +11,6 @@ namespace Disly.Areas.Admin.Models
         public List<StatisticMaterial> StatMaterialsOrg{ get; set; }
         public List<StatisticMaterial> StatMaterialsGs { get; set; }
         public List<StatisticMaterial> StatMaterialsEvent { get; set; }
+        public List<StatisticFeedBack> StatFeedBack { get; set; }
     }
 }

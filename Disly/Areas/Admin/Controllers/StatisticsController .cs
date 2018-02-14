@@ -50,6 +50,7 @@ namespace Disly.Areas.Admin.Controllers
         {
             model.StatMaterialsOrg= _cmsRepository.getStatisticMaterials(filter);
             model.StatMaterialsGs = _cmsRepository.getStatisticMaterialsGs(filter);
+            model.StatFeedBack = _cmsRepository.getStatisticFeedBack();
 
             return View(model);
         }
