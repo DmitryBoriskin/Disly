@@ -57,7 +57,7 @@
                 </div>
                 <div class="row">
                     <div class="col-md-4">@Html.TextBoxFor(m => m.Item.Email, new { type = "text", maxlength = "256", title = "E-mail приемной" })</div>
-                    <div class="col-md-8">@Html.TextBoxFor(m => m.Item.ExtUrl, new { type = "text", maxlength = "256", title = "Ссылка на внешний сайт" })</div>
+                    <div class="col-md-8">@Html.TextBoxFor(m => m.Item.ExtUrl, new { type = "text", maxlength = "256", title = "Ссылка на внешний сайт (www.site_url.ru)" })</div>
                 </div>
             </div>
 
@@ -249,3 +249,14 @@ else
     }
     <button type="submit" name="action" value="cancel-btn" data-action="cancel" class="button icon-cancel">Назад</button>
 </div>
+<script>
+    $(document).ready(function () {
+
+        $("#Item_ExtUrl").on("change", function (e)
+        {
+            var newval = $(this).val().replace("http://", "");
+            var newval = $(this).val().replace("https://", "");
+            $(this).val(newval);
+        });
+    });
+</script>

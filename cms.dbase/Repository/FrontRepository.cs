@@ -1345,7 +1345,7 @@ namespace cms.dbase
                     ? filter.SearchText.ToLower().Split(' ') : null; // поиск по человеку
 
                 var people = (from p in db.content_peoples
-                              join pol in db.content_people_org_links on p.id equals pol.f_people
+                              join pol in db.content_org_employeess on p.id equals pol.f_people
                               where !pol.b_dismissed
                               join o in db.content_orgss on pol.f_org equals o.id
                               join s in db.cms_sitess on pol.f_org equals s.f_content into ps
@@ -1370,9 +1370,9 @@ namespace cms.dbase
                 int specialization = !string.IsNullOrWhiteSpace(filter.Type) ? Convert.ToInt32(filter.Type) : 0; // специализация
 
                 var data = (from p in people
-                            join pepl in db.content_people_employee_posts_links on p.p.id equals pepl.f_people
+                            join pepl in db.content_people_postss on p.p.id equals pepl.f_people
                             join ep in db.content_employee_postss on pepl.f_post equals ep.id
-                            join pdl in db.content_people_department_links on p.pol.id equals pdl.f_people into ps
+                            join pdl in db.content_department_employeess on p.pol.id equals pdl.f_employee into ps
                             from pdl in ps.DefaultIfEmpty()
                                 //where p.s.c_alias.Equals(domain) &&
                             where (department.Equals(Guid.Empty) || pdl.f_department.Equals(department))
@@ -1433,7 +1433,7 @@ namespace cms.dbase
                     ? filter.SearchText.ToLower().Split(' ') : null; // поиск по человеку
 
                 var people = (from p in db.content_peoples
-                              join pol in db.content_people_org_links on p.id equals pol.f_people
+                              join pol in db.content_org_employeess on p.id equals pol.f_people
                               where !pol.b_dismissed
                               join o in db.content_orgss on pol.f_org equals o.id
                               join s in db.cms_sitess on pol.f_org equals s.f_content into ps
@@ -1458,9 +1458,9 @@ namespace cms.dbase
                 int specialization = !string.IsNullOrWhiteSpace(filter.Type) ? Convert.ToInt32(filter.Type) : 0; // специализация
 
                 var data = (from p in people
-                            join pepl in db.content_people_employee_posts_links on p.p.id equals pepl.f_people
+                            join pepl in db.content_people_postss on p.p.id equals pepl.f_people
                             join ep in db.content_employee_postss on pepl.f_post equals ep.id
-                            join pdl in db.content_people_department_links on p.pol.id equals pdl.f_people into ps
+                            join pdl in db.content_department_employeess on p.pol.id equals pdl.f_employee into ps
                             from pdl in ps.DefaultIfEmpty()
                                 //where p.s.c_alias.Equals(domain) &&
                             where (department.Equals(Guid.Empty) || pdl.f_department.Equals(department))
@@ -1518,9 +1518,9 @@ namespace cms.dbase
                     .ToArray();
 
                 var query = (from p in db.content_peoples
-                             join pol in db.content_people_org_links on p.id equals pol.f_people into pol2
+                             join pol in db.content_org_employeess on p.id equals pol.f_people into pol2
                              from pol in pol2.DefaultIfEmpty()
-                             join pdl in db.content_people_department_links on pol.id equals pdl.f_people into pdl2
+                             join pdl in db.content_department_employeess on pol.id equals pdl.f_employee into pdl2
                              from pdl in pdl2.DefaultIfEmpty()
                              join msel in db.content_main_specialist_employees_links on p.id equals msel.f_people into msel2
                              from msel in msel2.DefaultIfEmpty()
@@ -1604,8 +1604,8 @@ namespace cms.dbase
             using (var db = new CMSdb(_context))
             {
                 var query = (from s in db.cms_sitess
-                             join pol in db.content_people_org_links on s.f_content equals pol.f_org
-                             join pepl in db.content_people_employee_posts_links on pol.f_people equals pepl.f_people
+                             join pol in db.content_org_employeess on s.f_content equals pol.f_org
+                             join pepl in db.content_people_postss on pol.f_people equals pepl.f_people
                              join ep in db.content_employee_postss on pepl.f_post equals ep.id
                              where (domain.Equals("main") || s.c_alias.ToLower().Equals(domain)) && ep.b_doctor
                              select new PeoplePost
@@ -1925,7 +1925,7 @@ namespace cms.dbase
                                  join s in db.cms_sitess on o.id equals s.f_content into ss
                                  from s in ss.DefaultIfEmpty()
                                  where (s.id == null || s.f_content.Equals(o.id))//s.c_alias!="main" &&
-                                 join p in db.content_people_org_links on a.f_people equals p.id into ts
+                                 join p in db.content_org_employeess on a.f_people equals p.id into ts
                                  from p in ts.DefaultIfEmpty()
                                  where p.id == null || p.id == a.f_people
                                  where t.f_type.Equals(type) /*&& o.f_oid != null*/
@@ -1966,7 +1966,7 @@ namespace cms.dbase
                                  where a.id == null || a.f_org.Equals(o.id) && a.b_leader
                                  join s in db.cms_sitess on o.id equals s.f_content into ss
                                  from s in ss.DefaultIfEmpty()
-                                 join p in db.content_people_org_links on a.f_people equals p.id into ts
+                                 join p in db.content_org_employeess on a.f_people equals p.id into ts
                                  from p in ts.DefaultIfEmpty()
                                  where p.id == null || p.id == a.f_people
                                  orderby o.n_sort
@@ -2240,7 +2240,7 @@ namespace cms.dbase
                              where a.id == null || (a.f_org.Equals(o.id) && a.b_leader)
                              join s in db.cms_sitess on o.id equals s.f_content into ss
                              from s in ss.DefaultIfEmpty()
-                             join p in db.content_people_org_links on a.f_people equals p.id into ts
+                             join p in db.content_org_employeess on a.f_people equals p.id into ts
                              from p in ts.DefaultIfEmpty()
                              where p.id == null || p.id == a.f_people
                              where omsl.f_medical_service.Equals(service)
@@ -2323,13 +2323,13 @@ namespace cms.dbase
                     ? filter.Type : null;
 
                 var doctors = (from p in people
-                               join pol in db.content_people_org_links on p.id equals pol.f_people
+                               join pol in db.content_org_employeess on p.id equals pol.f_people
                                where !pol.b_dismissed
                                join o in db.content_orgss on pol.f_org equals o.id
                                join s in db.cms_sitess on o.id equals s.f_content into ss
                                from s in ss.DefaultIfEmpty()
                                where s.f_content == null || s.f_content == o.id
-                               join pepl in db.content_people_employee_posts_links on p.id equals pepl.f_people
+                               join pepl in db.content_people_postss on p.id equals pepl.f_people
                                join ep in db.content_employee_postss on pepl.f_post equals ep.id
                                where (post == null || pepl.f_post.ToString().Equals(post)) && ep.b_doctor
                                orderby p.c_surname, p.c_name, p.c_patronymic, ep.c_name
@@ -2795,6 +2795,7 @@ namespace cms.dbase
                         .Where(w => w.Title.ToLower().Contains(filter.SearchText.ToLower()));
                 }
 
+                query = query.OrderBy(p => p.Title);
 
                 if (query.Any())
                     return query.ToArray();
@@ -2873,7 +2874,7 @@ namespace cms.dbase
 
                               join p in db.content_peoples on s.f_people equals p.id
 
-                              join org in db.content_people_org_links on p.id equals org.f_people into ps
+                              join org in db.content_org_employeess on p.id equals org.f_people into ps
                               from org in ps.DefaultIfEmpty()
 
                               where (s.f_type == type)
@@ -2928,6 +2929,7 @@ namespace cms.dbase
                         PhoneReception = s.c_phone_reception,
                         Fax = s.c_fax,
                         Email = s.c_email,
+                        ExtUrl = s.c_www,
                         Contacts = s.c_contacts,
                         Address = s.c_adress,
                         GeopointX = s.n_geopoint_x,

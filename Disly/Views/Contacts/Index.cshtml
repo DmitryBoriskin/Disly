@@ -62,6 +62,12 @@
                                     <a href="mailto:@Model.OrgItem.Email">@Model.OrgItem.Email</a>
                                 </div>
                             }
+                            @if (!string.IsNullOrWhiteSpace(Model.OrgItem.ExtUrl))
+                            {
+                                <div>
+                                    <strong>Сайт: </strong><a href="http://@Model.OrgItem.ExtUrl" target="_blank">@Model.OrgItem.ExtUrl</a>
+                                </div>
+                            }
                         </div>
                         break;
                 }

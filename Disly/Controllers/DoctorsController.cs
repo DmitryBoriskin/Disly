@@ -133,12 +133,18 @@ namespace Disly.Controllers
 
                 XmlSerializer serial = new XmlSerializer(typeof(Employee));
 
-                using (TextReader reader = new StringReader(model.DoctorsItem.XmlInfo.FirstOrDefault()))
+                if(model.DoctorsItem != null && model.DoctorsItem.XmlInfo != null)
                 {
-                    var result = (Employee)serial.Deserialize(reader);
-                    listRecords.AddRange(result.EmployeeRecords);
-                    listRecords.RemoveAll(w => !w.Organisation.Equals(currentOrg.Title));
+                    using (TextReader reader = new StringReader(model.DoctorsItem.XmlInfo.FirstOrDefault()))
+                    {
+                        var result = (Employee)serial.Deserialize(reader);
+                        if (result.EmployeeRecords != null)
+                            listRecords.AddRange(result.EmployeeRecords);
+                        if (currentOrg != null && string.IsNullOrEmpty(currentOrg.Title))
+                            listRecords.RemoveAll(w => !w.Organisation.Equals(currentOrg.Title));
+                    }
                 }
+               
                 #endregion
 
                 // десериализация xml

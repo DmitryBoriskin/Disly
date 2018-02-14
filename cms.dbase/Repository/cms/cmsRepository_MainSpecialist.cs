@@ -205,7 +205,7 @@ namespace cms.dbase
             using (var db = new CMSdb(_context))
             {
                 var query = (from p in db.content_peoples
-                             join pepl in db.content_people_employee_posts_links on p.id equals pepl.f_people
+                             join pepl in db.content_people_postss on p.id equals pepl.f_people
                              join ep in db.content_employee_postss on pepl.f_post equals ep.id
                              orderby p.c_surname, p.c_name, p.c_patronymic
                              where ep.b_doctor
