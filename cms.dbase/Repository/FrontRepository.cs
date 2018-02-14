@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using cms.dbModel.entity.cms;
+using cms.dbase.Mapping;
 
 namespace cms.dbase
 {
@@ -30,7 +31,7 @@ namespace cms.dbase
         {
             _context = ConnectionString;
             _domain = (!string.IsNullOrEmpty(DomainUrl)) ? getSiteId(DomainUrl) : "";
-            //_domain = "cheb-gb2";
+            _domain = "main";
             LinqToDB.Common.Configuration.Linq.AllowMultipleQuery = true;
         }
         #region redirect methods
@@ -2294,27 +2295,34 @@ namespace cms.dbase
             }
         }
 
-        //private IQueryable<content_people> FindPeoplesQuery(IQueryable<content_people> query, FilterParams filter)
-        //{
-        //    if (!String.IsNullOrWhiteSpace(filter.SearchText))
-        //    {
-        //        var search = filter.SearchText.ToLower().Split(' ');
+        /// <summary>
+        /// Поиск людей по фильтру
+        /// </summary>
+        /// <param name="query"></param>
+        /// <param name="filter"></param>
+        /// <returns></returns>
+        private IQueryable<content_people> FindPeoplesQuery(IQueryable<content_people> query, FilterParams filter)
+        {
+            if (!String.IsNullOrWhiteSpace(filter.SearchText))
+            {
+                var search = filter.SearchText.ToLower().Split(' ');
 
-        //        foreach (var s in search)
-        //        {
-        //            query = query.Where(w => w.c_surname.Contains(s)
-        //                                || w.c_name.Contains(s)
-        //                                || w.c_patronymic.Contains(s));
-        //        }
-        //    }
-        //    if (!String.IsNullOrWhiteSpace(filter.Type))
-        //    {
-        //        //query = query.Where(w => w.contentpeopleemployeepostslinkcontentpeoples.Where(ww => ww.f_post.Equals(2)));
-        //    }
+                foreach (var s in search)
+                {
+                    query = query.Where(w => w.c_surname.Contains(s)
+                                        || w.c_name.Contains(s)
+                                        || w.c_patronymic.Contains(s));
+                }
+            }
+            if (!String.IsNullOrEmpty(filter.Type))
+            {
+                query = query.Where(w => w.contentpeoplepostscontentpeoples.Any(a => a.f_post.Equals(Int32.Parse(filter.Type))));
+                //query = query.Where(w => w.contentpeoplepostscontentpeoples.Any(b => b.id.Equals(Int32.Parse(filter.Type))));
+            }
 
-        //    return query;
-        //}
-
+            return query;
+        }
+        
         /// <summary>
         /// Получаем список врачей для портала
         /// </summary>
@@ -2324,100 +2332,131 @@ namespace cms.dbase
         {
             using (var db = new CMSdb(_context))
             {
-                var search = !string.IsNullOrWhiteSpace(filter.SearchText)
-                    ? filter.SearchText.ToLower().Split(' ') : null; // поиск по человеку
+                var people = db.content_peoples.AsQueryable();
 
+                var queryData = FindPeoplesQuery(people, filter);
+                
+                var result = queryData
+                                .MapSearch(db.cms_sitess.AsQueryable());
 
-                var people = (from p in db.content_peoples
-                              select p);
+                int itemCount = result.Count();
 
-                if (search != null)
-                {
-                    foreach (string item in search)
-                    {
-                        people = people.Where(w => w.c_surname.Contains(item)
-                                                || w.c_name.Contains(item)
-                                                || w.c_patronymic.Contains(item));
-                    }
-                }
-                string post = !string.IsNullOrWhiteSpace(filter.Type)
-                    ? filter.Type : null;
+                result = result
+                            .Skip(filter.Size * (filter.Page - 1))
+                            .Take(filter.Size);
 
-                var doctors = (from p in people
-                               join pol in db.content_org_employeess on p.id equals pol.f_people
-                               where !pol.b_dismissed
-                               join o in db.content_orgss on pol.f_org equals o.id
-                               join s in db.cms_sitess on o.id equals s.f_content into ss
-                               from s in ss.DefaultIfEmpty()
-                               where s.f_content == null || s.f_content == o.id
-                               join pepl in db.content_people_postss on p.id equals pepl.f_people
-                               join ep in db.content_specializationss on pepl.f_post equals ep.id
-                               where (post == null || pepl.f_post.ToString().Equals(post)) && ep.b_doctor
-                               orderby p.c_surname, p.c_name, p.c_patronymic, ep.c_name
-                               select new
-                               {
-                                   p = new
-                                   {
-                                       id = p.id,
-                                       surname = p.c_surname,
-                                       name = p.c_name,
-                                       patronymic = p.c_patronymic,
-                                       photo = p.c_photo
-                                   },
-                                   ep = new
-                                   {
-                                       id = ep.id,
-                                       name = ep.c_name,
-                                       org = pol.f_org,
-                                       title = !string.IsNullOrEmpty(o.c_title_short) ? o.c_title_short : o.c_title,
-                                       domain = s.c_alias.ToLower()
-                                   },
-                                   pepl = new
-                                   {
-                                       type = pepl.n_type
-                                   }
-                               });
-
-                // кол-во докторов
-                int itemCount = doctors.Count();
-
-                doctors = doctors
-                    .Skip(filter.Size * (filter.Page - 1))
-                    .Take(filter.Size)
-                    .Select(s => s);
-
-                var doctors2 = doctors
-                    .ToArray()
-                    .GroupBy(g => g.p.id)
-                    .Select(s => new People
-                    {
-                        Id = s.First().p.id,
-                        FIO = s.First().p.surname + " " + s.First().p.name + " " + s.First().p.patronymic,
-                        Photo = s.First().p.photo,
-                        Posts = s.Select(ep2 => new PeoplePost
-                        {
-                            Id = ep2.ep.id,
-                            Name = ep2.ep.name,
-                            Org = getOrgItem(ep2.ep.org),
-                            Type = ep2.pepl.type
-                        }).ToArray()
-                    });
-
-                if (doctors2.Any())
+                if (result.Any())
                 {
                     return new DoctorList()
                     {
-                        Doctors = doctors2.ToArray(),
+                        Doctors = result.ToArray(),
                         Pager = new Pager()
                         {
                             Page = filter.Page,
                             Size = filter.Size,
-                            ItemsCount = itemCount,
-                            //PageCount = (itemCount % filter.Size > 0) ? (itemCount / filter.Size) + 1 : itemCount / filter.Size
+                            ItemsCount = itemCount
                         }
                     };
                 }
                 return null;
+
+
+                #region comments
+                //var search = !string.IsNullOrWhiteSpace(filter.SearchText)
+                //    ? filter.SearchText.ToLower().Split(' ') : null; // поиск по человеку
+
+
+                //var people = (from p in db.content_peoples
+                //              select p);
+
+                //if (search != null)
+                //{
+                //    foreach (string item in search)
+                //    {
+                //        people = people.Where(w => w.c_surname.Contains(item)
+                //                                || w.c_name.Contains(item)
+                //                                || w.c_patronymic.Contains(item));
+                //    }
+                //}
+                //string post = !string.IsNullOrWhiteSpace(filter.Type)
+                //    ? filter.Type : null;
+
+                //var doctors = (from p in people
+                //               join pol in db.content_org_employeess on p.id equals pol.f_people
+                //               where !pol.b_dismissed
+                //               join o in db.content_orgss on pol.f_org equals o.id
+                //               join s in db.cms_sitess on o.id equals s.f_content into ss
+                //               from s in ss.DefaultIfEmpty()
+                //               where s.f_content == null || s.f_content == o.id
+                //               join pepl in db.content_people_postss on p.id equals pepl.f_people
+                //               join ep in db.content_specializationss on pepl.f_post equals ep.id
+                //               where (post == null || pepl.f_post.ToString().Equals(post)) && ep.b_doctor
+                //               orderby p.c_surname, p.c_name, p.c_patronymic, ep.c_name
+                //               select new
+                //               {
+                //                   p = new
+                //                   {
+                //                       id = p.id,
+                //                       surname = p.c_surname,
+                //                       name = p.c_name,
+                //                       patronymic = p.c_patronymic,
+                //                       photo = p.c_photo
+                //                   },
+                //                   ep = new
+                //                   {
+                //                       id = ep.id,
+                //                       name = ep.c_name,
+                //                       org = pol.f_org,
+                //                       title = !string.IsNullOrEmpty(o.c_title_short) ? o.c_title_short : o.c_title,
+                //                       domain = s.c_alias.ToLower()
+                //                   },
+                //                   pepl = new
+                //                   {
+                //                       type = pepl.n_type
+                //                   }
+                //               });
+
+                //// кол-во докторов
+                //int itemCount = doctors.Count();
+
+                //doctors = doctors
+                //    .Skip(filter.Size * (filter.Page - 1))
+                //    .Take(filter.Size)
+                //    .Select(s => s);
+
+                //var doctors2 = doctors
+                //    .ToArray()
+                //    .GroupBy(g => g.p.id)
+                //    .Select(s => new People
+                //    {
+                //        Id = s.First().p.id,
+                //        FIO = s.First().p.surname + " " + s.First().p.name + " " + s.First().p.patronymic,
+                //        Photo = s.First().p.photo,
+                //        Posts = s.Select(ep2 => new PeoplePost
+                //        {
+                //            Id = ep2.ep.id,
+                //            Name = ep2.ep.name,
+                //            Org = getOrgItem(ep2.ep.org),
+                //            Type = ep2.pepl.type
+                //        }).ToArray()
+                //    });
+
+                //if (doctors2.Any())
+                //{
+                //    return new DoctorList()
+                //    {
+                //        Doctors = doctors2.ToArray(),
+                //        Pager = new Pager()
+                //        {
+                //            Page = filter.Page,
+                //            Size = filter.Size,
+                //            ItemsCount = itemCount,
+                //            //PageCount = (itemCount % filter.Size > 0) ? (itemCount / filter.Size) + 1 : itemCount / filter.Size
+                //        }
+                //    };
+                //}
+                //return null;
+                #endregion
             }
         }
 
