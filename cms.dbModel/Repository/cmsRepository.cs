@@ -10,6 +10,7 @@ namespace cms.dbModel
         public abstract string getSiteId(string DomainUrl);
         public abstract Guid currentSiteId();
         public abstract string getSiteDefaultDomain(string siteId);
+        public abstract string getSiteDefaultDomain(Guid ContId);
 
         public abstract SitesModel getSite(Guid Id);
         public abstract SitesModel getSite(string domain);
@@ -299,5 +300,10 @@ namespace cms.dbModel
         public abstract bool sortingPhotos(Guid id, int num);
         public abstract PhotoModel getPhotoItem(Guid id);
         public abstract bool delPhotoItem(Guid id);
+        
+        //статистика
+        public abstract List<StatisticMaterial> getStatisticMaterials(FilterParams filter);
+        public abstract List<StatisticMaterial> getStatisticMaterialsGs(FilterParams filter);
+        //public abstract List<StatisticMaterial> getStatisticMaterialsEvents(FilterParams filter);
     }
 }
