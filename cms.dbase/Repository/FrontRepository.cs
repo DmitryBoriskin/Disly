@@ -1354,7 +1354,7 @@ namespace cms.dbase
 
                 if (filter.Id != null && filter.Id.Count() > 0)
                 {
-                    people = people.Where(w => w.p.contentpeopleemployeepostslinkcontentpeoples.Any(q => filter.Id.Contains(q.f_people)));
+                    people = people.Where(w => w.p.contentpeoplepostscontentpeoples.Any(q => filter.Id.Contains(q.f_people)));
                 }
 
                 if (search != null)
