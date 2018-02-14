@@ -1,0 +1,158 @@
+﻿@model StatisticViewModel
+
+<form>
+    <div class="content">
+        <h1>Статистика</h1>
+
+        <div class="row">
+            <div class="col-md-4">@Html.TextBox("datestart", Request.QueryString["datestart"], new { @class = "uc_input", @data_type = "date", @title = "Дата публикации с", @placeholder = "дд.мм.гггг" })</div>
+            <div class="col-md-4">@Html.TextBox("dateend", Request.QueryString["dateend"], new { @class = "uc_input", @data_type = "date", @title = "по", @placeholder = "дд.мм.гггг" })</div>
+            <div class="col-md-4">
+                <div class="row statistics_btn_block">
+                    <div class="col-md-6"><button type="submit" name="action" value="search-btn" class="button btn-primary">Применить</button></div>
+                    <div class="col-md-6"><button type="submit" name="action" value="clear-btn" class="button btn-default">Сбросить</button></div>
+                </div>
+            </div>
+        </div>
+        <div class="group-block"  title="Статистика пресс-центра организаций">
+            <div class="statistics">
+                <table class="table table-bordered table-condensed">
+                    <thead>
+                        <tr>
+                            <th>Организация</th>
+                            <th>Все</th>
+                            <th>Анонсы</th>
+                            <th>Актуально</th>
+                            <th>Новости</th>
+                            <th>Сми о нас</th>
+                            <th>Мастер классы</th>
+                            <th>Наши гости</th>
+                            <th>Мероприятия</th>
+                            <th>Фото</th>
+                            <th>Видео</th>
+                            <th>Новое в медицине</th>
+                        </tr>
+                    </thead>
+                    <tbody class="">
+                        @foreach (var item in Model.StatMaterialsOrg)
+                        {
+                            <tr>
+                                <td>
+                                    @item.Title<br>
+                                    <a href="@item.Domain" target="_blank">@item.Domain</a>
+                                </td>
+                                <td>@item.CountAll</td>
+                                <td>@item.CountAnnouncement</td>
+                                <td>@item.CountActual</td>
+                                <td>@item.CountNews</td>
+                                <td>@item.CountSmi</td>
+                                <td>@item.CountMasterClasses</td>
+                                <td>@item.CountGuests</td>
+                                <td>@item.CountEvents</td>
+                                <td>@item.CountPhoto</td>
+                                <td>@item.CountVideo</td>
+                                <td>@item.CountNewInMedicin</td>
+                            </tr>
+                        }
+                    </tbody>
+
+                </table>
+            </div>
+        </div>
+
+        <div class="group-block" title="Статистика пресс-центра главных специалистов">
+            <div class="statistics">
+                <table class="table table-bordered table-condensed">
+                    <thead>
+                        <tr>
+                            <th>Организация</th>
+                            <th>Все</th>
+                            <th>Анонсы</th>
+                            <th>Актуально</th>
+                            <th>Новости</th>
+                            <th>Сми о нас</th>
+                            <th>Мастер классы</th>
+                            <th>Наши гости</th>
+                            <th>Мероприятия</th>
+                            <th>Фото</th>
+                            <th>Видео</th>
+                            <th>Новое в медицине</th>
+                        </tr>
+                    </thead>
+                    <tbody class="">
+                        @foreach (var item in Model.StatMaterialsGs)
+                        {
+                            <tr>
+                                <td>
+                                    @item.Title<br>
+                                    <a href="@item.Domain" target="_blank">@item.Domain</a>
+                                </td>
+                                <td>@item.CountAll</td>
+                                <td>@item.CountAnnouncement</td>
+                                <td>@item.CountActual</td>
+                                <td>@item.CountNews</td>
+                                <td>@item.CountSmi</td>
+                                <td>@item.CountMasterClasses</td>
+                                <td>@item.CountGuests</td>
+                                <td>@item.CountEvents</td>
+                                <td>@item.CountPhoto</td>
+                                <td>@item.CountVideo</td>
+                                <td>@item.CountNewInMedicin</td>
+                            </tr>
+                        }
+                    </tbody>
+
+                </table>
+            </div>
+        </div>
+
+        <div class="group-block Open" title="Статистика обратной связи">
+            <div class="statistics">
+                <table class="table table-bordered table-condensed" cellpadding="8">
+                    <thead>
+                        <tr>
+                            <th rowspan="2">Медицинские организации</th>
+                            <th colspan="3">Рубрика Вопрос ответы</th>
+                            <th colspan="3">Рубрика Отзывы</th>
+                        </tr>
+                        <tr>
+                            <th>Поступившие вопросы</th>
+                            <th>Отвеченые</th>
+                            <th>Не отвеченые</th>
+                            <th>Поступившие</th>
+                            <th>Опубликованные</th>
+                            <th>Неопбуликованные</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    @*<div class="dop_info-block"></div>*@
+
+    @* Блок кнопок *@
+    <div class="buttons"></div>
+    @* //Блок кнопок *@
+</form>
+
+
+
+@*
+    Атрибуты полей
+
+
+    @class = "uc_input" - обязательный класс для инициализации
+    @title              - Название поля
+    @placeholder        - Надпись по умолчанию в пустом поле
+    @required           - обязательно для заполнения
+    @readonly           - поле только для чтения
+    @type               - тип поля
+    @max-length         - максимальное кол-во вводимых символов
+    @data_help          - всплывающая подсказка
+    @data_mask          - маска ввода
+
+*@

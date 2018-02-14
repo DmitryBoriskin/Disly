@@ -62,6 +62,30 @@ namespace cms.dbase
                 }
             }
         }
+        public override string getSiteDefaultDomain(Guid ContId)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var data0 = db.cms_sitess.Where(w => w.f_content == ContId).SingleOrDefault();
+                if (data0!=null)
+                {
+                    var siteId = data0.c_alias;
+                    var data = db.cms_sites_domainss
+                                 .Where(w => w.f_site.ToLower() == siteId)
+                                 .Where(w => w.b_default == true);
+                    try
+                    {
+                        return data.Select(p => p.c_domain).SingleOrDefault();
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new Exception("FrontRepository > getSiteDefaultDomain : Обнаружено более одного домена по умолчанию " + siteId);
+                    }
+                }
+                return null;
+                
+            }
+        }
 
         #region private methods of class
 

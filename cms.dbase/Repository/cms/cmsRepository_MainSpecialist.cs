@@ -21,7 +21,7 @@ namespace cms.dbase
         {
             using (var db = new CMSdb(_context))
             {
-                var query = db.content_employee_postss
+                var query = db.content_specializationss
                     .Where(w => w.b_doctor)
                     .OrderBy(o => o.id)
                     .Select(s => new EmployeePostModel
@@ -45,7 +45,7 @@ namespace cms.dbase
         {
             using (var db = new CMSdb(_context))
             {
-                var query = db.content_employee_postss
+                var query = db.content_specializationss
                     .Where(w => w.id.Equals(id))
                     .Select(s => new EmployeePostModel
                     {
@@ -148,17 +148,17 @@ namespace cms.dbase
                                   join cms in db.content_main_specialistss on site.f_content equals cms.id
                                   where cms.id.Equals(s.id)
                                   select site.id).SingleOrDefault(),
-                        Specialisations = (from l in db.content_main_specialist_specialisations_links
+                        Specialisations = (from l in db.content_main_specialist_specialisationss
                                            join m in db.content_main_specialistss
                                            on l.f_main_specialist equals m.id
                                            where l.f_main_specialist.Equals(s.id)
                                            select l.f_specialisation).ToArray(),
-                        EmployeeMainSpecs = (from l in db.content_main_specialist_employees_links
+                        EmployeeMainSpecs = (from l in db.content_main_specialist_peoples
                                              join m in db.content_main_specialistss
                                              on l.f_main_specialist equals m.id
                                              where (l.f_main_specialist.Equals(s.id) && l.f_type.Equals("main"))
                                              select l.f_people).ToArray(),
-                        EmployeeExpSoviet = (from l in db.content_main_specialist_employees_links
+                        EmployeeExpSoviet = (from l in db.content_main_specialist_peoples
                                              join m in db.content_main_specialistss
                                              on l.f_main_specialist equals m.id
                                              where (l.f_main_specialist.Equals(s.id) && l.f_type.Equals("soviet"))
@@ -205,8 +205,8 @@ namespace cms.dbase
             using (var db = new CMSdb(_context))
             {
                 var query = (from p in db.content_peoples
-                             join pepl in db.content_people_employee_posts_links on p.id equals pepl.f_people
-                             join ep in db.content_employee_postss on pepl.f_post equals ep.id
+                             join pepl in db.content_people_postss on p.id equals pepl.f_people
+                             join ep in db.content_specializationss on pepl.f_post equals ep.id
                              orderby p.c_surname, p.c_name, p.c_patronymic
                              where ep.b_doctor
                              select new EmployeeModel
@@ -242,7 +242,7 @@ namespace cms.dbase
                 {
                     foreach (var sp in item.Specialisations)
                     {
-                        db.content_main_specialist_specialisations_links
+                        db.content_main_specialist_specialisationss
                             .Value(v => v.f_main_specialist, item.Id)
                             .Value(v => v.f_specialisation, sp)
                             .Insert();
@@ -269,7 +269,7 @@ namespace cms.dbase
                     .Update();
 
                 // подчищаем таблицу перед обновлением
-                db.content_main_specialist_employees_links
+                db.content_main_specialist_peoples
                     .Where(w => w.f_main_specialist.Equals(item.Id))
                     .Delete();
 
@@ -278,7 +278,7 @@ namespace cms.dbase
                 {
                     foreach (var m in item.EmployeeMainSpecs)
                     {
-                        db.content_main_specialist_employees_links
+                        db.content_main_specialist_peoples
                             .Value(v => v.f_main_specialist, item.Id)
                             .Value(v => v.f_people, m)
                             .Value(v => v.f_type, "main")
@@ -291,7 +291,7 @@ namespace cms.dbase
                 {
                     foreach (var s in item.EmployeeExpSoviet)
                     {
-                        db.content_main_specialist_employees_links
+                        db.content_main_specialist_peoples
                             .Value(v => v.f_main_specialist, item.Id)
                             .Value(v => v.f_people, s)
                             .Value(v => v.f_type, "soviet")

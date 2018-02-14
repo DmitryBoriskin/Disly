@@ -5,7 +5,64 @@
     <div class="content">
         <h1>@ViewBag.Title</h1>
         @Html.TextBoxFor(m => m.Item.Title, new { @required = "", @title = "Название" })
-        @Html.TextAreaFor(m => m.Item.Desc, new { @title = "Положение о специалисте", @type = "editor", @rows = "8",data_dir= ViewBag.DataPath })
+        @Html.TextAreaFor(m => m.Item.Desc, new { @title = "Положение о специалисте", @type = "editor", @rows = "8", data_dir = ViewBag.DataPath })
+
+        @*@if (Model.EmployeeList != null && Model.EmployeeList != null)
+        {
+            <div class="form-group">
+                <label for="itemGroups-select">Главные специалисты:</label>
+                <select name="Item.EmployeeMainSpecs" id="itemGroups-select" class="form-control select2" multiple required>
+                    @foreach (var emp in Model.EmployeeList)
+                    {
+                        <option value="@emp.Id" @(Model.Item != null && Model.Item.EmployeeMainSpecs != null && Model.Item.EmployeeMainSpecs.Any(s => s == emp.Id) ? "selected" : null)>@emp.Fullname</option>
+                    }
+                </select>
+            </div>
+
+
+            <div class="child-list">
+                <div class="row">
+                    <div class="col-sm-5">
+                        <h3 class="nesting_title">Административный персонал</h3>
+                    </div>
+                    <div class="col-sm-7">
+                        @if (Model.SectionResolution.Write)
+                        {
+                            <a class="button icon-create green pull-right" href="/admin/orgs/administrativ/@Guid.NewGuid()?orgid=@Model.Item.Id">Добавить</a>
+                        }
+                        @if (Model.SectionResolution.Change)
+                        {
+                            <a class="button icon-sort pull-right sorting_element_on" style="max-width:150px;" data-action="noPreloader-accept" title="Добавляет возможность сортировки элементов списка">Сортировать</a>
+                        }
+                    </div>
+                </div>
+
+                @if (Model.Item.Administrativ != null)
+                {
+                    <div class="sort_list">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>&nbsp;</th>
+                                    <th>ФИО</th>
+                                </tr>
+                            </thead>
+                            <tbody data-service="/Admin/Services/ChangePermit?group=orgs_administrativ&menuSort=@Model.Item.Id">
+                                @foreach (var item in Model.Item.Administrativ)
+                        {
+                                    <tr class="ui-sortable-handle" data-id="@item.id">
+                                        <td></td>
+                                        <td><a href="/admin/orgs/administrativ/@item.id">@item.Surname @item.Name @item.Patronymic</a></td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+
+            </div>
+        }*@
+
     </div>
 
     <div class="dop_info-block">
@@ -32,16 +89,6 @@
         @if (Model.EmployeeList != null && Model.EmployeeList.Count() > 0)
         {
             <div class="form-group">
-                <label for="itemGroups-select">Главные специалисты:</label>
-                <select name="Item.EmployeeMainSpecs" id="itemGroups-select" class="form-control select2" multiple required>
-                    @foreach (var emp in Model.EmployeeList)
-                    {
-                        <option value="@emp.Id" @(Model.Item != null && Model.Item.EmployeeMainSpecs != null && Model.Item.EmployeeMainSpecs.Any(s => s == emp.Id) ? "selected" : null)>@emp.Fullname</option>
-                    }
-                </select>
-            </div>
-
-            <div class="form-group">
                 <label for="itemGroups-select">Экспертный совет:</label>
                 <select name="Item.EmployeeExpSoviet" id="itemGroups-select" class="form-control select2" multiple required>
                     @if (Model.AllDoctors != null && Model.AllDoctors.Count() > 0)
@@ -60,10 +107,10 @@
             if (Model.Item.SiteId != Guid.Empty)
             {
                 <br />
-                    <div class="alert alert-info">
-                        <strong>Сайт данной специалиста создан!</strong><br>
-                        <a class="button icon-create" href="/admin/sites/item/@Model.Item.SiteId">Редактировать сайт</a>
-                    </div>
+                <div class="alert alert-info">
+                    <strong>Сайт данной специалиста создан!</strong><br>
+                    <a class="button icon-create" href="/admin/sites/item/@Model.Item.SiteId">Редактировать сайт</a>
+                </div>
             }
             else
             {

@@ -200,7 +200,7 @@ namespace cms.dbase
                         .Select(s => new OrgsShortModel()
                         {
                             Id = s.id,
-                            Title = s.c_title,
+                            Title = !string.IsNullOrEmpty(s.c_title_short)? s.c_title_short: s.c_title,
                             Types = (s.contentorgstypeslinkorgs.Select(t => t.f_type).Any()) ?
                                 s.contentorgstypeslinkorgs.Select(t => t.f_type).ToArray() : null,
                             Checked = ContentLinkExists(filtr.RelId.Value, filtr.RelType, s.id, ContentLinkType.ORG),
@@ -1451,12 +1451,12 @@ namespace cms.dbase
                     {
                         //нужно показать только персон не добавленных в отделение
                         Guid OrgId = data_str.First().f_ord;
-                        var PeopleList = db.content_people_org_links
+                        var PeopleList = db.content_org_employeess
                                            .Where(w => w.f_org == OrgId)
                                            //.Where(w => (w.fkcontentpeopleorgdepartmentlinks == null || w.fkcontentpeopleorgdepartmentlinks.FirstOrDefault().f_department != idDepar))
                                            .Select(s => new People
                                            {
-                                               FIO = s.fkcontentpeopleorglink.c_surname + " " + s.fkcontentpeopleorglink.c_name + " " + s.fkcontentpeopleorglink.c_patronymic,
+                                               FIO = s.contentpeopleorglink.c_surname + " " + s.contentpeopleorglink.c_name + " " + s.contentpeopleorglink.c_patronymic,
                                                Id = s.id,
                                                IdLinkOrg = s.f_people
                                            }).ToArray();
@@ -1482,13 +1482,13 @@ namespace cms.dbase
                 using (var tran = db.BeginTransaction())
                 {
                     //проверям подключен ли данный пользователь к данному отделу
-                    var data = db.content_people_department_links.Where(w => (w.f_department == idDepart && w.f_people == IdLinkPeopleForOrg));
+                    var data = db.content_department_employeess.Where(w => (w.f_department == idDepart && w.f_employee == IdLinkPeopleForOrg));
                     if (!data.Any())
                     {
-                        content_people_department_link newdata = new content_people_department_link
+                        content_department_employees newdata = new content_department_employees
                         {
                             f_department = idDepart,
-                            f_people = IdLinkPeopleForOrg,
+                            f_employee = IdLinkPeopleForOrg,
                             c_status = status,
                             c_post = post
                         };
@@ -1512,7 +1512,7 @@ namespace cms.dbase
         {
             using (var db = new CMSdb(_context))
             {
-                var data = db.content_people_department_links.Where(w => w.f_department == idDep && w.f_people == idPeople);
+                var data = db.content_department_employeess.Where(w => w.f_department == idDep && w.f_employee == idPeople);
 
                 if (data.Any())
                 {
@@ -1896,12 +1896,12 @@ namespace cms.dbase
         {
             using (var db = new CMSdb(_context))
             {
-                var PeopleList = db.content_people_org_links
+                var PeopleList = db.content_org_employeess
                                            .Where(w => w.f_org == idOrg)
                                            .Select(s => new People
                                            {
-                                               FIO = s.fkcontentpeopleorglink.c_surname + " " + s.fkcontentpeopleorglink.c_name + " " + s.fkcontentpeopleorglink.c_patronymic,
-                                               Id = s.fkcontentpeopleorglink.id
+                                               FIO = s.contentpeopleorglink.c_surname + " " + s.contentpeopleorglink.c_name + " " + s.contentpeopleorglink.c_patronymic,
+                                               Id = s.contentpeopleorglink.id
                                                //Id = s.id,
                                                //IdLinkOrg = s.f_people
                                            }).ToArray();
