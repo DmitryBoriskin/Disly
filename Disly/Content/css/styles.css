@@ -502,6 +502,7 @@ a.link-close:before {
     border: solid 1px #dae1e6;
     border-radius: 4px;
     margin: 0 0 20px;
+    overflow:hidden;
 }
 .group-block_title {
     cursor: pointer;
@@ -1291,3 +1292,9 @@ button.rss_delete {border:none; background:none;}
 .rss_delete:before {content: '\ef34'; font-family:fontello; color:#2e5066;}
 .rss_list {list-style-type: none; padding-left: 0;}
 .rss_list li {margin:5px 0;}
+
+
+.statistics_btn_block{
+    margin:24px 0 0;
+}
+.statistics_btn_block .button{margin:0;}

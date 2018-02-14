@@ -1249,7 +1249,7 @@ namespace cms.dbase
                     {
                         data.Phones = Phones.ToArray();
                     }
-                    var People = db.content_sv_people_departments.Where(w => w.f_department == Id).OrderBy(o => new { o.c_surname, o.c_name, o.c_patronymic })
+                    var People = db.content_sv_employees_departments.Where(w => w.f_department == Id).OrderBy(o => new { o.c_surname, o.c_name, o.c_patronymic })
                                     .Select(s => new People()
                                     {
                                         Id = s.id,
@@ -1306,7 +1306,7 @@ namespace cms.dbase
                     }
 
 
-                    var People = db.content_sv_people_departments.Where(w => w.f_department == data.Id).OrderBy(o => new { o.c_surname, o.c_name, o.c_patronymic })
+                    var People = db.content_sv_employees_departments.Where(w => w.f_department == data.Id).OrderBy(o => new { o.c_surname, o.c_name, o.c_patronymic })
                                 .Select(s => new People()
                                 {
                                     Id = s.id,
