@@ -14,121 +14,168 @@
                 </div>
             </div>
         </div>
+        <div class="col-md-12">
+            <div class="row">
+                <button type="submit" name="action" value="save-presscentr-org" class="button btn-primary">Скачать статистику пресс-центра организаций</button>
+            </div>            
+        </div>
+        
         <div class="group-block"  title="Статистика пресс-центра организаций">
             <div class="statistics">
-                <table class="table table-bordered table-condensed">
-                    <thead>
-                        <tr>
-                            <th>Организация</th>
-                            <th>Все</th>
-                            <th>Анонсы</th>
-                            <th>Актуально</th>
-                            <th>Новости</th>
-                            <th>Сми о нас</th>
-                            <th>Мастер классы</th>
-                            <th>Наши гости</th>
-                            <th>Мероприятия</th>
-                            <th>Фото</th>
-                            <th>Видео</th>
-                            <th>Новое в медицине</th>
-                        </tr>
-                    </thead>
-                    <tbody class="">
-                        @foreach (var item in Model.StatMaterialsOrg)
-                        {
+                @if (Model.StatMaterialsOrg != null)
+                {
+                    <table class="table table-bordered table-condensed">
+                        <thead>
                             <tr>
-                                <td>
-                                    @item.Title<br>
-                                    <a href="@item.Domain" target="_blank">@item.Domain</a>
-                                </td>
-                                <td>@item.CountAll</td>
-                                <td>@item.CountAnnouncement</td>
-                                <td>@item.CountActual</td>
-                                <td>@item.CountNews</td>
-                                <td>@item.CountSmi</td>
-                                <td>@item.CountMasterClasses</td>
-                                <td>@item.CountGuests</td>
-                                <td>@item.CountEvents</td>
-                                <td>@item.CountPhoto</td>
-                                <td>@item.CountVideo</td>
-                                <td>@item.CountNewInMedicin</td>
+                                <th>Организация</th>
+                                <th>Все</th>
+                                <th>Анонсы</th>
+                                <th>Актуально</th>
+                                <th>Новости</th>
+                                <th>Сми о нас</th>
+                                <th>Мастер классы</th>
+                                <th>Наши гости</th>
+                                <th>Мероприятия</th>
+                                <th>Фото</th>
+                                <th>Видео</th>
+                                <th>Новое в медицине</th>
                             </tr>
-                        }
-                    </tbody>
+                        </thead>
+                        <tbody class="">
+                            @foreach (var item in Model.StatMaterialsOrg)
+                            {
+                                <tr>
+                                    <td>
+                                        @item.Title<br>
+                                        <a href="http://@item.Domain" target="_blank">@item.Domain</a>
+                                    </td>
+                                    <td>@item.CountAll</td>
+                                    <td>@item.CountAnnouncement</td>
+                                    <td>@item.CountActual</td>
+                                    <td>@item.CountNews</td>
+                                    <td>@item.CountSmi</td>
+                                    <td>@item.CountMasterClasses</td>
+                                    <td>@item.CountGuests</td>
+                                    <td>@item.CountEvents</td>
+                                    <td>@item.CountPhoto</td>
+                                    <td>@item.CountVideo</td>
+                                    <td>@item.CountNewInMedicin</td>
+                                </tr>
+                            }
+                        </tbody>
 
-                </table>
+                    </table>
+                }
+
+            </div>
+        </div>
+
+
+        <div class="col-md-12">
+            <div class="row">
+                <button type="submit" name="action" value="save-presscentr-gs" class="button btn-primary">Скачать статистику пресс-центра главных специалистов</button>
             </div>
         </div>
 
         <div class="group-block" title="Статистика пресс-центра главных специалистов">
             <div class="statistics">
-                <table class="table table-bordered table-condensed">
-                    <thead>
-                        <tr>
-                            <th>Организация</th>
-                            <th>Все</th>
-                            <th>Анонсы</th>
-                            <th>Актуально</th>
-                            <th>Новости</th>
-                            <th>Сми о нас</th>
-                            <th>Мастер классы</th>
-                            <th>Наши гости</th>
-                            <th>Мероприятия</th>
-                            <th>Фото</th>
-                            <th>Видео</th>
-                            <th>Новое в медицине</th>
-                        </tr>
-                    </thead>
-                    <tbody class="">
-                        @foreach (var item in Model.StatMaterialsGs)
-                        {
-                            <tr>
-                                <td>
-                                    @item.Title<br>
-                                    <a href="@item.Domain" target="_blank">@item.Domain</a>
-                                </td>
-                                <td>@item.CountAll</td>
-                                <td>@item.CountAnnouncement</td>
-                                <td>@item.CountActual</td>
-                                <td>@item.CountNews</td>
-                                <td>@item.CountSmi</td>
-                                <td>@item.CountMasterClasses</td>
-                                <td>@item.CountGuests</td>
-                                <td>@item.CountEvents</td>
-                                <td>@item.CountPhoto</td>
-                                <td>@item.CountVideo</td>
-                                <td>@item.CountNewInMedicin</td>
-                            </tr>
-                        }
-                    </tbody>
+                @if (Model.StatMaterialsGs != null)
+                {
 
-                </table>
+                    <table class="table table-bordered table-condensed">
+                        <thead>
+                            <tr>
+                                <th>Организация</th>
+                                <th>Все</th>
+                                <th>Анонсы</th>
+                                <th>Актуально</th>
+                                <th>Новости</th>
+                                <th>Сми о нас</th>
+                                <th>Мастер классы</th>
+                                <th>Наши гости</th>
+                                <th>Мероприятия</th>
+                                <th>Фото</th>
+                                <th>Видео</th>
+                                <th>Новое в медицине</th>
+                            </tr>
+                        </thead>
+                        <tbody class="">
+                            @foreach (var item in Model.StatMaterialsGs)
+                            {
+                                <tr>
+                                    <td>
+                                        @item.Title<br>
+                                        <a href="http://@item.Domain" target="_blank">@item.Domain</a>
+                                    </td>
+                                    <td>@item.CountAll</td>
+                                    <td>@item.CountAnnouncement</td>
+                                    <td>@item.CountActual</td>
+                                    <td>@item.CountNews</td>
+                                    <td>@item.CountSmi</td>
+                                    <td>@item.CountMasterClasses</td>
+                                    <td>@item.CountGuests</td>
+                                    <td>@item.CountEvents</td>
+                                    <td>@item.CountPhoto</td>
+                                    <td>@item.CountVideo</td>
+                                    <td>@item.CountNewInMedicin</td>
+                                </tr>
+                            }
+                        </tbody>
+
+                    </table>
+
+                }
+
             </div>
         </div>
 
-        <div class="group-block Open" title="Статистика обратной связи">
-            <div class="statistics">
-                <table class="table table-bordered table-condensed" cellpadding="8">
-                    <thead>
-                        <tr>
-                            <th rowspan="2">Медицинские организации</th>
-                            <th colspan="3">Рубрика Вопрос ответы</th>
-                            <th colspan="3">Рубрика Отзывы</th>
-                        </tr>
-                        <tr>
-                            <th>Поступившие вопросы</th>
-                            <th>Отвеченые</th>
-                            <th>Не отвеченые</th>
-                            <th>Поступившие</th>
-                            <th>Опубликованные</th>
-                            <th>Неопбуликованные</th>
-                        </tr>
-                    </thead>
-                    <tbody>
 
-                    </tbody>
-                </table>
+        <div class="col-md-12">
+            <div class="row">
+                <button type="submit" name="action" value="save-feed-back" class="button btn-primary">Скачать статистику обратной связи </button>
             </div>
+        </div>
+
+        <div class="group-block open" title="Статистика обратной связи организаций">
+            @if (Model.StatFeedBack != null)
+            {
+                <div class="statistics">
+                    <table class="table table-bordered table-condensed" cellpadding="8">
+                        <thead>
+                            <tr>
+                                <th rowspan="2">Медицинские организации</th>
+                                <th colspan="3">Рубрика Вопрос ответы</th>
+                                <th colspan="3">Рубрика Отзывы</th>
+                            </tr>
+                            <tr>
+                                <th>Поступившие вопросы</th>
+                                <th>Отвеченые</th>
+                                <th>Не отвеченые</th>
+                                <th>Поступившие</th>
+                                <th>Опубликованные</th>
+                                <th>Неопбуликованные</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.StatFeedBack)
+                            {
+                                <tr>
+                                    <td>
+                                        @item.Title<br>
+                                        <a href="http://@item.Domain" target="_blank">@item.Domain</a>
+                                    </td>
+                                    <td>@item.RewiewCount</td>
+                                    <td>@item.RewiewAnswerCount</td>
+                                    <td>@item.RewiewNoAnswerCount</td>
+                                    <td>@item.AppealCount</td>
+                                    <td>@item.AppealPublish</td>
+                                    <td>@item.AppealNoPublish</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
         </div>
     </div>
 

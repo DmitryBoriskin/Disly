@@ -2,6 +2,8 @@
 using System;
 using System.Web;
 using System.Web.Mvc;
+using IServ;
+using System.IO;
 
 namespace Disly.Areas.Admin.Controllers
 {
@@ -54,6 +56,142 @@ namespace Disly.Areas.Admin.Controllers
 
             return View(model);
         }
+
+        
+        [HttpPost]
+        [MultiButton(MatchFormKey = "action", MatchFormValue = "save-presscentr-org")]
+        public ActionResult DownloadPressOrg()
+        {
+            ErrorMessage userMessage = new ErrorMessage();
+            userMessage.title = "Информация";
+
+
+            model.StatMaterialsOrg = _cmsRepository.getStatisticMaterials(filter);
+
+            string _Path = Settings.UserFiles + "main/statistic/";
+
+            if (!Directory.Exists(_Path)) { Directory.CreateDirectory(Server.MapPath(_Path)); }
+            string FullName = _Path + "StatPressCentrOrg" + DateTime.Today.ToString("ddMMyyyy") + ".csv";
+
+            userMessage.info = "Документ создан - <a href="+ FullName + " targe='_blank'>Ссылка на скачивание</a>";
+            userMessage.buttons = new ErrorMassegeBtn[]{
+                     new ErrorMassegeBtn { url = "#", text = "ок", action = "false" }
+                 };
+            model.ErrorInfo = userMessage;
+            
+
+            string AbonentInfo = "Организация;Все;Анонсы;Актуально;Новости;Сми о нас;Мастер классы;Наши гости;Мероприятия;Фото;Видео;Новое в медицине\r\n";
+            foreach (var item in model.StatMaterialsOrg)
+            {
+                AbonentInfo +=  item.Title 
+                         +";" + item.CountAll
+                         +";" + item.CountAnnouncement
+                         +";" + item.CountActual
+                         +";" + item.CountNews
+                         +";" + item.CountSmi
+                         +";" + item.CountMasterClasses
+                         +";" + item.CountGuests
+                         +";" + item.CountEvents
+                         +";" + item.CountPhoto
+                         +";" + item.CountVideo
+                         +";" + item.CountNewInMedicin;
+
+                AbonentInfo += "\r\n";
+            }            
+            Functions.SaveStringInFile(AbonentInfo, Server.MapPath(FullName));
+
+            return View("index",model);
+        }
+
+        
+        [HttpPost]
+        [MultiButton(MatchFormKey = "action", MatchFormValue = "search-btn")]
+        public ActionResult DownloadPressGs()
+        {
+            ErrorMessage userMessage = new ErrorMessage();
+            userMessage.title = "Информация";
+
+
+            model.StatMaterialsGs = _cmsRepository.getStatisticMaterialsGs(filter);
+
+            string _Path = Settings.UserFiles + "main/statistic/";
+
+            if (!Directory.Exists(_Path)) { Directory.CreateDirectory(Server.MapPath(_Path)); }
+            string FullName = _Path + "StatPressCentrGs" + DateTime.Today.ToString("ddMMyyyy") + ".csv";
+
+            userMessage.info = "Документ создан - <a href=" + FullName + " targe='_blank'>Ссылка на скачивание</a>";
+            userMessage.buttons = new ErrorMassegeBtn[]{
+                     new ErrorMassegeBtn { url = "#", text = "ок", action = "false" }
+                 };
+            model.ErrorInfo = userMessage;
+
+
+            string AbonentInfo = "Организация;Все;Анонсы;Актуально;Новости;Сми о нас;Мастер классы;Наши гости;Мероприятия;Фото;Видео;Новое в медицине\r\n";
+            foreach (var item in model.StatMaterialsGs)
+            {
+                AbonentInfo += item.Title
+                         + ";" + item.CountAll
+                         + ";" + item.CountAnnouncement
+                         + ";" + item.CountActual
+                         + ";" + item.CountNews
+                         + ";" + item.CountSmi
+                         + ";" + item.CountMasterClasses
+                         + ";" + item.CountGuests
+                         + ";" + item.CountEvents
+                         + ";" + item.CountPhoto
+                         + ";" + item.CountVideo
+                         + ";" + item.CountNewInMedicin;
+
+                AbonentInfo += "\r\n";
+            }
+            Functions.SaveStringInFile(AbonentInfo, Server.MapPath(FullName));
+
+            return View("index", model);
+
+        }
+
+
+        
+        [HttpPost]
+        [MultiButton(MatchFormKey = "action", MatchFormValue = "save-feed-back")]
+        public ActionResult DownloadFeedBackStat()
+        {
+
+            ErrorMessage userMessage = new ErrorMessage();
+            userMessage.title = "Информация";
+
+            model.StatFeedBack = _cmsRepository.getStatisticFeedBack();
+
+            string _Path = Settings.UserFiles + "main/statistic/";
+
+            if (!Directory.Exists(_Path)) { Directory.CreateDirectory(Server.MapPath(_Path)); }
+            string FullName = _Path + "StatFeedBack" + DateTime.Today.ToString("ddMMyyyy") + ".csv";
+
+            userMessage.info = "Документ создан - <a href=" + FullName + " targe='_blank'>Ссылка на скачивание</a>";
+            userMessage.buttons = new ErrorMassegeBtn[]{
+                     new ErrorMassegeBtn { url = "#", text = "ок", action = "false" }
+                 };
+            model.ErrorInfo = userMessage;
+
+            string AbonentInfo = "Медицинские организации;Поступившие вопросы;Отвеченые вопросы;Не отвеченые вопросы;Поступившие отзывы;Опубликованные отзывы;Неопбуликованные отзывы\r\n";
+
+            foreach (var item in model.StatFeedBack)
+            {
+                AbonentInfo += item.Title
+                         + ";" + item.RewiewCount
+                         + ";" + item.RewiewAnswerCount
+                         + ";" + item.RewiewNoAnswerCount
+                         + ";" + item.AppealCount
+                         + ";" + item.AppealPublish
+                         + ";" + item.AppealNoPublish;
+
+                AbonentInfo += "\r\n";
+            }
+            Functions.SaveStringInFile(AbonentInfo, Server.MapPath(FullName));
+
+            return View("index", model);
+        }
+
 
 
         [HttpPost]
