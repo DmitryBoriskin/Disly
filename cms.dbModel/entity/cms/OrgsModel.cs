@@ -524,7 +524,7 @@ namespace cms.dbModel.entity
         /// Организация по данной должности
         /// </summary>
         public OrgsModel Org { get; set; }
-
+        
         ///// <summary>
         ///// Идентификатор организации (поле f_guid)
         ///// </summary>
