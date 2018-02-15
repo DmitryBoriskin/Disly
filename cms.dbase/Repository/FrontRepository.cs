@@ -1453,7 +1453,7 @@ namespace cms.dbase
                                  Posts = db.content_people_postss.Where(p => p.f_people.Equals(s.id)).Select(m => new PeoplePost
                                  {
                                      Name = m.contentpeoplepostscontentspecializations.c_name
-                                 }).ToArray()
+                                 }).GroupBy(g => g.Name).Select(t => t.First()).ToArray()
                              }).ToArray();
 
                     return result;
