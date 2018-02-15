@@ -14,7 +14,7 @@ namespace cms.dbase.Mapping
         internal static IQueryable<People> MapSearch(this IQueryable<content_people> query, IQueryable<cms_sites> sites)
         {
             return query
-                    .Where(w => w.contentpeoplepostscontentpeoples.Any(b => b.contentpeoplepostscontentspecializations.b_doctor))
+                    .Where(w => w.employeespostspeoples.Any(b => b.employeespostsspecializations.b_doctor))
                     .Where(w => w.contentpeopleorglinks.Any(a => !a.b_dismissed))
                     .OrderBy(o => o.c_surname)
                     .Select(s => new People
@@ -22,16 +22,16 @@ namespace cms.dbase.Mapping
                         Id = s.id,
                         FIO = s.c_surname + " " + s.c_name + " " + s.c_patronymic,
                         Photo = s.c_photo,
-                        Posts = s.contentpeoplepostscontentpeoples.Select(p => new EmployeePost
+                        Posts = s.employeespostspeoples.Select(p => new EmployeePost
                         {
                             Id = p.f_post,
-                            Name = p.contentpeoplepostscontentspecializations.c_name,
+                            Name = p.employeespostsspecializations.c_name,
                             Type = p.n_type,
                             Org = new OrgsShortModel
                             {
-                                Id = p.contentpeoplepostscontentorgs.id,
-                                Title = p.contentpeoplepostscontentorgs.c_title,
-                                Url = sites.Where(w => w.f_content.Equals(p.contentpeoplepostscontentorgs.id))
+                                Id = p.contentemployeespostsorgs.id,
+                                Title = p.contentemployeespostsorgs.c_title,
+                                Url = sites.Where(w => w.f_content.Equals(p.contentemployeespostsorgs.id))
                                            .Select(r => r.fksitesdomainss.FirstOrDefault().c_domain)
                                            .SingleOrDefault()
                             }

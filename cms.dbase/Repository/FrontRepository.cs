@@ -1355,7 +1355,7 @@ namespace cms.dbase
 
                 if (filter.Id != null && filter.Id.Count() > 0)
                 {
-                    people = people.Where(w => w.p.contentpeoplepostscontentpeoples.Any(q => filter.Id.Contains(q.f_people)));
+                    people = people.Where(w => w.p.employeespostspeoples.Any(q => filter.Id.Contains(q.f_people)));
                 }
 
                 if (search != null)
@@ -1371,7 +1371,7 @@ namespace cms.dbase
                 int specialization = !string.IsNullOrWhiteSpace(filter.Type) ? Convert.ToInt32(filter.Type) : 0; // специализация
 
                 var data = (from p in people
-                            join pepl in db.content_people_postss on p.p.id equals pepl.f_people
+                            join pepl in db.content_org_employees_postss on p.p.id equals pepl.f_people
                             join ep in db.content_specializationss on pepl.f_post equals ep.id
                             join pdl in db.content_department_employeess on p.pol.id equals pdl.f_employee into ps
                             from pdl in ps.DefaultIfEmpty()
@@ -1441,7 +1441,7 @@ namespace cms.dbase
                     var queryData = FindPeoplesQuery(people, filter);
 
                     var result = queryData
-                             .Where(w => w.contentpeoplepostscontentpeoples.Any(b => b.contentpeoplepostscontentspecializations.b_doctor))
+                             .Where(w => w.employeespostspeoples.Any(b => b.employeespostsspecializations.b_doctor))
                              .Where(w => w.contentpeopleorglinks.Any(a => !a.b_dismissed))
                              .OrderBy(o => new { o.c_surname, o.c_name, o.c_patronymic })
                              .Select(s => new People
@@ -1450,9 +1450,9 @@ namespace cms.dbase
                                  FIO = s.c_surname + " " + s.c_name + " " + s.c_patronymic,
                                  Photo = s.c_photo,
                                  SNILS = s.c_snils,
-                                 Posts = db.content_people_postss.Where(p => p.f_people.Equals(s.id)).Select(m => new PeoplePost
+                                 Posts = db.content_org_employees_postss.Where(p => p.f_people.Equals(s.id)).Select(m => new EmployeePost
                                  {
-                                     Name = m.contentpeoplepostscontentspecializations.c_name
+                                     Name = m.employeespostsspecializations.c_name
                                  }).GroupBy(g => g.Name).Select(t => t.First()).ToArray()
                              }).ToArray();
 
@@ -1509,22 +1509,22 @@ namespace cms.dbase
                 //    data = data.Where(n => filter.Specialization.Contains(n.ep.id));
                 //}
 
-                var data2 = data.ToArray()
-                    .GroupBy(g => new { g.p.p.id })
-                    .Select(s => new People
-                    {
-                        Id = s.Key.id,
-                        FIO = s.First().p.p.c_surname + " " + s.First().p.p.c_name + " " + s.First().p.p.c_patronymic,
-                        Photo = s.First().p.p.c_photo,
-                        SNILS = s.First().p.p.c_snils,
-                        Posts = s.Select(ep2 => new EmployeePost
-                        {
-                            Id = ep2.ep.id,
-                            Name = ep2.ep.c_name,
-                            Org = (ep2.p.o.id != null) ? getOrgItemShort(ep2.p.o.id) : null,
-                            Type = ep2.pepl.n_type
-                        }).ToArray()
-                    }).OrderBy(o => o.FIO);
+                //var data2 = data.ToArray()
+                //    .GroupBy(g => new { g.p.p.id })
+                //    .Select(s => new People
+                //    {
+                //        Id = s.Key.id,
+                //        FIO = s.First().p.p.c_surname + " " + s.First().p.p.c_name + " " + s.First().p.p.c_patronymic,
+                //        Photo = s.First().p.p.c_photo,
+                //        SNILS = s.First().p.p.c_snils,
+                //        Posts = s.Select(ep2 => new EmployeePost
+                //        {
+                //            Id = ep2.ep.id,
+                //            Name = ep2.ep.c_name,
+                //            Org = (ep2.p.o.id != null) ? getOrgItemShort(ep2.p.o.id) : null,
+                //            Type = ep2.pepl.n_type
+                //        }).ToArray()
+                //    }).OrderBy(o => o.FIO);
 
                 //if (data2.Any())
                 //    return data2.ToArray();
@@ -1638,7 +1638,7 @@ namespace cms.dbase
             {
                 var query = (from s in db.cms_sitess
                              join pol in db.content_org_employeess on s.f_content equals pol.f_org
-                             join pepl in db.content_people_postss on pol.f_people equals pepl.f_people
+                             join pepl in db.content_org_employees_postss on pol.f_people equals pepl.f_people
                              join ep in db.content_specializationss on pepl.f_post equals ep.id
                              where (domain.Equals("main") || s.c_alias.ToLower().Equals(domain)) && ep.b_doctor
                              select new EmployeePost
@@ -2348,7 +2348,7 @@ namespace cms.dbase
             }
             if (!String.IsNullOrEmpty(filter.Type))
             {
-                query = query.Where(w => w.contentpeoplepostscontentpeoples.Any(a => a.f_post.Equals(Int32.Parse(filter.Type))));
+                query = query.Where(w => w.employeespostspeoples.Any(a => a.f_post.Equals(Int32.Parse(filter.Type))));
             }
             if (!String.IsNullOrWhiteSpace(filter.Group))
             {
