@@ -72,7 +72,7 @@
 
                             <div class="col-lg-offset-9 col-lg-3">
                                 @*Для объекта типа "событие" ищем список организаций (поэтому передаем тип объекта и id)*@
-                                @Html.ActionLink("Привязать", "orgsListModal", "orgs", new { @objId = Model.Item.Id, @objType = ContentType.EVENT }, new { @id = "LogLists", @class = "button pop-up_frame icon-location-5", @data_class = "LogList", @title = "Организации для размещения" })
+                                @Html.ActionLink("Привязать", "orgsListModal", "orgs", new { @objId = Model.Item.Id, @objType = ContentType.EVENT }, new { @id = "bindToOrg", @class = "button pop-up_frame icon-location-5", @title = "Организации для размещения" })
                             </div>
                         </div>
                     </div>
@@ -93,7 +93,7 @@
                                 </ul>
                             </div>
                             <div class="col-lg-offset-9 col-lg-3">
-                                @Html.ActionLink("Привязать", "speclistModal", "mainSpecialist", new { @objId = Model.Item.Id, @objType = ContentType.MATERIAL }, new { @id = "LogLists", @class = "button pop-up_frame icon-location-5", @data_class = "LogList", @title = "Главные специалисты для размещения" })
+                                @Html.ActionLink("Привязать", "speclistModal", "mainSpecialist", new { @objId = Model.Item.Id, @objType = ContentType.MATERIAL }, new { @id = "bindToSpec", @class = "button pop-up_frame icon-location-5", @title = "Главные специалисты для размещения" })
                             </div>
                         </div>
                     </div>
@@ -116,7 +116,7 @@
 
                             <div class="col-lg-offset-9 col-lg-3">
                                 @*Для объекта типа "событие" ищем список n последних событий (поэтому передаем тип объекта и id)*@
-                                @Html.ActionLink("Привязать", "eventsListModal", "events", new { @objId = Model.Item.Id, @objType = ContentType.EVENT }, new { @id = "LogLists", @class = "button pop-up_frame icon-location-5", @data_class = "LogList", @title = "Организации для размещения" })
+                                @Html.ActionLink("Привязать", "eventsListModal", "events", new { @objId = Model.Item.Id, @objType = ContentType.EVENT }, new { @id = "bindToEvent", @class = "button pop-up_frame icon-location-5", @title = "Организации для размещения" })
                             </div>
                         </div>
                     </div>

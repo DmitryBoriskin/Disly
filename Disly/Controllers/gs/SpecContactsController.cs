@@ -77,13 +77,13 @@ namespace Disly.Controllers
             var filter = getFilter();
             filter.Domain = null;
             var pfilter = FilterParams.Extend<PeopleFilter>(filter);
-            var mainSpec = _repository.getMainSpecialistItem(model.SitesInfo.ContentId);
+            var mainSpec = _repository.getGSItem(model.SitesInfo.ContentId);
             if (mainSpec != null)
             {
                 model.MainSpec = mainSpec;
-                if(mainSpec.EmployeeMainSpecs != null)
+                if(mainSpec.SpecialistsId != null)
                 {
-                    pfilter.Id = mainSpec.EmployeeMainSpecs.ToArray();
+                    pfilter.Id = mainSpec.SpecialistsId.ToArray();
                     model.SpesialitsList = _repository.getPeopleList(pfilter);
                 }
             }

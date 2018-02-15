@@ -66,7 +66,7 @@
 
                             <div class="col-lg-offset-9 col-lg-3">
                                 @*Для объекта типа "Материалы" ищем список организаций (поэтому передаем тип объекта и id)*@
-                                @Html.ActionLink("Привязать", "orgsListModal", "orgs", new { @objId = Model.Item.Id, @objType = ContentType.MATERIAL }, new { @id = "LogLists", @class = "button pop-up_frame icon-location-5", @data_class = "LogList", @title = "Организации для размещения" })
+                                @Html.ActionLink("Привязать", "orgsListModal", "orgs", new { @objId = Model.Item.Id, @objType = ContentType.MATERIAL }, new { @id = "bindToOrg", @class = "button pop-up_frame icon-location-5", @title = "Организации для размещения" })
                             </div>
                         </div>
                     </div>
@@ -87,7 +87,7 @@
                                 </ul>
                             </div>
                             <div class="col-lg-offset-9 col-lg-3">
-                                @Html.ActionLink("Привязать", "speclistModal", "mainSpecialist", new { @objId = Model.Item.Id, @objType = ContentType.MATERIAL }, new { @id = "LogLists", @class = "button pop-up_frame icon-location-5", @data_class = "LogList", @title = "Главные специалисты для размещения" })
+                                @Html.ActionLink("Привязать", "speclistModal", "mainSpecialist", new { @objId = Model.Item.Id, @objType = ContentType.MATERIAL }, new { @id = "bindToSpec", @class = "button pop-up_frame icon-location-5", @title = "Главные специалисты для размещения" })
                             </div>
                         </div>
                     </div>
@@ -109,7 +109,7 @@
                             </div>
                             <div class="col-lg-offset-9 col-lg-3">
                                 @*Для объекта типа "Материалы" ищем список n последних событий (поэтому передаем тип объекта и id)*@
-                                @Html.ActionLink("Привязать", "eventsListModal", "events", new { @objId = Model.Item.Id, @objType = ContentType.MATERIAL }, new { @id = "LogLists", @class = "button pop-up_frame icon-location-5", @data_class = "LogList", @title = "Организации для размещения" })
+                                @Html.ActionLink("Привязать", "eventsListModal", "events", new { @objId = Model.Item.Id, @objType = ContentType.MATERIAL }, new { @id = "bindToEvent", @class = "button pop-up_frame icon-location-5", @title = "Организации для размещения" })
                             </div>
                         </div>
                     </div>
@@ -148,7 +148,7 @@
             @Html.CheckBoxFor(m => m.Item.Important, new { type = "checkbox", title = "Главная новость", data_toggle = "toggle", data_on = "Да", data_onstyle = "success", data_off = "Нет", data_offstyle = "danger", data_width = "248" })
 
             @*<div class="form-group">
-                <label>Главная новость</label>                
+                <label>Главная новость</label>
                 @Html.TextBoxFor(m=>m.Item.Important,
                     new
                     {

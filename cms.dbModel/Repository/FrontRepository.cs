@@ -56,7 +56,7 @@ namespace cms.dbModel
         public abstract People getPeopleItem(Guid id);
         public abstract string getPeopleSnils(Guid id);
         public abstract StructureModel[] getDeparatamentsSelectList(); //string domain
-        public abstract PeoplePost[] getPeoplePosts();//string domain
+        public abstract EmployeePost[] getPeoplePosts();//string domain
 
         public abstract OrgsModel getOrgInfo(string siteId);
         public abstract string getOid();
@@ -106,16 +106,18 @@ namespace cms.dbModel
 
         //Главные специалисты
 
-        public abstract MainSpecialistModel[] getMainSpecialistList(FilterParams filter);
-        public abstract int getCountMainSpecialiasBySite(string domain);
+        public abstract GSModel[] getGSList(FilterParams filter);
+        public abstract int getCountGSBySite(string domain);
 
-        public abstract MainSpecialistModel[] getMainSpecialistContacts();
-        public abstract People[] getMainSpecialistMembers(PeopleFilter filter);
-        public abstract OrgsModel getOrgItem(Guid id);
+        public abstract People[] getGSMembers(PeopleFilter filter);
+       
         public abstract OrgsModel getOrgItem();
-        
-        
-        public abstract MainSpecialistModel getMainSpecialistItem(Guid id);
+        public abstract OrgsModel getOrgItem(Guid id);
+        public abstract OrgsShortModel getOrgItemShort(Guid id);
+
+
+
+        public abstract GSModel getGSItem(Guid id);
 
         //вакансии
         public abstract VacanciesList getVacancy(FilterParams filter);

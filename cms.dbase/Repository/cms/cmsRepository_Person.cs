@@ -34,7 +34,7 @@ namespace cms.dbase
                     .GroupBy(p => new { p.emp.id })
                     .Select(s => new EmployeeModel
                     {
-                        Id = s.Key.id,
+                        PeopleId = s.Key.id,
                         Surname = s.First().emp.c_surname,
                         Name = s.First().emp.c_name,
                         Patronymic = s.First().emp.c_patronymic,
@@ -43,7 +43,7 @@ namespace cms.dbase
                         {
                             Url = s.First().emp.c_photo
                         },
-                        Posts = s.Select(d => new EmployeePostModel
+                        Posts = s.Select(d => new EmployeePost
                         {
                             Id = d.pe.id,
                             Parent = d.pe.n_parent,
@@ -69,12 +69,12 @@ namespace cms.dbase
                 using (var tr = db.BeginTransaction())
                 {
                     bool isExist = db.content_peoples
-                        .Where(w => w.id.Equals(item.Id)).Any();
+                        .Where(w => w.id.Equals(item.PeopleId)).Any();
 
                     if (isExist)
                     {
                         db.content_peoples
-                            .Where(w => w.id.Equals(item.Id))
+                            .Where(w => w.id.Equals(item.PeopleId))
                             .Set(s => s.c_surname, item.Surname)
                             .Set(s => s.c_name, item.Name)
                             .Set(s => s.c_patronymic, item.Patronymic)
@@ -86,7 +86,7 @@ namespace cms.dbase
                             Site = _domain,
                             Section = LogSection.Sites,
                             Action = LogAction.update,
-                            PageId = item.Id,
+                            PageId = item.PeopleId,
                             PageName = item.Fullname,
                             UserId = _currentUserId,
                             IP = _ip,

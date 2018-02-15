@@ -441,6 +441,7 @@
     <Content Include="Areas\Admin\Views\NewsMonitoring\Orgs.cshtml" />
     <Content Include="Areas\Admin\Views\Shared\Modal\Spec.cshtml" />
     <Content Include="Areas\Admin\Views\Statistics\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\MainSpecialist\Part\AddDoctor.cshtml" />
     <None Include="Content\plugins\tinymce\plugins\gallery\plugin.min.js_korkin" />
     <Content Include="Content\plugins\tinymce\plugins\help\img\logo.png" />
     <Content Include="Content\plugins\tinymce\plugins\help\plugin.min.js" />
@@ -928,7 +929,6 @@
     <Content Include="Views\LPU\Index.cshtml" />
     <Content Include="Views\Press\part\Item.cshtml" />
     <Content Include="Views\Home\part\media.cshtml" />
-    <Content Include="Views\PortalDoctors\Index_old.cshtml" />
     <Content Include="Views\Doctors\part\item.cshtml" />
     <Content Include="Views\Doctors\part\list.cshtml" />
     <Content Include="Views\MedicalServices\Index.cshtml" />

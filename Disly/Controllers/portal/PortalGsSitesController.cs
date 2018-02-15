@@ -63,7 +63,7 @@ namespace Disly.Controllers
             //Список объектов "Главный специалист"
             var filter = getFilter();
             filter.Domain = null;
-            model.List = _repository.getMainSpecialistList(filter);
+            model.List = _repository.getGSList(filter);
 
 
             return View(model);

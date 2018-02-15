@@ -22,12 +22,12 @@ namespace cms.dbase.Mapping
                         Id = s.id,
                         FIO = s.c_surname + " " + s.c_name + " " + s.c_patronymic,
                         Photo = s.c_photo,
-                        Posts = s.contentpeoplepostscontentpeoples.Select(p => new PeoplePost
+                        Posts = s.contentpeoplepostscontentpeoples.Select(p => new EmployeePost
                         {
                             Id = p.f_post,
                             Name = p.contentpeoplepostscontentspecializations.c_name,
                             Type = p.n_type,
-                            Org = new OrgsModel
+                            Org = new OrgsShortModel
                             {
                                 Id = p.contentpeoplepostscontentorgs.id,
                                 Title = p.contentpeoplepostscontentorgs.c_title,

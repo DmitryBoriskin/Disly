@@ -106,11 +106,11 @@ namespace Disly.Areas.Admin.Controllers
             orgfilter.RelType = ContentType.EVENT;
             var orgs = _cmsRepository.getOrgs(orgfilter);
 
-            MainSpecialistModel[] spec = null;
-            var specfilter = FilterParams.Extend<MainSpecialistFilter>(filter);
+            GSModel[] spec = null;
+            var specfilter = FilterParams.Extend<GSFilter>(filter);
             specfilter.RelId = Id;
             specfilter.RelType = ContentType.EVENT;
-            var specList = _cmsRepository.getMainSpecialistList(specfilter);
+            var specList = _cmsRepository.getGSList(specfilter);
             spec = (specList != null) ?
                 (specList.Data != null) ? specList.Data.ToArray() : null
                 : null;
