@@ -31,7 +31,7 @@ namespace cms.dbase
         {
             _context = ConnectionString;
             _domain = (!string.IsNullOrEmpty(DomainUrl)) ? getSiteId(DomainUrl) : "";
-            _domain = "main";
+            //_domain = "main";
             LinqToDB.Common.Configuration.Linq.AllowMultipleQuery = true;
         }
         #region redirect methods
@@ -1428,79 +1428,84 @@ namespace cms.dbase
                 string domain = filter.Domain; // домен
 
                 Guid department = !string.IsNullOrWhiteSpace(filter.Group) // департамент
-                    ? Guid.Parse(filter.Group) : Guid.Empty;
+                                    ? Guid.Parse(filter.Group) : Guid.Empty;
 
-                var search = !string.IsNullOrWhiteSpace(filter.SearchText)
-                    ? filter.SearchText.ToLower().Split(' ') : null; // поиск по человеку
+                var people = db.content_peoples.AsQueryable();
 
-                var people = (from p in db.content_peoples
-                              join pol in db.content_org_employeess on p.id equals pol.f_people
-                              where !pol.b_dismissed
-                              join o in db.content_orgss on pol.f_org equals o.id
-                              join s in db.cms_sitess on pol.f_org equals s.f_content into ps
-                              from s in ps.DefaultIfEmpty()
-                              select new { p, pol, s, o });
+                var queryData = FindPeoplesQuery(people, filter);
+                
+                var result = queryData.MapSearch(db.cms_sitess.AsQueryable(), domain);
 
-                //if (filter.Id != null && filter.Id.Count() > 0)
+                return result.ToArray();
+                
+                #region comments
+                //var search = !string.IsNullOrWhiteSpace(filter.SearchText)
+                //    ? filter.SearchText.ToLower().Split(' ') : null; // поиск по человеку
+
+                //var people = (from p in db.content_peoples
+                //              join pol in db.content_org_employeess on p.id equals pol.f_people
+                //              where !pol.b_dismissed
+                //              join o in db.content_orgss on pol.f_org equals o.id
+                //              join s in db.cms_sitess on pol.f_org equals s.f_content into ps
+                //              from s in ps.DefaultIfEmpty()
+                //              select new { p, pol, s, o });
+
+                //if (search != null)
                 //{
-                //    people = people.Where(w => w.p.contentmainspecialistemployeeslinkcontentpeoples.Any(q => filter.Id.Contains(q.f_people)));
+                //    foreach (string item in search)
+                //    {
+                //        people = people.Where(w => w.p.c_surname.Contains(item)
+                //                                || w.p.c_name.Contains(item)
+                //                                || w.p.c_patronymic.Contains(item));
+                //    }
                 //}
 
-                if (search != null)
-                {
-                    foreach (string item in search)
-                    {
-                        people = people.Where(w => w.p.c_surname.Contains(item)
-                                                || w.p.c_name.Contains(item)
-                                                || w.p.c_patronymic.Contains(item));
-                    }
-                }
+                //int specialization = !string.IsNullOrWhiteSpace(filter.Type) ? Convert.ToInt32(filter.Type) : 0; // специализация
 
-                int specialization = !string.IsNullOrWhiteSpace(filter.Type) ? Convert.ToInt32(filter.Type) : 0; // специализация
+                //var data = (from p in people
+                //            join pepl in db.content_people_postss on p.p.id equals pepl.f_people
+                //            join ep in db.content_specializationss on pepl.f_post equals ep.id
+                //            join pdl in db.content_department_employeess on p.pol.id equals pdl.f_employee into ps
+                //            from pdl in ps.DefaultIfEmpty()
+                //                //where p.s.c_alias.Equals(domain) &&
+                //            where (department.Equals(Guid.Empty) || pdl.f_department.Equals(department))
+                //                    && ep.b_doctor
+                //                    && (specialization == 0 || pepl.f_post.Equals(specialization))
+                //            orderby ep.id, p.p.c_surname, p.p.c_name, p.p.c_patronymic, pepl.n_type
+                //            select new { p, ep, pepl });
 
-                var data = (from p in people
-                            join pepl in db.content_people_postss on p.p.id equals pepl.f_people
-                            join ep in db.content_specializationss on pepl.f_post equals ep.id
-                            join pdl in db.content_department_employeess on p.pol.id equals pdl.f_employee into ps
-                            from pdl in ps.DefaultIfEmpty()
-                                //where p.s.c_alias.Equals(domain) &&
-                            where (department.Equals(Guid.Empty) || pdl.f_department.Equals(department))
-                                    && ep.b_doctor
-                                    && (specialization == 0 || pepl.f_post.Equals(specialization))
-                            orderby ep.id, p.p.c_surname, p.p.c_name, p.p.c_patronymic, pepl.n_type
-                            select new { p, ep, pepl });
+                //if (!string.IsNullOrEmpty(domain))
+                //{
+                //    data = data.Where(n => n.p.s.c_alias.ToLower() == domain);
+                //}
 
-                if (!string.IsNullOrEmpty(domain))
-                {
-                    data = data.Where(n => n.p.s.c_alias.ToLower() == domain);
-                }
+                //if (filter.Specialization != null && filter.Specialization.Count() > 0)
+                //{
+                //    data = data.Where(n => filter.Specialization.Contains(n.ep.id));
+                //}
 
-                if (filter.Specialization != null && filter.Specialization.Count() > 0)
-                {
-                    data = data.Where(n => filter.Specialization.Contains(n.ep.id));
-                }
+                //var data2 = data.ToArray()
+                //    .GroupBy(g => new { g.p.p.id })
+                //    .Select(s => new People
+                //    {
+                //        Id = s.Key.id,
+                //        FIO = s.First().p.p.c_surname + " " + s.First().p.p.c_name + " " + s.First().p.p.c_patronymic,
+                //        Photo = s.First().p.p.c_photo,
+                //        SNILS = s.First().p.p.c_snils,
+                //        Posts = s.Select(ep2 => new PeoplePost
+                //        {
+                //            Id = ep2.ep.id,
+                //            Name = ep2.ep.c_name,
+                //            Org = (ep2.p.o.id != null) ? getOrgItem(ep2.p.o.id) : null,
+                //            Type = ep2.pepl.n_type
+                //        }).ToArray()
+                //    }).OrderBy(o => o.FIO);
 
-                var data2 = data.ToArray()
-                    .GroupBy(g => new { g.p.p.id })
-                    .Select(s => new People
-                    {
-                        Id = s.Key.id,
-                        FIO = s.First().p.p.c_surname + " " + s.First().p.p.c_name + " " + s.First().p.p.c_patronymic,
-                        Photo = s.First().p.p.c_photo,
-                        SNILS = s.First().p.p.c_snils,
-                        Posts = s.Select(ep2 => new PeoplePost
-                        {
-                            Id = ep2.ep.id,
-                            Name = ep2.ep.c_name,
-                            Org = (ep2.p.o.id != null) ? getOrgItem(ep2.p.o.id) : null,
-                            Type = ep2.pepl.n_type
-                        }).ToArray()
-                    }).OrderBy(o => o.FIO);
+                //if (data2.Any())
+                //    return data2.ToArray();
 
-                if (data2.Any())
-                    return data2.ToArray();
-
-                return null;
+                //return null;
+                #endregion
             }
         }
 
@@ -2317,7 +2322,10 @@ namespace cms.dbase
             if (!String.IsNullOrEmpty(filter.Type))
             {
                 query = query.Where(w => w.contentpeoplepostscontentpeoples.Any(a => a.f_post.Equals(Int32.Parse(filter.Type))));
-                //query = query.Where(w => w.contentpeoplepostscontentpeoples.Any(b => b.id.Equals(Int32.Parse(filter.Type))));
+            }
+            if (!String.IsNullOrWhiteSpace(filter.Group))
+            {
+
             }
 
             return query;
@@ -2336,8 +2344,7 @@ namespace cms.dbase
 
                 var queryData = FindPeoplesQuery(people, filter);
                 
-                var result = queryData
-                                .MapSearch(db.cms_sitess.AsQueryable());
+                var result = queryData.MapSearch(db.cms_sitess.AsQueryable());
 
                 int itemCount = result.Count();
 
