@@ -24,15 +24,17 @@
                         <td>
                             <a class="adminlist_name" href="@link">@item.FIO</a>
 
-                            @if (item.Posts != null && item.Posts.Where(p => p.Org != null && p.Org.Id == Model.SitesInfo.ContentId).Any())
+                            @*@if (item.Posts != null && item.Posts.Where(p => p.Org != null && p.Org.Id == Model.SitesInfo.ContentId).Any())*@
+                            @if (item.Posts != null)
                             {
                                 string posts = string.Empty;
-                                foreach (var p in item.Posts.Where(p => p.Org != null && p.Org.Id == Model.SitesInfo.ContentId).OrderBy(p => p.Type))
+                                //foreach (var p in item.Posts.Where(p => p.Org != null && p.Org.Id == Model.SitesInfo.ContentId).OrderBy(p => p.Type))
+                                foreach (var p in item.Posts)
                                 {
-                                        <div class="adminlist_post">
-                                            @p.Name
-                                        </div>
-                                    }
+                                    <div class="adminlist_post">
+                                        @p.Name
+                                    </div>
+                                }
                             }
                         </td>
                         <td>

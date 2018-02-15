@@ -1259,11 +1259,11 @@ namespace cms.dbase
         {
             using (var db = new CMSdb(_context))
             {
-                var data = db.content_sv_people_departments
+                var data = db.content_sv_employees_departments
                              .Where(w => w.f_department == idDepart)
                              .Select(s => new People()
                              {
-                                 Id = s.f_people,
+                                 Id = s.f_employee,
                                  FIO = s.c_surname + " " + s.c_name + " " + s.c_patronymic,
                                  IdLinkOrg = s.idOrgLink,
                                  Post= s.c_post,

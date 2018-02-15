@@ -179,7 +179,7 @@ namespace cms.dbase
             using (var db = new CMSdb(_context))
             {
                 var query = db.cms_content_sv_people_postss
-                    .Where(w => specialisations.Contains(w.f_post))
+                    .Where(w => specialisations.Contains((int)w.f_post))
                     .OrderBy(o => o.c_surname)
                     .ThenBy(o => o.c_name)
                     .ThenBy(o => o.c_patronymic)

@@ -1427,18 +1427,42 @@ namespace cms.dbase
             {
                 string domain = filter.Domain; // домен
 
-                Guid department = !string.IsNullOrWhiteSpace(filter.Group) // департамент
-                                    ? Guid.Parse(filter.Group) : Guid.Empty;
-
                 var people = db.content_peoples.AsQueryable();
 
-                var queryData = FindPeoplesQuery(people, filter);
-                
-                var result = queryData.MapSearch(db.cms_sitess.AsQueryable(), domain);
+                if (!String.IsNullOrEmpty(domain))
+                {
+                    var contentId = db.cms_sitess
+                                        .Where(w => w.c_alias.Equals(domain))
+                                        .Select(s => s.f_content)
+                                        .SingleOrDefault();
 
-                return result.ToArray();
-                
+                    people = people.Where(w => w.contentpeopleorglinks.Any(a => a.contentorgpeoplelink.id.Equals(contentId)));
+
+                    var queryData = FindPeoplesQuery(people, filter);
+
+                    var result = queryData
+                             .Where(w => w.contentpeoplepostscontentpeoples.Any(b => b.contentpeoplepostscontentspecializations.b_doctor))
+                             .Where(w => w.contentpeopleorglinks.Any(a => !a.b_dismissed))
+                             .OrderBy(o => new { o.c_surname, o.c_name, o.c_patronymic })
+                             .Select(s => new People
+                             {
+                                 Id = s.id,
+                                 FIO = s.c_surname + " " + s.c_name + " " + s.c_patronymic,
+                                 Photo = s.c_photo,
+                                 Posts = db.content_people_postss.Where(p => p.f_people.Equals(s.id)).Select(m => new PeoplePost
+                                 {
+                                     Name = m.contentpeoplepostscontentspecializations.c_name
+                                 }).ToArray()
+                             }).ToArray();
+
+                    return result;
+                }
+                return null;
+
                 #region comments
+                //Guid department = !string.IsNullOrWhiteSpace(filter.Group) // департамент
+                //                    ? Guid.Parse(filter.Group) : Guid.Empty;
+
                 //var search = !string.IsNullOrWhiteSpace(filter.SearchText)
                 //    ? filter.SearchText.ToLower().Split(' ') : null; // поиск по человеку
 
@@ -2325,12 +2349,12 @@ namespace cms.dbase
             }
             if (!String.IsNullOrWhiteSpace(filter.Group))
             {
-
+                query = query.Where(w => w.contentpeopleorglinks.Any(a => a.fkcontentdepartmentpeoplelinks.Any(b => b.f_department.Equals(Guid.Parse(filter.Group)))));
             }
 
             return query;
         }
-        
+
         /// <summary>
         /// Получаем список врачей для портала
         /// </summary>
@@ -2343,7 +2367,7 @@ namespace cms.dbase
                 var people = db.content_peoples.AsQueryable();
 
                 var queryData = FindPeoplesQuery(people, filter);
-                
+
                 var result = queryData.MapSearch(db.cms_sitess.AsQueryable());
 
                 int itemCount = result.Count();
@@ -2851,8 +2875,8 @@ namespace cms.dbase
                                  Id = ms.id,
                                  Title = ms.c_name,
                                  Desc = ms.c_desc,
-                                 Domain = (s != null)? s.c_alias.ToLower(): null,
-                                 DomainUrl = (s != null && !string.IsNullOrEmpty(s.c_alias))? getSiteDefaultDomain(s.c_alias): null
+                                 Domain = (s != null) ? s.c_alias.ToLower() : null,
+                                 DomainUrl = (s != null && !string.IsNullOrEmpty(s.c_alias)) ? getSiteDefaultDomain(s.c_alias) : null
                              }
                     );
 
