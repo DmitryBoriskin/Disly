@@ -1449,6 +1449,7 @@ namespace cms.dbase
                                  Id = s.id,
                                  FIO = s.c_surname + " " + s.c_name + " " + s.c_patronymic,
                                  Photo = s.c_photo,
+                                 SNILS = s.c_snils,
                                  Posts = db.content_people_postss.Where(p => p.f_people.Equals(s.id)).Select(m => new PeoplePost
                                  {
                                      Name = m.contentpeoplepostscontentspecializations.c_name
