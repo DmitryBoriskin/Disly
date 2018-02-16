@@ -1421,7 +1421,7 @@ namespace cms.dbase
         /// </summary>
         /// <param name="filter">фильтр</param>
         /// <returns></returns>
-        public override People[] getOrgPeopleList(PeopleFilter filter)
+        public override DoctorList getOrgPeopleList(PeopleFilter filter)
         {
             using (var db = new CMSdb(_context))
             {
@@ -1450,17 +1450,44 @@ namespace cms.dbase
                                  FIO = s.c_surname + " " + s.c_name + " " + s.c_patronymic,
                                  Photo = s.c_photo,
                                  SNILS = s.c_snils,
-                                 #region working
-                                 Posts = db.content_org_employees_postss
-                                             .Where(p => p.f_people.Equals(s.id))
-                                             .Select(m => new EmployeePost
-                                             {
-                                                 Name = m.employeespostsspecializations.c_name
-                                             }).GroupBy(g => g.Name).Select(t => t.First()).ToArray()
-                                 #endregion
-                             }).ToArray();
+                                 Posts = s.contentpeopleorglinks
+                                            .Where(w => w.employeespostsorgemployeess.Any(a => a.employeespostsspecializations.id.Equals(a.f_post)))
+                                            .Where(w => w.f_org.Equals(contentId))
+                                            .Select(g => new EmployeePost
+                                            {
+                                                Name = g.employeespostsorgemployeess.Select(t => t.employeespostsspecializations.c_name).SingleOrDefault()
+                                            }).ToArray()
 
-                    return result;
+                                 #region working
+                                 //Posts = db.content_org_employees_postss
+                                 //            .Where(p => p.f_people.Equals(s.id))
+                                 //            .Select(m => new EmployeePost
+                                 //            {
+                                 //                Name = m.employeespostsspecializations.c_name
+                                 //            }).GroupBy(g => g.Name).Select(t => t.First()).ToArray()
+                                 #endregion
+                             });
+
+                    int itemCount = result.Count();
+
+                    result = result
+                                .Skip(filter.Size * (filter.Page - 1))
+                                .Take(filter.Size);
+
+                    if (result.Any())
+                    {
+                        return new DoctorList
+                        {
+                            Doctors = result.ToArray(),
+                            Pager = new Pager
+                            {
+                                Page = filter.Page,
+                                Size = filter.Size,
+                                ItemsCount = itemCount
+                            }
+                        };
+                    }
+                    return null;
                 }
                 return null;
             }

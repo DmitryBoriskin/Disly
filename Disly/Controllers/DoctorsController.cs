@@ -70,9 +70,9 @@ namespace Disly.Controllers
             model.PeoplePosts = _repository.getPeoplePosts();//Domain
 
             #region Редирект на регистрацию
-            if (model.DoctorsList != null && model.DoctorsList.Count() > 0 && model.DoctorsRegistry!=null)
+            if (model.DoctorsList != null && model.DoctorsList.Doctors != null && model.DoctorsList.Doctors.Count() > 0 && model.DoctorsRegistry!=null)
             {
-                foreach (var d in model.DoctorsList)
+                foreach (var d in model.DoctorsList.Doctors)
                 {
                     d.IsRedirectUrl = model.DoctorsRegistry
                         .Where(w => w.SNILS.Equals(d.SNILS))

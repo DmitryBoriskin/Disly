@@ -51,7 +51,7 @@ namespace cms.dbModel
         public abstract Departments getOvpDepartaments(Guid id);
 
         //Persons
-        public abstract People[] getOrgPeopleList(PeopleFilter filter);
+        public abstract DoctorList getOrgPeopleList(PeopleFilter filter);
         public abstract People[] getPeopleList(PeopleFilter filter);
         public abstract People getPeopleItem(Guid id);
         public abstract string getPeopleSnils(Guid id);
