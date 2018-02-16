@@ -1450,10 +1450,21 @@ namespace cms.dbase
                                  FIO = s.c_surname + " " + s.c_name + " " + s.c_patronymic,
                                  Photo = s.c_photo,
                                  SNILS = s.c_snils,
-                                 Posts = db.content_org_employees_postss.Where(p => p.f_people.Equals(s.id)).Select(m => new EmployeePost
-                                 {
-                                     Name = m.employeespostsspecializations.c_name
-                                 }).GroupBy(g => g.Name).Select(t => t.First()).ToArray()
+                                 Posts = db.content_org_employees_postss
+                                            .Where(p => p.f_people.Equals(s.id))
+                                            .Where(p => p.f_org.Equals(contentId))
+                                            .Select(m => new EmployeePost
+                                            {
+                                                Name = m.employeespostsspecializations.c_name
+                                            }).GroupBy(g => g.Name).Select(t => t.First()).ToArray()
+
+                                 #region working
+                                 //Posts = db.content_org_employees_postss.Where(p => p.f_people.Equals(s.id)).Select(m => new EmployeePost
+                                 //{
+                                 //    Name = m.employeespostsspecializations.c_name
+                                 //}).GroupBy(g => g.Name).Select(t => t.First()).ToArray()
+                                 #endregion
+
                              }).ToArray();
 
                     return result;
@@ -2694,8 +2705,8 @@ namespace cms.dbase
                                  Id = ms.id,
                                  Title = ms.c_name,
                                  Desc = ms.c_desc,
-                                 Domain = (s != null)? s.c_alias.ToLower(): null,
-                                 Url = (s != null && !string.IsNullOrEmpty(s.c_alias))? getSiteDefaultDomain(s.c_alias): null
+                                 Domain = (s != null) ? s.c_alias.ToLower() : null,
+                                 Url = (s != null && !string.IsNullOrEmpty(s.c_alias)) ? getSiteDefaultDomain(s.c_alias) : null
                              }
                     );
 
@@ -2740,15 +2751,15 @@ namespace cms.dbase
                                            where l.f_gs.Equals(s.id)
                                            select l.f_specialisation).ToArray(),
                         SpecialistsId = (from l in db.content_gs_memberss
-                                       join m in db.content_gss
-                                       on l.f_gs equals m.id
-                                       where (l.f_gs.Equals(s.id) && l.f_type.Equals("spec"))
-                                       select l.f_people).ToArray(),
+                                         join m in db.content_gss
+                                         on l.f_gs equals m.id
+                                         where (l.f_gs.Equals(s.id) && l.f_type.Equals("spec"))
+                                         select l.f_people).ToArray(),
                         ExpertsId = (from l in db.content_gs_memberss
-                                   join m in db.content_gss
-                                   on l.f_gs equals m.id
-                                   where (l.f_gs.Equals(s.id) && l.f_type.Equals("expert"))
-                                   select l.f_people).ToArray()
+                                     join m in db.content_gss
+                                     on l.f_gs equals m.id
+                                     where (l.f_gs.Equals(s.id) && l.f_type.Equals("expert"))
+                                     select l.f_people).ToArray()
                     });
 
                 if (!query.Any()) return null;
@@ -2840,7 +2851,7 @@ namespace cms.dbase
                     .Select(s => new OrgsShortModel
                     {
                         Id = s.id,
-                        Title = !string.IsNullOrEmpty(s.c_title_short)? s.c_title_short: s.c_title,
+                        Title = !string.IsNullOrEmpty(s.c_title_short) ? s.c_title_short : s.c_title,
                         Url = getSiteDefaultDomainByContentId(s.id),
                         Logo = new Photo
                         {
