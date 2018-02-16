@@ -126,30 +126,6 @@ namespace Disly.Controllers
                             .Any();
                 #endregion
 
-                //var currentOrg = _repository.getOrgItem();
-
-                #region Список записей по организациям
-                //List<CardRecord> listRecords = new List<CardRecord>();
-
-                //XmlSerializer serial = new XmlSerializer(typeof(Employee));
-
-                //if(model.DoctorsItem != null && model.DoctorsItem.XmlInfo != null)
-                //{
-                //    foreach (var info in model.DoctorsItem.XmlInfo)
-                //    {
-                //        using (TextReader reader = new StringReader(info))
-                //        {
-                //            var result = (Employee)serial.Deserialize(reader);
-                //            if (result.EmployeeRecords != null)
-                //                listRecords.AddRange(result.EmployeeRecords);
-                //            //if (currentOrg != null && string.IsNullOrEmpty(currentOrg.Title))
-                //            //    listRecords.RemoveAll(w => !w.Organisation.Equals(currentOrg.Title));
-                //        }
-                //    }
-                //}
-               
-                #endregion
-
                 // десериализация xml
                 XmlSerializer serializer = new XmlSerializer(typeof(Employee));
 
@@ -159,7 +135,6 @@ namespace Disly.Controllers
                     {
                         var result = (Employee)serializer.Deserialize(reader);
                         model.DoctorsItem.EmployeeInfo = result;
-                        //model.DoctorsItem.EmployeeInfo.EmployeeRecords = listRecords.ToArray();
                     }
                 }
             }

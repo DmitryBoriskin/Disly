@@ -82,32 +82,19 @@ namespace Disly.Controllers
             string _ViewName = (ViewName != String.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";
 
             model.DoctorsItem = _repository.getPeopleItem(id);
-
-            #region Список записей по организациям
-            List<CardRecord> listRecords = new List<CardRecord>();
-
-            XmlSerializer serial = new XmlSerializer(typeof(Employee));
-            if(model.DoctorsItem != null && model.DoctorsItem.XmlInfo != null)
-            {
-                using (TextReader reader = new StringReader(model.DoctorsItem.XmlInfo.FirstOrDefault()))
-                {
-                    var result = (Employee)serial.Deserialize(reader);
-                    listRecords.AddRange(result.EmployeeRecords);
-                }
-            }
             
-            #endregion
-
             // десериализация xml
             XmlSerializer serializer = new XmlSerializer(typeof(Employee));
 
             if(model.DoctorsItem != null && model.DoctorsItem.XmlInfo != null)
             {
-                using (TextReader reader = new StringReader(model.DoctorsItem.XmlInfo.FirstOrDefault()))
+                foreach (var info in model.DoctorsItem.XmlInfo)
                 {
-                    var result = (Employee)serializer.Deserialize(reader);
-                    model.DoctorsItem.EmployeeInfo = result;
-                    model.DoctorsItem.EmployeeInfo.EmployeeRecords = listRecords.ToArray();
+                    using (TextReader reader = new StringReader(info))
+                    {
+                        var result = (Employee)serializer.Deserialize(reader);
+                        model.DoctorsItem.EmployeeInfo = result;
+                    }
                 }
             }
             

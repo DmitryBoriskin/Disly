@@ -36,22 +36,6 @@ namespace cms.dbase.Mapping
                                             .SingleOrDefault()
                                         }
                                     })
-                        //Posts = s.contentpeoplepostscontentpeoples
-                        //            .Where(w => w.contentpeoplepostscontentpeople.contentpeopleorglinks.Any(a => !a.b_dismissed))
-                        //            .Select(p => new EmployeePost
-                        //            {
-                        //                Id = p.f_post,
-                        //                Name = p.contentpeoplepostscontentspecializations.c_name,
-                        //                Type = p.n_type,
-                        //                Org = new OrgsModel
-                        //                {
-                        //                    Id = p.contentpeoplepostscontentorgs.id,
-                        //                    Title = p.contentpeoplepostscontentorgs.c_title,
-                        //                    Url = sites.Where(w => w.f_content.Equals(p.contentpeoplepostscontentorgs.id))
-                        //                   .Select(r => r.fksitesdomainss.FirstOrDefault().c_domain)
-                        //                   .SingleOrDefault()
-                        //                }
-                        //            })
                     });
         }
     }
