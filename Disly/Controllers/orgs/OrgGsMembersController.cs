@@ -65,7 +65,7 @@ namespace Disly.Controllers
             var filter = getFilter();
             var pfilter = FilterParams.Extend<PeopleFilter>(filter);
             pfilter.Orgs = new Guid[] { model.SitesInfo.ContentId };
-            model.Members = _repository.getMainSpecialistMembers(pfilter);
+            model.Members = _repository.getGSMembers(pfilter);
 
             return View(model);
         }

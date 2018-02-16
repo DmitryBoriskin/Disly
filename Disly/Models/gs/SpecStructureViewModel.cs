@@ -16,7 +16,7 @@ namespace Disly.Models
         /// <summary>
         /// Общая информация о модели
         /// </summary>
-        public MainSpecialistModel MainSpec { get; set; }
+        public GSModel MainSpec { get; set; }
         /// <summary>
         /// Список докторов главных специалистов
         /// </summary>

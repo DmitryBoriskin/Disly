@@ -22,6 +22,6 @@ namespace Disly.Areas.Admin.Models
         /// <summary>
         /// Должности
         /// </summary>
-        public IEnumerable<EmployeePostModel> EmployeePosts { get; set; }
+        public IEnumerable<EmployeePost> EmployeePosts { get; set; }
     }
 }

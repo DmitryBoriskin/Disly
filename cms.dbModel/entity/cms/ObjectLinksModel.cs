@@ -31,7 +31,7 @@ namespace cms.dbModel.entity
         /// <summary>
         /// События
         /// </summary>
-        public MainSpecialistModel[] Specs { get; set; }
+        public GSModel[] Specs { get; set; }
 
         /// <summary>
         /// События

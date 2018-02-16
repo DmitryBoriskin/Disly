@@ -26,9 +26,9 @@
                             <tr>
                                 <td>
                                     <h3>
-                                        @if (!string.IsNullOrEmpty(item.DomainUrl))
+                                        @if (!string.IsNullOrEmpty(item.Url))
                                         {
-                                            var link = string.Format("http://{0}", item.DomainUrl);
+                                            var link = string.Format("http://{0}", item.Url);
                                             <a target="_blank" href="@link" title="@item.Title">@item.Title</a>
                                         }
                                         else

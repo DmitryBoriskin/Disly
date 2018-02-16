@@ -177,6 +177,21 @@ namespace cms.dbModel.entity
         /// </summary>
         public string Title { get; set; }
 
+        ///// <summary>
+        /// Url
+        /// </summary>
+        public string Url { get; set; }
+
+        ///// <summary>
+        /// Logo image 
+        /// </summary>
+        public Photo Logo { get; set; }
+
+        /// <summary>
+        /// Сортировка
+        /// </summary>
+        public int Sort { get; set; }
+
         /// <summary>
         /// Список привязанных типов Организаций
         /// </summary>
@@ -221,7 +236,7 @@ namespace cms.dbModel.entity
         /// <summary>
         /// Список организаций
         /// </summary>
-        public OrgsModelSmall[] Orgs { get; set; }
+        public OrgsShortModel[] Orgs { get; set; }
     }
 
     /// <summary>
@@ -433,7 +448,12 @@ namespace cms.dbModel.entity
         /// Привязка к организации
         /// </summary>
         public Guid IdLinkOrg { get; set; }
-        
+
+        /// <summary>
+        /// Привязка к организации
+        /// </summary>
+        public Guid IdLinkGS { get; set; }
+
         /// <summary>
         /// Должность
         /// </summary>
@@ -462,7 +482,7 @@ namespace cms.dbModel.entity
         /// <summary>
         /// Список должностей сотрудников
         /// </summary>
-        public IEnumerable<PeoplePost> Posts { get; set; }
+        public IEnumerable<EmployeePost> Posts { get; set; }
 
         /// <summary>
         /// Есть ли ссылка на регистрацию
@@ -485,62 +505,11 @@ namespace cms.dbModel.entity
         public string DepartmentTitle { get; set; }
 
         /// <summary>
-        /// Ссылка на сайт главного специалиста
-        /// </summary>
-        public string GsUrl { get; set; }
-
-        /// <summary>
         /// главный специалист
         /// </summary>
-        public MainSpecialistModel MainSpec { get; set; }
+        public GSModel GS { get; set; }
     }
 
-    /// <summary>
-    /// Должность сотрудника
-    /// </summary>
-    public class PeoplePost
-    {
-        /// <summary>
-        /// Идентификатор
-        /// </summary>
-        public int Id { get; set; }
-
-        /// <summary>
-        /// Родительский ключ
-        /// </summary>
-        public int? Parent { get; set; }
-
-        /// <summary>
-        /// Название
-        /// </summary>
-        public string Name { get; set; }
-
-        /// <summary>
-        /// Тип
-        /// </summary>
-        public int Type { get; set; }
-
-        /// <summary>
-        /// Организация по данной должности
-        /// </summary>
-        public OrgsModel Org { get; set; }
-        
-        ///// <summary>
-        ///// Идентификатор организации (поле f_guid)
-        ///// </summary>
-        //public Guid? OrgId { get; set; }
-
-        ///// <summary>
-        ///// Название организации
-        ///// </summary>
-        //public string OrgTitle { get; set; }
-
-        ///// <summary>
-        ///// ссылка на Сайт организации 
-        ///// </summary>
-        //public string OrgUrl { get; set; }
-    }
-    
     /// <summary>
     /// Модель, описывающая координаты
     /// </summary>
@@ -626,49 +595,6 @@ namespace cms.dbModel.entity
         /// Флаг лидерства
         /// </summary>
         public Boolean Leader { get; set; }
-    }
-    
-#warning Избавиться от моделей ниже
-    /// <summary>
-    /// Модель, описывающая совокупность новости и привязанных к ней организаций
-    /// </summary>
-    public class MaterialOrgType
-    {
-        /// <summary>
-        /// Типы организаций
-        /// </summary>
-        public List<OrgType> OrgTypes { get; set; }
-
-        /// <summary>
-        /// Новость
-        /// </summary>
-        public MaterialsModel Material { get; set; }
-    }
-
-    /// <summary>
-    /// Модель, описывающая малым описанием организацию
-    /// </summary>
-    public class OrgsModelSmall
-    {
-        /// <summary>
-        /// Идентификатор
-        /// </summary>
-        public Guid Id { get; set; }
-
-        /// <summary>
-        /// Название
-        /// </summary>
-        public string Title { get; set; }
-
-        /// <summary>
-        /// Сортировка
-        /// </summary>
-        public int Sort { get; set; }
-
-        /// <summary>
-        /// Флаг 
-        /// </summary>
-        public bool Check { get; set; }
     }
 
     /// <summary>

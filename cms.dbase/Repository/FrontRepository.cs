@@ -1355,7 +1355,7 @@ namespace cms.dbase
 
                 if (filter.Id != null && filter.Id.Count() > 0)
                 {
-                    people = people.Where(w => w.p.contentpeoplepostscontentpeoples.Any(q => filter.Id.Contains(q.f_people)));
+                    people = people.Where(w => w.p.employeespostspeoples.Any(q => filter.Id.Contains(q.f_people)));
                 }
 
                 if (search != null)
@@ -1371,7 +1371,7 @@ namespace cms.dbase
                 int specialization = !string.IsNullOrWhiteSpace(filter.Type) ? Convert.ToInt32(filter.Type) : 0; // специализация
 
                 var data = (from p in people
-                            join pepl in db.content_people_postss on p.p.id equals pepl.f_people
+                            join pepl in db.content_org_employees_postss on p.p.id equals pepl.f_people
                             join ep in db.content_specializationss on pepl.f_post equals ep.id
                             join pdl in db.content_department_employeess on p.pol.id equals pdl.f_employee into ps
                             from pdl in ps.DefaultIfEmpty()
@@ -1400,11 +1400,11 @@ namespace cms.dbase
                         FIO = s.First().p.p.c_surname + " " + s.First().p.p.c_name + " " + s.First().p.p.c_patronymic,
                         Photo = s.First().p.p.c_photo,
                         SNILS = s.First().p.p.c_snils,
-                        Posts = s.Select(ep2 => new PeoplePost
+                        Posts = s.Select(ep2 => new EmployeePost
                         {
                             Id = ep2.ep.id,
                             Name = ep2.ep.c_name,
-                            Org = (ep2.p.o.id != null) ? getOrgItem(ep2.p.o.id) : null,
+                            Org = (ep2.p.o.id != null) ? getOrgItemShort(ep2.p.o.id) : null,
                             Type = ep2.pepl.n_type
                         }).ToArray()
                     }).OrderBy(o => o.FIO);
@@ -1441,7 +1441,7 @@ namespace cms.dbase
                     var queryData = FindPeoplesQuery(people, filter);
 
                     var result = queryData
-                             .Where(w => w.contentpeoplepostscontentpeoples.Any(b => b.contentpeoplepostscontentspecializations.b_doctor))
+                             .Where(w => w.employeespostspeoples.Any(b => b.employeespostsspecializations.b_doctor))
                              .Where(w => w.contentpeopleorglinks.Any(a => !a.b_dismissed))
                              .OrderBy(o => new { o.c_surname, o.c_name, o.c_patronymic })
                              .Select(s => new People
@@ -1450,9 +1450,9 @@ namespace cms.dbase
                                  FIO = s.c_surname + " " + s.c_name + " " + s.c_patronymic,
                                  Photo = s.c_photo,
                                  SNILS = s.c_snils,
-                                 Posts = db.content_people_postss.Where(p => p.f_people.Equals(s.id)).Select(m => new PeoplePost
+                                 Posts = db.content_org_employees_postss.Where(p => p.f_people.Equals(s.id)).Select(m => new EmployeePost
                                  {
-                                     Name = m.contentpeoplepostscontentspecializations.c_name
+                                     Name = m.employeespostsspecializations.c_name
                                  }).GroupBy(g => g.Name).Select(t => t.First()).ToArray()
                              }).ToArray();
 
@@ -1517,11 +1517,11 @@ namespace cms.dbase
                 //        FIO = s.First().p.p.c_surname + " " + s.First().p.p.c_name + " " + s.First().p.p.c_patronymic,
                 //        Photo = s.First().p.p.c_photo,
                 //        SNILS = s.First().p.p.c_snils,
-                //        Posts = s.Select(ep2 => new PeoplePost
+                //        Posts = s.Select(ep2 => new EmployeePost
                 //        {
                 //            Id = ep2.ep.id,
                 //            Name = ep2.ep.c_name,
-                //            Org = (ep2.p.o.id != null) ? getOrgItem(ep2.p.o.id) : null,
+                //            Org = (ep2.p.o.id != null) ? getOrgItemShort(ep2.p.o.id) : null,
                 //            Type = ep2.pepl.n_type
                 //        }).ToArray()
                 //    }).OrderBy(o => o.FIO);
@@ -1650,17 +1650,17 @@ namespace cms.dbase
         /// Список должностей
         /// </summary>
         /// <returns></returns>
-        public override PeoplePost[] getPeoplePosts()
+        public override EmployeePost[] getPeoplePosts()
         {
             string domain = _domain;
             using (var db = new CMSdb(_context))
             {
                 var query = (from s in db.cms_sitess
                              join pol in db.content_org_employeess on s.f_content equals pol.f_org
-                             join pepl in db.content_people_postss on pol.f_people equals pepl.f_people
+                             join pepl in db.content_org_employees_postss on pol.f_people equals pepl.f_people
                              join ep in db.content_specializationss on pepl.f_post equals ep.id
                              where (domain.Equals("main") || s.c_alias.ToLower().Equals(domain)) && ep.b_doctor
-                             select new PeoplePost
+                             select new EmployeePost
                              {
                                  Id = ep.id,
                                  Parent = ep.n_parent,
@@ -2367,7 +2367,7 @@ namespace cms.dbase
             }
             if (!String.IsNullOrEmpty(filter.Type))
             {
-                query = query.Where(w => w.contentpeoplepostscontentpeoples.Any(a => a.f_post.Equals(Int32.Parse(filter.Type))));
+                query = query.Where(w => w.employeespostspeoples.Any(a => a.f_post.Equals(Int32.Parse(filter.Type))));
             }
             if (!String.IsNullOrWhiteSpace(filter.Group))
             {
@@ -2887,20 +2887,20 @@ namespace cms.dbase
         /// Получаем список главных специалистов
         /// </summary>
         /// <returns></returns>
-        public override MainSpecialistModel[] getMainSpecialistList(FilterParams filter)
+        public override GSModel[] getGSList(FilterParams filter)
         {
             using (var db = new CMSdb(_context))
             {
-                var query = (from ms in db.content_main_specialistss
+                var query = (from ms in db.content_gss
                              join s in db.cms_sitess on ms.id equals s.f_content into s2
                              from s in s2.DefaultIfEmpty()
-                             select new MainSpecialistModel
+                             select new GSModel
                              {
                                  Id = ms.id,
                                  Title = ms.c_name,
                                  Desc = ms.c_desc,
-                                 Domain = (s != null) ? s.c_alias.ToLower() : null,
-                                 DomainUrl = (s != null && !string.IsNullOrEmpty(s.c_alias)) ? getSiteDefaultDomain(s.c_alias) : null
+                                 Domain = (s != null)? s.c_alias.ToLower(): null,
+                                 Url = (s != null && !string.IsNullOrEmpty(s.c_alias))? getSiteDefaultDomain(s.c_alias): null
                              }
                     );
 
@@ -2920,53 +2920,44 @@ namespace cms.dbase
         }
 
         /// <summary>
-        /// Возвращает кол-во специалистов
+        /// Единичная запись главного специалиста
         /// </summary>
-        /// <param name="domain"></param>
+        /// <param name="id"></param>
         /// <returns></returns>
-        public override int getCountMainSpecialiasBySite(string domain)
+        public override GSModel getGSItem(Guid id)
         {
             using (var db = new CMSdb(_context))
             {
-                return (from ms in db.content_main_specialistss
-                        join s in db.cms_sitess on ms.id equals s.f_content
-                        join l in db.content_main_specialist_peoples on ms.id equals l.f_main_specialist
-                        where l.f_type.Equals("main") && s.c_alias.Equals(domain)
-                        select ms.c_name).Count();
-            }
-        }
+                var query = db.content_gss
+                    .Where(w => w.id.Equals(id))
+                    .Select(s => new GSModel
+                    {
+                        Id = s.id,
+                        Title = s.c_name,
+                        Desc = s.c_desc,
+                        SiteId = (from site in db.cms_sitess
+                                  join cms in db.content_gss on site.f_content equals cms.id
+                                  where cms.id.Equals(s.id)
+                                  select site.id).SingleOrDefault(),
+                        Specialisations = (from l in db.content_gs_specialisationss
+                                           join m in db.content_gss
+                                           on l.f_gs equals m.id
+                                           where l.f_gs.Equals(s.id)
+                                           select l.f_specialisation).ToArray(),
+                        SpecialistsId = (from l in db.content_gs_memberss
+                                       join m in db.content_gss
+                                       on l.f_gs equals m.id
+                                       where (l.f_gs.Equals(s.id) && l.f_type.Equals("spec"))
+                                       select l.f_people).ToArray(),
+                        ExpertsId = (from l in db.content_gs_memberss
+                                   join m in db.content_gss
+                                   on l.f_gs equals m.id
+                                   where (l.f_gs.Equals(s.id) && l.f_type.Equals("expert"))
+                                   select l.f_people).ToArray()
+                    });
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        public override MainSpecialistModel[] getMainSpecialistContacts()
-        {
-            using (var db = new CMSdb(_context))
-            {
-                var query = db.cms_sitess.Where(w => w.c_alias.ToLower() == _domain && w.c_content_type == "spec")
-                                         .Join(
-                                                 db.content_main_specialist_peoples,
-                                                 e => e.f_content,
-                                                 o => o.f_main_specialist,
-                                                 (e, o) => o
-                                                 )
-                                          .Join(
-                                                db.content_peoples,
-                                                n => n.f_people,
-                                                m => m.id,
-                                                (n, m) => m
-                                                )
-                                          .Select(s => new MainSpecialistModel()
-                                          {
-                                              Title = s.c_surname + " " + s.c_name + " " + s.c_patronymic,
-                                              Organization = getOrgItem(s.contentpeopleorglinks.Select(ss => ss.f_org).Single())
-                                          });
-                if (query.Any())
-                {
-                    return query.ToArray();
-                }
-                return null;
+                if (!query.Any()) return null;
+                else return query.SingleOrDefault();
             }
         }
 
@@ -2975,16 +2966,16 @@ namespace cms.dbase
         /// </summary>
         /// <param name="filtr"></param>
         /// <returns></returns>
-        public override People[] getMainSpecialistMembers(PeopleFilter filtr)
+        public override People[] getGSMembers(PeopleFilter filtr)
         {
             using (var db = new CMSdb(_context))
             {
-                var type = "main";
-                var people = (from s in db.content_main_specialist_peoples
+                var type = "spec";
+                var people = (from s in db.content_gs_memberss
 
-                              join spec in db.content_main_specialistss on s.f_main_specialist equals spec.id
+                              join spec in db.content_gss on s.f_gs equals spec.id
 
-                              join site in db.cms_sitess on s.f_main_specialist equals site.f_content into ss
+                              join site in db.cms_sitess on s.f_gs equals site.f_content into ss
                               from site in ss.DefaultIfEmpty()
 
                               join p in db.content_peoples on s.f_people equals p.id
@@ -3008,11 +2999,11 @@ namespace cms.dbase
                     {
                         Id = s.p.id,
                         FIO = s.p.c_surname + " " + s.p.c_name + " " + s.p.c_patronymic,
-                        MainSpec = new MainSpecialistModel()
+                        GS = new GSModel()
                         {
                             Id = s.spec.id,
                             Title = s.spec.c_name,
-                            DomainUrl = (!string.IsNullOrEmpty(s.site.c_alias)) ? getSiteDefaultDomain(s.site.c_alias) : null
+                            Url = (!string.IsNullOrEmpty(s.site.c_alias)) ? getSiteDefaultDomain(s.site.c_alias) : null
                         },
                         Photo = s.p.c_photo
                     });
@@ -3021,6 +3012,49 @@ namespace cms.dbase
                     return data.ToArray();
 
                 return null;
+            }
+        }
+
+        /// <summary>
+        /// Возвращает кол-во специалистов
+        /// </summary>
+        /// <param name="domain"></param>
+        /// <returns></returns>
+        public override int getCountGSBySite(string domain)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                return (from ms in db.content_gss
+                        join s in db.cms_sitess on ms.id equals s.f_content
+                        join l in db.content_gs_memberss on ms.id equals l.f_gs
+                        where l.f_type.Equals("spec") && s.c_alias.Equals(domain)
+                        select ms.c_name).Count();
+            }
+        }
+
+        /// <summary>
+        /// Получаем организацию
+        /// </summary>
+        /// <param name="id">Идентификатор</param>
+        /// <returns></returns>
+        public override OrgsShortModel getOrgItemShort(Guid id)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var data = db.content_orgss.Where(w => w.id == id)
+                    .Select(s => new OrgsShortModel
+                    {
+                        Id = s.id,
+                        Title = !string.IsNullOrEmpty(s.c_title_short)? s.c_title_short: s.c_title,
+                        Url = getSiteDefaultDomainByContentId(s.id),
+                        Logo = new Photo
+                        {
+                            Url = s.c_logo
+                        }
+                    });
+
+                if (!data.Any()) return null;
+                else return data.FirstOrDefault();
             }
         }
 
@@ -3083,47 +3117,6 @@ namespace cms.dbase
             }
         }
 
-        /// <summary>
-        /// Единичная запись главного специалиста
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        public override MainSpecialistModel getMainSpecialistItem(Guid id)
-        {
-            using (var db = new CMSdb(_context))
-            {
-                var query = db.content_main_specialistss
-                    .Where(w => w.id.Equals(id))
-                    .Select(s => new MainSpecialistModel
-                    {
-                        Id = s.id,
-                        Title = s.c_name,
-                        Desc = s.c_desc,
-                        SiteId = (from site in db.cms_sitess
-                                  join cms in db.content_main_specialistss on site.f_content equals cms.id
-                                  where cms.id.Equals(s.id)
-                                  select site.id).SingleOrDefault(),
-                        Specialisations = (from l in db.content_main_specialist_specialisationss
-                                           join m in db.content_main_specialistss
-                                           on l.f_main_specialist equals m.id
-                                           where l.f_main_specialist.Equals(s.id)
-                                           select l.f_specialisation).ToArray(),
-                        EmployeeMainSpecs = (from l in db.content_main_specialist_peoples
-                                             join m in db.content_main_specialistss
-                                             on l.f_main_specialist equals m.id
-                                             where (l.f_main_specialist.Equals(s.id) && l.f_type.Equals("main"))
-                                             select l.f_people).ToArray(),
-                        EmployeeExpSoviet = (from l in db.content_main_specialist_peoples
-                                             join m in db.content_main_specialistss
-                                             on l.f_main_specialist equals m.id
-                                             where (l.f_main_specialist.Equals(s.id) && l.f_type.Equals("soviet"))
-                                             select l.f_people).ToArray()
-                    });
-
-                if (!query.Any()) return null;
-                else return query.SingleOrDefault();
-            }
-        }
 
         public override VacanciesList getVacancy(FilterParams filter)
         {

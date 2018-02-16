@@ -1484,16 +1484,16 @@ namespace cms.dbase.models
 		#region Associations
 
 		/// <summary>
-		/// FK_gs_members__gs
-		/// </summary>
-		[Association(ThisKey="f_gs", OtherKey="id", CanBeNull=false, KeyName="FK_gs_members__gs", BackReferenceName="gsmembersgss")]
-		public content_gs gsmembersgs { get; set; }
-
-		/// <summary>
 		/// FK_gs_members__people
 		/// </summary>
 		[Association(ThisKey="f_people", OtherKey="id", CanBeNull=false, KeyName="FK_gs_members__people", BackReferenceName="gsmemberspeoples")]
 		public content_people gsmemberspeople { get; set; }
+
+		/// <summary>
+		/// FK_gs_members__gs
+		/// </summary>
+		[Association(ThisKey="f_gs", OtherKey="id", CanBeNull=false, KeyName="FK_gs_members__gs", BackReferenceName="gsmembersgss")]
+		public content_gs gsmembersgs { get; set; }
 
 		/// <summary>
 		/// FK_gs_members_contacts___gs_members_BackReference
@@ -2201,16 +2201,16 @@ namespace cms.dbase.models
 		#region Associations
 
 		/// <summary>
-		/// fk_content_sitemap_front_section
-		/// </summary>
-		[Association(ThisKey="f_front_section", OtherKey="c_alias", CanBeNull=false, KeyName="fk_content_sitemap_front_section", BackReferenceName="fkcontentsitemapfrontsections")]
-		public front_section fkcontentsitemapfrontsection { get; set; }
-
-		/// <summary>
 		/// fk_content_sitemap_from_sites
 		/// </summary>
 		[Association(ThisKey="f_site", OtherKey="c_alias", CanBeNull=false, KeyName="fk_content_sitemap_from_sites", BackReferenceName="fkcontentsitemapfromsitess")]
 		public cms_sites fkcontentsitemapfromsites { get; set; }
+
+		/// <summary>
+		/// fk_content_sitemap_front_section
+		/// </summary>
+		[Association(ThisKey="f_front_section", OtherKey="c_alias", CanBeNull=false, KeyName="fk_content_sitemap_front_section", BackReferenceName="fkcontentsitemapfrontsections")]
+		public front_section fkcontentsitemapfrontsection { get; set; }
 
 		/// <summary>
 		/// FK_content_sitemap_menutypes_content_sitemap_BackReference
@@ -2252,16 +2252,16 @@ namespace cms.dbase.models
 		#region Associations
 
 		/// <summary>
-		/// FK_content_sitemap_menutypes_content_sitemap_menus
-		/// </summary>
-		[Association(ThisKey="f_menutype", OtherKey="id", CanBeNull=false, KeyName="FK_content_sitemap_menutypes_content_sitemap_menus", BackReferenceName="contentsitemapmenutypescontentsitemapmenuss")]
-		public content_sitemap_menus contentsitemapmenutypescontentsitemapmenus { get; set; }
-
-		/// <summary>
 		/// FK_content_sitemap_menutypes_content_sitemap
 		/// </summary>
 		[Association(ThisKey="f_sitemap", OtherKey="id", CanBeNull=false, KeyName="FK_content_sitemap_menutypes_content_sitemap", BackReferenceName="contentsitemapmenutypescontentsitemaps")]
 		public content_sitemap contentsitemapmenutypescontentsitemap { get; set; }
+
+		/// <summary>
+		/// FK_content_sitemap_menutypes_content_sitemap_menus
+		/// </summary>
+		[Association(ThisKey="f_menutype", OtherKey="id", CanBeNull=false, KeyName="FK_content_sitemap_menutypes_content_sitemap_menus", BackReferenceName="contentsitemapmenutypescontentsitemapmenuss")]
+		public content_sitemap_menus contentsitemapmenutypescontentsitemapmenus { get; set; }
 
 		#endregion
 	}
@@ -2721,16 +2721,16 @@ namespace cms.dbase.models
 		#region Associations
 
 		/// <summary>
-		/// FK_front_section_site
-		/// </summary>
-		[Association(ThisKey="f_front_section", OtherKey="c_alias", CanBeNull=false, KeyName="FK_front_section_site", BackReferenceName="frontsectionsites")]
-		public front_section frontsectionsite { get; set; }
-
-		/// <summary>
 		/// FK_site_front_section_page_views
 		/// </summary>
 		[Association(ThisKey="f_page_view", OtherKey="id", CanBeNull=false, KeyName="FK_site_front_section_page_views", BackReferenceName="sitefrontsectionpageviewss")]
 		public front_page_views sitefrontsectionpageviews { get; set; }
+
+		/// <summary>
+		/// FK_front_section_site
+		/// </summary>
+		[Association(ThisKey="f_front_section", OtherKey="c_alias", CanBeNull=false, KeyName="FK_front_section_site", BackReferenceName="frontsectionsites")]
+		public front_section frontsectionsite { get; set; }
 
 		/// <summary>
 		/// FK_site_front_section
@@ -3449,4 +3449,3 @@ namespace cms.dbase.models
 		}
 	}
 }
- 

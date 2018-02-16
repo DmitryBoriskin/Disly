@@ -12,10 +12,19 @@ namespace cms.dbModel.entity.cms
     public class EmployeeModel
     {
         /// <summary>
-        /// Идентификатор
+        /// Идентификатор сотрудника
         /// </summary>
         public Guid Id { get; set; }
 
+        /// <summary>
+        /// Идентификатор человека
+        /// </summary>
+        public Guid PeopleId { get; set; }
+
+        /// <summary>
+        /// Фотография
+        /// </summary>
+        public Photo Photo { get; set; }
         /// <summary>
         /// Фамилия
         /// </summary>
@@ -48,20 +57,21 @@ namespace cms.dbModel.entity.cms
         }
 
         /// <summary>
-        /// Список занимаемых должностей
+        /// Список организаций в которых работает врач
         /// </summary>
-        public IEnumerable<EmployeePostModel> Posts { get; set; }
+        public OrgsModel[] Orgs { get; set; }
 
         /// <summary>
-        /// Фотография
+        /// Список занимаемых должностей
         /// </summary>
-        public Photo Photo { get; set; }
+        public EmployeePost[] Posts { get; set; }
+
     }
 
     /// <summary>
-    /// Модель, описывающая должности 
+    /// Должность сотрудника
     /// </summary>
-    public class EmployeePostModel
+    public class EmployeePost
     {
         /// <summary>
         /// Идентификатор
@@ -69,7 +79,7 @@ namespace cms.dbModel.entity.cms
         public int Id { get; set; }
 
         /// <summary>
-        /// Родитель
+        /// Родительский ключ
         /// </summary>
         public int? Parent { get; set; }
 
@@ -77,5 +87,17 @@ namespace cms.dbModel.entity.cms
         /// Название
         /// </summary>
         public string Name { get; set; }
+
+        /// <summary>
+        /// Тип
+        /// </summary>
+        public int Type { get; set; }
+
+        /// <summary>
+        /// Организация по данной должности
+        /// </summary>
+        public OrgsShortModel Org { get; set; }
+
     }
+
 }

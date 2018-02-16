@@ -16,14 +16,14 @@
                 </div>
             }>*@
 
-        @if (!string.IsNullOrWhiteSpace(Model.DoctorsItem.GsUrl))
+        @if (Model.DoctorsItem != null && Model.DoctorsItem.GS != null && !string.IsNullOrWhiteSpace(Model.DoctorsItem.GS.Url))
         {
-            var link = string.Format("http://{0}", Model.DoctorsItem.GsUrl);
+            var link = string.Format("http://{0}", Model.DoctorsItem.GS.Url);
             <div>
                 <strong>Главный специалист: </strong>
-                @if (Model.DoctorsItem.MainSpec != null)
+                @if (Model.DoctorsItem.GS != null)
                 {
-                    <a href="@link" target="_blank">@Model.DoctorsItem.MainSpec.Name</a>
+                    <a href="@link" target="_blank">@Model.DoctorsItem.GS.Title</a>
                 }
             </div>
         }

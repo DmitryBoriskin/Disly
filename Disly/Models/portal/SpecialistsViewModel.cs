@@ -11,7 +11,7 @@ namespace Disly.Models
         /// <summary>
         /// Список главных специалистов
         /// </summary>
-        public MainSpecialistModel[] List { get; set; }
+        public GSModel[] List { get; set; }
 
         /// <summary>
         /// Список врачей из главных специалистов

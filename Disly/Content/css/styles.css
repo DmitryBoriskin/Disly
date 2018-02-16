@@ -200,10 +200,11 @@ a:hover:after {
     right: 10px;
     border: solid 1px #dae1e6;
     background: #ffffff;
-    z-index: 1000;
-    border-radius: 5px;
+    z-index: 1000; 
     -moz-border-radius: 5px;
     -webkit-border-radius: 5px;
+    border-radius: 5px;
+   
 }
 .admin-settings:after {
     position:absolute;
@@ -706,10 +707,11 @@ a.tree-btn {
     margin-right: 0;
     padding: 0;
     text-align: center;
-    background: #ffffff;
-    border-radius: 17px;
+    background: #ffffff; 
     -moz-border-radius: 17px;
     -webkit-border-radius: 17px;
+    border-radius: 17px;
+   
 }
 a.tree-btn:before {
     font: 17px 'fontello';
@@ -780,9 +782,10 @@ a.tree-btn.new:before {
     background: #005c99;
     border:none;
     outline:none;
-    border-radius:4px;
-    -moz-border-radius:4px;
+     -moz-border-radius:4px;
     -webkit-border-radius:4px;
+    border-radius:4px;
+   
     color:#ffffff;
     font-size: 12px;
     line-height: 16px;
@@ -853,6 +856,9 @@ a.button.icon-cancel{
 }
 .icon-create:before {
     content: '\ef01'; 
+}
+.icon-pencil:before {
+    content: '\e874';; 
 }
 .icon-create.green:before {
     content: '\ef01'; 
@@ -1128,6 +1134,12 @@ div.ListItem img.photo-preview {
 #model-linksToEvent-ul
 {
    list-style: none;
+}
+
+#model-expertEmployees-ul,
+#model-specEmployees-ul
+{
+    font-size:13px;
 }
 
 

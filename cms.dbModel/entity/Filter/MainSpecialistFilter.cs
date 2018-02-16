@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Web;
 
-public class MainSpecialistFilter : FilterParams {
+public class GSFilter : FilterParams {
     /// <summary>
     /// Id элемента, привязанного к гс 
     /// </summary>

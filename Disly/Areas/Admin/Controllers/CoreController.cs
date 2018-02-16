@@ -134,7 +134,7 @@ namespace Disly.Areas.Admin.Controllers
             orgId = _cmsRepository.getOrgLinkByDomain();
 
             // идентификатор главного специалиста
-            mainSpecialist = _cmsRepository.getMainSpecLinkByDomain(Domain);
+            mainSpecialist = _cmsRepository.getGSLinkByDomain(Domain);
         }
 
         private void CmsRepository_DislyEvent(object sender, DislyEventArgs e)

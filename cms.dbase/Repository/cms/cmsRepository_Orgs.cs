@@ -1588,19 +1588,19 @@ namespace cms.dbase
         /// </summary>
         /// <param name="id">Тип</param>
         /// <returns></returns>
-        public override OrgsModelSmall[] getOrgSmall(Guid id, Guid material)
+        public override OrgsShortModel[] getOrgSmall(Guid id, Guid material)
         {
             using (var db = new CMSdb(_context))
             {
                 var data = db.content_sv_orgs_by_types
                     .Where(w => w.f_type.Equals(id))
                     .OrderBy(o => o.n_sort)
-                    .Select(s => new OrgsModelSmall
+                    .Select(s => new OrgsShortModel
                     {
                         Id = s.id,
                         Title = s.c_title,
                         Sort = s.n_sort,
-                        Check = setCheckedOrgs(s.id, material)
+                        Checked = setCheckedOrgs(s.id, material)
                     });
 
                 if (!data.Any()) return null;
@@ -1628,17 +1628,17 @@ namespace cms.dbase
         /// Получаем список организаций, прикреплённых к каким-то типам
         /// </summary>
         /// <returns></returns>
-        public override OrgsModelSmall[] getOrgAttachedToTypes(Guid material)
+        public override OrgsShortModel[] getOrgAttachedToTypes(Guid material)
         {
             using (var db = new CMSdb(_context))
             {
                 var data = db.content_sv_orgs_not_attacheds
                     .OrderBy(o => o.c_title)
-                    .Select(s => new OrgsModelSmall
+                    .Select(s => new OrgsShortModel
                     {
                         Id = s.id,
                         Title = s.c_title,
-                        Check = setCheckedOrgs(s.id, material)
+                        Checked = setCheckedOrgs(s.id, material)
                     });
 
                 if (!data.Any()) return null;

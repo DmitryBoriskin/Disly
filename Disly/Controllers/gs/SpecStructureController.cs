@@ -74,7 +74,7 @@ namespace Disly.Controllers
                 Url = ""
             });
 
-            int countSpec = _repository.getCountMainSpecialiasBySite(Domain);
+            int countSpec = _repository.getCountGSBySite(Domain);
 
             //Табы на странице
             model.Nav = new List<PageTabsViewModel>();
@@ -100,7 +100,7 @@ namespace Disly.Controllers
             var filter = getFilter();
             filter.Domain = null;
             var pfilter = FilterParams.Extend<PeopleFilter>(filter);
-            var mainSpec = _repository.getMainSpecialistItem(model.SitesInfo.ContentId);
+            var mainSpec = _repository.getGSItem(model.SitesInfo.ContentId);
             if (mainSpec != null)
             {
                 model.MainSpec = mainSpec;
@@ -109,17 +109,17 @@ namespace Disly.Controllers
                 {
                     case "specialists":
                         //Список врачей, входящих в модель "главный специалист"
-                        if (mainSpec.EmployeeMainSpecs != null)
+                        if (mainSpec.SpecialistsId != null)
                         {
-                            pfilter.Id = mainSpec.EmployeeMainSpecs.ToArray();
+                            pfilter.Id = mainSpec.SpecialistsId.ToArray();
                             model.SpesialitsList = _repository.getPeopleList(pfilter);
                         }
                         break;
                     case "experts":
                         //Получение экспертного состава
-                        if (mainSpec.EmployeeMainSpecs != null)
+                        if (mainSpec.SpecialistsId != null)
                         {
-                            pfilter.Id = mainSpec.EmployeeExpSoviet.ToArray();
+                            pfilter.Id = mainSpec.ExpertsId.ToArray();
                             model.ExpertsList = _repository.getPeopleList(pfilter);
                         }
                         break;

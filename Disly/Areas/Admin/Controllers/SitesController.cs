@@ -135,9 +135,9 @@ namespace Disly.Areas.Admin.Controllers
 
             var orgfilter = FilterParams.Extend<OrgFilter>(filter);
             var evfilter = FilterParams.Extend<EventFilter>(filter);
-            var specfilter = FilterParams.Extend<MainSpecialistFilter>(filter);
+            var specfilter = FilterParams.Extend<GSFilter>(filter);
             model.OrgsList = new SelectList(_cmsRepository.getOrgs(orgfilter), "Id", "Title", ContentId);
-            model.MainSpecialistList = new SelectList(_cmsRepository.getMainSpecialistList(specfilter).Data, "Id", "Title", ContentId);
+            model.MainSpecialistList = new SelectList(_cmsRepository.getGSList(specfilter).Data, "Id", "Title", ContentId);
             model.EventsList = new SelectList(_cmsRepository.getEventsList(evfilter).Data, "Id", "Title", ContentId);
             #endregion
             return View("Master", model);
@@ -286,9 +286,9 @@ namespace Disly.Areas.Admin.Controllers
                 );
             var orgfilter = FilterParams.Extend<OrgFilter>(filter);
             var evfilter = FilterParams.Extend<EventFilter>(filter);
-            var specfilter = FilterParams.Extend<MainSpecialistFilter>(filter);
+            var specfilter = FilterParams.Extend<GSFilter>(filter);
             model.OrgsList = new SelectList(_cmsRepository.getOrgs(orgfilter), "Id", "Title", ContentId);
-            model.MainSpecialistList = new SelectList(_cmsRepository.getMainSpecialistList(specfilter).Data, "Id", "Name", ContentId);
+            model.MainSpecialistList = new SelectList(_cmsRepository.getGSList(specfilter).Data, "Id", "Name", ContentId);
             model.EventsList = new SelectList(_cmsRepository.getEventsList(evfilter).Data, "Id", "Title", ContentId);
             #endregion
 

@@ -405,6 +405,39 @@ $(document).ready(function () {
         
     });
 
+    //Удаление члена из гс 
+    $(".gs-member-delete").on('click', function () {
+        var targetUrl = "/Admin/MainSpecialist/DeleteGSMember/";
+        var _memberId = $(this).data("memberId");
+
+        var memberItem = $(this).closest(".member-item");
+
+        try {
+            $.ajax({
+                type: "POST",
+                async: false,
+                url: "/admin/mainspecialist/deletegsmember",
+                data: { id: _memberId },
+                error: function () { alert("error"); },
+
+            })
+                .done(function (response) {
+                    memberItem.remove();
+                })
+                .fail(function (jqXHR, status) {
+                    console.log("Ошибка" + " " + status + " " + jqXHR);
+
+                })
+                .always(function (response) {
+
+                    //location.reload();
+                });
+        }
+        catch (ex) {
+            console.log(ex);
+        }
+    });
+
     //удаление варианта ответа
     $('.answer_delete').click(function (e) {
         e.preventDefault();
