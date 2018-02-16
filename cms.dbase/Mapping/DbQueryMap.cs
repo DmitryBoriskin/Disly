@@ -20,22 +20,38 @@ namespace cms.dbase.Mapping
                         Id = s.id,
                         FIO = s.c_surname + " " + s.c_name + " " + s.c_patronymic,
                         Photo = s.c_photo,
-                        Posts = s.contentpeoplepostscontentpeoples
-                                    .Where(w => w.contentpeoplepostscontentpeople.contentpeopleorglinks.Any(a => !a.b_dismissed))
-                                    .Select(p => new PeoplePost
+                        Posts = s.employeespostspeoples
+                                    .Where(a => !a.b_dissmissed)
+                                    .Select(p => new EmployeePost
                                     {
                                         Id = p.f_post,
-                                        Name = p.contentpeoplepostscontentspecializations.c_name,
+                                        Name = p.employeespostsspecializations.c_name,
                                         Type = p.n_type,
-                                        Org = new OrgsModel
+                                        Org = new OrgsShortModel
                                         {
-                                            Id = p.contentpeoplepostscontentorgs.id,
-                                            Title = p.contentpeoplepostscontentorgs.c_title,
-                                            Url = sites.Where(w => w.f_content.Equals(p.contentpeoplepostscontentorgs.id))
-                                           .Select(r => r.fksitesdomainss.FirstOrDefault().c_domain)
-                                           .SingleOrDefault()
+                                            Id = p.contentemployeespostsorgs.id,
+                                            Title = p.contentemployeespostsorgs.c_title,
+                                            Url = sites.Where(w => w.f_content.Equals(p.contentemployeespostsorgs.id))
+                                            .Select(r => r.fksitesdomainss.FirstOrDefault().c_domain)
+                                            .SingleOrDefault()
                                         }
                                     })
+                        //Posts = s.contentpeoplepostscontentpeoples
+                        //            .Where(w => w.contentpeoplepostscontentpeople.contentpeopleorglinks.Any(a => !a.b_dismissed))
+                        //            .Select(p => new EmployeePost
+                        //            {
+                        //                Id = p.f_post,
+                        //                Name = p.contentpeoplepostscontentspecializations.c_name,
+                        //                Type = p.n_type,
+                        //                Org = new OrgsModel
+                        //                {
+                        //                    Id = p.contentpeoplepostscontentorgs.id,
+                        //                    Title = p.contentpeoplepostscontentorgs.c_title,
+                        //                    Url = sites.Where(w => w.f_content.Equals(p.contentpeoplepostscontentorgs.id))
+                        //                   .Select(r => r.fksitesdomainss.FirstOrDefault().c_domain)
+                        //                   .SingleOrDefault()
+                        //                }
+                        //            })
                     });
         }
     }

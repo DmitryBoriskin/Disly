@@ -1550,12 +1550,12 @@ namespace cms.dbase
                         Id = s.id,
                         FIO = s.c_surname + " " + s.c_name + " " + s.c_patronymic,
                         Photo = s.c_photo,
-                        GsUrl = getSiteDefaultDomain(_domain),
-                        MainSpec = s.mainspecialistpeoplecontentpeoples
-                                        .Select(m => new MainSpecialistModel
-                                        {
-                                            Title = m.mainspecialistpeoplemainspecialists.c_name
-                                        }).SingleOrDefault(),
+                        //GsUrl = getSiteDefaultDomain(_domain),
+                        //MainSpec = s.mainspecialistpeoplecontentpeoples
+                        //                .Select(m => new MainSpecialistModel
+                        //                {
+                        //                    Title = m.mainspecialistpeoplemainspecialists.c_name
+                        //                }).SingleOrDefault(),
                         XmlInfo = s.contentpeopleinfocontentpeoples
                                         .Where(w => w.f_people.Equals(s.id))
                                         .Select(d => d.c_xml)
@@ -2387,8 +2387,9 @@ namespace cms.dbase
             using (var db = new CMSdb(_context))
             {
                 var people = db.content_peoples
-                                    .Where(w => w.contentpeoplepostscontentpeoples.Any(b => b.contentpeoplepostscontentspecializations.b_doctor))
-                                    .Where(w => w.contentpeopleorglinks.Any(a => !a.b_dismissed));
+                                    .Where(w => w.contentpeopleorglinks.Any(a => !a.b_dismissed))
+                                    .Where(w => w.employeespostspeoples.Any(b => b.employeespostsspecializations.b_doctor));
+                                    //.Where(w => w.contentpeoplepostscontentpeoples.Any(b => b.contentpeoplepostscontentspecializations.b_doctor))
 
                 var queryData = FindPeoplesQuery(people, filter);
 
