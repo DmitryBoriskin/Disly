@@ -1440,11 +1440,7 @@ namespace cms.dbase
 
                     var queryData = FindPeoplesQuery(people, filter);
 
-                    int itemCount = queryData.Count();
 
-                    queryData = queryData
-                                .Skip(filter.Size * (filter.Page - 1))
-                                .Take(filter.Size);
 
                     var result = queryData
                              .Where(w => w.employeespostspeoples.Any(b => b.employeespostsspecializations.b_doctor))
@@ -1474,6 +1470,10 @@ namespace cms.dbase
                                  #endregion
                              });
 
+                    int itemCount = result.Count();
+                    result = result
+                                .Skip(filter.Size * (filter.Page - 1))
+                                .Take(filter.Size);
 
                     if (result.Any())
                     {
