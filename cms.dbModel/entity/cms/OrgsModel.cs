@@ -508,6 +508,11 @@ namespace cms.dbModel.entity
         /// главный специалист
         /// </summary>
         public GSModel GS { get; set; }
+
+        /// <summary>
+        /// Список организаций
+        /// </summary>
+        public IEnumerable<OrgsShortModel> Orgs { get; set; }
     }
 
     /// <summary>

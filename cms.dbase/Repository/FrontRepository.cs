@@ -31,7 +31,7 @@ namespace cms.dbase
         {
             _context = ConnectionString;
             _domain = (!string.IsNullOrEmpty(DomainUrl)) ? getSiteId(DomainUrl) : "";
-            //_domain = "main";
+            //_domain = "koms-crb";
             LinqToDB.Common.Configuration.Linq.AllowMultipleQuery = true;
         }
         #region redirect methods
@@ -1440,6 +1440,12 @@ namespace cms.dbase
 
                     var queryData = FindPeoplesQuery(people, filter);
 
+                    int itemCount = queryData.Count();
+
+                    queryData = queryData
+                                .Skip(filter.Size * (filter.Page - 1))
+                                .Take(filter.Size);
+
                     var result = queryData
                              .Where(w => w.employeespostspeoples.Any(b => b.employeespostsspecializations.b_doctor))
                              .Where(w => w.contentpeopleorglinks.Any(a => !a.b_dismissed))
@@ -1468,11 +1474,6 @@ namespace cms.dbase
                                  #endregion
                              });
 
-                    int itemCount = result.Count();
-
-                    result = result
-                                .Skip(filter.Size * (filter.Page - 1))
-                                .Take(filter.Size);
 
                     if (result.Any())
                     {
