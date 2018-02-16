@@ -140,6 +140,11 @@ namespace Disly.Controllers
                         {
                             if (result.UZ.ID.Equals(currentOrg.Id))
                             {
+                                // берём только ту запись по сотруднику на сайте которой организации находимся
+                                result.EmployeeRecords = result.EmployeeRecords
+                                                            .Where(w => w.Organisation.ToLower().Equals(currentOrg.Title.ToLower()))
+                                                            .ToArray();
+
                                 model.DoctorsItem.EmployeeInfo = result;
                             }
                         }
