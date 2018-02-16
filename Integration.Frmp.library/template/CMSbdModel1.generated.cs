@@ -143,6 +143,18 @@ namespace Integration.Frmp.models
 		[Column(@"name"),                NotNull] public string Name   { get; set; } // nvarchar(512)
 	}
 
+	public static partial class DbModelStoredProcedures
+	{
+		#region ImportFrmpEmployees
+
+		public static int ImportFrmpEmployees(this DataConnection dataConnection)
+		{
+			return dataConnection.ExecuteProc("[dbo].[import_frmp_employees]");
+		}
+
+		#endregion
+	}
+
 	public static partial class TableExtensions
 	{
 		public static ImportFrmpPeoples Find(this ITable<ImportFrmpPeoples> table, Guid Id)
