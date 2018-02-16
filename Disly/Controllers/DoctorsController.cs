@@ -125,6 +125,8 @@ namespace Disly.Controllers
                             .Select(s => s.Url)
                             .Any();
                 #endregion
+                
+                var currentOrg = _repository.getCurrentOrgImportGuid();
 
                 // десериализация xml
                 XmlSerializer serializer = new XmlSerializer(typeof(Employee));
@@ -134,7 +136,17 @@ namespace Disly.Controllers
                     using (TextReader reader = new StringReader(info))
                     {
                         var result = (Employee)serializer.Deserialize(reader);
-                        model.DoctorsItem.EmployeeInfo = result;
+                        if  (currentOrg != null && currentOrg.Id != Guid.Empty)
+                        {
+                            if (result.UZ.ID.Equals(currentOrg.Id))
+                            {
+                                model.DoctorsItem.EmployeeInfo = result;
+                            }
+                        }
+                        else
+                        {
+                            model.DoctorsItem.EmployeeInfo = result;
+                        }
                     }
                 }
             }

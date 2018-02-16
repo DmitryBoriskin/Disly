@@ -2891,6 +2891,29 @@ namespace cms.dbase
         }
 
         /// <summary>
+        /// Возвращает идентификатор импорта по организации
+        /// </summary>
+        /// <returns></returns>
+        public override OrgsShortModel getCurrentOrgImportGuid()
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var result = (from o in db.content_orgss
+                              join s in db.cms_sitess on o.id equals s.f_content
+                              where s.c_alias.Equals(_domain)
+                              select new OrgsShortModel
+                              {
+                                  Id = (Guid)o.f_guid,
+                                  Title = o.c_title
+                              });
+
+                if (result.Any())
+                    return result.SingleOrDefault();
+                return null;
+            }
+        }
+
+        /// <summary>
         /// Возвращает организацию по названию
         /// </summary>
         /// <param name="title"></param>
