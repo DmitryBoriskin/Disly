@@ -118,6 +118,7 @@ namespace cms.dbModel
 
         public abstract OrgsModel getOrgItem();
         public abstract OrgsModel getOrgItem(Guid id);
+        public abstract OrgsShortModel getCurrentOrgImportGuid();
         public abstract OrgsShortModel getOrgItemShort(Guid id);
 
 

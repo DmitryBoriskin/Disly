@@ -70,9 +70,9 @@ namespace Disly.Controllers
             model.PeoplePosts = _repository.getPeoplePosts();//Domain
 
             #region Редирект на регистрацию
-            if (model.DoctorsList != null && model.DoctorsList.Count() > 0 && model.DoctorsRegistry!=null)
+            if (model.DoctorsList != null && model.DoctorsList.Doctors != null && model.DoctorsList.Doctors.Count() > 0 && model.DoctorsRegistry!=null)
             {
-                foreach (var d in model.DoctorsList)
+                foreach (var d in model.DoctorsList.Doctors)
                 {
                     d.IsRedirectUrl = model.DoctorsRegistry
                         .Where(w => w.SNILS.Equals(d.SNILS))
@@ -125,36 +125,34 @@ namespace Disly.Controllers
                             .Select(s => s.Url)
                             .Any();
                 #endregion
-
-                var currentOrg = _repository.getOrgItem();
-
-                #region Список записей по организациям
-                List<CardRecord> listRecords = new List<CardRecord>();
-
-                XmlSerializer serial = new XmlSerializer(typeof(Employee));
-
-                if(model.DoctorsItem != null && model.DoctorsItem.XmlInfo != null)
-                {
-                    using (TextReader reader = new StringReader(model.DoctorsItem.XmlInfo.FirstOrDefault()))
-                    {
-                        var result = (Employee)serial.Deserialize(reader);
-                        if (result.EmployeeRecords != null)
-                            listRecords.AddRange(result.EmployeeRecords);
-                        if (currentOrg != null && string.IsNullOrEmpty(currentOrg.Title))
-                            listRecords.RemoveAll(w => !w.Organisation.Equals(currentOrg.Title));
-                    }
-                }
-               
-                #endregion
+                
+                var currentOrg = _repository.getCurrentOrgImportGuid();
 
                 // десериализация xml
                 XmlSerializer serializer = new XmlSerializer(typeof(Employee));
 
-                using (TextReader reader = new StringReader(model.DoctorsItem.XmlInfo.FirstOrDefault()))
+                foreach (var info in model.DoctorsItem.XmlInfo)
                 {
-                    var result = (Employee)serializer.Deserialize(reader);
-                    model.DoctorsItem.EmployeeInfo = result;
-                    model.DoctorsItem.EmployeeInfo.EmployeeRecords = listRecords.ToArray();
+                    using (TextReader reader = new StringReader(info))
+                    {
+                        var result = (Employee)serializer.Deserialize(reader);
+                        if  (currentOrg != null && currentOrg.Id != Guid.Empty)
+                        {
+                            if (result.UZ.ID.Equals(currentOrg.Id))
+                            {
+                                // берём только ту запись по сотруднику на сайте которой организации находимся
+                                result.EmployeeRecords = result.EmployeeRecords
+                                                            .Where(w => w.Organisation.ToLower().Equals(currentOrg.Title.ToLower()))
+                                                            .ToArray();
+
+                                model.DoctorsItem.EmployeeInfo = result;
+                            }
+                        }
+                        else
+                        {
+                            model.DoctorsItem.EmployeeInfo = result;
+                        }
+                    }
                 }
             }
 

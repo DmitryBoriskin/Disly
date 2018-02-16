@@ -48,7 +48,7 @@ namespace Disly.Controllers
             try {
                 var domainUrl = Request.Url.Host.ToLower().Replace("www.", "");
                 Domain = _repository.getSiteId(domainUrl);
-                //Domain = "main";
+                //Domain = "koms-crb";
             }
             catch
             {

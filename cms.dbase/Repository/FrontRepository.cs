@@ -30,7 +30,7 @@ namespace cms.dbase
         {
             _context = ConnectionString;
             _domain = (!string.IsNullOrEmpty(DomainUrl)) ? getSiteId(DomainUrl) : "";
-            //_domain = "main";
+            //_domain = "koms-crb";
             LinqToDB.Common.Configuration.Linq.AllowMultipleQuery = true;
         }
         #region redirect methods
@@ -1439,6 +1439,8 @@ namespace cms.dbase
 
                     var queryData = FindPeoplesQuery(people, filter);
 
+
+
                     var result = queryData
                              .Where(w => w.employeespostspeoples.Any(b => b.employeespostsspecializations.b_doctor))
                              .Where(w => w.contentpeopleorglinks.Any(a => !a.b_dismissed))
@@ -1449,87 +1451,45 @@ namespace cms.dbase
                                  FIO = s.c_surname + " " + s.c_name + " " + s.c_patronymic,
                                  Photo = s.c_photo,
                                  SNILS = s.c_snils,
-                                 Posts = db.content_org_employees_postss.Where(p => p.f_people.Equals(s.id)).Select(m => new Specialisation
-                                 {
-                                     Name = m.employeespostsspecializations.c_name
-                                 }).GroupBy(g => g.Name).Select(t => t.First()).ToArray()
-                             }).ToArray();
+                                 Posts = s.contentpeopleorglinks
+                                            .Where(w => w.employeespostsorgemployeess.Any(a => a.employeespostsspecializations.id.Equals(a.f_post)))
+                                            .Where(w => w.f_org.Equals(contentId))
+                                            .Select(g => new EmployeePost
+                                            {
+                                                Name = g.employeespostsorgemployeess.Select(t => t.employeespostsspecializations.c_name).SingleOrDefault()
+                                            }).ToArray()
 
-                    return result;
+                                 #region working
+                                 //Posts = db.content_org_employees_postss
+                                 //            .Where(p => p.f_people.Equals(s.id))
+                                 //            .Select(m => new EmployeePost
+                                 //            {
+                                 //                Name = m.employeespostsspecializations.c_name
+                                 //            }).GroupBy(g => g.Name).Select(t => t.First()).ToArray()
+                                 #endregion
+                             });
+
+                    int itemCount = result.Count();
+                    result = result
+                                .Skip(filter.Size * (filter.Page - 1))
+                                .Take(filter.Size);
+
+                    if (result.Any())
+                    {
+                        return new DoctorList
+                        {
+                            Doctors = result.ToArray(),
+                            Pager = new Pager
+                            {
+                                Page = filter.Page,
+                                Size = filter.Size,
+                                ItemsCount = itemCount
+                            }
+                        };
+                    }
+                    return null;
                 }
                 return null;
-
-                #region comments
-                //Guid department = !string.IsNullOrWhiteSpace(filter.Group) // департамент
-                //                    ? Guid.Parse(filter.Group) : Guid.Empty;
-
-                //var search = !string.IsNullOrWhiteSpace(filter.SearchText)
-                //    ? filter.SearchText.ToLower().Split(' ') : null; // поиск по человеку
-
-                //var people = (from p in db.content_peoples
-                //              join pol in db.content_org_employeess on p.id equals pol.f_people
-                //              where !pol.b_dismissed
-                //              join o in db.content_orgss on pol.f_org equals o.id
-                //              join s in db.cms_sitess on pol.f_org equals s.f_content into ps
-                //              from s in ps.DefaultIfEmpty()
-                //              select new { p, pol, s, o });
-
-                //if (search != null)
-                //{
-                //    foreach (string item in search)
-                //    {
-                //        people = people.Where(w => w.p.c_surname.Contains(item)
-                //                                || w.p.c_name.Contains(item)
-                //                                || w.p.c_patronymic.Contains(item));
-                //    }
-                //}
-
-                //int specialization = !string.IsNullOrWhiteSpace(filter.Type) ? Convert.ToInt32(filter.Type) : 0; // специализация
-
-                //var data = (from p in people
-                //            join pepl in db.content_people_postss on p.p.id equals pepl.f_people
-                //            join ep in db.content_specializationss on pepl.f_post equals ep.id
-                //            join pdl in db.content_department_employeess on p.pol.id equals pdl.f_employee into ps
-                //            from pdl in ps.DefaultIfEmpty()
-                //                //where p.s.c_alias.Equals(domain) &&
-                //            where (department.Equals(Guid.Empty) || pdl.f_department.Equals(department))
-                //                    && ep.b_doctor
-                //                    && (specialization == 0 || pepl.f_post.Equals(specialization))
-                //            orderby ep.id, p.p.c_surname, p.p.c_name, p.p.c_patronymic, pepl.n_type
-                //            select new { p, ep, pepl });
-
-                //if (!string.IsNullOrEmpty(domain))
-                //{
-                //    data = data.Where(n => n.p.s.c_alias.ToLower() == domain);
-                //}
-
-                //if (filter.Specialization != null && filter.Specialization.Count() > 0)
-                //{
-                //    data = data.Where(n => filter.Specialization.Contains(n.ep.id));
-                //}
-
-                //var data2 = data.ToArray()
-                //    .GroupBy(g => new { g.p.p.id })
-                //    .Select(s => new People
-                //    {
-                //        Id = s.Key.id,
-                //        FIO = s.First().p.p.c_surname + " " + s.First().p.p.c_name + " " + s.First().p.p.c_patronymic,
-                //        Photo = s.First().p.p.c_photo,
-                //        SNILS = s.First().p.p.c_snils,
-                //        Posts = s.Select(ep2 => new EmployeePost
-                //        {
-                //            Id = ep2.ep.id,
-                //            Name = ep2.ep.c_name,
-                //            Org = (ep2.p.o.id != null) ? getOrgItemShort(ep2.p.o.id) : null,
-                //            Type = ep2.pepl.n_type
-                //        }).ToArray()
-                //    }).OrderBy(o => o.FIO);
-
-                //if (data2.Any())
-                //    return data2.ToArray();
-
-                //return null;
-                #endregion
             }
         }
 
@@ -1542,41 +1502,24 @@ namespace cms.dbase
         {
             using (var db = new CMSdb(_context))
             {
-                var xmlInfos = db.content_people_infos
-                    .Where(w => w.f_people.Equals(id))
-                    .Select(s => s.c_xml)
-                    .ToArray();
-
-                var query = (from p in db.content_peoples
-                             join pol in db.content_org_employeess on p.id equals pol.f_people into pol2
-                             from pol in pol2.DefaultIfEmpty()
-                             join pdl in db.content_department_employeess on pol.id equals pdl.f_employee into pdl2
-                             from pdl in pdl2.DefaultIfEmpty()
-                             join msel in db.content_gs_memberss on p.id equals msel.f_people into msel2
-                             from msel in msel2.DefaultIfEmpty()
-                             join s in db.cms_sitess on msel.f_gs equals s.f_content into s2
-                             from s in s2.DefaultIfEmpty()
-                             join ms in db.content_gss on msel.f_gs equals ms.id into ms2
-                             from ms in ms2.DefaultIfEmpty()
-                             where p.id.Equals(id)
-                             select new { p, s.c_alias, ms.c_name });
-
-                var data = query.ToArray()
-                    .GroupBy(p => new { p.p.id })
+                return db.content_peoples
+                    .Where(w => w.id.Equals(id))
                     .Select(s => new PeopleModel
                     {
-                        Id = s.Key.id,
-                        FIO = s.First().p.c_surname + " " + s.First().p.c_name + " " + s.First().p.c_patronymic,
-                        Photo = s.First().p.c_photo,
-                        GS = new GSModel
-                        {
-                            Title = s.First().c_name,
-                            Url = !String.IsNullOrWhiteSpace(s.First().c_alias) ? getSiteDefaultDomain(s.First().c_alias) : null
-                        },
-                        XmlInfo = xmlInfos
-                    });
-
-                return data.SingleOrDefault();
+                        Id = s.id,
+                        FIO = s.c_surname + " " + s.c_name + " " + s.c_patronymic,
+                        Photo = s.c_photo,
+                        //GsUrl = getSiteDefaultDomain(_domain),
+                        //MainSpec = s.mainspecialistpeoplecontentpeoples
+                        //                .Select(m => new MainSpecialistModel
+                        //                {
+                        //                    Title = m.mainspecialistpeoplemainspecialists.c_name
+                        //                }).SingleOrDefault(),
+                        XmlInfo = s.contentpeopleinfocontentpeoples
+                                        .Where(w => w.f_people.Equals(s.id))
+                                        .Select(d => d.c_xml)
+                                        .ToArray()
+                    }).SingleOrDefault();
             }
         }
 
@@ -2436,7 +2379,9 @@ namespace cms.dbase
         {
             using (var db = new CMSdb(_context))
             {
-                var people = db.content_peoples.AsQueryable();
+                var people = db.content_peoples
+                                    .Where(w => w.contentpeopleorglinks.Any(a => !a.b_dismissed))
+                                    .Where(w => w.employeespostspeoples.Any(b => b.employeespostsspecializations.b_doctor));
 
                 var queryData = FindPeoplesQuery(people, filter);
 
@@ -2462,104 +2407,6 @@ namespace cms.dbase
                     };
                 }
                 return null;
-
-
-                #region comments
-                //var search = !string.IsNullOrWhiteSpace(filter.SearchText)
-                //    ? filter.SearchText.ToLower().Split(' ') : null; // поиск по человеку
-
-
-                //var people = (from p in db.content_peoples
-                //              select p);
-
-                //if (search != null)
-                //{
-                //    foreach (string item in search)
-                //    {
-                //        people = people.Where(w => w.c_surname.Contains(item)
-                //                                || w.c_name.Contains(item)
-                //                                || w.c_patronymic.Contains(item));
-                //    }
-                //}
-                //string post = !string.IsNullOrWhiteSpace(filter.Type)
-                //    ? filter.Type : null;
-
-                //var doctors = (from p in people
-                //               join pol in db.content_org_employeess on p.id equals pol.f_people
-                //               where !pol.b_dismissed
-                //               join o in db.content_orgss on pol.f_org equals o.id
-                //               join s in db.cms_sitess on o.id equals s.f_content into ss
-                //               from s in ss.DefaultIfEmpty()
-                //               where s.f_content == null || s.f_content == o.id
-                //               join pepl in db.content_people_postss on p.id equals pepl.f_people
-                //               join ep in db.content_specializationss on pepl.f_post equals ep.id
-                //               where (post == null || pepl.f_post.ToString().Equals(post)) && ep.b_doctor
-                //               orderby p.c_surname, p.c_name, p.c_patronymic, ep.c_name
-                //               select new
-                //               {
-                //                   p = new
-                //                   {
-                //                       id = p.id,
-                //                       surname = p.c_surname,
-                //                       name = p.c_name,
-                //                       patronymic = p.c_patronymic,
-                //                       photo = p.c_photo
-                //                   },
-                //                   ep = new
-                //                   {
-                //                       id = ep.id,
-                //                       name = ep.c_name,
-                //                       org = pol.f_org,
-                //                       title = !string.IsNullOrEmpty(o.c_title_short) ? o.c_title_short : o.c_title,
-                //                       domain = s.c_alias.ToLower()
-                //                   },
-                //                   pepl = new
-                //                   {
-                //                       type = pepl.n_type
-                //                   }
-                //               });
-
-                //// кол-во докторов
-                //int itemCount = doctors.Count();
-
-                //doctors = doctors
-                //    .Skip(filter.Size * (filter.Page - 1))
-                //    .Take(filter.Size)
-                //    .Select(s => s);
-
-                //var doctors2 = doctors
-                //    .ToArray()
-                //    .GroupBy(g => g.p.id)
-                //    .Select(s => new People
-                //    {
-                //        Id = s.First().p.id,
-                //        FIO = s.First().p.surname + " " + s.First().p.name + " " + s.First().p.patronymic,
-                //        Photo = s.First().p.photo,
-                //        Posts = s.Select(ep2 => new PeoplePost
-                //        {
-                //            Id = ep2.ep.id,
-                //            Name = ep2.ep.name,
-                //            Org = getOrgItem(ep2.ep.org),
-                //            Type = ep2.pepl.type
-                //        }).ToArray()
-                //    });
-
-                //if (doctors2.Any())
-                //{
-                //    return new DoctorList()
-                //    {
-                //        Doctors = doctors2.ToArray(),
-                //        Pager = new Pager()
-                //        {
-                //            Page = filter.Page,
-                //            Size = filter.Size,
-                //            ItemsCount = itemCount,
-                //            //PageCount = (itemCount % filter.Size > 0) ? (itemCount / filter.Size) + 1 : itemCount / filter.Size
-                //        }
-                //    };
-                //}
-                //return null;
-                #endregion
             }
         }
 
@@ -3268,6 +3115,29 @@ namespace cms.dbase
 
                 if (!data.Any()) return null;
                 else return data.FirstOrDefault();
+            }
+        }
+
+        /// <summary>
+        /// Возвращает идентификатор импорта по организации
+        /// </summary>
+        /// <returns></returns>
+        public override OrgsShortModel getCurrentOrgImportGuid()
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var result = (from o in db.content_orgss
+                              join s in db.cms_sitess on o.id equals s.f_content
+                              where s.c_alias.Equals(_domain)
+                              select new OrgsShortModel
+                              {
+                                  Id = (Guid)o.f_guid,
+                                  Title = o.c_title
+                              });
+
+                if (result.Any())
+                    return result.SingleOrDefault();
+                return null;
             }
         }
 

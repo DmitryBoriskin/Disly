@@ -3,11 +3,11 @@
 
 <div class="row">
     <div class="col-md-8">
-        @if (Model.DoctorsList != null && Model.DoctorsList.Count() > 0)
+        @if (Model.DoctorsList != null && Model.DoctorsList.Doctors.Count() > 0)
         {
             <table class="table">
 
-                @foreach (var item in Model.DoctorsList)
+                @foreach (var item in Model.DoctorsList.Doctors)
                 {
                     string link = "/" + ViewBag.ControllerName + "/" + item.Id;
 
@@ -50,6 +50,11 @@
                     </tr>
                 }
             </table>
+
+            if (Model.DoctorsList != null && Model.DoctorsList.Pager != null)
+            {
+                @Html.Partial("Part/Pager", Model.DoctorsList.Pager)
+            }
         }
     </div>
     <div class="col-md-1"></div>
