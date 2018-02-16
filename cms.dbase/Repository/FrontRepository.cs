@@ -1543,38 +1543,59 @@ namespace cms.dbase
         {
             using (var db = new CMSdb(_context))
             {
-                var xmlInfos = db.content_people_infos
-                    .Where(w => w.f_people.Equals(id))
-                    .Select(s => s.c_xml)
-                    .ToArray();
-
-                var query = (from p in db.content_peoples
-                             join pol in db.content_org_employeess on p.id equals pol.f_people into pol2
-                             from pol in pol2.DefaultIfEmpty()
-                             join pdl in db.content_department_employeess on pol.id equals pdl.f_employee into pdl2
-                             from pdl in pdl2.DefaultIfEmpty()
-                             join msel in db.content_main_specialist_peoples on p.id equals msel.f_people into msel2
-                             from msel in msel2.DefaultIfEmpty()
-                             join s in db.cms_sitess on msel.f_main_specialist equals s.f_content into s2
-                             from s in s2.DefaultIfEmpty()
-                             join ms in db.content_main_specialistss on msel.f_main_specialist equals ms.id into ms2
-                             from ms in ms2.DefaultIfEmpty()
-                             where p.id.Equals(id)
-                             select new { p, s.c_alias, ms.c_name });
-
-                var data = query.ToArray()
-                    .GroupBy(p => new { p.p.id })
+                return db.content_peoples
+                    .Where(w => w.id.Equals(id))
                     .Select(s => new People
                     {
-                        Id = s.Key.id,
-                        FIO = s.First().p.c_surname + " " + s.First().p.c_name + " " + s.First().p.c_patronymic,
-                        Photo = s.First().p.c_photo,
-                        GsUrl = !String.IsNullOrWhiteSpace(s.First().c_alias) ? getSiteDefaultDomain(s.First().c_alias) : null,
-                        MainSpec = new MainSpecialistModel { Title = s.First().c_name },
-                        XmlInfo = xmlInfos
-                    });
+                        Id = s.id,
+                        FIO = s.c_surname + " " + s.c_name + " " + s.c_patronymic,
+                        Photo = s.c_photo,
+                        GsUrl = getSiteDefaultDomain(_domain),
+                        MainSpec = s.mainspecialistpeoplecontentpeoples
+                                        .Select(m => new MainSpecialistModel
+                                        {
+                                            Title = m.mainspecialistpeoplemainspecialists.c_name
+                                        }).SingleOrDefault(),
+                        XmlInfo = s.contentpeopleinfocontentpeoples
+                                        .Where(w => w.f_people.Equals(s.id))
+                                        .Select(d => d.c_xml)
+                                        .ToArray()
+                    }).SingleOrDefault();
 
-                return data.SingleOrDefault();
+                #region comments
+                //var xmlInfos = db.content_people_infos
+                //    .Where(w => w.f_people.Equals(id))
+                //    .Select(s => s.c_xml)
+                //    .ToArray();
+
+                //var query = (from p in db.content_peoples
+                //             join pol in db.content_org_employeess on p.id equals pol.f_people into pol2
+                //             from pol in pol2.DefaultIfEmpty()
+                //             join pdl in db.content_department_employeess on pol.id equals pdl.f_employee into pdl2
+                //             from pdl in pdl2.DefaultIfEmpty()
+                //             join msel in db.content_main_specialist_peoples on p.id equals msel.f_people into msel2
+                //             from msel in msel2.DefaultIfEmpty()
+                //             join s in db.cms_sitess on msel.f_main_specialist equals s.f_content into s2
+                //             from s in s2.DefaultIfEmpty()
+                //             join ms in db.content_main_specialistss on msel.f_main_specialist equals ms.id into ms2
+                //             from ms in ms2.DefaultIfEmpty()
+                //             where p.id.Equals(id)
+                //             select new { p, s.c_alias, ms.c_name });
+
+                //var data = query.ToArray()
+                //    .GroupBy(p => new { p.p.id })
+                //    .Select(s => new People
+                //    {
+                //        Id = s.Key.id,
+                //        FIO = s.First().p.c_surname + " " + s.First().p.c_name + " " + s.First().p.c_patronymic,
+                //        Photo = s.First().p.c_photo,
+                //        GsUrl = !String.IsNullOrWhiteSpace(s.First().c_alias) ? getSiteDefaultDomain(s.First().c_alias) : null,
+                //        MainSpec = new MainSpecialistModel { Title = s.First().c_name },
+                //        XmlInfo = xmlInfos
+                //    });
+
+                //return data.SingleOrDefault();
+                #endregion
             }
         }
 
@@ -2365,7 +2386,9 @@ namespace cms.dbase
         {
             using (var db = new CMSdb(_context))
             {
-                var people = db.content_peoples.AsQueryable();
+                var people = db.content_peoples
+                                    .Where(w => w.contentpeoplepostscontentpeoples.Any(b => b.contentpeoplepostscontentspecializations.b_doctor))
+                                    .Where(w => w.contentpeopleorglinks.Any(a => !a.b_dismissed));
 
                 var queryData = FindPeoplesQuery(people, filter);
 

@@ -132,7 +132,6 @@ namespace Integration.Frmp.models
 		[Column(@"b_sex"),           Nullable         ] public bool?     BSex        { get; set; } // bit
 		[Column(@"d_birthdate"),     Nullable         ] public DateTime? DBirthdate  { get; set; } // datetime2(7)
 		[Column(@"d_modify"),        Nullable         ] public DateTime? DModify     { get; set; } // datetime2(7)
-		[Column(@"xml_info"),        Nullable         ] public string    XmlInfo     { get; set; } // nvarchar(max)
 		[Column(@"c_photo"),         Nullable         ] public string    CPhoto      { get; set; } // varchar(max)
 	}
 
@@ -142,18 +141,6 @@ namespace Integration.Frmp.models
 		[Column(@"id"),     PrimaryKey,  NotNull] public int    Id     { get; set; } // int
 		[Column(@"parent"),    Nullable         ] public int?   Parent { get; set; } // int
 		[Column(@"name"),                NotNull] public string Name   { get; set; } // nvarchar(512)
-	}
-
-	public static partial class DbModelStoredProcedures
-	{
-		#region ImportFrmpEmployees
-
-		public static int ImportFrmpEmployees(this DataConnection dataConnection)
-		{
-			return dataConnection.ExecuteProc("[dbo].[import_frmp_employees]");
-		}
-
-		#endregion
 	}
 
 	public static partial class TableExtensions

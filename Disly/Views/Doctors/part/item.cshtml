@@ -7,7 +7,7 @@
             var link = string.Format("http://{0}", Model.DoctorsItem.GsUrl);
             <div>
                 <strong>Главный специалист: </strong>
-                @if (Model.DoctorsItem.MainSpec != null)
+                @if (Model.DoctorsItem.MainSpec != null && !String.IsNullOrEmpty(Model.DoctorsItem.MainSpec.Title))
                 {
                     <a href="@link" target="_blank">@Model.DoctorsItem.MainSpec.Title</a>
                 }
