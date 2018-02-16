@@ -1,6 +1,4 @@
 ﻿using cms.dbModel.entity;
-using cms.dbModel.entity.cms;
-using System.Collections.Generic;
 
 namespace Disly.Models
 {
@@ -20,16 +18,15 @@ namespace Disly.Models
         /// <summary>
         /// Список докторов главных специалистов
         /// </summary>
-        public People[] SpesialitsList { get; set; }
+        public GSMemberModel[] SpesialitsList { get; set; }
         /// <summary>
         /// Экспертный состав
         /// </summary>
-        public People[] ExpertsList { get; set; }
+        public GSMemberModel[] ExpertsList { get; set; }
         /// <summary>
         /// Список докторов по специальности
         /// </summary>
-        public People[] DoctorsList { get; set; }
-
+        public EmployeeModel[] EmployeeList { get; set; }
 
     }
 }

@@ -1515,6 +1515,7 @@ namespace cms.dbase.models
 		[Column,        Nullable] public string c_org_address { get; set; } // nchar(500)
 		[Column,        Nullable] public string c_org_phone   { get; set; } // nvarchar(100)
 		[Column,        Nullable] public string c_org_fax     { get; set; } // nvarchar(100)
+		[Column,        Nullable] public string c_org_email   { get; set; } // nvarchar(100)
 
 		#region Associations
 

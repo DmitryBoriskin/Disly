@@ -1,7 +1,6 @@
 ﻿using cms.dbModel;
 using System;
 using System.Linq;
-using cms.dbModel.entity.cms;
 using cms.dbase.models;
 using LinqToDB;
 using cms.dbModel.entity;
@@ -43,7 +42,7 @@ namespace cms.dbase
                         {
                             Url = s.First().emp.c_photo
                         },
-                        Posts = s.Select(d => new EmployeePost
+                        Posts = s.Select(d => new Specialisation
                         {
                             Id = d.pe.id,
                             Parent = d.pe.n_parent,

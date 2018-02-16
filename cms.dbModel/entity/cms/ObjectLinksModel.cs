@@ -1,6 +1,4 @@
-﻿using cms.dbModel.entity.cms;
-using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System;
 
 namespace cms.dbModel.entity
 {

@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace cms.dbModel.entity.cms
+
+namespace cms.dbModel.entity
 {
     /// <summary>
     /// Модель, описывающая сотрудиника
@@ -64,14 +61,14 @@ namespace cms.dbModel.entity.cms
         /// <summary>
         /// Список занимаемых должностей
         /// </summary>
-        public EmployeePost[] Posts { get; set; }
+        public Specialisation[] Posts { get; set; }
 
     }
 
     /// <summary>
     /// Должность сотрудника
     /// </summary>
-    public class EmployeePost
+    public class Specialisation
     {
         /// <summary>
         /// Идентификатор

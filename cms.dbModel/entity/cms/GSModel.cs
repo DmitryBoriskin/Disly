@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace cms.dbModel.entity.cms
+namespace cms.dbModel.entity
 {
     /// <summary>
     /// Список главных специалистов и пейджер
@@ -42,11 +42,6 @@ namespace cms.dbModel.entity.cms
         public string Desc { get; set; }
 
         /// <summary>
-        /// Специализация
-        /// </summary>
-        public int[] Specialisations { get; set; }
-
-        /// <summary>
         /// Идентификатор сайта
         /// </summary>
         public Guid? SiteId { get; set; }
@@ -62,26 +57,23 @@ namespace cms.dbModel.entity.cms
         public string Url { get; set; }
 
         /// <summary>
-        /// id людей Главных специалистов
+        /// Специализация
         /// </summary>
-        public IEnumerable<Guid> SpecialistsId { get; set; }
+        public int[] Specialisations { get; set; }
+
         /// <summary>
         /// Главные специалисты
         /// </summary>
-        public People[] Specialists { get; set; }
+        public GSMemberModel[] Specialists { get; set; }
 
-        /// <summary>
-        /// id людей Экспертный совет
-        /// </summary>
-        public IEnumerable<Guid> ExpertsId { get; set; }
         /// <summary>
         /// Экспертный совет
         /// </summary>
-        public People[] Experts { get; set; }
+        public GSMemberModel[] Experts { get; set; }
     }
 
     /// <summary>
-    /// Модель, описывающая главного специалиста для привязки
+    /// Модель, описывающая гc для привязки к объектам
     /// </summary>
     public class GSShortModel
     {
@@ -113,10 +105,15 @@ namespace cms.dbModel.entity.cms
     public class GSMemberModel
     {
         /// <summary>
+        /// member id
+        /// </summary>
+        public Guid Id { get; set; }
+
+        /// <summary>
         /// id гc
         /// </summary>
         [Required(ErrorMessage = "Обязательный параметр")]
-        public Guid Id { get; set; }
+        public Guid GSId { get; set; }
 
         /// <summary>
         /// тип (spec or expert)
@@ -125,14 +122,19 @@ namespace cms.dbModel.entity.cms
         public GSMemberType MemberType { get; set; }
 
         /// <summary>
-        /// Идентификатор (человека f_people)
+        /// Инфо о человеке
         /// </summary>
-        public Guid PeopleId { get; set; }
+        public PeopleModel People { get; set; }
 
         /// <summary>
-        /// Информация о враче
+        /// организации в которых он работает
         /// </summary>
-        [Required(ErrorMessage = "Обязательный параметр")]
-        public EmployeeModel Employee { get; set; }
+        public OrgsModel[] Orgs { get; set; }
+
+        /// <summary>
+        /// Должности человека
+        /// </summary>
+        public Specialisation[] Posts { get; set; }
+
     }
 }

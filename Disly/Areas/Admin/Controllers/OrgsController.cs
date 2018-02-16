@@ -1,6 +1,7 @@
 ﻿using cms.dbModel.entity;
 using Disly.Areas.Admin.Models;
 using Disly.Areas.Admin.Service;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -73,7 +74,7 @@ namespace Disly.Areas.Admin.Controllers
             #endregion
 
             var orgfilter = FilterParams.Extend<OrgFilter>(filter);
-            orgfilter.except = orgId;
+            orgfilter.Except = orgId;
 
             // Текущая организация
             if (orgId != null)
@@ -222,17 +223,18 @@ namespace Disly.Areas.Admin.Controllers
             #endregion
 
             #endregion
+
+            if (back_model.Item != null && !string.IsNullOrEmpty(back_model.Item.ExtUrl))
+            {
+                back_model.Item.ExtUrl = back_model.Item.ExtUrl.Replace("http://", "");
+                back_model.Item.ExtUrl = back_model.Item.ExtUrl.Replace("https://", "");
+            }
+
             if (model.Item != null)
             {
                 #region обновление
                 if (ModelState.IsValid)
                 {
-                    if (!string.IsNullOrEmpty(back_model.Item.ExtUrl))
-                    {
-                        back_model.Item.ExtUrl = back_model.Item.ExtUrl.Replace("http://", "");
-                        back_model.Item.ExtUrl = back_model.Item.ExtUrl.Replace("https://", "");
-                    }
-
                     _cmsRepository.updateOrg(id, back_model.Item); //, AccountInfo.id, RequestUserInfo.IP
                     userMessege.info = "Запись сохранена";
                     userMessege.buttons = new ErrorMassegeBtn[]
@@ -997,7 +999,7 @@ namespace Disly.Areas.Admin.Controllers
             var _peopList = _cmsRepository.getPersonsThisOrg(OrgId);
             if (_peopList != null)
             {
-                model.PeopleList = (model.AdministrativItem != null) ? new SelectList(_peopList, "Id", "FIO", model.AdministrativItem.PeopleF) : new SelectList(_peopList, "Id", "FIO");
+                model.PeopleList = (model.AdministrativItem != null) ? new SelectList(_peopList, "Id", "FIO", model.AdministrativItem.PeopleId) : new SelectList(_peopList, "Id", "FIO");
             }
             #endregion
            
@@ -1153,5 +1155,28 @@ namespace Disly.Areas.Admin.Controllers
         }
 
         #endregion
+        
+        /// <summary>
+        /// Получение списка организаций для человека
+        /// </summary>
+        /// <param name="peopleId"></param>
+        /// <returns></returns>
+        public string OrgListForSelect(Guid? peopleId = null)
+        {
+            var orgfilter = FilterParams.Extend<OrgFilter>(filter);
+            orgfilter.PeopleId = peopleId;
+
+            OrgsModel[] OrgList = _cmsRepository.getOrgs(orgfilter); // список организаций
+            var orglist = OrgList
+                                .Select(p => new 
+                                {
+                                     id = p.Id,
+                                     title = !string.IsNullOrEmpty(p.ShortTitle) ? p.ShortTitle : p.Title
+                                }).ToArray();
+
+            var data = JsonConvert.SerializeObject(orglist);
+
+            return data;
+        }
     }
 }

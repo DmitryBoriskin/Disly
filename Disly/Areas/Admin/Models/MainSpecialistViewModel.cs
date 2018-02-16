@@ -1,4 +1,4 @@
-﻿using cms.dbModel.entity.cms;
+﻿using cms.dbModel.entity;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -8,12 +8,9 @@ namespace Disly.Areas.Admin.Models
     /// <summary>
     /// Модель для представления главных специалистов
     /// </summary>
-    public class MainSpecialistViewModel : CoreViewModel
+    public class GSViewModel : CoreViewModel
     {
-        /// <summary>
-        /// Список должностей
-        /// </summary>
-        public IEnumerable<EmployeePost> EmployeePostList { get; set; }
+        
 
         /// <summary>
         /// Список главных специалистов
@@ -26,17 +23,23 @@ namespace Disly.Areas.Admin.Models
         public GSModel Item { get; set; }
 
         /// <summary>
+        /// Список должностей/специализации
+        /// </summary>
+        public Specialisation[] Spesializations { get; set; }
+
+        /// <summary>
         /// Список сотрудников по специализации
         /// </summary>
-        public IEnumerable<EmployeeModel> EmployeeList { get; set; }
+        public EmployeeModel[] EmployeeList { get; set; }
 
         /// <summary>
         /// Список всех врачей
         /// </summary>
-        public IEnumerable<EmployeeModel> AllDoctors { get; set; }
+        public EmployeeModel[] AllDoctors { get; set; }
     }
 
-    public class GSEmployeeViewModel: CoreViewModel
+
+    public class GSMemberViewModel: CoreViewModel
     {
         
         /// <summary>

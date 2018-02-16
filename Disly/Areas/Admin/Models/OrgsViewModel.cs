@@ -65,7 +65,7 @@ namespace Disly.Areas.Admin.Models
         /// <summary>
         /// Список медицинских услуг
         /// </summary>
-        public MedicalService[] MedicalServices { get; set; }
+        public MedServiceModel[] MedicalServices { get; set; }
 
         /// <summary>
         /// Права на структуру

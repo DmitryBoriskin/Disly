@@ -243,6 +243,7 @@
     <Content Include="Content\plugins\datatables\datatables.min.js" />
     <Content Include="Content\plugins\Disly\DislyControls.js" />
     <Content Include="Content\plugins\Disly\DislyControls.css" />
+    <Content Include="Content\plugins\formSerialize\jquery.serialize-object.min.js" />
     <Content Include="Content\plugins\icheck\icheck.js" />
     <Content Include="Content\plugins\icheck\icheck.min.js" />
     <Content Include="Content\plugins\icheck\skins\all.css" />

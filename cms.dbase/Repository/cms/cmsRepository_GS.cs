@@ -4,7 +4,6 @@ using cms.dbModel;
 using cms.dbModel.entity;
 using cms.dbase.models;
 using LinqToDB;
-using cms.dbModel.entity.cms;
 
 namespace cms.dbase
 {
@@ -17,14 +16,14 @@ namespace cms.dbase
         /// Получим список должностей сотрудников
         /// </summary>
         /// <returns></returns>
-        public override EmployeePost[] getEmployeePosts()
+        public override Specialisation[] getEmployeePosts()
         {
             using (var db = new CMSdb(_context))
             {
                 var query = db.content_specializationss
                     .Where(w => w.b_doctor)
                     .OrderBy(o => o.id)
-                    .Select(s => new EmployeePost
+                    .Select(s => new Specialisation
                     {
                         Id = s.id,
                         Parent = s.n_parent,
@@ -41,13 +40,13 @@ namespace cms.dbase
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public override EmployeePost getEmployeePost(int id)
+        public override Specialisation getEmployeePost(int id)
         {
             using (var db = new CMSdb(_context))
             {
                 var query = db.content_specializationss
                     .Where(w => w.id.Equals(id))
-                    .Select(s => new EmployeePost
+                    .Select(s => new Specialisation
                     {
                         Id = s.id,
                         Parent = s.n_parent,
@@ -146,10 +145,11 @@ namespace cms.dbase
                           Id = s.id,
                           Title = s.c_name,
                           Desc = s.c_desc,
-                          SiteId = (from site in db.cms_sitess
-                                    join cms in db.content_gss on site.f_content equals cms.id
-                                    where cms.id.Equals(s.id)
-                                    select site.id).SingleOrDefault(),
+                          SiteId = db.cms_sitess.Where(p => p.f_content == s.id).Select(p => p.id).SingleOrDefault(),
+                          //(from site in db.cms_sitess
+                          // join cms in db.content_gss on site.f_content equals cms.id
+                          // where cms.id.Equals(s.id)
+                          // select site.id).SingleOrDefault(),
                           Specialisations = s.gsspecialisationsgss.Where(sp => sp.f_gs == id).Any() ?
                                                 s.gsspecialisationsgss
                                                         .Where(sp => sp.f_gs == id)
@@ -161,20 +161,6 @@ namespace cms.dbase
                           // on l.f_main_specialist equals m.id
                           // where l.f_main_specialist.Equals(s.id)
                           // select l.f_specialisation).ToArray(),
-                          //Получаем в контроллере 
-                          //EmployeeMainSpecs = (from l in db.content_main_specialist_peoples
-                          //                     join m in db.content_main_specialistss
-                          //                     on l.f_main_specialist equals m.id
-                          //                     where (l.f_main_specialist.Equals(s.id) && l.f_type.Equals("main"))
-                          //                     select l.f_people).ToArray(),
-
-                          //Получаем в контроллере 
-                          //EmployeeExpSoviet = (from l in db.content_main_specialist_peoples
-                          //                     join m in db.content_main_specialistss
-                          //                     on l.f_main_specialist equals m.id
-                          //                     where (l.f_main_specialist.Equals(s.id) && l.f_type.Equals("soviet"))
-                          //                     select l.f_people).ToArray()
-
                       });
 
                 if (!query.Any()) return null;
@@ -188,20 +174,23 @@ namespace cms.dbase
         /// <param name="mainSpecialistId"></param>
         /// <param name="type"></param>
         /// <returns></returns>
-        public override People[] getGSMembers(Guid mainSpecialistId, GSMemberType type)
+        public override GSMemberModel[] getGSMembers(Guid mainSpecialistId, GSMemberType type)
         {
             using (var db = new CMSdb(_context))
             {
                 var query = db.content_gs_memberss
                             .Where(p => p.f_gs == mainSpecialistId)
                             .Where(p => p.f_type == type.ToString().ToLower())
-                            .Select(p => new People()
+                            .Select(p => new GSMemberModel()
                             {
-                                IdLinkGS = p.id,
-                                Id = p.f_people,
-                                FIO = String.Format("{0} {1} {2}", p.gsmemberspeople.c_surname, p.gsmemberspeople.c_name, p.gsmemberspeople.c_patronymic),
-                               
-                                //Дописать
+                                Id = p.id,
+                                GSId = p.f_gs,
+                                People = new PeopleModel()
+                                {
+                                    Id = p.f_people,
+                                    FIO = String.Format("{0} {1} {2}", p.gsmemberspeople.c_surname, p.gsmemberspeople.c_name, p.gsmemberspeople.c_patronymic),
+                                    Photo = p.gsmemberspeople.c_photo,
+                                }
                             });
                 if (query.Any())
                     return query.ToArray();
@@ -210,7 +199,6 @@ namespace cms.dbase
             }
         }
 
-        
 
         /// <summary>
         /// Получаем список сотрудников для выпадающих списков
@@ -228,23 +216,20 @@ namespace cms.dbase
                     query = query.Where(w => w.f_post != null && specialisations.Contains(w.f_post.Value));
                 }
 
-#warning Исправить в базе (Guid)s.id
-
                 var data = query
                     .OrderBy(o => o.c_surname)
                     .ThenBy(o => o.c_name)
                     .ThenBy(o => o.c_patronymic)
-                    .Select(s => new EmployeeModel
+                    .Select(s => new EmployeeModel()
                     {
-                        Id = (Guid)s.id, 
+                        Id = (Guid)s.id, //По причине left join'a может быть null, не должно быть такого
                         PeopleId = s.f_people,
                         Surname = s.c_surname,
                         Name = s.c_name,
-                        Patronymic = s.c_patronymic
-                        
+                        Patronymic = s.c_patronymic,
                     });
 
-                if (query.Any())
+                if (data.Any())
                     return data.ToArray();
 
                 return null;
@@ -356,39 +341,47 @@ namespace cms.dbase
             {
                 using (var tran = db.BeginTransaction())
                 {
-                    var newMemberId = Guid.NewGuid();
-                    db.content_gs_memberss
-                                .Value(v => v.id, newMemberId)
-                                .Value(v => v.f_gs, item.Id)
-                                .Value(v => v.f_people, item.PeopleId)
-                                .Value(v => v.f_type, item.MemberType.ToString().ToLower())
-                                .Insert();
-
-
-                    if (item.Employee != null && item.Employee.Orgs != null && item.Employee.Orgs.Count() > 0)
+                    try
                     {
-                        foreach (var org in item.Employee.Orgs)
+                        var newMemberId = Guid.NewGuid();
+                        db.content_gs_memberss
+                                    .Value(v => v.id, newMemberId)
+                                    .Value(v => v.f_gs, item.GSId)
+                                    .Value(v => v.f_people, item.People.Id)
+                                    .Value(v => v.f_type, item.MemberType.ToString().ToLower())
+                                    .Insert();
+
+
+                        if (item.Orgs != null && item.Orgs.Count() > 0)
                         {
-                            var orgId = (org.Id != Guid.Empty) ? org.Id : (Guid?)null;
-                            var cdContact = new content_gs_members_contacts()
+                            foreach (var org in item.Orgs)
                             {
-                                id = Guid.NewGuid(),
-                                f_gs_member = newMemberId,
+                                var orgId = (org.Id != Guid.Empty) ? org.Id : (Guid?)null;
+                                var cdContact = new content_gs_members_contacts()
+                                {
+                                    id = Guid.NewGuid(),
+                                    f_gs_member = newMemberId,
 
-                                //Записываем либо orgId, либо введенные вручную данные
-                                f_org = orgId,
-                                c_org_title = (orgId == null) ? org.Title : null,
-                                c_org_address = (orgId == null) ? org.Address : null,
-                                c_org_phone = (orgId == null) ? org.Phone : null,
-                                c_org_fax = (orgId == null) ? org.Fax : null,
-                                c_org_site = (orgId == null) ? org.Url : null
-                            };
-                            db.Insert(cdContact);
+                                    //Записываем либо orgId, либо введенные вручную данные
+                                    f_org = orgId,
+                                    c_org_title = (orgId == null) ? org.Title : null,
+                                    c_org_address = (orgId == null) ? org.Address : null,
+                                    c_org_phone = (orgId == null) ? org.Phone : null,
+                                    c_org_fax = (orgId == null) ? org.Fax : null,
+                                    c_org_site = (orgId == null) ? org.Url : null,
+                                    c_org_email = (orgId == null) ? org.Email : null
+                                };
+                                db.Insert(cdContact);
+                            }
                         }
-                    }
 
-                    tran.Commit();
-                    return true;
+                        tran.Commit();
+                        return true;
+                    }
+                    catch(Exception ex)
+                    {
+                        return false;
+                    }
                 }
             }
         }

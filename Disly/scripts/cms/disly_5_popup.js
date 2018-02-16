@@ -340,7 +340,7 @@
         }
     });
 
-    //Привязка к главным специалистам 
+    //Привязка к гс
     $("#modal-spec-table .spec-item-chkbx").on('ifToggled', function () {
         var targetUrl = "/Admin/MainSpecialist/UpdateLinkToSpec";
         var _objctId = $(this).data("objectId");
@@ -404,6 +404,74 @@
         catch (ex) {
             console.log(ex);
         }
+    });
+
+
+    function CheckFormData(form) {
+        if ($("#member-people-select").val()) {
+            if ($(".member-people-org-select").val()) {
+                return true;
+            }
+            else {
+                var flag = false;
+                form.find("input").not(":hidden").each(function (e) {
+                    if ($(this).val()) {
+                        flag = true;
+                    }
+                });
+                if (flag)
+                    return true;
+            }
+        }
+        return false;
+    }
+
+    $("#member-save-btn").on("click", function (e) {
+        e.preventDefault();
+        var form = $("form");
+        if (CheckFormData(form)) {
+            form.submit();
+            setTimeout(top.document.location.reload(), 3000);
+        }
+        else {
+            $("#error-message-box").removeClass("hidden");
+        }
+    });
+
+    $("#member-people-select").on("change", function (e) {
+        $(".member-people-org-select").select2({
+            placeholder: "Выберите организацию",
+            language: "ru",
+            width: "100%",
+            triggerChange: true,
+            allowClear: true,
+            //minimumInputLength: 1,
+
+            ajax: {
+                method: "POST",
+                url: "/admin/orgs/orglistforselect",
+                dataType: 'json',
+                delay: 500,
+                data: { peopleId: $("#member-people-select").val() },
+                processResults:
+                        function (data, params) {
+                            var obj = $.map(data, function (item, indx) {
+                                return {
+                                    id: item.id,
+                                    text: item.title
+                                }
+                            });
+                            return { results: obj };
+                        },
+                cache: true
+            }
+        });
+    });
+
+    $("#mainSpec-orgSite-input").on("change", function (e) {
+        var newval = $(this).val().replace("http://", "");
+        newval = $(this).val().replace("https://", "");
+        $(this).val(newval);
     });
 
 })

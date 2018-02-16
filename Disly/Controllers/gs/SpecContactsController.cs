@@ -77,14 +77,26 @@ namespace Disly.Controllers
             var filter = getFilter();
             filter.Domain = null;
             var pfilter = FilterParams.Extend<PeopleFilter>(filter);
-            var mainSpec = _repository.getGSItem(model.SitesInfo.ContentId);
-            if (mainSpec != null)
+            var gs = _repository.getGSItem(model.SitesInfo.ContentId);
+            if (gs != null)
             {
-                model.MainSpec = mainSpec;
-                if(mainSpec.SpecialistsId != null)
+                model.GS = gs;
+
+                //Получение списков врачей, относящихся к гс по типам
+                model.SpesialitsList = _repository.getGSMembers(gs.Id, GSMemberType.SPEC);
+                if (model.SpesialitsList != null && model.SpesialitsList.Count() > 0)
                 {
-                    pfilter.Id = mainSpec.SpecialistsId.ToArray();
-                    model.SpesialitsList = _repository.getPeopleList(pfilter);
+                    foreach (var item in model.SpesialitsList)
+                    {
+                        if (item.People != null)
+                        {
+                            var fltr = new OrgFilter()
+                            {
+                                PeopleId = item.People.Id
+                            };
+                            item.Orgs = _repository.getGsMemberContacts(item.Id);
+                        }
+                    }
                 }
             }
 
