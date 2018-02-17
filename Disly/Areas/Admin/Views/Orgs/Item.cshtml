@@ -18,7 +18,7 @@
             @Html.TextBoxFor(m => m.Item.ShortTitle, new { type = "text", maxlength = "128", title = "Краткое название" })
             <div class="row">
                 <div class="col-md-6">
-                    @Html.DropDownListFor(m => m.Item.DepartmentAffiliation, new SelectList(Model.DepartmentAffiliations, "Key", "Value", null), new { @title = "Тип ведомственной принадлежности:", @class = "selectpicker" })
+                    @Html.DropDownListFor(m => m.Item.Affiliation, new SelectList(Model.DepartmentAffiliations, "Key", "Value", null), new { @title = "Тип ведомственной принадлежности:", @class = "selectpicker" })
                 </div>
 
                 <div class="col-md-12">

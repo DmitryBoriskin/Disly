@@ -50,7 +50,7 @@ namespace cms.dbModel
         public abstract Departments getOvpDepartaments(Guid id);
 
         //Persons
-        public abstract PeopleModel[] getOrgPeopleList(PeopleFilter filter);
+        public abstract PeopleList getOrgPeopleList(PeopleFilter filter);
         public abstract PeopleModel[] getPeopleList(PeopleFilter filter);
         public abstract PeopleModel getPeopleItem(Guid id);
         public abstract string getPeopleSnils(Guid id);

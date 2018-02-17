@@ -688,13 +688,13 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Areas\Admin\Models\CoreViewModel.cs" />
+    <Compile Include="Models\DoctorsViewModel.cs" />
     <Compile Include="Models\EventViewModel.cs" />
     <Compile Include="Models\gs\SpecContactsViewModel.cs" />
     <Compile Include="Models\gs\SpecStructureViewModel.cs" />
     <Compile Include="Models\base\ErrorViewModel.cs" />
     <Compile Include="Models\WorksheetViewModel.cs" />
     <Compile Include="Models\FeedbackViewModel.cs" />
-    <Compile Include="Models\DoctorsViewModel.cs" />
     <Compile Include="Models\ContactsViewModel.cs" />
     <Compile Include="Models\portal\SpecialistsViewModel.cs" />
     <Compile Include="Models\portal\LPUViewModel.cs" />

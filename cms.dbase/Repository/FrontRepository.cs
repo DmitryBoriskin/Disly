@@ -1420,7 +1420,7 @@ namespace cms.dbase
         /// </summary>
         /// <param name="filter">фильтр</param>
         /// <returns></returns>
-        public override PeopleModel[] getOrgPeopleList(PeopleFilter filter)
+        public override PeopleList getOrgPeopleList(PeopleFilter filter)
         {
             using (var db = new CMSdb(_context))
             {
@@ -1454,9 +1454,11 @@ namespace cms.dbase
                                  Posts = s.contentpeopleorglinks
                                             .Where(w => w.employeespostsorgemployeess.Any(a => a.employeespostsspecializations.id.Equals(a.f_post)))
                                             .Where(w => w.f_org.Equals(contentId))
-                                            .Select(g => new EmployeePost
+                                            .Select(g => new Specialisation
                                             {
-                                                Name = g.employeespostsorgemployeess.Select(t => t.employeespostsspecializations.c_name).SingleOrDefault()
+                                                Name = g.employeespostsorgemployeess
+                                                .Select(t => t.employeespostsspecializations.c_name)
+                                                .SingleOrDefault()
                                             }).ToArray()
 
                                  #region working
@@ -1476,7 +1478,7 @@ namespace cms.dbase
 
                     if (result.Any())
                     {
-                        return new DoctorList
+                        return new PeopleList()
                         {
                             Doctors = result.ToArray(),
                             Pager = new Pager

@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using LinqToDB;
 
-namespace cms.dbase.Mapping
+namespace cms.dbase.Mapping 
 {
     internal static class DbQueryMap
     {
@@ -21,7 +21,7 @@ namespace cms.dbase.Mapping
                         Photo = s.c_photo,
                         Posts = s.employeespostspeoples
                                     .Where(a => !a.b_dissmissed)
-                                    .Select(p => new EmployeePost
+                                    .Select(p => new Specialisation
                                     {
                                         Id = p.f_post,
                                         Name = p.employeespostsspecializations.c_name,

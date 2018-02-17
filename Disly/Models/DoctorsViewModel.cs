@@ -10,7 +10,7 @@ namespace Disly.Models
         /// <summary>
         /// Список докторов
         /// </summary>
-        public PeopleModel[] DoctorsList { get; set; }
+        public PeopleList DoctorsList { get; set; }
 
         /// <summary>
         /// Единичная запись доктора

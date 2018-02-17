@@ -24,12 +24,12 @@
                 {
                     foreach (var item in Model.SpesialitsList)
                     {
-                        string link = "/doctors/" + item.GSId;
+                        string link = string.Format("/doctors/{0}", (item.People != null) ? item.People.Id.ToString() : null);
                         string photo = (item.People != null && !string.IsNullOrWhiteSpace(item.People.Photo))
-                              ? File.Exists(Server.MapPath(item.People.Photo))
-                                  ? item.People.Photo : "/Content/img/no_avatar.png"
-                              : "/Content/img/no_avatar.png";
-                        
+                                  ? File.Exists(Server.MapPath(item.People.Photo))
+                                      ? item.People.Photo : "/Content/img/no_avatar.png"
+                                  : "/Content/img/no_avatar.png";
+
 
                         string fio = (item.People != null) ? item.People.FIO : null;
                         <div class="row org_item">
