@@ -209,28 +209,34 @@ namespace cms.dbase
             using (var db = new CMSdb(_context))
             {
 
-                var query = db.cms_content_sv_employee_postss.AsQueryable();
+                //var query = db.cms_content_sv_employee_postss.AsQueryable();
 
-                if(specialisations != null && specialisations.Count() > 0)
+                var query = db.content_org_employees_postss.AsQueryable();
+
+                if (specialisations != null && specialisations.Count() > 0)
                 {
-                    query = query.Where(w => w.f_post != null && specialisations.Contains(w.f_post.Value));
+                    query = query
+                                 .Where(w => specialisations.Contains(w.f_post));
                 }
 
                 var data = query
-                    .OrderBy(o => o.c_surname)
-                    .ThenBy(o => o.c_name)
-                    .ThenBy(o => o.c_patronymic)
                     .Select(s => new EmployeeModel()
                     {
-                        Id = (Guid)s.id, //По причине left join'a может быть null, не должно быть такого
-                        PeopleId = s.f_people,
-                        Surname = s.c_surname,
-                        Name = s.c_name,
-                        Patronymic = s.c_patronymic,
+                        Id = s.employeespostsorgemployees.id, //По причине left join'a может быть null, не должно быть такого
+                        PeopleId = s.employeespostsorgemployees.f_people,
+                        Surname = s.employeespostsorgemployees.contentpeopleorglink.c_surname,
+                        Name = s.employeespostsorgemployees.contentpeopleorglink.c_name,
+                        Patronymic = s.employeespostsorgemployees.contentpeopleorglink.c_surname,
                     });
 
                 if (data.Any())
-                    return data.ToArray();
+                {
+                    return data.OrderBy(s => s.Surname)
+                        .ThenBy(s => s.Name)
+                        .ThenBy(s => s.Patronymic)
+                        .ToArray();
+                }
+                    
 
                 return null;
             }

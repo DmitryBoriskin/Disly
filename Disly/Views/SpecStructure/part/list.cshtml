@@ -3,7 +3,7 @@
 @if (Model != null && Model.Count() > 0)
 {
     <div class="row">
-        <div class="col-md-3 col-md-push-9">
+        @*<div class="col-md-3 col-md-push-9">
             <form id="list-filter-form" role="form" class="filtr_news" action="/@ViewBag.ControllerName/">
                 <div class="row">
                     <div class="col-sm-12">
@@ -18,9 +18,9 @@
                     </div>
                 </div>
             </form>
-        </div>
+        </div>*@
 
-        <div class="col-md-8 col-md-pull-3">
+        <div class="col-md-8">
             <table class="table">
                 @foreach (var item in Model)
                 {
@@ -37,6 +37,8 @@
                         </td>
                         <td>
                             <a class="adminlist_name" href="@link">@item.People.FIO</a>
+                        </td>
+                        <td>
                             @if (item.Orgs != null && item.Orgs.Count() > 0)
                             {
                                 foreach (var org in item.Orgs)
@@ -52,39 +54,20 @@
                                             <b>@(org.Title):</b><br />
                                         }
 
-                                        @*Должности*@
+                                        @if (item.Posts != null && item.Posts.Count() > 0)
+                                        {
+                                            var posts = item.Posts.Where(p => p.Org.Id == org.Id);
+                                            if (posts != null)
+                                            {
+                                                foreach (var post in posts)
+                                                {
+                                                <span> - @post.Name </span><br />
+                                                }
+                                            }
+                                        }
                                     </p>
                                 }
                             }
-
-                            @*@if (item.Posts != null && item.Posts.Count() > 0)
-                                {
-                                    var postsByOrg = item.Posts.Where(p => p.Org != null).Any() ?
-                                        item.Posts.Where(p => p.Org != null).GroupBy(p => p.Org.Id) : null;
-                                    if (postsByOrg != null)
-                                    {
-                                        foreach (var postByOrg in postsByOrg)
-                                        {
-                                            var org = postByOrg.Where(p => p.Org.Id == postByOrg.Key).First();
-                                            <p>
-                                                @if (!string.IsNullOrWhiteSpace(org.Org.Url))
-                                                {
-                                                    string linkToOrg = string.Format("http://{0}", org.Org.Url);
-                                                    <a target="_blank" href="@linkToOrg">@(org.Org.Title):</a><br />
-                                                }
-                                                else
-                                                {
-                                                    <b>@(org.Org.Title):</b><br />
-                                                }
-
-                                                @foreach (var p in postByOrg)
-                                                {
-                                                    <span> -@p.Name </span><br />
-                                                }
-                                            </p>
-                                        }
-                                    }
-                                }*@
                         </td>
                     </tr>
                 }

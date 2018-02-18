@@ -95,14 +95,14 @@
                     </div>
                 }
 
-                @if (Model.PeoplePosts != null && Model.PeoplePosts.Count() > 0)
+                @if (Model.Spesialisations != null && Model.Spesialisations.Count() > 0)
                 {
                     <div class="col-sm-12">
                         <div class="form-group">
                             <label class="label_filtr">Специализации</label>
                             <select class="form-control select2" name="type">
                                 <option value="">не выбрано</option>
-                                @foreach (var item in Model.PeoplePosts)
+                                @foreach (var item in Model.Spesialisations)
                                 {
                                     string selected = (item.Id.ToString() == ViewBag.Position) ? "selected" : string.Empty;
                                     <option value="@item.Id" @selected>@item.Name</option>

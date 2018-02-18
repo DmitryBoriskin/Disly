@@ -26,7 +26,12 @@ namespace Disly.Models
         /// <summary>
         /// Список докторов по специальности
         /// </summary>
-        public EmployeeModel[] EmployeeList { get; set; }
+        public PeopleList DoctorsList { get; set; }
+
+        /// <summary>
+        /// Список должностей
+        /// </summary>
+        public Specialisation[] Specializations { get; set; }
 
     }
 }

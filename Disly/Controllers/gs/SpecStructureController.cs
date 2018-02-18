@@ -146,8 +146,17 @@ namespace Disly.Controllers
                     case "doctors":
                         if (gs.Specialisations != null)
                         {
-                            //Получение членов общества (врачей по специальности)
-                            model.EmployeeList = _repository.getEmployeeList(gs.Specialisations);
+                            var docfilter = FilterParams.Extend<PeopleFilter>(filter);
+                            docfilter.Specializations = gs.Specialisations;
+                            model.DoctorsList = _repository.getDoctorsList(docfilter);
+                            var specfiltr = new SpecialisationFilter()
+                            {
+                                Specializations = gs.Specialisations
+                            };
+                            model.Specializations = _repository.getSpecialisations(specfiltr);
+
+                            ViewBag.SearchText = filter.SearchText;
+                            ViewBag.Position = filter.Type;
                         }
                         break;
                 }

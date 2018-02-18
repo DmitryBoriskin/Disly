@@ -75,13 +75,13 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>01/31/2018 09:05:04</publishTime>
     </File>
     <File Include="Areas/Admin/Views/MainSpecialist/Index.cshtml">
-      <publishTime>02/12/2018 15:56:20</publishTime>
+      <publishTime>02/16/2018 17:08:48</publishTime>
     </File>
     <File Include="Areas/Admin/Views/MainSpecialist/Item.cshtml">
-      <publishTime>02/15/2018 23:50:09</publishTime>
+      <publishTime>02/16/2018 21:52:45</publishTime>
     </File>
     <File Include="Areas/Admin/Views/MainSpecialist/Part/AddDoctor.cshtml">
-      <publishTime>02/15/2018 22:38:23</publishTime>
+      <publishTime>02/17/2018 01:57:28</publishTime>
     </File>
     <File Include="Areas/Admin/Views/MainSpecialist/Part/SearchFilter.cshtml">
       <publishTime>02/07/2018 11:58:41</publishTime>
@@ -129,7 +129,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>02/09/2018 19:57:28</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Orgs/Administrativ.cshtml">
-      <publishTime>01/26/2018 10:17:57</publishTime>
+      <publishTime>02/17/2018 03:01:25</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Orgs/Department.cshtml">
       <publishTime>02/15/2018 08:54:38</publishTime>
@@ -138,7 +138,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>02/12/2018 15:56:20</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Orgs/Item.cshtml">
-      <publishTime>02/13/2018 09:32:29</publishTime>
+      <publishTime>02/17/2018 03:01:25</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Orgs/Ovp.cshtml">
       <publishTime>02/06/2018 14:41:28</publishTime>
@@ -261,7 +261,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>09/26/2017 12:58:15</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Shared/_popUp.cshtml">
-      <publishTime>12/15/2017 09:10:49</publishTime>
+      <publishTime>02/17/2018 01:42:03</publishTime>
     </File>
     <File Include="Areas/Admin/Views/SiteMap/Index.cshtml">
       <publishTime>02/05/2018 15:36:05</publishTime>
@@ -345,7 +345,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>01/19/2018 09:10:42</publishTime>
     </File>
     <File Include="bin/cms.dbase.dll">
-      <publishTime>02/16/2018 00:38:34</publishTime>
+      <publishTime>02/17/2018 03:13:31</publishTime>
     </File>
     <File Include="bin/cms.dbase.dll.config">
       <publishTime>01/19/2018 09:10:42</publishTime>
@@ -354,13 +354,13 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>02/15/2018 12:08:19</publishTime>
     </File>
     <File Include="bin/cms.dbModel.dll">
-      <publishTime>02/16/2018 00:38:33</publishTime>
+      <publishTime>02/17/2018 03:13:29</publishTime>
     </File>
     <File Include="bin/cms.dbModel.pdb">
       <publishTime>02/14/2018 14:49:43</publishTime>
     </File>
     <File Include="bin/Disly.dll">
-      <publishTime>02/16/2018 00:38:35</publishTime>
+      <publishTime>02/17/2018 03:13:32</publishTime>
     </File>
     <File Include="bin/Disly.pdb">
       <publishTime>02/15/2018 12:08:20</publishTime>
@@ -453,7 +453,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>01/01/0001 00:00:00</publishTime>
     </File>
     <File Include="Content/css/styles.css">
-      <publishTime>02/15/2018 12:38:01</publishTime>
+      <publishTime>02/16/2018 10:58:35</publishTime>
     </File>
     <File Include="Content/css/styles_login.css">
       <publishTime>09/26/2017 12:58:15</publishTime>
@@ -471,7 +471,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>12/18/2017 13:16:21</publishTime>
     </File>
     <File Include="Content/css/theme/blue_dark.css">
-      <publishTime>02/16/2018 00:38:35</publishTime>
+      <publishTime>02/17/2018 03:13:31</publishTime>
     </File>
     <File Include="Content/css/theme/blue_dark.less">
       <publishTime>02/09/2018 19:57:28</publishTime>
@@ -1072,6 +1072,9 @@ by editing this MSBuild file. In order to learn more about this please visit htt
     </File>
     <File Include="Content/plugins/Disly/DislyControls.js">
       <publishTime>01/09/2018 22:13:33</publishTime>
+    </File>
+    <File Include="Content/plugins/formSerialize/jquery.serialize-object.min.js">
+      <publishTime>02/17/2018 01:33:24</publishTime>
     </File>
     <File Include="Content/plugins/icheck/icheck.js">
       <publishTime>11/02/2017 15:58:42</publishTime>
@@ -2001,7 +2004,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>09/26/2017 12:58:20</publishTime>
     </File>
     <File Include="scripts/cms/disly_5_popup.js">
-      <publishTime>02/15/2018 23:36:16</publishTime>
+      <publishTime>02/17/2018 02:26:48</publishTime>
     </File>
     <File Include="scripts/modernizr.js">
       <publishTime>01/24/2018 15:03:06</publishTime>
@@ -2040,7 +2043,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>02/13/2018 10:08:16</publishTime>
     </File>
     <File Include="Views/Contacts/part/administration.cshtml">
-      <publishTime>02/09/2018 17:07:25</publishTime>
+      <publishTime>02/17/2018 03:03:13</publishTime>
     </File>
     <File Include="Views/Contacts/part/nav.cshtml">
       <publishTime>01/01/0001 00:00:00</publishTime>
@@ -2055,7 +2058,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>02/15/2018 17:43:56</publishTime>
     </File>
     <File Include="Views/Doctors/part/list.cshtml">
-      <publishTime>02/16/2018 00:03:09</publishTime>
+      <publishTime>02/17/2018 02:28:46</publishTime>
     </File>
     <File Include="Views/Doctors/Redirect.cshtml">
       <publishTime>02/08/2018 13:40:19</publishTime>
@@ -2121,7 +2124,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>02/07/2018 14:42:30</publishTime>
     </File>
     <File Include="Views/LPU/Index.cshtml">
-      <publishTime>02/13/2018 10:09:32</publishTime>
+      <publishTime>02/17/2018 03:09:05</publishTime>
     </File>
     <File Include="Views/LPU/Nav.cshtml">
       <publishTime>01/01/0001 00:00:00</publishTime>
@@ -2214,16 +2217,16 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>02/12/2018 14:47:21</publishTime>
     </File>
     <File Include="Views/SpecContacts/Index.cshtml">
-      <publishTime>02/16/2018 00:31:55</publishTime>
+      <publishTime>02/17/2018 02:58:39</publishTime>
     </File>
     <File Include="Views/SpecStructure/Index.cshtml">
-      <publishTime>01/26/2018 10:17:57</publishTime>
+      <publishTime>02/16/2018 16:46:53</publishTime>
     </File>
     <File Include="Views/SpecStructure/list.cshtml">
       <publishTime>01/01/0001 00:00:00</publishTime>
     </File>
     <File Include="Views/SpecStructure/part/list.cshtml">
-      <publishTime>02/09/2018 18:58:20</publishTime>
+      <publishTime>02/16/2018 17:49:55</publishTime>
     </File>
     <File Include="Views/Structure/DepartmentItem.cshtml">
       <publishTime>01/16/2018 08:38:25</publishTime>
@@ -2274,7 +2277,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>01/24/2018 15:03:06</publishTime>
     </File>
     <File Include="Views/_spec/Contacts/part/administration.cshtml">
-      <publishTime>01/24/2018 15:03:06</publishTime>
+      <publishTime>02/17/2018 03:10:35</publishTime>
     </File>
     <File Include="Views/_spec/Contacts/part/phone.cshtml">
       <publishTime>01/24/2018 15:03:06</publishTime>

@@ -1386,9 +1386,9 @@ namespace cms.dbase
                     data = data.Where(n => n.p.s.c_alias.ToLower() == domain);
                 }
 
-                if (filter.Specialization != null && filter.Specialization.Count() > 0)
+                if (filter.Specializations != null && filter.Specializations.Count() > 0)
                 {
-                    data = data.Where(n => filter.Specialization.Contains(n.ep.id));
+                    data = data.Where(n => filter.Specializations.Contains(n.ep.id));
                 }
 
                 var data2 = data.ToArray()
@@ -1573,10 +1573,10 @@ namespace cms.dbase
         }
 
         /// <summary>
-        /// Список должностей
+        /// Список специализаций/должностей
         /// </summary>
         /// <returns></returns>
-        public override Specialisation[] getPeoplePosts()
+        public override Specialisation[] getSpecialisations()
         {
             string domain = _domain;
             using (var db = new CMSdb(_context))
@@ -1594,6 +1594,77 @@ namespace cms.dbase
                              });
 
                 var data = query.GroupBy(x => x.Id).Select(s => s.First());
+
+                if (data.Any())
+                    return data.ToArray();
+
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Список специализаций/должностей
+        /// </summary>
+        /// <returns></returns>
+        public override Specialisation[] getSpecialisations( SpecialisationFilter filtr)
+        {
+            string domain = _domain;
+            using (var db = new CMSdb(_context))
+            {
+                var query = db.content_specializationss.
+                    Where(s => s.b_doctor);
+
+                if(filtr.Specializations != null && filtr.Specializations.Count() > 0)
+                {
+                    query = query.Where(s => filtr.Specializations.Contains(s.id));
+
+                }
+
+                if(filtr.PeopleId.HasValue)
+                {
+                    query = query.Where(s => s.employeespostsspecializationss.Any(p => p.f_people == filtr.PeopleId.Value))
+                        .Where(s => s.employeespostsspecializationss.Any(p => !p.b_dissmissed));
+
+                }
+                   
+                  var data = query.Select( s =>  new Specialisation
+                             {
+                                 Id = s.id,
+                                 Parent = s.n_parent,
+                                 Name = s.c_name
+                             });
+
+                if (data.Any())
+                    return data.ToArray();
+
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="peopleId"></param>
+        /// <returns></returns>
+        public override Specialisation[] getPeopleSpecialisations(Guid peopleId)
+        {
+            string domain = _domain;
+            using (var db = new CMSdb(_context))
+            {
+                var query = db.content_org_employees_postss
+                    .Where(s => s.f_people == peopleId)
+                    .Where (s => !s.b_dissmissed);
+
+                var data = query.Select(s => new Specialisation
+                {
+                    Id = s.employeespostsspecializations.id,
+                    Parent = s.employeespostsspecializations.n_parent,
+                    Name = s.employeespostsspecializations.c_name,
+                    Org = new OrgsShortModel()
+                    {
+                        Id = (Guid)s.f_org
+                    }
+                });
 
                 if (data.Any())
                     return data.ToArray();
@@ -2347,7 +2418,7 @@ namespace cms.dbase
         /// <param name="query"></param>
         /// <param name="filter"></param>
         /// <returns></returns>
-        private IQueryable<content_people> FindPeoplesQuery(IQueryable<content_people> query, FilterParams filter)
+        private IQueryable<content_people> FindPeoplesQuery(IQueryable<content_people> query, PeopleFilter filter)
         {
             if (!String.IsNullOrWhiteSpace(filter.SearchText))
             {
@@ -2369,6 +2440,11 @@ namespace cms.dbase
                 query = query.Where(w => w.contentpeopleorglinks.Any(a => a.fkcontentdepartmentpeoplelinks.Any(b => b.f_department.Equals(Guid.Parse(filter.Group)))));
             }
 
+            if (filter.Specializations != null && filter.Specializations.Count() > 0)
+            {
+                query = query.Where(w => w.employeespostspeoples.Any(a => filter.Specializations.Contains(a.f_post)));
+            }
+
             return query;
         }
 
@@ -2377,7 +2453,7 @@ namespace cms.dbase
         /// </summary>
         /// <param name="filter">Фильтр</param>
         /// <returns>Список врачей</returns>
-        public override PeopleList getDoctorsList(FilterParams filter)
+        public override PeopleList getDoctorsList(PeopleFilter filter)
         {
             using (var db = new CMSdb(_context))
             {
@@ -2839,6 +2915,7 @@ namespace cms.dbase
                                     FIO = String.Format("{0} {1} {2}", p.gsmemberspeople.c_surname, p.gsmemberspeople.c_name, p.gsmemberspeople.c_patronymic),
                                     Photo = p.gsmemberspeople.c_photo,
                                 },
+                                Posts = getPeopleSpecialisations( p.f_people)
                                 //Orgs = getOrgs(new OrgFilter() { PeopleId = p.f_people})
                             });
                 if (query.Any())
@@ -2998,42 +3075,6 @@ namespace cms.dbase
                     });
 
                 if (data.Any())
-                    return data.ToArray();
-
-                return null;
-            }
-        }
-
-        /// <summary>
-        /// Получаем список сотрудников для выпадающих списков
-        /// </summary>
-        /// <returns></returns>
-        public override EmployeeModel[] getEmployeeList(int[] specialisations = null)
-        {
-            using (var db = new CMSdb(_context))
-            {
-
-                var query = db.cms_content_sv_employee_postss.AsQueryable();
-
-                if (specialisations != null && specialisations.Count() > 0)
-                {
-                    query = query.Where(w => w.f_post != null && specialisations.Contains(w.f_post.Value));
-                }
-
-                var data = query
-                    .OrderBy(o => o.c_surname)
-                    .ThenBy(o => o.c_name)
-                    .ThenBy(o => o.c_patronymic)
-                    .Select(s => new EmployeeModel
-                    {
-                        Id = (s.id.HasValue) ? s.id.Value : Guid.Empty, //По причине left join'a может быть null, не должно быть такого
-                        PeopleId = s.f_people,
-                        Surname = s.c_surname,
-                        Name = s.c_name,
-                        Patronymic = s.c_patronymic,
-                    });
-
-                if (query.Any())
                     return data.ToArray();
 
                 return null;

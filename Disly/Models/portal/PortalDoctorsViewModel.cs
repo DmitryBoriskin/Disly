@@ -20,7 +20,7 @@ namespace Disly.Models
         /// <summary>
         /// Список должностей
         /// </summary>
-        public Specialisation[] PeoplePosts { get; set; }
+        public Specialisation[] Specializations { get; set; }
 
         /// <summary>
         /// Идентификатор организации

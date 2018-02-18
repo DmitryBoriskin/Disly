@@ -35,11 +35,7 @@
                 }
                 break;
             case "doctors":
-                @*model = Model.EmployeeList;
-                if (model != null)
-                {
-                    @Html.Partial("part/list", model)
-                }*@
+                    @Html.Partial("part/doctorslist", Model)
                 break;
             default:
                 <div class="row">

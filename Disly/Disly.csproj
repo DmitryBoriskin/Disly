@@ -984,6 +984,7 @@
     <Content Include="Views\Shared\partial\Pager.cshtml" />
     <Content Include="Views\Press\part\Filter.cshtml" />
     <Content Include="Views\SpecContacts\Index.cshtml" />
+    <Content Include="Views\SpecStructure\part\doctorslist.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
