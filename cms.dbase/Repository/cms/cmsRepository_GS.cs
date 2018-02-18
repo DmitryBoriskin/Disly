@@ -226,7 +226,7 @@ namespace cms.dbase
                         PeopleId = s.employeespostsorgemployees.f_people,
                         Surname = s.employeespostsorgemployees.contentpeopleorglink.c_surname,
                         Name = s.employeespostsorgemployees.contentpeopleorglink.c_name,
-                        Patronymic = s.employeespostsorgemployees.contentpeopleorglink.c_surname,
+                        Patronymic = s.employeespostsorgemployees.contentpeopleorglink.c_patronymic,
                     });
 
                 if (data.Any())
@@ -282,18 +282,33 @@ namespace cms.dbase
         {
             using (var db = new CMSdb(_context))
             {
-                db.content_gss
-                    .Where(w => w.id.Equals(item.Id))
-                    .Set(u => u.c_name, item.Title)
-                    .Set(u => u.c_desc, item.Desc)
-                    .Update();
+                using (var tran = db.BeginTransaction())
+                {
+                    db.content_gss
+                        .Where(w => w.id.Equals(item.Id))
+                        .Set(u => u.c_name, item.Title)
+                        .Set(u => u.c_desc, item.Desc)
+                        .Update();
 
-                // подчищаем таблицу перед обновлением
-                db.content_gs_memberss
-                    .Where(w => w.f_gs.Equals(item.Id))
-                    .Delete();
+                    //редактируем специализации
+                    db.content_gs_specialisationss
+                        .Where(s => s.f_gs == item.Id)
+                        .Delete();
 
-                return true;
+                    if (item.Specialisations != null)
+                    {
+                        foreach (var sp in item.Specialisations)
+                        {
+                            db.content_gs_specialisationss
+                                .Value(v => v.f_gs, item.Id)
+                                .Value(v => v.f_specialisation, sp)
+                                .Insert();
+                        }
+                    }
+
+                    tran.Commit();
+                    return true;
+                }
             }
         }
 
