@@ -67,7 +67,7 @@ namespace Disly.Controllers
             var pfilter = FilterParams.Extend<PeopleFilter>(filter);
             model.DoctorsList = _repository.getOrgPeopleList(pfilter);
             model.DepartmentsSelectList = _repository.getDeparatamentsSelectList(); //Domain
-            model.PeoplePosts = _repository.getPeoplePosts();//Domain
+            model.Spesialisations = _repository.getSpecialisations();//Domain
 
             #region Редирект на регистрацию
             if (model.DoctorsList != null && model.DoctorsList.Doctors != null && model.DoctorsList.Doctors.Count() > 0 && model.DoctorsRegistry!=null)

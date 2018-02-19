@@ -1,6 +1,5 @@
-﻿@model GSEmployeeViewModel
+﻿@model GSMemberViewModel
 
-@using cms.dbModel.entity.cms;
 @{
     Layout = "~/Areas/Admin/Views/Shared/_popUp.cshtml";
 
@@ -14,13 +13,13 @@
     {
         using (Html.BeginForm("SaveGSMember", "/MainSpecialist/", FormMethod.Post, new { @enctype = "multipart/form-data" }))
         {
-            <input type="hidden" name="Id" value="@Model.Member.Id" />
+            <input type="hidden" name="GSId" value="@Model.Member.GSId" />
             <input type="hidden" name="MemberType" value="@Model.Member.MemberType" />
 
             <div class="form-group">
-                <label for="exampleInputFile">Выберите врача из списка</label>
-                <select class="select2" name="PeopleId"> 
-                    <option value=""></option>
+                <label for="exampleInputFile">Выберите врача из списка *</label>
+                <select class="select2" name="People.Id" id="member-people-select" required="required">
+                    <option></option>
                     @if (Model.EmployeeList != null && Model.EmployeeList.Count() > 0)
                     {
                         foreach (var emp in Model.EmployeeList)
@@ -71,54 +70,63 @@
                         <button type="button" class="close" data-dismiss="mainSpec-orgInfo" aria-hidden="true">&times;</button>
                         <div class="form-group col-sm-12">
                             <label for="mainSpec-patronymic-input">Место работы</label>
-                            <select class="select2" name="Employee.Orgs[@i].Id"> 
-                                @if (Model.Member != null && Model.Member.Employee != null && Model.Member.Employee.Orgs != null && Model.Member.Employee.Orgs.Count() > 0) 
+                            <select class="select2 member-people-org-select" name="Orgs[@i].Id">
+                                @if (Model.Member != null && Model.Member.Orgs != null && Model.Member.Orgs.Count() > 0)
                                 {
-                                    foreach (var org in Model.Member.Employee.Orgs)
+                                    foreach (var org in Model.Member.Orgs)
                                     {
                                         <option value="@org.Id">@org.Title</option>
                                     }
                                 }
                             </select>
+                            <label>* При отсутствии организации в списке, введите данные ниже</label>
                         </div>
+
                         <div class="row topIndent-20">
                             <div class="col-sm-12">
                                 <div class="form-group col-sm-12">
                                     <label for="mainSpec-orgTitle-input">Название организации</label>
-                                    <input type="text" class="form-control" name="Employee.Orgs[@i].Title" id="mainSpec-orgTitle-input" maxlength="64" value="">
+                                    <input type="text" class="form-control" name="Orgs[@i].Title" id="mainSpec-orgTitle-input" maxlength="500" value="">
                                 </div>
                                 <div class="form-group col-sm-6">
                                     <label for="mainSpec-orgAddress-input">Адрес организации</label>
-                                    <input type="text" class="form-control" name="Employee.Orgs[@i].Address" id="mainSpec-orgAddress-input" maxlength="64" value="">
+                                    <input type="text" class="form-control" name="Orgs[@i].Address" id="mainSpec-orgAddress-input" maxlength="500" value="">
                                 </div>
                                 <div class="form-group col-sm-6">
                                     <label for="mainSpec-orgSite-input">Сайт организации</label>
-                                    <input type="text" class="form-control" name="Employee.Orgs[@i].Url" id="mainSpec-orgSite-input" maxlength="64" value="">
+                                    <input type="text" class="form-control" name="Orgs[@i].Url" id="mainSpec-orgSite-input" maxlength="200" value="">
                                 </div>
                                 <div class="form-group col-sm-6">
                                     <label for="mainSpec-orgPhone-input">Телефон организации</label>
-                                    <input type="text" class="form-control" name="Employee.Orgs[@i].Phone" id="mainSpec-orgPhone-input" maxlength="64" value="">
+                                    <input type="text" class="form-control" name="Orgs[@i].Phone" id="mainSpec-orgPhone-input" maxlength="100" value="">
                                 </div>
                                 <div class="form-group col-sm-6">
                                     <label for="mainSpec-orgFax-input">Факс организации</label>
-                                    <input type="text" class="form-control" name="Employee.Orgs[@i].Fax" id="mainSpec-orgFax-input" maxlength="64" value="">
+                                    <input type="text" class="form-control" name="Orgs[@i].Fax" id="mainSpec-orgFax-input" maxlength="100" value="">
+                                </div>
+                                <div class="form-group col-sm-6">
+                                    <label for="mainSpec-orgEmail-input">Emai организации</label>
+                                    <input type="email" class="form-control" name="Orgs[@i].Email" id="mainSpec-orgEmail-input" maxlength="100" value="">
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="topIndent-20">
-                        <button type="submit" name="action" value="save-group-btn" class="button icon-create">Добавить еще контакты</button>
-                    </div>
+                    @*<div class="topIndent-20">
+                            <button type="submit" name="action" value="save-group-btn" class="button icon-create">Добавить еще контакты</button>
+                        </div>*@
                 </fieldset>
             </div>
-                <div class="row topIndent-20">
-                    <div class="col-sm-offset-10 col-sm-2 text-right">
-                        @if ((Model != null && Model.UserResolution.Change) || (Model == null && Model.UserResolution.Write))
-                        {
-                            <button type="submit" data-primary="true" class="button icon-create">Сохранить</button>
-                        }
-                    </div>
+            <div class="row topIndent-20">
+                <div id="error-message-box" class="col-md-12 text-danger hidden">! Необходимо выбрать врача и организацию. При отсутствии организации в списке, заполните контакты организации вручную.</div>
+            </div>
+            <div class="row topIndent-20">
+                <div class="col-sm-offset-9 col-sm-3 text-right">
+                    @if ((Model != null && Model.UserResolution.Change) || (Model == null && Model.UserResolution.Write))
+                    {
+                        <button type="submit" data-primary="true" id="member-save-btn" class="button icon-create">Сохранить</button>
+                    }
                 </div>
+            </div>
         }
     }
     else
@@ -128,80 +136,15 @@
 </div>
 
 <script>
+
     $(document).ready(function () {
-        $(".select2").select2({
+
+       $(".select2").select2({
             language: "ru",
             width: "100%",
             allowClear: false,
-        });
-        //.on('select2:unselecting', function (e) {
-        //       // before removing tag we check option element of tag and
-        //       // if it has property 'locked' we will create error to prevent all select2 functionality
-        //       if ($(e.params.args.data.element).attr('locked')) {
-        //           e.preventDefault();
-        //       }
-        //   });
+       });
 
-        $(".iCheck").iCheck({
-            checkboxClass: 'icheckbox_square-blue',
-            radioClass: 'icheckbox_square-blue'
-            //increaseArea: '%' //optional
-        });
-
-        $('#modal-org-table').DataTable(
-              {
-                  searching: true,
-                  ordering: true,
-                  columns: [
-                      null,
-                      null,
-                      { "searchable": false, "orderable": false }
-                  ],
-                  //paging: false
-                  language: {
-                      "processing": "Подождите...",
-                      "search": "Поиск:",
-                      "lengthMenu": "Показать _MENU_ записей",
-                      "info": "Записи с _START_ по _END_ из _TOTAL_ ",
-                      "infoEmpty": "Записи с 0 по 0 из 0",
-                      "infoFiltered": "(отфильтровано из _MAX_ записей)",
-                      "infoPostFix": "",
-                      "loadingRecords": "Загрузка записей...",
-                      "zeroRecords": "Записи отсутствуют.",
-                      "emptyTable": "В таблице отсутствуют данные",
-                      "paginate": {
-                          "first": "<<",
-                          "previous": "<",
-                          "next": ">",
-                          "last": ">>"
-                      },
-                      "aria": {
-                          "sortAscending": ": активировать для сортировки столбца по возрастанию",
-                          "sortDescending": ": активировать для сортировки столбца по убыванию"
-                      }
-                  }
-              });
-
-        $(".org-check-all").on("click", function (e) {
-            var state = $(this).data("state");
-            var item = $("#modal-org-table tbody");
-
-            if (state === "half-checked" || state === "full-unchecked") {
-                console.log(state);
-                item.find("[type=checkbox]").not(":disabled")
-                    .each(function () {
-                        $(this).iCheck("check");
-                    })
-                $(this).data("state", "full-checked");
-            }
-            else {
-                item.find("[type=checkbox]").not(":disabled")
-                    .each(function () {
-                        $(this).iCheck('uncheck');
-                    });
-                $(this).data("state", "full-unchecked");
-            }
-        });
     });
 </script>
 

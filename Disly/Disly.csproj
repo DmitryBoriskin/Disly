@@ -243,6 +243,7 @@
     <Content Include="Content\plugins\datatables\datatables.min.js" />
     <Content Include="Content\plugins\Disly\DislyControls.js" />
     <Content Include="Content\plugins\Disly\DislyControls.css" />
+    <Content Include="Content\plugins\formSerialize\jquery.serialize-object.min.js" />
     <Content Include="Content\plugins\icheck\icheck.js" />
     <Content Include="Content\plugins\icheck\icheck.min.js" />
     <Content Include="Content\plugins\icheck\skins\all.css" />
@@ -687,13 +688,13 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Areas\Admin\Models\CoreViewModel.cs" />
+    <Compile Include="Models\DoctorsViewModel.cs" />
     <Compile Include="Models\EventViewModel.cs" />
     <Compile Include="Models\gs\SpecContactsViewModel.cs" />
     <Compile Include="Models\gs\SpecStructureViewModel.cs" />
     <Compile Include="Models\base\ErrorViewModel.cs" />
     <Compile Include="Models\WorksheetViewModel.cs" />
     <Compile Include="Models\FeedbackViewModel.cs" />
-    <Compile Include="Models\DoctorsViewModel.cs" />
     <Compile Include="Models\ContactsViewModel.cs" />
     <Compile Include="Models\portal\SpecialistsViewModel.cs" />
     <Compile Include="Models\portal\LPUViewModel.cs" />
@@ -983,6 +984,7 @@
     <Content Include="Views\Shared\partial\Pager.cshtml" />
     <Content Include="Views\Press\part\Filter.cshtml" />
     <Content Include="Views\SpecContacts\Index.cshtml" />
+    <Content Include="Views\SpecStructure\part\doctorslist.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

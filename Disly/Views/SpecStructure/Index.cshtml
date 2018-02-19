@@ -4,7 +4,7 @@
 }
 @{
     // Model.CurrentPage == null Проверяем в контроллере, он не должен быть null
-    People[] model = null;
+    GSMemberModel[] model = null;
 }
 <div class="type-page">
     <div class="container">
@@ -35,11 +35,7 @@
                 }
                 break;
             case "doctors":
-                model = Model.DoctorsList;
-                if (model != null)
-                {
-                    @Html.Partial("part/list", model)
-                }
+                    @Html.Partial("part/doctorslist", Model)
                 break;
             default:
                 <div class="row">

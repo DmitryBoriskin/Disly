@@ -16,5 +16,10 @@ public class OrgFilter: FilterParams
     /// <summary>
     /// Исключаем
     /// </summary>
-    public Guid? except { get; set; }
+    public Guid? Except { get; set; }
+
+    /// <summary>
+    /// Фильтр по человеку
+    /// </summary>
+    public Guid? PeopleId { get; set; }
 }

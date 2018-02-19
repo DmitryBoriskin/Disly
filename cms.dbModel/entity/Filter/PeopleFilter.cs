@@ -3,10 +3,11 @@ using System.Web;
 
 public class PeopleFilter : FilterParams
 {
+
     /// <summary>
     /// Фильтрация по специализациям
     /// </summary>
-    public int[] Specialization { get; set; }
+    public int[] Specializations { get; set; }
 
     /// <summary>
     /// Фильтрация по организациям

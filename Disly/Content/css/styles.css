@@ -807,6 +807,9 @@ a.button:hover {
 a.button  {
     float: none;
 }
+a.button.right  {
+    float: right;
+}
 a.button.icon-cancel{
     float:left !important;
 }

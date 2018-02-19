@@ -51,12 +51,13 @@ namespace Disly.Controllers
             }
             #endregion
 
-            var filter = getFilter();
-            model.DoctorsList = _repository.getDoctorsList(filter);
-            model.PeoplePosts = _repository.getPeoplePosts();
+            var filtr = getFilter();
+            var docfilter = FilterParams.Extend<PeopleFilter>(filtr);
+            model.DoctorsList = _repository.getDoctorsList(docfilter);
+            model.Specializations = _repository.getSpecialisations();
 
-            ViewBag.SearchText = filter.SearchText;
-            ViewBag.Position = filter.Type;
+            ViewBag.SearchText = filtr.SearchText;
+            ViewBag.Position = filtr.Type;
 
             return View(model);
         }

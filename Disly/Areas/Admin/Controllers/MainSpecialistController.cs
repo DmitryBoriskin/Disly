@@ -1,8 +1,6 @@
 ﻿using cms.dbModel.entity;
-using cms.dbModel.entity.cms;
 using Disly.Areas.Admin.Models;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -11,7 +9,7 @@ namespace Disly.Areas.Admin.Controllers
 {
     public class MainSpecialistController : CoreController
     {
-        MainSpecialistViewModel model;
+        GSViewModel model;
         FilterParams filter;
 
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
@@ -24,7 +22,7 @@ namespace Disly.Areas.Admin.Controllers
             // наполняем фильтр
             filter = getFilter();
 
-            model = new MainSpecialistViewModel()
+            model = new GSViewModel()
             {
                 Account = AccountInfo,
                 Settings = SettingsInfo,
@@ -84,7 +82,7 @@ namespace Disly.Areas.Admin.Controllers
 
             model.Item = _cmsRepository.getGSItem(id);
             // Полный список специализаций
-            model.EmployeePostList = _cmsRepository.getEmployeePosts();
+            model.Spesializations = _cmsRepository.getEmployeePosts();
 
             //Это для картинок, вставленных в tinymce
             ViewBag.DataPath = ViewBag.DataPath + id.ToString() + "/";
@@ -92,26 +90,12 @@ namespace Disly.Areas.Admin.Controllers
             //Че за хуйня??? бред без единой проверки
             if (model.Item != null)
             {
-                int[] specs;
-                if (specialisations != null)
-                {
-                    specs = specialisations.Split(',').Select(Int32.Parse).ToArray();
-                    model.Item.Specialisations = specs.ToArray();
-                }
-                else
-                {
-                    specs = model.Item.Specialisations;
-                }
-
-                //Получение списков врачей, относящихся к гс по типам
-                var gsMembersSpecs = _cmsRepository.getGSMembers(model.Item.Id, GSMemberType.SPEC);
-                model.Item.Specialists = gsMembersSpecs;
-
-                var gsMembersExperts = _cmsRepository.getGSMembers(model.Item.Id, GSMemberType.EXPERT);
-                model.Item.Experts = gsMembersExperts;
-
+                var specs = model.Item.Specialisations;
                 // список сотрудников для данных специализаций
                 model.EmployeeList = _cmsRepository.getEmployeeList(specs.ToArray());
+
+                model.Item.Specialists = _cmsRepository.getGSMembers(model.Item.Id, GSMemberType.SPEC);
+                model.Item.Experts = _cmsRepository.getGSMembers(model.Item.Id, GSMemberType.EXPERT);
             }
 
             // список всех сотрудников
@@ -123,7 +107,7 @@ namespace Disly.Areas.Admin.Controllers
         [HttpPost]
         [ValidateInput(false)]
         [MultiButton(MatchFormKey = "action", MatchFormValue = "save-btn")]
-        public ActionResult Save(Guid id, MainSpecialistViewModel binData)
+        public ActionResult Save(Guid id, GSViewModel binData)
         {
             ErrorMessage userMessage = new ErrorMessage();
             userMessage.title = "Информация";
@@ -179,7 +163,7 @@ namespace Disly.Areas.Admin.Controllers
             else
             {
                 model.ErrorInfo = userMessage;
-                model.EmployeePostList = _cmsRepository.getEmployeePosts();
+                model.Spesializations = _cmsRepository.getEmployeePosts();
                 model.Item = _cmsRepository.getGSItem(id);
                 return View("Item", model);
             }
@@ -265,7 +249,7 @@ namespace Disly.Areas.Admin.Controllers
             //Получение главного специалиста
             var mainSpec = _cmsRepository.getGSItem(objId);
 
-            var model = new GSEmployeeViewModel()
+            var model = new GSMemberViewModel()
             {
                 Account = AccountInfo,
                 Settings = SettingsInfo,
@@ -278,15 +262,21 @@ namespace Disly.Areas.Admin.Controllers
             {
                 model.Member = new GSMemberModel()
                 {
-                    Id = objId,
+                    GSId = objId,
                     MemberType = objType
                 };
 
-                // список сотрудников для специализаций главного специалиста
-                model.EmployeeList = _cmsRepository.getEmployeeList(mainSpec.Specialisations);
+                if(objType == GSMemberType.SPEC)
+                {
+                    // список сотрудников для специализаций главного специалиста
+                    model.EmployeeList = _cmsRepository.getEmployeeList(mainSpec.Specialisations);
+                }
+                else
+                {
+                    model.EmployeeList = _cmsRepository.getEmployeeList();
+                }
             }
 
-            ViewBag.MainSpecType = objType;
             return PartialView("Part/AddDoctor", model);
         }
 
@@ -300,6 +290,17 @@ namespace Disly.Areas.Admin.Controllers
         {
             if ( ModelState.IsValid)
             {
+                if (bindData.Orgs != null && bindData.Orgs.Count() > 0)
+                {
+                    foreach(var org in bindData.Orgs)
+                    {
+                        if(!string.IsNullOrEmpty(org.Url))
+                        {
+                            org.Url = org.Url.Replace("http://", "");
+                            org.Url = org.Url.Replace("https://", "");
+                        }
+                    }
+                } 
                 var res = _cmsRepository.addGSMember(bindData);
                 if (res)
                     //return Json("Success");

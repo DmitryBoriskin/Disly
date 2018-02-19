@@ -7,7 +7,7 @@
         {
             string fio = item.Surname + " " + item.Name + " " + item.Patronymic;
 
-            string link = (item.PeopleF.HasValue) ? string.Format("/doctors/{0}", item.PeopleF.Value) : "";
+            string link = (item.PeopleId.HasValue) ? string.Format("/doctors/{0}", item.PeopleId.Value) : "";
 
             string photo = (item.Photo != null && !string.IsNullOrWhiteSpace(item.Photo.Url))
                        ? File.Exists(Server.MapPath(item.Photo.Url))

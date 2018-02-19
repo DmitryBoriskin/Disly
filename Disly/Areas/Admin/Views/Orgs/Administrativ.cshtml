@@ -29,7 +29,7 @@
 
         @if (Model.PeopleList != null)
         {
-            @Html.DropDownListFor(m => m.AdministrativItem.PeopleF, Model.PeopleList, new { @title = "Выберите врача", @class = "selectpicker", @data_live_search = "true", @data_help = "Выберите значение если эта персона есть в списке врачей, иначе оставьте поле пустым" })
+            @Html.DropDownListFor(m => m.AdministrativItem.PeopleId, Model.PeopleList, new { @title = "Выберите врача", @class = "selectpicker", @data_live_search = "true", @data_help = "Выберите значение если эта персона есть в списке врачей, иначе оставьте поле пустым" })
         }
 
         @Html.TextBoxFor(m => m.AdministrativItem.Phone, new { type = "text", maxlength = "128", title = "Телефон" })

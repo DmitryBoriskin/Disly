@@ -1,4 +1,4 @@
-﻿@model MainSpecialistViewModel
+﻿@model GSViewModel
 
 @{
     var newId = Guid.NewGuid();
@@ -22,12 +22,15 @@
                             {
                                 foreach (var spec in Model.Item.Specialists)
                                 {
-                                    <tr id="spec_@spec.IdLinkGS" class="member-item">
+                                    <tr id="spec_@spec.Id" class="member-item">
                                         <td>
-                                            @spec.FIO
+                                            @if (spec.People != null)
+                                            {
+                                                @spec.People.FIO
+                                            }
                                         </td>
                                         <td>
-                                            <a class="gs-member-delete icon-delete" data-member-id="@spec.IdLinkGS"></a>
+                                            <a class="gs-member-delete icon-delete" data-member-id="@spec.Id"></a>
                                         </td>
                                     </tr>
                                 }
@@ -49,10 +52,13 @@
                                 {
                                     <tr id="expert_@expert.Id" class="member-item">
                                         <td>
-                                            @expert.FIO
+                                            @if (expert.People != null)
+                                            {
+                                                @expert.People.FIO
+                                            }
                                         </td>
                                         <td>
-                                            <a class="gs-member-delete icon-delete" data-member-id="@expert.IdLinkGS"></a>
+                                            <a class="gs-member-delete icon-delete" data-member-id="@expert.Id"></a>
                                         </td>
                                     </tr>
                                 }
@@ -125,9 +131,9 @@
         <div class="form-group">
             <label for="itemGroups-select">Специализация:</label>
             <select name="Item.Specialisations" id="itemGroups-select" class="form-control select2" multiple required>
-                @if (Model.EmployeePostList != null && Model.EmployeePostList.Count() > 0)
+                @if (Model.Spesializations != null && Model.Spesializations.Count() > 0)
                 {
-                    foreach (var post in Model.EmployeePostList)
+                    foreach (var post in Model.Spesializations)
                     {
                         <option value="@post.Id" @(Model.Item != null && Model.Item.Specialisations != null && Model.Item.Specialisations.Any(s => s == post.Id) ? "selected" : null)>@post.Name</option>
                     }
