@@ -1452,14 +1452,13 @@ namespace cms.dbase
                                  FIO = s.c_surname + " " + s.c_name + " " + s.c_patronymic,
                                  Photo = s.c_photo,
                                  SNILS = s.c_snils,
-                                 Posts = s.contentpeopleorglinks
-                                            .Where(w => w.employeespostsorgemployeess.Any(a => a.employeespostsspecializations.id.Equals(a.f_post)))
-                                            .Where(w => w.f_org.Equals(contentId))
+                                 Posts = db.content_specializationss
+                                            .Where(w => w.employeespostsspecializationss.Any(a => a.f_org.Equals(contentId)))
+                                            .Where(w => w.employeespostsspecializationss.Any(b => b.f_people.Equals(s.id)))
                                             .Select(g => new EmployeePost
                                             {
-                                                Name = g.employeespostsorgemployeess.Select(t => t.employeespostsspecializations.c_name).SingleOrDefault()
-                                            }).ToArray()
-
+                                                Name = g.c_name
+                                            }).GroupBy(g => g.Name).Select(t => t.First()).ToArray()
                                  #region working
                                  //Posts = db.content_org_employees_postss
                                  //            .Where(p => p.f_people.Equals(s.id))
