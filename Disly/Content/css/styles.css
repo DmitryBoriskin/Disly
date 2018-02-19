@@ -1312,4 +1312,9 @@ button.rss_delete {border:none; background:none;}
 .statistics_btn_block{
     margin:24px 0 0;
 }
-.statistics_btn_block .button{margin:0;}
+.statistics_btn_block .button{
+    margin:0;
+}
+.select2 {
+    width:270px !important;
+}

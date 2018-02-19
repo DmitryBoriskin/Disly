@@ -46,7 +46,8 @@ namespace Disly.Controllers
             #region currentPage
             currentPage = _repository.getSiteMap("SpecContacts");
             if (currentPage == null)
-                throw new Exception("model.CurrentPage == null");
+                //throw new Exception("model.CurrentPage == null");
+                return RedirectToRoute("Error", new { httpCode = 404 });
 
             if (currentPage != null)
             {
@@ -57,10 +58,6 @@ namespace Disly.Controllers
                 model.CurrentPage = currentPage;
             }
             #endregion
-
-
-            if ((model.SitesInfo == null) || (model.SitesInfo != null && model.SitesInfo.Type != ContentLinkType.SPEC.ToString().ToLower()))
-                return RedirectToRoute("Error", new { httpCode = 405 });
 
             string _ViewName = (ViewName != String.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";
 

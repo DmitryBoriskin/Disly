@@ -29,9 +29,11 @@ namespace cms.dbase
         public FrontRepository(string ConnectionString, string DomainUrl)
         {
             _context = ConnectionString;
-            _domain = (!string.IsNullOrEmpty(DomainUrl)) ? getSiteId(DomainUrl) : "";
-            //_domain = "koms-crb";
             LinqToDB.Common.Configuration.Linq.AllowMultipleQuery = true;
+
+            _domain = (!string.IsNullOrEmpty(DomainUrl)) ? getSiteId(DomainUrl) : "";
+            //_domain = "allergolog";
+            
         }
         #region redirect methods
         public override SitesModel getSiteInfoByOldId(int Id)
@@ -1686,8 +1688,8 @@ namespace cms.dbase
                     throw new Exception("cmsRepository > queryByOrgFilter: Filter is null");
 
                 var query = db.content_orgss
-                                   .OrderBy(o => o.n_sort)
-                                   .AsQueryable();
+                            .Where(o => o.contentemployeespostsorgss.Any(p => !p.b_dissmissed));
+                            
 
                 if (filtr.Disabled != null && (bool)filtr.Disabled)
                     query = query.Where(w => w.b_disabled);
@@ -1721,6 +1723,8 @@ namespace cms.dbase
 
                 if (filtr.Except.HasValue && filtr.Except.Value != Guid.Empty)
                     query = query.Where(w => w.id != filtr.Except.Value);
+
+                query = query.OrderBy(o => o.n_sort);
 
                 var data = query.Select(s => new OrgsModel()
                 {
@@ -2965,7 +2969,10 @@ namespace cms.dbase
                             Phone = s.c_phone,
                             Fax = s.c_fax,
                             Url = getSiteDefaultDomainByContentId(s.id),
-                            ExtUrl = s.c_www
+                            ExtUrl = s.c_www,
+                            Logo = new Photo() {
+                                Url = s.c_logo
+                            }
                         });
 
                     if (data1.Any() && data2.Any())
