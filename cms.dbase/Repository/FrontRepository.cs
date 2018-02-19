@@ -2463,7 +2463,6 @@ namespace cms.dbase
             {
                 query = query.Where(w => w.contentpeopleorglinks.Any(a => a.fkcontentdepartmentpeoplelinks.Any(b => b.f_department.Equals(Guid.Parse(filter.Group)))));
             }
-
             if (filter.Specializations != null && filter.Specializations.Count() > 0)
             {
                 query = query.Where(w => w.employeespostspeoples.Any(a => filter.Specializations.Contains(a.f_post)));
