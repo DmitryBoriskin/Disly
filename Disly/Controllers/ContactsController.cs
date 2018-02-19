@@ -44,7 +44,8 @@ namespace Disly.Controllers
             #region currentPage
             currentPage = _repository.getSiteMap("Contacts");
             if (currentPage == null)
-                throw new Exception("model.CurrentPage == null");
+                //throw new Exception("model.CurrentPage == null");
+                return RedirectToRoute("Error", new { httpCode = 404 });
 
             if (currentPage != null)
             {

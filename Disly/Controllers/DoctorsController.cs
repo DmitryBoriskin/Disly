@@ -49,7 +49,8 @@ namespace Disly.Controllers
             #region currentPage
             currentPage = _repository.getSiteMap("Doctors");
             if (currentPage == null)
-                throw new Exception("model.CurrentPage == null");
+                //throw new Exception("model.CurrentPage == null");
+                return RedirectToRoute("Error", new { httpCode = 404 });
 
             if (currentPage != null)
             {
@@ -99,7 +100,8 @@ namespace Disly.Controllers
             #region currentPage
             currentPage = _repository.getSiteMap("Doctors");
             if (currentPage == null)
-                throw new Exception("model.CurrentPage == null");
+                //throw new Exception("model.CurrentPage == null");
+                return RedirectToRoute("Error", new { httpCode = 404 });
 
             if (currentPage != null)
             {
