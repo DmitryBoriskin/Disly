@@ -1451,13 +1451,23 @@ namespace cms.dbase
                                  FIO = s.c_surname + " " + s.c_name + " " + s.c_patronymic,
                                  Photo = s.c_photo,
                                  SNILS = s.c_snils,
-                                 Posts = db.content_specializationss
-                                            .Where(w => w.employeespostsspecializationss.Any(a => a.f_org.Equals(contentId)))
-                                            .Where(w => w.employeespostsspecializationss.Any(b => b.f_people.Equals(s.id)))
-                                            .Select(g => new Specialisation
-                                            {
-                                                Name = g.c_name
-                                            }).GroupBy(g => g.Name).Select(t => t.First()).ToArray()
+                                 Posts = (from sp in db.content_specializationss
+                                         join oep in db.content_org_employees_postss on sp.id equals oep.f_post
+                                         join oe in db.content_org_employeess on oep.f_employee equals oe.id
+                                         where oe.f_org.Equals(contentId) && oe.f_people.Equals(s.id)
+                                         select new Specialisation
+                                         {
+                                             Name = sp.c_name
+                                         }).GroupBy(g => g.Name).Select(t => t.First()).ToArray()
+                                 #region try
+                                 //Posts = db.content_specializationss
+                                 //           .Where(w => w.employeespostsspecializationss.Any(a => a.employeespostsorgemployees.f_people.Equals(s.id)))
+                                 //           .Where(w => w.employeespostsspecializationss.Any(a => a.employeespostsorgemployees.f_org.Equals(contentId)))
+                                 //           .Select(g => new Specialisation
+                                 //           {
+                                 //               Name = g.c_name
+                                 //           }).GroupBy(g => g.Name).Select(t => t.First()).ToArray()
+                                 #endregion
                                  #region working
                                  //Posts = db.content_org_employees_postss
                                  //            .Where(p => p.f_people.Equals(s.id))
