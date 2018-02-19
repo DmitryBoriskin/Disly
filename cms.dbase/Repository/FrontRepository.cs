@@ -1454,7 +1454,7 @@ namespace cms.dbase
                                  Posts = db.content_specializationss
                                             .Where(w => w.employeespostsspecializationss.Any(a => a.f_org.Equals(contentId)))
                                             .Where(w => w.employeespostsspecializationss.Any(b => b.f_people.Equals(s.id)))
-                                            .Select(g => new EmployeePost
+                                            .Select(g => new Specialisation
                                             {
                                                 Name = g.c_name
                                             }).GroupBy(g => g.Name).Select(t => t.First()).ToArray()
