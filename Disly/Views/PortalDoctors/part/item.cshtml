@@ -2,20 +2,6 @@
 
 <div class="row">
     <div class="col-md-8">
-        @*<div>
-                <strong>Место работы: </strong>
-                   @Model.DoctorsItem.EmployeeInfo.UZ.Name
-            </div
-
-            @if (Model.DoctorsItem.StructureId != null && Model.DoctorsItem.DepartmentId != null)
-            {
-                string link = "/structure/" + Model.DoctorsItem.StructureId + "/" + Model.DoctorsItem.DepartmentId;
-                <div>
-                    <strong>Отделение: </strong>
-                    <a href="@link">@Model.DoctorsItem.DepartmentTitle</a>
-                </div>
-            }>*@
-
         @if (Model.DoctorsItem != null && Model.DoctorsItem.GS != null && !string.IsNullOrWhiteSpace(Model.DoctorsItem.GS.Url))
         {
             var link = string.Format("http://{0}", Model.DoctorsItem.GS.Url);
@@ -38,10 +24,15 @@
                 {
                     foreach (var postByOrg in postsByOrg)
                     {
-
                         var org = postByOrg.Where(p => p.Organisation == postByOrg.Key).First();
+                        string link = (Model.DoctorsItem.Posts != null) 
+                            ? "http://" + Model.DoctorsItem.Posts
+                                .Where(w => w.Org.Title.ToLower().Equals(org.Organisation.ToLower()))
+                                .Select(s => s.Org.Url)
+                                .SingleOrDefault() + "/doctors/" + Model.DoctorsItem.Id : String.Empty;
+                        
                         <li>
-                            <b>@(org.Organisation):</b><br />
+                            <b><a href="@(link)" target="_blank">@(org.Organisation):</a></b><br />
 
                             @foreach (var p in postByOrg)
                             {
@@ -52,14 +43,6 @@
                     }
                 }
             }
-
-            @*<strong>Занимаем должность: </strong>
-            <ol>
-                @foreach (var p in Model.DoctorsItem.EmployeeInfo.EmployeeRecords)
-                {
-                    <li>@p.RecordPost.Name</li>
-                }
-            </ol>*@
         </ol>
 
         <div>

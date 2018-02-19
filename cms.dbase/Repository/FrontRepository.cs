@@ -1518,6 +1518,19 @@ namespace cms.dbase
                         Id = s.id,
                         FIO = s.c_surname + " " + s.c_name + " " + s.c_patronymic,
                         Photo = s.c_photo,
+                        Posts = s.contentpeopleorglinks
+                                    .Where(w => w.contentpeopleorglink.id.Equals(s.id))
+                                    .Select(g => new Specialisation
+                                    {
+                                        Org = new OrgsShortModel
+                                        {
+                                            Title = g.contentorgpeoplelink.c_title,
+                                            Url = db.cms_sites_domainss
+                                                    .Where(w => w.fksitesdomains.f_content.Equals(g.f_org))
+                                                    .Select(m => m.c_domain)
+                                                    .FirstOrDefault()
+                                        }
+                                    }).ToArray(),
                         //GsUrl = getSiteDefaultDomain(_domain),
                         //MainSpec = s.mainspecialistpeoplecontentpeoples
                         //                .Select(m => new MainSpecialistModel
