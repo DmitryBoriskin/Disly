@@ -1,6 +1,9 @@
 ﻿@model VacancyViewModel
 @{
-    Layout = ViewBag.Layout;
+    if (Model.SitesInfo.Alias == "main")
+    {
+        Layout = "/views/_portal/shared/_layout.cshtml";
+    }
 }
 @if (Model.List != null)
 {
@@ -49,7 +52,11 @@
                                             }
                                         </div>
                                     }
-                                    Html.RenderAction("Pager", "Service", new { @Model = Model.List.Pager });
+                                    //Html.RenderAction("Pager", "Service", new { @Model = Model.List.Pager });
+                                    if (Model.List != null && Model.List.Pager != null)
+                                    {
+                                       @Html.Partial("Part/Pager", Model.List.Pager)
+                                    }
                                 }
                             </div>
                         </div>

@@ -1,7 +1,6 @@
 ﻿using cms.dbModel;
 using System;
 using System.Linq;
-using cms.dbModel.entity.cms;
 using cms.dbase.models;
 using LinqToDB;
 using cms.dbModel.entity;
@@ -23,9 +22,9 @@ namespace cms.dbase
             using (var db = new CMSdb(_context))
             {
                 var query = (from emp in db.content_peoples
-                             join l in db.content_people_employee_posts_links
+                             join l in db.content_org_employees_postss
                              on emp.id equals l.f_people
-                             join pe in db.content_employee_postss
+                             join pe in db.content_specializationss
                              on l.f_post equals pe.id
                              where emp.id.Equals(id)
                              select new { emp, pe });
@@ -34,7 +33,7 @@ namespace cms.dbase
                     .GroupBy(p => new { p.emp.id })
                     .Select(s => new EmployeeModel
                     {
-                        Id = s.Key.id,
+                        PeopleId = s.Key.id,
                         Surname = s.First().emp.c_surname,
                         Name = s.First().emp.c_name,
                         Patronymic = s.First().emp.c_patronymic,
@@ -43,7 +42,7 @@ namespace cms.dbase
                         {
                             Url = s.First().emp.c_photo
                         },
-                        Posts = s.Select(d => new EmployeePostModel
+                        Posts = s.Select(d => new Specialisation
                         {
                             Id = d.pe.id,
                             Parent = d.pe.n_parent,
@@ -69,12 +68,12 @@ namespace cms.dbase
                 using (var tr = db.BeginTransaction())
                 {
                     bool isExist = db.content_peoples
-                        .Where(w => w.id.Equals(item.Id)).Any();
+                        .Where(w => w.id.Equals(item.PeopleId)).Any();
 
                     if (isExist)
                     {
                         db.content_peoples
-                            .Where(w => w.id.Equals(item.Id))
+                            .Where(w => w.id.Equals(item.PeopleId))
                             .Set(s => s.c_surname, item.Surname)
                             .Set(s => s.c_name, item.Name)
                             .Set(s => s.c_patronymic, item.Patronymic)
@@ -86,7 +85,7 @@ namespace cms.dbase
                             Site = _domain,
                             Section = LogSection.Sites,
                             Action = LogAction.update,
-                            PageId = item.Id,
+                            PageId = item.PeopleId,
                             PageName = item.Fullname,
                             UserId = _currentUserId,
                             IP = _ip,

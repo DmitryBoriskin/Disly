@@ -14,11 +14,6 @@ namespace Disly.Controllers
         {
             base.OnActionExecuting(filterContext);
 
-            currentPage = _repository.getSiteMap("MapSite");
-
-            if (currentPage == null)
-                throw new Exception("model.CurrentPage == null");
-
             model = new SiteMapViewModel
             {
                 SitesInfo = siteModel,
@@ -27,22 +22,33 @@ namespace Disly.Controllers
                 CurrentPage = currentPage,
                 Breadcrumbs = new List<Breadcrumbs>()
             };
-            #region Создаем переменные (значения по умолчанию)
-            string PageTitle = model.CurrentPage.Title;
-            string PageDesc = model.CurrentPage.Desc;
-            string PageKeyw = model.CurrentPage.Keyw;
-            #endregion
 
-            #region Метатеги
-            ViewBag.Title = PageTitle;
-            ViewBag.Description = PageDesc;
-            ViewBag.KeyWords = PageKeyw;
+            #region Создаем переменные (значения по умолчанию)
+            ViewBag.Title = "Страница";
+            ViewBag.Description = "Страница без названия";
+            ViewBag.KeyWords = "";
             #endregion
         }
 
         // GET: MapSite
         public ActionResult Index()
         {
+            #region currentPage
+            currentPage = _repository.getSiteMap("MapSite");
+            if (currentPage == null)
+                //throw new Exception("model.CurrentPage == null");
+                return RedirectToRoute("Error", new { httpCode = 404 });
+
+            if (currentPage != null)
+            {
+                ViewBag.Title = currentPage.Title;
+                ViewBag.Description = currentPage.Desc;
+                ViewBag.KeyWords = currentPage.Keyw;
+
+                model.CurrentPage = currentPage;
+            }
+            #endregion
+
             model.Breadcrumbs.Add(new Breadcrumbs
             {
                 Title = "Карта сайта",

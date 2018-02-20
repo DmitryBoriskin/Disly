@@ -38,16 +38,16 @@
                                 </td>
                                 <td>
                                     <a href="@link">@item.FIO</a><br />
-                                    @if (item.MainSpec != null && !string.IsNullOrEmpty(item.MainSpec.Name))
+                                    @if (item.GS != null && !string.IsNullOrEmpty(item.GS.Title))
                                     {
-                                        if (!string.IsNullOrEmpty(item.MainSpec.DomainUrl))
+                                        if (!string.IsNullOrEmpty(item.GS.Url))
                                         {
-                                            var mainSpeclink = string.Format("http://{0}", item.MainSpec.DomainUrl);
-                                            <span>Главный специалист: <a href="@mainSpeclink">@item.MainSpec.Name</a></span>
+                                            var mainSpeclink = string.Format("http://{0}", item.GS.Url);
+                                            <span>Главный специалист: <a href="@mainSpeclink">@item.GS.Title</a></span>
                                         }
                                         else
                                         {
-                                            <span>Главный специалист: @item.MainSpec.Name</span>
+                                            <span>Главный специалист: @item.GS.Title</span>
                                         }
                                     }
                                 </td>

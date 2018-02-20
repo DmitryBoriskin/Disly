@@ -2,6 +2,7 @@
 using Disly.Areas.Admin.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
@@ -25,6 +26,10 @@ namespace Disly.Areas.Admin.Controllers
                 ControllerName = ControllerName,
                 ActionName = ActionName
             };
+            if (AccountInfo != null)
+            {
+                model.Menu = _cmsRepository.getCmsMenu(AccountInfo.Id);
+            }
 
             #region Метатеги
             ViewBag.Title = UserResolutionInfo.Title;
@@ -63,21 +68,30 @@ namespace Disly.Areas.Admin.Controllers
             {
                 case "org":
                     var data = _cmsRepository.getOrgItem(model.Item.ContentId);
-                    ViewBag.ContentLink = "/admin/orgs/item/" + data.Id;
-                    ViewBag.ContentType = "организации";
-                    ViewBag.ContentTitle = data.Title;
+                    if(data != null)
+                    {
+                        ViewBag.ContentLink = "/admin/orgs/item/" + data.Id;
+                        ViewBag.ContentType = "организации";
+                        ViewBag.ContentTitle = data.Title;
+                    }
                     break;
                 case "people":
                     var data_p = _cmsRepository.getPerson(model.Item.ContentId);
-                    ViewBag.ContentLink = "/admin/Person/item/" + data_p.Id;
-                    ViewBag.ContentType = "персоны";
-                    ViewBag.ContentTitle = data_p.FIO;
+                    if (data_p != null)
+                    {
+                        ViewBag.ContentLink = "/admin/Person/item/" + data_p.Id;
+                        ViewBag.ContentType = "персоны";
+                        ViewBag.ContentTitle = data_p.FIO;
+                    }
                     break;
                 case "event":
                     var data_e = _cmsRepository.getEvent(model.Item.ContentId);
-                    ViewBag.ContentLink = "/admin/events/item/" + data_e.Id;
-                    ViewBag.ContentType = "события";
-                    ViewBag.ContentTitle = data_e.Title;
+                    if (data_e != null)
+                    {
+                        ViewBag.ContentLink = "/admin/events/item/" + data_e.Id;
+                        ViewBag.ContentType = "события";
+                        ViewBag.ContentTitle = data_e.Title;
+                    }
                     break;
             }
             return View("Item", model);
@@ -121,30 +135,33 @@ namespace Disly.Areas.Admin.Controllers
 
             var orgfilter = FilterParams.Extend<OrgFilter>(filter);
             var evfilter = FilterParams.Extend<EventFilter>(filter);
-
+            var specfilter = FilterParams.Extend<GSFilter>(filter);
             model.OrgsList = new SelectList(_cmsRepository.getOrgs(orgfilter), "Id", "Title", ContentId);
-            model.MainSpecialistList = new SelectList(_cmsRepository.getMainSpecialistList(filter).Data, "Id", "Name", ContentId);
+            model.MainSpecialistList = new SelectList(_cmsRepository.getGSList(specfilter).Data, "Id", "Title", ContentId);
             model.EventsList = new SelectList(_cmsRepository.getEventsList(evfilter).Data, "Id", "Title", ContentId);
             #endregion
             return View("Master", model);
         }
 
         /// <summary>
-        /// Формируем строку фильтра
+        /// 
         /// </summary>
-        /// <param name="title_serch">Поиск по названию</param>
-        /// <param name="search-btn">Поиск по доменному имени</param>
+        /// <param name="searchtext"></param>
+        /// <param name="disabled"></param>
+        /// <param name="size"></param>
+        /// <param name="date"></param>
+        /// <param name="dateend"></param>
         /// <returns></returns>
         [HttpPost]
         [MultiButton(MatchFormKey = "action", MatchFormValue = "search-btn")]
-        public ActionResult Search(string filter, bool disabled, string size)
+        public ActionResult Search(string searchtext, bool enabled, string size)
         {
             string query = HttpUtility.UrlDecode(Request.Url.Query);
-            query = addFiltrParam(query, "searchtext", filter);
-            if (disabled) query = addFiltrParam(query, "disabled", String.Empty);
-            else query = addFiltrParam(query, "disabled", enabeld.ToString().ToLower());
-            query = addFiltrParam(query, "page", String.Empty);
-            query = addFiltrParam(query, "size", size);
+            query = AddFiltrParam(query, "searchtext", searchtext);
+            query = AddFiltrParam(query, "disabled", (!enabled).ToString().ToLower());
+            query = AddFiltrParam(query, "page", String.Empty);
+            query = AddFiltrParam(query, "size", size);
+
             return Redirect(StartUrl + query);
         }
 
@@ -166,7 +183,7 @@ namespace Disly.Areas.Admin.Controllers
         {
             //  При создании записи сбрасываем номер страницы
             string query = HttpUtility.UrlDecode(Request.Url.Query);
-            query = addFiltrParam(query, "page", String.Empty);
+            query = AddFiltrParam(query, "page", String.Empty);
 
             return Redirect(StartUrl + "Master/" + Guid.NewGuid() + "/" + query);
         }
@@ -191,11 +208,14 @@ namespace Disly.Areas.Admin.Controllers
                 if (!string.IsNullOrEmpty(back_model.Item.DomainListString))
                 {
                     string[] dopDomains = back_model.Item.DomainListString.Replace(" ","").Split(';');
-                    foreach (var d in dopDomains)
+                    if (dopDomains != null && dopDomains.Count() > 0)
                     {
-                        if (!string.IsNullOrEmpty(d))
+                        foreach (var d in dopDomains)
                         {
-                            domains.Add(d);
+                            if (!string.IsNullOrEmpty(d))
+                            {
+                                domains.Add(d);
+                            }
                         }
                     }
                     back_model.Item.DomainListArray = domains;
@@ -266,8 +286,9 @@ namespace Disly.Areas.Admin.Controllers
                 );
             var orgfilter = FilterParams.Extend<OrgFilter>(filter);
             var evfilter = FilterParams.Extend<EventFilter>(filter);
+            var specfilter = FilterParams.Extend<GSFilter>(filter);
             model.OrgsList = new SelectList(_cmsRepository.getOrgs(orgfilter), "Id", "Title", ContentId);
-            model.MainSpecialistList = new SelectList(_cmsRepository.getMainSpecialistList(filter).Data, "Id", "Name", ContentId);
+            model.MainSpecialistList = new SelectList(_cmsRepository.getGSList(specfilter).Data, "Id", "Name", ContentId);
             model.EventsList = new SelectList(_cmsRepository.getEventsList(evfilter).Data, "Id", "Title", ContentId);
             #endregion
 
@@ -348,7 +369,7 @@ namespace Disly.Areas.Admin.Controllers
         }
 
 
-        //Получение списка сайтов по параметрам для отображения в модальном окне
+        //Получение списка сайтов по параметрам для отображения в модальном окне при привязке банеров
         [HttpGet]
         public ActionResult SiteListModal(Guid objId, ContentType objType)
         {
@@ -357,7 +378,6 @@ namespace Disly.Areas.Admin.Controllers
                 Domain = Domain,
                 RelId = objId,
                 RelType = objType,
-                Size = 1000
             };
 
             var model = new SitesModalViewModel()

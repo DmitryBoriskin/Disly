@@ -48,7 +48,7 @@
         @if (Model.StructureItem != null)
         {
             <div class="group-block " title="Дополнительные адреса">
-                @if (Model.StructureItem.DopAddres != null)
+                @if (Model.StructureItem.DopAddres != null && Model.StructureItem.DopAddres.Count() > 0)
                 {
                     <table class="table">
                         <thead>
@@ -73,11 +73,11 @@
                 }
                 <div class="row">
                     <div class="col-xs-12">
-                        <h5>Добавить аддрес</h5>
+                        <h5>Добавить адрес</h5>
                     </div>
                     @Html.HiddenFor(m => m.StructureItem.Id)
                     <div class="col-md-4">
-                        <input type="text" title="Назваеме" name="dop-addres-title" />
+                        <input type="text" title="Название" name="dop-addres-title" />
                     </div>
                     <div class="col-md-4">
                         <input type="text" title="Адрес" name="dop-addres" />
@@ -120,7 +120,7 @@
                             </tr>
                         </thead>
                         <tbody data-service="@urlParam">
-                            @if (Model.StructureItem.Departments != null)
+                            @if (Model.StructureItem.Departments != null && Model.StructureItem.Departments.Count() > 0)
                             {
                                 foreach (var item in Model.StructureItem.Departments)
                                 {

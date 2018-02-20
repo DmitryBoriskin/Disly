@@ -25,20 +25,15 @@ namespace Disly.Controllers
                 SitesInfo = siteModel,
                 SiteMapArray = siteMapArray,
                 BannerArray = bannerArray,
-                CurrentPage = currentPage
+                CurrentPage = currentPage,
+                Breadcrumbs = new List<Breadcrumbs>()
             };
 
-            //#region Создаем переменные (значения по умолчанию)
-            //string PageTitle = model.CurrentPage.Title;
-            //string PageDesc = model.CurrentPage.Desc;
-            //string PageKeyw = model.CurrentPage.Keyw;
-            //#endregion
-
-            //#region Метатеги
-            //ViewBag.Title = PageTitle;
-            //ViewBag.Description = PageDesc;
-            //ViewBag.KeyWords = PageKeyw;
-            //#endregion
+            #region Создаем переменные (значения по умолчанию)
+            ViewBag.Title = "Страница";
+            ViewBag.Description = "Страница без названия";
+            ViewBag.KeyWords = "";
+            #endregion
         }
 
         // GET: /RedirectRegisty/Hospitals/{id}
@@ -62,6 +57,12 @@ namespace Disly.Controllers
             if (doctors == null || doctors.Length > 1)
             {
                 model.Doctors = doctors;
+
+                model.Breadcrumbs.Add(new Breadcrumbs
+                {
+                    Title = "Расписание",
+                    Url = ""
+                });
 
                 return View("~/Views/Doctors/Redirect.cshtml", model);
             }

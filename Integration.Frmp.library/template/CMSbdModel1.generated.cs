@@ -21,7 +21,7 @@ using LinqToDB.Mapping;
 namespace Integration.Frmp.models
 {
 	/// <summary>
-	/// Database       : DislyMVC
+	/// Database       : DislyMVCImport
 	/// Data Source    : chuvashia.com
 	/// Server Version : 11.00.3000
 	/// </summary>
@@ -132,7 +132,6 @@ namespace Integration.Frmp.models
 		[Column(@"b_sex"),           Nullable         ] public bool?     BSex        { get; set; } // bit
 		[Column(@"d_birthdate"),     Nullable         ] public DateTime? DBirthdate  { get; set; } // datetime2(7)
 		[Column(@"d_modify"),        Nullable         ] public DateTime? DModify     { get; set; } // datetime2(7)
-		[Column(@"xml_info"),        Nullable         ] public string    XmlInfo     { get; set; } // nvarchar(max)
 		[Column(@"c_photo"),         Nullable         ] public string    CPhoto      { get; set; } // varchar(max)
 	}
 

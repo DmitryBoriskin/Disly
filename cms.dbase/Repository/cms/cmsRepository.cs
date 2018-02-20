@@ -44,6 +44,48 @@ namespace cms.dbase
             DislyEvent(null, eventArgs);
         }
 
+        public override string getSiteDefaultDomain(string siteId)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var data = db.cms_sites_domainss
+                    .Where(w => w.f_site.ToLower() == siteId)
+                    .Where(w => w.b_default == true);
+
+                try
+                {
+                    return data.Select(p => p.c_domain).SingleOrDefault();
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("FrontRepository > getSiteDefaultDomain : Обнаружено более одного домена по умолчанию " + siteId);
+                }
+            }
+        }
+        public override string getSiteDefaultDomain(Guid ContId)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var data0 = db.cms_sitess.Where(w => w.f_content == ContId).SingleOrDefault();
+                if (data0!=null)
+                {
+                    var siteId = data0.c_alias;
+                    var data = db.cms_sites_domainss
+                                 .Where(w => w.f_site.ToLower() == siteId)
+                                 .Where(w => w.b_default == true);
+                    try
+                    {
+                        return data.Select(p => p.c_domain).SingleOrDefault();
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new Exception("FrontRepository > getSiteDefaultDomain : Обнаружено более одного домена по умолчанию " + siteId);
+                    }
+                }
+                return null;
+                
+            }
+        }
 
         #region private methods of class
 
@@ -52,7 +94,7 @@ namespace cms.dbase
         {
             try
             {
-                var linkIdData = db.cms_sitess.Where(d => d.c_alias.Equals(domain)).SingleOrDefault();
+                var linkIdData = db.cms_sitess.Where(d => d.c_alias.ToLower().Equals(domain)).SingleOrDefault();
                 if (linkIdData != null)
                 {
                     return new SiteContentType()
@@ -83,7 +125,7 @@ namespace cms.dbase
                 using (var db = new CMSdb(_context))
                 {
                     var data = db.cms_sitess
-                                    .Where(w => w.c_alias == _domain);
+                                    .Where(w => w.c_alias.ToLower() == _domain);
 
                     var site = data.Single();
                     return site.id;
@@ -137,7 +179,7 @@ namespace cms.dbase
                             Id = s.id,
                             Title = s.c_name,
                             LongTitle = s.c_name_long,
-                            Alias = s.c_alias,
+                            Alias = s.c_alias.ToLower(),
                             Adress = s.c_adress,
                             Phone = s.c_phone,
                             Fax = s.c_fax,
@@ -148,7 +190,7 @@ namespace cms.dbase
                             {
                                 Url = s.c_logo
                             },
-                            DomainList = getSiteDomains(s.c_alias),
+                            DomainList = getSiteDomains(s.c_alias.ToLower()),
                             ContentId = (Guid)s.f_content,
                             Type = s.c_content_type,
                             SiteOff = s.b_site_off
@@ -177,13 +219,13 @@ namespace cms.dbase
             {
                 using (var db = new CMSdb(_context))
                 {
-                    var data = db.cms_sitess.Where(w => w.c_alias == domain)
+                    var data = db.cms_sitess.Where(w => w.c_alias.ToLower() == domain)
                         .Select(s => new SitesModel
                         {
                             Id = s.id,
                             Title = s.c_name,
                             LongTitle = s.c_name_long,
-                            Alias = s.c_alias,
+                            Alias = s.c_alias.ToLower(),
                             Adress = s.c_adress,
                             Phone = s.c_phone,
                             Fax = s.c_fax,
@@ -242,7 +284,7 @@ namespace cms.dbase
                             .Where(w => w.id.Equals(item.Id))
                             .Set(u => u.c_name, item.Title)
                             .Set(u => u.c_name_long, item.LongTitle)
-                            .Set(u => u.c_alias, item.Alias)
+                            .Set(u => u.c_alias, item.Alias.ToLower())
                             .Set(u => u.c_scripts, item.Scripts)
                             .Set(u => u.c_facebook, item.Facebook)
                             .Set(u => u.c_vk, item.Vk)
@@ -387,7 +429,7 @@ namespace cms.dbase
             {
                 bool result = false;
 
-                int count = db.cms_menus.Where(w => w.c_alias == alias).Count();
+                int count = db.cms_menus.Where(w => w.c_alias.ToLower() == alias.ToLower()).Count();
                 if (count > 0) result = true;
 
                 return result;
@@ -408,8 +450,8 @@ namespace cms.dbase
                     {
                         Num = s.num,
                         GroupName = s.c_title,
-                        Alias = s.c_alias,
-                        GroupItems = getCmsMenuItems(s.c_alias, user_id)
+                        Alias = s.c_alias.ToLower(),
+                        GroupItems = getCmsMenuItems(s.c_alias.ToLower(), user_id)
                     })
                     .OrderBy(o => o.Num);
 
@@ -434,7 +476,7 @@ namespace cms.dbase
                     {
                         id = s.c_menu_id,
                         Permit = s.n_permit,
-                        Alias = s.c_alias,
+                        Alias = s.c_alias.ToLower(),
                         Title = s.c_title,
                         Class = s.c_class,
                         Group = s.f_group
@@ -461,7 +503,7 @@ namespace cms.dbase
                     {
                         id = s.id,
                         Permit = s.n_permit,
-                        Alias = s.c_alias,
+                        Alias = s.c_alias.ToLower(),
                         Title = s.c_title,
                         Desc = s.c_desc,
                         Class = s.c_class,
@@ -486,7 +528,7 @@ namespace cms.dbase
                     {
                         num = s.num,
                         text = s.c_title,
-                        value = s.c_alias
+                        value = s.c_alias.ToLower()
                     })
                 .OrderBy(o => o.num);
 
@@ -514,7 +556,7 @@ namespace cms.dbase
                         .Value(p => p.id, id)
                         .Value(p => p.n_permit, Permit)
                         .Value(p => p.c_title, Item.Title)
-                        .Value(p => p.c_alias, Item.Alias)
+                        .Value(p => p.c_alias, Item.Alias.ToLower())
                         .Value(p => p.c_class, Item.Class)
                         .Value(p => p.f_group, Item.Group)
                         .Value(p => p.c_desc, Item.Desc)
@@ -535,8 +577,8 @@ namespace cms.dbase
 
                     //добавить права группы пользователей
                     Guid Dev_users = Guid.Parse("00000000-0000-0000-0000-000000000000");
-                    var data_group = db.cms_users_groups.Where(w => w.c_alias != "Developer").Select(s => new cms_users_group { id = s.id, c_alias = s.c_alias }).ToArray();//спсиок групп
-                    var data_group_develop = db.cms_users_groups.Where(w => w.c_alias == "Developer").Select(s => new cms_users_group { id = s.id, c_alias = s.c_alias }).ToArray();//спсиок групп
+                    var data_group = db.cms_users_groups.Where(w => w.c_alias.ToLower() != "developer").Select(s => new cms_users_group { id = s.id, c_alias = s.c_alias.ToLower() }).ToArray();//спсиок групп
+                    var data_group_develop = db.cms_users_groups.Where(w => w.c_alias.ToLower() == "developer").Select(s => new cms_users_group { id = s.id, c_alias = s.c_alias.ToLower() }).ToArray();//спсиок групп
                     var data_users = db.cms_userss.Where(w => w.id != Dev_users).Select(s => new cms_users { id = s.id }).ToArray();//спсиок пользователей
                     var data_users_develop = db.cms_userss.Where(w => w.id == Dev_users).Select(s => new cms_users { id = s.id }).ToArray();//разработчик системная учетная запись
 
@@ -545,7 +587,7 @@ namespace cms.dbase
                     {
                         db.cms_resolutions_templatess
                             .Value(v => v.f_menu_id, id)
-                            .Value(v => v.f_user_group, s.c_alias)
+                            .Value(v => v.f_user_group, s.c_alias.ToLower())
                             .Value(v => v.b_read, false)
                             .Value(v => v.b_write, false)
                             .Value(v => v.b_change, false)
@@ -556,7 +598,7 @@ namespace cms.dbase
                     {
                         db.cms_resolutions_templatess
                             .Value(v => v.f_menu_id, id)
-                            .Value(v => v.f_user_group, s.c_alias)
+                            .Value(v => v.f_user_group, s.c_alias.ToLower())
                             .Value(v => v.b_read, true)
                             .Value(v => v.b_write, true)
                             .Value(v => v.b_change, true)
@@ -626,7 +668,7 @@ namespace cms.dbase
                     {
                         data.Where(w => w.id == id)
                         .Set(p => p.c_title, Item.Title)
-                        .Set(p => p.c_alias, Item.Alias)
+                        .Set(p => p.c_alias, Item.Alias.ToLower())
                         .Set(p => p.c_class, Item.Class)
                         .Set(p => p.f_group, Item.Group)
                         .Set(p => p.c_desc, Item.Desc)
@@ -761,6 +803,12 @@ namespace cms.dbase
             {
                 var query = queryBySiteFilter(db, filtr);
 
+                var querycount = db.cms_sitess.Where(w => w.c_content_type != "temp");
+
+                int CountAllSites= querycount.Count();
+                int CountOrgSites = querycount.Where(w=>w.c_content_type=="org").Count(); 
+                int CountGsSites = querycount.Where(w => w.c_content_type == "spec").Count(); ;
+                int CountEventSites= querycount.Where(w => w.c_content_type == "event").Count();
 
                 if (filtr.Disabled != null) //в данном случае используется для определения отключенных/включенных сайтов
                 {
@@ -786,20 +834,30 @@ namespace cms.dbase
                         {
                             Id = s.id,
                             Title = s.c_name,
-                            Alias = s.c_alias,
+                            Alias = s.c_alias.ToLower(),
                             SiteOff = s.b_site_off,
                             Type = s.c_content_type,
-                            DomainList = getSiteDomains(s.c_alias)
+                            DomainList = getSiteDomains(s.c_alias.ToLower())
                         }).
                         Skip(filtr.Size * (filtr.Page - 1)).
                         Take(filtr.Size);
 
                     SitesModel[] sitesInfo = List.ToArray();
 
-                    return new SitesList
+                    return new SitesList()
                     {
                         Data = sitesInfo,
-                        Pager = new Pager { page = filtr.Page, size = filtr.Size, items_count = ItemCount, page_count = ItemCount / filtr.Size }
+                        Pager = new Pager()
+                        {
+                            Page = filtr.Page,
+                            Size = filtr.Size,
+                            ItemsCount = ItemCount,
+                            //PageCount = ItemCount / filtr.Size
+                        },
+                        CountAllSites=CountAllSites,
+                        CountOrgSites=CountOrgSites,
+                        CountGsSites=CountGsSites,
+                        CountEventSites=CountEventSites
                     };
                 }
                 return null;
@@ -816,15 +874,14 @@ namespace cms.dbase
                 {
                     var List = query
                     .OrderBy(o => new { o.c_name })
-                    .Take(filtr.Size)
                     .Select(s => new SitesShortModel()
                     {
                         Id = s.id,
                         Title = s.c_name,
-                        Alias = s.c_alias,
+                        Alias = s.c_alias.ToLower(),
                         SiteOff = s.b_site_off,
                         Type = s.c_content_type,
-                        DomainList = getSiteDomains(s.c_alias),
+                        DomainList = getSiteDomains(s.c_alias.ToLower()),
                         Checked = ContentLinkExists(filtr.RelId.Value, filtr.RelType, s.id, ContentLinkType.SITE),
                         Origin = ContentLinkOrigin(filtr.RelId.Value, filtr.RelType, s.id, ContentLinkType.SITE)
                     });
@@ -851,16 +908,14 @@ namespace cms.dbase
                     .OrderBy(o => new { o.c_name });
 
                 var data = query
-                    //.Skip(filtr.Size * (filtr.Page - 1))
-                    //.Take(filtr.Size)
                     .Select(s => new SitesShortModel
                     {
                         Id = s.id,
                         Title = s.c_name,
-                        Alias = s.c_alias,
+                        Alias = s.c_alias.ToLower(),
                         SiteOff = s.b_site_off,
                         Type = s.c_content_type,
-                        DomainList = getSiteDomains(s.c_alias),
+                        DomainList = getSiteDomains(s.c_alias.ToLower()),
                         Checked = (filtr.UserId.HasValue)? s.fklinksitetousers.Any(u => u.f_user == filtr.UserId) ? true: false :false
                         });
 
@@ -903,7 +958,7 @@ namespace cms.dbase
                     {
                         db.cms_sitess
                           .Value(v => v.id, ins.Id)
-                          .Value(v => v.c_alias, ins.Alias)
+                          .Value(v => v.c_alias, ins.Alias.ToLower())
                           .Value(v => v.c_name, ins.Title)
                           .Value(v => v.c_name_long, ins.Title)
                           .Value(v => v.c_content_type, ins.Type)
@@ -919,14 +974,14 @@ namespace cms.dbase
                             {
                                 db.front_site_sections
                                     .Value(v => v.f_site, ins.Alias)
-                                    .Value(v => v.f_front_section, item.c_alias)
+                                    .Value(v => v.f_front_section, item.c_alias.ToLower())
                                     .Value(v => v.f_page_view, item.c_default_view)
                                     .Insert();
                             }
                         }
                         //назначение пользователям(разработчикам и администраторам портала) прав  к созданному сайту
-                        var UserList = db.cms_users_groups.Where(w => (w.c_alias == "Developer" || w.c_alias == "administrator"))
-                                         .Join(db.cms_userss,e=>e.c_alias,o=>o.f_group,(e,o)=>o).Select(s=>s.id).ToArray();
+                        var UserList = db.cms_users_groups.Where(w => (w.c_alias.ToLower() == "developer" || w.c_alias.ToLower() == "administrator"))
+                                         .Join(db.cms_userss,e=>e.c_alias.ToLower(), o=>o.f_group,(e,o)=>o).Select(s=>s.id).ToArray();
 
 
                         foreach (var item in UserList)
@@ -1135,8 +1190,13 @@ namespace cms.dbase
                 {
                     NewDomain = NewDomain.Trim().ToLower();
 
+                    var bdefault = true;
+
                     if (NewDomain == "localhost")
+                    {
                         db.cms_sites_domainss.Where(w => w.c_domain == NewDomain).Delete();
+                        bdefault = false;
+                    }
 
                     var data = db.cms_sites_domainss.Where(w => w.c_domain == NewDomain);
                     if (!data.Any())
@@ -1146,6 +1206,7 @@ namespace cms.dbase
                                      .Value(v => v.id, NewGuid)
                                      .Value(v => v.f_site, SiteId)
                                      .Value(v => v.c_domain, NewDomain)
+                                     .Value(v => v.b_default, bdefault)
                                      .Insert();
                         //логирование
                         var log = new LogModel()
@@ -1182,30 +1243,45 @@ namespace cms.dbase
                     var data = db.cms_sites_domainss.Where(w => w.id == id);
                     if (data.Any())
                     {
-
-                        string domainName = data.Select(s => s.c_domain).SingleOrDefault();
-                        if (!string.IsNullOrEmpty(domainName) && domainName.Trim().ToLower() == "localhost")
+                        var domain = data.SingleOrDefault();
+                        if(domain != null)
                         {
-                            return false;
+                            string domainName = domain.c_domain;
+                            if (!string.IsNullOrEmpty(domainName) && domainName.Trim().ToLower() == "localhost")
+                            {
+                                return false;
+                            }
+                            data.Delete();
+
+                            if (domain.b_default)
+                            {
+                                var toUpdate = db.cms_sites_domainss.Where(p => p.f_site == domain.f_site).FirstOrDefault();
+
+                                if (toUpdate != null)
+                                {
+                                    toUpdate.b_default = true;
+                                    db.Update(toUpdate);
+                                }
+                            }
+
+                           
+
+                            //логирование
+                            var log = new LogModel()
+                            {
+                                Site = _domain,
+                                Section = LogSection.Sites,
+                                Action = LogAction.delete_domain,
+                                PageId = id,
+                                PageName = domainName,
+                                UserId = _currentUserId,
+                                IP = _ip,
+                            };
+                            insertLog(log);
+
+                            tran.Commit();
+                            return true;
                         }
-
-                        data.Delete();
-
-                        //логирование
-                        var log = new LogModel()
-                        {
-                            Site = _domain,
-                            Section = LogSection.Sites,
-                            Action = LogAction.delete_domain,
-                            PageId = id,
-                            PageName = domainName,
-                            UserId = _currentUserId,
-                            IP = _ip,
-                        };
-                        insertLog(log);
-
-                        tran.Commit();
-                        return true;
                     }
                 return false;
                 }
@@ -1257,6 +1333,7 @@ namespace cms.dbase
 
             }
         }
+
         /// <summary>
         /// Служит для определения идентификатора сайта
         /// </summary>
@@ -1377,15 +1454,15 @@ namespace cms.dbase
 
                     UsersModel[] usersInfo = List.ToArray();
 
-                    return new UsersList
+                    return new UsersList()
                     {
                         Data = usersInfo,
-                        Pager = new Pager
+                        Pager = new Pager()
                         {
-                            page = filtr.Page,
-                            size = filtr.Size,
-                            items_count = ItemCount,
-                            page_count = (ItemCount % filtr.Size > 0) ? (ItemCount / filtr.Size) + 1 : ItemCount / filtr.Size
+                            Page = filtr.Page,
+                            Size = filtr.Size,
+                            ItemsCount = ItemCount,
+                            //PageCount = (ItemCount % filtr.Size > 0) ? (ItemCount / filtr.Size) + 1 : ItemCount / filtr.Size
                         }
                     };
                 }

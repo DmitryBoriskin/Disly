@@ -1,5 +1,4 @@
 ﻿using cms.dbModel.entity;
-using cms.dbModel.entity.cms;
 
 namespace Disly.Models
 {
@@ -11,12 +10,12 @@ namespace Disly.Models
         /// <summary>
         /// Список главных специалистов
         /// </summary>
-        public MainSpecialistModel[] List { get; set; }
+        public GSModel[] List { get; set; }
 
         /// <summary>
         /// Список врачей из главных специалистов
         /// </summary>
-        public People[] Members { get; set; }
+        public PeopleModel[] Members { get; set; }
 
     }
 }

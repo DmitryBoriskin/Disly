@@ -19,9 +19,13 @@ namespace Disly.Areas.Admin.Controllers
                 Settings = SettingsInfo,
                 ControllerName = ControllerName,
                 ActionName = ActionName,
-
-                AccountLog = _cmsRepository.getCmsUserLog(AccountInfo.id)
             };
+            if (AccountInfo != null)
+            {
+                model.Menu = _cmsRepository.getCmsMenu(AccountInfo.Id);
+                model.AccountLog = _cmsRepository.getCmsUserLog(AccountInfo.Id);
+            }
+
 
             #region Метатеги
             ViewBag.Title = "Главная";

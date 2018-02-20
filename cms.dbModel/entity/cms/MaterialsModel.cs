@@ -94,6 +94,11 @@ namespace cms.dbModel.entity
         public string Desc { get; set; }
 
         /// <summary>
+        /// Прикрепленные документы
+        /// </summary>
+        public DocumentsModel[] Documents { get; set; }
+
+        /// <summary>
         /// Флаг важности
         /// </summary>
         [Required]
@@ -129,6 +134,10 @@ namespace cms.dbModel.entity
         /// Признак импортированности материала из рсс ленты
         /// </summary>
         public bool ImportRss { get; set; }
+        /// <summary>
+        /// Сми о медицине(мира/России/Чувашии)
+        /// </summary>
+        public string SmiType { get; set; }
   
         //-------------------------------------------------------------
         /// <summary>
@@ -150,7 +159,11 @@ namespace cms.dbModel.entity
         /// Название группы (для модуля внешней части)
         /// </summary>
         public string GroupName { get; set; }
-      
+
+        /// <summary>
+        /// Флаг привязки к главному порталу
+        /// </summary>
+        public bool IsAttacheToMainPortal { get; set; }
     }
 
     /// <summary>

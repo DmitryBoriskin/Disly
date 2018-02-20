@@ -13,6 +13,9 @@ namespace Disly.Models
         /// </summary>
         public List<MaterialFrontModule> Materials { get; set; }
 
+
+        public MaterialFrontModule ImportantMaterials { get; set; }
+
         /// <summary>
         /// Идентификатор организации
         /// </summary>

@@ -21,9 +21,11 @@
                 contentType: false,
                 processData: false,
                 data: false,
-                error: function (res) { alert("error - "+res); },
+                error: function (res) {
+                    window.alert(res);
+                },
                 success: function (result) {
-                    if (result !== '') alert(result);
+                    if (result !== '') window.alert(result);
                     else elem.parent().remove();
                 }
             });
@@ -137,7 +139,7 @@
     });
 
     //Привязка к организациям
-    $(".org-byType-tree .orgType-item-chkbx").on('ifToggled', function () {
+    $(".modal-org-list .org-item-chkbx").on('ifToggled', function () {
         var targetUrl = "/Admin/Orgs/UpdateLinkToOrg";
         var _objctId = $(this).data("objectId");
         var _objectType = $(this).data("objectType");
@@ -146,8 +148,8 @@
         var _checked = $(this).is(':checked');
 
         var el = $(this);
-        var elTooltip = $(this).closest(".orgType-item").find(".orgType-item-tooltip").first();
-        var _chkbxlabel = $(this).closest(".orgType-item").find("label .orgType-item-html").first().html();
+        var elTooltip = $(this).closest(".org-item-row").find(".org-item-tooltip").first();
+        var _chkbxlabel = $(this).closest(".org-item-row").find(".org-item-html").first().html();
 
         var listBlock = $("#model-linksToOrgs-ul", top.document);
 
@@ -179,7 +181,7 @@
                     if (_checked) {
                         if (listBlock.find("org_" + _linkId).length === 0)
                         {
-                            listBlock.append($("<li id='org_" + _linkId + "' class='icon-location-5'/>").html(_chkbxlabel));
+                            listBlock.append($("<li id='org_" + _linkId + "' class='icon-link'/>").html(_chkbxlabel));
                         }
                     }
                     else {
@@ -196,7 +198,7 @@
                         //content.fadeOut("slow");
                         elTooltip.tooltip('hide');
                     }, 1000);
-                    location.reload();
+                    //location.reload();
                 });
         }
         catch (ex) {
@@ -248,7 +250,7 @@
                     if (_checked) {
                         if (listBlock.find("evnt_" + _linkId).length === 0)
                         {
-                            listBlock.append($("<li id='evnt_" + _linkId + "' class='icon-calendar'/>").html(_dateEvent + _chkbxEvent));
+                            listBlock.append($("<li id='evnt_" + _linkId + "' class='icon-link'/>").html(_dateEvent + _chkbxEvent));
                         }
                     }
                     else {
@@ -314,7 +316,7 @@
                     elTooltip.tooltip('show');
                     if (_checked) {
                         if (listBlock.find("site_" + _linkId).length === 0) {
-                            listBlock.append($("<li id='site_" + _linkId + "' class='icon-location-5'/>").html(_chkbxHtml));
+                            listBlock.append($("<li id='site_" + _linkId + "' class='icon-link'/>").html(_chkbxHtml));
                         }
                     }
                     else {
@@ -336,6 +338,140 @@
         catch (ex) {
             console.log(ex);
         }
+    });
+
+    //Привязка к гс
+    $("#modal-spec-table .spec-item-chkbx").on('ifToggled', function () {
+        var targetUrl = "/Admin/MainSpecialist/UpdateLinkToSpec";
+        var _objctId = $(this).data("objectId");
+        var _objectType = $(this).data("objectType");
+        var _linkId = $(this).data("linkId");
+        var _linkType = $(this).data("linkType");
+        var _checked = $(this).is(':checked');
+
+        var el = $(this);
+        var elTooltip = $(this).closest(".spec-item-row").find(".spec-item-tooltip").first();
+        var _chkbxHtml = $(this).closest(".spec-item-row").find(".spec-item-html").first().html();
+
+        var listBlock = $("#model-linksToSpec-ul", top.document);
+
+        try {
+            var params = {
+                ObjctId: _objctId,
+                ObjctType: _objectType,
+                LinkId: _linkId,
+                LinkType: _linkType,
+                Checked: _checked
+            };
+
+            var _data = JSON.stringify(params);
+
+            //ShowPreloader(content);
+
+            $.ajax({
+                url: targetUrl,
+                method: "POST",
+                async: true,
+                cache: false,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                data: JSON.stringify(params)
+            })
+                .done(function (response) {
+                    elTooltip.attr("title", "Сохранено");
+                    elTooltip.tooltip('show');
+                    if (_checked) {
+                        if (listBlock.find("spec_" + _linkId).length === 0) {
+                            listBlock.append($("<li id='spec_" + _linkId + "' class='icon-link'/>").html(_chkbxHtml));
+                        }
+                    }
+                    else {
+                        listBlock.find("#spec_" + _linkId).remove();
+                    }
+                })
+                .fail(function (jqXHR, status) {
+                    console.log("Ошибка" + " " + status + " " + jqXHR);
+                    elTooltip.attr("title", "Ошибка сохранения");
+                    elTooltip.tooltip('show');
+                })
+                .always(function (response) {
+                    setTimeout(function () {
+                        elTooltip.tooltip('hide');
+                    }, 1000);
+                    //location.reload();
+                });
+        }
+        catch (ex) {
+            console.log(ex);
+        }
+    });
+
+
+    function CheckFormData(form) {
+        if ($("#member-people-select").val()) {
+            if ($(".member-people-org-select").val()) {
+                return true;
+            }
+            else {
+                var flag = false;
+                form.find("input").not(":hidden").each(function (e) {
+                    if ($(this).val()) {
+                        flag = true;
+                    }
+                });
+                if (flag)
+                    return true;
+            }
+        }
+        return false;
+    }
+
+    $("#member-save-btn").on("click", function (e) {
+        e.preventDefault();
+        var form = $("form");
+        if (CheckFormData(form)) {
+            form.submit();
+            setTimeout(top.document.location.reload(), 3000);
+        }
+        else {
+            $("#error-message-box").removeClass("hidden");
+        }
+    });
+
+    $("#member-people-select").on("change", function (e) {
+        $(".member-people-org-select").select2({
+            placeholder: "Выберите организацию",
+            language: "ru",
+            width: "100%",
+            triggerChange: true,
+            allowClear: true,
+            //minimumInputLength: 1,
+
+            ajax: {
+                method: "POST",
+                url: "/admin/orgs/orglistforselect",
+                dataType: 'json',
+                delay: 500,
+                data: { peopleId: $("#member-people-select").val() },
+                processResults:
+                        function (data, params) {
+                            var obj = $.map(data, function (item, indx) {
+                                return {
+                                    id: item.id,
+                                    text: item.title
+                                }
+                            });
+                            return { results: obj };
+                        },
+                cache: true
+            }
+        });
+    });
+
+    $("#mainSpec-orgSite-input").on("change", function (e) {
+        var newval = $(this).val().replace("http://", "");
+        newval = $(this).val().replace("https://", "");
+        $(this).val(newval);
     });
 
 })

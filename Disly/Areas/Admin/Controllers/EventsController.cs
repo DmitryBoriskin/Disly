@@ -2,11 +2,7 @@
 using Disly.Areas.Admin.Models;
 using Disly.Areas.Admin.Service;
 using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.IO;
 using System.Linq;
-using System.Net;
 using System.Web;
 using System.Web.Mvc;
 
@@ -37,6 +33,11 @@ namespace Disly.Areas.Admin.Controllers
                 ControllerName = ControllerName,
                 ActionName = ActionName
             };
+
+            if (AccountInfo != null)
+            {
+                model.Menu = _cmsRepository.getCmsMenu(AccountInfo.Id);
+            }
 
             #region Метатеги
             ViewBag.Title = UserResolutionInfo.Title;
@@ -75,9 +76,6 @@ namespace Disly.Areas.Admin.Controllers
                 :
                 ViewBag.DataPath + model.Item.DateBegin.ToString("yyyy") + "/" + model.Item.DateBegin.ToString("MM") + "/" + model.Item.DateBegin.ToString("dd") + "/";
 
-
-
-
             if (model.Item == null)
                 model.Item = new EventsModel()
                 {
@@ -95,6 +93,7 @@ namespace Disly.Areas.Admin.Controllers
             var eventFilter = FilterParams.Extend<EventFilter>(filter);
             eventFilter.RelId = Id;
             eventFilter.RelType = ContentType.EVENT;
+            eventFilter.Domain = null;
             var eventsList = _cmsRepository.getEventsList(eventFilter);
 
             var orgfilter = FilterParams.Extend<OrgFilter>(filter);
@@ -102,11 +101,20 @@ namespace Disly.Areas.Admin.Controllers
             orgfilter.RelType = ContentType.EVENT;
             var orgs = _cmsRepository.getOrgs(orgfilter);
 
+            GSModel[] spec = null;
+            var specfilter = FilterParams.Extend<GSFilter>(filter);
+            specfilter.RelId = Id;
+            specfilter.RelType = ContentType.EVENT;
+            var specList = _cmsRepository.getGSList(specfilter);
+            spec = (specList != null) ?
+                (specList.Data != null) ? specList.Data.ToArray() : null
+                : null;
+
             model.Item.Links = new ObjectLinks()
             {
                 Events = (eventsList != null) ? eventsList.Data : null,
                 Orgs = orgs,
-                //Persons = null
+                Specs = spec
             };
 
             ViewBag.Backlink = StartUrl + Request.Url.Query;
@@ -116,21 +124,27 @@ namespace Disly.Areas.Admin.Controllers
 
 
         /// <summary>
-        /// Формируем строку фильтра
+        /// 
         /// </summary>
-        /// <param name="title_serch">Поиск по названию</param>
+        /// <param name="searchtext"></param>
+        /// <param name="disabled"></param>
+        /// <param name="size"></param>
+        /// <param name="date"></param>
+        /// <param name="dateend"></param>
         /// <returns></returns>
         [HttpPost]
         [MultiButton(MatchFormKey = "action", MatchFormValue = "search-btn")]
-        public ActionResult Search(string filter, bool enabeld, string size)
+        public ActionResult Search(string searchtext, bool enabled, string size, DateTime? datestart, DateTime? dateend)
         {
             string query = HttpUtility.UrlDecode(Request.Url.Query);
-            query = addFiltrParam(query, "filter", filter);
-            if (enabeld) query = addFiltrParam(query, "enabeld", String.Empty);
-            else query = addFiltrParam(query, "enabeld", enabeld.ToString().ToLower());
-
-            query = addFiltrParam(query, "page", String.Empty);
-            query = addFiltrParam(query, "size", size);
+            query = AddFiltrParam(query, "searchtext", searchtext);
+            query = AddFiltrParam(query, "disabled", (!enabled).ToString().ToLower());
+            if (datestart.HasValue)
+                query = AddFiltrParam(query, "datestart", datestart.Value.ToString("dd.MM.yyyy").ToLower());
+            if (dateend.HasValue)
+                query = AddFiltrParam(query, "dateend", dateend.Value.ToString("dd.MM.yyyy").ToLower());
+            query = AddFiltrParam(query, "page", String.Empty);
+            query = AddFiltrParam(query, "size", size);
 
             return Redirect(StartUrl + query);
         }
@@ -156,7 +170,7 @@ namespace Disly.Areas.Admin.Controllers
         {
             //  При создании записи сбрасываем номер страницы
             string query = HttpUtility.UrlDecode(Request.Url.Query);
-            query = addFiltrParam(query, "page", String.Empty);
+            query = AddFiltrParam(query, "page", String.Empty);
 
             return Redirect(StartUrl + "Item/" + Guid.NewGuid() + "/" + query);
         }
@@ -180,7 +194,10 @@ namespace Disly.Areas.Admin.Controllers
                 var res = false;
                 var getEvent = _cmsRepository.getEvent(Id);
 
+                // добавление необходимых полей перед сохранением модели
                 bindData.Item.Id = Id;
+                bindData.Item.ContentLink = SiteInfo.ContentId;
+                bindData.Item.ContentLinkType = SiteInfo.Type;
 
                 #region Сохранение изображения
                 var width = 0;
@@ -191,12 +208,11 @@ namespace Disly.Areas.Admin.Controllers
                 string savePath = Settings.UserFiles + Domain + Settings.EventsDir;
                 if (upload != null && upload.ContentLength > 0)
                 {
-                    string fileExtension = upload.FileName.Substring(upload.FileName.LastIndexOf(".")).ToLower();
-
-                    var validExtension = (!string.IsNullOrEmpty(Settings.PicTypes)) ? Settings.PicTypes.Split(',') : "jpg,jpeg,png,gif".Split(',');
-                    if (!validExtension.Contains(fileExtension.Replace(".", "")))
+                    if (!AttachedPicExtAllowed(upload.FileName))
                     {
-                        model.Item = _cmsRepository.getEvent(Id);
+                        model.Item = (_cmsRepository.getEvent(Id) != null) ? _cmsRepository.getEvent(Id)
+                           : new EventsModel() { Id = Id };
+
                         model.ErrorInfo = new ErrorMessage()
                         {
                             title = "Ошибка",
@@ -209,6 +225,8 @@ namespace Disly.Areas.Admin.Controllers
 
                         return View("Item", model);
                     }
+
+                    string fileExtension = upload.FileName.Substring(upload.FileName.LastIndexOf(".")).ToLower();
 
                     var sizes = (!string.IsNullOrEmpty(Settings.MaterialPreviewImgSize)) ? Settings.MaterialPreviewImgSize.Split(',') : defaultPreviewSizes;
                     int.TryParse(sizes[0], out width);
@@ -241,8 +259,6 @@ namespace Disly.Areas.Admin.Controllers
                 else
                 {
                     userMessage.info = "Запись добавлена";
-                    bindData.Item.ContentLink = SiteInfo.ContentId;
-                    bindData.Item.ContentLinkType = SiteInfo.Type;
                     res = _cmsRepository.insertCmsEvent(bindData.Item);
                 }
                 //Сообщение пользователю
@@ -356,7 +372,7 @@ namespace Disly.Areas.Admin.Controllers
             {
                 ObjctId = objId,
                 ObjctType = objType,
-                EventsList = _cmsRepository.getLastEventsListWithCheckedFor(filtr),
+                EventsList = _cmsRepository.getLastEventsListWithCheckedFor(filtr)
             };
 
             //var model = new OrgsModalViewModel()

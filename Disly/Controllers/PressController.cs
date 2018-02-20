@@ -1,6 +1,7 @@
 ﻿using cms.dbase;
 using Disly.Models;
 using System;
+using System.Collections.Generic;
 using System.Web;
 using System.Web.Mvc;
 
@@ -14,11 +15,6 @@ namespace Disly.Controllers
         {
             base.OnActionExecuting(filterContext);
 
-            currentPage = _repository.getSiteMap("Press");
-
-            if (currentPage == null)
-                throw new Exception("model.CurrentPage == null");
-
             model = new NewsViewModel
             {
                 SitesInfo = siteModel,
@@ -30,15 +26,9 @@ namespace Disly.Controllers
             };
 
             #region Создаем переменные (значения по умолчанию)
-            string PageTitle = model.CurrentPage.Title;
-            string PageDesc = model.CurrentPage.Desc;
-            string PageKeyw = model.CurrentPage.Keyw;
-            #endregion
-
-            #region Метатеги
-            ViewBag.Title = PageTitle;
-            ViewBag.Description = PageDesc;
-            ViewBag.KeyWords = PageKeyw;
+            ViewBag.Title = "Страница";
+            ViewBag.Description = "Страница без названия";
+            ViewBag.KeyWords = "";
             #endregion
         }
 
@@ -48,42 +38,116 @@ namespace Disly.Controllers
         /// <returns></returns>
         public ActionResult Index()
         {
+            #region currentPage
+            currentPage = _repository.getSiteMap("Press");
+            if (currentPage == null)
+                //throw new Exception("model.CurrentPage == null");
+                return RedirectToRoute("Error", new { httpCode = 404 });
+
+            if (currentPage != null)
+            {
+                ViewBag.Title = currentPage.Title;
+                ViewBag.Description = currentPage.Desc;
+                ViewBag.KeyWords = currentPage.Keyw;
+
+                model.CurrentPage = currentPage;
+            }
+            #endregion
+
             string _ViewName = (ViewName != String.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";
+
             ViewBag.Category = (RouteData.Values["category"] != null) ? RouteData.Values["category"] : String.Empty;
             var filter = getFilter();
             filter.Disabled = false;
-            model.List = _repository.getMaterialsList(filter);
+            MaterialFilter filternews = FilterParams.Extend<MaterialFilter>(filter);
+            filternews.SmiType = (String.IsNullOrEmpty(Request.QueryString["smitype"])) ? String.Empty : Request.QueryString["smitype"];
 
-            ViewBag.Filter = filter;
-            ViewBag.NewsSearchArea = filter.SearchText;
-            ViewBag.NewsSearchDateStart = filter.Date;
-            ViewBag.NewsSearchDateFin = filter.DateEnd;
+            model.List = _repository.getMaterialsList(filternews);
+
+            ViewBag.FilterSearchText = filter.SearchText;
+            ViewBag.FilterDate = filter.Date;
+            ViewBag.FilterDateEnd = filter.DateEnd;
 
             return View(_ViewName, model);
         }
 
         public ActionResult Item(string year, string month, string day, string alias)
         {
+            #region currentPage
+            currentPage = _repository.getSiteMap("Press");
+            if (currentPage == null)
+                //throw new Exception("model.CurrentPage == null");
+                return RedirectToRoute("Error", new { httpCode = 404 });
+
+            if (currentPage != null)
+            {
+                ViewBag.Title = currentPage.Title;
+                ViewBag.Description = currentPage.Desc;
+                ViewBag.KeyWords = currentPage.Keyw;
+
+                model.CurrentPage = currentPage;
+            }
+            #endregion
+
             string _ViewName = (ViewName != String.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";
 
             ViewBag.Day = day.ToString();
             ViewBag.Alias = (RouteData.Values["alias"] != null) ? RouteData.Values["alias"] : String.Empty;
             model.Item = _repository.getMaterialsItem(year, month, day, alias); //,Domain
 
+            if (model.Item != null)
+                model.Item.Documents = _repository.getAttachDocuments(model.Item.Id);
+
             return View(_ViewName, model);
         }
 
         public ActionResult Category(string category)
         {
+            #region currentPage
+            currentPage = _repository.getSiteMap("Press");
+            if (currentPage == null)
+                //throw new Exception("model.CurrentPage == null");
+                return RedirectToRoute("Error", new { httpCode = 404 });
+
+            if (currentPage != null)
+            {
+                ViewBag.Title = currentPage.Title;
+                ViewBag.Description = currentPage.Desc;
+                ViewBag.KeyWords = currentPage.Keyw;
+
+                model.CurrentPage = currentPage;
+            }
+            #endregion
+
             string _ViewName = (ViewName != String.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";
 
-            ViewBag.CurrentCategory = category;
             var filter = getFilter();
             filter.Disabled = false;
             filter.Category = category;
-            ViewBag.Filter = filter;
+            MaterialFilter filternews = FilterParams.Extend<MaterialFilter>(filter);
+            filternews.SmiType = (String.IsNullOrEmpty(Request.QueryString["smitype"])) ? String.Empty : Request.QueryString["smitype"];
+            model.List = _repository.getMaterialsList(filternews);
 
-            model.List = _repository.getMaterialsList(filter);
+            ViewBag.FilterCategory = filter.Category;
+            ViewBag.FilterSearchText = filter.SearchText;
+            ViewBag.FilterDate = filter.Date;
+            ViewBag.FilterDateEnd = filter.DateEnd;
+
+            if(filter.Category== "new-in-medicine")
+            {
+
+                model.NewInMedicin = new SelectList(
+                   new List<SelectListItem>
+                   {
+                                new SelectListItem { Text = "не выбрано", Value =""},
+                                new SelectListItem { Text = "Мира", Value ="world"},
+                                new SelectListItem { Text = "России", Value ="russia"},
+                                new SelectListItem { Text = "Чувашии", Value = "chuvashia" }
+                   }, "Value", "Text", filternews.SmiType
+              );
+            }
+            
+
 
             return View(_ViewName, model);
         }
@@ -95,7 +159,11 @@ namespace Disly.Controllers
             ViewBag.Category = (RouteData.Values["category"] != null) ? RouteData.Values["category"] : String.Empty;
             var filter = getFilter();
             filter.Disabled = false;
-            model.List = _repository.getMaterialsList(filter);
+
+            MaterialFilter filternews = FilterParams.Extend<MaterialFilter>(filter);
+            filternews.SmiType = (String.IsNullOrEmpty(Request.QueryString["smitype"])) ? String.Empty : Request.QueryString["smitype"];
+
+            model.List = _repository.getMaterialsList(filternews);
 
             ViewBag.Filter = filter;
             ViewBag.NewsSearchArea = filter.SearchText;
@@ -113,7 +181,11 @@ namespace Disly.Controllers
             Response.ContentType = "text/xml";
             var filter = getFilter();
             filter.Disabled = false;
-            model.List = _repository.getMaterialsList(filter);
+
+            MaterialFilter filternews = FilterParams.Extend<MaterialFilter>(filter);
+            filternews.SmiType = (String.IsNullOrEmpty(Request.QueryString["smitype"])) ? String.Empty : Request.QueryString["smitype"];
+
+            model.List = _repository.getMaterialsList(filternews);
             if (model.List != null)
             {
                 ViewBag.LastDatePublish = model.List.Data[0].Date;

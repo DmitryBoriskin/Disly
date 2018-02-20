@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace cms.dbModel.entity
 {
@@ -14,7 +10,7 @@ namespace cms.dbModel.entity
         /// <summary>
         /// Идентификатор
         /// </summary>
-        public Guid id { get; set; }
+        public Guid Id { get; set; }
 
         /// <summary>
         /// Email

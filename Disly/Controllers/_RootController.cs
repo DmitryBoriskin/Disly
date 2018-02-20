@@ -136,6 +136,7 @@ namespace Disly.Controllers
             ViewBag.Concept = Concept = Settings.Concept;
             ViewBag.Coordination = Coordination = Settings.Coordination;
             ViewBag.ControllerName = ControllerName;
+            ViewBag.ActionName = ActionName;
         }
 
         public RootController()
@@ -166,31 +167,35 @@ namespace Disly.Controllers
         
         public FilterParams getFilter(int defaultPageSize = 20)
         {
-            string return_url = HttpUtility.UrlDecode(Request.Url.Query);
-            // если в URL номер страницы равен значению по умолчанию - удаляем его из URL
-            try
+            string return_url = "";
+            //string return_url = HttpUtility.UrlDecode(Request.Url.Query);
+
+
+            var queryParams = new Dictionary<string, string>();
+            var qparams = HttpUtility.ParseQueryString(Request.QueryString.ToString());
+            if (qparams.AllKeys != null && qparams.AllKeys.Count() > 0)
             {
-                return_url = (Convert.ToInt32(Request.QueryString["page"]) == 1) ? addFiltrParam(return_url, "page", String.Empty) : return_url;
+                foreach (var p in qparams.AllKeys)
+                {
+                    if (p != null)
+                    {
+                        queryParams.Add(p, qparams[p]);
+                    }
+                }
             }
-            catch
-            {
-                return_url = addFiltrParam(return_url, "page", String.Empty);
-            }
-            try
-            {
-                return_url = (Convert.ToInt32(Request.QueryString["size"]) == defaultPageSize) ? addFiltrParam(return_url, "size", String.Empty) : return_url;
-            }
-            catch
-            {
-                return_url = addFiltrParam(return_url, "size", String.Empty);
-            }
-            return_url = (!Convert.ToBoolean(Request.QueryString["disabled"])) ? addFiltrParam(return_url, "disabled", String.Empty) : return_url;
-            return_url = String.IsNullOrEmpty(Request.QueryString["tab"]) ? addFiltrParam(return_url, "tab", String.Empty) : return_url;
-            return_url = String.IsNullOrEmpty(Request.QueryString["searchtext"]) ? addFiltrParam(return_url, "searchtext", String.Empty) : return_url;
-           
-            // Если парамметры из адресной строки равны значениям по умолчанию - удаляем их из URL
-            if (return_url.ToLower() != HttpUtility.UrlDecode(Request.Url.Query).ToLower())
-                Response.Redirect(StartUrl + return_url);
+            //Формируем строку с параметрами фильтра без пейджера
+            var urlParams = String.Join("&", queryParams
+                .Where(p => p.Key != "page")
+                .Select(p => String.Format("{0}={1}", p.Key, p.Value))
+                );
+
+            var page = 1;
+            int.TryParse(Request.QueryString["page"], out page);
+ 
+            return_url = Request.Path + "?" + (!String.IsNullOrWhiteSpace(urlParams) ? urlParams + "&" : null);
+            if (page > 1)
+                return_url = return_url + "page=" + page;
+
 
             DateTime? DateNull = new DateTime?();
 
@@ -209,36 +214,30 @@ namespace Disly.Controllers
                 Disabled = (String.IsNullOrEmpty(Request.QueryString["disabled"])) ? false : Convert.ToBoolean(Request.QueryString["disabled"])
             };
 
-#warning  Зачем прибавляли 1 день?
-            //if (result.Date != DateNull && result.DateEnd == DateNull)
-            //{
-            //    result.DateEnd = ((DateTime)result.Date).AddDays(1);
-            //}
-
             return result;
         }
 
-        public string addFiltrParam(string query, string name, string val)
-        {
-            //string search_Param = @"\b" + name + @"=[\w]*[\b]*&?";
-            string search_Param = @"\b" + name + @"=(.*?)(&|$)";
-            string normal_Query = @"&$";
+        //public string addFiltrParam(string query, string name, string val)
+        //{
+        //    //string search_Param = @"\b" + name + @"=[\w]*[\b]*&?";
+        //    string search_Param = @"\b" + name + @"=(.*?)(&|$)";
+        //    string normal_Query = @"&$";
 
-            Regex delParam = new Regex(search_Param, RegexOptions.CultureInvariant);
-            Regex normalQuery = new Regex(normal_Query);
-            query = delParam.Replace(query, String.Empty);
-            query = normalQuery.Replace(query, String.Empty);
+        //    Regex delParam = new Regex(search_Param, RegexOptions.CultureInvariant);
+        //    Regex normalQuery = new Regex(normal_Query);
+        //    query = delParam.Replace(query, String.Empty);
+        //    query = normalQuery.Replace(query, String.Empty);
 
-            if (val != String.Empty)
-            {
-                if (query.IndexOf("?") > -1) query += "&" + name + "=" + val;
-                else query += "?" + name + "=" + val;
-            }
+        //    if (val != String.Empty)
+        //    {
+        //        if (query.IndexOf("?") > -1) query += "&" + name + "=" + val;
+        //        else query += "?" + name + "=" + val;
+        //    }
 
-            query = query.Replace("?&", "?").Replace("&&", "&");
+        //    query = query.Replace("?&", "?").Replace("&&", "&");
 
-            return query;
-        }
+        //    return query;
+        //}
 
     }
 }

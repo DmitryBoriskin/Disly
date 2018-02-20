@@ -32,7 +32,7 @@
                         <div class="row">
                             <div class="col-lg-12">
                                 <ul id="model-linksToSite-ul">
-                                    @if (Model.Item != null && Model.Item.Links != null && Model.Item.Links.Sites != null)
+                                    @if (Model.Item != null && Model.Item.Links != null && Model.Item.Links.Sites != null && Model.Item.Links.Sites.Count() > 0)
                                     {
                                         foreach (var site in Model.Item.Links.Sites)
                                         {

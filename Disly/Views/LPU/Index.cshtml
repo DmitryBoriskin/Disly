@@ -19,43 +19,66 @@
         @if (Model.OrgTypes != null)
         {
             <div class="row">
-                @foreach (var item in Model.OrgTypes)
-                {
-                    string link = "/lpu?tab=typelist&id=" + item.Id;
-                    <div class="col-md-6">
-                        <a href="@link">@item.Title</a>
-                    </div>
-                }
+                <div class="col-md-6">
+                    @foreach (var item in ViewBag.Column1)
+                    {
+                        string link = "/lpu?tab=typelist&id=" + item.Id;
+                        <a class="medical_services" href="@link">@item.Title</a>
+                    }
+                </div>
+                <div class="col-md-6">
+                    @foreach (var item in ViewBag.Column2)
+                    {
+                        string link = "/lpu?tab=typelist&id=" + item.Id;
+                        <a class="medical_services" href="@link">@item.Title</a>
+                    }
+                </div>
             </div>
         }
         @if (Model.DepartmentAffiliations != null)
         {
             <div class="row">
-                @foreach (var item in Model.DepartmentAffiliations)
-                {
-                    string link = "/lpu?tab=affiliation&id=" + item.Key;
-                    <div class="col-md-6">
-                        <a href="@link">@item.Value</a>
-                    </div>
-                }
+                <div class="col-md-6">
+                    @foreach (var item in ViewBag.Column1)
+                    {
+                        string link = "/lpu?tab=affiliation&id=" + item.Key;
+                        <a class="medical_services" href="@link">@item.Value</a>
+                    }
+                </div>
+                <div class="col-md-6">
+                    @foreach (var item in ViewBag.Column2)
+                    {
+                        string link = "/lpu?tab=affiliation&id=" + item.Key;
+                        <a class="medical_services" href="@link">@item.Value</a>
+                    }
+                </div>
             </div>
         }
 
         @if (Model.MedicalServices != null)
         {
             <div class="row">
-                @foreach (var item in Model.MedicalServices)
-                {
-                    string link = "/lpu?tab=services&id=" + item.Id;
-                    <div class="col-md-6">
-                        <a href="@link">@item.Title</a>
-                    </div>
-                }
+                <div class="col-md-6">
+                    @foreach (var item in ViewBag.Column1)
+                    {
+                        string link = "/lpu?tab=services&id=" + item.Id;
+                        <a class="medical_services" href="@link">@item.Title</a>
+                    }
+                </div>
+                <div class="col-md-6">
+                    @foreach (var item in ViewBag.Column2)
+                    {
+                        string link = "/lpu?tab=services&id=" + item.Id;
+                        <a class="medical_services" href="@link">@item.Title</a>
+                    }
+                </div>
+
+
             </div>
         }
         @if (!string.IsNullOrWhiteSpace(title))
-            {
-                <h2>@title</h2>
+        {
+            <h2>@title</h2>
             if (Model.OrgList == null)
             {
                 <p>По данным критериям организации не обнаружены</p>
@@ -68,83 +91,89 @@
             <div class="row">
                 <div class="col-md-12">
                     @foreach (var item in Model.OrgList)
-                    {                        
-                            <div class="row org_item">
-                                <div class="col-md-1">
-                                    @if (!string.IsNullOrWhiteSpace(item.Logo) && File.Exists(Server.MapPath(item.Logo)))
-                                    {
-                                        <img src="@item.Logo" alt="@item.Title" />
-                                    }
-                                </div>
+                    {
+                        <div class="row org_item">
+                            <div class="col-md-1">
+                                @if (item.Logo != null && !string.IsNullOrWhiteSpace(item.Logo.Url) && File.Exists(Server.MapPath(item.Logo.Url)))
+                                {
+                                    <img src="@item.Logo.Url" alt="@item.Title" />
+                                }
+                            </div>
 
-                                <div class="col-md-9">
-                                    @if (!string.IsNullOrWhiteSpace(item.Title))
-                                    {
-                                        <div>
-                                            <h4>
-                                                @if (!string.IsNullOrWhiteSpace(item.Link))
-                                                {
-                                                    string link = string.Format("http://{0}", item.Link);
-                                                    <strong>
-                                                        <a target="_blank" href="@link">@item.Title</a>
-                                                    </strong>
-                                                }
-                                                else
-                                                {
-                                                    <strong>@item.Title</strong>
-                                                }
-                                            </h4>
-                                        </div>
-                                    }
-                                    @if (!string.IsNullOrWhiteSpace(item.Address))
-                                    {
-                                        <div>
-                                            <strong>Адрес: </strong>@item.Address
-                                        </div>
-                                    }
-                                    @if (!string.IsNullOrWhiteSpace(item.Phone))
-                                    {
-                                        <div>
-                                            <strong>Телефон: </strong>@item.Phone
-                                        </div>
-                                    }
-                                    @if (!string.IsNullOrWhiteSpace(item.Fax))
-                                    {
-                                        <div>
-                                            <strong>Факс: </strong>@item.Fax
-                                        </div>
-                                    }
-                                    @if (!string.IsNullOrWhiteSpace(item.PhoneReception))
-                                    {
-                                        <div>
-                                            <strong>Телефон регистратуры: </strong>@item.PhoneReception
-                                        </div>
-                                    }
-                                    @if (!string.IsNullOrWhiteSpace(item.Email))
-                                    {
-                                        <div>
-                                            <strong>E-mail: </strong><a href="mailto:@item.Email">@item.Email</a>
-                                        </div>
-                                    }
-                                </div>
-                                <div class="col-md-2">
-                                    @if (item.Leader != null && item.Leader.PeopleF.HasValue)
-                                    {
-                                        string photo = (item.Leader.Photo != null && !string.IsNullOrWhiteSpace(item.Leader.Photo.Url))
-                                              ? File.Exists(Server.MapPath(item.Leader.Photo.Url))
-                                                  ? item.Leader.Photo.Url : "/Content/img/no_avatar.png"
-                                              : "/Content/img/no_avatar.png";
+                            <div class="col-md-9">
+                                @if (!string.IsNullOrWhiteSpace(item.Title))
+                                {
+                                    <div>
+                                        <h4>
+                                            @if (!string.IsNullOrWhiteSpace(item.Link))
+                                            {
+                                                string link = string.Format("http://{0}", item.Link);
+                                                <strong>
+                                                    <a target="_blank" href="@link">@item.Title</a>
+                                                </strong>
+                                            }
+                                            else
+                                            {
+                                                <strong>@item.Title</strong>
+                                            }
+                                        </h4>
+                                    </div>
+                                }
+                                @if (!string.IsNullOrWhiteSpace(item.Address))
+                                {
+                                    <div>
+                                        <strong>Адрес: </strong>@item.Address
+                                    </div>
+                                }
+                                @if (!string.IsNullOrWhiteSpace(item.Phone))
+                                {
+                                    <div>
+                                        <strong>Телефон: </strong>@item.Phone
+                                    </div>
+                                }
+                                @if (!string.IsNullOrWhiteSpace(item.Fax))
+                                {
+                                    <div>
+                                        <strong>Факс: </strong>@item.Fax
+                                    </div>
+                                }
+                                @if (!string.IsNullOrWhiteSpace(item.PhoneReception))
+                                {
+                                    <div>
+                                        <strong>Телефон регистратуры: </strong>@item.PhoneReception
+                                    </div>
+                                }
+                                @if (!string.IsNullOrWhiteSpace(item.Email))
+                                {
+                                    <div>
+                                        <strong>E-mail: </strong><a href="mailto:@item.Email">@item.Email</a>
+                                    </div>
+                                }
+                                @if (!string.IsNullOrWhiteSpace(item.ExtUrl))
+                                {
+                                    <div>
+                                        <strong>Сайт: </strong><a href="http://@item.ExtUrl" target="_blank">@item.ExtUrl</a>
+                                    </div>
+                                }
+                            </div>
+                            <div class="col-md-2">
+                                @if (item.Leader != null && item.Leader.PeopleId.HasValue)
+                                {
+                                    string photo = (item.Leader.Photo != null && !string.IsNullOrWhiteSpace(item.Leader.Photo.Url))
+                                          ? File.Exists(Server.MapPath(item.Leader.Photo.Url))
+                                              ? item.Leader.Photo.Url : "/Content/img/no_avatar.png"
+                                          : "/Content/img/no_avatar.png";
 
-                                        <img class="img-circle img-person-list" src="@photo" alt="@item.Leader.Surname" />
-                                        <div class="org_item_post">@item.Leader.Post</div>
-                                        <a target="_blank" href="/portaldoctors/@item.Leader.PeopleF">@item.Leader.Surname @item.Leader.Name @item.Leader.Patronymic</a>
-                                    }
-                                </div>
-                            </div>                        
+                                    <img class="img-circle img-person-list" src="@photo" alt="@item.Leader.Surname" />
+                                    <div class="org_item_post">@item.Leader.Post</div>
+                                    <a target="_blank" href="/portaldoctors/@item.Leader.PeopleId">@item.Leader.Surname @item.Leader.Name @item.Leader.Patronymic</a>
+                                }
+                            </div>
+                        </div>
                     }
                 </div>
             </div>
         }
-    
+
     </div>
 </div>

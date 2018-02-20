@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Web;
 
-public class MaterialFilter : FilterParams { }
-public class MainSpecialistFilter : FilterParams { }
+public class MaterialFilter : FilterParams {
+    public string SmiType { get; set; }
+}

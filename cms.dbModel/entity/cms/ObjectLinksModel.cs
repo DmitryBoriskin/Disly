@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
 
 namespace cms.dbModel.entity
 {
@@ -22,6 +21,15 @@ namespace cms.dbModel.entity
         /// События
         /// </summary>
         public OrgsModel[] Orgs { get; set; }
+
+        /// <summary>
+        /// События
+        /// </summary>
+        public Guid[] SpecId { get; set; }
+        /// <summary>
+        /// События
+        /// </summary>
+        public GSModel[] Specs { get; set; }
 
         /// <summary>
         /// События

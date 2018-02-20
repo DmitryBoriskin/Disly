@@ -39,7 +39,7 @@
                                     @item.Type
                                 </td>
                                 <td>
-                                    @if (item.DomainList != null)
+                                    @if (item.DomainList != null && item.DomainList.Count() > 0)
                                     {
                                         <ul>
                                             @foreach (var domain in item.DomainList)

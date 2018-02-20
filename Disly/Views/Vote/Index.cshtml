@@ -1,6 +1,9 @@
 ﻿@model VoteViewModel
 @{
-    Layout = ViewBag.Layout;
+    if (Model.SitesInfo.Alias == "main")
+    {
+        Layout = "/views/_portal/shared/_layout.cshtml";
+    }
 }
 <div class="type-page">
     <div class="container">

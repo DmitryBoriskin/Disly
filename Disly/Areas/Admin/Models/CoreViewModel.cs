@@ -5,24 +5,42 @@ namespace Disly.Areas.Admin.Models
 {
     public abstract class CoreViewModel
     {
-        public string DomainName { get; set; }
-
-        public AccountModel Account { get; set; }
-        public SettingsModel Settings { get; set; }
-        public ResolutionsModel UserResolution { get; set; }
-        public cmsLogModel Log { get; set; }
-
-        public ErrorMessage ErrorInfo { get; set; }
-
         /// <summary>
         /// Название контроллера
         /// </summary>
         public string ControllerName { get; set; }
-
         /// <summary>
         /// Название актина
         /// </summary>
         public string ActionName { get; set; }
+        /// <summary>
+        /// Текущий домен
+        /// </summary>
+        public string DomainName { get; set; }
+        /// <summary>
+        /// Настройки сайта
+        /// </summary>
+        public SettingsModel Settings { get; set; }
+        /// <summary>
+        /// Подключенный пользователь
+        /// </summary>
+        public AccountModel Account { get; set; }
+        /// <summary>
+        /// Права пользователя
+        /// </summary>
+        public ResolutionsModel UserResolution { get; set; }
+        /// <summary>
+        /// Меню админки
+        /// </summary>
+        public cmsMenuModel[] Menu { get; set; }
+        /// <summary>
+        /// Логи, последние н записей
+        /// </summary>
+        public cmsLogModel Log { get; set; }
+        /// <summary>
+        /// Ошибки
+        /// </summary>
+        public ErrorMessage ErrorInfo { get; set; }
     }
 
     // Ошибки
@@ -48,4 +66,38 @@ namespace Disly.Areas.Admin.Models
         public string url { get; set; }
         public bool isChecked { get; set; }
     }
+
+
 }
+///// <summary>
+///// Пейджер
+///// </summary>
+//public class PagerModel1
+//{
+//    /// <summary>
+//    /// Кол-во эл-тов
+//    /// </summary>
+//    public int ItemsCount { get; set; }
+
+//    /// <summary>
+//    /// Кол-во эл-тов на странице
+//    /// </summary>
+//    public int PageSize { get; set; }
+
+//    /// <summary>
+//    /// Текущая страница
+//    /// </summary>
+//    public int Page { get; set; }
+
+//    /// <summary>
+//    /// Кол-во страниц
+//    /// </summary>
+//    public int PageCount
+//    {
+//        get
+//        {
+//            return ItemsCount / PageSize + (ItemsCount % PageSize == 0 ? 0 : 1);
+//        }
+//    }
+//}
+    

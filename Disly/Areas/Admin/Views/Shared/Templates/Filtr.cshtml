@@ -1,0 +1,62 @@
+﻿@model FiltrModel
+@{
+    Layout = null;
+
+    var queryParams = new Dictionary<string, string>();
+    var qparams = HttpUtility.ParseQueryString(Request.QueryString.ToString());
+    if (qparams.AllKeys != null && qparams.AllKeys.Count() > 0)
+    {
+        foreach (var p in qparams.AllKeys)
+        {
+            if (p != null)
+            {
+                queryParams.Add(p, qparams[p]);
+            }
+        }
+    }
+
+    var urlParams = String.Join("&", queryParams
+        .Where(p => p.Key != "page")
+        .Select(p => String.Format("{0}={1}", p.Key, p.Value))
+        );
+
+    string path = Request.Path + "?" + (!String.IsNullOrWhiteSpace(urlParams) ? urlParams + "&" : null);
+
+    //string size = ViewBag.PagerSize;
+    //string path = Request.Path + "?" + (!String.IsNullOrWhiteSpace(urlParams) ? urlParams + "&" : null);
+}
+
+<div class="" style="margin-bottom: 20px;">
+    <div class="dop-caption @Model.Icon">@Model.Title</div>
+    <div class="filte-map">
+        @{string active = (Request.QueryString[Model.Alias] == null) ? "now" : String.Empty;}
+        <div class="filtr-root">
+            <div class="filtr-item @active">
+                <div class="filtr-item_link">
+                    <a href="@Model.Link">Все</a>
+                </div>
+            </div>
+        </div>
+        <div class="filtr-list">
+            @if (Model.Items != null && Model.Items.Count() > 0)
+            {
+                foreach (Catalog_list Item in Model.Items)
+                {
+                    <div class="filtr-item @Item.Selected">
+                        <div class="filtr-item_link">
+                            @if (!Model.ReadOnly || Model.AccountGroup.ToLower().Equals("developer"))
+                            {
+                                <a class="tree-btn pop-up_frame edit" href="@Item.Url" title="Редактирование @Model.Title.ToLower()"> </a>
+                            }
+                            <a href="@Item.Link">@Item.Text</a>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+    @if (Model.AccountGroup.ToLower().Equals("developer"))
+    {
+        <a class="button pop-up_frame" href="@Model.Url" title="@Model.BtnName">@Model.BtnName</a>
+    }
+</div>

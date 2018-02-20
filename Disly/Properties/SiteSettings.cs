@@ -136,7 +136,7 @@ public class Settings
     /// </summary>
     public static string Coordination = ConfigurationManager.AppSettings["Coordination"];
 
-    /// <summary>
+    /// <summary>       
     /// Типы поддерживаемых документов
     /// </summary>
     public static string DocTypes = ReadAppSetting("DocTypes");//ConfigurationManager.AppSettings["MaterialPreviewImgSize"];

@@ -40,7 +40,7 @@ namespace cms.dbase
                             Site = s.f_site,
                             FrontSection = s.f_front_section,
                             Path = s.c_path,
-                            Alias = s.c_alias,
+                            Alias = s.c_alias.ToLower(),
                             Title = s.c_title,
                             Text = s.c_text,
                             Preview = s.c_preview,
@@ -59,15 +59,15 @@ namespace cms.dbase
 
                         var siteMapList = list.OrderBy(o => o.Sort).ToArray();
 
-                        return new SiteMapList
+                        return new SiteMapList()
                         {
                             Data = siteMapList,
-                            Pager = new Pager
+                            Pager = new Pager()
                             {
-                                page = filtr.Page,
-                                size = filtr.Size,
-                                items_count = itemCount,
-                                page_count = (itemCount % filtr.Size > 0) ? (itemCount / filtr.Size) + 1 : itemCount / filtr.Size
+                                Page = filtr.Page,
+                                Size = filtr.Size,
+                                ItemsCount = itemCount,
+                                //PageCount = (itemCount % filtr.Size > 0) ? (itemCount / filtr.Size) + 1 : itemCount / filtr.Size
                             }
                         };
                     }
@@ -96,7 +96,7 @@ namespace cms.dbase
                             Site = s.f_site,
                             FrontSection = s.f_front_section,
                             Path = s.c_path,
-                            Alias = s.c_alias,
+                            Alias = s.c_alias.ToLower(),
                             Title = s.c_title,
                             Text = s.c_text,
                             Preview = s.c_preview,
@@ -114,15 +114,15 @@ namespace cms.dbase
 
                         var siteMapList = list.ToArray();
 
-                        return new SiteMapList
+                        return new SiteMapList()
                         {
                             Data = siteMapList,
-                            Pager = new Pager
+                            Pager = new Pager()
                             {
-                                page = filtr.Page,
-                                size = filtr.Size,
-                                items_count = itemCount,
-                                page_count = (itemCount % filtr.Size > 0) ? (itemCount / filtr.Size) + 1 : itemCount / filtr.Size
+                                Page = filtr.Page,
+                                Size = filtr.Size,
+                                ItemsCount = itemCount,
+                                //PageCount = (itemCount % filtr.Size > 0) ? (itemCount / filtr.Size) + 1 : itemCount / filtr.Size
                             }
                         };
                     }
@@ -148,7 +148,7 @@ namespace cms.dbase
                         Site = s.f_site,
                         FrontSection = s.f_front_section,
                         Path = s.c_path,
-                        Alias = s.c_alias,
+                        Alias = s.c_alias.ToLower(),
                         Title = s.c_title,
                         Text = s.c_text,
                         Preview = s.c_preview,
@@ -237,8 +237,8 @@ namespace cms.dbase
         {
             using (var db = new CMSdb(_context))
             {
-                int _count=0;                
-                var query = db.content_sitemaps.Where(w => w.c_alias == alias && w.id!=ThisGuid && w.f_site==_domain);
+                int _count = 0;
+                var query = db.content_sitemaps.Where(w => w.c_alias.ToLower() == alias && w.id!=ThisGuid && w.f_site==_domain);
                 query = (String.IsNullOrEmpty(ParentId)) 
                     ? query.Where(w => w.uui_parent == null) 
                     : query.Where(w => w.uui_parent == Guid.Parse(ParentId));
@@ -302,7 +302,7 @@ namespace cms.dbase
                             .Value(p => p.f_site, item.Site)
                             .Value(p => p.f_front_section, item.FrontSection)
                             .Value(p => p.c_path, item.Path)
-                            .Value(p => p.c_alias, item.Alias)
+                            .Value(p => p.c_alias, item.Alias.ToLower())
                             .Value(p => p.c_title, item.Title)
                             .Value(p => p.c_preview, item.Preview)
                             .Value(p => p.c_url, item.Url)
@@ -323,6 +323,13 @@ namespace cms.dbase
                             foreach (var m in item.MenuGroups)
                             {
                                 Guid menuId = Guid.Parse(m);
+
+                                //реализуем логику что в группу "Плитка"можно добавить только 20 элементов
+                                if (menuId == Guid.Parse("76B9A197-708B-4B48-B851-F2606A5288D5"))
+                                {
+                                    var dop_query = db.content_sitemap_menutypess.Where(w => w.f_site == _domain && w.f_menutype == menuId).Count();
+                                    if (dop_query > 19) break;
+                                }
 
                                 var _maxSortMenu = db.content_sitemap_menutypess
                                     .Where(w => w.f_site.Equals(item.Site))
@@ -387,7 +394,7 @@ namespace cms.dbase
                             .Set(u => u.f_site, item.Site)
                             .Set(u => u.f_front_section, item.FrontSection)
                             .Set(u => u.c_path, item.Path)
-                            .Set(u => u.c_alias, item.Alias)
+                            .Set(u => u.c_alias, item.Alias.ToLower())
                             .Set(u => u.c_title, item.Title)
                             .Set(u => u.c_text, item.Text)
                             .Set(u => u.c_preview, item.Preview)
@@ -403,11 +410,11 @@ namespace cms.dbase
                         #region обновим алиасы для дочерних эл-тов
                         // заменяемый путь 
                         string _oldPath = oldRecord.c_path.Equals("/") ?
-                            oldRecord.c_path + oldRecord.c_alias : oldRecord.c_path + "/" + oldRecord.c_alias;
+                            oldRecord.c_path + oldRecord.c_alias.ToLower() : oldRecord.c_path + "/" + oldRecord.c_alias.ToLower();
 
                         // новый путь
                         string _newPath = item.Path.Equals("/") ?
-                            item.Path + item.Alias : item.Path + "/" + item.Alias;
+                            item.Path + item.Alias : item.Path + "/" + item.Alias.ToLower();
 
                         // список дочерних эл-тов для обновления алиаса
                         var listToUpdate = db.content_sitemaps
@@ -466,13 +473,22 @@ namespace cms.dbase
                                 //добавляем значения
                                 foreach (var m in item.MenuGroups)
                                 {
+                                    
                                     Guid menuId = Guid.Parse(m);
 
                                     if (!menuOld.Contains(menuId))
                                     {
+
+                                        //реализуем логику что в группу "Плитка"можно добавить только 20 элементов
+                                        if (menuId == Guid.Parse("76B9A197-708B-4B48-B851-F2606A5288D5"))
+                                        {
+                                            var dop_query = db.content_sitemap_menutypess.Where(w => w.f_site == _domain && w.f_menutype == menuId).Count();
+                                            if (dop_query > 19) break;                                            
+                                        }
+                                        
                                         var maxSortQuery = db.content_sitemap_menutypess
-                                            .Where(w => w.f_site.Equals(item.Site))
-                                            .Where(w => w.f_menutype.Equals(menuId));
+                                                             .Where(w => w.f_site.Equals(item.Site))
+                                                             .Where(w => w.f_menutype.Equals(menuId));
 
                                         int maxSort = maxSortQuery.Any() ? maxSortQuery.Select(s => s.n_sort).Max() : 0;
 
@@ -549,6 +565,14 @@ namespace cms.dbase
                                 {
                                     Guid menuId = Guid.Parse(m);
 
+
+                                    //реализуем логику что в группу "Плитка"можно добавить только 20 элементов
+                                    if (menuId == Guid.Parse("76B9A197-708B-4B48-B851-F2606A5288D5"))
+                                    {
+                                        var dop_query = db.content_sitemap_menutypess.Where(w => w.f_site == _domain && w.f_menutype == menuId).Count();
+                                        if (dop_query > 19) break;
+                                    }
+
                                     var _maxSortMenu = db.content_sitemap_menutypess
                                         .Where(w => w.f_site.Equals(item.Site))
                                         .Where(w => w.f_menutype.Equals(menuId));
@@ -599,7 +623,7 @@ namespace cms.dbase
                 const string ORG = "org";
 
                 var type = db.cms_sitess
-                    .Where(w => w.c_alias.Equals(domain))
+                    .Where(w => w.c_alias.ToLower().Equals(domain))
                     .Select(s => s.c_content_type).SingleOrDefault();
 
                 IQueryable<front_page_views> query;
@@ -654,7 +678,7 @@ namespace cms.dbase
                         Id = s.id,
                         Text = s.c_title,
                         Sort = s.n_sort,
-                        Value = s.c_alias
+                        Value = s.c_alias.ToLower()
                     });
 
                 if (!query.Any()) return null;
@@ -674,9 +698,9 @@ namespace cms.dbase
                     .OrderBy(o => o.n_sort)
                     .Select(s => new Catalog_list
                     {
-                        text = s.c_title,
-                        value = s.id.ToString(),
-                        available = s.b_available
+                        Text = s.c_title,
+                        Value = s.id.ToString(),
+                        Available = s.b_available
                     });
                 if (!data.Any()) { return null; }
                 else { return data.ToArray(); }
@@ -789,7 +813,7 @@ namespace cms.dbase
                         {
                             Title = s.c_title,
                             Path = s.c_path,
-                            Alias = s.c_alias,
+                            Alias = s.c_alias.ToLower(),
                             Sort = s.n_sort
                         }).FirstOrDefault();
 
@@ -943,7 +967,7 @@ namespace cms.dbase
                     {
                         Id = s.id,
                         Path = s.c_path,
-                        Alias = s.c_alias,
+                        Alias = s.c_alias.ToLower(),
                         Title = s.c_title,
                         Disabled = s.b_disabled,
                         Blocked = s.b_blocked,

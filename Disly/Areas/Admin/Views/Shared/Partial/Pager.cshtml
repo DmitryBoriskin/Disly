@@ -1,0 +1,111 @@
+﻿@model Pager
+@{
+    Layout = null;
+
+    var queryParams = new Dictionary<string, string>();
+    var qparams = HttpUtility.ParseQueryString(Request.QueryString.ToString());
+
+    if (qparams.AllKeys != null && qparams.AllKeys.Count() > 0)
+    {
+        foreach (var p in qparams.AllKeys)
+        {
+            if (p != null)
+            {
+                queryParams.Add(p, qparams[p]);
+            }
+        }
+    }
+
+    var urlParams = String.Join("&", queryParams
+        .Where(p => p.Key != "page")
+        .Select(p => String.Format("{0}={1}", p.Key, p.Value))
+        );
+
+
+    int volume = 3;
+    string size = ViewBag.PagerSize;
+    string path = Request.Path + "?" + (!String.IsNullOrWhiteSpace(urlParams) ? urlParams + "&" : null);
+}
+
+<div style="overflow:hidden">
+    <div style="float: right; width: 50px; padding: 15px 0;">
+        @Html.TextBox("size", size, new { @class = "uc_input page_size", @data_focus = false, @MaxLength = "3", @Width = "55", @data_mask = "9999" })
+    </div>
+    <div style="float: right; width: 160px; padding: 30px 5px; text-align: right;">
+        Показывать по:
+    </div>
+    @if (Model.PageCount > 1)
+    {
+        int j = 0;
+        <nav aria-label="Page navigation">
+            <ul class="pagination">
+                @for (int i = 0; i <= Model.PageCount; i++)
+                {
+                    int p = i + 1;
+                    int prev = Model.Page - 1;
+                    int next = Model.Page + 1;
+
+                    if (p > Model.PageCount) { break; }
+                    if (i == 0 && Model.Page - volume > 2)
+                    {
+                        i = (Model.Page - volume) - 2;
+                        <li class="PagedList-skipToPrevious"><a href="@(path)page=@prev" rel="prev">«</a></li>
+                            <li class="PagedList-skipToFirst"><a href="@(path)page=1">1</a></li>
+                            <li class="disabled PagedList-ellipses"><a>…</a></li>
+                    }
+                    else
+                    {
+                        if (Model.Page == p)
+                        {
+                            //break;
+                            <li class="PagerNow active"><a href="@(path)page=@p">@p</a></li>
+                        }
+                        else
+                        {
+                            if (Model.PageCount == p)
+                            {
+                                <li class="PagedList-skipToLast"><a href="@(path)page=@Model.PageCount">@Model.PageCount</a></li>
+                                    <li class="PagedList-skipToNext"><a href="@(path)page=@next" rel="next">»</a></li>
+                                break;
+                            }
+                            if (p > Model.Page + volume)
+                            {
+                                <li class="disabled PagedList-ellipses"><a>…</a></li>
+                                    <li class="PagedList-skipToLast"><a href="@(path)page=@Model.PageCount">@Model.PageCount</a></li>
+                                    <li class="PagedList-skipToNext"><a href="@(path)page=@next" rel="next">»</a></li>
+                                break;
+                            }
+                            <li><a href="@(path)page=@p">@p</a></li>
+                            if (p > Model.Page)
+                            {
+                                j++;
+                            }
+                        }
+                    }
+
+                }
+            </ul>
+        </nav>
+    }
+</div>
+
+@*<div style="overflow:hidden">
+        <div style="float: right; width: 50px; padding: 15px 0;">
+            @Html.TextBox("size", size, new { @class = "uc_input page_size", @data_focus = false, @MaxLength = "3", @Width = "55", @data_mask = "9999" })
+        </div>
+        <div style="float: right; width: 160px; padding: 30px 5px; text-align: right;">
+            Показывать по:
+        </div>
+        @if (Model != null)
+        {
+            <nav aria-label="Page navigation">
+                <ul class="pagination">
+                    @foreach (PagerModel item in Model)
+                {
+                    string active = (@item.isChecked) ? "PagerNow active" : "";
+                        <li class="@active"><a href="@item.url">@item.text</a></li>
+                    }
+                </ul>
+            </nav>
+        }
+    </div>*@

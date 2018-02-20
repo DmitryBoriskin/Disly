@@ -96,6 +96,14 @@ body {
     font-weight: normal;
     font-style: normal;
 }
+fieldset{
+    border: solid 1px #dae1e6;
+    padding:15px;
+}
+legend{
+    font-size:14px;
+    margin-bottom:0px !important;
+}
 img {
     border:none;
 }
@@ -212,9 +220,9 @@ a:hover:after {
     background: #005c99;
     border:none;
     outline:none;
-    border-radius:4px;
     -moz-border-radius:4px;
     -webkit-border-radius:4px;
+     border-radius:4px;
     color:#ffffff;
     font-size: 12px;
     line-height: 16px;
@@ -306,23 +314,58 @@ a.button  {
     background: url('/Content/img/preloader.svg') center center no-repeat;
 }
 .modal-org-list, .modal-event-list,
-.modal-site-list, .modal-userGroupResolutions-list
+.modal-site-list, .modal-userGroupResolutions-list,
+.modal-spec-list
 {
     height:400px;
     overflow:hidden;
     margin:30px 0 0 0;
     font-size: 0.9em;
 }
+#modal-mainSpec-data{
+     height:600px;
+}
+
 .modal-org-list a, .modal-event-list a{
     font-size: 1.1em;
 }
-.org-type-check-all[data-state='half-checked']{
+
+.org-check-all,
+.site-check-all,
+.spec-check-all
+{
     margin-left:10px;
     padding:1px 5px;
     background-color:#eee;
     border:1px solid #d2d2d2;
     border-radius:4px;
     cursor:pointer;
+}
+.modal-data{
+    padding:5px;
+}
+
+.org-check-all[data-state='half-checked'],
+.site-check-all[data-state='half-checked'],
+.spec-check-all[data-state='half-checked']
+{
+    background-color:#eee;
+}
+
+.org-check-all[data-state='full-unchecked'],
+.site-check-all[data-state='full-unchecked'],
+.spec-check-all[data-state='full-unchecked']
+{
+     background-color:#f8c4c4;
+}
+.org-type-check-all[data-state='full-checked'],
+.site-check-all[data-state='full-checked'],
+.spec-check-all[data-state='full-checked']
+{
+     background-color:#8af3e0;
+}
+.mainSpec-orgInfo{
+    padding:15px;
 }
 
 .org-byType-tree {
@@ -366,7 +409,6 @@ table{
     padding: 0 20px;
     background: #e6edf2;
 }
-
 
 th{
     text-transform:uppercase;

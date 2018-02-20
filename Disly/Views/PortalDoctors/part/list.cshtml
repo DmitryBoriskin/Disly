@@ -34,23 +34,22 @@
                         <td>
                             @if (item.Posts != null && item.Posts.Count() > 0)
                             {
-                                var postsByOrg = item.Posts.Where(p => p.OrgId != null).Any() ?
-                                    item.Posts.Where(p => p.OrgId != null).OrderBy(p => p.Type).GroupBy(p => p.OrgId) : null;
+                                var postsByOrg = item.Posts.Where(p => p.Org != null).Any() ?
+                                    item.Posts.Where(p => p.Org != null).OrderBy(p => p.Type).GroupBy(p => p.Org.Id) : null;
                                 if (postsByOrg != null)
                                 {
                                     foreach (var postByOrg in postsByOrg)
                                     {
-
-                                        var org = postByOrg.Where(p => p.OrgId == postByOrg.Key).First();
-                                        string linkToOrg = string.Format("http://{0}", org.OrgUrl);
+                                        var org = postByOrg.Where(p => p.Org.Id == postByOrg.Key).First();
+                                        string linkToOrg = string.Format("http://{0}", org.Org.Url);
                                         <p>
                                             @if (!string.IsNullOrWhiteSpace(linkToOrg))
                                             {
-                                                <a target="_blank" href="@linkToOrg">@(org.OrgTitle):</a><br />
+                                                <a target="_blank" href="@linkToOrg">@(org.Org.Title):</a><br />
                                             }
                                             else
                                             {
-                                                <b>@(org.OrgTitle):</b><br />
+                                                <b>@(org.Org.Title):</b><br />
                                             }
 
                                             @foreach (var p in postByOrg)
@@ -65,6 +64,11 @@
                     </tr>
                 }
             </table>
+            
+            if (Model.DoctorsList != null && Model.DoctorsList.Pager != null)
+            {
+                @Html.Partial("Part/Pager", Model.DoctorsList.Pager)
+            }
         }
 
     </div>
@@ -73,19 +77,19 @@
             <div class="row">
                 <div class="col-sm-12">
                     <div class="form-group search_news">
-                        <label class="label_filtr" for="search_news">Ключевые слова</label>
+                        <label class="label_filtr" for="search_news">Поиск по ФИО</label>
                         <input type="text" class="filtr_data form-control" name="searchtext" id="search_news" value="@ViewBag.SearchText" />
                     </div>
                 </div>
 
-                @if (Model.PeoplePosts != null)
+                @if (Model.Specializations != null)
                 {
                     <div class="col-sm-12">
                         <div class="form-group">
                             <label class="label_filtr">Специализации</label>
                             <select class="form-control select2" name="type">
                                 <option value="">не выбрано</option>
-                                @foreach (var item in Model.PeoplePosts)
+                                @foreach (var item in Model.Specializations)
                                 {
                                     string selected = (item.Id.ToString() == ViewBag.Position) ? "selected" : string.Empty;
                                     <option value="@item.Id" @selected>@item.Name</option>

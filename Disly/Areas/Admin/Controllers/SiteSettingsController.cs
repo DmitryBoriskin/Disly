@@ -27,6 +27,10 @@ namespace Disly.Areas.Admin.Controllers
                 ControllerName = ControllerName,
                 ActionName = ActionName
             };
+            if (AccountInfo != null)
+            {
+                model.Menu = _cmsRepository.getCmsMenu(AccountInfo.Id);
+            }
 
             #region Метатеги
             ViewBag.Title = UserResolutionInfo.Title;
@@ -39,7 +43,8 @@ namespace Disly.Areas.Admin.Controllers
                     new SelectListItem { Text = "Бирюзовая", Value = "turquoise" },
                     new SelectListItem { Text = "Синяя", Value = "blue" },
                     new SelectListItem { Text = "Фиолетовая", Value = "purple" },
-                    new SelectListItem { Text = "Зеленая", Value = "green" }
+                    new SelectListItem { Text = "Зеленая", Value = "green" },
+                    new SelectListItem { Text = "Темно синяя", Value = "blue_dark" },
                 }, "Value", "Text");
         }
 
@@ -65,15 +70,36 @@ namespace Disly.Areas.Admin.Controllers
             {
                 #region Сохранение изображений
 
+                #region сохраняем логотип
                 if (upload != null && upload.ContentLength > 0)
                 {
+                    if (AttachedPicExtAllowed(upload.FileName))//убеждаемся что закачивается изображение
+                    {
+                        string savePath = Settings.UserFiles + Domain + "/logo/";
 
-                    var photo = imageWorker(upload, 1);
-                    if (photo == null)
-                        return View("Item", model);
+                        if (!Directory.Exists(Server.MapPath(savePath)))
+                        {
+                            Directory.CreateDirectory(Server.MapPath(savePath));
+                        }
+                        int idx = upload.FileName.LastIndexOf('.');
+                        string Title = upload.FileName.Substring(0, idx);
 
-                    backModel.Item.Logo = photo;
-                }
+                        string TransTitle = Transliteration.Translit(Title);
+                        string FileName = TransTitle + Path.GetExtension(upload.FileName);
+
+
+                        //сохраняем оригинал
+                        upload.SaveAs(Server.MapPath(Path.Combine(savePath, FileName)));
+                        string FullName = savePath + FileName;
+                        backModel.Item.Logo = new Photo {Url= FullName };
+                    }
+                    //var photo = imageWorker(upload, 1);
+                    //if (photo == null)
+                    //    return View("Item", model);
+
+                    
+                } 
+                #endregion
 
                 #region Изображени под слайдером
                 if (uploadBack != null && uploadBack.ContentLength > 0)
@@ -145,15 +171,16 @@ namespace Disly.Areas.Admin.Controllers
                     break;
             }
 
-            string fileExtension = upload.FileName.Substring(upload.FileName.LastIndexOf(".")).ToLower();
-
-            var validExtension = (!string.IsNullOrEmpty(Settings.PicTypes)) ? Settings.PicTypes.Split(',') : "jpg,jpeg,png,gif".Split(',');
-            if (!validExtension.Contains(fileExtension.Replace(".", "")))
+            // var validExtension = (!string.IsNullOrEmpty(Settings.PicTypes)) ? Settings.PicTypes.Split(',') : "jpg,jpeg,png,gif".Split(',');
+            //if (!validExtension.Contains(fileExtension.Replace(".", "")))
+            if (!AttachedPicExtAllowed(upload.FileName))
             {
                 return null;
             }
 
             string fileName = Transliteration.Translit(upload.FileName.Substring(0, upload.FileName.LastIndexOf(".")));
+
+            string fileExtension = upload.FileName.Substring(upload.FileName.LastIndexOf(".")).ToLower();
 
             Photo photoNew = new Photo()
             {

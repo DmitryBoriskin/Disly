@@ -20,7 +20,6 @@ namespace Disly.Controllers
                 BannerArray = bannerArray,
             };
 
-            
         }
 
         /// <summary>
@@ -29,25 +28,26 @@ namespace Disly.Controllers
         /// <returns ></returns>
         public ActionResult Index()
         {
-            #region Создаем переменные (значения по умолчанию)
+            #region currentPage
+
+            if (currentPage != null)
+            {
+                ViewBag.Title = currentPage.Title;
+                ViewBag.Description = currentPage.Desc;
+                ViewBag.KeyWords = currentPage.Keyw;
+            }
+            #endregion
+
             string _ViewName = (ViewName != String.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";
-
-            string PageTitle = "Главная страница";
-            string PageDesc = "описание страницы";
-            string PageKeyw = "ключевые слова";
-            #endregion
-
-            #region Метатеги
-            ViewBag.Title = PageTitle;
-            ViewBag.Description = PageDesc;
-            ViewBag.KeyWords = PageKeyw;
-            #endregion
 
             model.Materials = _repository.getMaterialsModule(); //Domain
             model.Oid = _repository.getOid();
 
             if (model.SitesInfo.Alias == "main" && !IsSpecVersion)
             {
+
+                model.ImportantMaterials = _repository.getMaterialsImportant();
+
                 _ViewName = _ViewName.ToLower().Replace("views/", "views/_portal/");//спец вьюха для главного сайта 
             }
             return View(_ViewName, model);

@@ -50,7 +50,7 @@
             </div>
         }
 
-        @if (Model.List != null)
+        @if (Model.List != null && Model.List.Data != null && Model.List.Data.Count() > 0)
         {
             <div class="sort_list">
                 <table id="sm_list" class="table table-striped">
@@ -102,7 +102,11 @@
 
     <div class="dop_info-block">
         <div class="dop-caption">Фильтр</div>
-        @{ Html.RenderAction("Filtr", "Templates", new { @Title = "Группы меню", @Alias = "group", @Icon = "icon-th-list-3", @Url = "/admin/services/sitemapmenu/", @BtnName = "Новая группа меню", @Items = Model.MenuTypes, @readOnly = true }); }
+        @*@{ Html.RenderAction("Filtr", "Templates", new { @Title = "Группы меню", @Alias = "group", @Icon = "icon-th-list-3", @Url = "/admin/services/sitemapmenu/", @BtnName = "Новая группа меню", @Items = Model.MenuTypes, @readOnly = true }); }*@
+        @if (Model.Filtr != null)
+        {
+            @Html.Partial("Partial/Filtr", Model.Filtr)
+        }
     </div>
 }
 else

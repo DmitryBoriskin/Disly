@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace cms.dbModel.entity
 {
@@ -248,7 +243,11 @@ namespace cms.dbModel.entity
         /// <summary>
         /// Фотоальбомы
         /// </summary>
-        Anketa = 16
+        Anketa = 16,
+        /// <summary>
+        /// новостная группа
+        /// </summary>
+        MaterialGroup = 14
     }
 
     /// <summary>

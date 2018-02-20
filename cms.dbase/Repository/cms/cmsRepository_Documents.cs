@@ -1,7 +1,6 @@
 ﻿using cms.dbModel;
 using System;
 using System.Linq;
-using cms.dbModel.entity.cms;
 using cms.dbase.models;
 using LinqToDB;
 using cms.dbModel.entity;
@@ -86,9 +85,9 @@ namespace cms.dbase
                     {
                         query.Set(p => p.n_sort, p => p.n_sort - 1).Update();
                     }
-                    data
-                        .Where(w => w.id == id)
-                        .Delete();
+
+                    data.Where(w => w.id == id).Delete();
+
                     return true;
                 }
                 else return false;

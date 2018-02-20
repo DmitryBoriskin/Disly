@@ -1,5 +1,4 @@
 ﻿using cms.dbModel.entity;
-using cms.dbModel.entity.cms;
 using System.Collections.Generic;
 
 namespace Disly.Areas.Admin.Models
@@ -22,6 +21,6 @@ namespace Disly.Areas.Admin.Models
         /// <summary>
         /// Должности
         /// </summary>
-        public IEnumerable<EmployeePostModel> EmployeePosts { get; set; }
+        public IEnumerable<Specialisation> EmployeePosts { get; set; }
     }
 }

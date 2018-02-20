@@ -2,6 +2,25 @@
 var change = 0;
 
 $(document).ready(function () {
+    //специфический для med.cap.ru
+    //показываем селект "новове в медеицине" если выбрана соответствующая категория
+    if ($('#itemGroups-select').length > 0) {
+        var NewInMedicin = $('#NewInMedicin');
+        SpotNewInMedicin();
+        $('#itemGroups-select').change(function() {
+            SpotNewInMedicin();
+        });  
+        function SpotNewInMedicin() {
+            NewInMedicin.hide();
+            $('#itemGroups-select').find('option:selected').each(function() {
+                if ($(this).attr('value') == '6303b7c5-5404-4ec0-aed2-1c308992c78a') {
+                    NewInMedicin.show();
+                }
+            });
+        }
+     }   
+
+    
 
     $('#DomainSelect').change(function () {
         window.location.href = this.options[this.selectedIndex].value
@@ -379,10 +398,44 @@ $(document).ready(function () {
             error: function () { alert("error"); },
             success: function (data) {
                 $Container.remove();
+                location.reload();
             }
             
         });
         
+    });
+
+    //Удаление члена из гс 
+    $(".gs-member-delete").on('click', function () {
+        var targetUrl = "/Admin/MainSpecialist/DeleteGSMember/";
+        var _memberId = $(this).data("memberId");
+
+        var memberItem = $(this).closest(".member-item");
+
+        try {
+            $.ajax({
+                type: "POST",
+                async: false,
+                url: "/admin/mainspecialist/deletegsmember",
+                data: { id: _memberId },
+                error: function () { alert("error"); },
+
+            })
+                .done(function (response) {
+                    memberItem.remove();
+                })
+                .fail(function (jqXHR, status) {
+                    console.log("Ошибка" + " " + status + " " + jqXHR);
+
+                })
+                .always(function (response) {
+
+                    //location.reload();
+                });
+        }
+        catch (ex) {
+            console.log(ex);
+        }
     });
 
     //удаление варианта ответа
@@ -779,6 +832,8 @@ function InitTinyMCE(id, _width, _height, directory) {
         convert_urls: false,
         relative_urls: false,
         image_advtab: true,
+        image_caption: true,
+        image_title: true,
         cleanup: false,
         erify_html: false,
         statusbar: false,
@@ -842,6 +897,8 @@ function InitTinyMCE_new(id, _width, _height, directory) {
         height: _height,
         verify_html: false,
         width: _width,
+        image_caption: true,
+        image_title: true,
         content_css: '/Content/css/iframe_tinymce.css',
         automatic_uploads: true,
         images_upload_url: 'http://' + window.location.hostname + (location.port ? ':' + location.port : '') + '/Admin/Services/GetFile/?dir=' + directory,
@@ -935,7 +992,7 @@ function Coords(x, y, title, desc, zoom) {
     });
 
 
-    //myMap.events.add('click', function (e) {        
+    //myMap.events.add('click', function (e) {
     //    var coords = e.get('coordPosition');
     //    var xMap = coords[0].toPrecision(6);
     //    var yMap = coords[1].toPrecision(6);

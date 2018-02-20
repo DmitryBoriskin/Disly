@@ -38,15 +38,15 @@ namespace cms.dbase
                                 .Take(filtr.Size);
                     SiteSectionModel[] SiteSectionInfo = List.ToArray();
 
-                    return new SiteSectionList
+                    return new SiteSectionList()
                     {
                         Data = SiteSectionInfo,
-                        Pager = new Pager
+                        Pager = new Pager()
                         {
-                            page = filtr.Page,
-                            size = filtr.Size,
-                            items_count = ItemCount,
-                            page_count = (ItemCount % filtr.Size > 0) ? (ItemCount / filtr.Size) + 1 : ItemCount / filtr.Size
+                            Page = filtr.Page,
+                            Size = filtr.Size,
+                            ItemsCount = ItemCount,
+                            //PageCount = (ItemCount % filtr.Size > 0) ? (ItemCount / filtr.Size) + 1 : ItemCount / filtr.Size
                         }
                     };
 
@@ -159,12 +159,12 @@ namespace cms.dbase
                         if (cdSiteSection.f_page_type != upd.Alias)
                         {
                             var cdFontSection = db.front_sections
-                                .Where(s => s.c_alias == cdSiteSection.f_page_type);
+                                .Where(s => s.c_alias.ToLower() == cdSiteSection.f_page_type.ToLower());
                             if (cdFontSection == null)
                                 throw new Exception("cmsRepository_SiteSection updateSiteSection: No such frontSection (" + cdSiteSection.f_page_type + ")!");
 
                             var cdFontSectionItem = cdFontSection.SingleOrDefault();
-                            cdFontSectionItem.c_alias = upd.Alias;
+                            cdFontSectionItem.c_alias = upd.Alias.ToLower();
 
                             db.Update(cdFontSectionItem); //Тут должно сработать каскадное изменение во всех таблицах
                         }
@@ -227,13 +227,13 @@ namespace cms.dbase
                     {
                         id = Guid.NewGuid(),
                         c_name = sitesection.Title,
-                        c_alias = sitesection.Alias,
+                        c_alias = sitesection.Alias.ToLower(),
                         c_default_view = sitesection.Id
                     };
                     db.Insert(cdSection);
 
                     //сделаем этот шаблон для всех существующих сайтов
-                    var allsites = db.cms_sitess.Select(s => s.c_alias).ToArray();
+                    var allsites = db.cms_sitess.Select(s => s.c_alias.ToLower()).ToArray();
                     foreach (var siteId in allsites)
                     {
                         db.front_site_sections

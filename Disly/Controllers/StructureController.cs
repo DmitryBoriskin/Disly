@@ -17,11 +17,6 @@ namespace Disly.Controllers
         {
             base.OnActionExecuting(filterContext);
 
-            currentPage = _repository.getSiteMap("Structure");
-
-            if (currentPage == null)
-                throw new Exception("model.CurrentPage == null");
-
             model = new StructureViewModel
             {
                 SitesInfo = siteModel,
@@ -31,24 +26,10 @@ namespace Disly.Controllers
                 CurrentPage = currentPage
             };
 
-            //#region Получаем данные из адресной строки
-            //string UrlPath = "/" + (String)RouteData.Values["path"];
-            //if (UrlPath.LastIndexOf("/") > 0 && UrlPath.LastIndexOf("/") == UrlPath.Length - 1) UrlPath = UrlPath.Substring(0, UrlPath.Length - 1);
-
-            //string _path = UrlPath.Substring(0, UrlPath.LastIndexOf("/") + 1);
-            //string _alias = UrlPath.Substring(UrlPath.LastIndexOf("/") + 1);
-            //#endregion
-
             #region Создаем переменные (значения по умолчанию)
-            string PageTitle = model.CurrentPage.Title;
-            string PageDesc = model.CurrentPage.Desc;
-            string PageKeyw = model.CurrentPage.Keyw;
-            #endregion
-
-            #region Метатеги
-            ViewBag.Title = PageTitle;
-            ViewBag.Description = PageDesc;
-            ViewBag.KeyWords = PageKeyw;
+            ViewBag.Title = "Страница";
+            ViewBag.Description = "Страница без названия";
+            ViewBag.KeyWords = "";
             #endregion
         }
 
@@ -58,6 +39,22 @@ namespace Disly.Controllers
         /// <returns></returns>
         public ActionResult Index()
         {
+            #region currentPage
+            currentPage = _repository.getSiteMap("Structure");
+            if (currentPage == null)
+                //throw new Exception("model.CurrentPage == null");
+                return RedirectToRoute("Error", new { httpCode = 404 });
+
+            if (currentPage != null)
+            {
+                ViewBag.Title = currentPage.Title;
+                ViewBag.Description = currentPage.Desc;
+                ViewBag.KeyWords = currentPage.Keyw;
+
+                model.CurrentPage = currentPage;
+            }
+            #endregion
+
             string _ViewName = (ViewName != String.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";
 
             model.Structures = _repository.getStructureList(); //Domain
@@ -76,6 +73,22 @@ namespace Disly.Controllers
         /// <returns></returns>
         public ActionResult Item(int num)
         {
+            #region currentPage
+            currentPage = _repository.getSiteMap("Structure");
+            if (currentPage == null)
+                //throw new Exception("model.CurrentPage == null");
+                return RedirectToRoute("Error", new { httpCode = 404 });
+
+            if (currentPage != null)
+            {
+                ViewBag.Title = currentPage.Title;
+                ViewBag.Description = currentPage.Desc;
+                ViewBag.KeyWords = currentPage.Keyw;
+
+                model.CurrentPage = currentPage;
+            }
+            #endregion
+
             string _ViewName = (ViewName != String.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";
 
             model.StructureItem = _repository.getStructureItem(num); //Domain, 

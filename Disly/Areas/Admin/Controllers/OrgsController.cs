@@ -1,6 +1,7 @@
 ﻿using cms.dbModel.entity;
 using Disly.Areas.Admin.Models;
 using Disly.Areas.Admin.Service;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -38,8 +39,13 @@ namespace Disly.Areas.Admin.Controllers
                 Types = _cmsRepository.getOrgTypesList(new OrgTypeFilter() { }),
                 DepartmentAffiliations = _cmsRepository.getDepartmentAffiliations(),
                 MedicalServices = _cmsRepository.getMedicalServices(),
-                SectionResolution = _accountRepository.getCmsUserResolutioInfo(AccountInfo.id, "structure")
+               
             };
+            if (AccountInfo != null)
+            {
+                model.Menu = _cmsRepository.getCmsMenu(AccountInfo.Id);
+                model.SectionResolution = _accountRepository.getCmsUserResolutioInfo(AccountInfo.Id, "structure");
+            }
 
             ViewBag.OrgId = orgId;
 
@@ -54,7 +60,7 @@ namespace Disly.Areas.Admin.Controllers
         public ActionResult Index()
         {
             #region администратор сайта
-            if (model.Account.Group.ToLower() == "admin")
+            if (model.Account.Group == "admin")
             {
                 if (orgId != null)
                 {
@@ -68,7 +74,7 @@ namespace Disly.Areas.Admin.Controllers
             #endregion
 
             var orgfilter = FilterParams.Extend<OrgFilter>(filter);
-            orgfilter.except = orgId;
+            orgfilter.Except = orgId;
 
             // Текущая организация
             if (orgId != null)
@@ -76,21 +82,28 @@ namespace Disly.Areas.Admin.Controllers
                 model.Item = _cmsRepository.getOrgItem((Guid)orgId);
             }
             model.OrgList = _cmsRepository.getOrgs(orgfilter);// список организаций
+            model.CountItem = _cmsRepository.getCountOrg();
             return View(model);
         }
 
         /// <summary>
-        /// Формируем строку фильтра
+        /// 
         /// </summary>
-        /// <param name="title_serch">Поиск по названию</param>
+        /// <param name="searchtext"></param>
+        /// <param name="disabled"></param>
+        /// <param name="size"></param>
+        /// <param name="date"></param>
+        /// <param name="dateend"></param>
         /// <returns></returns>
         [HttpPost]
         [MultiButton(MatchFormKey = "action", MatchFormValue = "search-btn")]
-        public ActionResult Search(string searchtext, bool disabled, string size, DateTime? date, DateTime? dateend)
+        public ActionResult Search(string searchtext, string size)
         {
             string query = HttpUtility.UrlDecode(Request.Url.Query);
-            query = addFiltrParam(query, "searchtext", searchtext);
-            query = addFiltrParam(query, "disabled", disabled.ToString().ToLower());
+            query = AddFiltrParam(query, "searchtext", searchtext);
+            query = AddFiltrParam(query, "page", String.Empty);
+            query = AddFiltrParam(query, "size", size);
+
             return Redirect(StartUrl + query);
         }
 
@@ -111,7 +124,7 @@ namespace Disly.Areas.Admin.Controllers
         {
             //  При создании записи сбрасываем номер страницы
             string query = HttpUtility.UrlDecode(Request.Url.Query);
-            query = addFiltrParam(query, "page", String.Empty);
+            query = AddFiltrParam(query, "page", String.Empty);
             return Redirect(StartUrl + "item/" + Guid.NewGuid() + "/" + query);
         }
 
@@ -119,7 +132,7 @@ namespace Disly.Areas.Admin.Controllers
         public ActionResult Item(Guid Id)
         {
             #region администратор сайта
-            if (model.Account.Group.ToLower() == "admin")
+            if (model.Account.Group == "admin")
             {
                 if (orgId != null && !Id.Equals((Guid)orgId))
                 {
@@ -180,10 +193,7 @@ namespace Disly.Areas.Admin.Controllers
 
                 if (upload != null && upload.ContentLength > 0)
                 {
-                    string fileExtension = upload.FileName.Substring(upload.FileName.LastIndexOf(".")).ToLower();
-
-                    var validExtension = (!string.IsNullOrEmpty(Settings.PicTypes)) ? Settings.PicTypes.Split(',') : "jpg,jpeg,png,gif".Split(',');
-                    if (!validExtension.Contains(fileExtension.Replace(".", "")))
+                    if (!AttachedPicExtAllowed(upload.FileName))
                     {
                         model.ErrorInfo = new ErrorMessage()
                         {
@@ -198,6 +208,8 @@ namespace Disly.Areas.Admin.Controllers
                         return View("Item", model);
                     }
 
+                    string fileExtension = upload.FileName.Substring(upload.FileName.LastIndexOf(".")).ToLower();
+
                     Photo photoNew = new Photo()
                     {
                         Name = id.ToString() + fileExtension,
@@ -211,6 +223,13 @@ namespace Disly.Areas.Admin.Controllers
             #endregion
 
             #endregion
+
+            if (back_model.Item != null && !string.IsNullOrEmpty(back_model.Item.ExtUrl))
+            {
+                back_model.Item.ExtUrl = back_model.Item.ExtUrl.Replace("http://", "");
+                back_model.Item.ExtUrl = back_model.Item.ExtUrl.Replace("https://", "");
+            }
+
             if (model.Item != null)
             {
                 #region обновление
@@ -302,7 +321,7 @@ namespace Disly.Areas.Admin.Controllers
             if (model.StructureItem != null)
             {
                 #region администратор сайта
-                if (model.Account.Group.ToLower() == "admin")
+                if (model.Account.Group == "admin")
                 {
                     if (orgId != null)
                     {
@@ -346,19 +365,23 @@ namespace Disly.Areas.Admin.Controllers
 
                 if (back_model.StructureItem.GeopointX != null) { MapX = (double)back_model.StructureItem.GeopointX; }
                 if (back_model.StructureItem.GeopointY != null) { MapY = (double)back_model.StructureItem.GeopointY; }
-                ViewBag.Titlecoord = back_model.StructureItem.Title;
-                ViewBag.Xcoord = MapX;
-                ViewBag.Ycoord = MapY;
-                try
-                {
+           
+                //try
+                //{
                     if (back_model.StructureItem.Adress != String.Empty && (MapX == 0 || MapY == 0))
                     {
                         var CoordResult = Spots.Coords(back_model.StructureItem.Adress);
                         back_model.StructureItem.GeopointX = CoordResult.GeopointX;
                         back_model.StructureItem.GeopointY = CoordResult.GeopointY;
                     }
-                }
-                catch { }
+                //}
+                //catch { }
+
+                ViewBag.Titlecoord = back_model.StructureItem.Title;
+                ViewBag.Xcoord = back_model.StructureItem.GeopointX;
+                ViewBag.Ycoord = back_model.StructureItem.GeopointY;
+
+
                 #endregion
 
 
@@ -500,7 +523,7 @@ namespace Disly.Areas.Admin.Controllers
             if (model.StructureItem != null)
             {
                 #region администратор сайта
-                if (model.Account.Group.ToLower() == "admin")
+                if (model.Account.Group == "admin")
                 {
                     if (orgId != null)
                     {
@@ -515,6 +538,10 @@ namespace Disly.Areas.Admin.Controllers
                     }
                 }
                 #endregion
+
+
+                ViewBag.Xcoord = model.StructureItem.GeopointX;
+                ViewBag.Ycoord = model.StructureItem.GeopointY;
 
                 if (!model.StructureItem.Ovp)
                 {
@@ -696,7 +723,7 @@ namespace Disly.Areas.Admin.Controllers
         public ActionResult Department(Guid id)
         {
             #region администратор сайта
-            if (model.Account.Group.ToLower() == "admin")
+            if (model.Account.Group == "admin")
             {
                 if (orgId != null)
                 {
@@ -833,7 +860,12 @@ namespace Disly.Areas.Admin.Controllers
             string IdDepartment = Request["DepartmentItem.Id"];
             string PhoneLabel = Request["new_phone_label"];
             string PhoneValue = Request["new_phone_value"];
-            _cmsRepository.insDepartmentsPhone(Guid.Parse(IdDepartment), PhoneLabel, PhoneValue); //, AccountInfo.id, RequestUserInfo.IP
+            if(!String.IsNullOrEmpty(PhoneLabel) || !String.IsNullOrEmpty(PhoneValue))
+            {
+                _cmsRepository.insDepartmentsPhone(Guid.Parse(IdDepartment), PhoneLabel, PhoneValue); //, AccountInfo.id, RequestUserInfo.IP
+            }
+            
+
             return Redirect(((System.Web.HttpRequestWrapper)Request).RawUrl);
         }
 
@@ -887,7 +919,7 @@ namespace Disly.Areas.Admin.Controllers
             };
 
             #region for test
-            if (model.OrgsTypes != null)
+            if (model.OrgsTypes != null && model.OrgsTypes.Count() > 0)
             {
                 foreach (var orgtype in model.OrgsTypes)
                 {
@@ -931,13 +963,15 @@ namespace Disly.Areas.Admin.Controllers
         #region administrative
         public ActionResult Administrativ(Guid Id)
         {
+           
+
             model.AdministrativItem = _cmsRepository.getAdministrativ(Id);
             ViewBag.Title = "Административный персонал";
 
             if (model.AdministrativItem != null)
             {
                 #region администратор сайта
-                if (model.Account.Group.ToLower() == "admin")
+                if (model.Account.Group == "admin")
                 {
                     if (orgId != null)
                     {
@@ -956,18 +990,19 @@ namespace Disly.Areas.Admin.Controllers
             string _OrgId = Request.Params["orgid"];
             //информация о персоне
             Guid OrgId = (model.AdministrativItem != null) ? model.AdministrativItem.OrgId : Guid.Parse(_OrgId);
+            if (OrgId == null)
+            {
+                model.BreadCrumbOrg = _cmsRepository.getBreadCrumbOrgs(Id, ViewBag.ActionName);
+            }
 
             #region сотрудники для выпадающего списка
             var _peopList = _cmsRepository.getPersonsThisOrg(OrgId);
             if (_peopList != null)
             {
-                model.PeopleList = (model.AdministrativItem != null) ? new SelectList(_peopList, "Id", "FIO", model.AdministrativItem.PeopleF) : new SelectList(_peopList, "Id", "FIO");
+                model.PeopleList = (model.AdministrativItem != null) ? new SelectList(_peopList, "Id", "FIO", model.AdministrativItem.PeopleId) : new SelectList(_peopList, "Id", "FIO");
             }
             #endregion
-            if (OrgId == null)
-            {
-                model.BreadCrumbOrg = _cmsRepository.getBreadCrumbOrgs(Id, ViewBag.ActionName);
-            }
+           
             return View(model);
         }
 
@@ -995,10 +1030,7 @@ namespace Disly.Areas.Admin.Controllers
 
                 if (upload != null && upload.ContentLength > 0)
                 {
-                    string fileExtension = upload.FileName.Substring(upload.FileName.LastIndexOf(".")).ToLower();
-
-                    var validExtension = (!string.IsNullOrEmpty(Settings.PicTypes)) ? Settings.PicTypes.Split(',') : "jpg,jpeg,png,gif".Split(',');
-                    if (!validExtension.Contains(fileExtension.Replace(".", "")))
+                    if (!AttachedPicExtAllowed(upload.FileName))
                     {
                         model.ErrorInfo = new ErrorMessage()
                         {
@@ -1011,6 +1043,9 @@ namespace Disly.Areas.Admin.Controllers
                         };
                         return View("Item", model);
                     }
+
+                    string fileExtension = upload.FileName.Substring(upload.FileName.LastIndexOf(".")).ToLower();
+
                     Photo photo = new Photo
                     {
                         Name = aliasname + fileExtension,
@@ -1120,5 +1155,28 @@ namespace Disly.Areas.Admin.Controllers
         }
 
         #endregion
+        
+        /// <summary>
+        /// Получение списка организаций для человека
+        /// </summary>
+        /// <param name="peopleId"></param>
+        /// <returns></returns>
+        public string OrgListForSelect(Guid? peopleId = null)
+        {
+            var orgfilter = FilterParams.Extend<OrgFilter>(filter);
+            orgfilter.PeopleId = peopleId;
+
+            OrgsModel[] OrgList = _cmsRepository.getOrgs(orgfilter); // список организаций
+            var orglist = OrgList
+                                .Select(p => new 
+                                {
+                                     id = p.Id,
+                                     title = !string.IsNullOrEmpty(p.ShortTitle) ? p.ShortTitle : p.Title
+                                }).ToArray();
+
+            var data = JsonConvert.SerializeObject(orglist);
+
+            return data;
+        }
     }
 }

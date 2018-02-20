@@ -1,0 +1,19 @@
+﻿@{
+    var checkboxValue = false;
+    if (!string.IsNullOrEmpty(Request.QueryString["disabled"]))
+    {
+        bool.TryParse(Request.QueryString["disabled"], out checkboxValue);
+    }
+}
+
+<div class="row">
+    <div class="col-md-12">
+        @Html.TextBox("searchtext", Request.QueryString["searchtext"], new { @title = "Поиск по ключевым словам", @placeholder = "поиск...", @MaxLength = "512" })
+
+        @Html.CheckBox("enabled", !checkboxValue, new { type = "checkbox", title = "Отображать", data_toggle = "toggle", data_on = "Только разрешенные", data_off = "Только запрещенные", data_width = "248" })
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6"><button type="submit" name="action" value="search-btn" class="button btn-primary">Применить</button></div>
+    <div class="col-md-6"><button type="submit" name="action" value="clear-btn" class="button btn-default">Сбросить</button></div>
+</div>

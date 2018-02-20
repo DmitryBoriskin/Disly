@@ -61,6 +61,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>bin\Imaging.dll</HintPath>
     </Reference>
+    <Reference Include="IServ, Version=2.0.0.0, Culture=neutral">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\IServ.dll</HintPath>
+    </Reference>
     <Reference Include="linq2db, Version=1.0.7.3, Culture=neutral, PublicKeyToken=f19f8aed7feff67e, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Bin\linq2db.dll</HintPath>
@@ -142,6 +146,7 @@
     <Content Include="Content\css\styles_login.css" />
     <Content Include="Content\css\styles_old.css" />
     <Content Include="Content\css\theme\blue.css" />
+    <Content Include="Content\css\theme\blue_dark.css" />
     <Content Include="Content\css\theme\green.css" />
     <Content Include="Content\css\theme\green_portal.css" />
     <Content Include="Content\css\theme\purple.css" />
@@ -238,6 +243,7 @@
     <Content Include="Content\plugins\datatables\datatables.min.js" />
     <Content Include="Content\plugins\Disly\DislyControls.js" />
     <Content Include="Content\plugins\Disly\DislyControls.css" />
+    <Content Include="Content\plugins\formSerialize\jquery.serialize-object.min.js" />
     <Content Include="Content\plugins\icheck\icheck.js" />
     <Content Include="Content\plugins\icheck\icheck.min.js" />
     <Content Include="Content\plugins\icheck\skins\all.css" />
@@ -408,6 +414,35 @@
     <Content Include="Content\plugins\tinymce\plugins\fullscreen\plugin.min.js" />
     <Content Include="Content\css\theme\green_portal.less" />
     <Content Include="Areas\Admin\Views\Materials\RssList.cshtml" />
+    <Content Include="Areas\Admin\Views\Shared\Templates\Filtr.cshtml" />
+    <Content Include="Areas\Admin\Views\Shared\Templates\Menu.cshtml" />
+    <Content Include="Areas\Admin\Views\Shared\Partial\Pager.cshtml" />
+    <Content Include="Areas\Admin\Views\Shared\Partial\Filtr.cshtml" />
+    <Content Include="Areas\Admin\Views\Materials\Modal\Group.cshtml" />
+    <Content Include="Areas\Admin\Views\Events\Part\SearchFilter.cshtml" />
+    <Content Include="Areas\Admin\Views\Feedbacks\Part\SearchFilter.cshtml" />
+    <Content Include="Areas\Admin\Views\Materials\Part\SearchFilter.cshtml" />
+    <Content Include="Areas\Admin\Views\MainSpecialist\Part\SearchFilter.cshtml" />
+    <Content Include="Areas\Admin\Views\Person\Part\SearchFilter.cshtml" />
+    <Content Include="Areas\Admin\Views\PhotoAlbums\Part\SearchFilter.cshtml" />
+    <Content Include="Areas\Admin\Views\Sites\Part\SearchFilter.cshtml" />
+    <Content Include="Areas\Admin\Views\Users\Part\SearchFilter.cshtml" />
+    <Content Include="Areas\Admin\Views\Vacancy\Part\SearchFilter.cshtml" />
+    <Content Include="Areas\Admin\Views\Vote\Part\SearchFilter.cshtml" />
+    <Content Include="Areas\Admin\Views\Worksheet\Part\SearchFilter.cshtml" />
+    <Content Include="Areas\Admin\Views\PortalUsers\Part\SearchFilter.cshtml" />
+    <Content Include="Content\css\theme\blue_dark.less" />
+    <Content Include="Areas\Admin\Views\Orgs\part\SearchFilter.cshtml" />
+    <Content Include="Areas\Admin\Views\NewsMonitoring\Modal\Group.cshtml" />
+    <Content Include="Areas\Admin\Views\NewsMonitoring\Part\SearchFilter.cshtml" />
+    <Content Include="Areas\Admin\Views\NewsMonitoring\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\NewsMonitoring\Item.cshtml" />
+    <Content Include="Areas\Admin\Views\NewsMonitoring\OrgsSaved.cshtml" />
+    <Content Include="Areas\Admin\Views\NewsMonitoring\RssList.cshtml" />
+    <Content Include="Areas\Admin\Views\NewsMonitoring\Orgs.cshtml" />
+    <Content Include="Areas\Admin\Views\Shared\Modal\Spec.cshtml" />
+    <Content Include="Areas\Admin\Views\Statistics\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\MainSpecialist\Part\AddDoctor.cshtml" />
     <None Include="Content\plugins\tinymce\plugins\gallery\plugin.min.js_korkin" />
     <Content Include="Content\plugins\tinymce\plugins\help\img\logo.png" />
     <Content Include="Content\plugins\tinymce\plugins\help\plugin.min.js" />
@@ -555,7 +590,6 @@
     <Content Include="scripts\uc_script _old.js" />
     <Content Include="scripts\uc_script.js" />
     <Content Include="UC_params.txt" />
-    <Content Include="Views\Feedback\Index.cshtml" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -566,11 +600,16 @@
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
     <Compile Include="Areas\Admin\Controllers\AccountController.cs" />
     <Compile Include="Areas\Admin\Controllers\BannersController.cs" />
-    <Compile Include="Areas\Admin\Controllers\cmsMenuController.cs" />
+    <Compile Include="Areas\Admin\Controllers\CmsMenuController.cs" />
     <Compile Include="Areas\Admin\Controllers\DocumentsController .cs" />
+    <Compile Include="Areas\Admin\Controllers\StatisticsController .cs" />
+    <Compile Include="Areas\Admin\Controllers\NewsMonitoringController.cs" />
     <Compile Include="Areas\Admin\Controllers\WorksheetController.cs" />
     <Compile Include="Areas\Admin\Models\AnketaViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\StatisticViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\ModalViewModels\MainSpecModalViewModel.cs" />
     <Compile Include="Controllers\gs\SpecStructureController.cs" />
+    <Compile Include="Controllers\gs\SpecContactsController.cs" />
     <Compile Include="Controllers\orgs\OrgGsMembersController.cs" />
     <Compile Include="Controllers\AnketaController.cs" />
     <Compile Include="Controllers\VacancyController.cs" />
@@ -649,12 +688,13 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Areas\Admin\Models\CoreViewModel.cs" />
+    <Compile Include="Models\DoctorsViewModel.cs" />
     <Compile Include="Models\EventViewModel.cs" />
+    <Compile Include="Models\gs\SpecContactsViewModel.cs" />
     <Compile Include="Models\gs\SpecStructureViewModel.cs" />
     <Compile Include="Models\base\ErrorViewModel.cs" />
     <Compile Include="Models\WorksheetViewModel.cs" />
     <Compile Include="Models\FeedbackViewModel.cs" />
-    <Compile Include="Models\DoctorsViewModel.cs" />
     <Compile Include="Models\ContactsViewModel.cs" />
     <Compile Include="Models\portal\SpecialistsViewModel.cs" />
     <Compile Include="Models\portal\LPUViewModel.cs" />
@@ -728,7 +768,6 @@
     <Content Include="Content\fonts\Ubuntu\ubuntu_regular.woff" />
     <Content Include="Content\fonts\Ubuntu\ubuntu_regular.woff2" />
     <Content Include="Areas\Admin\Views\Shared\Partial\Modal.cshtml" />
-    <Content Include="Areas\Admin\Views\Shared\Partial\Filter.cshtml" />
     <Content Include="Views\Error\Index.cshtml" />
     <Content Include="Views\Page\Index.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
@@ -743,7 +782,6 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Services\ChangePass.cshtml" />
     <Content Include="Areas\Admin\Views\Services\Log.cshtml" />
-    <Content Include="Areas\Admin\Views\Services\UserResolutions.cshtml" />
     <Content Include="Areas\Admin\Views\Services\GroupClaims.cshtml" />
     <Content Include="Areas\Admin\Views\Sites\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Sites\Item.cshtml" />
@@ -752,7 +790,6 @@
     <Content Include="Areas\Admin\Views\PortalUsers\Item.cshtml" />
     <Content Include="Areas\Admin\Views\Shared\Templates\Filtr\Default.cshtml" />
     <Content Include="Areas\Admin\Views\Shared\_popUp.cshtml" />
-    <Content Include="Areas\Admin\Views\Services\LogUser.cshtml" />
     <Content Include="Areas\Admin\Views\Shared\Templates\Pager\Default.cshtml" />
     <Content Include="Areas\Admin\Views\Image\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Services\GetFile.cshtml" />
@@ -870,7 +907,6 @@
     <Content Include="Content\plugins\tinymce\skins\lightgray\fonts\tinymce.woff" />
     <Content Include="package.json" />
     <Content Include="Content\spec\cecu.less" />
-    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\services\Pager.cshtml" />
     <Content Include="Views\Shared\services\breadcrumbs.cshtml" />
@@ -893,12 +929,11 @@
     <Content Include="Views\LPU\Index.cshtml" />
     <Content Include="Views\Press\part\Item.cshtml" />
     <Content Include="Views\Home\part\media.cshtml" />
-    <Content Include="Views\PortalDoctors\Index_old.cshtml" />
     <Content Include="Views\Doctors\part\item.cshtml" />
     <Content Include="Views\Doctors\part\list.cshtml" />
     <Content Include="Views\MedicalServices\Index.cshtml" />
     <Content Include="Views\Shared\part\childlist.cshtml" />
-    <Content Include="Views\Feedback\Form.cshtml" />
+    <Content Include="Views\Feedback\part\Form.cshtml" />
     <Content Include="Views\Search\Index.cshtml" />
     <Content Include="Views\Feedback\AnswerForm.cshtml" />
     <Content Include="Views\EventsFront\Index.cshtml" />
@@ -942,6 +977,14 @@
     <Content Include="Views\PortalDoctors\part\list.cshtml" />
     <Content Include="Views\PortalDoctors\Index.cshtml" />
     <Content Include="Userfiles\rezume_form.doc" />
+    <Content Include="Views\Shared\part\Pager.cshtml" />
+    <Content Include="Views\Feedback\part\Filter.cshtml" />
+    <Content Include="Views\Feedback\part\List.cshtml" />
+    <Content Include="Views\Shared\partial\Pager.cshtml" />
+    <Content Include="Views\Press\part\Filter.cshtml" />
+    <Content Include="Views\SpecContacts\Index.cshtml" />
+    <Content Include="Views\SpecStructure\part\doctorslist.cshtml" />
+    <None Include="Properties\PublishProfiles\Med.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

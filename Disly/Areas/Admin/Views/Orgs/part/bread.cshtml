@@ -1,6 +1,6 @@
 ﻿@model OrgsViewModel
 
-@if (Model.BreadCrumbOrg != null)
+@if (Model.BreadCrumbOrg != null && Model.BreadCrumbOrg.Count() > 0)
 {
     <ol class="breadcrumb">
         @foreach (var item in Model.BreadCrumbOrg)

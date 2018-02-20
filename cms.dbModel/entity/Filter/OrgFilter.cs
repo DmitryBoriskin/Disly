@@ -4,17 +4,22 @@ using System.Web;
 public class OrgFilter: FilterParams
 {
     /// <summary>
-    /// Должен передаваться либо MaterialId либо EventId
+    /// Id элемента, привязанного к организации 
     /// </summary>
     public Guid? RelId { get; set; }
-    
+
     /// <summary>
-    /// определяет в какой таблице связей искать связь с организацией
+    /// тип элемента, привязанного к организации 
     /// </summary>
     public ContentType RelType { get; set; }
 
     /// <summary>
     /// Исключаем
     /// </summary>
-    public Guid? except { get; set; }
+    public Guid? Except { get; set; }
+
+    /// <summary>
+    /// Фильтр по человеку
+    /// </summary>
+    public Guid? PeopleId { get; set; }
 }

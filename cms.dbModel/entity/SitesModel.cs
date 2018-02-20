@@ -21,6 +21,11 @@ namespace cms.dbModel.entity
         /// Пейджер
         /// </summary>
         public Pager Pager;
+
+        public int CountAllSites;
+        public int CountOrgSites;
+        public int CountGsSites;
+        public int CountEventSites;
     }
 
     /// <summary>
@@ -160,6 +165,8 @@ namespace cms.dbModel.entity
         /// Изображение под слайдером
         /// </summary>
         public Photo BackGroundImg { get; set; }
+
+        public string DefaultDomain { get; set; }
     }
 
     /// <summary>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Web;
+using System.Web.Mvc;
 
 /// <summary>
 /// Типы контента
@@ -12,6 +13,7 @@ public enum ContentType
     PHOTO = 3,
     BANNER = 4,
     ANKETA = 5
+
 }
 /// <summary>
 /// Типы объектов, которые могут иметь свои сайты(домены)
@@ -24,3 +26,11 @@ public enum ContentLinkType
     SPEC = 3,
     SITE = 4
 }
+
+public enum GSMemberType
+{
+    UNDEFINED = 0,
+    SPEC = 1, //main
+    EXPERT = 2, //soviet
+}
+

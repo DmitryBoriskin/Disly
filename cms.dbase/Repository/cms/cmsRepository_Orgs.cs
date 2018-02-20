@@ -59,6 +59,11 @@ namespace cms.dbase
                 }
             }
 
+            if(filtr.PeopleId.HasValue && filtr.PeopleId.Value != Guid.Empty)
+            {
+                query = query.Where(p => p.contentorgpeoplelinks.Any(s => s.f_people == filtr.PeopleId.Value));
+            }
+
             return query;
         }
 
@@ -96,6 +101,17 @@ namespace cms.dbase
                 return false;
             }
         }
+
+        public int getCountOrg()
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var query = db.content_orgss;
+                if (query.Any()) return query.Count();
+                return 0;
+            }
+        }
+
         /// <summary>
         /// Постраничный список организаций
         /// </summary>
@@ -120,15 +136,15 @@ namespace cms.dbase
                 if (!data.Any())
                     return null;
 
-                return new OrgsList
+                return new OrgsList()
                 {
                     Data = data.ToArray(),
-                    Pager = new Pager
+                    Pager = new Pager()
                     {
-                        page = filtr.Page,
-                        size = filtr.Size,
-                        items_count = itemCount,
-                        page_count = (itemCount % filtr.Size > 0) ? (itemCount / filtr.Size) + 1 : itemCount / filtr.Size
+                        Page = filtr.Page,
+                        Size = filtr.Size,
+                        ItemsCount = itemCount,
+                        //PageCount = (itemCount % filtr.Size > 0) ? (itemCount / filtr.Size) + 1 : itemCount / filtr.Size
                     }
                 };
             }
@@ -148,8 +164,8 @@ namespace cms.dbase
 
                 //data.OrderBy(o => o.n_sort); ХЗ почему эта строка нормально не сортирует
 
-                if (filtr.except.HasValue && filtr.except.Value != Guid.Empty)
-                    query = query.Where(w => w.id != filtr.except.Value);
+                if (filtr.Except.HasValue && filtr.Except.Value != Guid.Empty)
+                    query = query.Where(w => w.id != filtr.Except.Value);
 
                 var data = query.Select(s => new OrgsModel()
                 {
@@ -171,7 +187,7 @@ namespace cms.dbase
         /// Получаем полный список доступных организаций с отмеченными значениями(для кот есть связи для объекта)
         /// </summary>
         /// <param name="filtr">Фильтр</param>
-        /// <returns></returns>         
+        /// <returns></returns>
         public override OrgsShortModel[] getOrgsListWhithChekedFor(OrgFilter filtr)
         {
             using (var db = new CMSdb(_context))
@@ -189,7 +205,7 @@ namespace cms.dbase
                         .Select(s => new OrgsShortModel()
                         {
                             Id = s.id,
-                            Title = s.c_title,
+                            Title = !string.IsNullOrEmpty(s.c_title_short)? s.c_title_short: s.c_title,
                             Types = (s.contentorgstypeslinkorgs.Select(t => t.f_type).Any()) ?
                                 s.contentorgstypeslinkorgs.Select(t => t.f_type).ToArray() : null,
                             Checked = ContentLinkExists(filtr.RelId.Value, filtr.RelType, s.id, ContentLinkType.ORG),
@@ -235,6 +251,7 @@ namespace cms.dbase
                         PhoneReception = s.c_phone_reception,
                         Fax = s.c_fax,
                         Email = s.c_email,
+                        ExtUrl = s.c_www,
                         DirecorPost = s.c_director_post,
                         DirectorF = s.f_director,
                         Contacts = s.c_contacts,
@@ -247,7 +264,7 @@ namespace cms.dbase
                         Disabled = s.b_disabled,
                         Types = types,
                         Services = services,
-                        DepartmentAffiliation = s.f_department_affiliation,
+                        Affiliation = s.f_department_affiliation,
                         SiteGuid =(siteGuid!=String.Empty)? siteGuid: String.Empty,
                         Logo = new Photo
                         {
@@ -294,6 +311,7 @@ namespace cms.dbase
                             .Value(s => s.c_phone_reception, model.PhoneReception)
                             .Value(s => s.c_fax, model.Fax)
                             .Value(s => s.c_email, model.Email)
+                            .Value(s=> s.c_www, model.ExtUrl)
                             .Value(s => s.c_director_post, model.DirecorPost)
                             .Value(s => s.f_director, model.DirectorF)
                             .Value(s => s.c_contacts, model.Contacts)
@@ -301,7 +319,7 @@ namespace cms.dbase
                             .Value(s => s.n_geopoint_x, model.GeopointX)
                             .Value(s => s.n_geopoint_y, model.GeopointY)
                             .Value(s => s.f_oid, model.Oid)
-                            .Value(s => s.f_department_affiliation, model.DepartmentAffiliation)
+                            .Value(s => s.f_department_affiliation, model.Affiliation)
                             .Value(s => s.c_logo, _Logo)
                             .Value(s => s.b_disabled, model.Disabled)
                             .Insert();
@@ -399,6 +417,7 @@ namespace cms.dbase
                             .Set(s => s.c_phone_reception, model.PhoneReception)
                             .Set(s => s.c_fax, model.Fax)
                             .Set(s => s.c_email, model.Email)
+                            .Set(s => s.c_www, model.ExtUrl)
                             .Set(s => s.c_director_post, model.DirecorPost)
                             .Set(s => s.f_director, model.DirectorF)
                             .Set(s => s.c_contacts, model.Contacts)
@@ -406,7 +425,7 @@ namespace cms.dbase
                             .Set(s => s.n_geopoint_x, model.GeopointX)
                             .Set(s => s.n_geopoint_y, model.GeopointY)
                             .Set(s => s.f_oid, model.Oid)
-                            .Set(s => s.f_department_affiliation, model.DepartmentAffiliation)
+                            .Set(s => s.f_department_affiliation, model.Affiliation)
                             .Set(s => s.c_logo, url)
                             .Set(s => s.b_disabled, model.Disabled)
                             .Update();
@@ -837,12 +856,14 @@ namespace cms.dbase
                 var query = db.content_org_structure_adresss.Where(w => w.f_org_structure == StrucId);
                 if (query.Any())
                 {
-                    return query.Select(s => new DopAddres()
-                    {
-                        Id=s.id,
-                        Address=s.c_adress,
-                        Title=s.c_title
-                    }).ToArray();
+                    return query
+                            .OrderBy(o=>o.c_title)
+                            .Select(s => new DopAddres()
+                            {
+                                Id=s.id,
+                                Address=s.c_adress,
+                                Title=s.c_title
+                            }).ToArray();
                 }
                 return null;
             }
@@ -1239,15 +1260,15 @@ namespace cms.dbase
         /// </summary>
         /// <param name="idDepart">Департамент</param>
         /// <returns></returns>
-        public override People[] getPeopleDepartment(Guid idDepart)
+        public override PeopleModel[] getPeopleDepartment(Guid idDepart)
         {
             using (var db = new CMSdb(_context))
             {
-                var data = db.content_sv_people_departments
+                var data = db.content_sv_employees_departments
                              .Where(w => w.f_department == idDepart)
-                             .Select(s => new People()
+                             .Select(s => new PeopleModel()
                              {
-                                 Id = s.f_people,
+                                 Id = s.f_employee,
                                  FIO = s.c_surname + " " + s.c_name + " " + s.c_patronymic,
                                  IdLinkOrg = s.idOrgLink,
                                  Post= s.c_post,
@@ -1421,7 +1442,7 @@ namespace cms.dbase
         /// </summary>
         /// <param name="idDepar">Департамент</param>
         /// <returns></returns>
-        public override People[] getPersonsThisDepartment(Guid idDepar)
+        public override PeopleModel[] getPersonsThisDepartment(Guid idDepar)
         {
             using (var db = new CMSdb(_context))
             {
@@ -1435,12 +1456,12 @@ namespace cms.dbase
                     {
                         //нужно показать только персон не добавленных в отделение
                         Guid OrgId = data_str.First().f_ord;
-                        var PeopleList = db.content_people_org_links
+                        var PeopleList = db.content_org_employeess
                                            .Where(w => w.f_org == OrgId)
                                            //.Where(w => (w.fkcontentpeopleorgdepartmentlinks == null || w.fkcontentpeopleorgdepartmentlinks.FirstOrDefault().f_department != idDepar))
-                                           .Select(s => new People
+                                           .Select(s => new PeopleModel
                                            {
-                                               FIO = s.fkcontentpeopleorglink.c_surname + " " + s.fkcontentpeopleorglink.c_name + " " + s.fkcontentpeopleorglink.c_patronymic,
+                                               FIO = s.contentpeopleorglink.c_surname + " " + s.contentpeopleorglink.c_name + " " + s.contentpeopleorglink.c_patronymic,
                                                Id = s.id,
                                                IdLinkOrg = s.f_people
                                            }).ToArray();
@@ -1466,13 +1487,14 @@ namespace cms.dbase
                 using (var tran = db.BeginTransaction())
                 {
                     //проверям подключен ли данный пользователь к данному отделу
-                    var data = db.content_people_department_links.Where(w => (w.f_department == idDepart && w.f_people == IdLinkPeopleForOrg));
+                    var data = db.content_department_employeess.Where(w => (w.f_department == idDepart && w.f_employee == IdLinkPeopleForOrg));
                     if (!data.Any())
                     {
-                        content_people_department_link newdata = new content_people_department_link
+                        content_department_employees newdata = new content_department_employees
                         {
+                            id = Guid.NewGuid(),
                             f_department = idDepart,
-                            f_people = IdLinkPeopleForOrg,
+                            f_employee = IdLinkPeopleForOrg,
                             c_status = status,
                             c_post = post
                         };
@@ -1496,7 +1518,7 @@ namespace cms.dbase
         {
             using (var db = new CMSdb(_context))
             {
-                var data = db.content_people_department_links.Where(w => w.f_department == idDep && w.f_people == idPeople);
+                var data = db.content_department_employeess.Where(w => w.f_department == idDep && w.f_employee == idPeople);
 
                 if (data.Any())
                 {
@@ -1572,19 +1594,19 @@ namespace cms.dbase
         /// </summary>
         /// <param name="id">Тип</param>
         /// <returns></returns>
-        public override OrgsModelSmall[] getOrgSmall(Guid id, Guid material)
+        public override OrgsShortModel[] getOrgSmall(Guid id, Guid material)
         {
             using (var db = new CMSdb(_context))
             {
                 var data = db.content_sv_orgs_by_types
                     .Where(w => w.f_type.Equals(id))
                     .OrderBy(o => o.n_sort)
-                    .Select(s => new OrgsModelSmall
+                    .Select(s => new OrgsShortModel
                     {
                         Id = s.id,
                         Title = s.c_title,
                         Sort = s.n_sort,
-                        Check = setCheckedOrgs(s.id, material)
+                        Checked = setCheckedOrgs(s.id, material)
                     });
 
                 if (!data.Any()) return null;
@@ -1612,17 +1634,17 @@ namespace cms.dbase
         /// Получаем список организаций, прикреплённых к каким-то типам
         /// </summary>
         /// <returns></returns>
-        public override OrgsModelSmall[] getOrgAttachedToTypes(Guid material)
+        public override OrgsShortModel[] getOrgAttachedToTypes(Guid material)
         {
             using (var db = new CMSdb(_context))
             {
                 var data = db.content_sv_orgs_not_attacheds
                     .OrderBy(o => o.c_title)
-                    .Select(s => new OrgsModelSmall
+                    .Select(s => new OrgsShortModel
                     {
                         Id = s.id,
                         Title = s.c_title,
-                        Check = setCheckedOrgs(s.id, material)
+                        Checked = setCheckedOrgs(s.id, material)
                     });
 
                 if (!data.Any()) return null;
@@ -1678,7 +1700,7 @@ namespace cms.dbase
                                   Post = s.c_post,
                                   Text = s.c_text,
                                   OrgId = s.f_org,
-                                  PeopleF = s.f_people,
+                                  PeopleId = s.f_people,
                                   Leader = s.b_leader
                               });
                 if (query.Any())
@@ -1717,7 +1739,7 @@ namespace cms.dbase
                       .Value(v => v.c_post, ins.Post)
                       .Value(v => v.c_text, ins.Text)
                       .Value(v => v.f_org, ins.OrgId)
-                      .Value(v => v.f_people, ins.PeopleF)
+                      .Value(v => v.f_people, ins.PeopleId)
                       .Value(v => v.n_sort, maxSort)
                       .Value(v => v.b_leader, ins.Leader)
                       .Insert();
@@ -1764,7 +1786,7 @@ namespace cms.dbase
                             .Set(s => s.c_photo, upd.Photo.Url)
                             .Set(s => s.c_post, upd.Post)
                             .Set(s => s.c_text, upd.Text)
-                            .Set(s => s.f_people, upd.PeopleF)
+                            .Set(s => s.f_people, upd.PeopleId)
                             .Set(s => s.b_leader, upd.Leader)
                             .Update();
 
@@ -1876,16 +1898,16 @@ namespace cms.dbase
         /// </summary>
         /// <param name="idOrg">идентификатор организации</param>
         /// <returns></returns>
-        public override People[] getPersonsThisOrg(Guid idOrg)
+        public override PeopleModel[] getPersonsThisOrg(Guid idOrg)
         {
             using (var db = new CMSdb(_context))
             {
-                var PeopleList = db.content_people_org_links
+                var PeopleList = db.content_org_employeess
                                            .Where(w => w.f_org == idOrg)
-                                           .Select(s => new People
+                                           .Select(s => new PeopleModel
                                            {
-                                               FIO = s.fkcontentpeopleorglink.c_surname + " " + s.fkcontentpeopleorglink.c_name + " " + s.fkcontentpeopleorglink.c_patronymic,
-                                               Id = s.fkcontentpeopleorglink.id
+                                               FIO = s.contentpeopleorglink.c_surname + " " + s.contentpeopleorglink.c_name + " " + s.contentpeopleorglink.c_patronymic,
+                                               Id = s.contentpeopleorglink.id
                                                //Id = s.id,
                                                //IdLinkOrg = s.f_people
                                            }).ToArray();
@@ -1897,13 +1919,13 @@ namespace cms.dbase
         /// Получим список медицинских услуг
         /// </summary>
         /// <returns></returns>
-        public override MedicalService[] getMedicalServices()
+        public override MedServiceModel[] getMedicalServices()
         {
             using (var db = new CMSdb(_context))
             {
                 var query = db.content_medical_servicess
                     .OrderBy(o => o.n_sort)
-                    .Select(s => new MedicalService
+                    .Select(s => new MedServiceModel
                     {
                         Id = s.id,
                         Title = s.c_title,
@@ -1944,7 +1966,7 @@ namespace cms.dbase
             {
                 var query = (from s in db.cms_sitess
                              join o in db.content_orgss on s.f_content equals o.id
-                             where s.c_alias.Equals(_domain)
+                             where s.c_alias.ToLower().Equals(_domain)
                              select o.id);
 
                 if (!query.Any()) return null;
@@ -2005,10 +2027,16 @@ namespace cms.dbase
 
                 if (!structureIds.Any()) return false;
 
+                
+
+
+                
+                var query1 = db.content_departmentss
+                    .Where(w => w.id.Equals(id));
+                //случай когда департамент создается т.е. его не существует в базе
+                if (!query1.Any()) return true;
                 // структура владеющая департаментом
-                var query = db.content_departmentss
-                    .Where(w => w.id.Equals(id))
-                    .Select(s => s.f_structure);
+                var query =query1.Select(s => s.f_structure);
 
                 if (!query.Any()) return false;
 

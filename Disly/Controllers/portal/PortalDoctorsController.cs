@@ -1,7 +1,9 @@
 ﻿using cms.dbModel.entity;
 using Disly.Models;
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Web.Mvc;
 using System.Xml.Serialization;
 
@@ -15,11 +17,6 @@ namespace Disly.Controllers
         {
             base.OnActionExecuting(filterContext);
 
-            currentPage = _repository.getSiteMap("PortalDoctors");
-
-            //if (currentPage == null)
-            //    throw new Exception("model.CurrentPage == null");
-
             model = new PortalDoctorsViewModel
             {
                 SitesInfo = siteModel,
@@ -29,28 +26,39 @@ namespace Disly.Controllers
                 CurrentPage = currentPage
             };
 
-            //#region Создаем переменные (значения по умолчанию)
-            //string PageTitle = model.CurrentPage.Title;
-            //string PageDesc = model.CurrentPage.Desc;
-            //string PageKeyw = model.CurrentPage.Keyw;
-            //#endregion
-
-            //#region Метатеги
-            //ViewBag.Title = PageTitle;
-            //ViewBag.Description = PageDesc;
-            //ViewBag.KeyWords = PageKeyw;
-            //#endregion
+            #region Создаем переменные (значения по умолчанию)
+            ViewBag.Title = "Страница";
+            ViewBag.Description = "Страница без названия";
+            ViewBag.KeyWords = "";
+            #endregion
         }
 
         // GET: PortalDoctors
         public ActionResult Index()
         {
-            var filter = getFilter();
-            model.DoctorsList = _repository.getDoctorsList(filter);
-            model.PeoplePosts = _repository.getPeoplePosts();
+            #region currentPage
+            currentPage = _repository.getSiteMap("PortalDoctors");
+            if (currentPage == null)
+                //throw new Exception("model.CurrentPage == null");
+                return RedirectToRoute("Error", new { httpCode = 404 });
 
-            ViewBag.SearchText = filter.SearchText;
-            ViewBag.Position = filter.Type;
+            if (currentPage != null)
+            {
+                ViewBag.Title = currentPage.Title;
+                ViewBag.Description = currentPage.Desc;
+                ViewBag.KeyWords = currentPage.Keyw;
+
+                model.CurrentPage = currentPage;
+            }
+            #endregion
+
+            var filtr = getFilter();
+            var docfilter = FilterParams.Extend<PeopleFilter>(filtr);
+            model.DoctorsList = _repository.getDoctorsList(docfilter);
+            model.Specializations = _repository.getSpecialisations();
+
+            ViewBag.SearchText = filtr.SearchText;
+            ViewBag.Position = filtr.Type;
 
             return View(model);
         }
@@ -58,18 +66,40 @@ namespace Disly.Controllers
         // GET: portaldoctors/id
         public ActionResult Item(Guid id)
         {
+            #region currentPage
+            currentPage = _repository.getSiteMap("PortalDoctors");
+            //if (currentPage == null)
+                //throw new Exception("model.CurrentPage == null");
+
+            if (currentPage != null)
+            {
+                ViewBag.Title = currentPage.Title;
+                ViewBag.Description = currentPage.Desc;
+                ViewBag.KeyWords = currentPage.Keyw;
+
+                model.CurrentPage = currentPage;
+            }
+            #endregion
+
             string _ViewName = (ViewName != String.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";
 
             model.DoctorsItem = _repository.getPeopleItem(id);
-
+            
             // десериализация xml
             XmlSerializer serializer = new XmlSerializer(typeof(Employee));
 
-            using (TextReader reader = new StringReader(model.DoctorsItem.XmlInfo))
+            if(model.DoctorsItem != null && model.DoctorsItem.XmlInfo != null)
             {
-                var result = (Employee)serializer.Deserialize(reader);
-                model.DoctorsItem.EmployeeInfo = result;
+                foreach (var info in model.DoctorsItem.XmlInfo)
+                {
+                    using (TextReader reader = new StringReader(info))
+                    {
+                        var result = (Employee)serializer.Deserialize(reader);
+                        model.DoctorsItem.EmployeeInfo = result;
+                    }
+                }
             }
+            
 
             return View("Index", model);
         }

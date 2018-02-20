@@ -11,7 +11,8 @@ namespace Disly.Areas.Admin.Models
     /// Модель, описывающая организации во внешней части
     /// </summary>
     public class OrgsViewModel : CoreViewModel
-    {                
+    {   
+        public int CountItem { get; set; }
         /// <summary>
         /// Единичная запись организации
         /// </summary>
@@ -64,7 +65,7 @@ namespace Disly.Areas.Admin.Models
         /// <summary>
         /// Список медицинских услуг
         /// </summary>
-        public MedicalService[] MedicalServices { get; set; }
+        public MedServiceModel[] MedicalServices { get; set; }
 
         /// <summary>
         /// Права на структуру

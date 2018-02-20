@@ -39,11 +39,11 @@ namespace cms.dbase
                     Where(w => w.c_email == Email).
                     Select(s => new AccountModel
                     {
-                        id = s.id,
+                        Id = s.id,
                         Mail = s.c_email,
                         Salt = s.c_salt,
                         Hash = s.c_hash,
-                        Group = s.f_group,
+                        Group = s.f_group.ToLower(),
                         Surname = s.c_surname,
                         Name = s.c_name,
                         Patronymic = s.c_patronymic,
@@ -63,11 +63,11 @@ namespace cms.dbase
                     Where(w => w.id == Id).
                     Select(s => new AccountModel
                     {
-                        id = s.id,
+                        Id = s.id,
                         Mail = s.c_email,
                         Salt = s.c_salt,
                         Hash = s.c_hash,
-                        Group = s.f_group,
+                        Group = s.f_group.ToLower(),
                         Surname = s.c_surname,
                         Name = s.c_name,
                         Patronymic = s.c_patronymic,
@@ -112,11 +112,13 @@ namespace cms.dbase
                     {
                         SiteId = s.f_site,
                         DomainName = s.c_name
-                    })
-                    .ToArray();
+                    });
 
-                if (!data.Any()) { return null; }
-                else { return data; }
+
+                if (data.Any())
+                    return data.ToArray();
+
+                return null;
             }
         }
 
@@ -130,7 +132,7 @@ namespace cms.dbase
             using (var db = new CMSdb(_context))
             {
                 var data = db.cms_sv_resolutionss
-                    .Where(w => (w.c_alias == _pageUrl && w.c_user_id == _userId))
+                    .Where(w => (w.c_alias.ToLower() == _pageUrl.ToLower() && w.c_user_id == _userId))
                     .Select(s => new ResolutionsModel
                     {
                         Title = s.c_title,
@@ -138,9 +140,12 @@ namespace cms.dbase
                         Write = s.b_write,
                         Change = s.b_change,
                         Delete = s.b_delete
-                    }).ToArray();
-                if (!data.Any()) { return null; }
-                else { return data.First(); }
+                    });
+
+                if (data.Any())
+                    return data.FirstOrDefault();
+
+                return null;
             }
         }
 

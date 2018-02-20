@@ -38,6 +38,10 @@ namespace Disly.Areas.Admin.Controllers
                     new SiteMapMenu { Value = "spec", Text = "Специалисты" }
                 }
             };
+            if (AccountInfo != null)
+            {
+                model.Menu = _cmsRepository.getCmsMenu(AccountInfo.Id);
+            }
 
             //Справочник всех доступных категорий
             MaterialsGroup[] GroupsValues = _cmsRepository.getAllMaterialGroups();
@@ -82,7 +86,7 @@ namespace Disly.Areas.Admin.Controllers
         {
             //  При создании записи сбрасываем номер страницы
             string query = HttpUtility.UrlDecode(Request.Url.Query);
-            query = addFiltrParam(query, "page", String.Empty);
+            query = AddFiltrParam(query, "page", String.Empty);
 
             return Redirect(StartUrl + "Item/" + Guid.NewGuid() + "/" + query);
         }

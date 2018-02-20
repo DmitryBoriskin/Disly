@@ -59,16 +59,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Mapping\DbQueryMap.cs" />
     <Compile Include="Repository\cms\cmsRepository.cs" />
     <Compile Include="Repository\cms\cmsRepository_Banners.cs" />
     <Compile Include="Repository\cms\cmsRepository_Anketa.cs" />
     <Compile Include="Repository\cms\cmsRepository_Feedbacks.cs" />
     <Compile Include="Repository\cms\cmsRepository_Documents.cs" />
     <Compile Include="Repository\cms\cmsRepository_PhotoAlbums.cs" />
+    <Compile Include="Repository\cms\cmsRepository_Statistics.cs" />
     <Compile Include="Repository\cms\cmsRepository_Vote.cs" />
     <Compile Include="Repository\cms\cmsRepository_Person.cs" />
     <Compile Include="Repository\cms\cmsRepository_SiteSection.cs" />
-    <Compile Include="Repository\cms\cmsRepository_MainSpecialist.cs" />
+    <Compile Include="Repository\cms\cmsRepository_GS.cs" />
     <Compile Include="Repository\cms\cmsRepository_Vacancies.cs" />
     <Compile Include="Repository\cms\cmsRepository_Users.cs" />
     <Compile Include="Repository\cms\cmsRepository_Events.cs" />

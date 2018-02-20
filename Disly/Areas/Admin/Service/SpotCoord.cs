@@ -32,16 +32,21 @@ namespace Disly.Areas.Admin.Service
             coord = Convert.ToString(ReCoord.Match(html).Groups[1].Value);
 
             coord = coord.Replace(" ", ";");
-            string[] ArrCoord = coord.Split(';');
-            foreach (string qwerty in ArrCoord)
+            string[] arrCoord = coord.Split(';');
+
+            if(arrCoord != null && arrCoord.Count() > 1)
             {
-                try
+                foreach (string qwerty in arrCoord)
                 {
-                    MapX = double.Parse(ArrCoord[1].Replace(".", ","));
-                    MapY = double.Parse(ArrCoord[0].Replace(".", ","));
+                    try
+                    {
+                        MapX = double.Parse(arrCoord[1].Replace(".", ","));
+                        MapY = double.Parse(arrCoord[0].Replace(".", ","));
+                    }
+                    catch { }
                 }
-                catch { }
             }
+            
             CoordModel GeoCoord = new CoordModel() {
                 GeopointX= MapX,
                 GeopointY=MapY

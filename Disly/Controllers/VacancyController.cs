@@ -17,11 +17,6 @@ namespace Disly.Controllers
         {
             base.OnActionExecuting(filterContext);
 
-            currentPage = _repository.getSiteMap("Vacancy");
-
-            if (currentPage == null)
-                throw new Exception("model.CurrentPage == null"); //Заменить потом все на  return new HttpNotFoundResult();
-
             model = new VacancyViewModel
             {
                 SitesInfo = siteModel,
@@ -32,22 +27,10 @@ namespace Disly.Controllers
             };
 
             #region Создаем переменные (значения по умолчанию)
-            string PageTitle = model.CurrentPage.Title;
-            string PageDesc = model.CurrentPage.Desc;
-            string PageKeyw = model.CurrentPage.Keyw;
+            ViewBag.Title = "Страница";
+            ViewBag.Description = "Страница без названия";
+            ViewBag.KeyWords = "";
             #endregion
-
-            #region Метатеги
-            ViewBag.Title = PageTitle;
-            ViewBag.Description = PageDesc;
-            ViewBag.KeyWords = PageKeyw;
-            #endregion
-
-            model.Breadcrumbs.Add(new Breadcrumbs()
-            {
-                Title = PageTitle,
-                Url = string.Format("/{0}/", model.CurrentPage.FrontSection)
-            });
         }
 
         /// <summary>
@@ -56,12 +39,34 @@ namespace Disly.Controllers
         /// <returns></returns>
         public ActionResult Index()
         {
+            #region currentPage
+            currentPage = _repository.getSiteMap("Vacancy");
+            if (currentPage == null)
+                //throw new Exception("model.CurrentPage == null");
+                return RedirectToRoute("Error", new { httpCode = 404 });
+
+            if (currentPage != null)
+            {
+                ViewBag.Title = currentPage.Title;
+                ViewBag.Description = currentPage.Desc;
+                ViewBag.KeyWords = currentPage.Keyw;
+
+                model.CurrentPage = currentPage;
+            }
+            #endregion
+
             string _ViewName = (ViewName != String.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";
 
             var filter = getFilter();
             if (Domain == "main")
                 filter.Domain = null;
             model.List = _repository.getVacancy(filter);
+
+            model.Breadcrumbs.Add(new Breadcrumbs()
+            {
+                Title = ViewBag.Title,
+                Url = string.Format("/{0}/", model.CurrentPage.FrontSection)
+            });
 
             ViewBag.Filter = filter;
             ViewBag.NewsSearchArea = filter.SearchText;
@@ -76,6 +81,22 @@ namespace Disly.Controllers
         /// <returns></returns>
         public ActionResult Item(Guid id)
         {
+            #region currentPage
+            currentPage = _repository.getSiteMap("Vacancy");
+            if (currentPage == null)
+                //throw new Exception("model.CurrentPage == null");
+                return RedirectToRoute("Error", new { httpCode = 404 });
+
+            if (currentPage != null)
+            {
+                ViewBag.Title = currentPage.Title;
+                ViewBag.Description = currentPage.Desc;
+                ViewBag.KeyWords = currentPage.Keyw;
+
+                model.CurrentPage = currentPage;
+            }
+            #endregion
+
             string _ViewName = (ViewName != String.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";
 
             model.Item = _repository.getVacancyItem(id);

@@ -59,9 +59,9 @@
 <div class="news-module">
     <div class="row">
         <div class="col-md-6">
-            @if (news != null && news.FirstOrDefault() != null)
+            @if (Model.ImportantMaterials != null)
             {
-                var news_it = news.FirstOrDefault();
+                var news_it = Model.ImportantMaterials;
 
                 string link = "/press/" + news_it.Date.Year + "/" + news_it.Date.Month + "/" + news_it.Date.Day + "/" + news_it.Alias;
                 string photo = !string.IsNullOrEmpty(news_it.Photo) ? news_it.Photo : "~/Content/img/temporal.jpg";
@@ -75,7 +75,7 @@
                                 <div>@news_it.Date.ToString("yyyy")</div>
                             </div>
                         </div>
-                        <a href="/press/@news_it.GroupAlias" class="module-material-item-group-link">@news_it.GroupName</a>
+                        <a href="" class="module-material-item-group-link">Главное</a>
                     </div>
                     <a href="@link">
                         <img src="@photo" alt="@news_it.Title" />
@@ -143,16 +143,16 @@
                                         <div>@ann.Date.ToString("yyyy")</div>
                                     </div>
                                 </div>
-                                <a class="module-material-item-group-link" href="/press/@ann.GroupAlias">@ann.GroupName                                </a>
+                                <a class="module-material-item-group-link" href="/press/@ann.GroupAlias">@ann.GroupName</a>
                                 <a class="module-material-title" href="@link">@ann.Title</a>
                             </div>
                         }
                     }
                 </div>
                 <div class="col-md-3">
-                    @if (news != null && smi.Count() > 0)
+                    @if (news != null && news.Count() > 0)
                     {
-                        foreach (var item in smi.ToList()) //for (int j = 0; j < 2; j++)
+                        foreach (var item in news.ToList()) //for (int j = 0; j < 2; j++)
                         {                            
                             string link = "/press/" + item.Date.Year + "/" + item.Date.Month + "/" + item.Date.Day + "/" + item.Alias;
                             <div class="module-material-item">
@@ -296,28 +296,28 @@
 <div class="row60 portal_lk_wr">
     <div class="col-md-12">
         <div class="row">
-            <divc class="portal_lk">
+            <div class="portal_lk">
                 <div class="col-md-3">
-                    <a href="#">
+                    <a href="/teleradiosyuzheti">
                         <img  src="~/Content/portal/img/tv-radio-plot.jpg"/>
                     </a>
                 </div>
                 <div class="col-md-3">
-                    <a href="#">
+                    <a href="/press/smi-about-medicin">
                         <img src="~/Content/portal/img/smi-for-med-chuvashia.jpg"/>
                     </a>
                 </div>
                 <div class="col-md-3">
-                    <a href="#">
+                    <a href="/obzor-pressi">
                         <img src="~/Content/portal/img/browse_press.jpg" />
                     </a>
                 </div>
                 <div class="col-md-3">
-                    <a href="#">
+                    <a href="https://www.youtube.com/channel/UCjpuskOiIp7Ns8CY2bobP0g/featured?view_as=subscriber" target="_blank">
                         <img src="~/Content/portal/img/youtube-med-chuv.jpg" />
                     </a>                    
                 </div>
-            </divc>
+            </div>
         </div>
     </div>
 </div>

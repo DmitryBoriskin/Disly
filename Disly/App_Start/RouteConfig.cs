@@ -9,6 +9,16 @@ namespace Disly
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
+            //images
+            routes.IgnoreRoute("{*jpgfiles}", new { jpgfiles = @".*\.jpg(/.*)?" });
+            routes.IgnoreRoute("{*jpegfiles}", new { jpegfiles = @".*\.jpeg(/.*)?" });
+            routes.IgnoreRoute("{*pngfiles}", new { pngfiles = @".*\.png(/.*)?" });
+            routes.IgnoreRoute("{*giffiles}", new { pngfiles = @".*\.gif(/.*)?" });
+            //docs
+            routes.IgnoreRoute("{*docfiles}", new { pngfiles = @".*\.doc(/.*)?" });
+            routes.IgnoreRoute("{*docxfiles}", new { pngfiles = @".*\.docx(/.*)?" });
+            //routes.IgnoreRoute("{*docfiles}", new { pngfiles = @".*\.doc(/.*)?" });
+
             // Ошибка
             routes.MapRoute(
                name: "Error",
@@ -169,6 +179,12 @@ namespace Disly
               url: "SpecStructure/",
               defaults: new { controller = "SpecStructure", action = "Index" }
            );
+            // Структура в гс
+            routes.MapRoute(
+              name: "SpecContacts",
+              url: "SpecContacts/",
+              defaults: new { controller = "SpecContacts", action = "Index" }
+           );
 
             // Главные специалисты на портале
             routes.MapRoute(
@@ -270,7 +286,7 @@ namespace Disly
                name: "Page",
                url: "{*path}",
                defaults: new { controller = "Page", action = "Index", path = UrlParameter.Optional }
-               //constraints: new { path = @"\d{6}" }
+              // constraints: new { path = @"\d{6}" }
             );
 
             
@@ -287,7 +303,7 @@ namespace Disly
                 //constraints: new { path = @"\d{6}" }
             );
 
-
+            
         }
     }
 }
