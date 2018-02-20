@@ -2486,7 +2486,32 @@ namespace cms.dbase
 
                 var queryData = FindPeoplesQuery(people, filter);
 
-                var result = queryData.MapSearch(db.cms_sitess.AsQueryable());
+                //var result = queryData.MapSearch(db.cms_sitess.AsQueryable());
+
+                var result = queryData
+                    .OrderBy(o => o.c_surname)
+                    .Select(s => new PeopleModel
+                    {
+                        Id = s.id,
+                        FIO = s.c_surname + " " + s.c_name + " " + s.c_patronymic,
+                        Photo = s.c_photo,
+                        Posts = s.employeespostspeoples
+                                    .Where(a => !a.b_dissmissed)
+                                    .Select(p => new Specialisation
+                                    {
+                                        Id = p.f_post,
+                                        Name = p.employeespostsspecializations.c_name,
+                                        Type = p.n_type,
+                                        Org = new OrgsShortModel
+                                        {
+                                            Id = p.contentemployeespostsorgs.id,
+                                            Title = p.contentemployeespostsorgs.c_title,
+                                            Url = db.cms_sitess.Where(w => w.f_content.Equals(p.contentemployeespostsorgs.id))
+                                                                .Select(r => r.fksitesdomainss.FirstOrDefault().c_domain)
+                                                                .SingleOrDefault()
+                                        }
+                                    })
+                    });
 
                 int itemCount = result.Count();
 
