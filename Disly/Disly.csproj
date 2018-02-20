@@ -907,7 +907,6 @@
     <Content Include="Content\plugins\tinymce\skins\lightgray\fonts\tinymce.woff" />
     <Content Include="package.json" />
     <Content Include="Content\spec\cecu.less" />
-    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\services\Pager.cshtml" />
     <Content Include="Views\Shared\services\breadcrumbs.cshtml" />
@@ -985,6 +984,7 @@
     <Content Include="Views\Press\part\Filter.cshtml" />
     <Content Include="Views\SpecContacts\Index.cshtml" />
     <Content Include="Views\SpecStructure\part\doctorslist.cshtml" />
+    <None Include="Properties\PublishProfiles\Med.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

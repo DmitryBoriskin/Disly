@@ -59,10 +59,6 @@ namespace Disly.Controllers
             }
             #endregion
 
-
-            //if ((model.SitesInfo == null) || (model.SitesInfo != null && model.SitesInfo.Type != ContentLinkType.SPEC.ToString().ToLower()))
-            //    return RedirectToRoute("Error", new { httpCode = 405 });
-
             string _ViewName = (ViewName != String.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";
 
             model.Type = tab;
