@@ -27,3 +27,10 @@ public enum ContentLinkType
     SITE = 4
 }
 
+public enum GSMemberType
+{
+    UNDEFINED = 0,
+    SPEC = 1, //main
+    EXPERT = 2, //soviet
+}
+

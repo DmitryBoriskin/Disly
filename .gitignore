@@ -3,6 +3,7 @@
 */Logs/
 */bin/
 */obj/
+Disly/Properties/PublishProfiles/
 cms.dbase/template/CMSbdModel.tt
 cms.dbase/template/OnlineRegister.tt
 ImportFRMP/template/CMSbdModel.tt

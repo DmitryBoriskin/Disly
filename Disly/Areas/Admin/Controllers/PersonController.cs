@@ -155,7 +155,7 @@ namespace Disly.Areas.Admin.Controllers
 
                 if (_cmsRepository.getEmployee(id) != null)
                 {
-                    back_model.Item.Id = id;
+                    back_model.Item.PeopleId = id;
                     _cmsRepository.updateEmployee(back_model.Item); //, AccountInfo.id, RequestUserInfo.IP
                     userMassege.info = "Запись обновлена";
                 }

@@ -37,7 +37,8 @@ namespace Disly.Controllers
             #region currentPage
             currentPage = _repository.getSiteMap("OrgGsMembers");
             if (currentPage == null)
-                throw new Exception("model.CurrentPage == null");
+                //throw new Exception("model.CurrentPage == null");
+                return RedirectToRoute("Error", new { httpCode = 404 });
 
             if (currentPage != null)
             {
@@ -51,8 +52,8 @@ namespace Disly.Controllers
 
             string _ViewName = (ViewName != string.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";
 
-            if ((model.SitesInfo == null) || (model.SitesInfo != null && model.SitesInfo.Type != ContentLinkType.ORG.ToString().ToLower()) && model.SitesInfo.Alias != "main")
-                return RedirectToRoute("Error", new { httpCode = 405 });
+            //if ((model.SitesInfo == null) || (model.SitesInfo != null && model.SitesInfo.Type != ContentLinkType.ORG.ToString().ToLower()) && model.SitesInfo.Alias != "main")
+            //    return RedirectToRoute("Error", new { httpCode = 405 });
 
             //Хлебные крошки
             model.Breadcrumbs.Add(new Breadcrumbs
@@ -65,7 +66,7 @@ namespace Disly.Controllers
             var filter = getFilter();
             var pfilter = FilterParams.Extend<PeopleFilter>(filter);
             pfilter.Orgs = new Guid[] { model.SitesInfo.ContentId };
-            model.Members = _repository.getMainSpecialistMembers(pfilter);
+            model.Members = _repository.getGSMembers(pfilter);
 
             return View(model);
         }

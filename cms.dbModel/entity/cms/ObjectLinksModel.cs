@@ -1,6 +1,4 @@
-﻿using cms.dbModel.entity.cms;
-using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System;
 
 namespace cms.dbModel.entity
 {
@@ -31,7 +29,7 @@ namespace cms.dbModel.entity
         /// <summary>
         /// События
         /// </summary>
-        public MainSpecialistModel[] Specs { get; set; }
+        public GSModel[] Specs { get; set; }
 
         /// <summary>
         /// События

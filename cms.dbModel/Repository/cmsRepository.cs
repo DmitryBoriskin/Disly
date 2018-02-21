@@ -1,5 +1,4 @@
 ﻿using cms.dbModel.entity;
-using cms.dbModel.entity.cms;
 using System;
 using System.Collections.Generic;
 
@@ -173,20 +172,20 @@ namespace cms.dbModel
         public abstract bool insDepartmentsPhone(Guid idDepart, string Label, string Value);
         public abstract bool delDepartmentsPhone(int id);
         public abstract bool sortDepartament(Guid id, int new_num);
-        public abstract People[] getPeopleDepartment(Guid idDepart);
+        public abstract PeopleModel[] getPeopleDepartment(Guid idDepart);
         public abstract bool insDepartament(Guid id, Guid Structure, Departments insert);
         public abstract bool updDepartament(Guid id,  Departments update);
         public abstract bool delDepartament(Guid id);
-        public abstract People[] getPersonsThisDepartment(Guid idStructure);
+        public abstract PeopleModel[] getPersonsThisDepartment(Guid idStructure);
         public abstract bool insPersonsThisDepartment(Guid idDepart, Guid IdLinkPeopleForOrg, string status, string post);
         public abstract bool delPersonsThisDepartment(Guid idDep, Guid idPeople);
 
         public abstract OrgType[] getOrgTypesList(OrgTypeFilter filter);
 
         public abstract List<OrgType> getOrgByType(Guid id);
-        public abstract OrgsModelSmall[] getOrgSmall(Guid id, Guid material);
+        public abstract OrgsShortModel[] getOrgSmall(Guid id, Guid material);
         public abstract bool setCheckedOrgs(Guid id, Guid material);
-        public abstract OrgsModelSmall[] getOrgAttachedToTypes(Guid id);
+        public abstract OrgsShortModel[] getOrgAttachedToTypes(Guid id);
 
         public abstract OrgsAdministrative[] getAdministrativList(Guid id);
         public abstract OrgsAdministrative getAdministrativ(Guid id);
@@ -195,8 +194,8 @@ namespace cms.dbModel
         public abstract bool delAdministrativ(Guid id);
         public abstract bool permit_OrgsAdminstrativ(Guid id, Guid OrgId, int num);
         public abstract DepartmentAffiliationModel[] getDepartmentAffiliations();
-        public abstract People[] getPersonsThisOrg(Guid idOrg);
-        public abstract MedicalService[] getMedicalServices();
+        public abstract PeopleModel[] getPersonsThisOrg(Guid idOrg);
+        public abstract MedServiceModel[] getMedicalServices();
         public abstract Guid[] getOrgMedicalServicesLinks(Guid org);
         public abstract Guid? getOrgLinkByDomain();
         public abstract bool IsStructureAllowedToOrg(Guid structureId, Guid orgId);
@@ -257,17 +256,23 @@ namespace cms.dbModel
         public abstract bool insertSiteSection(SiteSectionModel sitesection);
 
         // Главные специалисты
-        public abstract EmployeePostModel[] getEmployeePosts();
-        public abstract EmployeePostModel getEmployeePost(int id);
-        public abstract MainSpecialistList getMainSpecialistList(MainSpecialistFilter filter);
-        public abstract MainSpecialistShortModel[] getMainSpecWithCheckedFor(MainSpecialistFilter filtr);
-        public abstract MainSpecialistModel getMainSpecialistItem(Guid id);
-        public abstract EmployeeModel[] getEmployeeList(int[] specialisations);
-        public abstract EmployeeModel[] getEmployeeList();
-        public abstract bool createMainSpecialist(MainSpecialistModel item);
-        public abstract bool updateMainSpecialist(MainSpecialistModel item);
-        public abstract bool deleteMainSpecialist(Guid id);
-        public abstract Guid? getMainSpecLinkByDomain(string domain);
+        public abstract Specialisation[] getEmployeePosts();
+        public abstract Specialisation getEmployeePost(int id);
+
+        public abstract GSList getGSList(GSFilter filter);
+        public abstract GSModel getGSItem(Guid id);
+        public abstract bool createGS(GSModel item);
+        public abstract bool updateGS(GSModel item);
+        public abstract bool deleteGS(Guid id);
+
+        public abstract Guid? getGSLinkByDomain(string domain);
+        public abstract GSShortModel[] getGSWithCheckedFor(GSFilter filtr);
+
+        public abstract GSMemberModel[] getGSMembers(Guid mainSpecialistId, GSMemberType type);
+        public abstract EmployeeModel[] getEmployeeList(int[] specialisations = null);
+        
+        public abstract bool addGSMember(GSMemberModel item);
+        public abstract bool deleteGSMember(Guid id);
 
         // Врачи
         public abstract EmployeeModel getEmployee(Guid id);

@@ -46,7 +46,8 @@ namespace Disly.Controllers
             #region currentPage
             currentPage = _repository.getSiteMap("SpecContacts");
             if (currentPage == null)
-                throw new Exception("model.CurrentPage == null");
+                //throw new Exception("model.CurrentPage == null");
+                return RedirectToRoute("Error", new { httpCode = 404 });
 
             if (currentPage != null)
             {
@@ -57,10 +58,6 @@ namespace Disly.Controllers
                 model.CurrentPage = currentPage;
             }
             #endregion
-
-
-            if ((model.SitesInfo == null) || (model.SitesInfo != null && model.SitesInfo.Type != ContentLinkType.SPEC.ToString().ToLower()))
-                return RedirectToRoute("Error", new { httpCode = 405 });
 
             string _ViewName = (ViewName != String.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";
 
@@ -77,14 +74,26 @@ namespace Disly.Controllers
             var filter = getFilter();
             filter.Domain = null;
             var pfilter = FilterParams.Extend<PeopleFilter>(filter);
-            var mainSpec = _repository.getMainSpecialistItem(model.SitesInfo.ContentId);
-            if (mainSpec != null)
+            var gs = _repository.getGSItem(model.SitesInfo.ContentId);
+            if (gs != null)
             {
-                model.MainSpec = mainSpec;
-                if(mainSpec.EmployeeMainSpecs != null)
+                model.GS = gs;
+
+                //Получение списков врачей, относящихся к гс по типам
+                model.SpesialitsList = _repository.getGSMembers(gs.Id, GSMemberType.SPEC);
+                if (model.SpesialitsList != null && model.SpesialitsList.Count() > 0)
                 {
-                    pfilter.Id = mainSpec.EmployeeMainSpecs.ToArray();
-                    model.SpesialitsList = _repository.getPeopleList(pfilter);
+                    foreach (var item in model.SpesialitsList)
+                    {
+                        if (item.People != null)
+                        {
+                            var fltr = new OrgFilter()
+                            {
+                                PeopleId = item.People.Id
+                            };
+                            item.Orgs = _repository.getGsMemberContacts(item.Id);
+                        }
+                    }
                 }
             }
 

@@ -46,7 +46,8 @@ namespace Disly.Controllers
             #region currentPage
             currentPage = _repository.getSiteMap("SpecStructure");
             if (currentPage == null)
-                throw new Exception("model.CurrentPage == null");
+                //throw new Exception("model.CurrentPage == null");
+                return RedirectToRoute("Error", new { httpCode = 404 });
 
             if (currentPage != null)
             {
@@ -57,10 +58,6 @@ namespace Disly.Controllers
                 model.CurrentPage = currentPage;
             }
             #endregion
-
-
-            if ((model.SitesInfo == null) || (model.SitesInfo != null && model.SitesInfo.Type != ContentLinkType.SPEC.ToString().ToLower()))
-                return RedirectToRoute("Error", new { httpCode = 405 });
 
             string _ViewName = (ViewName != String.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";
 
@@ -74,7 +71,7 @@ namespace Disly.Controllers
                 Url = ""
             });
 
-            int countSpec = _repository.getCountMainSpecialiasBySite(Domain);
+            int countSpec = _repository.getCountGSBySite(Domain);
 
             //Табы на странице
             model.Nav = new List<PageTabsViewModel>();
@@ -100,35 +97,63 @@ namespace Disly.Controllers
             var filter = getFilter();
             filter.Domain = null;
             var pfilter = FilterParams.Extend<PeopleFilter>(filter);
-            var mainSpec = _repository.getMainSpecialistItem(model.SitesInfo.ContentId);
-            if (mainSpec != null)
+            var gs = _repository.getGSItem(model.SitesInfo.ContentId);
+            if (gs != null)
             {
-                model.MainSpec = mainSpec;
+                model.MainSpec = gs;
 
                 switch (tab)
                 {
                     case "specialists":
                         //Список врачей, входящих в модель "главный специалист"
-                        if (mainSpec.EmployeeMainSpecs != null)
+                        model.SpesialitsList = _repository.getGSMembers(gs.Id, GSMemberType.SPEC);
+                        if (model.SpesialitsList != null && model.SpesialitsList.Count() > 0)
                         {
-                            pfilter.Id = mainSpec.EmployeeMainSpecs.ToArray();
-                            model.SpesialitsList = _repository.getPeopleList(pfilter);
+                            foreach (var item in model.SpesialitsList)
+                            {
+                                if (item.People != null)
+                                {
+                                    var fltr = new OrgFilter()
+                                    {
+                                        PeopleId = item.People.Id
+                                    };
+                                    item.Orgs = _repository.getOrgs(fltr);
+                                }
+                            }
                         }
                         break;
                     case "experts":
                         //Получение экспертного состава
-                        if (mainSpec.EmployeeMainSpecs != null)
+                        model.ExpertsList = _repository.getGSMembers(gs.Id, GSMemberType.EXPERT);
+                        if (model.ExpertsList != null && model.ExpertsList.Count() > 0)
                         {
-                            pfilter.Id = mainSpec.EmployeeExpSoviet.ToArray();
-                            model.ExpertsList = _repository.getPeopleList(pfilter);
+                            foreach (var item in model.ExpertsList)
+                            {
+                                if (item.People != null)
+                                {
+                                    var fltr = new OrgFilter()
+                                    {
+                                        PeopleId = item.People.Id
+                                    };
+                                    item.Orgs = _repository.getOrgs(fltr);
+                                }
+                            }
                         }
                         break;
                     case "doctors":
-                        if (mainSpec.Specialisations != null)
+                        if (gs.Specialisations != null)
                         {
-                            //Получение членов общества (врачей по специальности)
-                            pfilter.Specialization = mainSpec.Specialisations;
-                            model.DoctorsList = _repository.getPeopleList(pfilter);
+                            var docfilter = FilterParams.Extend<PeopleFilter>(filter);
+                            docfilter.Specializations = gs.Specialisations;
+                            model.DoctorsList = _repository.getDoctorsList(docfilter);
+                            var specfiltr = new SpecialisationFilter()
+                            {
+                                Specializations = gs.Specialisations
+                            };
+                            model.Specializations = _repository.getSpecialisations(specfiltr);
+
+                            ViewBag.SearchText = filter.SearchText;
+                            ViewBag.Position = filter.Type;
                         }
                         break;
                 }

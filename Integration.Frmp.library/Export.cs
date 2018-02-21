@@ -433,7 +433,7 @@ namespace Integration.Frmp.library
 
             try
             {
-                db.ImportFrmpEmployees();
+                //db.ImportFrmpEmployees();
                 SrvcLogger.Debug("{WORK}", "Данные из таблицы импорта сотрудников dbo.import_frmp_peoples перенесены в таблицу dbo.content_people");
                 SrvcLogger.Debug("{WORK}", "Данные из таблицы импорта сотрудников dbo.import_frmp_orgs_peoples перенесены в таблицу dbo.content_people_org_link");
                 SrvcLogger.Debug("{WORK}", "Данные из таблицы импорта сотрудников dbo.import_frmp_posts перенесены в таблицу dbo.content_employee_posts");

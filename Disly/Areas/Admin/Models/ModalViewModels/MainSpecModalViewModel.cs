@@ -1,9 +1,6 @@
 ﻿using cms.dbModel.entity;
-using cms.dbModel.entity.cms;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+
 
 namespace Disly.Areas.Admin.Models
  {
@@ -21,6 +18,6 @@ namespace Disly.Areas.Admin.Models
         /// <summary>
         /// справочник последних N событий, с выбранными событиями
         /// </summary>
-        public MainSpecialistShortModel[] SpecList { get; set; }
+        public GSShortModel[] SpecList { get; set; }
     }
  }

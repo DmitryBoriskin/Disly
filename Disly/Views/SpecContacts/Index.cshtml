@@ -4,7 +4,7 @@
 }
 @{
     // Model.CurrentPage == null Проверяем в контроллере, он не должен быть null
-    People[] model = null;
+    PeopleModel[] model = null;
 }
 <div class="type-page">
     <div class="container">
@@ -24,90 +24,93 @@
                 {
                     foreach (var item in Model.SpesialitsList)
                     {
-                        string link = "/doctors/" + item.Id;
-                        string photo = (!string.IsNullOrWhiteSpace(item.Photo))
-                              ? File.Exists(Server.MapPath(item.Photo))
-                                  ? item.Photo : "/Content/img/no_avatar.png"
-                              : "/Content/img/no_avatar.png";
-                        var mainPost = item.Posts.Where(p => p.Type == 1).FirstOrDefault();
-                        <div class="row org_item">
-                            @if (mainPost != null && mainPost.Org != null)
-                            {
-                                var org = mainPost.Org;
-                                <div class="col-md-1">
-                                    @if (org != null && org.Logo != null && !string.IsNullOrWhiteSpace(org.Logo.Url) && File.Exists(Server.MapPath(org.Logo.Url)))
-                                    {
-                                        <img src="@org.Logo.Url" alt="@org.Title" title="@org.Title" />
-                                    }
-                                </div>
-                                <div class="col-md-9">
-                                    @if (!string.IsNullOrWhiteSpace(org.Title))
-                                    {
-                                        <div>
-                                            <h4>
-                                                @if (!string.IsNullOrWhiteSpace(org.Url))
-                                                {
-                                                    string url = string.Format("http://{0}", org.Url);
-                                                    <strong>
-                                                        <a target="_blank" href="@link">@org.Title</a>
-                                                    </strong>
-                                                }
-                                                else
-                                                {
-                                                    <strong>@org.Title</strong>
-                                                }
-                                            </h4>
-                                        </div>
-                                    }
-                                    @if (!string.IsNullOrWhiteSpace(org.Address))
-                                    {
-                                        <div>
-                                            <strong>Адрес: </strong>@org.Address
-                                        </div>
-                                    }
-                                    @if (!string.IsNullOrWhiteSpace(org.Phone))
-                                    {
-                                        <div>
-                                            <strong>Телефон: </strong>@org.Phone
-                                        </div>
-                                    }
-                                    @if (!string.IsNullOrWhiteSpace(org.Fax))
-                                    {
-                                        <div>
-                                            <strong>Факс: </strong>@org.Fax
-                                        </div>
-                                    }
-                                    @if (!string.IsNullOrWhiteSpace(org.PhoneReception))
-                                    {
-                                        <div>
-                                            <strong>Телефон регистратуры: </strong>@org.PhoneReception
-                                        </div>
-                                    }
-                                    @if (!string.IsNullOrWhiteSpace(org.Email))
-                                    {
-                                        <div>
-                                            <strong>E-mail: </strong><a href="mailto:@org.Email">@org.Email</a>
-                                        </div>
-                                    }
-                                    @if (!string.IsNullOrWhiteSpace(org.ExtUrl))
-                                    {
-                                        <div>
-                                            <strong>Сайт: </strong><a href="http://@org.ExtUrl" target="_blank">@org.ExtUrl</a>
-                                        </div>
-                                    }
-                                </div>
+                        string link = string.Format("/doctors/{0}", (item.People != null) ? item.People.Id.ToString() : null);
+                        string photo = (item.People != null && !string.IsNullOrWhiteSpace(item.People.Photo))
+                                  ? File.Exists(Server.MapPath(item.People.Photo))
+                                      ? item.People.Photo : "/Content/img/no_avatar.png"
+                                  : "/Content/img/no_avatar.png";
 
+
+                        string fio = (item.People != null) ? item.People.FIO : null;
+                        <div class="row org_item">
+                            @if (item.Orgs != null && item.Orgs.Count() > 0)
+                            {
+
+                                foreach (var org in item.Orgs)
+                                {
+                                    <div class="col-md-1">
+                                        @if (org != null && org.Logo != null && !string.IsNullOrWhiteSpace(org.Logo.Url) && File.Exists(Server.MapPath(org.Logo.Url)))
+                                        {
+                                            <img src="@org.Logo.Url" alt="@org.Title" title="@org.Title" />
+                                        }
+                                    </div>
+                                    <div class="col-md-9">
+                                        @if (!string.IsNullOrWhiteSpace(org.Title))
+                                        {
+                                            <div>
+                                                <h4>
+                                                    @if (!string.IsNullOrWhiteSpace(org.Url))
+                                                    {
+                                                        string url = string.Format("http://{0}", org.Url);
+                                                        <strong>
+                                                            <a target="_blank" href="@url">@org.Title</a>
+                                                        </strong>
+                                                    }
+                                                    else
+                                                    {
+                                                        <strong>@org.Title</strong>
+                                                    }
+                                                </h4>
+                                            </div>
+                                        }
+                                        @if (!string.IsNullOrWhiteSpace(org.Address))
+                                        {
+                                            <div>
+                                                <strong>Адрес: </strong>@org.Address
+                                            </div>
+                                        }
+                                        @if (!string.IsNullOrWhiteSpace(org.Phone))
+                                        {
+                                            <div>
+                                                <strong>Телефон: </strong>@org.Phone
+                                            </div>
+                                        }
+                                        @if (!string.IsNullOrWhiteSpace(org.Fax))
+                                        {
+                                            <div>
+                                                <strong>Факс: </strong>@org.Fax
+                                            </div>
+                                        }
+                                        @if (!string.IsNullOrWhiteSpace(org.PhoneReception))
+                                        {
+                                            <div>
+                                                <strong>Телефон регистратуры: </strong>@org.PhoneReception
+                                            </div>
+                                        }
+                                        @if (!string.IsNullOrWhiteSpace(org.Email))
+                                        {
+                                            <div>
+                                                <strong>E-mail: </strong><a href="mailto:@org.Email">@org.Email</a>
+                                            </div>
+                                        }
+                                        @if (!string.IsNullOrWhiteSpace(org.ExtUrl))
+                                        {
+                                            <div>
+                                                <strong>Сайт: </strong><a href="http://@org.ExtUrl" target="_blank">@org.ExtUrl</a>
+                                            </div>
+                                        }
+                                    </div>
+
+                                }
                             }
                             else
                             {
-                                <div class="col-md-1"></div>
-                                <div class="col-md-9">Нет данных об основном месте работы</div>
+                                <div class="col-md-10"></div>
                             }
 
                             <div class="col-md-2">
-                                <img class="img-circle img-person-list" src="@photo" alt="@item.FIO" title="@item.FIO" />
-                                <div class="org_item_post">@item.Post</div>
-                                <a class="adminlist_name" href="@link">@item.FIO</a>
+                                <img class="img-circle img-person-list" src="@photo" alt="@fio" title="@fio" /><br />
+                                <a class="adminlist_name" href="@link">@fio</a>
                             </div>
                         </div>
                     }

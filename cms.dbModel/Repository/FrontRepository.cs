@@ -1,5 +1,4 @@
 ﻿using cms.dbModel.entity;
-using cms.dbModel.entity.cms;
 using System;
 using System.Collections.Generic;
 
@@ -51,32 +50,36 @@ namespace cms.dbModel
         public abstract Departments getOvpDepartaments(Guid id);
 
         //Persons
-        public abstract People[] getOrgPeopleList(PeopleFilter filter);
-        public abstract People[] getPeopleList(PeopleFilter filter);
-        public abstract People getPeopleItem(Guid id);
+        public abstract PeopleList getOrgPeopleList(PeopleFilter filter);
+        public abstract PeopleModel[] getPeopleList(PeopleFilter filter);
+        public abstract PeopleModel getPeopleItem(Guid id);
         public abstract string getPeopleSnils(Guid id);
         public abstract StructureModel[] getDeparatamentsSelectList(); //string domain
-        public abstract PeoplePost[] getPeoplePosts();//string domain
+        public abstract Specialisation[] getSpecialisations();//string domain
+        public abstract Specialisation[] getSpecialisations(SpecialisationFilter filter);
+        public abstract Specialisation[] getPeopleSpecialisations(Guid peopleId);
 
+
+        public abstract OrgsModel[] getOrgs(OrgFilter filtr);
         public abstract OrgsModel getOrgInfo(string siteId);
         public abstract string getOid();
         public abstract OrgsAdministrative[] getAdministrative(string domain);
 
         //лпу
         public abstract OrgType[] getOrgTypes();
-        public abstract OrgFrontModel[] getOrgModels(Guid? type);
-        public abstract OrgFrontModel[] getOrgsModel(string tab, Guid? idtype);
+        public abstract OrgsModel[] getOrgModels(Guid? type);
+        public abstract OrgsModel[] getOrgsModel(string tab, Guid? idtype);
         public abstract OrgsAdministrative getLeaderOrg(Guid OrgId);
         public abstract string spotDomainContent(Guid? ContentId);
         public abstract string getOrgTypeName(Guid id);
         public abstract DepartmentAffiliationModel[] getDepartmentAffiliations();
         public abstract string getAffiliationDepartment(Guid id);
-        public abstract MedicalService[] getMedicalServices(string domain);
-        public abstract OrgFrontModel[] getOrgPortalModels(Guid service);
+        public abstract MedServiceModel[] getMedicalServices(string domain);
+        public abstract OrgsModel[] getOrgPortalModels(Guid service);
         public abstract string getMedicalServiceTitle(Guid id);
 
         //врачи портала
-        public abstract DoctorList getDoctorsList(FilterParams filter);
+        public abstract PeopleList getDoctorsList(PeopleFilter filter);
 
         //Обратная связь
         public abstract FeedbacksList getFeedbacksList(FilterParams filtr);
@@ -106,16 +109,19 @@ namespace cms.dbModel
 
         //Главные специалисты
 
-        public abstract MainSpecialistModel[] getMainSpecialistList(FilterParams filter);
-        public abstract int getCountMainSpecialiasBySite(string domain);
+        public abstract GSModel[] getGSList(FilterParams filter);
+        public abstract int getCountGSBySite(string domain);
 
-        public abstract MainSpecialistModel[] getMainSpecialistContacts();
-        public abstract People[] getMainSpecialistMembers(PeopleFilter filter);
-        public abstract OrgsModel getOrgItem(Guid id);
+        public abstract PeopleModel[] getGSMembers(PeopleFilter filter);
+        public abstract GSModel getGSItem(Guid id);
+        public abstract GSMemberModel[] getGSMembers(Guid mainSpecialistId, GSMemberType type);
+        public abstract OrgsModel[] getGsMemberContacts(Guid id);
+
         public abstract OrgsModel getOrgItem();
-        
-        
-        public abstract MainSpecialistModel getMainSpecialistItem(Guid id);
+        public abstract OrgsModel getOrgItem(Guid id);
+        public abstract OrgsShortModel getCurrentOrgImportGuid();
+        public abstract OrgsShortModel getOrgItemShort(Guid id);
+
 
         //вакансии
         public abstract VacanciesList getVacancy(FilterParams filter);

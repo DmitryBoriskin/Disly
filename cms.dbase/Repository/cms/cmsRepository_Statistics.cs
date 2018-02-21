@@ -79,7 +79,7 @@ namespace cms.dbase
                     Count = s.countgroup
                 }).ToArray();
 
-                var Gs = db.content_main_specialistss
+                var Gs = db.content_gss
                     .OrderBy(o => o.c_name)
                     .Select(s => new OrgsModel()
                     {

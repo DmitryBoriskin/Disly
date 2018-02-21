@@ -1,5 +1,7 @@
 ﻿@{
     Layout = "~/Areas/Admin/Views/Shared/_login.cshtml";
+    var port = (Settings.BaseURL == "localhost") ? ":" + Context.Request.Url.Port : "";
+    var homeLink = @Settings.BaseURL + port;
 }
 
 <div class="WelcomeContentLeft">
@@ -7,4 +9,6 @@
 </div>
 <div class="WelcomeContentRight">
     @Html.Raw(Model.Message)
+
+    <div class="topIndent-20"><br /><br /><a href="@homeLink">Вернуться на главную страницу</a></div>
 </div>

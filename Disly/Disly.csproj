@@ -243,6 +243,7 @@
     <Content Include="Content\plugins\datatables\datatables.min.js" />
     <Content Include="Content\plugins\Disly\DislyControls.js" />
     <Content Include="Content\plugins\Disly\DislyControls.css" />
+    <Content Include="Content\plugins\formSerialize\jquery.serialize-object.min.js" />
     <Content Include="Content\plugins\icheck\icheck.js" />
     <Content Include="Content\plugins\icheck\icheck.min.js" />
     <Content Include="Content\plugins\icheck\skins\all.css" />
@@ -441,6 +442,7 @@
     <Content Include="Areas\Admin\Views\NewsMonitoring\Orgs.cshtml" />
     <Content Include="Areas\Admin\Views\Shared\Modal\Spec.cshtml" />
     <Content Include="Areas\Admin\Views\Statistics\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\MainSpecialist\Part\AddDoctor.cshtml" />
     <None Include="Content\plugins\tinymce\plugins\gallery\plugin.min.js_korkin" />
     <Content Include="Content\plugins\tinymce\plugins\help\img\logo.png" />
     <Content Include="Content\plugins\tinymce\plugins\help\plugin.min.js" />
@@ -686,13 +688,13 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Areas\Admin\Models\CoreViewModel.cs" />
+    <Compile Include="Models\DoctorsViewModel.cs" />
     <Compile Include="Models\EventViewModel.cs" />
     <Compile Include="Models\gs\SpecContactsViewModel.cs" />
     <Compile Include="Models\gs\SpecStructureViewModel.cs" />
     <Compile Include="Models\base\ErrorViewModel.cs" />
     <Compile Include="Models\WorksheetViewModel.cs" />
     <Compile Include="Models\FeedbackViewModel.cs" />
-    <Compile Include="Models\DoctorsViewModel.cs" />
     <Compile Include="Models\ContactsViewModel.cs" />
     <Compile Include="Models\portal\SpecialistsViewModel.cs" />
     <Compile Include="Models\portal\LPUViewModel.cs" />
@@ -905,7 +907,6 @@
     <Content Include="Content\plugins\tinymce\skins\lightgray\fonts\tinymce.woff" />
     <Content Include="package.json" />
     <Content Include="Content\spec\cecu.less" />
-    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\services\Pager.cshtml" />
     <Content Include="Views\Shared\services\breadcrumbs.cshtml" />
@@ -928,7 +929,6 @@
     <Content Include="Views\LPU\Index.cshtml" />
     <Content Include="Views\Press\part\Item.cshtml" />
     <Content Include="Views\Home\part\media.cshtml" />
-    <Content Include="Views\PortalDoctors\Index_old.cshtml" />
     <Content Include="Views\Doctors\part\item.cshtml" />
     <Content Include="Views\Doctors\part\list.cshtml" />
     <Content Include="Views\MedicalServices\Index.cshtml" />
@@ -983,6 +983,8 @@
     <Content Include="Views\Shared\partial\Pager.cshtml" />
     <Content Include="Views\Press\part\Filter.cshtml" />
     <Content Include="Views\SpecContacts\Index.cshtml" />
+    <Content Include="Views\SpecStructure\part\doctorslist.cshtml" />
+    <None Include="Properties\PublishProfiles\Med.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

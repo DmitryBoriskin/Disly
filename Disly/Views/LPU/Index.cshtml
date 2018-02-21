@@ -94,9 +94,9 @@
                     {
                         <div class="row org_item">
                             <div class="col-md-1">
-                                @if (!string.IsNullOrWhiteSpace(item.Logo) && File.Exists(Server.MapPath(item.Logo)))
+                                @if (item.Logo != null && !string.IsNullOrWhiteSpace(item.Logo.Url) && File.Exists(Server.MapPath(item.Logo.Url)))
                                 {
-                                    <img src="@item.Logo" alt="@item.Title" />
+                                    <img src="@item.Logo.Url" alt="@item.Title" />
                                 }
                             </div>
 
@@ -157,7 +157,7 @@
                                 }
                             </div>
                             <div class="col-md-2">
-                                @if (item.Leader != null && item.Leader.PeopleF.HasValue)
+                                @if (item.Leader != null && item.Leader.PeopleId.HasValue)
                                 {
                                     string photo = (item.Leader.Photo != null && !string.IsNullOrWhiteSpace(item.Leader.Photo.Url))
                                           ? File.Exists(Server.MapPath(item.Leader.Photo.Url))
@@ -166,7 +166,7 @@
 
                                     <img class="img-circle img-person-list" src="@photo" alt="@item.Leader.Surname" />
                                     <div class="org_item_post">@item.Leader.Post</div>
-                                    <a target="_blank" href="/portaldoctors/@item.Leader.PeopleF">@item.Leader.Surname @item.Leader.Name @item.Leader.Patronymic</a>
+                                    <a target="_blank" href="/portaldoctors/@item.Leader.PeopleId">@item.Leader.Surname @item.Leader.Name @item.Leader.Patronymic</a>
                                 }
                             </div>
                         </div>

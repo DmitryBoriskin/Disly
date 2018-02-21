@@ -16,11 +16,11 @@ namespace Disly.Models
         /// <summary>
         /// Медицинские услуги
         /// </summary>
-        public MedicalService[] MedicalServices { get; set; }
+        public MedServiceModel[] MedicalServices { get; set; }
 
         /// <summary>
         /// Список организаций
         /// </summary>
-        public OrgFrontModel[] OrgList { get; set; }
+        public OrgsModel[] OrgList { get; set; }
     }
 }

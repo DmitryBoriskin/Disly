@@ -1,5 +1,4 @@
 ﻿using cms.dbModel.entity;
-using cms.dbModel.entity.cms;
 
 namespace Disly.Models
 {
@@ -11,12 +10,12 @@ namespace Disly.Models
         /// <summary>
         /// Список докторов
         /// </summary>
-        public People[] DoctorsList { get; set; }
+        public PeopleList DoctorsList { get; set; }
 
         /// <summary>
         /// Единичная запись доктора
         /// </summary>
-        public People DoctorsItem { get; set; }
+        public PeopleModel DoctorsItem { get; set; }
 
         /// <summary>
         /// Список структур
@@ -26,7 +25,7 @@ namespace Disly.Models
         /// <summary>
         /// Список должностей
         /// </summary>
-        public PeoplePost[] PeoplePosts { get; set; }
+        public Specialisation[] Spesialisations { get; set; }
 
         /// <summary>
         /// Идентификатор организации
