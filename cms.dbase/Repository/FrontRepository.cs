@@ -17,7 +17,7 @@ namespace cms.dbase
         /// </summary>
         private string _context = null;
         private string _domain = string.Empty;
-
+    
         /// <summary>
         /// Конструктор
         /// </summary>
@@ -31,7 +31,7 @@ namespace cms.dbase
         {
             _context = ConnectionString;
             _domain = (!string.IsNullOrEmpty(DomainUrl)) ? getSiteId(DomainUrl) : "";
-            _domain = "main";
+            //_domain = "main";
             LinqToDB.Common.Configuration.Linq.AllowMultipleQuery = true;
         }
         #region redirect methods
