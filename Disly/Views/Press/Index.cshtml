@@ -3,9 +3,10 @@
     Layout = ViewBag.Layout;
 
     string _allactiv = (String.IsNullOrEmpty(ViewBag.FilterCategory)) ? "class=active" : "";
+    string classcontainer = (Model.SitesInfo.Alias != "main") ? "container" : "";
 }
 <div class="type-page">
-    <div class="container">
+    <div class="@classcontainer">
         <div class="row">
             <div class="col-md-12">
                 @Html.Partial("services/breadcrumbs")

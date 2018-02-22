@@ -1,9 +1,10 @@
 ﻿@model TypePageViewModel
 @{
     Layout = ViewBag.Layout;
+    string classcontainer = (Model.SitesInfo.Alias != "main") ? "container" : "";
 }
 <div class="type-page">
-    <div class="container">
+    <div class="@classcontainer">
         @Html.Partial("services/breadcrumbs")
         @if (Model.Item != null)
         {

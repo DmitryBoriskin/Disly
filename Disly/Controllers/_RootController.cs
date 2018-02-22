@@ -91,7 +91,7 @@ namespace Disly.Controllers
                     }
                 }
                 currentPage = _repository.getSiteMap(_path, _alias);
-                breadcrumb = _repository.getBreadCrumbCollection(HttpContext.Request.Url.PathAndQuery);
+                breadcrumb = _repository.getBreadCrumbCollection(_path+_alias);
             
 
             #endregion
