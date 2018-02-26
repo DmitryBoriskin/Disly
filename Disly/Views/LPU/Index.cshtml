@@ -166,7 +166,16 @@
 
                                     <img class="img-circle img-person-list" src="@photo" alt="@item.Leader.Surname" />
                                     <div class="org_item_post">@item.Leader.Post</div>
-                                    <a target="_blank" href="/portaldoctors/@item.Leader.PeopleId">@item.Leader.Surname @item.Leader.Name @item.Leader.Patronymic</a>
+                                    
+                                    if (item.Leader.PeopleId.HasValue)
+                                    {
+                                        <a target="_blank" href="/portaldoctors/@item.Leader.PeopleId">@item.Leader.Surname @item.Leader.Name @item.Leader.Patronymic</a>
+                                    }
+                                    else
+                                    {
+                                        <span>@item.Leader.Surname @item.Leader.Name @item.Leader.Patronymic</span>
+                                    }
+
                                 }
                             </div>
                         </div>
