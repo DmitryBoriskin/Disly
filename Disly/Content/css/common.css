@@ -782,6 +782,9 @@ a.sitemap-plate.sitemap-plate-image {
     margin-top:4px;
     background-color: #fff;
 }
+.breadcrumb>li {
+    display: initial;
+}
 
 .breadcrumb > li a {
     text-decoration: underline;
