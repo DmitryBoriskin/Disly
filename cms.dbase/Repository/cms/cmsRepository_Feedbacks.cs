@@ -102,6 +102,7 @@ namespace cms.dbase
                         Answer = s.c_answer,
                         Answerer = s.c_answerer,
                         IsNew = s.b_new,
+                        AnswererCode = s.c_code,
                         Disabled = s.b_disabled,
                         FbType = (FeedbackType)Enum.Parse(typeof(FeedbackType), s.c_type)
                     });

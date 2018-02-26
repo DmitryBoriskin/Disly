@@ -49,6 +49,15 @@
         {
             @Html.ActionLink("Журнал изменений", "log", "services", new { @id = Model.Item.Id }, new { @id = "LogLists", @class = "button pop-up_frame icon-archive", @data_class = "LogList", @title = "Журнал изменений" })
         }
+        @if (Model.Item != null)
+        {
+            var replylink = string.Format("http://{0}/feedback/answerform?id={1}&code={2}", @Settings.BaseURL, @Model.Item.Id, @Model.Item.AnswererCode);
+            <div class="form-group">
+                <label>Ссылка для ответа на сайте:</label>
+                <textarea rows="8" readonly >@replylink</textarea>
+            </div>
+        }
+
     </div>
 
 }
