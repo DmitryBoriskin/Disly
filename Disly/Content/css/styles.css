@@ -931,6 +931,7 @@ a.button.icon-cancel{
 .icon-calc:before { content:'\e99d'; }              /* Опросы */
 .icon-graduation-cap:before {content:'\e98c'}       /* Главный специалист */
 .icon-newspaper:before { content: '\e99c'; }        /* Мониторинг новостей */
+.icon-chart-line:before{content:'\e948';}           /* Статистика */
 
 .icon-menu:before {
     content:'\ed81';
