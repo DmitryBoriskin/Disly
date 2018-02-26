@@ -157,7 +157,7 @@
                                 }
                             </div>
                             <div class="col-md-2">
-                                @if (item.Leader != null && item.Leader.PeopleId.HasValue)
+                                @if (item.Leader != null  && item.Leader.Name!=null) 
                                 {
                                     string photo = (item.Leader.Photo != null && !string.IsNullOrWhiteSpace(item.Leader.Photo.Url))
                                           ? File.Exists(Server.MapPath(item.Leader.Photo.Url))
