@@ -1811,6 +1811,8 @@ namespace cms.dbase
             string domain = _domain;
             using (var db = new CMSdb(_context))
             {
+                //так добились  того чтобы голосования "тянулись" с главного сайта
+                domain = "main";
                 var query = db.content_votes
                             .Where(w => w.f_site == domain && w.b_disabled == false)
                             .OrderByDescending(o => o.d_date_start)
