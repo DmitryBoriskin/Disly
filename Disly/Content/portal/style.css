@@ -14,9 +14,10 @@ body {
 .cont_block{background-color:#fff;margin-top:100px;
             padding:0 60px;
 }
-.type-page{
-    min-height:400px;
-    padding-bottom:100px!important  ;
+.type-page {
+    min-height: 400px;
+    padding-bottom: 100px !important;
+    overflow: hidden;
 }
 .cont_wrap{
     padding-bottom:523px;   
