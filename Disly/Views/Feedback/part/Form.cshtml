@@ -71,11 +71,12 @@
                             <textarea class="form-control" id="feedback-senderContacts-input" name="SenderContacts" rows="3" maxlength="256">@ViewBag.SenderContacts</textarea>
                         </div>
                         <div class="form-group">
-                            <label for="feedback-type-select">Тип обращения</label>
+                            <input type="hidden" name="FbType" value="@(ViewBag.FbType != null? ViewBag.FbType.ToString() : FeedbackType.appeal.ToString())" />
+                            @*<label for="feedback-type-select">Тип обращения</label>
                             <select id="feedback-type-select" name="FbType" class="form-control">
                                 <option value="@FeedbackType.appeal.ToString()" @((ViewBag.FbType == FeedbackType.appeal) ? "selected" : null)>Вопрос</option>
                                 <option value="@FeedbackType.review.ToString()" @((ViewBag.FbType == FeedbackType.review) ? "selected" : null)>Отзыв</option>
-                            </select>
+                            </select>*@
                         </div>
                         <div class="form-group">
                             <label for="feedback-theme-input">Тема обращения</label>
