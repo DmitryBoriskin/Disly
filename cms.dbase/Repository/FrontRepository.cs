@@ -1112,7 +1112,7 @@ namespace cms.dbase
                         //                 GeopointX = ad.n_geopoint_x,
                         //                 GeopointY = ad.n_geopoint_y
                         //             }).ToArray(),
-                        Departments = s.Select(d => new Departments
+                        Departments = s.OrderBy(o=>o.dep.n_sort).Select(d => new Departments
                         {
                             Id = d.dep.id,
                             Title = d.dep.c_title,
@@ -1169,6 +1169,7 @@ namespace cms.dbase
             {
                 var data = db.content_org_structures.Where(w => w.num == num)
                            .Join(db.cms_sitess.Where(o => o.c_alias.ToLower() == domain), o => o.f_ord, e => e.f_content, (e, o) => e)
+                           .OrderBy(e=>e.n_sort)
                            .Select(s => new StructureModel()
                            {
                                Id = s.id,
