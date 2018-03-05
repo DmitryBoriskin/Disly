@@ -484,73 +484,82 @@ namespace Disly.Areas.Admin.Controllers
 
             DateTime dt;
             XNamespace yandex = "http://news.yandex.ru";
+            try {
+                List<RssItem> items = (from s in doc.Descendants("item")
+                                       select new RssItem()
+                                       {
+                                           title = s.Element("title").Value,
+                                           link = s.Element("link").Value,
+                                           enclosure = (s.Element("enclosure") != null) ? s.Element("enclosure").Attribute("url").Value : null,
+                                           yandex_full_text = (string)s.Element(yandex + "full-text").Value,
+                                           pubDate = DateTime.TryParseExact((s.Element("pubDate").Value)
+                                           , "ddd, dd MMM yyyy HH:mm:ss +ffff",
+                                           System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out dt) ?
+                                           DateTime.ParseExact((s.Element("pubDate").Value)
+                                           , "ddd, dd MMM yyyy HH:mm:ss +ffff",
+                                           System.Globalization.CultureInfo.InvariantCulture) : DateTime.ParseExact((s.Element("pubDate").Value)
+                                           , "ddd, dd MMM yyyy HH:mm:ss 'GMT'",
+                                           System.Globalization.CultureInfo.InvariantCulture),
+                                           description = s.Element("description").Value
+                                       }).ToList();
 
-            List<RssItem> items = (from s in doc.Descendants("item")
-                                   select new RssItem()
-                                   {
-                                       title = s.Element("title").Value,
-                                       link = s.Element("link").Value,
-                                       enclosure = (s.Element("enclosure") != null) ? s.Element("enclosure").Attribute("url").Value : null,
-                                       yandex_full_text = (string)s.Element(yandex + "full-text").Value,
-                                       pubDate = DateTime.TryParseExact((s.Element("pubDate").Value)
-                                       , "ddd, dd MMM yyyy HH:mm:ss +ffff",
-                                       System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out dt) ?
-                                       DateTime.ParseExact((s.Element("pubDate").Value)
-                                       , "ddd, dd MMM yyyy HH:mm:ss +ffff",
-                                       System.Globalization.CultureInfo.InvariantCulture) : DateTime.ParseExact((s.Element("pubDate").Value)
-                                       , "ddd, dd MMM yyyy HH:mm:ss 'GMT'",
-                                       System.Globalization.CultureInfo.InvariantCulture),
-                                       description = s.Element("description").Value
-                                   }).ToList();
 
-            List<RssImportModel> channel = (from s in doc.Descendants("channel")
-                                            select new RssImportModel()
-                                            {
-                                                title = s.Element("title").Value,
-                                                link = s.Element("link").Value,
-                                                description = s.Element("description").Value,
-                                                language = s.Element("language").Value,
-                                                copyright = s.Element("copyright").Value,
 
-                                                //             lastBuildDate = DateTime.TryParseExact((s.Element("lastbuilddate").Value)
-                                                //    , "ddd, dd MMM yyyy HH:mm:ss +ffff",
-                                                //    System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out dt) ?
-                                                //    DateTime.ParseExact((s.Element("lastbuilddate").Value)
-                                                //             , "ddd, dd MMM yyyy HH:mm:ss +ffff",
-                                                //    System.Globalization.CultureInfo.InvariantCulture) : DateTime.ParseExact((s.Element("lastbuilddate").Value)
-                                                //    , "ddd, dd MMM yyyy HH:mm:ss 'GMT'",
-                                                //System.Globalization.CultureInfo.InvariantCulture),
-                                                items = items
-                                            }
-                                          ).ToList();
+                List<RssImportModel> channel = (from s in doc.Descendants("channel")
+                                                select new RssImportModel()
+                                                {
+                                                    title = s.Element("title").Value,
+                                                    link = s.Element("link").Value,
+                                                    description = s.Element("description").Value,
+                                                    language = s.Element("language").Value,
+                                                    copyright = s.Element("copyright").Value,
 
-            RssImportModel importModel = channel[0];
-            if (importModel.items != null && importModel.items.Count() > 0)
-            {
-                foreach (RssItem rssItem in importModel.items)
+                                                    //             lastBuildDate = DateTime.TryParseExact((s.Element("lastbuilddate").Value)
+                                                    //    , "ddd, dd MMM yyyy HH:mm:ss +ffff",
+                                                    //    System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out dt) ?
+                                                    //    DateTime.ParseExact((s.Element("lastbuilddate").Value)
+                                                    //             , "ddd, dd MMM yyyy HH:mm:ss +ffff",
+                                                    //    System.Globalization.CultureInfo.InvariantCulture) : DateTime.ParseExact((s.Element("lastbuilddate").Value)
+                                                    //    , "ddd, dd MMM yyyy HH:mm:ss 'GMT'",
+                                                    //System.Globalization.CultureInfo.InvariantCulture),
+                                                    items = items
+                                                }
+                                              ).ToList();
+
+                RssImportModel importModel = channel[0];
+                if (importModel.items != null && importModel.items.Count() > 0)
                 {
-                    Guid id = Guid.NewGuid();
-                    Photo Prev = (rssItem.enclosure != null) ? new Photo { Url = rssItem.enclosure } : null;
-                    MaterialsModel item = new MaterialsModel()
+                    foreach (RssItem rssItem in importModel.items)
                     {
-                        Id = id,
-                        Title = rssItem.title,
-                        PreviewImage = Prev,
-                        Alias = Transliteration.Translit(rssItem.title),
-                        Desc = rssItem.description,
-                        Date = rssItem.pubDate,
-                        Year = Convert.ToInt32(rssItem.pubDate.ToString("yyyy")),
-                        Month = Convert.ToInt32(rssItem.pubDate.ToString("MM")),
-                        Day = Convert.ToInt32(rssItem.pubDate.ToString("dd")),
-                        Text = rssItem.yandex_full_text,
-                        Url = rssItem.link,
-                        UrlName = importModel.title,
-                        Disabled = false,
-                        ImportRss = true
-                    };
-                    _cmsRepository.insertRssObject(item);
+                        Guid id = Guid.NewGuid();
+                        Photo Prev = (rssItem.enclosure != null) ? new Photo { Url = rssItem.enclosure } : null;
+                        MaterialsModel item = new MaterialsModel()
+                        {
+                            Id = id,
+                            Title = rssItem.title,
+                            PreviewImage = Prev,
+                            Alias = Transliteration.Translit(rssItem.title),
+                            Desc = rssItem.description,
+                            Date = rssItem.pubDate,
+                            Year = Convert.ToInt32(rssItem.pubDate.ToString("yyyy")),
+                            Month = Convert.ToInt32(rssItem.pubDate.ToString("MM")),
+                            Day = Convert.ToInt32(rssItem.pubDate.ToString("dd")),
+                            Text = rssItem.yandex_full_text,
+                            Url = rssItem.link,
+                            UrlName = importModel.title,
+                            Disabled = false,
+                            ImportRss = true
+                        };
+                        _cmsRepository.insertRssObject(item);
+                    }
                 }
+
+
             }
+            catch {
+                
+            }
+            
 
             //}
             //catch { }

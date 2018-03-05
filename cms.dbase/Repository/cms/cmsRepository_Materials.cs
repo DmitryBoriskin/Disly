@@ -857,7 +857,7 @@ namespace cms.dbase
                 var query = db.content_rss_materialss.Where(w => w.f_site == _domain);
                 if (query.Any())
                 {
-                    query = query.OrderBy(o => o.d_date);
+                    query = query.OrderByDescending(o => o.d_date);
                     return query.Select(s => new RssItem()
                     {
                         title = s.c_title,
