@@ -13,6 +13,8 @@ namespace Disly.Models
         /// </summary>
         public List<MaterialFrontModule> Materials { get; set; }
 
+        public List<MaterialFrontModule> MaterialsNewInMedicin { get; set; }
+
 
         public MaterialFrontModule ImportantMaterials { get; set; }
 

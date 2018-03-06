@@ -725,6 +725,8 @@ a.sitemap-plate.sitemap-plate-image {
     position: absolute;
     right: 10px;
     top: 10px;
+    max-width: 140px;
+    text-align: right;
 }
 .module-material-item-group-link:hover{
     color:#fff;

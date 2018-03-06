@@ -484,14 +484,14 @@ namespace Disly.Areas.Admin.Controllers
 
             DateTime dt;
             XNamespace yandex = "http://news.yandex.ru";
-            try {
+            //try {
                 List<RssItem> items = (from s in doc.Descendants("item")
                                        select new RssItem()
                                        {
                                            title = s.Element("title").Value,
                                            link = s.Element("link").Value,
                                            enclosure = (s.Element("enclosure") != null) ? s.Element("enclosure").Attribute("url").Value : null,
-                                           yandex_full_text = (string)s.Element(yandex + "full-text").Value,
+                                           yandex_full_text = (string)s.Element("description"),
                                            pubDate = DateTime.TryParseExact((s.Element("pubDate").Value)
                                            , "ddd, dd MMM yyyy HH:mm:ss +ffff",
                                            System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out dt) ?
@@ -503,25 +503,24 @@ namespace Disly.Areas.Admin.Controllers
                                            description = s.Element("description").Value
                                        }).ToList();
 
-
-
                 List<RssImportModel> channel = (from s in doc.Descendants("channel")
                                                 select new RssImportModel()
                                                 {
                                                     title = s.Element("title").Value,
                                                     link = s.Element("link").Value,
                                                     description = s.Element("description").Value,
-                                                    language = s.Element("language").Value,
-                                                    copyright = s.Element("copyright").Value,
+                                                    language =s.Element("language")?.Value,
+                                                    copyright = s.Element("copyright")?.Value,
 
-                                                    //             lastBuildDate = DateTime.TryParseExact((s.Element("lastbuilddate").Value)
+                                                    //lastBuildDate = DateTime.TryParseExact((s.Element("lastbuilddate").Value)
                                                     //    , "ddd, dd MMM yyyy HH:mm:ss +ffff",
-                                                    //    System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out dt) ?
+                                                    //    System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out dt) 
+                                                    //    ?
                                                     //    DateTime.ParseExact((s.Element("lastbuilddate").Value)
                                                     //             , "ddd, dd MMM yyyy HH:mm:ss +ffff",
-                                                    //    System.Globalization.CultureInfo.InvariantCulture) : DateTime.ParseExact((s.Element("lastbuilddate").Value)
-                                                    //    , "ddd, dd MMM yyyy HH:mm:ss 'GMT'",
-                                                    //System.Globalization.CultureInfo.InvariantCulture),
+                                                    //    System.Globalization.CultureInfo.InvariantCulture) 
+                                                    //    :
+                                                    //    DateTime.ParseExact((s.Element("lastbuilddate").Value), "ddd, dd MMM yyyy HH:mm:ss 'GMT'", System.Globalization.CultureInfo.InvariantCulture),
                                                     items = items
                                                 }
                                               ).ToList();
@@ -555,10 +554,10 @@ namespace Disly.Areas.Admin.Controllers
                 }
 
 
-            }
-            catch {
+            //}
+            //catch {
                 
-            }
+            //}
             
 
             //}

@@ -762,6 +762,7 @@ namespace cms.dbase
                         .Where(w => materialIds.Contains(w.id))
                         .Where(w => w.group_id.Equals(g));
 
+                    //если не анонсы
                     if (g != Guid.Parse("651CFEB9-E157-4F42-B40D-DE5A7DC1A8FC"))
                     {
                         query = query.Where(w => w.d_date <= DateTime.Now);
@@ -777,7 +778,8 @@ namespace cms.dbase
                             Date = s.d_date,
                             GroupName = s.group_title,
                             GroupAlias = s.group_alias,
-                            Photo = s.c_preview
+                            Photo = s.c_preview,
+                            SmiType=s.c_smi_type
                         });
 
 
@@ -792,6 +794,77 @@ namespace cms.dbase
                 return null;
             }
         }
+
+
+        /// <summary>
+        /// Получаем новости группы 
+        /// </summary>
+        /// <returns></returns>
+        public override List<MaterialFrontModule> getMaterialsGroupNewInMedicin()
+        {
+            string domain = _domain;
+            using (var db = new CMSdb(_context))
+            {
+                var contentType = ContentType.MATERIAL.ToString().ToLower();
+
+                // список id-новостей для данного сайта
+                var materialIds = db.content_content_links.Where(e => e.f_content_type == contentType)
+                    .Join(db.cms_sitess.Where(o => o.c_alias.ToLower() == domain),
+                            e => e.f_link,
+                            o => o.f_content,
+                            (e, o) => e.f_content
+                            ).ToArray();
+
+                if (!materialIds.Any())
+                    return null;
+
+           
+
+                List<MaterialFrontModule> list = new List<MaterialFrontModule>();
+
+                var query = db.content_sv_materials_groupss
+                         .Where(w => materialIds.Contains(w.id))
+                         .Where(w => w.group_id.Equals(Guid.Parse("6303B7C5-5404-4EC0-AED2-1C308992C78A")));
+
+
+                var data = query
+                    .Where(w => w.b_disabled == false)
+                    .OrderByDescending(o => o.d_date)
+                    .Select(s => new MaterialFrontModule
+                    {
+                        Title = s.c_title,
+                        Alias = s.c_alias.ToLower(),
+                        Date = s.d_date,
+                        GroupName = s.group_title,
+                        GroupAlias = s.group_alias,
+                        Photo = s.c_preview,
+                        SmiType = s.c_smi_type
+                    });
+
+                if (data.Any())
+                {
+                    var world = data.Where(w => w.SmiType == "world");
+                    if (world.Any())
+                    {
+                        list.AddRange(world.Take(1));
+                    }
+                    var rus = data.Where(w => w.SmiType == "russia");
+                    if (rus.Any())
+                    {
+                        list.AddRange(rus.Take(1));
+                    }
+                    var chuv = data.Where(w => w.SmiType == "chuvashia");
+                    if (world.Any())
+                    {
+                        list.AddRange(chuv.Take(1));
+                    }
+
+                    return list;
+                }
+                return null;             
+            }
+        }
+
 
         /// <summary>
         /// Получаем главную новость сайта
@@ -832,6 +905,7 @@ namespace cms.dbase
             }
         }
 
+        
         /// <summary>
         /// Получим список новостей для определенной сущности
         /// </summary>
@@ -2668,7 +2742,7 @@ namespace cms.dbase
                             b_new = feedback.IsNew,
                             b_disabled = feedback.Disabled,
                             f_site = _domain,
-                            c_code = feedback.AnswererCode,
+                            c_code = (Guid)feedback.AnswererCode,
                             b_anonymous = feedback.Anonymous,
                             c_type = feedback.FbType.ToString()
                         };
@@ -2709,7 +2783,7 @@ namespace cms.dbase
                         cdFeedback.c_answer = feedback.Answer;
                         cdFeedback.c_answerer = feedback.Answerer;
                         cdFeedback.b_disabled = feedback.Disabled;
-                        cdFeedback.c_code = feedback.AnswererCode;
+                        cdFeedback.c_code = (Guid)feedback.AnswererCode;
 
                         db.Update(cdFeedback);
                         tran.Commit();
