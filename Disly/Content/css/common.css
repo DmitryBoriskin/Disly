@@ -48,6 +48,27 @@ fieldset {
 }
 .type-page img{max-width:100%;}
 
+
+figure.image {
+    border: 1px solid #c8ccd1;
+    padding: 3px;
+    background-color: #f8f9fa;    
+    display: inline-block;
+}
+figure.align-left {
+    float: left;
+}
+figure.align-right {
+    float: right;
+}
+
+figure.image figcaption{
+    line-height: 1.4em;
+    padding: 3px;
+    font-size: 94%
+}
+
+
 .type-page table:not(.table){
     max-width:100%;
     margin-bottom:20px;

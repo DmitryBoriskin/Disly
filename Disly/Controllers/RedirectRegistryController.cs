@@ -44,8 +44,8 @@ namespace Disly.Controllers
             if (hospital != null)
                 return Redirect(hospital.Url);
             else
-                return RedirectToAction("Index", "Home");
-            //Redirect("https://reg.med.cap.ru/");
+                return Redirect("https://reg.med.cap.ru/");
+            //RedirectToAction("Index", "Home");
         }
 
         // GET: /RedirectRegistry/Doctors/{id}/?oid=oid

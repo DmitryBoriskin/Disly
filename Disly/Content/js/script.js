@@ -19,6 +19,14 @@
         $('.show_original').swipebox();
         $(".swipebox").swipebox();
     }
+
+
+    $('figure.image').each(function () {
+        var style = $(this).find('img').attr("style");
+        $(this).attr('style', style);
+        $(this).find('img').attr("style",'');
+    });
+
     
 
 
