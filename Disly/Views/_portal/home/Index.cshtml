@@ -42,10 +42,17 @@
         })
         : null;
 
-    var announcements = (Model.Materials != null) ? Model.Materials.Where(w => w.GroupAlias.Equals("announcement")) : null;
+    var announcements = Model.Materials.Where(w => w.GroupAlias.Equals("announcement")).FirstOrDefault();
+
+    var newworld = Model.MaterialsNewInMedicin.Where(w => w.SmiType=="world").FirstOrDefault();
+    var newrus = Model.MaterialsNewInMedicin.Where(w => w.SmiType == "russia").FirstOrDefault();
+    var newchuv = Model.MaterialsNewInMedicin.Where(w => w.SmiType == "chuvashia").FirstOrDefault();
+
+
+
     var news = (Model.Materials != null) ? Model.Materials.Where(w => w.GroupAlias.Equals("news")) : null;
     var events = (Model.Materials != null) ? Model.Materials.Where(w => w.GroupAlias.Equals("actual")) : null;
-    var smi = (Model.Materials != null) ? Model.Materials.Where(w => w.GroupAlias.Equals("smi")) : null;
+    //var smi = (Model.Materials != null) ? Model.Materials.Where(w => w.GroupAlias.Equals("smi")) : null;
     int i = 0;
 
     string backgroundSlider = Model.SitesInfo.BackGroundImg != null
@@ -58,36 +65,43 @@
 @*верхний модуль*@
 <div class="news-module">
     <div class="row">
-        <div class="col-md-6">
-            @if (Model.ImportantMaterials != null)
-            {
-                var news_it = Model.ImportantMaterials;
 
-                string link = "/press/" + news_it.Date.Year + "/" + news_it.Date.Month + "/" + news_it.Date.Day + "/" + news_it.Alias;
-                string photo = !string.IsNullOrEmpty(news_it.Photo) ? news_it.Photo : "~/Content/img/temporal.jpg";
+
+
+
+        <div class="col-md-6 col-sm-12">
+            @if (events != null && events.FirstOrDefault() != null)
+            {
+                var ev = events.FirstOrDefault();
+
+                string link = "/press/" + ev.Date.Year + "/" + ev.Date.Month + "/" + ev.Date.Day + "/" + ev.Alias;
+                string photo = !string.IsNullOrEmpty(ev.Photo) ? ev.Photo : "~/Content/img/temporal.jpg";
 
                 <div class="event-item-module">
                     <div class="event-item-module-opacity top-op">
                         <div class="module-material-item-date">
-                            <div class="module-material-item-day">@news_it.Date.Day.ToString()</div>
+                            <div class="module-material-item-day">@ev.Date.Day.ToString()</div>
                             <div class="module-material-item-otherdate">
-                                <div>@news_it.Date.ToString("MMMM")</div>
-                                <div>@news_it.Date.ToString("yyyy")</div>
+                                <div>@ev.Date.ToString("MMMM")</div>
+                                <div>@ev.Date.ToString("yyyy")</div>
                             </div>
                         </div>
-                        <a href="" class="module-material-item-group-link">Главное</a>
+                        <a href="/press/@ev.GroupAlias" class="module-material-item-group-link">@ev.GroupName</a>
                     </div>
                     <a href="@link">
-                        <img src="@photo" alt="@news_it.Title" />
+                        <img src="@photo" alt="@ev.Title" />
                     </a>
                     <div class="event-item-module-opacity bottom-op">
-                        <a href="@link">@news_it.Title</a>
+                        <a href="@link">@ev.Title</a>
                     </div>
                 </div>
             }
         </div>
 
-        <div class="col-md-3 flank-paddings-15">
+
+
+
+        <div class="col-md-3 col-sm-6 flank-paddings-15">
             <a class="linker linker__top" href="https://reg.med.cap.ru/Default.aspx" target="_blank">
                 <div class="linker_text linker_reg">
                     <div class="linker_text_top">Электронная регистратура</div>
@@ -102,7 +116,7 @@
                 </div>                
             </a>
         </div>
-        <div class="col-md-3 flank-paddings-15">
+        <div class="col-md-3 col-sm-6 flank-paddings-15">
             <a class="linker linker__bottom" href="/kalendarj">
                 <img src="~/Content/portal/img/event_calendar.jpg" />
                 <div class="linker_text linker_calendar">
@@ -123,84 +137,116 @@
 
 @*модуль новостей*@ 
 
-    @if (Model.Materials != null)
-    {
+ 
         <div class="news-module">
             <p class="module-title">Пресс-центр<span class="ti-folder"></span><a class="link-to-archive" href="/press">Архив</a></p>
             <div class="row">
-                <div class="col-md-3">
-                    @if (announcements != null && announcements.Count() > 0)
-                    {
-                        foreach (var ann in announcements.ToList()) //for (int j = 0; j < 2; j++)
-                        {
-                            string link = "/press/" + ann.Date.Year + "/" + ann.Date.Month + "/" + ann.Date.Day + "/" + ann.Alias;
 
+                <div class="col-md-3 col-sm-6">
+                    @if (announcements != null)
+                    {                        
+                            string link = "/press/" + announcements.Date.Year + "/" + announcements.Date.Month + "/" + announcements.Date.Day + "/" + announcements.Alias;
                             <div class="module-material-item">
                                 <div class="module-material-item-date">
-                                    <div class="module-material-item-day">@ann.Date.Day.ToString()</div>
+                                    <div class="module-material-item-day">@announcements.Date.Day.ToString()</div>
                                     <div class="module-material-item-otherdate">
-                                        <div>@ann.Date.ToString("MMMM")</div>
-                                        <div>@ann.Date.ToString("yyyy")</div>
+                                        <div>@announcements.Date.ToString("MMMM")</div>
+                                        <div>@announcements.Date.ToString("yyyy")</div>
                                     </div>
                                 </div>
-                                <a class="module-material-item-group-link" href="/press/@ann.GroupAlias">@ann.GroupName</a>
-                                <a class="module-material-title" href="@link">@ann.Title</a>
+                                <a class="module-material-item-group-link" href="/press/@announcements.GroupAlias">@announcements.GroupName</a>
+                                <a class="module-material-title" href="@link">@announcements.Title</a>
+                            </div>                        
+                    }
+
+                    @if (newchuv != null)
+                    {
+
+                        string link = "/press/" + newchuv.Date.Year + "/" + newchuv.Date.Month + "/" + newchuv.Date.Day + "/" + newchuv.Alias;
+
+                        <div class="module-material-item">
+                            <div class="module-material-item-date">
+                                <div class="module-material-item-day">@newchuv.Date.Day.ToString()</div>
+                                <div class="module-material-item-otherdate">
+                                    <div>@newchuv.Date.ToString("MMMM")</div>
+                                    <div>@newchuv.Date.ToString("yyyy")</div>
+                                </div>
                             </div>
-                        }
+                            <a class="module-material-item-group-link" href="/press/new-in-medicine/?smitype=chuvashia">Новое в медицине Чувашии</a>
+                            <a class="module-material-title" href="@link">@newchuv.Title</a>
+                        </div>
                     }
                 </div>
-                <div class="col-md-3">
-                    @if (news != null && news.Count() > 0)
-                    {
-                        foreach (var item in news.ToList()) //for (int j = 0; j < 2; j++)
-                        {                            
-                            string link = "/press/" + item.Date.Year + "/" + item.Date.Month + "/" + item.Date.Day + "/" + item.Alias;
-                            <div class="module-material-item">
-                                <div class="module-material-item-date">
-                                    <div class="module-material-item-day">@item.Date.Day.ToString()</div>
-                                    <div class="module-material-item-otherdate">
-                                        <div>@item.Date.ToString("MMMM")</div>
-                                        <div>@item.Date.ToString("yyyy")</div>
-                                    </div>
-                                </div>
-                                <a href="/press/@item.GroupAlias" class="module-material-item-group-link">@item.GroupName</a>
-                                <a href="@link" class="module-material-title">@item.Title</a>
-                            </div>                            
-                        }
-                    }
-                </div>
-                <div class="col-md-6">
-                    @if (events != null && events.FirstOrDefault() != null)
-                    {
-                        var ev = events.FirstOrDefault();
 
-                        string link = "/press/" + ev.Date.Year + "/" + ev.Date.Month + "/" + ev.Date.Day + "/" + ev.Alias;
-                        string photo = !string.IsNullOrEmpty(ev.Photo) ? ev.Photo : "~/Content/img/temporal.jpg";
+                <div class="col-md-3 col-sm-6">
+                    @if (newworld != null)
+                    {
+
+                        string link = "/press/" + newworld.Date.Year + "/" + newworld.Date.Month + "/" + newworld.Date.Day + "/" + newworld.Alias;
+
+                        <div class="module-material-item">
+                            <div class="module-material-item-date">
+                                <div class="module-material-item-day">@newworld.Date.Day.ToString()</div>
+                                <div class="module-material-item-otherdate">
+                                    <div>@newworld.Date.ToString("MMMM")</div>
+                                    <div>@newworld.Date.ToString("yyyy")</div>
+                                </div>
+                            </div>
+                            <a class="module-material-item-group-link" href="/press/new-in-medicine/?smitype=world">Новое в медицине мира</a>
+                            <a class="module-material-title" href="@link">@newworld.Title</a>
+                        </div>
+                    }
+
+                    @if (newrus != null)
+                    {
+
+                        string link = "/press/" + newrus.Date.Year + "/" + newrus.Date.Month + "/" + newrus.Date.Day + "/" + newrus.Alias;
+
+                        <div class="module-material-item">
+                            <div class="module-material-item-date">
+                                <div class="module-material-item-day">@newworld.Date.Day.ToString()</div>
+                                <div class="module-material-item-otherdate">
+                                    <div>@newrus.Date.ToString("MMMM")</div>
+                                    <div>@newrus.Date.ToString("yyyy")</div>
+                                </div>
+                            </div>
+                            <a class="module-material-item-group-link" href="/press/new-in-medicine/?smitype=russia">Новое в медицине России</a>
+                            <a class="module-material-title" href="@link">@newrus.Title</a>
+                        </div>
+                    }
+                </div>               
+                
+                <div class="col-md-6">
+                    @if (Model.ImportantMaterials != null)
+                    {
+                        var news_it = Model.ImportantMaterials;
+
+                        string link = "/press/" + news_it.Date.Year + "/" + news_it.Date.Month + "/" + news_it.Date.Day + "/" + news_it.Alias;
+                        string photo = !string.IsNullOrEmpty(news_it.Photo) ? news_it.Photo : "~/Content/img/temporal.jpg";
 
                         <div class="event-item-module">
                             <div class="event-item-module-opacity top-op">
                                 <div class="module-material-item-date">
-                                    <div class="module-material-item-day">@ev.Date.Day.ToString()</div>
+                                    <div class="module-material-item-day">@news_it.Date.Day.ToString()</div>
                                     <div class="module-material-item-otherdate">
-                                        <div>@ev.Date.ToString("MMMM")</div>
-                                        <div>@ev.Date.ToString("yyyy")</div>
+                                        <div>@news_it.Date.ToString("MMMM")</div>
+                                        <div>@news_it.Date.ToString("yyyy")</div>
                                     </div>
                                 </div>
-                                <a href="/press/@ev.GroupAlias" class="module-material-item-group-link">@ev.GroupName</a>
+                                <a href="" class="module-material-item-group-link"></a>
                             </div>
                             <a href="@link">
-                                <img src="@photo" alt="@ev.Title" />
+                                <img src="@photo" alt="@news_it.Title" />
                             </a>
                             <div class="event-item-module-opacity bottom-op">
-                                <a href="@link">@ev.Title</a>
+                                <a href="@link">@news_it.Title</a>
                             </div>
                         </div>
                     }
                 </div>
             </div>
-
         </div>
-    }
+    
 
 @*конец модуля новостей*@ 
 @*модуль полезные ресурсы*@ 
@@ -223,7 +269,7 @@
                                     title = title.Substring(0, 70);
                                 }
 
-                                <div class="linkimg_item col-md-3">
+                                <div class="linkimg_item col-md-3 col-sm-6">
                                     <a href="@link">
                                         <div class="imglink-item">
                                             @if (!string.IsNullOrEmpty(item.Url))
@@ -274,7 +320,7 @@
                     {
                         fullPath = "/" + item.FrontSection;
                     }
-                    <div class="col-sm-3">
+                    <div class="col-sm-6 col-md-3">
                         @if (!string.IsNullOrWhiteSpace(item.Photo.Url))
                         {
                             <a href="@fullPath" class="sitemap-plate sitemap-plate-image" title="@item.Title">
@@ -297,22 +343,22 @@
     <div class="col-md-12">
         <div class="row">
             <div class="portal_lk">
-                <div class="col-md-3">
+                <div class="col-md-3 col-sm-6">
                     <a href="/teleradiosyuzheti">
                         <img  src="~/Content/portal/img/tv-radio-plot.jpg"/>
                     </a>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-3 col-sm-6">
                     <a href="/press/smi-about-medicin">
                         <img src="~/Content/portal/img/smi-for-med-chuvashia.jpg"/>
                     </a>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-3 col-sm-6">
                     <a href="/obzor-pressi">
                         <img src="~/Content/portal/img/browse_press.jpg" />
                     </a>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-3 col-sm-6">
                     <a href="https://www.youtube.com/channel/UCjpuskOiIp7Ns8CY2bobP0g/featured?view_as=subscriber" target="_blank">
                         <img src="~/Content/portal/img/youtube-med-chuv.jpg" />
                     </a>                    

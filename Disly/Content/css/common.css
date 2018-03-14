@@ -48,6 +48,27 @@ fieldset {
 }
 .type-page img{max-width:100%;}
 
+
+figure.image {
+    border: 1px solid #c8ccd1;
+    padding: 3px;
+    background-color: #f8f9fa;    
+    display: inline-block;
+}
+figure.align-left {
+    float: left;
+}
+figure.align-right {
+    float: right;
+}
+
+figure.image figcaption{
+    line-height: 1.4em;
+    padding: 3px;
+    font-size: 94%
+}
+
+
 .type-page table:not(.table){
     max-width:100%;
     margin-bottom:20px;
@@ -725,6 +746,8 @@ a.sitemap-plate.sitemap-plate-image {
     position: absolute;
     right: 10px;
     top: 10px;
+    max-width: 140px;
+    text-align: right;
 }
 .module-material-item-group-link:hover{
     color:#fff;
@@ -782,6 +805,9 @@ a.sitemap-plate.sitemap-plate-image {
     margin-top:4px;
     background-color: #fff;
 }
+.breadcrumb>li {
+    display: initial;
+}
 
 .breadcrumb > li a {
     text-decoration: underline;
@@ -820,7 +846,8 @@ a.sitemap-plate.sitemap-plate-image {
     border: 1px solid #d9d9d9;
     position: relative;
     padding: 20px 25px 20px;
-    margin-bottom:36px;
+    margin-bottom: 36px;
+    min-height: 80px;
 }
 .child_sitemap:before{
     content: '';

@@ -216,7 +216,7 @@ namespace cms.dbase
                     });
 
                 if (data.Any())
-                {
+                {   
                     var query = data.FirstOrDefault();
                     if (num > query.Sort)
                     {

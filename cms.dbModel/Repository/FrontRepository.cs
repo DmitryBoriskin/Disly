@@ -35,6 +35,7 @@ namespace cms.dbModel
 
         //Materials
         public abstract List<MaterialFrontModule> getMaterialsModule(); //string domain
+        public abstract List<MaterialFrontModule> getMaterialsGroupNewInMedicin();
         public abstract MaterialFrontModule getMaterialsImportant();
         public abstract MaterialsList getMaterialsList(MaterialFilter filtr);
         public abstract MaterialsModel getMaterialsItem(string year, string month, string day, string alias); //, string domain

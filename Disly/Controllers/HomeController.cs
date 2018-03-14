@@ -39,17 +39,17 @@ namespace Disly.Controllers
             #endregion
 
             string _ViewName = (ViewName != String.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";
-
-            model.Materials = _repository.getMaterialsModule(); //Domain
+            
             model.Oid = _repository.getOid();
+            model.Materials = _repository.getMaterialsModule(); //Domain
 
             if (model.SitesInfo.Alias == "main" && !IsSpecVersion)
             {
-
                 model.ImportantMaterials = _repository.getMaterialsImportant();
-
+                model.MaterialsNewInMedicin = _repository.getMaterialsGroupNewInMedicin();
                 _ViewName = _ViewName.ToLower().Replace("views/", "views/_portal/");//спец вьюха для главного сайта 
             }
+            
             return View(_ViewName, model);
         }
     }

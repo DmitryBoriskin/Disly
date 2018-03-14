@@ -105,7 +105,7 @@ namespace Disly.Areas.Admin.Controllers
 
         
         [HttpPost]
-        [MultiButton(MatchFormKey = "action", MatchFormValue = "search-btn")]
+        [MultiButton(MatchFormKey = "action", MatchFormValue = "save-presscentr-gs")]
         public ActionResult DownloadPressGs()
         {
             ErrorMessage userMessage = new ErrorMessage();

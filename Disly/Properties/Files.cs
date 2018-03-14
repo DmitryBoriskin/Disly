@@ -75,7 +75,11 @@ public class Files
         string filePath = HttpContext.Current.Server.MapPath(Path + Name + extension);
 
         if (File.Exists(filePath))
+        {
+            File.SetAttributes(filePath, FileAttributes.Normal);
             File.Delete(filePath);
+        }
+            
         _File.Save(filePath, myImageCodecInfo, myEncoderParameters);
         _File.Dispose();
 

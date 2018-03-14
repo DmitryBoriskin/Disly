@@ -2,6 +2,7 @@
 @{
     string urlParam = "/Admin/Services/ChangePermit?group=orgs";
     Guid? orgId = ViewBag.OrgId;
+    int i = 0;
 }
 
 @if (Model.UserResolution.Read)
@@ -42,13 +43,14 @@
             {
                 if (!item.Id.Equals(orgId))
                 {
+                    i++;
                     string link = "/admin/orgs/item/" + item.Id;
 
                     <div class="row" data-id="@item.Id">
                         <div class="list-item">
                             <div class="col-md-12">
                                 <div class="li-desc">
-                                    <a href="@link" class="li-caption">@item.Title</a><br />
+                                    <a href="@link" class="li-caption">@i. @item.Title</a><br />
                                 </div>
                             </div>
                         </div>

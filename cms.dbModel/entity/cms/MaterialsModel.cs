@@ -215,6 +215,7 @@ namespace cms.dbModel.entity
         /// Название группы
         /// </summary>
         public string GroupName { get; set; }
+        public string SmiType { get; set; }
 
         /// <summary>
         /// Алиас группы
