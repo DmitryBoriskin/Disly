@@ -4,10 +4,9 @@
 */bin/
 */obj/
 Disly/Properties/PublishProfiles/
-cms.dbase/template/CMSbdModel.tt
-cms.dbase/template/OnlineRegister.tt
-ImportFRMP/template/CMSbdModel.tt
-Integration.Frmp.library/template/CMSbdModel.tt
+cms.dbase/template/
+ImportFRMP/template/
+Integration.Frmp.library/template/
 Integration.Frmp.library/Data
 App.config
 app.config
@@ -17,5 +16,5 @@ Web.Debug.config
 Integration.Frmp.cmd/App.config
 Integration.Frmp.service/App.config
 PhotoImport/App.config
-PhotoImport/Template/CMSbdModel.tt
+PhotoImport/Template/
 

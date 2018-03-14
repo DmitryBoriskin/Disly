@@ -110,7 +110,7 @@ namespace Disly.Controllers
                 ViewBag.KeyWords = currentPage.Keyw;
             }
             #endregion
-
+                                                                            
             string _ViewName = (ViewName != String.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";
 
             var filter = getFilter();
