@@ -69,7 +69,7 @@ namespace Disly.Areas.Admin.Controllers
             {
                 case "org":
                     var data = _cmsRepository.getOrgItem(model.Item.ContentId);
-                    if(data != null)
+                    if (data != null)
                     {
                         ViewBag.ContentLink = "/admin/orgs/item/" + data.Id;
                         ViewBag.ContentType = "организации";
@@ -203,6 +203,12 @@ namespace Disly.Areas.Admin.Controllers
         [MultiButton(MatchFormKey = "action", MatchFormValue = "save-btn")]
         public ActionResult Save(Guid Id, SitesViewModel back_model)
         {
+            FilterParams filter = new FilterParams()
+            {
+                Page = 1,
+                Size = 999999
+            };
+
             ErrorMessage userMassege = new ErrorMessage();
             userMassege.title = "Информация";
             if (!_cmsRepository.check_Site(Id) && back_model.Item.ContentId == null)
@@ -214,11 +220,11 @@ namespace Disly.Areas.Admin.Controllers
             {
                 // дополнительные домены
                 List<string> domains = new List<string>();
-                domains.Add(back_model.Item.Alias + "."+Settings.BaseURL);
+                domains.Add(back_model.Item.Alias + "." + Settings.BaseURL);
 
                 if (!string.IsNullOrEmpty(back_model.Item.DomainListString))
                 {
-                    string[] dopDomains = back_model.Item.DomainListString.Replace(" ","").Split(';');
+                    string[] dopDomains = back_model.Item.DomainListString.Replace(" ", "").Split(';');
                     if (dopDomains != null && dopDomains.Count() > 0)
                     {
                         foreach (var d in dopDomains)
@@ -229,8 +235,8 @@ namespace Disly.Areas.Admin.Controllers
                             }
                         }
                     }
-                    back_model.Item.DomainListArray = domains;
                 }
+                back_model.Item.DomainListArray = domains;
 
                 if (_cmsRepository.check_Site(Id))
                 {
@@ -255,10 +261,30 @@ namespace Disly.Areas.Admin.Controllers
             else
             {
                 userMassege.info = "Ошибка в заполнении формы";
-                userMassege.buttons = new ErrorMassegeBtn[]{
+                userMassege.buttons = new ErrorMassegeBtn[]
+                {
                     new ErrorMassegeBtn { url = "#", text = "ок", action = "false" }
                 };
-                model.Item = _cmsRepository.getSite(Id);
+                //model.Item = _cmsRepository.getSite(Id);
+                #region данные для выпадающих списков
+                model.TypeList = new SelectList(
+                        new List<SelectListItem>
+                        {
+                        new SelectListItem { Text = "Не выбрано", Value =""},
+                        new SelectListItem { Text = "Организация", Value ="org"},
+                        new SelectListItem { Text = "Главный специалист", Value = "spec" },
+                        new SelectListItem { Text = "Событие", Value = "event" }
+                        }, "Value", "Text", back_model.Item.Type
+                    );
+
+                var orgFilter = FilterParams.Extend<OrgFilter>(filter);
+                var evFilter = FilterParams.Extend<EventFilter>(filter);
+                var specFilter = FilterParams.Extend<GSFilter>(filter);
+
+                model.OrgsList = new SelectList(_cmsRepository.getOrgs(orgFilter), "Id", "Title", back_model.Item.ContentId);
+                model.MainSpecialistList = new SelectList(_cmsRepository.getGSList(specFilter).Data, "Id", "Title", back_model.Item.ContentId);
+                model.EventsList = new SelectList(_cmsRepository.getEventsList(evFilter).Data, "Id", "Title", back_model.Item.ContentId);
+                #endregion
                 model.ErrorInfo = userMassege;
 
                 return View("Master", model);
@@ -267,11 +293,11 @@ namespace Disly.Areas.Admin.Controllers
             model.ErrorInfo = userMassege;
 
             #region Данные из адресной строки(для случаев когда сайт создается со страницы того кому создается сайт)
-            FilterParams filter = new FilterParams()
-            {
-                Page = 1,
-                Size = 999999
-            };
+            //FilterParams filter = new FilterParams()
+            //{
+            //    Page = 1,
+            //    Size = 999999
+            //};
             string OrgType = Request.QueryString["type"];
             string ContentId = Request.QueryString["contentid"];
 
@@ -318,7 +344,7 @@ namespace Disly.Areas.Admin.Controllers
             {
                 Guid id = Guid.Parse(Request["Item.Id"]);
                 var SiteId = _cmsRepository.getSite(id).Alias;
-                string Domain = Request["new_domain"].Replace(" ","");
+                string Domain = Request["new_domain"].Replace(" ", "");
 
                 _cmsRepository.insertDomain(SiteId, Domain);
             }
@@ -336,7 +362,7 @@ namespace Disly.Areas.Admin.Controllers
             var res = _cmsRepository.setDomainDefault(id);
             if (res)
                 return Json("Success");
-            
+
             return Json("An Error Has occourred");
         }
 
