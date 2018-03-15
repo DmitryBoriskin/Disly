@@ -94,6 +94,15 @@ namespace Disly.Areas.Admin.Controllers
                         ViewBag.ContentTitle = data_e.Title;
                     }
                     break;
+                case "spec":
+                    var data_s = _cmsRepository.getGSItem(model.Item.ContentId);
+                    if (data_s != null)
+                    {
+                        ViewBag.ContentLink = "/admin/mainspecialist/item/" + data_s.Id;
+                        ViewBag.ContentType = "главного специалиста";
+                        ViewBag.ContentTitle = data_s.Title;
+                    }
+                    break;
             }
             return View("Item", model);
         }

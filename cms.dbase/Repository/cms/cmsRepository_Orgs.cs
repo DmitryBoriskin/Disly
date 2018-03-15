@@ -236,12 +236,12 @@ namespace cms.dbase
                     types = getTypes.Select(t => t.Id).ToArray();
 
                 var querySite = db.cms_sitess.Where(w => w.f_content == id).Select(s => s.id).SingleOrDefault();
-                String siteGuid = (querySite!=null)? querySite.ToString():String.Empty;
+                String siteGuid = (querySite != null) ? querySite.ToString() : String.Empty;
                 
-
                 var services = getOrgMedicalServicesLinks(id);
 
-                var data = db.content_orgss.Where(w => w.id == id)
+                var data = db.content_orgss
+                    .Where(w => w.id.Equals(id) || w.f_guid.Equals(id))
                     .Select(s => new OrgsModel
                     {
                         Id = s.id,
