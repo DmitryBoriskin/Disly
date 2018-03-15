@@ -158,6 +158,8 @@ namespace Disly.Areas.Admin.Controllers
 
         public CoreController()
         {
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
             _accountRepository = new AccountRepository("cmsdbConnection");
 
             Guid userId = Guid.Empty;

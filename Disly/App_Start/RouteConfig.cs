@@ -179,11 +179,23 @@ namespace Disly
               url: "SpecStructure/",
               defaults: new { controller = "SpecStructure", action = "Index" }
            );
-            // Структура в гс
+            // члены в гс
             routes.MapRoute(
-              name: "SpecContacts",
-              url: "SpecContacts/",
-              defaults: new { controller = "SpecContacts", action = "Index" }
+              name: "SpecMembers",
+              url: "SpecMembers/",
+              defaults: new { controller = "SpecMembers", action = "Index" }
+           );
+            // эксперты в гс
+            routes.MapRoute(
+              name: "SpecExperts",
+              url: "SpecExperts/",
+              defaults: new { controller = "SpecExperts", action = "Index" }
+           );
+            // доктора в гс
+            routes.MapRoute(
+              name: "SpecDoctors",
+              url: "SpecDoctors/",
+              defaults: new { controller = "SpecDoctors", action = "Index" }
            );
 
             // Главные специалисты на портале

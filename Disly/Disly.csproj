@@ -608,6 +608,9 @@
     <Compile Include="Areas\Admin\Models\AnketaViewModel.cs" />
     <Compile Include="Areas\Admin\Models\StatisticViewModel.cs" />
     <Compile Include="Areas\Admin\Models\ModalViewModels\MainSpecModalViewModel.cs" />
+    <Compile Include="Controllers\gs\SpecMembersController.cs" />
+    <Compile Include="Controllers\gs\SpecExpertsController.cs" />
+    <Compile Include="Controllers\gs\SpecDoctorsController.cs" />
     <Compile Include="Controllers\gs\SpecStructureController.cs" />
     <Compile Include="Controllers\gs\SpecContactsController.cs" />
     <Compile Include="Controllers\orgs\OrgGsMembersController.cs" />
@@ -985,6 +988,9 @@
     <Content Include="Views\SpecContacts\Index.cshtml" />
     <Content Include="Views\SpecStructure\part\doctorslist.cshtml" />
     <None Include="Properties\PublishProfiles\Med.pubxml" />
+    <Content Include="Views\SpecMembers\Index.cshtml" />
+    <Content Include="Views\SpecExperts\Index.cshtml" />
+    <Content Include="Views\SpecDoctors\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

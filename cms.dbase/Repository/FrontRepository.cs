@@ -35,7 +35,6 @@ namespace cms.dbase
 
             _domain = (!string.IsNullOrEmpty(DomainUrl)) ? getSiteId(DomainUrl) : "";
             //_domain = "allergolog";
-            
         }
         #region redirect methods
         public override SitesModel getSiteInfoByOldId(int Id)
@@ -565,6 +564,35 @@ namespace cms.dbase
             }
         }
 
+        public override SiteMapModel getPageInfo(Guid id)
+        {
+            string domain = _domain;
+
+            using (var db = new CMSdb(_context))
+            {
+                var query = db.content_sitemaps
+                    .Where(w => w.f_site == domain)
+                    .Where(w => w.b_disabled == false)
+                    .Where(w => w.id == id);
+
+                var data = query.Select(s => new SiteMapModel
+                {
+                    Title = s.c_title,
+                    Text = s.c_text,
+                    Alias = s.c_alias.ToLower(),
+                    Path = s.c_path,
+                    Id = s.id,
+                    ParentId = s.uui_parent,
+                    FrontSection = s.f_front_section
+                });
+
+                if (data.Any())
+                    return data.First();
+
+                return null;
+            }
+        }
+
         /// <summary>
         /// Получим сестринские эл-ты карты сайта по пути
         /// </summary>
@@ -673,7 +701,7 @@ namespace cms.dbase
         }
 
         /// <summary>
-        /// Получаем хленые крошки
+        /// Получаем хлебные крошки
         /// </summary>
         /// <param name="Url">относительная ссылка на страницу</param>
         /// <returns></returns>

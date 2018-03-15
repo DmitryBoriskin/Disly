@@ -24,6 +24,7 @@ namespace cms.dbModel
         // Карта сайта
         public abstract SiteMapModel getSiteMap(string path, string alias); //, string domain
         public abstract SiteMapModel getSiteMap(string frontSection);
+        public abstract SiteMapModel getPageInfo(Guid id);
         public abstract string[] getSiteMapSiblings(string path);
         public abstract List<SiteMapModel> getSiteMapSiblingElements(string path);
         public abstract SiteMapModel[] getSiteMapChild(Guid ParentId);

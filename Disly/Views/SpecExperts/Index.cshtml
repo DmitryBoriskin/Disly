@@ -1,0 +1,71 @@
+﻿@model SpecStructureViewModel
+@{
+    Layout = ViewBag.Layout;
+}
+<div class="type-page">
+    <div class="container">
+
+        @Html.Partial("services/breadcrumbs")
+
+        <h1>@ViewBag.Title</h1>
+
+        @if (Model.ExpertsList != null && Model.ExpertsList.Count() > 0)
+        {
+            <div class="row">
+                <div class="col-md-8">
+                    <table class="table">
+                        @foreach (var item in Model.ExpertsList)
+                        {
+                            string link = string.Format("/doctors/{0}", (item.People != null) ? item.People.Id.ToString() : null);
+                            string photo = (item.People != null && !string.IsNullOrWhiteSpace(item.People.Photo))
+                                  ? File.Exists(Server.MapPath(item.People.Photo))
+                                      ? item.People.Photo : "/Content/img/no_avatar.png"
+                                  : "/Content/img/no_avatar.png";
+                            <tr>
+                                <td class="adminlist_img_td">
+                                    <a target="_blank" href="@link">
+                                        <img class="img-circle img-person-list" alt="@item.People.FIO" src="@photo" />
+                                    </a>
+                                </td>
+                                <td>
+                                    <a class="adminlist_name" href="@link">@item.People.FIO</a>
+                                </td>
+                                <td>
+                                    @if (item.Orgs != null && item.Orgs.Count() > 0)
+                                    {
+                                        foreach (var org in item.Orgs)
+                                        {
+                                            <p>
+                                                @if (!string.IsNullOrWhiteSpace(org.Url))
+                                                {
+                                                    string linkToOrg = string.Format("http://{0}", org.Url);
+                                                    <a target="_blank" href="@linkToOrg">@(org.Title):</a><br />
+                                                }
+                                                else
+                                                {
+                                                    <b>@(org.Title):</b><br />
+                                                }
+
+                                                @if (item.Posts != null && item.Posts.Count() > 0)
+                                                {
+                                                    var posts = item.Posts.Where(p => p.Org.Id == org.Id);
+                                                    if (posts != null)
+                                                    {
+                                                        foreach (var post in posts)
+                                                        {
+                                                            <span> - @post.Name </span><br />
+                                                        }
+                                                    }
+                                                }
+                                            </p>
+                                        }
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </table>
+                </div>
+            </div>
+        }
+    </div>
+</div>
