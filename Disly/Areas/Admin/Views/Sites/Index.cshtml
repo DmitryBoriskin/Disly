@@ -22,7 +22,6 @@
                     </div>
                 </div>
             }
-            //Html.RenderAction("Pager", "Templates", new { @Model = Model.List.Pager });
             if (Model.List != null && Model.List.Pager != null)
             {
                 @Html.Partial("Partial/Pager", Model.List.Pager)
@@ -32,15 +31,17 @@
 
     <div class="dop_info-block">
         <div class="dop-caption">Фильтр</div>
-        @Html.Partial("Part/SearchFilter")
+        @Html.Partial("Part/SearchFilter", Model)
 
-        
-        <div class="alert alert-info topIndent-20" role="alert">
-            <p>@Model.List.CountAllSites — сайтов</p>
-            <p>@Model.List.CountOrgSites — сайтов организаций</p>
-            <p>@Model.List.CountGsSites — сайтов главных специалистов</p>
-            <p>@Model.List.CountEventSites — сайтов событий</p>
-        </div>
+        @if (Model.CountSites != null)
+        {
+            <div class="alert alert-info topIndent-20" role="alert">
+                <p>@Model.CountSites.CountAllSites — сайтов</p>
+                <p>@Model.CountSites.CountOrgSites — сайтов организаций</p>
+                <p>@Model.CountSites.CountGsSites — сайтов главных специалистов</p>
+                <p>@Model.CountSites.CountEventSites — сайтов событий</p>
+            </div>
+        }
     </div>
 
     <div class="buttons">

@@ -1,8 +1,14 @@
-﻿@{
+﻿@model SitesViewModel
+@{
     var checkboxValue = false;
     if (!string.IsNullOrEmpty(Request.QueryString["disabled"]))
     {
         bool.TryParse(Request.QueryString["disabled"], out checkboxValue);
+    }
+    string type = null;
+    if (!String.IsNullOrEmpty(Request.QueryString["type"]))
+    {
+        type = Request.QueryString["type"];
     }
 }
 
@@ -11,6 +17,33 @@
         @Html.TextBox("searchtext", Request.QueryString["searchtext"], new { @title = "Поиск по ключевым словам", @placeholder = "поиск...", @MaxLength = "512" })
 
         @Html.CheckBox("enabled", !checkboxValue, new { type = "checkbox", title = "Отображать", data_toggle = "toggle", data_on = "Только разрешенные", data_off = "Только запрещенные", data_width = "248" })
+
+        @if (Model != null && Model.SitesTypes != null)
+        {
+            <select class="selectpicker" title="Тип сайта" id="type" name="type">
+                @if (type == null)
+                {
+                    <option selected="selected" value="">не выбрано</option>
+                }
+                else
+                {
+                    <option value="">не выбрано</option>
+                }
+                @foreach (var item in Model.SitesTypes)
+                {
+                    bool isSelected = item.Value.Equals(type);
+
+                    if (isSelected)
+                    {
+                        <option selected="selected" value="@item.Value">@item.Text</option>
+                    }
+                    else
+                    {
+                        <option value="@item.Value">@item.Text</option>
+                    }
+                }
+            </select>
+        }
     </div>
 </div>
 <div class="row">

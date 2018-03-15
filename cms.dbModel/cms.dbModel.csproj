@@ -57,6 +57,7 @@
     <Compile Include="entity\cms\BannersModel.cs" />
     <Compile Include="entity\cms\ContentLinkModel.cs" />
     <Compile Include="entity\cms\AnketaModel.cs" />
+    <Compile Include="entity\cms\CountSites.cs" />
     <Compile Include="entity\cms\MedServiceModel.cs" />
     <Compile Include="entity\cms\PeopleModel.cs" />
     <Compile Include="entity\cms\PhotoModel.cs" />

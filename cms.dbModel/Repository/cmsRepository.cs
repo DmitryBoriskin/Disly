@@ -39,6 +39,8 @@ namespace cms.dbModel
 
         // Все сайты портала
         public abstract SitesList getSiteList(SiteFilter filtr);
+        public abstract CountSites GetCountSites();
+        public abstract Catalog_list[] GetSiteTypes();
         public abstract SitesShortModel[] getSiteListWithCheckedForUser(SiteFilter filtr);
         public abstract SitesShortModel[] getSiteListWithCheckedForBanner(SiteFilter filtr);
 

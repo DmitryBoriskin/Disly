@@ -30,7 +30,7 @@ namespace cms.dbase
         public cmsRepository(string ConnectionString, Guid UserId, string IP, string DomainUrl)
         {
             _context = ConnectionString;
-            _domain = (!string.IsNullOrEmpty(DomainUrl))? getSiteId(DomainUrl): "";
+            _domain = (!string.IsNullOrEmpty(DomainUrl)) ? getSiteId(DomainUrl) : "";
             _ip = IP;
             _currentUserId = UserId;
 
@@ -67,7 +67,7 @@ namespace cms.dbase
             using (var db = new CMSdb(_context))
             {
                 var data0 = db.cms_sitess.Where(w => w.f_content == ContId).SingleOrDefault();
-                if (data0!=null)
+                if (data0 != null)
                 {
                     var siteId = data0.c_alias;
                     var data = db.cms_sites_domainss
@@ -83,7 +83,7 @@ namespace cms.dbase
                     }
                 }
                 return null;
-                
+
             }
         }
 
@@ -146,7 +146,7 @@ namespace cms.dbase
         {
             try
             {
-             using (var db = new CMSdb(_context))
+                using (var db = new CMSdb(_context))
                 {
                     var data = db.cms_sites_domainss
                                     .Where(w => w.c_domain == DomainUrl);
@@ -171,36 +171,36 @@ namespace cms.dbase
         {
             //try
             //{
-                using (var db = new CMSdb(_context))
-                {
-                    var data = db.cms_sitess.Where(w => w.id == Id)
-                        .Select(s => new SitesModel
+            using (var db = new CMSdb(_context))
+            {
+                var data = db.cms_sitess.Where(w => w.id == Id)
+                    .Select(s => new SitesModel
+                    {
+                        Id = s.id,
+                        Title = s.c_name,
+                        LongTitle = s.c_name_long,
+                        Alias = s.c_alias.ToLower(),
+                        Adress = s.c_adress,
+                        Phone = s.c_phone,
+                        Fax = s.c_fax,
+                        Email = s.c_email,
+                        Site = s.c_url,
+                        Worktime = s.c_worktime,
+                        Logo = new Photo
                         {
-                            Id = s.id,
-                            Title = s.c_name,
-                            LongTitle = s.c_name_long,
-                            Alias = s.c_alias.ToLower(),
-                            Adress = s.c_adress,
-                            Phone = s.c_phone,
-                            Fax = s.c_fax,
-                            Email = s.c_email,
-                            Site = s.c_url,
-                            Worktime = s.c_worktime,
-                            Logo = new Photo
-                            {
-                                Url = s.c_logo
-                            },
-                            DomainList = getSiteDomains(s.c_alias.ToLower()),
-                            ContentId = (Guid)s.f_content,
-                            Type = s.c_content_type,
-                            SiteOff = s.b_site_off
-                        });
+                            Url = s.c_logo
+                        },
+                        DomainList = getSiteDomains(s.c_alias.ToLower()),
+                        ContentId = (Guid)s.f_content,
+                        Type = s.c_content_type,
+                        SiteOff = s.b_site_off
+                    });
 
-                    if (data.Any())
-                        return data.SingleOrDefault();
+                if (data.Any())
+                    return data.SingleOrDefault();
 
-                    return null;
-                }
+                return null;
+            }
             //}
             //catch(Exception ex)
             //{
@@ -238,7 +238,7 @@ namespace cms.dbase
                             },
                             ContentId = (Guid)s.f_content,
                             Type = s.c_content_type,
-                            Scripts=s.c_scripts,
+                            Scripts = s.c_scripts,
                             Facebook = s.c_facebook,
                             Vk = s.c_vk,
                             Instagramm = s.c_instagramm,
@@ -257,7 +257,7 @@ namespace cms.dbase
                     return null;
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 //Log
                 return null;
@@ -384,7 +384,7 @@ namespace cms.dbase
                 db.cms_logs.Insert(() => new cms_log
                 {
                     d_date = DateTime.Now,
-                   
+
                     f_site = log.Site,
                     f_section = log.Section.ToString(),
                     f_action = log.Action.ToString(),
@@ -561,7 +561,7 @@ namespace cms.dbase
                         .Value(p => p.f_group, Item.Group)
                         .Value(p => p.c_desc, Item.Desc)
                        .Insert();
-                    
+
                     // логирование
                     var log = new LogModel()
                     {
@@ -630,7 +630,7 @@ namespace cms.dbase
                             .Value(v => v.b_importent, false)
                             .Insert();
                     }
-                    
+
                     // логирование
                     log = new LogModel()
                     {
@@ -673,7 +673,7 @@ namespace cms.dbase
                         .Set(p => p.f_group, Item.Group)
                         .Set(p => p.c_desc, Item.Desc)
                         .Update();
-                        
+
                         // логирование
                         var log = new LogModel()
                         {
@@ -716,7 +716,7 @@ namespace cms.dbase
                         .Update();
 
                     db.cms_menus.Where(w => w.id == id).Delete();
-                    
+
                     // логирование
                     var log = new LogModel()
                     {
@@ -765,8 +765,12 @@ namespace cms.dbase
 
             var query = db.cms_sitess.AsQueryable();
 
+            if (!String.IsNullOrEmpty(filtr.Type))
+            {
+                query = query.Where(w => w.c_content_type.Equals(filtr.Type));
+            }
 
-            if (!string.IsNullOrEmpty(filtr.SearchText))
+            if (!String.IsNullOrEmpty(filtr.SearchText))
             {
                 query = query.Where(w => w.c_name.Contains(filtr.SearchText));
             }
@@ -805,10 +809,10 @@ namespace cms.dbase
 
                 var querycount = db.cms_sitess.Where(w => w.c_content_type != "temp");
 
-                int CountAllSites= querycount.Count();
-                int CountOrgSites = querycount.Where(w=>w.c_content_type=="org").Count(); 
+                int CountAllSites = querycount.Count();
+                int CountOrgSites = querycount.Where(w => w.c_content_type == "org").Count();
                 int CountGsSites = querycount.Where(w => w.c_content_type == "spec").Count(); ;
-                int CountEventSites= querycount.Where(w => w.c_content_type == "event").Count();
+                int CountEventSites = querycount.Where(w => w.c_content_type == "event").Count();
 
                 if (filtr.Disabled != null) //в данном случае используется для определения отключенных/включенных сайтов
                 {
@@ -854,13 +858,52 @@ namespace cms.dbase
                             ItemsCount = ItemCount,
                             //PageCount = ItemCount / filtr.Size
                         },
-                        CountAllSites=CountAllSites,
-                        CountOrgSites=CountOrgSites,
-                        CountGsSites=CountGsSites,
-                        CountEventSites=CountEventSites
+                        CountAllSites = CountAllSites,
+                        CountOrgSites = CountOrgSites,
+                        CountGsSites = CountGsSites,
+                        CountEventSites = CountEventSites
                     };
                 }
                 return null;
+            }
+        }
+
+        /// <summary>
+        /// Возвращает кол-во сайтов
+        /// </summary>
+        /// <returns></returns>
+        public override CountSites GetCountSites()
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var querycount = db.cms_sitess.Where(w => w.c_content_type != "temp");
+                
+                return new CountSites
+                {
+                    CountAllSites = querycount.Count(),
+                    CountOrgSites = querycount.Where(w => w.c_content_type == "org").Count(),
+                    CountGsSites = querycount.Where(w => w.c_content_type == "spec").Count(),
+                    CountEventSites = querycount.Where(w => w.c_content_type == "event").Count()
+                };
+            }
+        }
+
+        /// <summary>
+        /// Возвращает типы сайтов
+        /// </summary>
+        /// <returns></returns>
+        public override Catalog_list[] GetSiteTypes()
+        {
+            using (var db = new CMSdb(_context))
+            {
+                
+                return db.cms_sites_typess
+                    .Where(w => !w.c_alias.Equals("temp"))
+                    .Select(s => new Catalog_list
+                    {
+                        Text = s.c_title,
+                        Value = s.c_alias
+                    }).ToArray();
             }
         }
 
@@ -916,8 +959,8 @@ namespace cms.dbase
                         SiteOff = s.b_site_off,
                         Type = s.c_content_type,
                         DomainList = getSiteDomains(s.c_alias.ToLower()),
-                        Checked = (filtr.UserId.HasValue)? s.fklinksitetousers.Any(u => u.f_user == filtr.UserId) ? true: false :false
-                        });
+                        Checked = (filtr.UserId.HasValue) ? s.fklinksitetousers.Any(u => u.f_user == filtr.UserId) ? true : false : false
+                    });
 
                 if (data.Any())
                     return data.ToArray();
@@ -981,7 +1024,7 @@ namespace cms.dbase
                         }
                         //назначение пользователям(разработчикам и администраторам портала) прав  к созданному сайту
                         var UserList = db.cms_users_groups.Where(w => (w.c_alias.ToLower() == "developer" || w.c_alias.ToLower() == "administrator"))
-                                         .Join(db.cms_userss,e=>e.c_alias.ToLower(), o=>o.f_group,(e,o)=>o).Select(s=>s.id).ToArray();
+                                         .Join(db.cms_userss, e => e.c_alias.ToLower(), o => o.f_group, (e, o) => o).Select(s => s.id).ToArray();
 
 
                         foreach (var item in UserList)
@@ -1007,11 +1050,11 @@ namespace cms.dbase
                                 domain_source = "template-site-event";
                                 break;
                         }
-//#warning !!!!не забыть удалить строку
-//                        domain_source = "rkob";
-//#warning !!!!не забыть удалить строку
-                        db.dublicate_content_sitemap(domain_source, ins.Alias);                        
-                        var sitemap_val = db.content_sitemaps.Where(w => w.f_site == domain_source && w.uui_parent==null).ToArray();                        
+                        //#warning !!!!не забыть удалить строку
+                        //                        domain_source = "rkob";
+                        //#warning !!!!не забыть удалить строку
+                        db.dublicate_content_sitemap(domain_source, ins.Alias);
+                        var sitemap_val = db.content_sitemaps.Where(w => w.f_site == domain_source && w.uui_parent == null).ToArray();
                         #endregion
 
                         #region Доменные имена
@@ -1026,7 +1069,7 @@ namespace cms.dbase
                             }
                         }
                         #endregion
-                        
+
                         // логирование
                         var log = new LogModel()
                         {
@@ -1043,11 +1086,11 @@ namespace cms.dbase
                         tran.Commit();
                         return true;
                     }
-                  return false;
+                    return false;
                 }
             }
         }
-        
+
         /// <summary>
         /// Обновление сайта
         /// </summary>
@@ -1102,7 +1145,8 @@ namespace cms.dbase
         /// <returns></returns>
         public override bool deleteSite(Guid id)
         {
-            try {
+            try
+            {
                 using (var db = new CMSdb(_context))
                 {
                     using (var tran = db.BeginTransaction())
@@ -1138,7 +1182,7 @@ namespace cms.dbase
                 OnDislyEvent(new DislyEventArgs(LogLevelEnum.Debug, "cmsRepository: deleteSite id = " + id, ex));
                 return false;
             }
-           
+
         }
 
         /// <summary>
@@ -1224,7 +1268,7 @@ namespace cms.dbase
                         tran.Commit();
                         return true;
                     }
-                 return false;
+                    return false;
                 }
             }
         }
@@ -1244,7 +1288,7 @@ namespace cms.dbase
                     if (data.Any())
                     {
                         var domain = data.SingleOrDefault();
-                        if(domain != null)
+                        if (domain != null)
                         {
                             string domainName = domain.c_domain;
                             if (!string.IsNullOrEmpty(domainName) && domainName.Trim().ToLower() == "localhost")
@@ -1264,7 +1308,7 @@ namespace cms.dbase
                                 }
                             }
 
-                           
+
 
                             //логирование
                             var log = new LogModel()
@@ -1283,9 +1327,9 @@ namespace cms.dbase
                             return true;
                         }
                     }
-                return false;
+                    return false;
                 }
-                    
+
             }
         }
 
@@ -1370,9 +1414,9 @@ namespace cms.dbase
                                                 .Where(w => w.f_content == data.ObjctId)
                                                 .Where(w => w.f_link == data.LinkId);
 
-                        if(link.Any())
+                        if (link.Any())
                         {
-                            if(!data.Checked)
+                            if (!data.Checked)
                             {
                                 //delete
                                 db.content_content_links
@@ -1402,7 +1446,7 @@ namespace cms.dbase
                     }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 OnDislyEvent(new DislyEventArgs(LogLevelEnum.Debug, "", ex));
                 return false;
@@ -1433,7 +1477,7 @@ namespace cms.dbase
                         }
                     }
                 }
-                
+
                 query = query.OrderBy(o => new { o.c_surname, o.c_name });
 
                 if (query.Any())

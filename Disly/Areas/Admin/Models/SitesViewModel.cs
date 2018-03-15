@@ -1,4 +1,5 @@
 ﻿using cms.dbModel.entity;
+using System.Collections.Generic;
 using System.Web.Mvc;
 
 namespace Disly.Areas.Admin.Models
@@ -42,5 +43,15 @@ namespace Disly.Areas.Admin.Models
         /// Список тем
         /// </summary>
         public SelectList Themes { get; set; }
+
+        /// <summary>
+        /// Инфа по кол-ву сайтов
+        /// </summary>
+        public CountSites CountSites { get; set; }
+
+        /// <summary>
+        /// Типы сайтов
+        /// </summary>
+        public Catalog_list[] SitesTypes { get; set; }
     }
 }
