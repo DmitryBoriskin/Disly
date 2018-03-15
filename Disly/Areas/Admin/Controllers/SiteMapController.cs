@@ -129,7 +129,7 @@ namespace Disly.Areas.Admin.Controllers
                 {
                     Id = id
                 };
-                #region опредлим родителя чтобы построить путь в директорию
+                #region определим родителя, чтобы построить путь в директорию
                 string parent = Request.QueryString["parent"];
                 if (parent != String.Empty && parent != null && parent != "")
                 {
@@ -143,22 +143,6 @@ namespace Disly.Areas.Admin.Controllers
                 ViewBag.DataPath = ViewBag.DataPath + model.Item.Path + "/" + model.Item.Alias + "/";
             }
             ViewBag.DataPath = ViewBag.DataPath.Replace("//", "/");
-            //var mg = new MultiSelectList(model.MenuTypes, "value", "text", model.Item != null ? model.Item.MenuGroups : null);
-            //ViewBag.GroupMenu = mg;
-
-
-            //var aviable = (model.MenuTypes != null) ?
-            //            (model.MenuTypes.Where(p => p.available).Any()) ?
-            //                        model.MenuTypes.Where(p => p.available).ToArray() : new Catalog_list[] { }
-            //                            : new Catalog_list[] { };
-
-
-            //var mgAviable = new MultiSelectList(aviable, "value", "text", model.Item != null ? model.Item.MenuGroups : null);
-            //ViewBag.GroupMenuAviable = mgAviable;
-
-
-            //if (model.Item != null)
-            //    model.Item.MenuGroups = null;
 
             if (!string.IsNullOrEmpty(Request.QueryString["parent"]))
             {
@@ -192,6 +176,11 @@ namespace Disly.Areas.Admin.Controllers
         {
             ErrorMessage userMessage = new ErrorMessage();
             userMessage.title = "Информация";
+
+            if (String.IsNullOrWhiteSpace(back_model.Item.Title))
+            {
+                back_model.Item.Title = "[без названия]";
+            }
 
             back_model.Item.MenuGroups = Item_MenuGroups;
 
