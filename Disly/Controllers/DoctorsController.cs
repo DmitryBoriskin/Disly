@@ -71,7 +71,7 @@ namespace Disly.Controllers
             model.Spesialisations = _repository.getSpecialisations();//Domain
 
             #region Редирект на регистрацию
-            if (model.DoctorsList != null && model.DoctorsList.Doctors != null && model.DoctorsList.Doctors.Count() > 0 && model.DoctorsRegistry!=null)
+            if (model.DoctorsList != null && model.DoctorsList.Doctors != null && model.DoctorsList.Doctors.Count() > 0 && model.DoctorsRegistry != null)
             {
                 foreach (var d in model.DoctorsList.Doctors)
                 {
@@ -110,7 +110,7 @@ namespace Disly.Controllers
                 ViewBag.KeyWords = currentPage.Keyw;
             }
             #endregion
-                                                                            
+
             string _ViewName = (ViewName != String.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";
 
             var filter = getFilter();
@@ -120,14 +120,14 @@ namespace Disly.Controllers
             {
 
                 #region Запись на приём
-                if (string.IsNullOrEmpty(model.DoctorsItem.SNILS) && model.DoctorsRegistry!=null)
+                if (string.IsNullOrEmpty(model.DoctorsItem.SNILS) && model.DoctorsRegistry != null)
                     model.DoctorsItem.IsRedirectUrl = model.DoctorsRegistry
                             .Where(w => w.SNILS.Equals(model.DoctorsItem.SNILS))
                             .Where(w => w.Url != null)
                             .Select(s => s.Url)
                             .Any();
                 #endregion
-                
+
                 var currentOrg = _repository.getCurrentOrgImportGuid();
 
                 // десериализация xml
@@ -138,22 +138,14 @@ namespace Disly.Controllers
                     using (TextReader reader = new StringReader(info))
                     {
                         var result = (Employee)serializer.Deserialize(reader);
-                        if  (currentOrg != null && currentOrg.Id != Guid.Empty)
+                        if (currentOrg != null && currentOrg.Id != Guid.Empty && result.UZ.ID.Equals(currentOrg.Id))
                         {
-                            if (result.UZ.ID.Equals(currentOrg.Id))
-                            {
-                                // берём только ту запись по сотруднику на сайте которой организации находимся
-                                result.EmployeeRecords = result.EmployeeRecords
-                                                            .Where(w => w.Organisation.ToLower().Equals(currentOrg.Title.ToLower()))
-                                                            .ToArray();
-
-                                model.DoctorsItem.EmployeeInfo = result;
-                            }
+                            // берём только ту запись по сотруднику на сайте которой организации находимся
+                            result.EmployeeRecords = result.EmployeeRecords
+                                                        .Where(w => w.Organisation.ToLower().Equals(currentOrg.Title.ToLower()))
+                                                        .ToArray();
                         }
-                        else
-                        {
-                            model.DoctorsItem.EmployeeInfo = result;
-                        }
+                        model.DoctorsItem.EmployeeInfo = result;
                     }
                 }
             }

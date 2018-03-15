@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace cms.dbModel.entity
 {
@@ -35,6 +36,7 @@ namespace cms.dbModel.entity
         /// <summary>
         /// Название
         /// </summary>
+        [Required(ErrorMessage = "Поле «Доменное имя» не должно быть пустым.")]
         public string Title { get; set; }
         
         /// <summary>

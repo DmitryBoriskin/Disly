@@ -179,7 +179,19 @@ namespace Disly.Areas.Admin.Controllers
 
             if (String.IsNullOrWhiteSpace(back_model.Item.Title))
             {
-                back_model.Item.Title = "[без названия]";
+                //ModelState.AddModelError("Item.Title", "Запрещено создавать эл-ты с пустыми названиями");
+
+                userMessage.info = "Запрещено создавать эл-ты с пустыми названиями";
+                userMessage.buttons = new ErrorMassegeBtn[]
+                {
+                    new ErrorMassegeBtn { url = "#", text = "ок", action = "false" }
+                };
+                model.ErrorInfo = userMessage;
+
+                model.Item = back_model.Item;
+                model.Item.Id = id;
+                model.Item.Title = null;
+                return View(model);
             }
 
             back_model.Item.MenuGroups = Item_MenuGroups;
@@ -371,8 +383,9 @@ namespace Disly.Areas.Admin.Controllers
             var mgAviable = new MultiSelectList(aviable, "value", "text", model.Item != null ? model.Item.MenuGroups : null);
             ViewBag.GroupMenuAviable = mgAviable;
 
+            if (model.Item != null)
+                model.Item.MenuGroups = null;
 
-            model.Item.MenuGroups = null;
             model.ErrorInfo = userMessage;
 
             return View(model);
