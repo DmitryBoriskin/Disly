@@ -34,8 +34,8 @@ namespace cms.dbase
             LinqToDB.Common.Configuration.Linq.AllowMultipleQuery = true;
 
             _domain = (!string.IsNullOrEmpty(DomainUrl)) ? getSiteId(DomainUrl) : "";
-            //_domain = "allergolog";
-            
+            //_domain = "cheb-gkc";
+
         }
         #region redirect methods
         public override SitesModel getSiteInfoByOldId(int Id)
