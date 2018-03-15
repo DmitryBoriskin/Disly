@@ -1058,6 +1058,15 @@ namespace cms.dbase
                         #endregion
 
                         #region Доменные имена
+                        if (!String.IsNullOrEmpty(ins.Alias))
+                        {
+                            db.cms_sites_domainss
+                                .Value(v => v.f_site, ins.Alias)
+                                .Value(v => v.c_domain, ins.Alias)
+                                .Value(v => v.b_default, true)
+                                .Insert();
+                        }
+
                         if (ins.DomainListArray != null && ins.DomainListArray.Count() > 0)
                         {
                             foreach (var d in ins.DomainListArray)

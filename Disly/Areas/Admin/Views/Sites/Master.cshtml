@@ -11,7 +11,9 @@
             <div class="col-xs-6"></div>
         </div>
         <div style="overflow:hidden">
-            <div style="width: 235px; margin-right: 2px; float:left;">@Html.TextBoxFor(m => Model.Item.Alias, new { @class = "uc_input", @required = "", @title = "Доменное имя (идентификатор сайта)", @placeholder = "domain", @MaxLength = "64" })</div>
+            <div style="width: 235px; margin-right: 2px; float:left;">
+                @Html.TextBoxFor(m => Model.Item.Alias, new { @class = "uc_input", @required = "", @title = "Доменное имя (идентификатор сайта)", @placeholder = "domain", @MaxLength = "64" })
+            </div>
             <div style="overflow: hidden; font: 14px Verdana; margin: 37px 0 0;">.@Settings.BaseURL</div>
         </div>
         <div class="row">
