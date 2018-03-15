@@ -144,7 +144,6 @@ namespace Disly.Controllers
                             result.EmployeeRecords = result.EmployeeRecords
                                                         .Where(w => w.Organisation.ToLower().Equals(currentOrg.Title.ToLower()))
                                                         .ToArray();
-
                         }
                         model.DoctorsItem.EmployeeInfo = result;
                     }
