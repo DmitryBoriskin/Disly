@@ -245,7 +245,6 @@ namespace Disly.Areas.Admin.Controllers
         [HttpGet]
         public ActionResult NewGSMember(Guid objId, GSMemberType objType)
         {
-           
             //Получение главного специалиста
             var mainSpec = _cmsRepository.getGSItem(objId);
 

@@ -4,7 +4,6 @@
     Layout = "~/Areas/Admin/Views/Shared/_popUp.cshtml";
 
     GSMemberModel postBackModel = new GSMemberModel();
-    //string fileUrl = (Model.Doctor != null && Model.Doctor.Photo != null) ? Model.Doctor.Photo.Url : string.Empty;
     int i = 0;
 }
 
@@ -30,40 +29,6 @@
                 </select>
             </div>
             <div class="topIndent-20 mainSpec-people-info">
-                @*<fieldset class="mainSpec-fieldset">
-                        <legend>ФИО</legend>
-                        <div class="form-group col-sm-12">
-                            <label for="mainSpec-surname-input">Фамилия</label>
-                            <input type="text" class="form-control" id="mainSpec-surname-input" maxlength="64" value="">
-                        </div>
-                        <div class="form-group col-sm-6">
-                            <label for="mainSpec-name-input">Имя</label>
-                            <input type="text" class="form-control" id="mainSpec-name-input" maxlength="64" value="">
-                        </div>
-                        <div class="form-group col-sm-6">
-                            <label for="mainSpec-patronymic-input">Отчество</label>
-                            <input type="text" class="form-control" id="mainSpec-patronymic-input" maxlength="64" value="">
-                        </div>
-                    </fieldset>*@
-
-                @*<div class="form-group">
-                        <label for="exampleInputFile">Фотография</label>
-                        <input type="file" id="exampleInputFile" accept=".jpg,.jpeg,.png,.gif">
-                    </div>*@
-
-                @*<div class="checkbox">
-                        <label>
-                            <input type="checkbox"> Проверить меня
-                        </label>
-                    </div>*@
-
-
-                @*@Html.TextBoxFor(m => m.Doctor.Surname, new { required = "", type = "text", maxlength = "64", title = "Фамилия" })
-                    @Html.TextBoxFor(m => m.Doctor.Name, new { required = "", type = "text", maxlength = "64", title = "Имя" })
-                    @Html.TextBoxFor(m => m.Doctor.Patronymic, new { type = "text", maxlength = "64", title = "Отчество" })
-
-                    @Html.TextBoxFor(m => m.Doctor.Photo.Url, new { type = "file", data_posted_name = "upload", data_url = fileUrl, title = "Изображение", accept = ".jpg,.jpeg,.png,.gif" })*@
-
                 <fieldset class="topIndent-20">
                     <legend>КОНТАКТЫ</legend>
                     <div class="mainSpec-orgInfo bg-info">
@@ -111,9 +76,6 @@
                             </div>
                         </div>
                     </div>
-                    @*<div class="topIndent-20">
-                            <button type="submit" name="action" value="save-group-btn" class="button icon-create">Добавить еще контакты</button>
-                        </div>*@
                 </fieldset>
             </div>
             <div class="row topIndent-20">

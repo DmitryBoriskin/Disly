@@ -196,6 +196,17 @@ namespace cms.dbase
                     return query.ToArray();
 
                 return null;
+
+                //var data = query
+                //    .GroupBy(g => g.employeespostsorgemployees.id)
+                //    .Select(s => new EmployeeModel
+                //    {
+                //        Id = s.Key,
+                //        PeopleId = s.First().employeespostsorgemployees.f_people,
+                //        Surname = s.First().employeespostsorgemployees.contentpeopleorglink.c_surname,
+                //        Name = s.First().employeespostsorgemployees.contentpeopleorglink.c_name,
+                //        Patronymic = s.First().employeespostsorgemployees.contentpeopleorglink.c_patronymic
+                //    });
             }
         }
 
@@ -220,14 +231,30 @@ namespace cms.dbase
                 }
 
                 var data = query
-                    .Select(s => new EmployeeModel()
+                    //.GroupBy(g => g.employeespostsorgemployees.id)
+                    .GroupBy(g => g.f_people)
+                    .Select(s => new EmployeeModel
                     {
-                        Id = s.employeespostsorgemployees.id, //По причине left join'a может быть null, не должно быть такого
-                        PeopleId = s.employeespostsorgemployees.f_people,
-                        Surname = s.employeespostsorgemployees.contentpeopleorglink.c_surname,
-                        Name = s.employeespostsorgemployees.contentpeopleorglink.c_name,
-                        Patronymic = s.employeespostsorgemployees.contentpeopleorglink.c_patronymic,
+                        Id = s.Key,
+                        PeopleId = s.First().employeespostsorgemployees.f_people,
+                        Surname = s.First().employeespostsorgemployees.contentpeopleorglink.c_surname,
+                        Name = s.First().employeespostsorgemployees.contentpeopleorglink.c_name,
+                        Patronymic = s.First().employeespostsorgemployees.contentpeopleorglink.c_patronymic
                     });
+
+                #region comments
+                //var data = query
+                //    .Select(s => new EmployeeModel()
+                //    {
+                //        Id = s.employeespostsorgemployees.id, //По причине left join'a может быть null, не должно быть такого
+                //        PeopleId = s.employeespostsorgemployees.f_people,
+                //        Surname = s.employeespostsorgemployees.contentpeopleorglink.c_surname,
+                //        Name = s.employeespostsorgemployees.contentpeopleorglink.c_name,
+                //        Patronymic = s.employeespostsorgemployees.contentpeopleorglink.c_patronymic,
+                //    });
+
+                //var results = data.GroupBy(p => p.Id).ToArray();
+                #endregion
 
                 if (data.Any())
                 {
@@ -236,7 +263,6 @@ namespace cms.dbase
                         .ThenBy(s => s.Patronymic)
                         .ToArray();
                 }
-                    
 
                 return null;
             }
@@ -399,7 +425,7 @@ namespace cms.dbase
                         tran.Commit();
                         return true;
                     }
-                    catch(Exception ex)
+                    catch (Exception ex)
                     {
                         return false;
                     }
