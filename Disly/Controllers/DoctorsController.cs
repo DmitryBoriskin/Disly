@@ -145,12 +145,8 @@ namespace Disly.Controllers
                                                         .Where(w => w.Organisation.ToLower().Equals(currentOrg.Title.ToLower()))
                                                         .ToArray();
 
-                            model.DoctorsItem.EmployeeInfo = result;
                         }
-                        else
-                        {
-                            model.DoctorsItem.EmployeeInfo = result;
-                        }
+                        model.DoctorsItem.EmployeeInfo = result;
                     }
                 }
             }
