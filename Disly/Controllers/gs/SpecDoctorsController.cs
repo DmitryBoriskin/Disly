@@ -40,7 +40,7 @@ namespace Disly.Controllers
         public ActionResult Index()
         {
             #region currentPage
-            currentPage = _repository.getSiteMap("SpecMembers");
+            currentPage = _repository.getSiteMap("SpecDoctors");
             if (currentPage == null)
                 //throw new Exception("model.CurrentPage == null");
                 return RedirectToRoute("Error", new { httpCode = 404 });
