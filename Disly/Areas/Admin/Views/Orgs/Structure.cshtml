@@ -15,7 +15,7 @@
         <div class="group-block open" title="Телефон и e-mail">
             <div class="row">
                 <div class="col-md-4">@Html.TextBoxFor(m => m.StructureItem.Phone, new { type = "text", maxlength = "256", title = "Телефон приемной" })</div>
-                <div class="col-md-4">@Html.TextBoxFor(m => m.StructureItem.PhoneReception, new { type = "text", maxlength = "256", title = "Телефон регистраутры" })</div>
+                <div class="col-md-4">@Html.TextBoxFor(m => m.StructureItem.PhoneReception, new { type = "text", maxlength = "256", title = "Телефон регистратуры" })</div>
                 <div class="col-md-4">@Html.TextBoxFor(m => m.StructureItem.Fax, new { type = "text", maxlength = "256", title = "Факс" })</div>
             </div>
             <div class="row">
@@ -23,13 +23,13 @@
             </div>
         </div>
         <div class="group-block open" title="Адрес">
-            @Html.TextBoxFor(m => m.StructureItem.Adress, new { type = "text", maxlength = "512", title = "Адрес организации:" })
+            @Html.TextBoxFor(m => m.StructureItem.Adress, new { type = "text", maxlength = "512", title = "Адрес организации" })
             <div class="row">
                 <div class="col-md-6">
-                    @Html.TextBoxFor(m => m.StructureItem.GeopointX, new { type = "text", maxlength = "128", title = "X - координата:" })
+                    @Html.TextBoxFor(m => m.StructureItem.GeopointX, new { type = "text", maxlength = "128", title = "X - координата" })
                 </div>
                 <div class="col-md-6">
-                    @Html.TextBoxFor(m => m.StructureItem.GeopointY, new { type = "text", maxlength = "128", title = "Y - координата:" })
+                    @Html.TextBoxFor(m => m.StructureItem.GeopointY, new { type = "text", maxlength = "128", title = "Y - координата" })
                 </div>
             </div>
             <div class="row">
