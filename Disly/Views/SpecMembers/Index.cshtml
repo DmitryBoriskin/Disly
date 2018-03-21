@@ -16,11 +16,12 @@
                     <table class="table">
                         @foreach (var item in Model.SpesialitsList)
                         {
-                            string link = string.Format("/doctors/{0}", (item.People != null) ? item.People.Id.ToString() : null);
+                            //string link = string.Format("/doctors/{0}", (item.People != null) ? item.People.Id.ToString() : null);
+                            string link = (item.People!=null)?ViewBag.GeneralDomain + "/portaldoctors/" + item.People.Id:"#";
                             string photo = (item.People != null && !string.IsNullOrWhiteSpace(item.People.Photo))
-                                  ? File.Exists(Server.MapPath(item.People.Photo))
-                                      ? item.People.Photo : "/Content/img/no_avatar.png"
-                                  : "/Content/img/no_avatar.png";
+                                          ? File.Exists(Server.MapPath(item.People.Photo))
+                                              ? item.People.Photo : "/Content/img/no_avatar.png"
+                                          : "/Content/img/no_avatar.png";
                             <tr>
                                 <td class="adminlist_img_td">
                                     <a target="_blank" href="@link">
@@ -28,7 +29,7 @@
                                     </a>
                                 </td>
                                 <td>
-                                    <a class="adminlist_name" href="@link">@item.People.FIO</a>
+                                    <a target="_blank" class="adminlist_name" href="@link">@item.People.FIO</a>
                                 </td>
                                 <td>
                                     @if (item.Orgs != null && item.Orgs.Count() > 0)

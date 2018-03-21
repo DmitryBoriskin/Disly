@@ -110,6 +110,7 @@ namespace Disly.Controllers
             ViewBag.DepartGroup = filter.Group;
             ViewBag.Position = filter.Type;
 
+            ViewBag.GeneralDomain = Settings.GeneralDomain;
 
             return View(_ViewName, model);
         }

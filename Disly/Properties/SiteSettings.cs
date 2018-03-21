@@ -22,6 +22,11 @@ public class Settings
     public static string BaseURL = ConfigurationManager.AppSettings["BaseURL"];
 
     /// <summary>
+    /// Основной домейн
+    /// </summary>
+    public static string GeneralDomain = ConfigurationManager.AppSettings["GeneralDomain"];
+    
+    /// <summary>
     /// Ключ капчи
     /// </summary>
     public static string CaptchaKey = ConfigurationManager.AppSettings["captchaKey"];
