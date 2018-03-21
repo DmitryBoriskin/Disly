@@ -89,7 +89,7 @@ namespace Disly.Controllers
                 {
                     var docfilter = FilterParams.Extend<PeopleFilter>(filter);
                     docfilter.Specializations = gs.Specialisations;
-                    var doctorsList = _repository.getDoctorsList(docfilter);
+                    model.DoctorsList = _repository.getDoctorsList(docfilter);
                    
                     var specfiltr = new SpecialisationFilter()
                     {
