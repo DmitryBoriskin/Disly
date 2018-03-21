@@ -3169,7 +3169,6 @@ namespace cms.dbase
                         //  select site.id).SingleOrDefault(),
                         Specialisations = s.gsspecialisationsgss.Where(sp => sp.f_gs == id).Any() ?
                                                 s.gsspecialisationsgss
-                                                        .Where(sp => sp.f_gs == id)
                                                         .Select(sp => sp.f_specialisation)
                                                         .ToArray()
                                                 : null,

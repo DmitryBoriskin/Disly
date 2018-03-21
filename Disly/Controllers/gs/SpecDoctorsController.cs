@@ -85,11 +85,12 @@ namespace Disly.Controllers
             if (gs != null)
             {
                 model.MainSpec = gs;
-                if (gs.Specialisations != null)
+                if (gs.Specialisations != null && gs.Specialisations.Count() > 0)
                 {
                     var docfilter = FilterParams.Extend<PeopleFilter>(filter);
                     docfilter.Specializations = gs.Specialisations;
-                    model.DoctorsList = _repository.getDoctorsList(docfilter);
+                    var doctorsList = _repository.getDoctorsList(docfilter);
+                   
                     var specfiltr = new SpecialisationFilter()
                     {
                         Specializations = gs.Specialisations
