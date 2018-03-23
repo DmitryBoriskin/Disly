@@ -1,78 +1,7 @@
 ﻿@model PortalDoctorsViewModel
-
 <h1>@ViewBag.Title</h1>
 <div class="row">
-    <div class="col-md-8">
-        @if (Model.DoctorsList != null && Model.DoctorsList.Doctors.Count() > 0)
-        {
-            <table class="table">
-                <tr>
-                    <th>Изображение</th>
-                    <th>ФИО</th>
-                    <th>Должность</th>
-                </tr>
-
-                @foreach (var item in Model.DoctorsList.Doctors)
-                {
-                    string link = "/" + ViewBag.ControllerName + "/" + item.Id;
-
-                    string photo = !string.IsNullOrWhiteSpace(item.Photo)
-                        ? File.Exists(Server.MapPath(item.Photo))
-                            ? item.Photo : "/Content/img/no_avatar.png"
-                        : "/Content/img/no_avatar.png";
-                    <tr>
-
-
-                        <td class="adminlist_img_td">
-                            <a class="adminlist_img_wr" target="_blank" href="@link">
-                                <img class="img-circle img-person-list" alt="@item.FIO" src="@photo" />
-                            </a>
-                        </td>
-                        <td>
-                            <a class="adminlist_name" href="@link">@item.FIO</a>
-                        </td>
-                        <td>
-                            @if (item.Posts != null && item.Posts.Count() > 0)
-                            {
-                                var postsByOrg = item.Posts.Where(p => p.Org != null).Any() ?
-                                    item.Posts.Where(p => p.Org != null).OrderBy(p => p.Type).GroupBy(p => p.Org.Id) : null;
-                                if (postsByOrg != null)
-                                {
-                                    foreach (var postByOrg in postsByOrg)
-                                    {
-                                        var org = postByOrg.Where(p => p.Org.Id == postByOrg.Key).First();
-                                        string linkToOrg = string.Format("http://{0}", org.Org.Url);
-                                        <p>
-                                            @if (!string.IsNullOrWhiteSpace(linkToOrg))
-                                            {
-                                                <a target="_blank" href="@linkToOrg">@(org.Org.Title):</a><br />
-                                            }
-                                            else
-                                            {
-                                                <b>@(org.Org.Title):</b><br />
-                                            }
-
-                                            @foreach (var p in postByOrg)
-                                            {
-                                                <span> -@p.Name </span><br />
-                                            }
-                                        </p>
-                                    }
-                                }
-                            }
-                        </td>
-                    </tr>
-                }
-            </table>
-            
-            if (Model.DoctorsList != null && Model.DoctorsList.Pager != null)
-            {
-                @Html.Partial("Part/Pager", Model.DoctorsList.Pager)
-            }
-        }
-
-    </div>
-    <div class="col-md-3 col-md-push-1">
+    <div class="col-md-3 col-md-offset-1 col-push-8">
         <form role="form" class="filtr_news" action="/@ViewBag.ControllerName/">
             <div class="row">
                 <div class="col-sm-12">
@@ -81,7 +10,6 @@
                         <input type="text" class="filtr_data form-control" name="searchtext" id="search_news" value="@ViewBag.SearchText" />
                     </div>
                 </div>
-
                 @if (Model.Specializations != null)
                 {
                     <div class="col-sm-12">
@@ -95,11 +23,9 @@
                                     <option value="@item.Id" @selected>@item.Name</option>
                                 }
                             </select>
-
                         </div>
                     </div>
                 }
-
                 <div class="col-sm-12 control-filter">
                     <a class="btn btn-default pull-right" href="/@ViewBag.ControllerName">Очистить</a>
                     <button class="btn sub" type="submit">Применить</button>
@@ -107,5 +33,71 @@
             </div>
         </form>
     </div>
+    <div class="col-md-8 col-md-pull-4">
+        @if (Model.DoctorsList != null && Model.DoctorsList.Doctors.Count() > 0)
+        {
+            <div class="doctorsList-block">
+                @foreach (var item in Model.DoctorsList.Doctors)
+                {
+                    string link = "/" + ViewBag.ControllerName + "/" + item.Id;
 
+                    string photo = !string.IsNullOrWhiteSpace(item.Photo)
+                        ? File.Exists(Server.MapPath(item.Photo))
+                            ? item.Photo : "/Content/img/no_avatar.png"
+                        : "/Content/img/no_avatar.png";
+                    <div class="row">
+                        <div class="col-md-2 col-sm-3 col-xs-5">
+                            <a target="_blank" href="@link">
+                                <img class="img-circle img-person-list" alt="@item.FIO" src="@photo" />
+                            </a>
+                        </div>
+                        <div class="col-md-3 col-sm-9 col-xs-7">
+                            <a class="adminlist_name" href="@link">@item.FIO</a>
+                        </div>
+                        <div class="col-md-7 col-xs-12">
+                            @if (item.Posts != null && item.Posts.Count() > 0)
+                    {
+                        var postsByOrg = item.Posts.Where(p => p.Org != null).Any() ?
+                            item.Posts.Where(p => p.Org != null).OrderBy(p => p.Type).GroupBy(p => p.Org.Id) : null;
+                        if (postsByOrg != null)
+                        {
+                            foreach (var postByOrg in postsByOrg)
+                            {
+                                var org = postByOrg.Where(p => p.Org.Id == postByOrg.Key).First();
+                                string linkToOrg = string.Format("http://{0}", org.Org.Url);
+                                        <p>
+                                            @if (!string.IsNullOrWhiteSpace(linkToOrg))
+                                            {
+                                                <a target="_blank" href="@linkToOrg">@(org.Org.Title):</a><br />
+                                            }
+                                            else
+                                            {
+                                                <b>@(org.Org.Title):</b><br />
+                                            }
+                                            @foreach (var p in postByOrg)
+                                            {
+                                                <span> -@p.Name </span><br />
+                                            }
+                                        </p>
+                                    }
+                                }
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
+            if (Model.DoctorsList != null && Model.DoctorsList.Pager != null)
+            {
+                @Html.Partial("Part/Pager", Model.DoctorsList.Pager)
+            }
+        }
+        else
+        {
+            <div class="doctorsList-block">
+                <p class="noItems">Список пуст ...</p>
+            </div>
+        }
+    </div>
 </div>
+
+

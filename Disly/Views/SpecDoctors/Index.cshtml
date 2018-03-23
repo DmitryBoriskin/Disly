@@ -18,12 +18,44 @@
             @Html.Partial("part/nav", Model.Nav)
         }
 
-
         <div class="row">
-            <div class="col-md-8">
+            <div class="col-md-3 col-md-offset-1 col-md-push-8">
+                <form role="form" class="filtr_news" action="/@ViewBag.ControllerName/">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group search_news">
+                                <label class="label_filtr" for="search_news">Поиск по ФИО</label>
+                                <input type="text" class="filtr_data form-control" name="searchtext" id="search_news" value="@ViewBag.SearchText" />
+                            </div>
+                        </div>
+                        @if (Model.Specializations != null)
+                        {
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label class="label_filtr">Специализации</label><br />
+                                    <select class="form-control select2" name="type" style="width:100%;">
+                                        <option value="">не выбрано</option>
+                                        @foreach (var item in Model.Specializations)
+                                        {
+                                            string selected = (item.Id.ToString() == ViewBag.Position) ? "selected" : string.Empty;
+                                            <option value="@item.Id" @selected>@item.Name</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                        }
+                        <div class="col-sm-12 control-filter">
+                            <input type="hidden" name="tab" value="doctors" />
+                            <a class="btn btn-default pull-right" href="/@ViewBag.ControllerName">Очистить</a>
+                            <button class="btn sub" type="submit">Применить</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="col-md-8 col-md-pull-4">
                 @if (Model.DoctorsList != null && Model.DoctorsList.Doctors.Count() > 0)
                 {
-                    <table class="table">
+                    <div class="doctorsList-block">
                         @foreach (var item in Model.DoctorsList.Doctors)
                 {
                     var port = (Settings.BaseURL == "localhost") ? ":" + Context.Request.Url.Port : "";
@@ -33,17 +65,16 @@
                         ? File.Exists(Server.MapPath(item.Photo))
                             ? item.Photo : "/Content/img/no_avatar.png"
                         : "/Content/img/no_avatar.png";
-                            <tr>
-
-                                <td class="adminlist_img_td">
+                            <div class="row">
+                                <div class="col-md-2 col-sm-3 col-xs-5">
                                     <a class="adminlist_img_wr" target="_blank" href="@link">
                                         <img class="img-circle img-person-list" alt="@item.FIO" src="@photo" />
                                     </a>
-                                </td>
-                                <td>
+                                </div>
+                                <div class="col-md-3 col-sm-9 col-xs-7">
                                     <a class="adminlist_name" href="@link">@item.FIO</a>
-                                </td>
-                                <td>
+                                </div>
+                                <div class="col-md-7 col-xs-12">
                                     @if (item.Posts != null && item.Posts.Count() > 0)
                                     {
                                         var postsByOrg = item.Posts.Where(p => p.Org != null).Any() ?
@@ -71,49 +102,22 @@
                                             }
                                         }
                                     }
-                                </td>
-                            </tr>
+                                </div>
+                            </div>
                         }
-                    </table>
+                    </div>
 
                     if (Model.DoctorsList != null && Model.DoctorsList.Pager != null)
                     {
                         @Html.Partial("Part/Pager", Model.DoctorsList.Pager)
                     }
                 }
-            </div>
-            <div class="col-md-3 col-md-push-1">
-                <form role="form" class="filtr_news" action="/@ViewBag.ControllerName/">
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <div class="form-group search_news">
-                                <label class="label_filtr" for="search_news">Поиск по ФИО</label>
-                                <input type="text" class="filtr_data form-control" name="searchtext" id="search_news" value="@ViewBag.SearchText" />
-                            </div>
-                        </div>
-                        @if (Model.Specializations != null)
-                        {
-                            <div class="col-sm-12">
-                                <div class="form-group">
-                                    <label class="label_filtr">Специализации</label>
-                                    <select class="form-control select2" name="type">
-                                        <option value="">не выбрано</option>
-                                        @foreach (var item in Model.Specializations)
-                                        {
-                                            string selected = (item.Id.ToString() == ViewBag.Position) ? "selected" : string.Empty;
-                                            <option value="@item.Id" @selected>@item.Name</option>
-                                        }
-                                    </select>
-                                </div>
-                            </div>
-                        }
-                        <div class="col-sm-12 control-filter">
-                            <input type="hidden" name="tab" value="doctors" />
-                            <a class="btn btn-default pull-right" href="/@ViewBag.ControllerName">Очистить</a>
-                            <button class="btn sub" type="submit">Применить</button>
-                        </div>
+                else
+                {
+                    <div class="doctorsList-block">
+                        <p class="noItems">Список пуст ...</p>
                     </div>
-                </form>
+                }
             </div>
         </div>
     </div>

@@ -2,63 +2,7 @@
 
 
 <div class="row">
-    <div class="col-md-8">
-        @if (Model.DoctorsList != null && Model.DoctorsList.Doctors.Count() > 0)
-        {
-            <table class="table">
-
-                @foreach (var item in Model.DoctorsList.Doctors)
-                {
-                    string link = "/" + ViewBag.ControllerName + "/" + item.Id;
-
-                    string photo = !string.IsNullOrWhiteSpace(item.Photo)
-                        ? File.Exists(Server.MapPath(item.Photo))
-                            ? item.Photo : "/Content/img/no_avatar.png"
-                        : "/Content/img/no_avatar.png";
-                    <tr>
-                        <td class="adminlist_img_td">
-                            <a class="adminlist_img_wr" target="_blank" href="@link">
-                                <img class="img-circle img-person-list" alt="@item.FIO" src="@photo" />
-                            </a>
-                        </td>
-                        <td>
-                            <a class="adminlist_name" href="@link">@item.FIO</a>
-
-                            @*@if (item.Posts != null && item.Posts.Where(p => p.Org != null && p.Org.Id == Model.SitesInfo.ContentId).Any())*@
-                            @if (item.Posts != null)
-                            {
-                                string posts = string.Empty;
-                                //foreach (var p in item.Posts.Where(p => p.Org != null && p.Org.Id == Model.SitesInfo.ContentId).OrderBy(p => p.Type))
-                                foreach (var p in item.Posts)
-                                {
-                                    <div class="adminlist_post">
-                                        @p.Name
-                                    </div>
-                                }
-                            }
-                        </td>
-                        <td>
-                            @if (item.IsRedirectUrl)
-                            {
-                                <a target="_blank" href="/RedirectRegistry/Doctors/@item.Id/?oid=@Model.Oid">Расписание</a>
-                            }
-                            else
-                            {
-                                <p>По графику</p>
-                            }
-                        </td>
-                    </tr>
-                }
-            </table>
-
-            if (Model.DoctorsList != null && Model.DoctorsList.Pager != null)
-            {
-                @Html.Partial("Part/Pager", Model.DoctorsList.Pager)
-            }
-        }
-    </div>
-    <div class="col-md-1"></div>
-    <div class="col-md-3">
+    <div class="col-md-3 col-md-offset-1 col-col-md-push-8">
         <form role="form" class="filtr_news" action="/@ViewBag.ControllerName/">
             <div class="row">
                 <div class="col-sm-12">
@@ -121,4 +65,65 @@
         </form>
     </div>
 
+    <div class="col-md-8 col-md-pull-4">
+        @if (Model.DoctorsList != null && Model.DoctorsList.Doctors.Count() > 0)
+        {
+            <div class="doctorsList-block">
+
+                @foreach (var item in Model.DoctorsList.Doctors)
+                {
+                    string link = "/" + ViewBag.ControllerName + "/" + item.Id;
+
+                    string photo = !string.IsNullOrWhiteSpace(item.Photo)
+                        ? File.Exists(Server.MapPath(item.Photo))
+                            ? item.Photo : "/Content/img/no_avatar.png"
+                        : "/Content/img/no_avatar.png";
+                    <div class="row">
+                        <div class="col-md-2 col-sm-3 col-xs-5">
+                            <a target="_blank" href="@link">
+                                <img class="img-circle img-person-list" alt="@item.FIO" src="@photo" />
+                            </a>
+                        </div>
+                        <div class="col-md-8 col-xs-7">
+                            <a class="adminlist_name" href="@link">@item.FIO</a>
+
+                            @*@if (item.Posts != null && item.Posts.Where(p => p.Org != null && p.Org.Id == Model.SitesInfo.ContentId).Any())*@
+                            @if (item.Posts != null)
+                            {
+                                string posts = string.Empty;
+                                //foreach (var p in item.Posts.Where(p => p.Org != null && p.Org.Id == Model.SitesInfo.ContentId).OrderBy(p => p.Type))
+                                foreach (var p in item.Posts)
+                                {
+                                    <div class="adminlist_post">
+                                        @p.Name
+                                    </div>
+                                }
+                            }
+                        </div>
+                        <div class="col-md-2 col-sm-9 col-xs-12">
+                            @if (item.IsRedirectUrl)
+                            {
+                                <a target="_blank" href="/RedirectRegistry/Doctors/@item.Id/?oid=@Model.Oid">Расписание</a>
+                            }
+                            else
+                            {
+                                <p>По графику</p>
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
+
+            if (Model.DoctorsList != null && Model.DoctorsList.Pager != null)
+            {
+                @Html.Partial("Part/Pager", Model.DoctorsList.Pager)
+            }
+        }
+        else
+        {
+            <div class="doctorsList-block">
+                <p class="noItems">Список пуст ...</p>
+            </div>
+        }
+    </div>
 </div>

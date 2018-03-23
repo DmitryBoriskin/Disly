@@ -44,6 +44,8 @@ namespace Disly.Controllers
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             base.OnActionExecuting(filterContext);
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
 
             try {
                 var domainUrl = Request.Url.Host.ToLower().Replace("www.", "");
@@ -92,7 +94,6 @@ namespace Disly.Controllers
                 }
                 currentPage = _repository.getSiteMap(_path, _alias);
                 breadcrumb = _repository.getBreadCrumbCollection(_path+_alias);
-            
 
             #endregion
 

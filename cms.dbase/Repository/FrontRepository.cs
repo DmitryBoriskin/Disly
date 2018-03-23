@@ -179,13 +179,15 @@ namespace cms.dbase
                         return _domain.f_site;
                     }
 
-                    throw new Exception("FrontRepository: getSiteId Domain '" + domain + "' was not found!");
+                   
+                    //throw new Exception("FrontRepository: getSiteId Domain '" + domain + "' was not found!");
                 }
             }
             catch (Exception ex)
             {
-                throw new Exception("FrontRepository: getSiteId Domain '" + domain + "' непредвиденная ошибка!" + ex.Message);
+                //throw new Exception("FrontRepository: getSiteId Domain '" + domain + "' непредвиденная ошибка!" + ex.Message);
             }
+            return null;
         }
 
         /// <summary>
