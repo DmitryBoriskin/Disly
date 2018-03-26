@@ -302,10 +302,12 @@ namespace Disly.Controllers
 
                         Mailer letter = new Mailer();
                         letter.isSsl = true;
+                        letter.Domain = Domain;
                         letter.Theme = "Сайт " + Domain + ": Обратная связь";
                         letter.Text = msg.ToString();
                         letter.Attachments = savedFileName;
                         letter.MailTo = Settings.mailTo;
+                       
 
                         var admins = _repository.getSiteAdmins();
                         if (admins != null)
@@ -505,6 +507,7 @@ namespace Disly.Controllers
 
                         Mailer letter = new Mailer();
                         letter.isSsl = true;
+                        letter.Domain = Domain;
                         letter.Theme = "Сайт " + Domain + ": Обратная связь";
                         letter.Text = msg1.ToString();
                         letter.MailTo = feedbackItem.SenderEmail;
@@ -532,6 +535,7 @@ namespace Disly.Controllers
 
                     Mailer letter2 = new Mailer();
                     letter2.isSsl = true;
+                    letter2.Domain = Domain;
                     letter2.Theme = "Сайт " + Domain + ": Обратная связь";
                     letter2.Text = msg2.ToString();
                     letter2.MailTo = Settings.mailTo;

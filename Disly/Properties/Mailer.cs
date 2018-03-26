@@ -228,14 +228,14 @@ public class Mailer
                 return true;
             }
 
-            var message = String.Format("Mailer => SendMail for domain {0}: не указаны", domain);
+            var message = String.Format("Mailer => SendMail for domain {0}: не указаны адесаты", domain);
             OnDislyEvent(new DislyEventArgs(LogLevelEnum.Warning, message, null));
 
         }
         catch (Exception ex)
         {
             var message = String.Format("Mailer => SendMail for domain {0}", domain);
-            OnDislyEvent(new DislyEventArgs(LogLevelEnum.Warning, message, ex));
+            OnDislyEvent(new DislyEventArgs(LogLevelEnum.Error, message, ex));
         }
 
         return false;
