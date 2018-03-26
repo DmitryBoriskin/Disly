@@ -16,7 +16,14 @@ namespace cms.dbase
         /// </summary>
         private string _context = null;
         private string _domain = string.Empty;
-    
+
+        //Создаем событие, на которое потом подпишемся
+        public static event EventHandler<DislyEventArgs> DislyFrontEvent;
+        private static void OnDislyEvent(DislyEventArgs eventArgs)
+        {
+            DislyFrontEvent(null, eventArgs);
+        }
+
         /// <summary>
         /// Конструктор
         /// </summary>
@@ -40,47 +47,54 @@ namespace cms.dbase
         #region redirect methods
         public override SitesModel getSiteInfoByOldId(int Id)
         {
-            string domain = _domain;
-            using (var db = new CMSdb(_context))
+            try
             {
-                var data = db.cms_sitess
-                    .Where(w => w.c_alias.ToLower().Equals(domain))
-                    .Select(s => new SitesModel
-                    {
-                        Id = s.id,
-                        Title = s.c_name,
-                        LongTitle = s.c_name_long,
-                        Alias = s.c_alias.ToLower(),
-                        Adress = s.c_adress,
-                        Phone = s.c_phone,
-                        Fax = s.c_fax,
-                        Email = s.c_email,
-                        Site = s.c_url,
-                        Worktime = s.c_worktime,
-                        Logo = new Photo
+                string domain = _domain;
+                using (var db = new CMSdb(_context))
+                {
+                    var data = db.cms_sitess
+                        .Where(w => w.c_alias.ToLower().Equals(domain))
+                        .Select(s => new SitesModel
                         {
-                            Url = s.c_logo
-                        },
-                        ContentId = (Guid)s.f_content,
-                        ContentType = (ContentLinkType)Enum.Parse(typeof(ContentLinkType), s.c_content_type, true),
-                        Type = s.c_content_type,
-                        Facebook = s.c_facebook,
-                        Vk = s.c_vk,
-                        Instagramm = s.c_instagramm,
-                        Odnoklassniki = s.c_odnoklassniki,
-                        Twitter = s.c_twitter,
-                        Theme = s.c_theme,
-                        BackGroundImg = new Photo
-                        {
-                            Url = s.c_background_img
-                        }
-                    });
+                            Id = s.id,
+                            Title = s.c_name,
+                            LongTitle = s.c_name_long,
+                            Alias = s.c_alias.ToLower(),
+                            Adress = s.c_adress,
+                            Phone = s.c_phone,
+                            Fax = s.c_fax,
+                            Email = s.c_email,
+                            Site = s.c_url,
+                            Worktime = s.c_worktime,
+                            Logo = new Photo
+                            {
+                                Url = s.c_logo
+                            },
+                            ContentId = (Guid)s.f_content,
+                            ContentType = (ContentLinkType)Enum.Parse(typeof(ContentLinkType), s.c_content_type, true),
+                            Type = s.c_content_type,
+                            Facebook = s.c_facebook,
+                            Vk = s.c_vk,
+                            Instagramm = s.c_instagramm,
+                            Odnoklassniki = s.c_odnoklassniki,
+                            Twitter = s.c_twitter,
+                            Theme = s.c_theme,
+                            BackGroundImg = new Photo
+                            {
+                                Url = s.c_background_img
+                            }
+                        });
 
-                if (data.Any())
-                    return data.SingleOrDefault();
-
-                return null;
+                    if (data.Any())
+                        return data.SingleOrDefault();
+                }
             }
+            catch (Exception ex)
+            {
+                var message = String.Format("frontRepository=> getSiteInfoByOldId for \"{0}\" oldid={}", _domain, Id);
+                OnDislyEvent(new DislyEventArgs(LogLevelEnum.Debug, message, ex));
+            }
+                return null;
         }
 
         /// <summary>
@@ -185,7 +199,8 @@ namespace cms.dbase
             }
             catch (Exception ex)
             {
-                //throw new Exception("FrontRepository: getSiteId Domain '" + domain + "' непредвиденная ошибка!" + ex.Message);
+                var message = String.Format("cmsRepository=> getSiteId for \"{0}\"", domain);
+                OnDislyEvent(new DislyEventArgs(LogLevelEnum.Error, message, ex));
             }
             return null;
         }
@@ -1172,7 +1187,6 @@ namespace cms.dbase
                         }).ToArray();
                 }
                 return null;
-
             }
         }
 
@@ -2785,9 +2799,11 @@ namespace cms.dbase
             }
             catch (Exception ex)
             {
-                //write to log ex
-                return false;
+                var message = String.Format("frontRepository=> insertFeedbackItem for \"{0}\"", _domain);
+                OnDislyEvent(new DislyEventArgs(LogLevelEnum.Debug, message, ex));
             }
+
+            return false;
         }
 
         /// <summary>
@@ -2824,9 +2840,10 @@ namespace cms.dbase
             }
             catch (Exception ex)
             {
-                //write to log ex
-                return false;
+                var message = String.Format("frontRepository=> updateFeedbackItem for \"{0}\"", _domain);
+                OnDislyEvent(new DislyEventArgs(LogLevelEnum.Debug, message, ex));
             }
+            return false;
         }
 
         /// <summary>

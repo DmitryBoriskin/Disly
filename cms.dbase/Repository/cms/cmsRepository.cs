@@ -38,10 +38,10 @@ namespace cms.dbase
         }
 
         //Создаем событие, на которое потом подпишемся
-        public static event EventHandler<DislyEventArgs> DislyEvent;
+        public static event EventHandler<DislyEventArgs> DislyCmsEvent;
         private static void OnDislyEvent(DislyEventArgs eventArgs)
         {
-            DislyEvent(null, eventArgs);
+            DislyCmsEvent(null, eventArgs);
         }
 
         public override string getSiteDefaultDomain(string siteId)
@@ -58,7 +58,9 @@ namespace cms.dbase
                 }
                 catch (Exception ex)
                 {
-                    throw new Exception("FrontRepository > getSiteDefaultDomain : Обнаружено более одного домена по умолчанию " + siteId);
+                    var message = String.Format("cmsRepository=> getSiteDefaultDomain for \"{0}\"", siteId);
+                    OnDislyEvent(new DislyEventArgs(LogLevelEnum.Error, message, ex));
+                    return "main";
                 }
             }
         }

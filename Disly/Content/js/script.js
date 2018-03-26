@@ -1,7 +1,7 @@
 ﻿$(document).ready(function () {
     $('.select2').select2();
 
-  
+    $('.type-page').find('table').addClass("table-responsive");
 
     $('input[data-type=date').datepicker({ onSelect: function (dateText, inst) { $(this).attr('value', dateText); } });
 
@@ -27,10 +27,6 @@
         $(this).find('img').attr("style",'');
     });
 
-    
-
-
-
     // анимация баннеров
     if ($('.ling_img_on').length > 0) {
         $('.ling_img_on').each(function () {
@@ -51,8 +47,6 @@
         });
         
     }
-
-
 
     //Фильтр по новостям
     //$('.filtr_news').submit(function (e) {
@@ -191,19 +185,12 @@ function GeoCollection(obj) {
                 clusterer.add(_placemark);
             });
 
-           
-
-
-
             //myMap.geoObjects.add(gCollection);
 
             myMap.geoObjects.add(clusterer);
             if (point_count > 1) {
                 myMap.setBounds(clusterer.getBounds());//авто центрирование и масштабирование
             }
-            
-
-
         }
 
 

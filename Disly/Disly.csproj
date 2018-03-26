@@ -616,6 +616,7 @@
     <Compile Include="Controllers\gs\SpecContactsController.cs" />
     <Compile Include="Controllers\orgs\OrgGsMembersController.cs" />
     <Compile Include="Controllers\AnketaController.cs" />
+    <Compile Include="Controllers\stringBuilder.cs" />
     <Compile Include="Controllers\VacancyController.cs" />
     <Compile Include="Controllers\RedirectFromOldController.cs" />
     <Compile Include="Areas\Admin\Controllers\PhotoAlbumsController.cs" />

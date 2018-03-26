@@ -1260,9 +1260,7 @@ a.sitemap-plate.sitemap-plate-image {
 
 .boss_fio {
     color: #333;
-    margin-bottom: 10px;
-    padding-bottom: 15px;
-    border-bottom: 1px solid #ccc;
+    margin-bottom: 5px;
     display: block;
 }
 
@@ -2003,10 +2001,6 @@ iframe.photo-gallery {
 
 .structur_phons {
     padding: 10px 0 20px;
-}
-
-.person_right {
-    padding: 0 0 0 53px;
 }
 
 .vacnacy-list {

@@ -11,12 +11,15 @@ using System.Web;
 using Portal.Code;
 using System.Drawing.Imaging;
 using System.Collections.Generic;
+using NLog;
 
 namespace Disly.Areas.Admin.Controllers
 {
     [Authorize]
     public class CoreController : Controller
     {
+
+        Logger cmsLogger = null;
         /// <summary>
         /// Контекст доступа к базе данных
         /// </summary>
@@ -41,7 +44,10 @@ namespace Disly.Areas.Admin.Controllers
 
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            cmsRepository.DislyEvent += CmsRepository_DislyEvent;
+            //Подписка на события репозитория
+            cmsLogger = LogManager.GetLogger("CmsLogger");
+            cmsRepository.DislyCmsEvent += CmsRepository_DislyEvent;
+            Mailer.DislyEvent += Mailer_DislyEvent;
 
             base.OnActionExecuting(filterContext);
 
@@ -137,24 +143,44 @@ namespace Disly.Areas.Admin.Controllers
             mainSpecialist = _cmsRepository.getGSLinkByDomain(Domain);
         }
 
-        private void CmsRepository_DislyEvent(object sender, DislyEventArgs e)
+
+        #region Логирование событий
+        private void LogEvent(object sender, DislyEventArgs e)
         {
             switch (e.EventLevel)
             {
+                case LogLevelEnum.Trace:
+                    cmsLogger.Debug(e.Exception, e.Message);
+                    break;
                 case LogLevelEnum.Debug:
-                    AppLogger.Debug(e.Message, e.Exception);
-                    break;
-                case LogLevelEnum.Error:
-                    AppLogger.Error(e.Message, e.Exception);
-                    break;
-                case LogLevelEnum.Warn:
-                    AppLogger.Warn(e.Message, e.Exception);
+                    cmsLogger.Debug(e.Exception, e.Message);
                     break;
                 case LogLevelEnum.Info:
-                    AppLogger.Info(e.Message, e.Exception);
+                    cmsLogger.Info(e.Exception, e.Message);
+                    break;
+                case LogLevelEnum.Warning:
+                    cmsLogger.Warn(e.Exception, e.Message);
+                    break;
+                case LogLevelEnum.Error:
+                    cmsLogger.Error(e.Exception, e.Message);
+                    break;
+                case LogLevelEnum.Fatal:
+                    cmsLogger.Warn(e.Exception, e.Message);
                     break;
             }
         }
+
+        private void Mailer_DislyEvent(object sender, DislyEventArgs e)
+        {
+            LogEvent(sender, e);
+        }
+
+        private void CmsRepository_DislyEvent(object sender, DislyEventArgs e)
+        {
+            LogEvent(sender, e);
+        }
+        #endregion
+
 
         public CoreController()
         {
