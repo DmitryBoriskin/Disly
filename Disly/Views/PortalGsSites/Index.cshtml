@@ -42,11 +42,20 @@
                         {
                             <div class="row">
                                 <div class="col-md-2 col-sm-3 col-xs-5">
-                                    @*@if (item.Logo != null && !string.IsNullOrWhiteSpace(org.Logo.Url) && File.Exists(Server.MapPath(org.Logo.Url)))
+                                    @if (!string.IsNullOrWhiteSpace(item.SiteImgUrl) && File.Exists(Server.MapPath(item.SiteImgUrl)))
                                     {
-                                        <img src="@org.Logo.Url" alt="@org.Title" title="@org.Title" />
-                                    }*@
+                                        if (!string.IsNullOrEmpty(item.Url))
+                                        {
+                                            var link = string.Format("http://{0}", item.Url);
+                                            <a target="_blank" href="@link" title="@item.Title">
+                                                <div class="gs-background">
+                                                    <img src="@item.SiteImgUrl" alt="@item.Title" />
+                                                </div>
+                                            </a>
+                                        }
+                                    }
                                 </div>
+
                                 <div class="col-md-10 col-sm-9 col-xs-7">
                                     <h3>
                                         @if (!string.IsNullOrEmpty(item.Url))

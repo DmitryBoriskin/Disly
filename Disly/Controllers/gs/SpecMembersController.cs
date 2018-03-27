@@ -69,7 +69,7 @@ namespace Disly.Controllers
                     model.Breadcrumbs.Add(new Breadcrumbs
                     {
                         Title = parentPage.Title,
-                        Url = parentPage.Alias
+                        Url = "/" + parentPage.Alias
                     });
             }
             model.Breadcrumbs.Add(new Breadcrumbs

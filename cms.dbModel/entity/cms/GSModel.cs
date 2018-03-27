@@ -47,6 +47,11 @@ namespace cms.dbModel.entity
         public Guid? SiteId { get; set; }
 
         /// <summary>
+        /// логотип сайта
+        /// </summary>
+        public string SiteImgUrl { get; set; }
+
+        /// <summary>
         /// Идентификатор сайта
         /// </summary>
         public string Domain { get; set; }

@@ -2022,3 +2022,9 @@ iframe.photo-gallery {
     margin-bottom: 20px;
     overflow: hidden;
 }
+.gs-background{
+    margin:0 auto;
+    background-color:#003399;
+    display:inline-block;
+    padding:1px;
+}

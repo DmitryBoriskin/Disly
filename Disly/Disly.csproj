@@ -612,7 +612,6 @@
     <Compile Include="Controllers\gs\SpecMembersController.cs" />
     <Compile Include="Controllers\gs\SpecExpertsController.cs" />
     <Compile Include="Controllers\gs\SpecDoctorsController.cs" />
-    <Compile Include="Controllers\gs\SpecStructureController.cs" />
     <Compile Include="Controllers\gs\SpecContactsController.cs" />
     <Compile Include="Controllers\orgs\OrgGsMembersController.cs" />
     <Compile Include="Controllers\AnketaController.cs" />

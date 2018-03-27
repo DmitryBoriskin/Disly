@@ -236,9 +236,11 @@ namespace cms.dbase
         /// Получение информации по сайту
         /// </summary>
         /// <returns></returns>
-        public override SitesModel getSiteInfo()
+        public override SitesModel getSiteInfo(string domain = null)
         {
-            string domain = _domain;
+            if (string.IsNullOrEmpty(domain))
+                domain = _domain;
+
             using (var db = new CMSdb(_context))
             {
                 var data = db.cms_sitess
@@ -283,6 +285,11 @@ namespace cms.dbase
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="contentId"></param>
+        /// <returns></returns>
         public override string getSiteDefaultDomainByContentId(Guid contentId)
         {
             using (var db = new CMSdb(_context))

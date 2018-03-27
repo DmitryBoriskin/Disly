@@ -2,6 +2,7 @@
 using Disly.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Web.Mvc;
 
 namespace Disly.Controllers
@@ -66,7 +67,18 @@ namespace Disly.Controllers
             filter.Domain = null;
             model.List = _repository.getGSList(filter);
 
+            if(model.List != null && model.List.Count() > 0)
+            {
+                foreach(var item in model.List)
+                {
+                    if (!string.IsNullOrEmpty(item.Domain))
+                    {
+                        var siteInfo = _repository.getSiteInfo(item.Domain);
 
+                        item.SiteImgUrl = (siteInfo != null && siteInfo.Logo != null) ? siteInfo.Logo.Url : "";
+                    }
+                }
+            }
             return View(model);
         }
     }

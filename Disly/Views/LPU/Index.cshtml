@@ -93,14 +93,14 @@
                     @foreach (var item in Model.OrgList)
                     {
                         <div class="row org_item">
-                            <div class="col-md-1">
+                            <div class="col-md-2 col-sm-3 col-xs-5">
                                 @if (item.Logo != null && !string.IsNullOrWhiteSpace(item.Logo.Url) && File.Exists(Server.MapPath(item.Logo.Url)))
                                 {
                                     <img src="@item.Logo.Url" alt="@item.Title" />
                                 }
                             </div>
 
-                            <div class="col-md-9">
+                            <div class="col-md-8 col-sm-6 col-xs-7">
                                 @if (!string.IsNullOrWhiteSpace(item.Title))
                                 {
                                     <div>
@@ -156,17 +156,18 @@
                                     </div>
                                 }
                             </div>
-                            <div class="col-md-2">
-                                @if (item.Leader != null  && item.Leader.Name!=null) 
+                            <div class="col-md-2 col-sm-3 col-xs-12">
+                                @if (item.Leader != null && item.Leader.Name != null)
                                 {
                                     string photo = (item.Leader.Photo != null && !string.IsNullOrWhiteSpace(item.Leader.Photo.Url))
                                           ? File.Exists(Server.MapPath(item.Leader.Photo.Url))
                                               ? item.Leader.Photo.Url : "/Content/img/no_avatar.png"
                                           : "/Content/img/no_avatar.png";
 
-                                    <img class="img-circle img-person-list" src="@photo" alt="@item.Leader.Surname" />
+                                    <img class="img-circle img-person-list sm-align" src="@photo" alt="@item.Leader.Surname" />
+                                    <br />
                                     <div class="org_item_post">@item.Leader.Post</div>
-                                    
+
                                     if (item.Leader.PeopleId.HasValue)
                                     {
                                         <a target="_blank" href="/portaldoctors/@item.Leader.PeopleId">@item.Leader.Surname @item.Leader.Name @item.Leader.Patronymic</a>

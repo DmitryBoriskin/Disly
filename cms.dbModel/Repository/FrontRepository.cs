@@ -8,7 +8,7 @@ namespace cms.dbModel
     {
         public abstract string getSiteId(string domainUrl);
         public abstract SiteSectionModel getView(string siteSection); //string siteId,
-        public abstract SitesModel getSiteInfo(); //string domain
+        public abstract SitesModel getSiteInfo(string domain);
         public abstract string getSiteDefaultDomain(string siteId);
         public abstract string getSiteDefaultDomainByContentId(Guid contentId);
         public abstract UsersModel[] getSiteAdmins();
