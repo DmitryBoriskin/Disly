@@ -18,26 +18,31 @@ public class Files
     /// <param name="maxHeight">Максимальная высота</param>
     /// http://hellomvc.blogspot.ru/2011/03/uploading-with-resize.html
     /// 
-    public static string SaveImageResize(HttpPostedFileBase hpf, string Path ,int FinWidth, int FinHeight)
+    public static string SaveImageResize(HttpPostedFileBase hpf, string Path, int FinWidth, int FinHeight)
     {
+        GC.Collect();
+        GC.WaitForPendingFinalizers();
+
         ImageCodecInfo myImageCodecInfo = GetEncoderInfo("image/jpeg");
         EncoderParameters myEncoderParameters = new EncoderParameters(1);
         myEncoderParameters.Param[0] = new EncoderParameter(Encoder.Quality, 100L);
 
-        Bitmap _File  = (Bitmap)Bitmap.FromStream(hpf.InputStream);
-        _File = Imaging.Resize(_File, FinWidth, FinHeight, "top","left");
+        Bitmap _File = (Bitmap)Bitmap.FromStream(hpf.InputStream);
+        _File = Imaging.Resize(_File, FinWidth, FinHeight, "top", "left");
         //_File = Imaging.Crop(_File, FinWidth, FinHeight, 0, 0);
 
         //    Path = Server.MapPath(Path);
         if (!Directory.Exists(Path)) { Directory.CreateDirectory(HttpContext.Current.Server.MapPath(Path)); }
-        
+
         string imageName = Transliteration.Translit(hpf.FileName.Substring(0, hpf.FileName.IndexOf("."))).Replace(" ", "_");
-        string extension =hpf.FileName.Substring(hpf.FileName.IndexOf("."));
+        string extension = hpf.FileName.Substring(hpf.FileName.IndexOf("."));
         string filePath = HttpContext.Current.Server.MapPath(Path + imageName + extension);
 
         if (File.Exists(filePath))
             File.Delete(filePath);
-        _File.Save(filePath, myImageCodecInfo, myEncoderParameters);
+
+         _File.Save(filePath, myImageCodecInfo, myEncoderParameters);
+
         _File.Dispose();
 
         return Path + imageName + extension;
@@ -45,6 +50,9 @@ public class Files
 
     public static string SaveImageResizeRename(HttpPostedFileBase hpf, string Path, string Name, int FinWidth, int FinHeight)
     {
+        GC.Collect();
+        GC.WaitForPendingFinalizers();
+
         ImageCodecInfo myImageCodecInfo = GetEncoderInfo("image/jpeg");
         EncoderParameters myEncoderParameters = new EncoderParameters(1);
         myEncoderParameters.Param[0] = new EncoderParameter(Encoder.Quality, 100L);
@@ -68,9 +76,9 @@ public class Files
             orientation = "height";
             _File = Imaging.Resize(_File, FinHeight, orientation);
         }
-        
+
         if (!Directory.Exists(Path)) { Directory.CreateDirectory(HttpContext.Current.Server.MapPath(Path)); }
-        
+
         string extension = hpf.FileName.Substring(hpf.FileName.IndexOf("."));
         string filePath = HttpContext.Current.Server.MapPath(Path + Name + extension);
 
@@ -79,7 +87,7 @@ public class Files
             File.SetAttributes(filePath, FileAttributes.Normal);
             File.Delete(filePath);
         }
-            
+
         _File.Save(filePath, myImageCodecInfo, myEncoderParameters);
         _File.Dispose();
 
@@ -88,6 +96,9 @@ public class Files
 
     public static string SaveImageResizeProp(HttpPostedFileBase hpf, string Path, int maxWidth, int maxHeight)
     {
+        GC.Collect();
+        GC.WaitForPendingFinalizers();
+
         string filePath = string.Empty;
         if (hpf != null && hpf.ContentLength != 0 && hpf.ContentLength <= 307200)
         {
@@ -146,14 +157,19 @@ public class Files
                         filePath = HttpContext.Current.Server.MapPath(Path + imageName + ext);
                         if (System.IO.File.Exists(filePath))
                             System.IO.File.Delete(filePath);
+
                         newBMP.Save(filePath);
 
+                        //oGraphics.Dispose();
+                        //newBMP.Dispose();
                     }
                 }
-                    }
-                }
-        return filePath;
+
+                //originalPic.Dispose();
             }
+        }
+        return filePath;
+    }
 
 
     public class FileAnliz
@@ -294,6 +310,9 @@ public class Files
 
     public static void deleteImage(string url)
     {
+        GC.Collect();
+        GC.WaitForPendingFinalizers();
+
         try
         {
             var serverPath = HttpContext.Current.Server.MapPath(url);

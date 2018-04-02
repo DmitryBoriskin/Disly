@@ -652,6 +652,8 @@ namespace cms.dbase
                 var data = query
                     .Select(s => new SiteMapMenu
                     {
+                        Id = s.id,
+                        Sort = s.n_sort,
                         Text = s.c_title,
                         Value = s.f_page_type
                     });

@@ -57,14 +57,15 @@
                 {
                     <div class="doctorsList-block">
                         @foreach (var item in Model.DoctorsList.Doctors)
-                {
-                    var port = (Settings.BaseURL == "localhost") ? ":" + Context.Request.Url.Port : "";
-                    string link = "http://" + Settings.BaseURL + port + "/portaldoctors/" + item.Id;
+                        {
+                            var port = (Settings.BaseURL == "localhost") ? ":" + Context.Request.Url.Port : "";
+                            string link = string.Format("http://{0}{1}/portaldoctors/{2}", Settings.BaseURL, port, (item.People != null) ? item.People.Id.ToString() : null);
 
-                    string photo = !string.IsNullOrWhiteSpace(item.Photo)
-                        ? File.Exists(Server.MapPath(item.Photo))
-                            ? item.Photo : "/Content/img/no_avatar.png"
-                        : "/Content/img/no_avatar.png";
+
+                            string photo = !string.IsNullOrWhiteSpace(item.Photo)
+                                ? File.Exists(Server.MapPath(item.Photo))
+                                    ? item.Photo : "/Content/img/no_avatar.png"
+                                : "/Content/img/no_avatar.png";
                             <div class="row">
                                 <div class="col-md-2 col-sm-3 col-xs-5">
                                     <a class="adminlist_img_wr" target="_blank" href="@link">

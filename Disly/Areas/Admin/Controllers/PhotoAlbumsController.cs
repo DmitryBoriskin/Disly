@@ -14,6 +14,7 @@ using System.Web.Script.Serialization;
 
 namespace Disly.Areas.Admin.Controllers
 {
+
     public class PhotoAlbumsController : CoreController
     {
         PhotoViewModel model;
@@ -262,6 +263,11 @@ namespace Disly.Areas.Admin.Controllers
                             Bitmap _FilePrev = Imaging.Resize(_File, 120, 120, "center", "center");
                             _FilePrev.Save(Server.MapPath(serverPath + "/prev_" + newFilename), myImageCodecInfo, myEncoderParameters);
 
+                            //Очистка памяти
+                            _File.Dispose();
+                            _FileOrigin.Dispose();
+                            _FileHd.Dispose();
+                            _FilePrev.Dispose();
 
                             photoList[counter] = new PhotoModel()
                             {
@@ -273,16 +279,6 @@ namespace Disly.Areas.Admin.Controllers
                                 PhotoImage = new Photo { Url = serverPath + "/" + newFilename }
                             };
                             counter++;
-
-                            //записываем обложку фотоальбома
-
-
-                            //}
-                            //catch (Exception ex)
-                            //{
-                            //    ViewBag.Message = "Произошла ошибка: " + ex.Message.ToString();
-                            //    break;
-                            //}
                         }
                         else
                         {
@@ -383,6 +379,9 @@ namespace Disly.Areas.Admin.Controllers
         [HttpPost]
         public string DeletePhoto(string id)
         {
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+
             PhotoModel photo = _cmsRepository.getPhotoItem(Guid.Parse(id));
             if (photo != null)
             {
@@ -398,6 +397,7 @@ namespace Disly.Areas.Admin.Controllers
                             System.IO.File.Delete(Server.MapPath(photoPath));
                             System.IO.File.Delete(Server.MapPath(previewPath));
                             System.IO.File.Delete(Server.MapPath(hdPath));
+
                             return "true";
                         }
                         else return "Не удалось удалить фотографию.";

@@ -879,11 +879,24 @@ namespace Disly.Areas.Admin.Controllers
         [MultiButton(MatchFormKey = "action", MatchFormValue = "add-new-people-depart")]
         public ActionResult AddPeople()
         {
+#warning Почему не через модель передаются данные?
             string IdDepartment = Request["DepartmentItem.Id"];
             string IdLinkPeopleForOrg = Request["s_people"];
             string PeopleStatus = Request["s_people_status"];
             string PeoplePost = Request["s_people_post"];
-            _cmsRepository.insPersonsThisDepartment(Guid.Parse(IdDepartment), Guid.Parse(IdLinkPeopleForOrg), PeopleStatus, PeoplePost);
+
+            Guid depId = Guid.Empty;
+            Guid orgId = Guid.Empty;
+            if (Guid.TryParse(IdDepartment, out depId) && Guid.TryParse(IdLinkPeopleForOrg, out orgId))
+                    _cmsRepository.insPersonsThisDepartment(depId, orgId, PeopleStatus, PeoplePost);
+                else
+            {
+                var exMsg = string.Format("{IdDepartment:{0}, IdLinkPeopleForOrg:{1}}", IdDepartment, IdLinkPeopleForOrg);
+                cmsLogger.Debug(new Exception(exMsg), "Admin => OrgsController => AddPeople");
+            }
+                   
+
+
             return Redirect(((System.Web.HttpRequestWrapper)Request).RawUrl);
         }
 

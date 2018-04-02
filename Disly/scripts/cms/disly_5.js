@@ -748,7 +748,7 @@ function Sorting_init(Object) {
 
             $.ajax({
                 type: "POST",
-                async: false,
+                async: true,
                 url: _ServiceUrl,
                 data: { id: _Id, permit: _Num },
                 error: function () { Content = '<div>Error!</div>'; },

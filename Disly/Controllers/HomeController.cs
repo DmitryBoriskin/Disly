@@ -43,7 +43,7 @@ namespace Disly.Controllers
             model.Oid = _repository.getOid();
             model.Materials = _repository.getMaterialsModule(); //Domain
 
-            if (model.SitesInfo.Alias == "main" && !IsSpecVersion)
+            if (model.SitesInfo != null && model.SitesInfo.Alias == "main" && !IsSpecVersion)
             {
                 model.ImportantMaterials = _repository.getMaterialsImportant();
                 model.MaterialsNewInMedicin = _repository.getMaterialsGroupNewInMedicin();

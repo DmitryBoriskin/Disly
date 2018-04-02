@@ -48,18 +48,22 @@ namespace cms.dbase
         {
             using (var db = new CMSdb(_context))
             {
-                var data = db.cms_sites_domainss
-                    .Where(w => w.f_site.ToLower() == siteId)
+                var query = db.cms_sites_domainss
+                    .Where(w => w.f_site.ToLower() == siteId.ToLower())
                     .Where(w => w.b_default == true);
 
                 try
                 {
-                    return data.Select(p => p.c_domain).SingleOrDefault();
+                    if(query.Count() > 1)
+                        return query.Select(p => p.c_domain).First();
+
+                    return query.Select(p => p.c_domain).Single();
                 }
                 catch (Exception ex)
                 {
                     var message = String.Format("cmsRepository=> getSiteDefaultDomain for \"{0}\"", siteId);
                     OnDislyEvent(new DislyEventArgs(LogLevelEnum.Error, message, ex));
+
                     return "main";
                 }
             }

@@ -511,6 +511,9 @@ namespace Integration.Frmp.library
         /// <returns></returns>
         private static string ImageResizing(string snils, string img)
         {
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+
             ImageCodecInfo myImageCodecInfo = GetEncoderInfo("image/jpeg");
             EncoderParameters myEncoderParameters = new EncoderParameters(1);
             myEncoderParameters.Param[0] = new EncoderParameter(System.Drawing.Imaging.Encoder.Quality, 100L);
