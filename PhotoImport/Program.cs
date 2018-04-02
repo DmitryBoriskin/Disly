@@ -59,6 +59,9 @@ namespace PhotoImport
         /// <param name="org">Идентификатор организации</param>
         private static void Execute(int org)
         {
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+
             // список фотоальбомов
             IEnumerable<PhotoAlbumOld> albums = repository.GetAlbums(org, null);
 
@@ -159,6 +162,8 @@ namespace PhotoImport
 
                                     _previewAlbum = localPath + "albumprev" + ".jpg";
                                     repository.UpdatePreviewAlbum(id, _previewAlbum);
+
+                                    albumPrev.Dispose();
                                 }
 
                                 // новая фотка
@@ -175,6 +180,10 @@ namespace PhotoImport
 
                                 // добавление фото
                                 repository.InsertPhotoItem(photo);
+
+                                imgPrev.Dispose();
+                                imgReal.Dispose();
+
                             }
                         }
 

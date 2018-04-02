@@ -122,6 +122,9 @@ namespace Disly.Controllers
         /// <returns></returns>
         public ActionResult Department(int num, Guid id)
         {
+            if (num == 0)
+                return Redirect(ControllerName + "/");
+
             string _ViewName = (ViewName != String.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";
 
             model.StructureItem = _repository.getStructureItem(num); //Domain,

@@ -19,7 +19,7 @@ namespace Disly.Areas.Admin.Controllers
     public class CoreController : Controller
     {
 
-        Logger cmsLogger = null;
+        protected Logger cmsLogger = null;
         /// <summary>
         /// Контекст доступа к базе данных
         /// </summary>
@@ -184,8 +184,6 @@ namespace Disly.Areas.Admin.Controllers
 
         public CoreController()
         {
-            GC.Collect();
-            GC.WaitForPendingFinalizers();
             _accountRepository = new AccountRepository("cmsdbConnection");
 
             Guid userId = Guid.Empty;

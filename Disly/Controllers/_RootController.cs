@@ -47,8 +47,6 @@ namespace Disly.Controllers
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             base.OnActionExecuting(filterContext);
-            GC.Collect();
-            GC.WaitForPendingFinalizers();
 
             try {
                 var domainUrl = Request.Url.Host.ToLower().Replace("www.", "");

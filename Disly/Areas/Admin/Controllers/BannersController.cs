@@ -178,11 +178,11 @@ namespace Disly.Areas.Admin.Controllers
 
                 if (upload != null && upload.ContentLength > 0)
                 {
-
                     if (!AttachedPicExtAllowed(upload.FileName))
                     {
                         model.Item = (_cmsRepository.getBannerItem(id) != null)? _cmsRepository.getBannerItem(id)
                             : new BannersModel() { Id = id };
+
                         model.ErrorInfo = new ErrorMessage()
                         {
                             title = "Ошибка",
