@@ -65,6 +65,8 @@ fieldset {
 
 .type-page {
     padding-bottom: 40px;
+    z-index: 3;
+    position: relative;
 }
 
     .type-page img {
