@@ -292,7 +292,8 @@ namespace cms.dbase
                     {
                         var queryMaxSort = db.content_sitemaps
                             .Where(w => w.f_site == item.Site)
-                            .Where(w => w.c_path.Equals(item.Path))
+                            .Where(w => w.uui_parent == item.ParentId)
+                            //.Where(w => w.c_path.Equals(item.Path))
                             .Select(s => s.n_sort);
 
                         int maxSort = queryMaxSort.Any() ? queryMaxSort.Max() + 1 : 1;
@@ -827,7 +828,8 @@ namespace cms.dbase
                     listToUpdate.Set(u => u.n_sort, u => u.n_sort - 1).Update();
 
                     // Удаляем дочерние эл-ты 
-                    deleteSiteMapItemCascad(id);
+                    //deleteSiteMapItemCascad(id);
+                    //Удаляются каскадно!!!
 
                     //удаляем  текущий элемент
                     db.content_sitemaps.Where(w => w.id == id).Delete();
@@ -914,44 +916,47 @@ namespace cms.dbase
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public override bool deleteSiteMapItemCascad(Guid id) {
-            using (var db = new CMSdb(_context))
-            {
-                var childlist = db.content_sitemaps.Where(w => w.uui_parent == id);
-                var childlistarray = childlist.Select(s => s.id);
-                if (childlistarray.Any())
-                {
-                    foreach (var item in childlistarray.ToArray())
-                    {
-                        deleteSiteMapItemCascad(item);
+        //public override bool deleteSiteMapItemCascad(Guid id) {
+        //    using (var db = new CMSdb(_context))
+        //    {
+        //        var childlist = db.content_sitemaps
+        //                            .Where(w => w.uui_parent == id)
+        //                            .Select(s => s.id);
 
-                        #region удаляем связи с группой меню
-                        var menuTypesBigger = db.content_sitemap_menutypess
-                                                .Where(w => w.f_site.Equals(_domain))
-                                                .Where(w => w.f_sitemap.Equals(item))
-                                                .Select(s => new { s.f_menutype, s.n_sort });
+        //        if (childlist.Any())
+        //        {
+        //            foreach (var itemId in childlist.ToArray())
+        //            {
+        //                deleteSiteMapItemCascad(itemId);
 
-                        if (menuTypesBigger.Any())
-                        {
-                            foreach (var mt in menuTypesBigger.ToArray())
-                            {
-                                db.content_sitemap_menutypess
-                                    .Where(w => w.f_site.Equals(_domain))
-                                    .Where(w => w.f_menutype.Equals(mt.f_menutype))
-                                    .Where(w => w.n_sort > mt.n_sort)
-                                    .Set(s => s.n_sort, s => s.n_sort - 1)
-                                    .Update();
-                            }
-                        }
-                        #endregion
-                    }
-                    childlist.Delete();
-                }
+        //                #region удаляем связи с группой меню
+        //                //В базе каскадно и так удаляются!!!!
+        //                //var menuTypesBigger = db.content_sitemap_menutypess
+        //                //                        .Where(w => w.f_site.Equals(_domain))
+        //                //                        .Where(w => w.f_sitemap.Equals(itemId))
+        //                //                        .Select(s => new { s.f_menutype, s.n_sort });
 
-                return true;
+        //                //if (menuTypesBigger.Any())
+        //                //{
+        //                //    foreach (var mt in menuTypesBigger.ToArray())
+        //                //    {
+        //                //        db.content_sitemap_menutypess
+        //                //            .Where(w => w.f_site.Equals(_domain))
+        //                //            .Where(w => w.f_menutype.Equals(mt.f_menutype))
+        //                //            .Where(w => w.n_sort > mt.n_sort)
+        //                //            .Set(s => s.n_sort, s => s.n_sort - 1)
+        //                //            .Update();
+        //                //    }
+        //                //}
+        //                #endregion
+        //            }
+        //            childlist.Delete();
+        //        }
 
-            }
-        }
+        //        return true;
+
+        //    }
+        //}
 
         /// <summary>
         /// Получаем список дочерних элементов для текущего
@@ -1059,6 +1064,8 @@ namespace cms.dbase
                             .Where(w => w.id.Equals(id))
                             .Select(s => new SiteMapModel
                             {
+                                Id = s.id,
+                                ParentId = s.uui_parent,
                                 Path = s.c_path,
                                 Sort = s.n_sort
                             }).FirstOrDefault();
@@ -1066,8 +1073,9 @@ namespace cms.dbase
                         if (permit > data.Sort)
                         {
                             db.content_sitemaps
-                                .Where(w => w.f_site.Equals(_domain))
-                                .Where(w => w.c_path.Equals(data.Path))
+                                .Where(w => w.f_site == _domain)
+                                //.Where(w => w.c_path.Equals(data.Path))
+                                .Where(w => w.uui_parent == data.ParentId)
                                 .Where(w => w.n_sort > data.Sort && w.n_sort <= permit)
                                 .Set(u => u.n_sort, u => u.n_sort - 1)
                                 .Update();
@@ -1075,9 +1083,10 @@ namespace cms.dbase
                         else
                         {
                             db.content_sitemaps
-                                .Where(w => w.f_site.Equals(_domain))
-                                .Where(w => w.c_path.Equals(data.Path))
-                                .Where(w => w.n_sort < data.Sort && w.n_sort >= permit)
+                                .Where(w => w.f_site ==_domain)
+                                 //.Where(w => w.c_path.Equals(data.Path))
+                                .Where(w => w.uui_parent == data.ParentId)
+                                .Where(w => w.n_sort <= data.Sort && w.n_sort >= permit)
                                 .Set(u => u.n_sort, u => u.n_sort + 1)
                                 .Update();
                         }
