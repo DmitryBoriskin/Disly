@@ -49,6 +49,8 @@ namespace Disly.Areas.Admin.Controllers
             cmsRepository.DislyCmsEvent += CmsRepository_DislyEvent;
             Mailer.DislyEvent += Mailer_DislyEvent;
 
+            
+
             base.OnActionExecuting(filterContext);
 
             ControllerName = filterContext.RouteData.Values["Controller"].ToString().ToLower();
@@ -68,7 +70,7 @@ namespace Disly.Areas.Admin.Controllers
                 AppLogger.Debug("CoreController: Не получилось определить Domain", ex);
             }
             ViewBag.Domain = Domain;
-
+            
             StartUrl = "/Admin/" + (String)RouteData.Values["controller"] + "/";
 
             #region Настройки сайта            

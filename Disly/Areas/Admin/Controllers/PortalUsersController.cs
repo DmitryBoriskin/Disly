@@ -29,6 +29,7 @@ namespace Disly.Areas.Admin.Controllers
             {
                 model.Menu = _cmsRepository.getCmsMenu(AccountInfo.Id);
             }
+            ViewBag.DataPath = Settings.UserFiles + Domain + "/" + (String)RouteData.Values["controller"] + "/";
 
             #region Метатеги
             ViewBag.Title = UserResolutionInfo.Title;
