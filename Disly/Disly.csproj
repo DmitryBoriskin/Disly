@@ -149,6 +149,7 @@
     <Content Include="Content\css\theme\blue.css" />
     <Content Include="Content\css\theme\blue_dark.css" />
     <Content Include="Content\css\theme\green.css" />
+    <Content Include="Content\css\theme\green2.css" />
     <Content Include="Content\css\theme\green_portal.css" />
     <Content Include="Content\css\theme\purple.css" />
     <Content Include="Content\css\theme\turquoise.css" />
@@ -444,6 +445,7 @@
     <Content Include="Areas\Admin\Views\Shared\Modal\Spec.cshtml" />
     <Content Include="Areas\Admin\Views\Statistics\Index.cshtml" />
     <Content Include="Areas\Admin\Views\MainSpecialist\Part\AddDoctor.cshtml" />
+    <Content Include="Content\css\theme\green2.less" />
     <None Include="Content\plugins\tinymce\plugins\gallery\plugin.min.js_korkin" />
     <Content Include="Content\plugins\tinymce\plugins\help\img\logo.png" />
     <Content Include="Content\plugins\tinymce\plugins\help\plugin.min.js" />

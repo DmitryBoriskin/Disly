@@ -44,6 +44,7 @@ namespace Disly.Areas.Admin.Controllers
                     new SelectListItem { Text = "Синяя", Value = "blue" },
                     new SelectListItem { Text = "Фиолетовая", Value = "purple" },
                     new SelectListItem { Text = "Зеленая", Value = "green" },
+                    new SelectListItem { Text = "Зеленая2", Value = "green2" },
                     new SelectListItem { Text = "Темно синяя", Value = "blue_dark" },
                 }, "Value", "Text");
         }
