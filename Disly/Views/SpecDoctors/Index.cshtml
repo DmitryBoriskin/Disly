@@ -59,7 +59,7 @@
                         @foreach (var item in Model.DoctorsList.Doctors)
                         {
                             var port = (Settings.BaseURL == "localhost") ? ":" + Context.Request.Url.Port : "";
-                            string link = string.Format("http://{0}{1}/portaldoctors/{2}", Settings.BaseURL, port, (item.People != null) ? item.People.Id.ToString() : null);
+                            string link = string.Format("http://{0}{1}/portaldoctors/{2}", Settings.BaseURL, port, item.Id);
 
 
                             string photo = !string.IsNullOrWhiteSpace(item.Photo)
