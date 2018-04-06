@@ -465,7 +465,8 @@ namespace cms.dbase
                 var query = db.sv_sites_bannerss
                     .Where(b => b.site_alias == _domain)
                     //.Where(b => b.f_section == section)
-                    .Where(b => b.banner_disabled == false);
+                    .Where(b => b.banner_disabled == false)
+                    .Where(b => b.banner_date_end > DateTime.Now || b.banner_date_end == null);
 
                 if (query.Any())
                 {
@@ -2389,6 +2390,7 @@ namespace cms.dbase
                 else return null;
             }
         }
+
         public override OrgsAdministrative getLeaderOrg(Guid OrgId)
         {
             using (var db = new CMSdb(_context))
@@ -2410,6 +2412,7 @@ namespace cms.dbase
                 return null;
             }
         }
+
         public override string spotDomainContent(Guid? ContentId)
         {
             using (var db = new CMSdb(_context))

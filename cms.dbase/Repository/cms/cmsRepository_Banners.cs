@@ -104,6 +104,7 @@ namespace cms.dbase
                             Url = s.banner_url,
                             Text = s.banner_text,
                             Date = s.banner_date,
+                            DateEnd = s.banner_date_end,
                             Sort = s.banner_sort,
                             Disabled = s.banner_disabled,
                             Section = s.banner_section,
@@ -174,6 +175,7 @@ namespace cms.dbase
                         Text = s.c_text,
                         CountClick = s.n_count_click,
                         Date = s.d_date,
+                        DateEnd = s.d_date_end,
                         Sort = s.n_sort,
                         Disabled = s.b_disabled,
                         Section = s.f_section,
@@ -233,6 +235,7 @@ namespace cms.dbase
                             .Value(v => v.c_url, item.Url)
                             .Value(v => v.c_text, item.Text)
                             .Value(v => v.d_date, item.Date)
+                            .Value(v => v.d_date_end, item.DateEnd)
                             .Value(v => v.n_sort, maxSort)
                             .Value(v => v.b_disabled, item.Disabled)
                             .Value(v => v.f_section, item.Section)
@@ -296,6 +299,7 @@ namespace cms.dbase
                         .Set(s => s.c_url, item.Url)
                         .Set(s => s.c_text, item.Text)
                         .Set(s => s.d_date, item.Date)
+                        .Set(s => s.d_date_end, item.DateEnd)
                         .Set(s => s.b_disabled, item.Disabled)
                         .Set(s => s.f_section, item.Section)
                         .Set(s => s.b_locked, item.Locked)
