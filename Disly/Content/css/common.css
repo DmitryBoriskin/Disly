@@ -1570,7 +1570,10 @@ a.sitemap-plate.sitemap-plate-image {
     position: relative;
     right: -2px;
 }
-
+.attachfile {
+    display: inline-block;
+    width: 100%;
+}
 .attachfile h2 {
     font-size: 24px;
     font-weight: 600;
