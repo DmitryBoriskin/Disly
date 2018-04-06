@@ -72,7 +72,7 @@
 
                                     string sliderfoto = (!string.IsNullOrWhiteSpace(item.Url))
                                                   ? File.Exists(Server.MapPath(item.Url))
-                                                      ? item.Url : "/Content/img/nophoto.jpg"
+                                                      ? item.Url : "/Content/img/noslider.jpg"
                                                   : "/Content/img/nophoto.jpg";
 
                                 <div class="item @active">

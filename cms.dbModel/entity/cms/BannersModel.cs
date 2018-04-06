@@ -48,6 +48,11 @@ namespace cms.dbModel.entity
         public DateTime Date { get; set; }
 
         /// <summary>
+        /// Дата
+        /// </summary>
+        public DateTime? DateEnd { get; set; }
+
+        /// <summary>
         /// Порядок сортировки
         /// </summary>
         public int Sort { get; set; }
