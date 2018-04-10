@@ -540,11 +540,14 @@ select.form-control {
 }
 
 .slider-controls {
-    position: relative;
+    /*position: relative;*/
     font-size: 15px;
-    bottom: 90px;
-    float: right;
+    /*bottom: 90px;*/
+    /*float: right;*/
     margin: 0 207px 0 0;
+    position:absolute;
+    bottom:10px;
+    right:0;
 }
 
     .slider-controls a {
@@ -558,6 +561,9 @@ select.form-control {
     text-align: left;
     width: 100%;
 }
+.slider-message-block a:not(:last-child){
+    margin-bottom:15px;
+}
 
     .slider-message-block a {
         text-decoration: none !important;
@@ -568,7 +574,7 @@ select.form-control {
 
 .slider-message {
     padding: 12px 30px;
-    margin-bottom: 15px;
+    /*margin-bottom: 15px;*/
     font-size: 14px;
     background-color: #fff;
     color: #999;
