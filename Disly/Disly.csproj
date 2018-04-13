@@ -492,6 +492,8 @@
     <Content Include="Content\plugins\tinymce\themes\inlite\theme.min.js" />
     <Content Include="Content\plugins\tinymce\themes\modern\theme.min.js" />
     <Content Include="Content\plugins\tinymce\tinymce.min.js" />
+    <Content Include="Content\portal\img\bg2.jpg" />
+    <Content Include="Content\portal\img\bg1.jpg" />
     <Content Include="Content\portal\img\bg.jpg" />
     <Content Include="Content\portal\img\browse_press.jpg" />
     <Content Include="Content\portal\img\e-reg.jpg" />
