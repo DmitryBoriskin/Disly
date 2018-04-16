@@ -243,7 +243,7 @@ namespace Disly.Areas.Admin.Controllers
         /// <param name="objType"></param>
         /// <returns></returns>
         [HttpGet]
-        public ActionResult NewGSMember(Guid objId, GSMemberType objType)
+        public ActionResult NewGSMember(Guid objId)
         {
             //Получение главного специалиста
             var mainSpec = _cmsRepository.getGSItem(objId);
@@ -262,18 +262,16 @@ namespace Disly.Areas.Admin.Controllers
                 model.Member = new GSMemberModel()
                 {
                     GSId = objId,
-                    MemberType = objType
+                    //MemberType = objType
                 };
 
-                if(objType == GSMemberType.SPEC)
-                {
-                    // список сотрудников для специализаций главного специалиста
-                    model.EmployeeList = _cmsRepository.getEmployeeList(mainSpec.Specialisations);
-                }
-                else
-                {
-                    model.EmployeeList = _cmsRepository.getEmployeeList();
-                }
+                //if(objType == GSMemberType.SPEC)
+                //{
+                //    // список сотрудников для специализаций главного специалиста
+                //    model.EmployeeList = _cmsRepository.getEmployeeList(mainSpec.Specialisations);
+                //}
+
+               model.EmployeeList = _cmsRepository.getEmployeeList();
             }
 
             return PartialView("Part/AddDoctor", model);
