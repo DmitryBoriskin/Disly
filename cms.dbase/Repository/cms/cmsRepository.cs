@@ -503,9 +503,10 @@ namespace cms.dbase
         {
             using (var db = new CMSdb(_context))
             {
-                var data = db.cms_menus.
-                    Where(w => w.id == id).
-                    Select(s => new cmsMenuItem
+                var data = db.cms_menus
+                    .Where(w => w.id == id)
+                    .Where(w => w.b_show == true)
+                    .Select(s => new cmsMenuItem
                     {
                         id = s.id,
                         Permit = s.n_permit,
