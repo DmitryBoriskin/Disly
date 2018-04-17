@@ -79,8 +79,6 @@ namespace cms.dbase
                     if (!res)
                         throw new Exception("getSiteMapList: не удалось Guid.TryParse(filtr.Group, out menuId)");
 
-
-#warning Для чего здесь опять view? 
                     var query = db.content_sv_sitemap_menus
                         .Where(w => w.f_site == site)
                         .Where(w => w.f_menutype == menuId)
@@ -104,9 +102,9 @@ namespace cms.dbase
                             Desc = s.c_desc,
                             Keyw = s.c_keyw,
                             Disabled = s.b_disabled,
-                            Blocked = s.b_blocked, //???
+                            Blocked = s.b_blocked, 
                             DisabledMenu = s.b_disabled_menu,
-                            Sort = s.n_sort,
+                            Sort = s.menu_sort,
                             ParentId = s.uui_parent,
                             CountSibling = getCountSiblings(s.id)
                         }).Skip(filtr.Size * (filtr.Page - 1))

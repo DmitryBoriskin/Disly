@@ -134,7 +134,7 @@ namespace Disly.Areas.Admin.Controllers
                 if (parent != String.Empty && parent != null && parent != "")
                 {
                     var parentitem = _cmsRepository.getSiteMapItem(Guid.Parse(parent));
-                    ViewBag.DataPath = ViewBag.DataPath + parentitem.Path + parentitem.Alias + "/";                    
+                    ViewBag.DataPath = ViewBag.DataPath + parentitem.Path + parentitem.Alias + "/";
                 }
                 #endregion
             }
