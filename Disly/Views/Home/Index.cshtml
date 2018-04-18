@@ -120,7 +120,11 @@
                                 </div>
                             </div>
                         </a>
-                        <a href="/contacts?t=phone">
+                        @{ 
+                            string ourphone =(Model.SitesInfo.Type=="spec")? "/speccontacts" : "/contacts?t=phone";
+
+                        }
+                        <a href="@ourphone">
                             <div class="slider-message slider-message-2">
                                 <div class="icon-slider-message">
                                     <span class="ti-mobile"></span>
