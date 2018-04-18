@@ -128,7 +128,6 @@ namespace cms.dbase
         /// <returns></returns>
         public override ResolutionsModel getCmsUserResolutioInfo(Guid _userId, string _pageUrl)
         {
-
             using (var db = new CMSdb(_context))
             {
                 var data = db.cms_sv_resolutionss

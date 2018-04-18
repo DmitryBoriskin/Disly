@@ -704,6 +704,7 @@ function PopUpFrame(Object) {
     //      alert("Request failed: " + textStatus);
     //  });
 
+    $modalBody.append("<div class='modal-preloader-block text-center'><img src='/Content/img/preloader.svg'/></div>");
     ///////////////////////////////////////////////
     $modalBody.append($frale);
 

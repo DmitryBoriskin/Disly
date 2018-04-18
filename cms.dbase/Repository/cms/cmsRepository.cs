@@ -476,9 +476,9 @@ namespace cms.dbase
         {
             using (var db = new CMSdb(_context))
             {
-                var data = db.cms_sv_resolutionss.
-                    Where(w => (w.f_group == group_id && w.b_read == true && w.c_user_id == user_id)).
-                    Select(s => new cmsMenuItem
+                var data = db.cms_sv_resolutionss
+                    .Where(w => w.f_group == group_id && w.b_read == true && w.c_user_id == user_id && w.b_show == true)
+                    .Select(s => new cmsMenuItem
                     {
                         id = s.c_menu_id,
                         Permit = s.n_permit,
@@ -505,7 +505,6 @@ namespace cms.dbase
             {
                 var data = db.cms_menus
                     .Where(w => w.id == id)
-                    .Where(w => w.b_show == true)
                     .Select(s => new cmsMenuItem
                     {
                         id = s.id,

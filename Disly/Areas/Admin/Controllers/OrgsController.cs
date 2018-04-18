@@ -315,14 +315,12 @@ namespace Disly.Areas.Admin.Controllers
         // GET: Admin/Orgs/structure/{Guid}
         public ActionResult Structure(Guid id)
         {
-
-
             ViewBag.Title = "Структурное подразделение";
             model.StructureItem = _cmsRepository.getStructure(id);//+ список подразделений      
             if (model.StructureItem != null)
             {
                 #region администратор сайта
-                if (model.Account.Group == "admin")
+                if (model.Account.Group == "admin" )
                 {
                     if (orgId != null)
                     {

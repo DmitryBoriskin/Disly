@@ -10,14 +10,16 @@
     }
 }
 
-<div class="modal fade" data-show="@isOpen" data-backdrop="static" data-keyboard="false" >
+<div class="modal fade" data-show="@isOpen" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <h4 class="modal-title">@_title</h4>
             </div>
-            <div class="modal-body">@Html.Raw(@_info)</div>
+            <div class="modal-body">
+                @Html.Raw(@_info)
+            </div>
             <div class="modal-footer">
                 @if (Model.ErrorInfo != null)
                 {

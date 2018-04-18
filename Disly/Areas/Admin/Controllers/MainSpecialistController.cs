@@ -243,7 +243,7 @@ namespace Disly.Areas.Admin.Controllers
         /// <param name="objType"></param>
         /// <returns></returns>
         [HttpGet]
-        public ActionResult NewGSMember(Guid objId)
+        public ActionResult NewGSMember(Guid objId, GSMemberType objType)
         {
             //Получение главного специалиста
             var mainSpec = _cmsRepository.getGSItem(objId);
@@ -262,7 +262,7 @@ namespace Disly.Areas.Admin.Controllers
                 model.Member = new GSMemberModel()
                 {
                     GSId = objId,
-                    //MemberType = objType
+                    MemberType = objType
                 };
 
                 //if(objType == GSMemberType.SPEC)

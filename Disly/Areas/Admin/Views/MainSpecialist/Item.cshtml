@@ -38,7 +38,7 @@
                         </table>
                     </div>
                     <div class="col-lg-offset-9 col-lg-3">
-                        @Html.ActionLink("Добавить", "NewGSMember", "MainSpecialist", new { @objId = Model.Item.Id }, new { @id = "AddSpec", @class = "button pop-up_frame icon-create", @title = "Добавить врача в ГС" })
+                        @Html.ActionLink("Добавить", "NewGSMember", "MainSpecialist", new { @objId = Model.Item.Id, @objType = GSMemberType.SPEC }, new { @id = "AddSpec", @class = "button pop-up_frame icon-create", @title = "Добавить врача в ГС" })
                     </div>
                 </div>
             </div>
