@@ -355,7 +355,7 @@ namespace cms.dbase
                     var mainSp = query.SingleOrDefault();
 
                     db.content_gss
-                        .Where(w => w.id.Equals(id))
+                        .Where(w => w.id==id)
                         .Delete();
 
                     var log = new LogModel()
