@@ -87,6 +87,9 @@ namespace Disly.Controllers
                 case "typelist":
                     if (id.HasValue)
                     {
+                        // список организаций
+                        model.OrgList = _repository.getOrgModels(id.Value);
+
                         // название типа организаций
                         ViewBag.TypeTitle = _repository.getOrgTypeName(id.Value);
                         model.Breadcrumbs.Add(new Breadcrumbs

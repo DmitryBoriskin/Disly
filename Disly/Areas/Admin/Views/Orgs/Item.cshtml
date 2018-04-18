@@ -83,6 +83,7 @@
                 </div>
             </div>
 
+            @*@if (Model.Item != null && Model.SectionResolution != null)*@
             @if (Model.Item != null && Model.SectionResolution != null)
             {
                 <div class="child-list">
@@ -211,9 +212,6 @@
                     <a class="button icon-create" href="/Admin/Sites/Master/@Guid.NewGuid()/?type=org&contentid=@Model.Item.Id" target="_blank">Создать сайт организации</a>
                 }
             }
-
-
-
 
             @if (Model.Item != null)
             {
