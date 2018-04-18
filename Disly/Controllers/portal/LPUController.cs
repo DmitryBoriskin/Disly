@@ -111,6 +111,10 @@ namespace Disly.Controllers
                 case "affiliation":
                     if (id.HasValue)
                     {
+                        model.OrgList = _repository.getOrgModels(null)
+                            .Where(w => w.Affiliation.Equals(id)).ToArray();
+
+
                         ViewBag.TypeTitle = _repository.getAffiliationDepartment(id.Value);
                         model.Breadcrumbs.Add(new Breadcrumbs
                         {
@@ -137,6 +141,7 @@ namespace Disly.Controllers
                             Title = ViewBag.TypeTitle,
                             Url = ""
                         });
+                        model.OrgList = _repository.getOrgPortalModels(id.Value);
                     }
                     else
                     {
@@ -146,8 +151,7 @@ namespace Disly.Controllers
                         ViewBag.Column1 = model.MedicalServices.Skip(0).Take(count_1_column);
                         ViewBag.Column2 = model.MedicalServices.Skip(count_1_column);
 
-                    }
-                        
+                    }                      
 
                     break;
                 default:
@@ -163,11 +167,6 @@ namespace Disly.Controllers
                     }
                     break;
             }
-
-            //if (id.HasValue || !id.HasValue && String.IsNullOrEmpty(tab))
-            //{
-            //    model.OrgList = _repository.getOrgsModel(tab, id.Value);
-            //}
 
             return View(model);
         }
