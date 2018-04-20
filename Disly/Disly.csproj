@@ -498,14 +498,17 @@
     <Content Include="Content\portal\img\bg3.jpg" />
     <Content Include="Content\portal\img\browse_press.jpg" />
     <Content Include="Content\portal\img\e-reg.jpg" />
+    <Content Include="Content\portal\img\e-reg_old.jpg" />
     <Content Include="Content\portal\img\event_calendar.jpg" />
     <Content Include="Content\portal\img\logo.png" />
     <Content Include="Content\portal\img\med_logo_footer.jpg" />
     <Content Include="Content\portal\img\mini-logo-med.png" />
     <Content Include="Content\portal\img\online-consultation.jpg" />
+    <Content Include="Content\portal\img\online-consultation_old.jpg" />
     <Content Include="Content\portal\img\smi-for-med-chuvashia.jpg" />
     <Content Include="Content\portal\img\tv-radio-plot.jpg" />
     <Content Include="Content\portal\img\your-opinion.jpg" />
+    <Content Include="Content\portal\img\your-opinion_old.jpg" />
     <Content Include="Content\portal\img\youtube-med-chuv.jpg" />
     <Content Include="Content\portal\style.css" />
     <Content Include="Content\spec\cecu.css" />
