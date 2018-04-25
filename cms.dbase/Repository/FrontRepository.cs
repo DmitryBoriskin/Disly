@@ -2366,7 +2366,7 @@ namespace cms.dbase
                 {
                     //Id = o.id,
                     Title = o.c_title,
-                    Phone = o.c_phone,
+                    Phone = o.orgphone,
                     PhoneReception = o.c_phone_reception,
                     Fax = o.c_fax,
                     Email = o.c_email,
