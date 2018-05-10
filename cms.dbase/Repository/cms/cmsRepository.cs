@@ -1449,11 +1449,30 @@ namespace cms.dbase
                             if (data.Checked)
                             {
                                 //insert
+                                
+                                var maxSortQuery = db.content_content_links
+                                                .Where(w => w.f_link == data.LinkId)
+                                                .Where(w => w.f_content_type == data.ObjctType.ToString().ToLower());
+
+                                if(data.ObjctType == ContentType.BANNER)
+                                {
+                                    var section = db.content_bannerss
+                                        .Where(b => b.id == data.ObjctId).First().f_section;
+
+                                    maxSortQuery = maxSortQuery
+                                           .Where(w => db.content_bannerss.Any(s => s.f_section == section && s.id == w.f_content));
+                                }
+
+                                var max = (maxSortQuery.Any()) ? maxSortQuery.Max(m => m.n_sort) + 1 : 1;
+
+
+
                                 db.content_content_links
                                            .Value(v => v.f_content, data.ObjctId)
                                            .Value(v => v.f_content_type, data.ObjctType.ToString().ToLower())
                                            .Value(v => v.f_link, data.LinkId)
                                            .Value(v => v.f_link_type, data.LinkType.ToString().ToLower())
+                                           .Value(v => v.n_sort, max)
                                            .Insert();
                             }
                         }

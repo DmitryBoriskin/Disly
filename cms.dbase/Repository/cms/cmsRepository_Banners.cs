@@ -384,49 +384,88 @@ namespace cms.dbase
         /// <returns></returns>
         public override bool permit_Banners(Guid id, int permit)
         {
-            using (var db = new CMSdb(_context))
+            try
             {
-                var data = db.content_bannerss
-                    .Where(w => w.id.Equals(id))
-                    .Select(s => new BannersModel
-                    {
-                        Section = s.f_section,
-                        Sort = s.n_sort
-                    });
-
-                if (data.Any())
+                using (var db = new CMSdb(_context))
                 {
-                    var query = data.FirstOrDefault();
-                    if (permit > query.Sort)
+                    var siteId = getSite(_domain).Id;
+
+                    var data = db.content_bannerss
+                        .Where(w => w.id == id)
+                        .Select(s => new BannersModel
+                        {
+                            Section = s.f_section,
+                        // Sort = s.n_sort
+                        Sort = db.content_content_links
+                                    .Where(c => c.f_content == id && c.f_link == siteId)
+                                    .First()
+                                    .n_sort
+                        });
+
+                    if (data.Any())
                     {
-                        db.content_bannerss
-                            .Where(w => w.f_site.Equals(_domain))
-                            .Where(w => w.f_section.Equals(query.Section))
-                            .Where(w => w.n_sort > query.Sort && w.n_sort <= permit)
-                            .Set(u => u.n_sort, u => u.n_sort - 1)
-                            .Update();
+                        var query = data.FirstOrDefault();
+                        if (permit > query.Sort)
+                        {
+                            /*db.content_bannerss
+                                .Where(w => w.f_site == _domain)
+                                .Where(w => w.f_section.Equals(query.Section))
+                                .Where(w => w.n_sort > query.Sort && w.n_sort <= permit)
+                                .Set(u => u.n_sort, u => u.n_sort - 1)
+                                .Update();*/
+
+                            //Все баннеры привязанные к сайту, по выбранной секции
+                            db.content_content_links
+                                .Where(w => w.f_content_type == "banner")
+                                .Where(w => w.f_link == siteId)
+                                .Where(w => db.content_bannerss.Any(s => s.f_section == query.Section && s.id == w.f_content))
+                                .Where(w => w.n_sort > query.Sort && w.n_sort <= permit)
+                                .Set(u => u.n_sort, u => u.n_sort - 1)
+                                .Update();
+                        }
+                        else
+                        {
+                            /*db.content_bannerss
+                                .Where(w => w.f_site == _domain)
+                                .Where(w => w.f_section.Equals(query.Section))
+                                .Where(w => w.n_sort < query.Sort && w.n_sort >= permit)
+                                .Set(u => u.n_sort, u => u.n_sort + 1)
+                                .Update();*/
+
+                            //Все баннеры привязанные к сайту, но выбранной секции
+                            db.content_content_links
+                                .Where(w => w.f_content_type == "banner")
+                                .Where(w => w.f_link == siteId)
+                                .Where(w => db.content_bannerss.Any(s => s.f_section == query.Section && s.id == w.f_content))
+                                .Where(w => w.n_sort < query.Sort && w.n_sort >= permit)
+                                .Set(u => u.n_sort, u => u.n_sort + 1)
+                                .Update();
+                        }
+
+                        /*db.content_bannerss
+                            .Where(w => w.id.Equals(id))
+                            .Set(u => u.n_sort, permit)
+                            .Update();*/
+
+                        db.content_content_links
+                              .Where(w => w.f_content == id)
+                              .Where(w => w.f_link == siteId)
+                             .Set(u => u.n_sort, permit)
+                             .Update();
+
+                        return true;
                     }
                     else
                     {
-                        db.content_bannerss
-                            .Where(w => w.f_site.Equals(_domain))
-                            .Where(w => w.f_section.Equals(query.Section))
-                            .Where(w => w.n_sort < query.Sort && w.n_sort >= permit)
-                            .Set(u => u.n_sort, u => u.n_sort + 1)
-                            .Update();
+                        return false;
                     }
-                    db.content_bannerss
-                        .Where(w => w.id.Equals(id))
-                        .Set(u => u.n_sort, permit)
-                        .Update();
-
-                    return true;
-                }
-                else
-                {
-                    return false;
                 }
             }
+            catch(Exception ex)
+            {
+                return false;
+            }
+          
         }
     }
 }
