@@ -118,7 +118,6 @@ namespace Disly.Controllers
 
             if (model.DoctorsItem != null)
             {
-
                 #region Запись на приём
                 if (string.IsNullOrEmpty(model.DoctorsItem.SNILS) && model.DoctorsRegistry != null)
                     model.DoctorsItem.IsRedirectUrl = model.DoctorsRegistry

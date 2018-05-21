@@ -121,7 +121,7 @@ namespace Integration.Frmp.library
 
                         try
                         {
-                            FinalizeIntegration(db);
+                            //FinalizeIntegration(db);
                         }
                         catch (Exception e)
                         {
@@ -323,13 +323,13 @@ namespace Integration.Frmp.library
                 }
                 SrvcLogger.Debug("{WORK}", "Данные по сотрудникам успешно добавлены в таблицу dbo.import_frmp_peoples");
 
-                for (int i = 0; i < importPeopleInfos.Count(); i += 1000)
-                {
-                    var bulk = importPeopleInfos.Skip(i).Take(1000);
-                    db.BulkCopy(bulk);
-                    SrvcLogger.Debug("{WORK}", string.Format("Импортированно информации по сотрудникам {0} из {1}", i, importPeopleInfos.Count()));
-                }
-                SrvcLogger.Debug("{WORK}", "Данные по сотрудникам успешно добавлены в таблицу dbo.import_frmp_people_infos");
+                //for (int i = 0; i < importPeopleInfos.Count(); i += 1000)
+                //{
+                //    var bulk = importPeopleInfos.Skip(i).Take(1000);
+                //    db.BulkCopy(bulk);
+                //    SrvcLogger.Debug("{WORK}", string.Format("Импортированно информации по сотрудникам {0} из {1}", i, importPeopleInfos.Count()));
+                //}
+                //SrvcLogger.Debug("{WORK}", "Данные по сотрудникам успешно добавлены в таблицу dbo.import_frmp_people_infos");
 
                 // уникальные связи сотрудников и организаций
                 var distinctPeopleOrgLinks = (from l in importPeopleOrgsLink
