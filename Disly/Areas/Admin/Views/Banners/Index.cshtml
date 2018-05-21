@@ -62,6 +62,7 @@
                         {
                             string imgUrl = (!string.IsNullOrEmpty(item.Photo.Url) && File.Exists(Server.MapPath(item.Photo.Url))) ? item.Photo.Url : "/Content/img/nophoto.jpg";
                             string disabled = (item.Disabled) ? "disabled" : string.Empty;
+
                             string text = string.Empty;
 
                             if (!string.IsNullOrEmpty(item.Text))
@@ -72,24 +73,31 @@
 
                             <div class="row list-item ui-sortable-handle @disabled" data-id="@item.Id">
                                 <div class="list-item @disabled">
-                                    <div class="col-md-3">
-                                        <a href="/admin/banners/item/@item.Id" class="li-image">
-                                            <img src="@imgUrl" alt="@item.Title" class="list_img_preview" />
-                                        </a>
+                                    <div class="col-md-1">
+                                        @item.Sort
                                     </div>
-                                    <div class="col-md-9">
-                                        <div class="li-desc">
-                                            @if (item.Locked || item.Site != Model.DomainName)
-                                            {
-                                                <span class="icon-lock" title="Заблокировано администратором портала"></span>
-                                            }
-                                            <a href="/admin/banners/item/@item.Id" class="li-caption">@item.Title</a><br />
-                                            <span>Дата публикации: </span>@item.Date.ToString("dd MMMM yyyy")<br />
-                                            <span>Текст: </span>@text<br />
-                                            <span>Кол-во переходов: </span>@item.CountClick
+                                        <div class="col-md-3">
+                                            <a href="/admin/banners/item/@item.Id" class="li-image">
+                                                <img src="@imgUrl" alt="@item.Title" class="list_img_preview" />
+                                            </a>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <div class="li-desc">
+                                                @if (item.Locked || item.Site != Model.DomainName)
+                                                {
+                                                    <span class="icon-lock" title="Заблокировано администратором портала"></span>
+                                                }
+                                                @if (item.DateEnd.HasValue)
+                                                {
+                                                    <span class="icon-сlock" title="Установлена дата оканчания показа"></span>
+                                                }
+                                                <a href="/admin/banners/item/@item.Id" class="li-caption">@item.Title</a><br />
+                                                <span>Дата публикации: </span>@item.Date.ToString("dd MMMM yyyy")<br />
+                                                <span>Текст: </span>@text<br />
+                                                <span>Кол-во переходов: </span>@item.CountClick
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
 
                             </div>
                         }

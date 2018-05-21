@@ -36,10 +36,11 @@
 
     <link href="/Content/plugins/mobileGallery/swipebox.css" rel="stylesheet">
     <link href="/Content/css/common.css" rel="stylesheet" />
+    <link href="/Content/css/common_media.css" rel="stylesheet" />
     <link href="/Content/css/commonless.css" rel="stylesheet" />
     <link href="~/Content/css/theme/green_portal.css" rel="stylesheet" />
 
-    <link href="~/Content/portal/style.css" rel="stylesheet" />
+    <link href="~/Content/portal/style.css?ver=1" rel="stylesheet" />
 
     <link href="~/Content/css/print.css" rel="stylesheet" type="text/css" media="print">
 
@@ -64,18 +65,16 @@
                     <div id="header-container" class="navbar-container">
                         <div class="head">
                             <div class="row">
-                                <div class="col-md-8">
+                                <div class="col-md-8 col-sm-9 head_logo">
                                     <a href="/" class="head_link">
-                                        @if (Model.SitesInfo.Logo.Url != null)
+                                    @if (Model.SitesInfo.Logo.Url != null)
                                     {
-                                    <div class="head_logo">
                                         <img src="~/Content/portal/img/logo.png"/>
-                                    </div>
                                     }
                                         @*<div class="head_title"><span>@Model.SitesInfo.LongTitle</span></div>*@
                                     </a>
                                 </div>
-                                <div class="col-md-4 right_section">     
+                                <div class="col-md-4 col-sm-3 right_section">
                                     <div class="navbar-right_wr">
                                         <ul class="nav navbar-nav navbar-right">
                                             <li><a href="/mapsite"><span class="ti-layers-alt top-icon"></span>Карта сайта</a></li>

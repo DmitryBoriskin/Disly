@@ -113,6 +113,9 @@ namespace Disly.Areas.Admin.Controllers
         [HttpPost]
         public string Delete(Guid id)
         {
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+
             //Guid Id = Guid.Parse(id);
             DocumentsViewModel model = new DocumentsViewModel()
             {

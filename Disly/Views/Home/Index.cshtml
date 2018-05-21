@@ -72,8 +72,8 @@
 
                                     string sliderfoto = (!string.IsNullOrWhiteSpace(item.Url))
                                                   ? File.Exists(Server.MapPath(item.Url))
-                                                      ? item.Url : "/Content/img/nophoto.jpg"
-                                                  : "/Content/img/nophoto.jpg";
+                                                      ? item.Url : "/Content/img/noslider.jpg"
+                                                  : "/Content/img/noslider.jpg";
 
                                 <div class="item @active">
                                     <div class="slider-item">
@@ -120,7 +120,11 @@
                                 </div>
                             </div>
                         </a>
-                        <a href="/contacts?t=phone">
+                        @{ 
+                            string ourphone =(Model.SitesInfo.Type=="spec")? "/speccontacts" : "/contacts?tab=phone";
+
+                        }
+                        <a href="@ourphone">
                             <div class="slider-message slider-message-2">
                                 <div class="icon-slider-message">
                                     <span class="ti-mobile"></span>

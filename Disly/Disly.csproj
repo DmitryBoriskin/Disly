@@ -137,6 +137,7 @@
     </Content>
     <Content Include="Areas\Admin\Views\Feedbacks\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Feedbacks\Item.cshtml" />
+    <Content Include="Content\css\common_media.css" />
     <Content Include="Content\css\common.css" />
     <Content Include="Content\css\commonless.css" />
     <Content Include="Content\css\iframe_tinymce.css" />
@@ -148,6 +149,7 @@
     <Content Include="Content\css\theme\blue.css" />
     <Content Include="Content\css\theme\blue_dark.css" />
     <Content Include="Content\css\theme\green.css" />
+    <Content Include="Content\css\theme\green2.css" />
     <Content Include="Content\css\theme\green_portal.css" />
     <Content Include="Content\css\theme\purple.css" />
     <Content Include="Content\css\theme\turquoise.css" />
@@ -200,6 +202,7 @@
     <Content Include="Content\img\metrica2.png" />
     <Content Include="Content\img\minzdrav-logo.png" />
     <Content Include="Content\img\nophoto.jpg" />
+    <Content Include="Content\img\noslider.jpg" />
     <Content Include="Content\img\no_avatar.png" />
     <Content Include="Content\img\obr-project.png" />
     <Content Include="Content\img\portal_bg.jpg" />
@@ -443,6 +446,7 @@
     <Content Include="Areas\Admin\Views\Shared\Modal\Spec.cshtml" />
     <Content Include="Areas\Admin\Views\Statistics\Index.cshtml" />
     <Content Include="Areas\Admin\Views\MainSpecialist\Part\AddDoctor.cshtml" />
+    <Content Include="Content\css\theme\green2.less" />
     <None Include="Content\plugins\tinymce\plugins\gallery\plugin.min.js_korkin" />
     <Content Include="Content\plugins\tinymce\plugins\help\img\logo.png" />
     <Content Include="Content\plugins\tinymce\plugins\help\plugin.min.js" />
@@ -488,17 +492,23 @@
     <Content Include="Content\plugins\tinymce\themes\inlite\theme.min.js" />
     <Content Include="Content\plugins\tinymce\themes\modern\theme.min.js" />
     <Content Include="Content\plugins\tinymce\tinymce.min.js" />
+    <Content Include="Content\portal\img\bg2.jpg" />
+    <Content Include="Content\portal\img\bg1.jpg" />
     <Content Include="Content\portal\img\bg.jpg" />
+    <Content Include="Content\portal\img\bg3.jpg" />
     <Content Include="Content\portal\img\browse_press.jpg" />
     <Content Include="Content\portal\img\e-reg.jpg" />
+    <Content Include="Content\portal\img\e-reg_old.jpg" />
     <Content Include="Content\portal\img\event_calendar.jpg" />
     <Content Include="Content\portal\img\logo.png" />
     <Content Include="Content\portal\img\med_logo_footer.jpg" />
     <Content Include="Content\portal\img\mini-logo-med.png" />
     <Content Include="Content\portal\img\online-consultation.jpg" />
+    <Content Include="Content\portal\img\online-consultation_old.jpg" />
     <Content Include="Content\portal\img\smi-for-med-chuvashia.jpg" />
     <Content Include="Content\portal\img\tv-radio-plot.jpg" />
     <Content Include="Content\portal\img\your-opinion.jpg" />
+    <Content Include="Content\portal\img\your-opinion_old.jpg" />
     <Content Include="Content\portal\img\youtube-med-chuv.jpg" />
     <Content Include="Content\portal\style.css" />
     <Content Include="Content\spec\cecu.css" />
@@ -611,10 +621,10 @@
     <Compile Include="Controllers\gs\SpecMembersController.cs" />
     <Compile Include="Controllers\gs\SpecExpertsController.cs" />
     <Compile Include="Controllers\gs\SpecDoctorsController.cs" />
-    <Compile Include="Controllers\gs\SpecStructureController.cs" />
     <Compile Include="Controllers\gs\SpecContactsController.cs" />
     <Compile Include="Controllers\orgs\OrgGsMembersController.cs" />
     <Compile Include="Controllers\AnketaController.cs" />
+    <Compile Include="Controllers\stringBuilder.cs" />
     <Compile Include="Controllers\VacancyController.cs" />
     <Compile Include="Controllers\RedirectFromOldController.cs" />
     <Compile Include="Areas\Admin\Controllers\PhotoAlbumsController.cs" />
@@ -953,8 +963,6 @@
     <Content Include="Views\Vacancy\Index.cshtml" />
     <Content Include="Views\Vacancy\Item.cshtml" />
     <Content Include="Views\Anketa\Index.cshtml" />
-    <Content Include="Views\SpecStructure\Index.cshtml" />
-    <Content Include="Views\SpecStructure\part\list.cshtml" />
     <Content Include="Views\Shared\part\nav.cshtml" />
     <Content Include="Views\_portal\home\Index.cshtml" />
     <Content Include="Views\_portal\shared\_Layout.cshtml" />
@@ -986,7 +994,6 @@
     <Content Include="Views\Shared\partial\Pager.cshtml" />
     <Content Include="Views\Press\part\Filter.cshtml" />
     <Content Include="Views\SpecContacts\Index.cshtml" />
-    <Content Include="Views\SpecStructure\part\doctorslist.cshtml" />
     <None Include="Properties\PublishProfiles\Med.pubxml" />
     <Content Include="Views\SpecMembers\Index.cshtml" />
     <Content Include="Views\SpecExperts\Index.cshtml" />

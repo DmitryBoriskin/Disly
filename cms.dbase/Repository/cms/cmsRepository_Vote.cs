@@ -39,7 +39,7 @@ namespace cms.dbase
                         query = query.Where(w => w.d_date_start.Date <= filter.DateEnd);
                     }
 
-                    query = query.OrderBy(o => o.d_date_start);
+                    query = query.OrderByDescending(o => o.d_date_start);
 
                     int itemCount = query.Count();
 

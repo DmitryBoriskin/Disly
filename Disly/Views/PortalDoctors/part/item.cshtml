@@ -1,7 +1,26 @@
 ﻿@model PortalDoctorsViewModel
 
 <div class="row">
-    <div class="col-md-8">
+    <div class="col-md-3 col-md-offset-1 col-md-push-8">
+        <div class="dop-block">
+            @{
+                string photo = (!string.IsNullOrWhiteSpace(Model.DoctorsItem.Photo))
+                           ? File.Exists(Server.MapPath(Model.DoctorsItem.Photo))
+                               ? Model.DoctorsItem.Photo : "/Content/img/no_avatar.png"
+                           : "/Content/img/no_avatar.png";
+            }
+            <a href="/doctors/@Model.DoctorsItem.Id" class="boss_img_wrap">
+                <img src="@photo" title="@Model.DoctorsItem.FIO" alt="@Model.DoctorsItem.FIO" />
+            </a>
+            <a class="btn_print" onClick="window.print()">Распечатать</a><br />
+            <a class="btn_share" title="Поделиться" href="../../../../#">Поделиться</a><br />
+            @if (Model.DoctorsItem.IsRedirectUrl)
+            {
+                <a class="btn_reg ti-info-alt" target="_blank" href="/RedirectRegistry/Doctors/@Model.DoctorsItem.Id/?oid=@Model.Oid">Расписание</a>
+            }
+        </div>
+    </div>
+    <div class="col-md-8 col-md-pull-4">
         @if (Model.DoctorsItem != null && Model.DoctorsItem.GS != null && !string.IsNullOrWhiteSpace(Model.DoctorsItem.GS.Url))
         {
             var link = string.Format("http://{0}", Model.DoctorsItem.GS.Url);
@@ -95,28 +114,6 @@
                         </li>
                     }
                 </ol>
-            }
-        </div>
-    </div>
-
-    <div class="col-md-3 col-md-push-1">
-        <div class="dop-block">
-            @{
-                string photo = (!string.IsNullOrWhiteSpace(Model.DoctorsItem.Photo))
-                           ? File.Exists(Server.MapPath(Model.DoctorsItem.Photo))
-                               ? Model.DoctorsItem.Photo : "/Content/img/no_avatar.png"
-                           : "/Content/img/no_avatar.png";
-            }
-
-            <a href="/doctors/@Model.DoctorsItem.Id" class="boss_img_wrap">
-                <img src="@photo" title="@Model.DoctorsItem.FIO" alt="@Model.DoctorsItem.FIO" />
-            </a>
-
-            <a class="btn_print" onClick="window.print()">Распечатать</a><br />
-            <a class="btn_share" title="Поделиться" href="../../../../#">Поделиться</a><br />
-            @if (Model.DoctorsItem.IsRedirectUrl)
-            {
-                <a class="btn_reg ti-info-alt" target="_blank" href="/RedirectRegistry/Doctors/@Model.DoctorsItem.Id/?oid=@Model.Oid">Расписание</a>
             }
         </div>
     </div>

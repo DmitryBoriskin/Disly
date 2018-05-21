@@ -33,7 +33,7 @@
         }
 
         @Html.TextBoxFor(m => m.AdministrativItem.Phone, new { type = "text", maxlength = "128", title = "Телефон" })
-        @Html.TextAreaFor(m => m.AdministrativItem.Text, new { type = "editor", title = "Дополнительная информация", height = "150" })
+        @Html.TextAreaFor(m => m.AdministrativItem.Text, new { type = "editor", title = "Дополнительная информация", height = "150", data_dir = ViewBag.DataPath })
     </div>
     <div class="dop_info-block">
         <div class="dop-caption">Настройки</div>

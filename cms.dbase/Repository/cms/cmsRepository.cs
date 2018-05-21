@@ -38,27 +38,33 @@ namespace cms.dbase
         }
 
         //Создаем событие, на которое потом подпишемся
-        public static event EventHandler<DislyEventArgs> DislyEvent;
+        public static event EventHandler<DislyEventArgs> DislyCmsEvent;
         private static void OnDislyEvent(DislyEventArgs eventArgs)
         {
-            DislyEvent(null, eventArgs);
+            DislyCmsEvent(null, eventArgs);
         }
 
         public override string getSiteDefaultDomain(string siteId)
         {
             using (var db = new CMSdb(_context))
             {
-                var data = db.cms_sites_domainss
-                    .Where(w => w.f_site.ToLower() == siteId)
+                var query = db.cms_sites_domainss
+                    .Where(w => w.f_site.ToLower() == siteId.ToLower())
                     .Where(w => w.b_default == true);
 
                 try
                 {
-                    return data.Select(p => p.c_domain).SingleOrDefault();
+                    if(query.Count() > 1)
+                        return query.Select(p => p.c_domain).First();
+
+                    return query.Select(p => p.c_domain).Single();
                 }
                 catch (Exception ex)
                 {
-                    throw new Exception("FrontRepository > getSiteDefaultDomain : Обнаружено более одного домена по умолчанию " + siteId);
+                    var message = String.Format("cmsRepository=> getSiteDefaultDomain for \"{0}\"", siteId);
+                    OnDislyEvent(new DislyEventArgs(LogLevelEnum.Error, message, ex));
+
+                    return "main";
                 }
             }
         }
@@ -470,9 +476,9 @@ namespace cms.dbase
         {
             using (var db = new CMSdb(_context))
             {
-                var data = db.cms_sv_resolutionss.
-                    Where(w => (w.f_group == group_id && w.b_read == true && w.c_user_id == user_id)).
-                    Select(s => new cmsMenuItem
+                var data = db.cms_sv_resolutionss
+                    .Where(w => w.f_group == group_id && w.b_read == true && w.c_user_id == user_id && w.b_show == true)
+                    .Select(s => new cmsMenuItem
                     {
                         id = s.c_menu_id,
                         Permit = s.n_permit,
@@ -497,9 +503,9 @@ namespace cms.dbase
         {
             using (var db = new CMSdb(_context))
             {
-                var data = db.cms_menus.
-                    Where(w => w.id == id).
-                    Select(s => new cmsMenuItem
+                var data = db.cms_menus
+                    .Where(w => w.id == id)
+                    .Select(s => new cmsMenuItem
                     {
                         id = s.id,
                         Permit = s.n_permit,
@@ -1443,11 +1449,30 @@ namespace cms.dbase
                             if (data.Checked)
                             {
                                 //insert
+                                
+                                var maxSortQuery = db.content_content_links
+                                                .Where(w => w.f_link == data.LinkId)
+                                                .Where(w => w.f_content_type == data.ObjctType.ToString().ToLower());
+
+                                if(data.ObjctType == ContentType.BANNER)
+                                {
+                                    var section = db.content_bannerss
+                                        .Where(b => b.id == data.ObjctId).First().f_section;
+
+                                    maxSortQuery = maxSortQuery
+                                           .Where(w => db.content_bannerss.Any(s => s.f_section == section && s.id == w.f_content));
+                                }
+
+                                var max = (maxSortQuery.Any()) ? maxSortQuery.Max(m => m.n_sort) + 1 : 1;
+
+
+
                                 db.content_content_links
                                            .Value(v => v.f_content, data.ObjctId)
                                            .Value(v => v.f_content_type, data.ObjctType.ToString().ToLower())
                                            .Value(v => v.f_link, data.LinkId)
                                            .Value(v => v.f_link_type, data.LinkType.ToString().ToLower())
+                                           .Value(v => v.n_sort, max)
                                            .Insert();
                             }
                         }

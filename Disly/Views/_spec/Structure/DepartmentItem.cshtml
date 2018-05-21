@@ -11,19 +11,18 @@
 
 <div class="structur">
     <div class="row">
-        <div class="col-md-8">
+        <div class="col-md-3 col-md-offset-1 col-md-push-8">
+            <div class="boss ">
+                @Html.Partial("part/boss_list")
+                <a class="btn_reg ti-user" href="/doctors/?group=@Model.DepartmentItem.Id">все сотрудники</a>
+            </div>
+        </div>
+        <div class="col-md-8 col-md-pull-4">
             @if (Model.DepartmentItem.Phones != null)
             {
-                @*<dl class="dl-horizontal structur_phons">
-                    @foreach (var item in Model.DepartmentItem.Phones)
-                    {
-                        <dt>@item.Label</dt>
-                        <dd>@item.Value</dd>
-                    }
-                </dl>*@
                 <h3>Телефоны</h3>
                 <div class="structur_phons">
-                    <table class="table table-condensed">
+                    <table class="table table-condensed table-responsive">
                         @foreach (var item in Model.DepartmentItem.Phones)
                         {
                             <tr>
@@ -36,14 +35,7 @@
             }
             <div>@Html.Raw(Model.DepartmentItem.Text)</div>
         </div>
-        <div class="col-md-3 col-md-push-1">
-            <div class="boss pull-right">
-                <div class="person_right">
-                    @Html.Partial("part/boss_list")
-                    <a class="btn_reg ti-user" href="/doctors/?group=@Model.DepartmentItem.Id">все сотрудники</a>
-                </div>
-            </div>
-        </div>
+        
     </div>
 </div>
 </div>

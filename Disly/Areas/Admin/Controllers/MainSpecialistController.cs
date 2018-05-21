@@ -265,15 +265,13 @@ namespace Disly.Areas.Admin.Controllers
                     MemberType = objType
                 };
 
-                if(objType == GSMemberType.SPEC)
-                {
-                    // список сотрудников для специализаций главного специалиста
-                    model.EmployeeList = _cmsRepository.getEmployeeList(mainSpec.Specialisations);
-                }
-                else
-                {
-                    model.EmployeeList = _cmsRepository.getEmployeeList();
-                }
+                //if(objType == GSMemberType.SPEC)
+                //{
+                //    // список сотрудников для специализаций главного специалиста
+                //    model.EmployeeList = _cmsRepository.getEmployeeList(mainSpec.Specialisations);
+                //}
+
+               model.EmployeeList = _cmsRepository.getEmployeeList();
             }
 
             return PartialView("Part/AddDoctor", model);

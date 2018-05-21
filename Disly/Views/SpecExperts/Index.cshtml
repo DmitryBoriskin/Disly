@@ -12,25 +12,26 @@
         @if (Model.ExpertsList != null && Model.ExpertsList.Count() > 0)
         {
             <div class="row">
-                <div class="col-md-8">
-                    <table class="table">
+                <div class="col-md-12">
+                    <div class="doctorsList-block">
                         @foreach (var item in Model.ExpertsList)
                         {
-                            string link = string.Format("/doctors/{0}", (item.People != null) ? item.People.Id.ToString() : null);
+                            var port = (Settings.BaseURL == "localhost") ? ":" + Context.Request.Url.Port : "";
+                            string link = string.Format("http://{0}{1}/portaldoctors/{2}", Settings.BaseURL, port, (item.People != null) ? item.People.Id.ToString() : null);
                             string photo = (item.People != null && !string.IsNullOrWhiteSpace(item.People.Photo))
-                                  ? File.Exists(Server.MapPath(item.People.Photo))
-                                      ? item.People.Photo : "/Content/img/no_avatar.png"
-                                  : "/Content/img/no_avatar.png";
-                            <tr>
-                                <td class="adminlist_img_td">
+                                          ? File.Exists(Server.MapPath(item.People.Photo))
+                                              ? item.People.Photo : "/Content/img/no_avatar.png"
+                                          : "/Content/img/no_avatar.png";
+                            <div class="row">
+                                <div class="col-md-2 col-sm-3 col-xs-5">
                                     <a target="_blank" href="@link">
                                         <img class="img-circle img-person-list" alt="@item.People.FIO" src="@photo" />
                                     </a>
-                                </td>
-                                <td>
+                                </div>
+                                <div class="col-md-3 col-sm-9 col-xs-7">
                                     <a class="adminlist_name" href="@link">@item.People.FIO</a>
-                                </td>
-                                <td>
+                                </div>
+                                <div class="col-md-7 col-xs-12">
                                     @if (item.Orgs != null && item.Orgs.Count() > 0)
                                     {
                                         foreach (var org in item.Orgs)
@@ -60,11 +61,17 @@
                                             </p>
                                         }
                                     }
-                                </td>
-                            </tr>
+                                </div>
+                            </div>
                         }
-                    </table>
+                    </div>
                 </div>
+            </div>
+        }
+        else
+        {
+            <div class="doctorsList-block">
+                <p class="noItems">Список пуст ...</p>
             </div>
         }
     </div>

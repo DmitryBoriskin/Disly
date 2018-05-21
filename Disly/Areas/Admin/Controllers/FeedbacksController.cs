@@ -25,6 +25,7 @@ namespace Disly.Areas.Admin.Controllers
 
             ViewBag.HttpKeys = Request.QueryString.AllKeys;
             ViewBag.Query = Request.QueryString;
+            ViewBag.DataPath = Settings.UserFiles + Domain+ "/"+ ViewBag.ControllerName + "/";
 
             filter = getFilter();
 

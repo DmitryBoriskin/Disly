@@ -10,7 +10,7 @@
             @Html.TextBoxFor(m => m.Item.Alias, new { @class = "uc_input", @required = "", @Title = "Псевдоним", @placeholder = "Псевдоним", @MaxLength = "16", @data_help = "Уникальное имя раздела, по которому будут раздаваться права пользователям на данный раздел." })
         </div>
     </div>
-    @Html.TextAreaFor(m => m.Item.Desc, new { @class = "uc_input", @type = "editor", @height = "300", @title = "Краткое описание раздела" })
+    @Html.TextAreaFor(m => m.Item.Desc, new { @class = "uc_input", @type = "lighteditor", @height = "300", @title = "Краткое описание раздела" })
 </div>
 
 <div class="dop_info-block">

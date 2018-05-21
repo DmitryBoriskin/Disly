@@ -225,7 +225,6 @@ namespace cms.dbModel
         public abstract bool createSiteMapItem(Guid id, SiteMapModel item);
         public abstract bool updateSiteMapItem(Guid id, SiteMapModel item);
         public abstract bool deleteSiteMapItem(Guid id);
-        public abstract bool deleteSiteMapItemCascad(Guid id);
 
         public abstract SiteMapMenu[] getSiteMapFrontSectionList(string domain);
         public abstract SiteMapMenu getSiteMapMenu(Guid id);

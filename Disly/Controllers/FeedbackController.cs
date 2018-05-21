@@ -1,10 +1,12 @@
 ﻿using cms.dbase;
 using cms.dbModel.entity;
+using Disly.Areas.Admin.Service;
 using Disly.Models;
 using Newtonsoft.Json;
 using System;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Web.Mvc;
 
 namespace Disly.Controllers
@@ -49,7 +51,7 @@ namespace Disly.Controllers
         /// Список обращений
         /// </summary>
         /// <returns></returns>
-        public ActionResult Appeallist(string sendStatus = "new", string message = "")
+        public ActionResult Appeallist(string status = null)
         {
             #region currentPage
             currentPage = _repository.getSiteMap(_path, _alias);
@@ -68,8 +70,6 @@ namespace Disly.Controllers
             }
             #endregion
 
-            
-
             var filter = getFilter();
             filter.Disabled = false;
             filter.Type = FeedbackType.appeal.ToString();             //Только вопросы
@@ -82,7 +82,7 @@ namespace Disly.Controllers
             #endregion
 
             ViewBag.FbType = FeedbackType.appeal;
-            ViewBag.FormStatus = sendStatus;
+            ViewBag.FormStatus = status;
             ViewBag.IsAgree = false;
             ViewBag.Anonymous = false;
             ViewBag.captchaKey = Settings.CaptchaKey;
@@ -94,7 +94,7 @@ namespace Disly.Controllers
         /// Список отзывов
         /// </summary>
         /// <returns></returns>
-        public ActionResult Reviewlist(string sendStatus = "new")
+        public ActionResult Reviewlist(string status = null)
         {
             #region currentPage
             currentPage = _repository.getSiteMap(_path, _alias);
@@ -127,7 +127,7 @@ namespace Disly.Controllers
             #endregion
 
             ViewBag.FbType = FeedbackType.review;
-            ViewBag.FormStatus = sendStatus;
+            ViewBag.FormStatus = status;
             ViewBag.IsAgree = false;
             ViewBag.Anonymous = false;
             ViewBag.captchaKey = Settings.CaptchaKey;
@@ -183,16 +183,22 @@ namespace Disly.Controllers
         [MultiButton(MatchFormKey = "action", MatchFormValue = "send-btn")]
         public ActionResult SendForm(FeedbackFormViewModel bindData)
         {
-            var newId = Guid.NewGuid();
+            Guid newId = Guid.NewGuid();
+
             string PrivateKey = Settings.SecretKey;
             string EncodedResponse = Request["g-Recaptcha-Response"];
             bool IsCaptchaValid = (ReCaptchaClass.Validate(PrivateKey, EncodedResponse) == "True" ? true : false);
 
-            var formStatus = "new";
-            
+            var formStatus = "";
+            var errorMsg = new StringBuilder();
+
+            var fileLink = "";
+
             if (ModelState.IsValid && IsCaptchaValid)
             {
                 var AnswererCode = Guid.NewGuid();
+
+                #region map bind data to FeedbackModel
                 var newMessage = new FeedbackModel()
                 {
                     Id = newId,
@@ -210,98 +216,135 @@ namespace Disly.Controllers
                     AnswererCode = AnswererCode,
                     FbType = bindData.FbType
                 };
-                var res = _repository.insertFeedbackItem(newMessage);
+                #endregion
 
-                //var res = false;
-                var fileLink = "";
-                if (res)
+                var fileValid = true;
+                var savedFileName = "";
+                if (bindData.FileToUpload != null && bindData.FileToUpload.ContentLength > 0)
                 {
-                    var savedFileName = "";
-                    if (bindData.FileToUpload != null)
+                    string savePath = Settings.UserFiles + Domain + Settings.FeedbacksDir + newId.ToString() + "/";
+                    if (bindData.FileToUpload.ContentLength < 10485760)
                     {
-                        string savePath = Settings.UserFiles + Domain + Settings.FeedbacksDir + newId.ToString() + "/";
-                        if (!Directory.Exists(savePath))
-                            Directory.CreateDirectory(Server.MapPath(savePath));
+                        //загружаем файлы
+                        string[] exts = { "jpg", "jpeg", "png", "gif", "txt", "doc", "docx", "rtf", "xls", "xlsx", "xlm", "pdf", "zip", "7z", "rar" };
 
-                        savedFileName = Path.Combine(Server.MapPath(savePath), Path.GetFileName(bindData.FileToUpload.FileName));
-                        bindData.FileToUpload.SaveAs(savedFileName);
-                        fileLink = "<a href=\"" + Settings.BaseURL + savePath + Path.GetFileName(bindData.FileToUpload.FileName) + "\">" + bindData.FileToUpload.FileName + "</a>";
+                        var fileName = Path.GetFileName(bindData.FileToUpload.FileName);
+                        string _name = fileName.Substring(0, fileName.LastIndexOf("."));
+                        string _exp = fileName.Substring(fileName.LastIndexOf(".") + 1);
+
+                        fileName = Transliteration.Translit(_name) + "." + _exp;
+
+                        if (!exts.Contains(_exp))
+                        {
+                            fileValid = false;
+                            errorMsg.AppendFormat("К обращению нельзя прикреплять файлы формата {0}<br />", _exp);
+                            frontLogger.Info(new Exception("Попытка прикрепить файл формата ." + _exp), "FeedbackController for site " + Domain + ":");
+                        }
+                        else
+                        {
+                            if (!Directory.Exists(savePath))
+                                Directory.CreateDirectory(Server.MapPath(savePath));
+
+                            savedFileName = Path.Combine(Server.MapPath(savePath), Path.GetFileName(bindData.FileToUpload.FileName));
+                            bindData.FileToUpload.SaveAs(savedFileName);
+                            fileLink = "<a href=\"" + Settings.BaseURL + savePath + Path.GetFileName(bindData.FileToUpload.FileName) + "\">" + bindData.FileToUpload.FileName + "</a>";
+                        }
                     }
-
-                    #region отправка сообщение на e-mail.ru
-                    // domen_ru/feedback/answerform?id=db4609c2-c5dc-4f4a-9d6a-542192ec7cb3&code=b6614768-fa5f-4a27-bd09-d07a3e6db1a9
-                    var domainUrl = _repository.getSiteDefaultDomain(Domain);
-                    if (string.IsNullOrEmpty(domainUrl))
-                        domainUrl = Settings.BaseURL;
-
-                    var answerLink = string.Format("http://{0}/feedback/answerform?id={1}&code={2}", domainUrl, newId, AnswererCode);
-
-                    var msgText = string.Format(
-                        "<div style=\"background-color:#fcf8e3;padding:15px;border:1px solid #eee; border-radius:4px;\">"
-                        + "<p>Уважаемый администратор сайта {0}!<br />"
-                        + "У вас 1 новое сообщение, отправленное через форму обратной связи сайта:</p>"
-
-                        + "<p style=\"padding-bottom:30px;\">"
-                        + "<b>Заявитель:</b> {1}<br />"
-                        + "<b>E-mail:</b>{2}<br />"
-                        + "<b>Дополнительные контакты:</b> {3}<br />"
-                        + "</p>"
-                        + "<p style=\"padding-bottom:30px;\">"
-                        + "<b>Тема обращения:</b><br />{4}<br /><br />"
-                        + "<b>Текст обращения:</b><br />{5}"
-                        + "</p>"
-                        + "<p>"
-                        + "Ответить на обращение можно по ссылке: <a href=\"{6}\">Ответить на обращение</a>"
-                        + "</p>"
-                        + "<p>"
-                        + "Прикрепленый файл: {7}"
-                        + "</p>"
-                        + "</div>"
-
-                        + "<hr />"
-                        + "<div style=\"font-size:12px;line-height:16px;color:#9c9c9c;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;\">"
-                        + "Сообщение было создано почтовым роботом. Пожалуйста, не отвечайте на него."
-                        + "</div>",
-                        Domain,
-                        bindData.SenderName,
-                        bindData.SenderEmail,
-                        bindData.SenderContacts,
-                        bindData.Theme,
-                        bindData.Text,
-                        answerLink,
-                        fileLink
-                        );
-
-                    Mailer letter = new Mailer();
-                    letter.isSsl = true;
-                    letter.Theme = "Сайт " + Domain + ": Обратная связь";
-                    letter.Text = msgText;
-                    letter.Attachments = savedFileName;
-                    letter.MailTo = Settings.mailTo;
-
-                    var admins = _repository.getSiteAdmins();
-                    if (admins != null)
+                    else
                     {
-                        letter.MailTo = string.Join(";", admins.Select(s => s.EMail.ToString()));
+                        fileValid = false;
+                        errorMsg.Append("Размер файла превышает допустимые 10Мб<br />");
+                        frontLogger.Info(new Exception("Попытка прикрепить файл зазмером ." + bindData.FileToUpload.ContentLength), "FeedbackController for site " + Domain + ":");
                     }
-
-                    var errorText = letter.SendMail();
-                    #endregion
-
-                    formStatus = "send";
-
-                    if (bindData.FbType == FeedbackType.review)
-                        return RedirectToAction("Reviewlist", new { sendStatus = formStatus });
-
-                    return RedirectToAction("Appeallist", new { sendStatus = formStatus });
                 }
-                else
-                    formStatus = "error";
+                if (fileValid)
+                {
+                    //Сохраняем в базу и отправка на почту
+                    var insertRes = _repository.insertFeedbackItem(newMessage);
+                    if (insertRes)
+                    {
+                        #region отправка сообщение на e-mail.ru
+
+                        // domen_ru/feedback/answerform?id=db4609c2-c5dc-4f4a-9d6a-542192ec7cb3&code=b6614768-fa5f-4a27-bd09-d07a3e6db1a9
+                        var domainUrl = _repository.getSiteDefaultDomain(Domain);
+                        if (string.IsNullOrEmpty(domainUrl))
+                            domainUrl = Settings.BaseURL;
+
+                        var answerLink = string.Format("http://{0}/feedback/answerform?id={1}&code={2}", domainUrl, newId, AnswererCode);
+
+                        var msg = new StringBuilder();
+                        msg.Append("<div style=\"background-color:#fcf8e3;padding:15px;border:1px solid #eee; border-radius:4px;\">");
+                        msg.AppendFormat("<p>Уважаемый администратор сайта {0}!<br />", Domain);
+                        msg.Append("У вас 1 новое сообщение, отправленное через форму обратной связи сайта:</p>");
+
+                        msg.Append("<p style=\"padding-bottom:30px;\">");
+                        msg.AppendFormat("<b>Заявитель:</b> {0}<br />", bindData.SenderName);
+                        msg.AppendFormat("<b>E-mail:</b>{0}<br />", bindData.SenderEmail);
+                        msg.AppendFormat("<b>Дополнительные контакты:</b> {0}<br />", bindData.SenderContacts);
+                        msg.Append("</p>");
+                        msg.Append("<p style=\"padding-bottom:30px;\">");
+                        msg.AppendFormat("<b>Тема обращения:</b><br />{0}<br /><br />", bindData.Theme);
+                        msg.AppendFormat("<b>Текст обращения:</b><br />{0}", bindData.Text);
+                        msg.Append("</p>");
+                        msg.AppendFormat("<p>Ответить на обращение можно по ссылке: <a href=\"{0}\">Ответить на обращение</a></p>", answerLink);
+                        if (string.IsNullOrEmpty(fileLink))
+                            msg.AppendFormat("<p>Прикрепленый файл: {0}</p>", fileLink);
+                        msg.Append("</div>");
+
+                        //Подпись
+                        var caption = new StringBuilder();
+                        caption.Append("<hr />");
+                        caption.Append("<div style=\"font-size:12px;line-height:16px;color:#9c9c9c;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;\">");
+                        caption.Append("Сообщение было создано почтовым роботом. Пожалуйста, не отвечайте на него.");
+                        caption.Append("</div>");
+
+                        msg.Append(caption);
+
+                        Mailer letter = new Mailer();
+                        letter.isSsl = true;
+                        letter.Domain = Domain;
+                        letter.Theme = "Сайт " + Domain + ": Обратная связь";
+                        letter.Text = msg.ToString();
+                        letter.Attachments = savedFileName;
+                        letter.MailTo = Settings.mailTo;
+                       
+
+                        var admins = _repository.getSiteAdmins();
+                        if (admins != null)
+                        {
+                            letter.MailTo = string.Join(";", admins.Select(s => s.EMail.ToString()));
+                        }
+
+                        //letter.MailTo = "s-kuzmina@asoft21.ru";
+
+                        //Логируем в SendMail, даже если админу не отправилось - в базу записалось
+                        var sendingRes = letter.SendMail();
+
+                        #endregion
+
+                        if (bindData.FbType == FeedbackType.review)
+                            return RedirectToAction("Reviewlist", new { status = "send" });
+
+                        return RedirectToAction("Appeallist", new { status = "send" });
+                    }
+                    else
+                    {
+                        formStatus = "error";
+                        errorMsg.Append("Не удалось отправить сообщение<br />");
+                    }
+                }
             }
             else
-                formStatus = "captcha";
+            {
+                formStatus = "error";
 
-          //В случае ошибок в форме
+                if (!IsCaptchaValid)
+                    errorMsg.Append("Ошибка ввода captcha");
+                else
+                    errorMsg.Append("Заполните все обязательные поля");
+            }
+
+            //В случае ошибок в форме
             var _alias = "appeallist";
             if (bindData.FbType != FeedbackType.appeal)
                 _alias = "reviewlist";
@@ -309,7 +352,6 @@ namespace Disly.Controllers
             #region currentPage
             currentPage = _repository.getSiteMap(_path, _alias);
             if (currentPage == null)
-                //throw new Exception("model.CurrentPage == null");
                 return RedirectToRoute("Error", new { httpCode = 404 });
 
             if (currentPage != null)
@@ -344,10 +386,12 @@ namespace Disly.Controllers
             ViewBag.Text = bindData.Text;
             #endregion
 
-            ViewBag.FormStatus = formStatus;
             ViewBag.IsAgree = false;
             ViewBag.Anonymous = false;
             ViewBag.captchaKey = Settings.CaptchaKey;
+
+            ViewBag.FormStatus = formStatus;
+            ViewBag.FormMsg = errorMsg.ToString();
 
             return View(model);
         }
@@ -392,7 +436,15 @@ namespace Disly.Controllers
         [MultiButton(MatchFormKey = "action", MatchFormValue = "answer-btn")]
         public ActionResult AnswerForm(FeedbackAnswerFormViewModel bindData)
         {
-            var errorText = "";
+            var errorMsg = new StringBuilder();
+
+            //Подпись
+            var caption = new StringBuilder();
+            caption.Append("<hr />");
+            caption.Append("<div style=\"font-size:12px;line-height:16px;color:#9c9c9c;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;\">");
+            caption.Append("Сообщение было создано почтовым роботом. Пожалуйста, не отвечайте на него.");
+            caption.Append("</div>");
+
             ViewBag.ByEmail = true;
             ViewBag.captchaKey = Settings.CaptchaKey;
 
@@ -412,8 +464,8 @@ namespace Disly.Controllers
                 feedbackItem.Disabled = !bindData.Publish;
                 feedbackItem.AnswererCode = newAnswererCode;
 
-                var res = _repository.updateFeedbackItem(feedbackItem);
-                if (res)
+                var updateRes = _repository.updateFeedbackItem(feedbackItem);
+                if (updateRes)
                 {
                     var page = "appeallist";
                     if (feedbackItem.FbType == FeedbackType.review)
@@ -430,47 +482,39 @@ namespace Disly.Controllers
                     if (bindData.ByEmail)
                     {
                         #region отправка сообщения на e-mail.ru
-                        var msgText1 = string.Format(
-                        "<div>"
-                        + "<p style=\"padding-bottom:30px;\">Уважаемый {0}!</p>"
-                        + "Ваше обращение:"
 
-                        + "<p style=\"background-color:#fcf8e3;padding:15px;border:1px solid #eee; border-radius:4px; padding-bottom:30px;\">"
-                        + "<b>Дата:</b><br />{1}<br /><br />"
-                        + "<b>Тема обращения:</b><br />{2}<br /><br />"
-                        + "<b>Текст обращения:</b><br />{3}"
-                        + "</p>"
+                        var msg1 = new StringBuilder();
+                        msg1.Append("<div>");
+                        msg1.AppendFormat("<p style=\"padding-bottom:30px;\">Уважаемый {0}!</p>", feedbackItem.SenderName);
+                        msg1.Append("Ваше обращение:");
+                        msg1.Append("<p style=\"background-color:#fcf8e3;padding:15px;border:1px solid #eee; border-radius:4px; padding-bottom:30px;\">");
+                        msg1.AppendFormat("<b>Дата:</b><br />{0}<br /><br />", feedbackItem.Date);
+                        msg1.AppendFormat("<b>Тема обращения:</b><br />{0}<br /><br />", feedbackItem.Title);
+                        msg1.AppendFormat("<b>Текст обращения:</b><br />{0}", feedbackItem.Text);
+                        msg1.Append("</p>");
 
-                        + "<p style=\"padding-bottom:30px;\">"
-                        + "рассмотрено, <b>отвечает:</b><br />{4}<br /><br />"
-                        + "<b>Ответ на обращение:</b><br />{5}"
-                        + "</p>"
+                        msg1.Append("<p style=\"padding-bottom:30px;\">");
+                        msg1.AppendFormat("рассмотрено, <b>отвечает:</b><br />{0}<br /><br />", feedbackItem.Answerer);
+                        msg1.AppendFormat("<b>Ответ на обращение:</b><br />{0}", feedbackItem.Answer);
+                        msg1.Append("</p>");
 
-                         + "<p style=\"padding-bottom:30px;\">"
-                        + "Также ответ опубликован на сайте. <a href=\"{6}\">Перейти</a>"
-                        + "</p>"
-                        + "</div>"
+                        msg1.Append("<p style=\"padding-bottom:30px;\">");
+                        msg1.AppendFormat("Также ответ опубликован на сайте. <a href=\"{0}\">Перейти</a>", feedbackLink);
+                        msg1.Append("</p>");
+                        msg1.Append("</div>");
 
-                        + "<hr />"
-                        + "<div style=\"font-size:12px;line-height:16px;color:#9c9c9c;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;\">"
-                        + "Сообщение было создано почтовым роботом. Пожалуйста, не отвечайте на него."
-                        + "</div>",
-                        feedbackItem.SenderName,
-                        feedbackItem.Date,
-                        feedbackItem.Title,
-                        feedbackItem.Text,
-                        feedbackItem.Answerer,
-                        feedbackItem.Answer,
-                        feedbackLink
-                        );
+                        msg1.Append(caption);
 
-                        Mailer letter1 = new Mailer();
-                        letter1.isSsl = true;
-                        letter1.Theme = "Сайт " + Domain + ": Обратная связь";
-                        letter1.Text = msgText1;
-                        letter1.MailTo = feedbackItem.SenderEmail;
+                        Mailer letter = new Mailer();
+                        letter.isSsl = true;
+                        letter.Domain = Domain;
+                        letter.Theme = "Сайт " + Domain + ": Обратная связь";
+                        letter.Text = msg1.ToString();
+                        letter.MailTo = feedbackItem.SenderEmail;
 
-                        errorText = letter1.SendMail();
+                        //Логируем в SendMail
+                        var res1 = letter.SendMail();
+
                         #endregion
                     }
 
@@ -478,29 +522,22 @@ namespace Disly.Controllers
                     // domen_ru/feedback/answerform?id=db4609c2-c5dc-4f4a-9d6a-542192ec7cb3&code=b6614768-fa5f-4a27-bd09-d07a3e6db1a9
                     var answerEditLink = string.Format("http://{0}/feedback/answerform?id={1}&code={2}", domainUrl, bindData.Id, newAnswererCode);
 
-                    var msgText2 = string.Format(
-                        "<div style=\"background-color:#fcf8e3;padding:15px;border:1px solid #eee; border-radius:4px;\">"
-                        + "<p>Уважаемый администратор сайта {0}!<br /><br />"
-                        + "На сообщение (обратная связь):<br />"
-                        + "<a href=\"{1}\">{2}</a><br /><br />"
-                        + "специалистом был дан ответ.<br /> Чтобы отредактировать ответ на обращение, перейдите по ссылке: "
-                         + "<a href=\"{3}\">Редактировать</a>"
-                        + "</p>"
+                    var msg2 = new StringBuilder();
+                    msg2.Append("<div style=\"background-color:#fcf8e3;padding:15px;border:1px solid #eee; border-radius:4px;\">");
+                    msg2.AppendFormat("<p>Уважаемый администратор сайта {0}!<br /><br />", Domain);
+                    msg2.Append("На сообщение (обратная связь):<br />");
+                    msg2.AppendFormat("<a href=\"{0}\">{1}</a><br /><br />", feedbackLink, feedbackLink);
+                    msg2.Append("специалистом был дан ответ.<br /> Чтобы отредактировать ответ на обращение, перейдите по ссылке: ");
+                    msg2.AppendFormat("<a href=\"{0}\">Редактировать</a>", answerEditLink);
+                    msg2.Append("</p>");
 
-                        + "<hr />"
-                        + "<div style=\"font-size:12px;line-height:16px;color:#9c9c9c;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;\">"
-                        + "Сообщение было создано почтовым роботом. Пожалуйста, не отвечайте на него."
-                        + "</div>",
-                        Domain,
-                        feedbackLink,
-                        feedbackLink,
-                        answerEditLink
-                        );
+                    msg2.Append(caption);
 
                     Mailer letter2 = new Mailer();
                     letter2.isSsl = true;
+                    letter2.Domain = Domain;
                     letter2.Theme = "Сайт " + Domain + ": Обратная связь";
-                    letter2.Text = msgText2;
+                    letter2.Text = msg2.ToString();
                     letter2.MailTo = Settings.mailTo;
 
                     var admins = _repository.getSiteAdmins();
@@ -508,30 +545,42 @@ namespace Disly.Controllers
                     {
                         letter2.MailTo = string.Join(";", admins.Select(s => s.EMail.ToString()));
                     }
+                    //letter.MailTo = "s-kuzmina@asoft21.ru";
 
-                    errorText += "<br />" + letter2.SendMail();
+                    //Логируем в SendMail
+                    var res2 = letter2.SendMail();
+
                     #endregion
 
-                    ViewBag.FormStatus = "send";
+                    if (feedbackItem.FbType == FeedbackType.review)
+                        return RedirectToAction("Reviewlist");
+
+                    return RedirectToAction("Appeallist");
+                }
+                else
+                {
+                    errorMsg.Append("Не удалось отправить сообщение<br />");
                 }
             }
             else
             {
-                ViewBag.FormStatus = "captcha";
-                ViewBag.Answer = bindData.Answer;
-                ViewBag.Answerer = bindData.Answerer;
+                if (!IsCaptchaValid)
+                    errorMsg.Append("Ошибка ввода captcha<br />");
+                else
+                    errorMsg.Append("Заполните все обязательные поля<br />");
             }
-
-            ViewBag.ByEmail = true;
-            ViewBag.IsAgree = false;
 
             model.Item = feedbackItem;
 
-            if (feedbackItem.FbType == FeedbackType.review)
-                return RedirectToAction("Reviewlist");
+            ViewBag.Answer = bindData.Answer;
+            ViewBag.Answerer = bindData.Answerer;
+            ViewBag.ByEmail = true;
+            ViewBag.IsAgree = false;
 
-            return RedirectToAction("Appeallist");
-            //return View(_ViewName, model);
+            ViewBag.FormStatus = "error";
+            ViewBag.FormMsg = errorMsg.ToString();
+
+            return View(model);
         }
     }
 }

@@ -2,6 +2,7 @@
 using cms.dbModel.entity;
 using Disly.Models;
 using System;
+using System.Linq;
 using System.Web.Mvc;
 
 namespace Disly.Controllers
@@ -59,10 +60,9 @@ namespace Disly.Controllers
 
             model.Structures = _repository.getStructureList(); //Domain
             //если в списке только одна структура — редиректим на него
-            if (model.Structures != null && model.Structures.Length == 1)
-            {
+            if (model.Structures != null && model.Structures.Count() > 0 && model.Structures.Count()==1)
                 return Redirect(ControllerName + "/" + model.Structures[0].Num);
-            }
+
 
             return View(_ViewName, model);
         }
@@ -73,10 +73,12 @@ namespace Disly.Controllers
         /// <returns></returns>
         public ActionResult Item(int num)
         {
+            if (num == 0)
+                return Redirect(ControllerName + "/");
+
             #region currentPage
             currentPage = _repository.getSiteMap("Structure");
             if (currentPage == null)
-                //throw new Exception("model.CurrentPage == null");
                 return RedirectToRoute("Error", new { httpCode = 404 });
 
             if (currentPage != null)
@@ -120,6 +122,9 @@ namespace Disly.Controllers
         /// <returns></returns>
         public ActionResult Department(int num, Guid id)
         {
+            if (num == 0)
+                return Redirect(ControllerName + "/");
+
             string _ViewName = (ViewName != String.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";
 
             model.StructureItem = _repository.getStructureItem(num); //Domain,

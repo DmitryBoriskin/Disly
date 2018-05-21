@@ -16,7 +16,14 @@ namespace cms.dbase
         /// </summary>
         private string _context = null;
         private string _domain = string.Empty;
-    
+
+        //Создаем событие, на которое потом подпишемся
+        public static event EventHandler<DislyEventArgs> DislyFrontEvent;
+        private static void OnDislyEvent(DislyEventArgs eventArgs)
+        {
+            DislyFrontEvent(null, eventArgs);
+        }
+
         /// <summary>
         /// Конструктор
         /// </summary>
@@ -35,52 +42,59 @@ namespace cms.dbase
 
             _domain = (!string.IsNullOrEmpty(DomainUrl)) ? getSiteId(DomainUrl) : "";
             //_domain = "cheb-gkc";
-
         }
+
         #region redirect methods
         public override SitesModel getSiteInfoByOldId(int Id)
         {
-            string domain = _domain;
-            using (var db = new CMSdb(_context))
+            try
             {
-                var data = db.cms_sitess
-                    .Where(w => w.c_alias.ToLower().Equals(domain))
-                    .Select(s => new SitesModel
-                    {
-                        Id = s.id,
-                        Title = s.c_name,
-                        LongTitle = s.c_name_long,
-                        Alias = s.c_alias.ToLower(),
-                        Adress = s.c_adress,
-                        Phone = s.c_phone,
-                        Fax = s.c_fax,
-                        Email = s.c_email,
-                        Site = s.c_url,
-                        Worktime = s.c_worktime,
-                        Logo = new Photo
+                string domain = _domain;
+                using (var db = new CMSdb(_context))
+                {
+                    var data = db.cms_sitess
+                        .Where(w => w.c_alias.ToLower().Equals(domain))
+                        .Select(s => new SitesModel
                         {
-                            Url = s.c_logo
-                        },
-                        ContentId = (Guid)s.f_content,
-                        ContentType = (ContentLinkType)Enum.Parse(typeof(ContentLinkType), s.c_content_type, true),
-                        Type = s.c_content_type,
-                        Facebook = s.c_facebook,
-                        Vk = s.c_vk,
-                        Instagramm = s.c_instagramm,
-                        Odnoklassniki = s.c_odnoklassniki,
-                        Twitter = s.c_twitter,
-                        Theme = s.c_theme,
-                        BackGroundImg = new Photo
-                        {
-                            Url = s.c_background_img
-                        }
-                    });
+                            Id = s.id,
+                            Title = s.c_name,
+                            LongTitle = s.c_name_long,
+                            Alias = s.c_alias.ToLower(),
+                            Adress = s.c_adress,
+                            Phone = s.c_phone,
+                            Fax = s.c_fax,
+                            Email = s.c_email,
+                            Site = s.c_url,
+                            Worktime = s.c_worktime,
+                            Logo = new Photo
+                            {
+                                Url = s.c_logo
+                            },
+                            ContentId = (Guid)s.f_content,
+                            ContentType = (ContentLinkType)Enum.Parse(typeof(ContentLinkType), s.c_content_type, true),
+                            Type = s.c_content_type,
+                            Facebook = s.c_facebook,
+                            Vk = s.c_vk,
+                            Instagramm = s.c_instagramm,
+                            Odnoklassniki = s.c_odnoklassniki,
+                            Twitter = s.c_twitter,
+                            Theme = s.c_theme,
+                            BackGroundImg = new Photo
+                            {
+                                Url = s.c_background_img
+                            }
+                        });
 
-                if (data.Any())
-                    return data.SingleOrDefault();
-
-                return null;
+                    if (data.Any())
+                        return data.SingleOrDefault();
+                }
             }
+            catch (Exception ex)
+            {
+                var message = String.Format("frontRepository=> getSiteInfoByOldId for \"{0}\" oldid={}", _domain, Id);
+                OnDislyEvent(new DislyEventArgs(LogLevelEnum.Debug, message, ex));
+            }
+                return null;
         }
 
         /// <summary>
@@ -179,13 +193,16 @@ namespace cms.dbase
                         return _domain.f_site;
                     }
 
-                    throw new Exception("FrontRepository: getSiteId Domain '" + domain + "' was not found!");
+                   
+                    //throw new Exception("FrontRepository: getSiteId Domain '" + domain + "' was not found!");
                 }
             }
             catch (Exception ex)
             {
-                throw new Exception("FrontRepository: getSiteId Domain '" + domain + "' непредвиденная ошибка!" + ex.Message);
+                var message = String.Format("cmsRepository=> getSiteId for \"{0}\"", domain);
+                OnDislyEvent(new DislyEventArgs(LogLevelEnum.Error, message, ex));
             }
+            return null;
         }
 
         /// <summary>
@@ -219,9 +236,11 @@ namespace cms.dbase
         /// Получение информации по сайту
         /// </summary>
         /// <returns></returns>
-        public override SitesModel getSiteInfo()
+        public override SitesModel getSiteInfo(string domain = null)
         {
-            string domain = _domain;
+            if (string.IsNullOrEmpty(domain))
+                domain = _domain;
+
             using (var db = new CMSdb(_context))
             {
                 var data = db.cms_sitess
@@ -266,6 +285,11 @@ namespace cms.dbase
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="contentId"></param>
+        /// <returns></returns>
         public override string getSiteDefaultDomainByContentId(Guid contentId)
         {
             using (var db = new CMSdb(_context))
@@ -284,6 +308,12 @@ namespace cms.dbase
                 }
             }
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="siteId"></param>
+        /// <returns></returns>
         public override string getSiteDefaultDomain(string siteId)
         {
             if (string.IsNullOrEmpty(siteId))
@@ -435,7 +465,8 @@ namespace cms.dbase
                 var query = db.sv_sites_bannerss
                     .Where(b => b.site_alias == _domain)
                     //.Where(b => b.f_section == section)
-                    .Where(b => b.banner_disabled == false);
+                    .Where(b => b.banner_disabled == false)
+                    .Where(b => b.banner_date_end > DateTime.Now || b.banner_date_end == null);
 
                 if (query.Any())
                 {
@@ -565,6 +596,11 @@ namespace cms.dbase
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public override SiteMapModel getPageInfo(Guid id)
         {
             string domain = _domain;
@@ -763,65 +799,73 @@ namespace cms.dbase
         /// <returns></returns>
         public override List<MaterialFrontModule> getMaterialsModule()
         {
-            string domain = _domain;
-            using (var db = new CMSdb(_context))
+            try
             {
-                var contentType = ContentType.MATERIAL.ToString().ToLower();
-
-                // список id-новостей для данного сайта
-                var materialIds = db.content_content_links.Where(e => e.f_content_type == contentType)
-                    .Join(db.cms_sitess.Where(o => o.c_alias.ToLower() == domain),
-                            e => e.f_link,
-                            o => o.f_content,
-                            (e, o) => e.f_content
-                            );
-
-                if (!materialIds.Any())
-                    return null;
-
-                // список групп
-                var groups = db.content_materials_groupss
-                    .Select(s => s.id).ToArray();
-
-                List<MaterialFrontModule> list = new List<MaterialFrontModule>();
-
-                foreach (var g in groups)
+                string domain = _domain;
+                using (var db = new CMSdb(_context))
                 {
-                    var query = db.content_sv_materials_groupss
-                        .Where(w => materialIds.Contains(w.id))
-                        .Where(w => w.group_id.Equals(g));
+                    var contentType = ContentType.MATERIAL.ToString().ToLower();
 
-                    //если не анонсы
-                    if (g != Guid.Parse("651CFEB9-E157-4F42-B40D-DE5A7DC1A8FC"))
+                    // список id-новостей для данного сайта
+                    var materialIds = db.content_content_links.Where(e => e.f_content_type == contentType)
+                        .Join(db.cms_sitess.Where(o => o.c_alias.ToLower() == domain),
+                                e => e.f_link,
+                                o => o.f_content,
+                                (e, o) => e.f_content
+                                );
+
+                    if (!materialIds.Any())
+                        return null;
+
+                    // список групп
+                    var groups = db.content_materials_groupss
+                        .Select(s => s.id).ToArray();
+
+                    List<MaterialFrontModule> list = new List<MaterialFrontModule>();
+
+                    foreach (var g in groups)
                     {
-                        query = query.Where(w => w.d_date <= DateTime.Now);
+                        var query = db.content_sv_materials_groupss
+                            .Where(w => materialIds.Contains(w.id))
+                            .Where(w => w.group_id.Equals(g));
+
+                        //если не анонсы
+                        if (g != Guid.Parse("651CFEB9-E157-4F42-B40D-DE5A7DC1A8FC"))
+                        {
+                            query = query.Where(w => w.d_date <= DateTime.Now);
+                        }
+
+                        var data = query
+                            .Where(w => w.b_disabled == false)
+                            .OrderByDescending(o => o.d_date)
+                            .Select(s => new MaterialFrontModule
+                            {
+                                Title = s.c_title,
+                                Alias = s.c_alias.ToLower(),
+                                Date = s.d_date,
+                                GroupName = s.group_title,
+                                GroupAlias = s.group_alias,
+                                Photo = s.c_preview,
+                                SmiType = s.c_smi_type
+                            });
+
+
+                        // берём последние 3 новости данной группы
+                        if (data.Any())
+                            list.AddRange(data.Take(2));
                     }
 
-                    var data = query
-                        .Where(w => w.b_disabled == false)
-                        .OrderByDescending(o => o.d_date)
-                        .Select(s => new MaterialFrontModule
-                        {
-                            Title = s.c_title,
-                            Alias = s.c_alias.ToLower(),
-                            Date = s.d_date,
-                            GroupName = s.group_title,
-                            GroupAlias = s.group_alias,
-                            Photo = s.c_preview,
-                            SmiType=s.c_smi_type
-                        });
-
-
-                    // берём последние 3 новости данной группы
-                    if (data.Any())
-                        list.AddRange(data.Take(2));
+                    if (list.Any())
+                        return list;
                 }
-
-                if (list.Any())
-                    return list;
-
-                return null;
             }
+            catch (Exception ex)
+            {
+                var message = String.Format("frontRepository=> getMaterialsModule for \"{0}\" ", _domain);
+                OnDislyEvent(new DislyEventArgs(LogLevelEnum.Debug, message, ex));
+            }
+
+            return null;
         }
 
 
@@ -1153,6 +1197,11 @@ namespace cms.dbase
                 return null;
             }
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public override StructureModel[] getStructureList()
         {
             using (var db = new CMSdb(_context))
@@ -1170,7 +1219,6 @@ namespace cms.dbase
                         }).ToArray();
                 }
                 return null;
-
             }
         }
 
@@ -1267,35 +1315,43 @@ namespace cms.dbase
         /// <returns></returns>
         public override StructureModel getStructureItem(int num) //string domain,
         {
-            string domain = _domain;
-            using (var db = new CMSdb(_context))
+            try
             {
-                var data = db.content_org_structures.Where(w => w.num == num)
-                           .Join(db.cms_sitess.Where(o => o.c_alias.ToLower() == domain), o => o.f_ord, e => e.f_content, (e, o) => e)
-                           .OrderBy(e=>e.n_sort)
-                           .Select(s => new StructureModel()
-                           {
-                               Id = s.id,
-                               Num = s.num,
-                               Title = s.c_title,
-                               Adress = s.c_adress,
-                               GeopointX = s.n_geopoint_x,
-                               GeopointY = s.n_geopoint_y,
-                               Phone = s.c_phone,
-                               PhoneReception = s.c_phone_reception,
-                               Fax = s.c_fax,
-                               Email = s.c_email,
-                               Routes = s.c_routes,
-                               Schedule = s.c_schedule,
-                               DirecorPost = s.c_director_post,
-                               Ovp = s.b_ovp
-                           });
+                string domain = _domain;
+                using (var db = new CMSdb(_context))
+                {
+                    var data = db.content_org_structures.Where(w => w.num == num)
+                               .Join(db.cms_sitess.Where(o => o.c_alias.ToLower() == domain), o => o.f_ord, e => e.f_content, (e, o) => e)
+                               .OrderBy(e => e.n_sort)
+                               .Select(s => new StructureModel()
+                               {
+                                   Id = s.id,
+                                   Num = s.num,
+                                   Title = s.c_title,
+                                   Adress = s.c_adress,
+                                   GeopointX = s.n_geopoint_x,
+                                   GeopointY = s.n_geopoint_y,
+                                   Phone = s.c_phone,
+                                   PhoneReception = s.c_phone_reception,
+                                   Fax = s.c_fax,
+                                   Email = s.c_email,
+                                   Routes = s.c_routes,
+                                   Schedule = s.c_schedule,
+                                   DirecorPost = s.c_director_post,
+                                   Ovp = s.b_ovp
+                               });
 
-                if (data.Any())
-                    return data.First();
-
-                return null;
+                    if (data.Any())
+                        return data.FirstOrDefault();
+                }
             }
+            catch (Exception ex)
+            {
+                var message = String.Format("frontRepository=> getStructureItem for \"{0}\" num={}", _domain, num);
+                OnDislyEvent(new DislyEventArgs(LogLevelEnum.Debug, message, ex));
+            }
+
+            return null;
         }
 
         /// <summary>
@@ -2120,15 +2176,25 @@ namespace cms.dbase
         /// <returns></returns>
         public override string getOid()
         {
-            using (var db = new CMSdb(_context))
+            try
             {
-                return
-                    (from s in db.cms_sitess
-                     join o in db.content_orgss on s.f_content equals o.id
-                     where s.c_alias.ToLower().Equals(_domain)
-                     select o.f_oid
-                    ).SingleOrDefault();
+                using (var db = new CMSdb(_context))
+                {
+                    return
+                        (from s in db.cms_sitess
+                         join o in db.content_orgss on s.f_content equals o.id
+                         where s.c_alias.ToLower().Equals(_domain)
+                         select o.f_oid
+                        ).SingleOrDefault();
+                }
             }
+            catch (Exception ex)
+            {
+                var message = String.Format("frontRepository=> getOid for \"{0}\"", _domain);
+                OnDislyEvent(new DislyEventArgs(LogLevelEnum.Debug, message, ex));
+            }
+
+            return null;
         }
 
         /// <summary>
@@ -2300,7 +2366,7 @@ namespace cms.dbase
                 {
                     //Id = o.id,
                     Title = o.c_title,
-                    Phone = o.c_phone,
+                    Phone = o.orgphone,
                     PhoneReception = o.c_phone_reception,
                     Fax = o.c_fax,
                     Email = o.c_email,
@@ -2324,6 +2390,7 @@ namespace cms.dbase
                 else return null;
             }
         }
+
         public override OrgsAdministrative getLeaderOrg(Guid OrgId)
         {
             using (var db = new CMSdb(_context))
@@ -2345,6 +2412,7 @@ namespace cms.dbase
                 return null;
             }
         }
+
         public override string spotDomainContent(Guid? ContentId)
         {
             using (var db = new CMSdb(_context))
@@ -2783,9 +2851,11 @@ namespace cms.dbase
             }
             catch (Exception ex)
             {
-                //write to log ex
-                return false;
+                var message = String.Format("frontRepository=> insertFeedbackItem for \"{0}\"", _domain);
+                OnDislyEvent(new DislyEventArgs(LogLevelEnum.Debug, message, ex));
             }
+
+            return false;
         }
 
         /// <summary>
@@ -2822,9 +2892,10 @@ namespace cms.dbase
             }
             catch (Exception ex)
             {
-                //write to log ex
-                return false;
+                var message = String.Format("frontRepository=> updateFeedbackItem for \"{0}\"", _domain);
+                OnDislyEvent(new DislyEventArgs(LogLevelEnum.Debug, message, ex));
             }
+            return false;
         }
 
         /// <summary>
@@ -3169,7 +3240,6 @@ namespace cms.dbase
                         //  select site.id).SingleOrDefault(),
                         Specialisations = s.gsspecialisationsgss.Where(sp => sp.f_gs == id).Any() ?
                                                 s.gsspecialisationsgss
-                                                        .Where(sp => sp.f_gs == id)
                                                         .Select(sp => sp.f_specialisation)
                                                         .ToArray()
                                                 : null,

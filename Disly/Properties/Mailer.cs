@@ -7,6 +7,7 @@ using System.Data;
 using Disly.Areas.Admin.Models;
 using cms.dbase;
 using System.Text.RegularExpressions;
+using cms.dbModel.entity;
 
 /// <summary>
 /// Сервис отправки писем
@@ -19,6 +20,7 @@ public class Mailer
     /// </summary>
     //protected dbRepository _repository { get; private set; }
     //protected SettingsViewModel model = new SettingsViewModel();
+    protected string domain = "";
 
     protected string server = String.Empty;
     protected int port = 25;
@@ -34,7 +36,6 @@ public class Mailer
     protected string styles = String.Empty;
 
     protected string attechments = String.Empty;
-    protected string results = String.Empty;
     protected string dublicate = String.Empty;
 
     public string MailTo
@@ -103,6 +104,19 @@ public class Mailer
         get { return dublicate; }
     }
 
+    public String Domain
+    {
+        set { domain = value; }
+        get { return domain; }
+    }
+
+    //Создаем событие, на которое потом подпишемся
+    public static event EventHandler<DislyEventArgs> DislyEvent;
+    private static void OnDislyEvent(DislyEventArgs eventArgs)
+    {
+        DislyEvent(null, eventArgs);
+    }
+
     public void MailFromSettings()
     {
         //    try {
@@ -152,83 +166,78 @@ public class Mailer
         //        server = Settings.mailServer;
         //        password = Settings.mailPWD;
         //    }      
-
-        if (mailfrom == String.Empty || server == String.Empty || password == String.Empty)
-        {
-            server = Settings.mailServer;
-            port = Settings.mailServerPort;
-            ssl = Settings.mailServerSSL;
-            mailname = Settings.mailAddresName;
-            mailfrom = Settings.mailUser;
-            server = Settings.mailServer;
-            password = Settings.mailPass;
-        }
-    }
-
-
-    public void MailToSettings()
-    {
-        //_repository = new dbRepository("cmsdbConnection");
-        //Guid GeneralUser= Guid.Parse("00000000-0000-0000-0000-000000000000");
-
-        //UsersViewModel model = new UsersViewModel()
-        //{
-        //    User = _repository.getUser(GeneralUser)
-        //};
-
-        //if (model.User.C_EMail.ToString() != String.Empty)
-        //    maillist = maillist + ";" + model.User.C_EMail.ToString();
-
-        if (maillist == string.Empty) maillist = Settings.mailTo;
-    }
-
-    public string SendMail()
-    {
-        MailFromSettings();
-
-        //Авторизация на SMTP сервере
-        SmtpClient Smtp = new SmtpClient(server, port);
-        Smtp.EnableSsl = ssl;
-        Smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
-        Smtp.UseDefaultCredentials = false;
-        Smtp.Credentials = new NetworkCredential(mailfrom, password);
-
-        // Формирование сообщения
-
-        MailMessage _Message = new MailMessage();
-        _Message.From = new MailAddress(mailfrom, mailname);
-        if (dublicate != String.Empty) maillist += ";" + dublicate;
-        string[] MailList = maillist.Split(';');
-        Regex regex = new Regex(@"\b[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}\b");
-
-        foreach (string adress in MailList)
-        {
-            MatchCollection normail = regex.Matches(adress);
-            if (normail.Count > 0) _Message.To.Add(new MailAddress(adress));
-        }
-
-        _Message.Subject = theme;
-        _Message.BodyEncoding = System.Text.Encoding.UTF8;
-        _Message.IsBodyHtml = true;
-        _Message.Body = "<DOCTYPE html><html><head></head><body>" + text + "</body></html>";
-
-        if (Attachments != string.Empty)
-        {
-            _Message.Attachments.Add(new Attachment(Attachments));
-        }
-
         try
         {
-            Smtp.Send(_Message);//отправка
-            results = "Сообщение отправлено";
+            if (mailfrom == String.Empty || server == String.Empty || password == String.Empty)
+            {
+                server = Settings.mailServer;
+                port = Settings.mailServerPort;
+                ssl = Settings.mailServerSSL;
+                mailname = Settings.mailAddresName;
+                mailfrom = Settings.mailUser;
+                server = Settings.mailServer;
+                password = Settings.mailPass;
+            }
         }
-        catch (System.Net.WebException)
+        catch (Exception ex)
         {
-            throw new Exception("Ошибка при отправке");
-            //results = "Ошибка при отправке";
+            var message = String.Format("Mailer => MailFromSettings");
+            OnDislyEvent(new DislyEventArgs(LogLevelEnum.Warning, message, ex));
         }
-
-        return results;
     }
 
+
+    public bool SendMail()
+    {
+        MailFromSettings();
+        try
+        {
+            //Авторизация на SMTP сервере
+            SmtpClient Smtp = new SmtpClient(server, port);
+            Smtp.EnableSsl = ssl;
+            Smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
+            Smtp.UseDefaultCredentials = false;
+            Smtp.Credentials = new NetworkCredential(mailfrom, password);
+
+            // Формирование сообщения
+            MailMessage _Message = new MailMessage();
+            _Message.From = new MailAddress(mailfrom, mailname);
+
+            _Message.Subject = theme;
+            _Message.BodyEncoding = System.Text.Encoding.UTF8;
+            _Message.IsBodyHtml = true;
+            _Message.Body = "<DOCTYPE html><html><head></head><body>" + text + "</body></html>";
+            if (Attachments != string.Empty)
+                _Message.Attachments.Add(new Attachment(Attachments));
+
+            if (dublicate != String.Empty)
+                maillist += ";" + dublicate;
+
+            if (maillist != null)
+            {
+                string[] MailList = maillist.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+                Regex regex = new Regex(@"\b[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}\b");
+                foreach (string adress in MailList)
+                {
+                    MatchCollection normail = regex.Matches(adress);
+                    if (normail.Count > 0)
+                        _Message.To.Add(new MailAddress(adress));
+                }
+
+                Smtp.Send(_Message);
+                return true;
+            }
+
+            var message = String.Format("Mailer => SendMail for domain {0}: не указаны адесаты", domain);
+            OnDislyEvent(new DislyEventArgs(LogLevelEnum.Warning, message, null));
+
+        }
+        catch (Exception ex)
+        {
+            var message = String.Format("Mailer => SendMail for domain {0}", domain);
+            OnDislyEvent(new DislyEventArgs(LogLevelEnum.Error, message, ex));
+        }
+
+        return false;
+    }
 }

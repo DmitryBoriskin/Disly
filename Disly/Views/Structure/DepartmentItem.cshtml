@@ -6,24 +6,22 @@
     }
 }
 <div class="type-page">
-@Html.Partial("services/breadcrumbs")
-<h1>@Model.DepartmentItem.Title</h1>
+    @Html.Partial("services/breadcrumbs")
+    <h1>@Model.DepartmentItem.Title</h1>
 
-<div class="structur">
-    <div class="row">
-        <div class="col-md-8">
-            @if (Model.DepartmentItem.Phones != null)
-            {
-                @*<dl class="dl-horizontal structur_phons">
-                    @foreach (var item in Model.DepartmentItem.Phones)
-                    {
-                        <dt>@item.Label</dt>
-                        <dd>@item.Value</dd>
-                    }
-                </dl>*@
-                <h3>Телефоны</h3>
-                <div class="structur_phons">
-                    <table class="table table-condensed">
+    <div class="structur">
+        <div class="row">
+            <div class="col-md-3 col-md-offset-1 col-md-push-8">
+                <div class="boss">
+                        @Html.Partial("part/boss_list")
+                        <a class="btn_reg ti-user" href="/doctors/?group=@Model.DepartmentItem.Id">все сотрудники</a>
+                 </div>
+            </div>
+            <div class="col-md-8 col-md-pull-4">
+                @if (Model.DepartmentItem.Phones != null && Model.DepartmentItem.Phones.Count() > 0)
+                {
+                    <h3>Телефоны</h3>
+                    <table class="table table-condensed table-responsive">
                         @foreach (var item in Model.DepartmentItem.Phones)
                         {
                             <tr>
@@ -32,20 +30,9 @@
                             </tr>
                         }
                     </table>
-                </div>                
-            }
-            <div>@Html.Raw(Model.DepartmentItem.Text)</div>
-        </div>
-        <div class="col-md-3 col-md-push-1">
-            <div class="boss pull-right">
-                <div class="person_right">
-                    @Html.Partial("part/boss_list")
-                    <a class="btn_reg ti-user" href="/doctors/?group=@Model.DepartmentItem.Id">все сотрудники</a>
-                </div>
+                }
+                <div>@Html.Raw(Model.DepartmentItem.Text)</div>
             </div>
         </div>
     </div>
 </div>
-</div>
-
-

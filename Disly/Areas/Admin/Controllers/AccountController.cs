@@ -159,7 +159,10 @@ namespace Disly.Areas.Admin.Controllers
                                 Massege += "<hr><i><span style=\"font-size:11px\">Это сообщение отпралено роботом, на него не надо отвечать</i></span>";
                                 Letter.MailTo = AccountInfo.Mail;
                                 Letter.Text = Massege;
-                                string ErrorText = Letter.SendMail();
+
+                                //Логируем в SendMail
+                                var res = Letter.SendMail();
+
                                 #endregion
                                 ModelState.AddModelError("", "После " + maxLoginError + " неудачных попыток авторизации Ваш пользователь временно заблокирован.");
                                 ModelState.AddModelError("", "Вам на почту отправлено сообщение с инструкцией по разблокировки и смене пароля.");
@@ -239,7 +242,10 @@ namespace Disly.Areas.Admin.Controllers
                     Massege += "<hr><i><span style=\"font-size:11px\">Это сообщение отпралено роботом, на него не надо отвечать</i></span>";
                     Letter.MailTo = AccountInfo.Mail;
                     Letter.Text = Massege;
-                    string ErrorText = Letter.SendMail();
+
+                    //Логируем в SendMail
+                    var res = Letter.SendMail();
+                   
                     #endregion
 
                     return RedirectToAction("MsgSendMail", "Account");

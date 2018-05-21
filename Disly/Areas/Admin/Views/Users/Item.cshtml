@@ -38,7 +38,7 @@
                     @Html.TextBoxFor(m => m.Item.Mobile, new { maxlength = "64", @placeholder = "Телефон (моб.)", @data_mask="+7 (999) 999-99-99" })
                 </div>
             </div>            
-            @Html.TextAreaFor(m => m.Item.Contacts, new { @title = "Дополнительные контакты", @type = "editor", @rows = "8" })
+            @Html.TextAreaFor(m => m.Item.Contacts, new { @title = "Дополнительные контакты", @type = "editor", @rows = "8", data_dir = ViewBag.DataPath })
         </div>
     </div>
     

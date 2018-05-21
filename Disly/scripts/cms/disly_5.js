@@ -704,6 +704,7 @@ function PopUpFrame(Object) {
     //      alert("Request failed: " + textStatus);
     //  });
 
+    $modalBody.append("<div class='modal-preloader-block text-center'><img src='/Content/img/preloader.svg'/></div>");
     ///////////////////////////////////////////////
     $modalBody.append($frale);
 
@@ -748,7 +749,7 @@ function Sorting_init(Object) {
 
             $.ajax({
                 type: "POST",
-                async: false,
+                async: true,
                 url: _ServiceUrl,
                 data: { id: _Id, permit: _Num },
                 error: function () { Content = '<div>Error!</div>'; },

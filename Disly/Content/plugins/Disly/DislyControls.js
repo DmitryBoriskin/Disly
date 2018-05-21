@@ -35,6 +35,7 @@
     }
 
     inputText.prototype.render = function () {
+
         this.$element.wrap('<div class="form-group">');
 
         if (this.options.title) {
@@ -53,18 +54,31 @@
 
 
         if (this.options.type == 'date' || this.options.type == 'datetime') {
-            var $InputTime = $('<input style="width:70px;" class="form-control" placeholder="00:00">');
-            var timeValh = this.$element.attr('value').replace(/(\d+).(\d+).(\d+) (\d+):(\d+):(\d+)/, '$4');
-            var timeValm = this.$element.attr('value').replace(/(\d+).(\d+).(\d+) (\d+):(\d+):(\d+)/, '$5');
+            var $InputTime = $('<input style="width:70px;" class="form-control" placeholder="00:00" value="">');
 
-            if (timeValh.length < 2) {
-                timeValh = "0" + timeValh;
-            }
-            if (timeValm.length < 2) {
-                timeValm = "0" + timeValm;
+
+            if (this.$element.val())
+            {
+                var timeValh = this.$element.attr('value').replace(/(\d+).(\d+).(\d+) (\d+):(\d+):(\d+)/, '$4');
+                var timeValm = this.$element.attr('value').replace(/(\d+).(\d+).(\d+) (\d+):(\d+):(\d+)/, '$5');
+
+                if (timeValh.length === 0) {
+                    timeValh = "00";
+                }
+                if (timeValh.length === 1) {
+                    timeValh = "0" + timeValh;
+                }
+
+                if (timeValm.length === 0) {
+                    timeValm = "0" + timeValm;
+                }
+                if (timeValm.length === 1) {
+                    timeValm = "00";
+                }
+
+                $InputTime.attr('value', timeValh + ":" + timeValm);
             }
 
-            $InputTime.attr('value', timeValh + ":" + timeValm);
             $InputTime.mask('Hh:Mm', {
                 'translation': {
                     H: { pattern: /[0-2]/ },
@@ -77,15 +91,16 @@
 
             //$InputTime.attr('data-mask', '99:99');
 
-            var $InputDate = $('<input data-type="date" class="form-control" value="">');
-            $InputDate.attr('value', this.$element.attr('value').replace(/(\d+).(\d+).(\d+) (\d+:\d+:\d+)/, '$1.$2.$3'));
+            var $InputDate = $('<input data-type="date" class="form-control" value="" >');
             $InputDate.attr('data-mask', '99.99.9999');
 
+            if (this.$element.val()) {
+                $InputDate.attr('value', this.$element.attr('value').replace(/(\d+).(\d+).(\d+) (\d+:\d+:\d+)/, '$1.$2.$3'));
+            }
 
             if (this.$element.attr('required') == 'required') {
                 $InputDate.attr('required', 'required');
             }
-
 
             this.$element.hide();
             this.$element.after($InputTime);
@@ -102,26 +117,38 @@
             $InputDate.keyup(function () {
                 SpotDate();
             });
+
             $InputTime.keyup(function () {
                 SpotDate();
             });
+
             $InputDate.datepicker()
                 .on("input change", function (e) {
                     SpotDate();
                 });
+
             function SpotDate() {
                 var time = $InputTime.val();
-                var Length = time.length;
-                switch (Length) {
-                    case (5): time += ':00'; break;
-                    case (4): time += '0:00'; break;
-                    case (3): time += '00:00'; break;
-                    case (2): time += ':00:00'; break;
-                    case (1): time += '0:00:00'; break;
-                    default: time += '00:00:00'; break;
+                var date = $InputDate.val();
+
+                if (date) {
+                    var Length = time.length;
+                    switch (Length) {
+                        case (5): time += ':00'; break;
+                        case (4): time += '0:00'; break;
+                        case (3): time += '00:00'; break;
+                        case (2): time += ':00:00'; break;
+                        case (1): time += '0:00:00'; break;
+                        default:
+                            time += '00:00:00'; break;
+                    }
+                    $TargetInput.attr('value', date + ' ' + time);
                 }
-                $TargetInput.attr('value', $InputDate.val() + ' ' + time);
-            }
+                else {
+                    $InputTime.val('');
+                    $TargetInput.attr('value', '');
+                }
+            };
         }
         this.$element.addClass('form-control');
     }
@@ -220,14 +247,13 @@
         this.$element.after($HiddenInput);
 
         var fName = this.$element.attr('data-url');
-        if (fName)
-        {
+        if (fName) {
             fName = fName.substring(fName.lastIndexOf('/') + 1, fName.lastIndexOf('.'));
         }
         else {
             fName = '';
         }
-       
+
         name: this.$element.attr('data-name', fName);
 
         this.create()
@@ -237,7 +263,7 @@
     }
 
     inputFile.prototype.delete = function () {
-       // this.$element.removeAttr('data-url');
+        // this.$element.removeAttr('data-url');
     }
 
     inputFile.prototype.create = function () {

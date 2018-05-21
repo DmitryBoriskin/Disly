@@ -78,7 +78,7 @@
                 </div>
             }
             else
-            {<p>Дополнительные телефоны можно доавить после создания раздела.</p>}
+            {<p>Дополнительные телефоны можно добавить после создания раздела.</p>}
         </div>
 
 
@@ -130,9 +130,9 @@
         <div class="group-block " title="Как добраться">
             @Html.TextAreaFor(m => m.StructureItem.Routes, new { type = "editor", title = "Текст", height = "100",data_dir= ViewBag.DataPath })
         </div>
-        <div class="group-block " title="График работы">
+        @*<div class="group-block " title="График работы">
             @Html.TextAreaFor(m => m.StructureItem.Schedule, new { type = "editor", title = "Текст", height = "100", data_dir = ViewBag.DataPath })
-        </div>
+        </div>*@
         <div class="group-block open" title="Описание">
             @Html.TextAreaFor(m => m.DepartmentItem.Text, new { type = "editor", title = "Текст", height = "250", data_dir = ViewBag.DataPath })
         </div>
@@ -203,7 +203,7 @@
         }
         else
         {
-            <p>Сотрудников можно добавить только послед создания отдела.</p>
+            <p>Сотрудников можно добавить только после создания отдела.</p>
         }
 
     </div>

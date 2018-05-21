@@ -19,35 +19,16 @@
             @*<h2>Задайте вопрос</h2>*@
             @if (ViewBag.FormStatus != null)
             {
-                string status = ViewBag.FormStatus;
                 <div id="feedback_status" class="feedback_status">
-                    @switch (status)
+                    @if (ViewBag.FormStatus == "error")
                     {
-                        case "send":
-                            {
-                                <div class="alert alert-success">
-                                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                                    Ваше сообщение отправлено.
-                                </div>
-                            }
-                            break;
-                        case "captcha":
-                            {
-                                <div class="alert alert-warning">
-                                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                                    Сообщение не отправлено. Заполните все обязательные поля и введите каптчу.
-                                </div>
-                            }
-                            break;
-                        default:
-                            {
-                                <div class="alert alert-danger">
-                                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                                    Ваше сообщение не отправлено.
-                                    @Html.ValidationSummary(false, "")
-                                </div>
-                            }
-                            break;
+
+                        <div class="alert alert-danger">
+                            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                            Сообщение не отправлено!<br />
+                            @Html.Raw(ViewBag.FormMsg)<br />
+                            @Html.ValidationSummary(false, "")
+                        </div>
                     }
                 </div>
             }
@@ -80,7 +61,7 @@
                         <input type="hidden" name="AnswererCode" value="@Model.Item.AnswererCode" />
                         <div class="form-group">
                             <label for="feedback-answer-area">Текст ответа</label>
-                            <textarea class="form-control" id="feedback-answer-area" name="Answer" rows="7" maxlength="2048" placeholder="Здравствуйте! Отвечаем на ваще обращение... ">@(!string.IsNullOrEmpty(ViewBag.Answer) ? ViewBag.Answer : Model.Item.Answer)</textarea>
+                            <textarea class="form-control" id="feedback-answer-area" name="Answer" rows="7" placeholder="Здравствуйте! Отвечаем на ваще обращение... ">@(!string.IsNullOrEmpty(ViewBag.Answer) ? ViewBag.Answer : Model.Item.Answer)</textarea>
                         </div>
                         <div class="form-group">
                             <label for="feedback-answerer-input">Отвечает</label>

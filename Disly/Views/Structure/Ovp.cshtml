@@ -11,7 +11,7 @@
     <div class="row">        
         <div class="col-md-8">
             <div class="structur_phons">
-                <table class="table table-condensed">
+                <table class="table table-condensed table-responsive">
                     
                         @if (Model.StructureItem.Adress != null)
                         {
@@ -63,7 +63,7 @@
            
             @if (Model.DepartmentItem.Peoples != null)
             {
-                <table class="table">
+                <table class="table table-condensed table-responsive">
                     @foreach (var item in Model.DepartmentItem.Peoples)
                     {
                         <tr>

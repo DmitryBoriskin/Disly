@@ -152,7 +152,6 @@ namespace cms.dbase
                           // select site.id).SingleOrDefault(),
                           Specialisations = s.gsspecialisationsgss.Where(sp => sp.f_gs == id).Any() ?
                                                 s.gsspecialisationsgss
-                                                        .Where(sp => sp.f_gs == id)
                                                         .Select(sp => sp.f_specialisation)
                                                         .ToArray()
                                                 : null,
@@ -356,7 +355,7 @@ namespace cms.dbase
                     var mainSp = query.SingleOrDefault();
 
                     db.content_gss
-                        .Where(w => w.id.Equals(id))
+                        .Where(w => w.id==id)
                         .Delete();
 
                     var log = new LogModel()

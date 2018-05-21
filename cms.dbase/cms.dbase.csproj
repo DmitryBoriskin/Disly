@@ -87,9 +87,9 @@
       <DependentUpon>CMSbdModel.tt</DependentUpon>
     </Compile>
     <Compile Include="template\OnlineRegister.generated.cs">
-      <DependentUpon>OnlineRegister.tt</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
+      <DependentUpon>OnlineRegister.tt</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>

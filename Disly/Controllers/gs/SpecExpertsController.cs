@@ -41,7 +41,7 @@ namespace Disly.Controllers
         public ActionResult Index()
         {
             #region currentPage
-            currentPage = _repository.getSiteMap("SpecMembers");
+            currentPage = _repository.getSiteMap("SpecExperts");
             if (currentPage == null)
                 //throw new Exception("model.CurrentPage == null");
                 return RedirectToRoute("Error", new { httpCode = 404 });
@@ -66,7 +66,7 @@ namespace Disly.Controllers
                     model.Breadcrumbs.Add(new Breadcrumbs
                     {
                         Title = parentPage.Title,
-                        Url = parentPage.Alias
+                        Url = "/" + parentPage.Alias
                     });
             }
 

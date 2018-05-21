@@ -1,8 +1,7 @@
 ﻿@model ContatcsViewModel
-@if (Model.Administrativ != null)
+@if (Model.Administrativ != null && Model.Administrativ.Count() > 0)
 {
-    <br /><br />
-    <table class="table">
+    <div class="doctorsList-block">
         @foreach (var item in Model.Administrativ)
         {
             string fio = item.Surname + " " + item.Name + " " + item.Patronymic;
@@ -14,24 +13,33 @@
                            ? item.Photo.Url : "/Content/img/no_avatar.png"
                        : "/Content/img/no_avatar.png";
 
-            <tr>
-                <td class="adminlist_img_td">
-                    <a class="adminlist_img_wr" target="_blank" href="@link">
+            <div class="row">
+                <div class="col-md-2 col-sm-3 col-xs-5">
+                    <a target="_blank" href="@link">
                         <img class="img-circle img-person-list" src="@photo" />
                     </a>
-                </td>
-                <td>
+                </div>
+
+                <div class="col-md-3 col-sm-9 col-xs-7">
                     <a class="adminlist_name" href="@link">@fio</a>
                     <div class="adminlist_post">@item.Post</div>
-                </td>
-                <td>
+                </div>
+                <div class="col-md-2 col-xs-12">
                     @if (item.Phone != null)
                     {
                         <div class="adminlist_phone">@item.Phone</div>
                     }
-                </td>
-                <td width="35%">@Html.Raw(item.Text)</td>
-            </tr>
+                </div>
+                <div class="col-md-5 col-xs-12">
+                    @Html.Raw(item.Text)
+                </div>
+            </div>
         }
-    </table>
+    </div>
+}
+else
+{
+    <div class="doctorsList-block">
+        <p class="noItems">Список пуст ...</p>
+    </div>
 }

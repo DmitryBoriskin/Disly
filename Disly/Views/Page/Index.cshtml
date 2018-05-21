@@ -10,20 +10,21 @@
         {
             <h1>@Model.Item.Title</h1>
         }
-        
+
         @if (Model.Child != null)
         {
             if (!String.IsNullOrEmpty(Model.Item.Text))
             {
-                <div class="col-md-8">
+                <div class="col-md-3 col-md-offset-1 col-md-push-8">
+                    @Html.Partial("part/childlist_sitemap")
+                </div>
+                <div class="col-md-8 col-md-pull-4">
                     @if (Model.Item != null)
                     {
                         @Html.Raw(Model.Item.Text)
                     }
                 </div>
-                <div class="col-md-3 col-md-push-1">
-                    @Html.Partial("part/childlist_sitemap")
-                </div>
+
             }
             else
             {

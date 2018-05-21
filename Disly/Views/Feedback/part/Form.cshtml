@@ -1,7 +1,7 @@
 ﻿@model FeedbackViewModel
 @{
-       Layout = null;
-       string _action = ViewBag.ActionName;
+    Layout = null;
+    string _action = ViewBag.ActionName;
 }
 <script src='https://www.google.com/recaptcha/api.js'></script>
 
@@ -16,46 +16,28 @@
         <div class="col-md-8">
             @if (ViewBag.FormStatus != null)
             {
-                string status = ViewBag.FormStatus;
                 <div id="feedback_status" class="feedback_status">
-                    @switch (status)
+                    @if (ViewBag.FormStatus == "send")
                     {
-                        case "new":
-                            <div></div>
-                            break;
-                        case "send":
-
-                            <div class="alert alert-success">
-                                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                                Ваше сообщение отправлено.
-                            </div>
-
-                            break;
-                        case "captcha":
-
-                            <div class="alert alert-warning">
-                                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                                Сообщение не отправлено. Заполните все обязательные поля и введите каптчу.
-                            </div>
-
-                            break;
-                        default:
-
-                            <div class="alert alert-danger">
-                                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                                Произошла ошибка. Ваше сообщение не отправлено!<br /> При необходимости прикрепите файл заново.
-                                @Html.ValidationSummary(false, "")
-                            </div>
-
-                            break;
+                        <div class="alert alert-success">
+                            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                            Cообщение отправлено.
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="alert alert-warning">
+                            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                            Сообщение не отправлено!<br />
+                            @Html.Raw(ViewBag.FormMsg)<br />
+                            @Html.ValidationSummary(false, "")<br />
+                            При необходимости прикрепите файл заново.
+                        </div>
                     }
                 </div>
             }
             <fieldset>
                 <div id="reviewss-from" class="select_choice">
-                    @* Если форма на отдельной странице
-                        using (Html.BeginForm("SendForm", "Feedback", FormMethod.Post, new { enctype = "multipart/form-data" }))
-                    *@
                     @using (Html.BeginForm(_action, "feedback", FormMethod.Post, new { enctype = "multipart/form-data" }))
                     {
                         <div class="form-group">
@@ -73,10 +55,10 @@
                         <div class="form-group">
                             <input type="hidden" name="FbType" value="@(ViewBag.FbType != null? ViewBag.FbType.ToString() : FeedbackType.appeal.ToString())" />
                             @*<label for="feedback-type-select">Тип обращения</label>
-                            <select id="feedback-type-select" name="FbType" class="form-control">
-                                <option value="@FeedbackType.appeal.ToString()" @((ViewBag.FbType == FeedbackType.appeal) ? "selected" : null)>Вопрос</option>
-                                <option value="@FeedbackType.review.ToString()" @((ViewBag.FbType == FeedbackType.review) ? "selected" : null)>Отзыв</option>
-                            </select>*@
+                                <select id="feedback-type-select" name="FbType" class="form-control">
+                                    <option value="@FeedbackType.appeal.ToString()" @((ViewBag.FbType == FeedbackType.appeal) ? "selected" : null)>Вопрос</option>
+                                    <option value="@FeedbackType.review.ToString()" @((ViewBag.FbType == FeedbackType.review) ? "selected" : null)>Отзыв</option>
+                                </select>*@
                         </div>
                         <div class="form-group">
                             <label for="feedback-theme-input">Тема обращения</label>
@@ -84,7 +66,7 @@
                         </div>
                         <div class="form-group">
                             <label for="feedback-text-area">Текст обращения</label>
-                            <textarea class="form-control" id="feedback-text-area" name="Text" rows="7" maxlength="2048" required>@ViewBag.Text</textarea>
+                            <textarea class="form-control" id="feedback-text-area" name="Text" rows="7" required>@ViewBag.Text</textarea>
                         </div>
 
                         <div class="form-group">
@@ -97,20 +79,20 @@
                             </div>
                         </div>
 
-                            <div class="checkbox">
-                                <label>
-                                    <input type="checkbox" id="feedback-anonymous-chkbx" name="Anonymous" @(ViewBag.Anonymous ? "checked" : null) value="True" />
-                                    Анонимно (Ваше имя не будет отображено на сайте)
-                                </label>
-                            </div>
-                            <div class="checkbox">
-                                <label>
-                                    <input type="checkbox" id="feedback-isAgree-chkbx" name="IsAgree" @(ViewBag.IsAgree ? "checked" : null) value="True" />
-                                    Я согласен на обработку своих персональных данных в соответствии с Федеральным законом №152-ФЗ от 27.07.2006 г. «О персональных данных»
-                                </label>
-                            </div>
-                            <div class="g-recaptcha" data-sitekey="@ViewBag.CaptchaKey"></div>
-                            <div id="fb"></div>
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" id="feedback-anonymous-chkbx" name="Anonymous" @(ViewBag.Anonymous ? "checked" : null) value="True" />
+                                Анонимно (Ваше имя не будет отображено на сайте)
+                            </label>
+                        </div>
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" id="feedback-isAgree-chkbx" name="IsAgree" @(ViewBag.IsAgree ? "checked" : null) value="True" />
+                                Я согласен на обработку своих персональных данных в соответствии с Федеральным законом №152-ФЗ от 27.07.2006 г. «О персональных данных»
+                            </label>
+                        </div>
+                        <div class="g-recaptcha" data-sitekey="@ViewBag.CaptchaKey"></div>
+                        <div id="fb"></div>
                             <br>
                             <button id="feedback-send-btn" type="submit" name="action" value="send-btn" class="btn sub btn-primary" @(ViewBag.IsAgree ? "" : "disabled")>Отправить</button>
                     }
@@ -141,18 +123,16 @@
             minimumResultsForSearch: Infinity
         });
 
-        if("@ViewBag.FormStatus" !== "new")
-        {
+        if ("@ViewBag.FormStatus" !== "new") {
             $('html, body').delay(500).queue(
                 function () {
-                    if ($(".fixed-theme").length === 0)
-                    {
+                    if ($(".fixed-theme").length === 0) {
                         $(this).dequeue();
                     }
                 })
                 .animate({
-                        scrollTop: ($('#feedback-send-form').offset().top - 250)
-            });
+                    scrollTop: ($('#feedback-send-form').offset().top - 250)
+                });
         }
     });
 </script>

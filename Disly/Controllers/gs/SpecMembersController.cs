@@ -69,7 +69,7 @@ namespace Disly.Controllers
                     model.Breadcrumbs.Add(new Breadcrumbs
                     {
                         Title = parentPage.Title,
-                        Url = parentPage.Alias
+                        Url = "/" + parentPage.Alias
                     });
             }
             model.Breadcrumbs.Add(new Breadcrumbs
@@ -110,6 +110,7 @@ namespace Disly.Controllers
             ViewBag.DepartGroup = filter.Group;
             ViewBag.Position = filter.Type;
 
+            ViewBag.GeneralDomain = Settings.GeneralDomain;
 
             return View(_ViewName, model);
         }

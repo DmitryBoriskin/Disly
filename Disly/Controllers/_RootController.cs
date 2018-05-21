@@ -9,11 +9,14 @@ using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Mvc;
 using System.IO;
+using NLog;
 
 namespace Disly.Controllers
 {
     public class RootController : Controller
     {
+        public Logger frontLogger = null;
+
         /// <summary>
         /// Контекст доступа к базе данных
         /// </summary>
@@ -92,7 +95,6 @@ namespace Disly.Controllers
                 }
                 currentPage = _repository.getSiteMap(_path, _alias);
                 breadcrumb = _repository.getBreadCrumbCollection(_path+_alias);
-            
 
             #endregion
 
@@ -123,8 +125,6 @@ namespace Disly.Controllers
                 ViewName = (IsSpecVersion && allview.UrlSpec != null) ? allview.UrlSpec : allview.Url;
             }
 
-
-
             siteModel = _repository.getSiteInfo();
             
             siteMapArray = _repository.getSiteMapList(); //Domain
@@ -137,6 +137,11 @@ namespace Disly.Controllers
             ViewBag.Coordination = Coordination = Settings.Coordination;
             ViewBag.ControllerName = ControllerName;
             ViewBag.ActionName = ActionName;
+
+            //Подписка на события репозитория
+            frontLogger = LogManager.GetLogger("FrontLogger");
+            FrontRepository.DislyFrontEvent += FrontRepository_DislyFrontEvent;
+            Mailer.DislyEvent += Mailer_DislyEvent;
         }
 
         public RootController()
@@ -152,7 +157,46 @@ namespace Disly.Controllers
             }
             _repository = new FrontRepository("cmsdbConnection", domainUrl);
         }
-        
+
+        #region Логирование ошибок
+
+        private void LogEvent(object sender, DislyEventArgs e)
+        {
+            switch (e.EventLevel)
+            {
+                case LogLevelEnum.Trace:
+                    frontLogger.Debug(e.Exception, e.Message);
+                    break;
+                case LogLevelEnum.Debug:
+                    frontLogger.Debug(e.Exception, e.Message);
+                    break;
+                case LogLevelEnum.Info:
+                    frontLogger.Info(e.Exception, e.Message);
+                    break;
+                case LogLevelEnum.Warning:
+                    frontLogger.Warn(e.Exception, e.Message);
+                    break;
+                case LogLevelEnum.Error:
+                    frontLogger.Error(e.Exception, e.Message);
+                    break;
+                case LogLevelEnum.Fatal:
+                    frontLogger.Warn(e.Exception, e.Message);
+                    break;
+            }
+        }
+
+        private void Mailer_DislyEvent(object sender, DislyEventArgs e)
+        {
+            LogEvent(sender, e);
+        }
+
+        private void FrontRepository_DislyFrontEvent(object sender, DislyEventArgs e)
+        {
+            LogEvent(sender, e);
+        }
+
+        #endregion
+
         [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = true)]
         public class MultiButtonAttribute : ActionNameSelectorAttribute
         {

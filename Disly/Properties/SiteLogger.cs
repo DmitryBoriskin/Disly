@@ -9,7 +9,7 @@ namespace Portal.Code
 {
     internal static class AppLogger
     {
-        private static Logger mLogger = LogManager.GetCurrentClassLogger();
+        private static Logger mLogger = LogManager.GetLogger("AppLogger"); //GetCurrentClassLogger();
 
         public static void Trace(string message, Exception exception = null, Dictionary<string, object> extParams = null)
         {
