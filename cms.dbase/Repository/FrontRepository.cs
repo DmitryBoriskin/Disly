@@ -94,7 +94,7 @@ namespace cms.dbase
                 var message = String.Format("frontRepository=> getSiteInfoByOldId for \"{0}\" oldid={}", _domain, Id);
                 OnDislyEvent(new DislyEventArgs(LogLevelEnum.Debug, message, ex));
             }
-                return null;
+            return null;
         }
 
         /// <summary>
@@ -193,7 +193,7 @@ namespace cms.dbase
                         return _domain.f_site;
                     }
 
-                   
+
                     //throw new Exception("FrontRepository: getSiteId Domain '" + domain + "' was not found!");
                 }
             }
@@ -891,7 +891,7 @@ namespace cms.dbase
                 if (!materialIds.Any())
                     return null;
 
-           
+
 
                 List<MaterialFrontModule> list = new List<MaterialFrontModule>();
 
@@ -934,7 +934,7 @@ namespace cms.dbase
 
                     return list;
                 }
-                return null;             
+                return null;
             }
         }
 
@@ -978,7 +978,7 @@ namespace cms.dbase
             }
         }
 
-        
+
         /// <summary>
         /// Получим список новостей для определенной сущности
         /// </summary>
@@ -1263,7 +1263,7 @@ namespace cms.dbase
                         //                 GeopointX = ad.n_geopoint_x,
                         //                 GeopointY = ad.n_geopoint_y
                         //             }).ToArray(),
-                        Departments = s.OrderBy(o=>o.dep.n_sort).Select(d => new Departments
+                        Departments = s.OrderBy(o => o.dep.n_sort).Select(d => new Departments
                         {
                             Id = d.dep.id,
                             Title = d.dep.c_title,
@@ -1590,68 +1590,139 @@ namespace cms.dbase
             {
                 string domain = filter.Domain; // домен
 
-                var people = db.content_peoples.AsQueryable();
+                #region comments
+                //var people = db.content_peoples.AsQueryable();
 
-                if (!String.IsNullOrEmpty(domain))
+                //if (!String.IsNullOrEmpty(domain))
+                //{
+                //    var contentId = db.cms_sitess
+                //                        .Where(w => w.c_alias.Equals(domain))
+                //                        .Select(s => s.f_content)
+                //                        .SingleOrDefault();
+
+                //    people = people.Where(w => w.contentpeopleorglinks.Any(a => a.contentorgpeoplelink.id.Equals(contentId)));
+
+                //    var queryData = FindPeoplesQuery(people, filter);
+
+                //    var result = queryData
+                //             .Where(w => w.employeespostspeoples.Any(b => b.employeespostsspecializations.b_doctor))
+                //             .Where(w => w.contentpeopleorglinks.Any(a => !a.b_dismissed))
+                //             .OrderBy(o => new { o.c_surname, o.c_name, o.c_patronymic })
+                //             .Select(s => new PeopleModel
+                //             {
+                //                 Id = s.id,
+                //                 FIO = s.c_surname + " " + s.c_name + " " + s.c_patronymic,
+                //                 Photo = s.c_photo,
+                //                 SNILS = s.c_snils,
+                //                 Posts = (from sp in db.content_specializationss
+                //                         join oep in db.content_org_employees_postss on sp.id equals oep.f_post
+                //                         join oe in db.content_org_employeess on oep.f_employee equals oe.id
+                //                         where oe.f_org.Equals(contentId) && oe.f_people.Equals(s.id)
+                //                         select new Specialisation
+                //                         {
+                //                             Name = sp.c_name
+                //                         }).GroupBy(g => g.Name).Select(t => t.First()).ToArray()
+                //             });
+
+                //    int itemCount = result.Count();
+                //    result = result
+                //                .Skip(filter.Size * (filter.Page - 1))
+                //                .Take(filter.Size);
+
+                //    if (result.Any())
+                //    {
+                //        return new PeopleList()
+                //        {
+                //            Doctors = result.ToArray(),
+                //            Pager = new Pager
+                //            {
+                //                Page = filter.Page,
+                //                Size = filter.Size,
+                //                ItemsCount = itemCount
+                //            }
+                //        };
+                //    }
+                //    return null;
+                //}
+                #endregion
+
+                if (!String.IsNullOrWhiteSpace(domain))
                 {
-                    var contentId = db.cms_sitess
+                    Guid? siteId = db.cms_sitess
                                         .Where(w => w.c_alias.Equals(domain))
                                         .Select(s => s.f_content)
                                         .SingleOrDefault();
 
-                    people = people.Where(w => w.contentpeopleorglinks.Any(a => a.contentorgpeoplelink.id.Equals(contentId)));
+                    var links = db.test_people_post_linkss
+                        .Where(w => w.f_org == siteId)
+                        .Where(w => w.testpeoplepostlinkstestposts.b_doctor)
+                        .Where(w => !w.b_deleted);
+                    
+                    #region filter
 
-                    var queryData = FindPeoplesQuery(people, filter);
+                    if (!String.IsNullOrWhiteSpace(filter.SearchText))
+                    {
+                        var search = filter.SearchText.ToLower().Split(' ');
+
+                        foreach (var s in search)
+                        {
+                            links = links
+                                .Where(w => w.testpeoplepostlinkstestpeoples.c_surname.Contains(s)
+                                        || w.testpeoplepostlinkstestpeoples.c_name.Contains(s)
+                                        || w.testpeoplepostlinkstestpeoples.c_patronymic.Contains(s));
+                        }
+                    }
+                    if (!String.IsNullOrEmpty(filter.Type))
+                    {
+                        links = links
+                            .Where(w => w.testpeoplepostlinkstestposts.id == Int32.Parse(filter.Type));
+                    }
+                    if (!String.IsNullOrWhiteSpace(filter.Group))
+                    {
+                        links = links
+                            .Where(w => w.testpeoplepostlinkstestpeoples.contentpeopleorglinks.Any(a => a.fkcontentdepartmentpeoplelinks.Any(b => b.f_department == Guid.Parse(filter.Group))));
+                    }
+                    if (filter.Specializations != null && filter.Specializations.Count() > 0)
+                    {
+                        links = links.Where(w => filter.Specializations.Contains(w.f_post));
+                    }
+
+                    #endregion
+
+                    var people = links
+                        .Select(s => new
+                        {
+                            Id = s.f_people,
+                            FIO = $"{s.testpeoplepostlinkstestpeoples.c_surname} {s.testpeoplepostlinkstestpeoples.c_name} {s.testpeoplepostlinkstestpeoples.c_patronymic}",
+                            Photo = s.testpeoplepostlinkstestpeoples.c_photo,
+                            SNILS = s.testpeoplepostlinkstestpeoples.c_snils,
+                            Post = s.testpeoplepostlinkstestposts.name
+                        });
+
+                    var p = people.ToArray()
+                        .GroupBy(g => new { g.Id })
+                        .Select(s => new PeopleModel
+                        {
+                            Id = s.Key.Id,
+                            FIO = s.First().FIO,
+                            Photo = s.First().Photo,
+                            SNILS = s.First().SNILS,
+                            Posts = s.Select(e => new Specialisation
+                            {
+                                Name = e.Post
+                            }).ToArray()
+                        }).OrderBy(o => o.FIO);
 
 
+                    int itemCount = p.Count();
+                    var tt = p.Skip(filter.Size * (filter.Page - 1))
+                             .Take(filter.Size);
 
-                    var result = queryData
-                             .Where(w => w.employeespostspeoples.Any(b => b.employeespostsspecializations.b_doctor))
-                             .Where(w => w.contentpeopleorglinks.Any(a => !a.b_dismissed))
-                             .OrderBy(o => new { o.c_surname, o.c_name, o.c_patronymic })
-                             .Select(s => new PeopleModel
-                             {
-                                 Id = s.id,
-                                 FIO = s.c_surname + " " + s.c_name + " " + s.c_patronymic,
-                                 Photo = s.c_photo,
-                                 SNILS = s.c_snils,
-                                 Posts = (from sp in db.content_specializationss
-                                         join oep in db.content_org_employees_postss on sp.id equals oep.f_post
-                                         join oe in db.content_org_employeess on oep.f_employee equals oe.id
-                                         where oe.f_org.Equals(contentId) && oe.f_people.Equals(s.id)
-                                         select new Specialisation
-                                         {
-                                             Name = sp.c_name
-                                         }).GroupBy(g => g.Name).Select(t => t.First()).ToArray()
-                                 #region try
-                                 //Posts = db.content_specializationss
-                                 //           .Where(w => w.employeespostsspecializationss.Any(a => a.employeespostsorgemployees.f_people.Equals(s.id)))
-                                 //           .Where(w => w.employeespostsspecializationss.Any(a => a.employeespostsorgemployees.f_org.Equals(contentId)))
-                                 //           .Select(g => new Specialisation
-                                 //           {
-                                 //               Name = g.c_name
-                                 //           }).GroupBy(g => g.Name).Select(t => t.First()).ToArray()
-                                 #endregion
-                                 #region working
-                                 //Posts = db.content_org_employees_postss
-                                 //            .Where(p => p.f_people.Equals(s.id))
-                                 //            .Select(m => new EmployeePost
-                                 //            {
-                                 //                Name = m.employeespostsspecializations.c_name
-                                 //            }).GroupBy(g => g.Name).Select(t => t.First()).ToArray()
-                                 #endregion
-                             });
-
-                    int itemCount = result.Count();
-                    result = result
-                                .Skip(filter.Size * (filter.Page - 1))
-                                .Take(filter.Size);
-
-                    if (result.Any())
+                    if (tt.Any())
                     {
                         return new PeopleList()
                         {
-                            Doctors = result.ToArray(),
+                            Doctors = tt.ToArray(),
                             Pager = new Pager
                             {
                                 Page = filter.Page,
@@ -1662,6 +1733,7 @@ namespace cms.dbase
                     }
                     return null;
                 }
+
                 return null;
             }
         }
@@ -1790,7 +1862,7 @@ namespace cms.dbase
         /// Список специализаций/должностей
         /// </summary>
         /// <returns></returns>
-        public override Specialisation[] getSpecialisations( SpecialisationFilter filtr)
+        public override Specialisation[] getSpecialisations(SpecialisationFilter filtr)
         {
             string domain = _domain;
             using (var db = new CMSdb(_context))
@@ -1798,25 +1870,25 @@ namespace cms.dbase
                 var query = db.content_specializationss.
                     Where(s => s.b_doctor);
 
-                if(filtr.Specializations != null && filtr.Specializations.Count() > 0)
+                if (filtr.Specializations != null && filtr.Specializations.Count() > 0)
                 {
                     query = query.Where(s => filtr.Specializations.Contains(s.id));
 
                 }
 
-                if(filtr.PeopleId.HasValue)
+                if (filtr.PeopleId.HasValue)
                 {
                     query = query.Where(s => s.employeespostsspecializationss.Any(p => p.f_people == filtr.PeopleId.Value))
                         .Where(s => s.employeespostsspecializationss.Any(p => !p.b_dissmissed));
 
                 }
-                   
-                  var data = query.Select( s =>  new Specialisation
-                             {
-                                 Id = s.id,
-                                 Parent = s.n_parent,
-                                 Name = s.c_name
-                             });
+
+                var data = query.Select(s => new Specialisation
+                {
+                    Id = s.id,
+                    Parent = s.n_parent,
+                    Name = s.c_name
+                });
 
                 if (data.Any())
                     return data.ToArray();
@@ -1837,7 +1909,7 @@ namespace cms.dbase
             {
                 var query = db.content_org_employees_postss
                     .Where(s => s.f_people == peopleId)
-                    .Where (s => !s.b_dissmissed);
+                    .Where(s => !s.b_dissmissed);
 
                 var data = query.Select(s => new Specialisation
                 {
@@ -1871,7 +1943,7 @@ namespace cms.dbase
 
                 var query = db.content_orgss
                             .Where(o => o.contentemployeespostsorgss.Any(p => !p.b_dissmissed));
-                            
+
 
                 if (filtr.Disabled != null && (bool)filtr.Disabled)
                     query = query.Where(w => w.b_disabled);
@@ -2656,13 +2728,64 @@ namespace cms.dbase
         {
             using (var db = new CMSdb(_context))
             {
+                #region comments
+                //var people = db.content_peoples
+                //                    .Where(w => w.contentpeopleorglinks.Any(a => !a.b_dismissed))
+                //                    .Where(w => w.employeespostspeoples.Any(b => b.employeespostsspecializations.b_doctor));
+
+                //var queryData = FindPeoplesQuery(people, filter);
+
+                //var result = queryData
+                //    .OrderBy(o => o.c_surname)
+                //    .Select(s => new PeopleModel
+                //    {
+                //        Id = s.id,
+                //        FIO = s.c_surname + " " + s.c_name + " " + s.c_patronymic,
+                //        Photo = s.c_photo,
+                //        Posts = s.employeespostspeoples
+                //                    .Where(a => !a.b_dissmissed)
+                //                    .Select(p => new Specialisation
+                //                    {
+                //                        Id = p.f_post,
+                //                        Name = p.employeespostsspecializations.c_name,
+                //                        Type = p.n_type,
+                //                        Org = new OrgsShortModel
+                //                        {
+                //                            Id = p.contentemployeespostsorgs.id,
+                //                            Title = p.contentemployeespostsorgs.c_title,
+                //                            Url = db.cms_sitess.Where(w => w.f_content.Equals(p.contentemployeespostsorgs.id))
+                //                                                .Select(r => r.fksitesdomainss.FirstOrDefault().c_domain)
+                //                                                .SingleOrDefault()
+                //                        }
+                //                    })
+                //    });
+
+                //int itemCount = result.Count();
+
+                //result = result
+                //            .Skip(filter.Size * (filter.Page - 1))
+                //            .Take(filter.Size);
+
+                //if (result.Any())
+                //{
+                //    return new PeopleList()
+                //    {
+                //        Doctors = result.ToArray(),
+                //        Pager = new Pager()
+                //        {
+                //            Page = filter.Page,
+                //            Size = filter.Size,
+                //            ItemsCount = itemCount
+                //        }
+                //    };
+                //}
+                #endregion
+
                 var people = db.content_peoples
-                                    .Where(w => w.contentpeopleorglinks.Any(a => !a.b_dismissed))
-                                    .Where(w => w.employeespostspeoples.Any(b => b.employeespostsspecializations.b_doctor));
+                    .Where(w => w.testpeoplepostlinkstestpeopless.Any(a => !a.b_deleted))
+                    .Where(w => w.testpeoplepostlinkstestpeopless.Any(a => a.testpeoplepostlinkstestposts.b_doctor));
 
                 var queryData = FindPeoplesQuery(people, filter);
-
-                //var result = queryData.MapSearch(db.cms_sitess.AsQueryable());
 
                 var result = queryData
                     .OrderBy(o => o.c_surname)
@@ -2671,22 +2794,23 @@ namespace cms.dbase
                         Id = s.id,
                         FIO = s.c_surname + " " + s.c_name + " " + s.c_patronymic,
                         Photo = s.c_photo,
-                        Posts = s.employeespostspeoples
-                                    .Where(a => !a.b_dissmissed)
-                                    .Select(p => new Specialisation
-                                    {
-                                        Id = p.f_post,
-                                        Name = p.employeespostsspecializations.c_name,
-                                        Type = p.n_type,
-                                        Org = new OrgsShortModel
-                                        {
-                                            Id = p.contentemployeespostsorgs.id,
-                                            Title = p.contentemployeespostsorgs.c_title,
-                                            Url = db.cms_sitess.Where(w => w.f_content.Equals(p.contentemployeespostsorgs.id))
-                                                                .Select(r => r.fksitesdomainss.FirstOrDefault().c_domain)
-                                                                .SingleOrDefault()
-                                        }
-                                    })
+                        Posts = s.testpeoplepostlinkstestpeopless
+                            .Where(w => !w.b_deleted)
+                            .Select(p => new Specialisation
+                            {
+                                Id = p.f_post,
+                                Name = p.testpeoplepostlinkstestposts.name,
+                                Type = p.n_type,
+                                Org = new OrgsShortModel
+                                {
+                                    Id = p.f_org,
+                                    Title = p.testpeoplepostlinkstestorgs.c_name,
+                                    Url = db.cms_sitess
+                                        .Where(w => w.f_content == p.f_org)
+                                        .Select(r => r.fksitesdomainss.FirstOrDefault().c_domain)
+                                        .SingleOrDefault()
+                                }
+                            })
                     });
 
                 int itemCount = result.Count();
@@ -2708,6 +2832,7 @@ namespace cms.dbase
                         }
                     };
                 }
+
                 return null;
             }
         }
@@ -3142,7 +3267,7 @@ namespace cms.dbase
                                     FIO = String.Format("{0} {1} {2}", p.gsmemberspeople.c_surname, p.gsmemberspeople.c_name, p.gsmemberspeople.c_patronymic),
                                     Photo = p.gsmemberspeople.c_photo,
                                 },
-                                Posts = getPeopleSpecialisations( p.f_people)
+                                Posts = getPeopleSpecialisations(p.f_people)
                                 //Orgs = getOrgs(new OrgFilter() { PeopleId = p.f_people})
                             });
                 if (query.Any())
@@ -3193,7 +3318,8 @@ namespace cms.dbase
                             Fax = s.c_fax,
                             Url = getSiteDefaultDomainByContentId(s.id),
                             ExtUrl = s.c_www,
-                            Logo = new Photo() {
+                            Logo = new Photo()
+                            {
                                 Url = s.c_logo
                             }
                         });
