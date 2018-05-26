@@ -288,6 +288,49 @@ namespace ImportOldInfo
         }
 
         /// <summary>
+        /// Возвращает список новых фотоальбомов для исправления косяков по изображениям
+        /// </summary>
+        /// <param name="org"></param>
+        /// <returns></returns>
+        public PhotoAlbumNew[] GetNewAlbumsForUpdate(Org org)
+        {
+            using (var db = new DbModel(context))
+            {
+                return db.content_photoalbums
+                    .Where(w => w.f_site == org.Alias)
+                    .Where(w => w.n_old_id != null)
+                    .Select(s => new PhotoAlbumNew
+                    {
+                        Id = s.id,
+                        Title = s.c_title,
+                        Text = s.c_text,
+                        Date = s.d_date,
+                        Domain = s.f_site,
+                        Path = s.c_path,
+                        Disabled = s.c_disabled,
+                        OldId = s.n_old_id
+                    }).ToArray();
+            }
+        }
+
+        /// <summary>
+        /// Удаляет фотки для альбома
+        /// </summary>
+        /// <param name="album"></param>
+        public bool DropPhotos(Guid album)
+        {
+            using (var db = new DbModel(context))
+            {
+                using (var tr = db.BeginTransaction())
+                {
+                    return db.content_photoss
+                        .Where(w => w.f_album == album)
+                        .Delete() > 0;
+                }
+            }
+        }
+
+        /// <summary>
         /// Записывает инфу по новому фотоальбому
         /// </summary>
         /// <param name="album"></param>
