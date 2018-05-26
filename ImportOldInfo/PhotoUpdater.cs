@@ -31,11 +31,18 @@ namespace ImportOldInfo
             // новые альбомы
             IEnumerable<PhotoAlbumNew> newAlbums = repository.GetNewAlbumsForUpdate(org);
 
+            // текущий порядковый номер альбома
+            int currentAlbumNumber = 0;
+
+            // общее кол-во альбомов
+            int countAlbums = newAlbums.Count();
+
             foreach (var album in newAlbums)
             {
+                currentAlbumNumber++;
                 try
                 {
-                    var oldAlbum = oldAlbums.Where(w => w.Link == album.OldId).SingleOrDefault();
+                    var oldAlbum = oldAlbums.Where(w => w.Link == album.OldId).FirstOrDefault();
                     // путь до старой директории
                     string oldDirectory = ($"{helper.OldDirectory}{oldAlbum.Org}{oldAlbum.Folder.Replace(".", "")}").Replace("/", "\\");
 
@@ -56,21 +63,14 @@ namespace ImportOldInfo
                             
                             // удаляем фотки из альбома
                             repository.DropPhotos(album.Id);
-                            
-                            // создадим папку для нового альбома
-                            if (!Directory.Exists(savePath))
+
+                            if (Directory.Exists(savePath))
                             {
-                                DirectoryInfo _di = Directory.CreateDirectory(savePath);
-                            }
-                            else
-                            {
-                                DirectoryInfo dirToDrop = new DirectoryInfo(savePath);
-                                foreach (FileInfo file in dirToDrop.GetFiles())
-                                {
-                                    file.Delete();
-                                }
+                                Directory.Delete(savePath, true);
                             }
 
+                            DirectoryInfo _di = Directory.CreateDirectory(savePath);
+                            
                             // номер фотки
                             int count = 0;
 
@@ -83,8 +83,7 @@ namespace ImportOldInfo
                             {
                                 try
                                 {
-
-                                    if (allowedExtensions.Contains(img.Extension.ToLower()))
+                                    if (img != null && allowedExtensions.Contains(img.Extension.ToLower()))
                                     {
                                         count++;
 
@@ -144,6 +143,12 @@ namespace ImportOldInfo
                                 repository.InsertPhotos(photos);
                             }
                         }
+                    }
+
+                    // сколько альбомов обработанно
+                    if (currentAlbumNumber % 10 == 0)
+                    {
+                        ServiceLogger.Info("{work}", $"обработанно альбомов {currentAlbumNumber} из {countAlbums}");
                     }
                 }
                 catch (Exception e)

@@ -323,9 +323,12 @@ namespace ImportOldInfo
             {
                 using (var tr = db.BeginTransaction())
                 {
-                    return db.content_photoss
+                    bool res = db.content_photoss
                         .Where(w => w.f_album == album)
                         .Delete() > 0;
+
+                    tr.Commit();
+                    return res;
                 }
             }
         }
