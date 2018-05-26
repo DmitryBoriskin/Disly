@@ -60,7 +60,7 @@ namespace ImportOldInfo
 
                             // путь для сохранения альбома
                             string savePath = helper.NewDirectory + localPath;
-                            
+
                             // удаляем фотки из альбома
                             repository.DropPhotos(album.Id);
 
@@ -70,7 +70,7 @@ namespace ImportOldInfo
                             }
 
                             DirectoryInfo _di = Directory.CreateDirectory(savePath);
-                            
+
                             // номер фотки
                             int count = 0;
 
@@ -78,6 +78,10 @@ namespace ImportOldInfo
                             string _previewAlbum = null;
 
                             List<content_photos> photos = new List<content_photos>();
+
+                            ImageCodecInfo myImageCodecInfo = GetEncoderInfo("image/jpeg");
+                            EncoderParameters myEncoderParameters = new EncoderParameters(1);
+                            myEncoderParameters.Param[0] = new EncoderParameter(Encoder.Quality, 70L);
 
                             foreach (var img in fi)
                             {
@@ -87,31 +91,52 @@ namespace ImportOldInfo
                                     {
                                         count++;
 
-                                        ImageCodecInfo myImageCodecInfo = GetEncoderInfo("image/jpeg");
-                                        EncoderParameters myEncoderParameters = new EncoderParameters(1);
-                                        myEncoderParameters.Param[0] = new EncoderParameter(Encoder.Quality, 70L);
-
                                         // превьюшка для фотки
-                                        Bitmap imgPrev = (Bitmap)Bitmap.FromFile(img.FullName);
-                                        imgPrev = Imaging.Resize(imgPrev, 120, 120, "center", "center");
-                                        imgPrev.Save($"{savePath}prev_{count}.jpg", myImageCodecInfo, myEncoderParameters);
-
+                                        using (Bitmap imgPrev = (Bitmap)Bitmap.FromFile(img.FullName))
+                                        {
+                                            var tmpImg = Imaging.Resize(imgPrev, 120, 120, "center", "center");
+                                            try
+                                            {
+                                                tmpImg.Save($"{savePath}prev_{count}.jpg", myImageCodecInfo, myEncoderParameters);
+                                            }
+                                            finally
+                                            {
+                                                tmpImg.Dispose();
+                                            }
+                                        }
+                                        
                                         // основное изображение
-                                        Bitmap imgReal = (Bitmap)Bitmap.FromFile(img.FullName);
-                                        imgReal = Imaging.Resize(imgReal, 2000, "width");
-                                        imgReal.Save($"{savePath}{count}.jpg", myImageCodecInfo, myEncoderParameters);
-
+                                        using (Bitmap imgReal = (Bitmap)Bitmap.FromFile(img.FullName))
+                                        {
+                                            var tmpImgReal = Imaging.Resize(imgReal, 2000, "width");
+                                            try
+                                            {
+                                                tmpImgReal.Save($"{savePath}{count}.jpg", myImageCodecInfo, myEncoderParameters);
+                                            }
+                                            finally
+                                            {
+                                                tmpImgReal.Dispose();
+                                            }
+                                        }
+                                        
                                         // сохраняем превьюшку для альбома
                                         if (count == 1)
                                         {
-                                            Bitmap albumPrev = (Bitmap)Bitmap.FromFile(img.FullName);
-                                            albumPrev = Imaging.Resize(albumPrev, 540, 360, "center", "center");
-                                            albumPrev.Save($"{savePath}albumprev.jpg", myImageCodecInfo, myEncoderParameters);
+                                            using (Bitmap albumPrev = (Bitmap)Bitmap.FromFile(img.FullName))
+                                            {
+                                                var tmpAlbumPrev = Imaging.Resize(albumPrev, 540, 360, "center", "center");
+                                                try
+                                                {
+                                                    tmpAlbumPrev.Save($"{savePath}albumprev.jpg", myImageCodecInfo, myEncoderParameters);
+                                                }
+                                                finally
+                                                {
+                                                    tmpAlbumPrev.Dispose();
+                                                }
+                                            }
 
                                             _previewAlbum = $"{localPath}albumprev.jpg";
                                             repository.UpdatePreviewAlbum(album.Id, _previewAlbum);
-
-                                            albumPrev.Dispose();
                                         }
 
                                         content_photos photo = new content_photos
@@ -127,10 +152,6 @@ namespace ImportOldInfo
 
                                         // добавление фото
                                         photos.Add(photo);
-
-                                        imgPrev.Dispose();
-                                        imgReal.Dispose();
-
                                     }
                                 }
                                 catch (Exception e)

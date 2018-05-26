@@ -16,4 +16,5 @@ Integration.Frmp.cmd/App.config
 Integration.Frmp.service/App.config
 PhotoImport/App.config
 PhotoImport/Template/
+*/Template/
 

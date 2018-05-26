@@ -21,7 +21,8 @@ namespace ImportOldInfo
             Console.WriteLine("приложение для переноса инфы со старого med.cap.ru");
             Console.WriteLine("1 - перенос по одному");
             Console.WriteLine("2 - перенос всех сайтов");
-            Console.WriteLine("3 - фикс изображений");
+            Console.WriteLine("3 - фикс изображений одного сайта");
+            Console.WriteLine("4 - фикс изображений всех сайтов");
 
             string variant = Console.ReadLine();
 
@@ -41,6 +42,16 @@ namespace ImportOldInfo
                     break;
                 case "3":
                     FixImages(orgsIds);
+                    break;
+                case "4":
+                    int c = 0;
+                    foreach (int id in orgsIds)
+                    {
+                        c++;
+                        var org = repository.GetOrg(id);
+                        ServiceLogger.Info("{work}", $"организация: {org.Alias} --> {c} из {orgsIds.Count()}");
+                        PhotoUpdater.Fix(org, repository, helper);
+                    }
                     break;
             }
 
@@ -119,6 +130,7 @@ namespace ImportOldInfo
             } while (!orgsIds.Contains(id));
 
             var org = repository.GetOrg(id);
+            ServiceLogger.Info("{work}", $"организация: {org.Alias}");
             PhotoUpdater.Fix(org, repository, helper);
         }
     }
