@@ -243,9 +243,10 @@ namespace ImportOldInfo
 
             foreach (var album in newAlbums)
             {
-                if (Directory.Exists(album.Path))
+                string path = $"{helper.NewDirectory}{album.Path}";
+                if (Directory.Exists(path))
                 {
-                    Directory.Delete(album.Path, true);
+                    Directory.Delete(path, true);
                 }
             }
         }
