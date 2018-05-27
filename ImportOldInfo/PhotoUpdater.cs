@@ -103,6 +103,7 @@ namespace ImportOldInfo
                                             {
                                                 tmpImg.Dispose();
                                             }
+                                            imgPrev.Dispose();
                                         }
                                         
                                         // основное изображение
@@ -117,6 +118,7 @@ namespace ImportOldInfo
                                             {
                                                 tmpImgReal.Dispose();
                                             }
+                                            imgReal.Dispose();
                                         }
                                         
                                         // сохраняем превьюшку для альбома
@@ -133,6 +135,7 @@ namespace ImportOldInfo
                                                 {
                                                     tmpAlbumPrev.Dispose();
                                                 }
+                                                albumPrev.Dispose();
                                             }
 
                                             _previewAlbum = $"{localPath}albumprev.jpg";

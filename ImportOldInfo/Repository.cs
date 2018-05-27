@@ -334,6 +334,28 @@ namespace ImportOldInfo
         }
 
         /// <summary>
+        /// Удаляет импортированные фотоальбомы 
+        /// </summary>
+        /// <param name="org"></param>
+        /// <returns></returns>
+        public bool DeletePhotoAlbums(Org org)
+        {
+            using (var db = new DbModel(context))
+            {
+                using (var tr = db.BeginTransaction())
+                {
+                    bool result = db.content_photoalbums
+                        .Where(w => w.f_site == org.Alias)
+                        .Where(w => w.n_old_id != null)
+                        .Delete() > 0;
+
+                    tr.Commit();
+                    return result;
+                }
+            }
+        }
+
+        /// <summary>
         /// Записывает инфу по новому фотоальбому
         /// </summary>
         /// <param name="album"></param>

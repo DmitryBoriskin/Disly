@@ -78,6 +78,8 @@ namespace ImportOldInfo
             // список фотоальбомов
             IEnumerable<PhotoAlbumOld> albums = repository.GetAlbums(org);
 
+            DropAlreadyImportedAlbums(org, repository, helper);
+
             // текущий порядковый номер альбома
             int currentAlbumNumber = 0;
 
@@ -96,9 +98,7 @@ namespace ImportOldInfo
                     {
                         // путь до старой директории
                         string oldDirectory = ($"{helper.OldDirectory}{album.Org}{album.Folder.Replace(".", "")}").Replace("/", "\\");
-
-                        //ServiceLogger.Info("{work}", $"oldDirectory: {oldDirectory}");
-
+                        
                         if (Directory.Exists(oldDirectory))
                         {
                             // информация по полученной директории
@@ -114,8 +114,6 @@ namespace ImportOldInfo
 
                             // путь для сохранения альбома
                             string savePath = helper.NewDirectory + localPath;
-
-                            //ServiceLogger.Info("{work}", $"savePath: {savePath}");
 
                             // создадим папку для нового альбома
                             if (!Directory.Exists(savePath))
@@ -150,56 +148,66 @@ namespace ImportOldInfo
 
                             List<content_photos> photos = new List<content_photos>();
 
+                            ImageCodecInfo myImageCodecInfo = GetEncoderInfo("image/jpeg");
+                            EncoderParameters myEncoderParameters = new EncoderParameters(1);
+                            myEncoderParameters.Param[0] = new EncoderParameter(Encoder.Quality, 70L);
+
                             foreach (var img in fi)
                             {
-                                if (allowedExtensions.Contains(img.Extension.ToLower()))
+                                try
                                 {
-                                    count++;
-
-                                    ImageCodecInfo myImageCodecInfo = GetEncoderInfo("image/jpeg");
-                                    EncoderParameters myEncoderParameters = new EncoderParameters(1);
-                                    myEncoderParameters.Param[0] = new EncoderParameter(Encoder.Quality, 70L);
-
-                                    // превьюшка для фотки
-                                    Bitmap imgPrev = (Bitmap)Bitmap.FromFile(img.FullName);
-                                    imgPrev = Imaging.Resize(imgPrev, 120, 120, "center", "center");
-                                    imgPrev.Save($"{savePath}prev_{count}.jpg", myImageCodecInfo, myEncoderParameters);
-
-                                    // основное изображение
-                                    Bitmap imgReal = (Bitmap)Bitmap.FromFile(img.FullName);
-                                    imgReal = Imaging.Resize(imgReal, 2000, "width");
-                                    imgReal.Save($"{savePath}{count}.jpg", myImageCodecInfo, myEncoderParameters);
-
-                                    // сохраняем превьюшку для альбома
-                                    if (count == 1)
+                                    if (allowedExtensions.Contains(img.Extension.ToLower()))
                                     {
-                                        Bitmap albumPrev = (Bitmap)Bitmap.FromFile(img.FullName);
-                                        albumPrev = Imaging.Resize(albumPrev, 540, 360, "center", "center");
-                                        albumPrev.Save($"{savePath}albumprev.jpg", myImageCodecInfo, myEncoderParameters);
+                                        count++;
 
-                                        _previewAlbum = $"{localPath}albumprev.jpg";
-                                        repository.UpdatePreviewAlbum(id, _previewAlbum);
+                                        // превьюшка для фотки
+                                        using (Bitmap imgPrev = (Bitmap)Bitmap.FromFile(img.FullName))
+                                        {
+                                            var tempImgPrev = Imaging.Resize(imgPrev, 120, 120, "center", "center");
+                                            tempImgPrev.Save($"{savePath}prev_{count}.jpg", myImageCodecInfo, myEncoderParameters);
+                                            tempImgPrev.Dispose();
+                                        }
 
-                                        albumPrev.Dispose();
+                                        // основное изображение
+                                        using (Bitmap imgReal = (Bitmap)Bitmap.FromFile(img.FullName))
+                                        {
+                                            var tmpImgReal = Imaging.Resize(imgReal, 2000, "width");
+                                            tmpImgReal.Save($"{savePath}{count}.jpg", myImageCodecInfo, myEncoderParameters);
+                                            tmpImgReal.Dispose();
+                                        }
+
+                                        // сохраняем превьюшку для альбома
+                                        if (count == 1)
+                                        {
+                                            using (Bitmap albumPrev = (Bitmap)Bitmap.FromFile(img.FullName))
+                                            {
+                                                var tmpAlbumPrev = Imaging.Resize(albumPrev, 540, 360, "center", "center");
+                                                tmpAlbumPrev.Save($"{savePath}albumprev.jpg", myImageCodecInfo, myEncoderParameters);
+                                                tmpAlbumPrev.Dispose();
+                                            }
+
+                                            _previewAlbum = $"{localPath}albumprev.jpg";
+                                            repository.UpdatePreviewAlbum(id, _previewAlbum);
+                                        }
+
+                                        content_photos photo = new content_photos
+                                        {
+                                            id = Guid.NewGuid(),
+                                            f_album = id,
+                                            c_title = $"{count}{img.Extension}",
+                                            d_date = img.LastWriteTime,
+                                            c_preview = $"{localPath}prev_{count}.jpg",
+                                            c_photo = $"{localPath}{count}.jpg",
+                                            n_sort = count
+                                        };
+
+                                        // добавление фото
+                                        photos.Add(photo);
                                     }
-
-                                    content_photos photo = new content_photos
-                                    {
-                                        id = Guid.NewGuid(),
-                                        f_album = id,
-                                        c_title = $"{count}{img.Extension}",
-                                        d_date = img.LastWriteTime,
-                                        c_preview = $"{localPath}prev_{count}.jpg",
-                                        c_photo = $"{localPath}{count}.jpg",
-                                        n_sort = count
-                                    };
-
-                                    // добавление фото
-                                    photos.Add(photo);
-
-                                    imgPrev.Dispose();
-                                    imgReal.Dispose();
-
+                                }
+                                catch (Exception e)
+                                {
+                                    ServiceLogger.Error("{error}", e.ToString());
                                 }
                             }
                             if (photos != null && photos.Count() > 0)
@@ -213,13 +221,31 @@ namespace ImportOldInfo
                         {
                             ServiceLogger.Info("{work}", $"обработанно альбомов {currentAlbumNumber} из {countAlbums}");
                         }
-
                     }
                 }
                 catch (Exception e)
                 {
                     ServiceLogger.Error("{error}", $"ошибка на шаге: {currentAlbumNumber} of {countAlbums}");
                     ServiceLogger.Error("{error}", e.ToString());
+                }
+            }
+        }
+
+        /// <summary>
+        /// Удаляет уже импортированные альбомы
+        /// </summary>
+        private static void DropAlreadyImportedAlbums(Org org, Repository repository, ParamsHelper helper)
+        {
+            // новые импортированные альбомы
+            IEnumerable<PhotoAlbumNew> newAlbums = repository.GetNewAlbumsForUpdate(org);
+            // удаляем ранее импортированные альбомы 
+            repository.DeletePhotoAlbums(org);
+
+            foreach (var album in newAlbums)
+            {
+                if (Directory.Exists(album.Path))
+                {
+                    Directory.Delete(album.Path, true);
                 }
             }
         }
