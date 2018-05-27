@@ -106,6 +106,11 @@ namespace ImportOldInfo
         {
             using (var db = new DbModel(context))
             {
+                db.CommandTimeout = 1200000;
+                if (db.Command != null)
+                {
+                    db.Command.CommandTimeout = 1200000;
+                }
                 try
                 {
                     using (var tr = db.BeginTransaction())
