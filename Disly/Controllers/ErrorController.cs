@@ -171,8 +171,8 @@ namespace Disly.Controllers
                 Message = msg,
                 BackUrl = (Request.UrlReferrer != null ? Request.UrlReferrer.AbsoluteUri : null)
             };
-
-            return View("CustomError", thisViewModel);
+            
+            return View("~/Views/Error/CustomError.cshtml", thisViewModel);
         }
 
         public ActionResult InDevelopment()

@@ -85,6 +85,35 @@ namespace Disly.Controllers
             return RedirectPermanent(redirectUrl);
         }
 
+        public ActionResult InMedicin(int? id, int? pg)
+        {
+            MaterialsModel material = null;
+            if (id.HasValue)
+            {
+                //Ссылки типа: http://www.rkod.med.cap.ru/pg_11/id_918558/News.aspx , http://www.rkod.med.cap.ru/id_918558/News.aspx
+                material = _repository.getMaterialsByOldId(id.Value);
+            }
+
+            var pageIdstr = Request.Params["id"];
+            int newsid = 0;
+            if (!string.IsNullOrEmpty(pageIdstr) && int.TryParse(pageIdstr, out newsid))
+            {
+                //Ссылки типа: http://www.med.cap.ru/News.aspx?id=918579
+                material = _repository.getMaterialsByOldId(newsid);
+            }
+
+            if (material != null)
+            {
+                redirectUrl = string.Format("/press/{0}/{1}/{2}/{3}", material.Year, material.Month, material.Day, material.Alias);
+            }
+            else
+            {
+                redirectUrl = "/press/";
+            }
+
+            return RedirectPermanent(redirectUrl);
+        }
+
         //Hospitals.aspx?lib=557311
         //О нас
         public ActionResult Hospitals()
