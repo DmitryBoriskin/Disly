@@ -11,10 +11,13 @@ namespace Disly.Controllers
         public const String ActionName_Custom = "Custom";
 
         [ActionName(ActionName_Custom)]
-        public ActionResult Custom(Int32 httpCode, String message)
+        public ActionResult Custom(Int32? httpCode, String message)
         {
             //string ViewName = "~/Views/Error/CustomError.cshtml";
-            Response.StatusCode = httpCode;
+            if (!httpCode.HasValue)
+                httpCode = 404;
+
+            Response.StatusCode = httpCode.Value;
 
             String msg = String.Empty;
             String title = "Ошибка";
