@@ -46,8 +46,8 @@
     var events = (Model.Materials != null) ? Model.Materials.Where(w => w.GroupAlias.Equals("actual")) : null;
     int i = 0;
 
-    string backgroundSlider = Model.SitesInfo.BackGroundImg != null
-        ? "style=background-image:url(" + Model.SitesInfo.BackGroundImg.Url + ");"
+    string backgroundSlider = (Model.SitesInfo != null && Model.SitesInfo.BackGroundImg != null && !string.IsNullOrEmpty(Model.SitesInfo.BackGroundImg.Url))
+        ? "style=background-image:url(@(Model.SitesInfo.BackGroundImg.Url));"
         : null;
 
 }

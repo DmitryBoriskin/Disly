@@ -5,7 +5,8 @@
 }
 
 <div class="WelcomeContentLeft">
-    <div class="LoginCaption">@Model.Title.ToString() @Model.HttpCode.ToString()</div>
+    @*<div class="LoginCaption">@Model.Title @Model.HttpCode</div>*@
+    <div class="LoginCaption">Ошибка 404</div>
 </div>
 <div class="WelcomeContentRight">
     @Html.Raw(Model.Message)

@@ -807,12 +807,15 @@ namespace cms.dbase
                     var contentType = ContentType.MATERIAL.ToString().ToLower();
 
                     // список id-новостей для данного сайта
-                    var materialIds = db.content_content_links.Where(e => e.f_content_type == contentType)
-                        .Join(db.cms_sitess.Where(o => o.c_alias.ToLower() == domain),
-                                e => e.f_link,
-                                o => o.f_content,
-                                (e, o) => e.f_content
-                                );
+                    var materialIds = db.content_content_links
+                        .Where(e => e.f_content_type == contentType)
+                        .Where(e => db.cms_sitess.Any(t => t.c_alias.ToLower() == domain && t.f_content == e.f_link))
+                        .Select(e => e.f_content);
+                        //.Join(db.cms_sitess.Where(o => o.c_alias.ToLower() == domain),
+                        //        e => e.f_link,
+                        //        o => o.f_content,
+                        //        (e, o) => e.f_content
+                        //        );
 
                     if (!materialIds.Any())
                         return null;

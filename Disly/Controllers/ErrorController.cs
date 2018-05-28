@@ -10,6 +10,12 @@ namespace Disly.Controllers
         public const String Name = "Error";
         public const String ActionName_Custom = "Custom";
 
+        public ActionResult Index()
+        {
+            return View();
+        }
+
+
         [ActionName(ActionName_Custom)]
         public ActionResult Custom(Int32? httpCode, String message)
         {
@@ -176,6 +182,7 @@ namespace Disly.Controllers
             };
             
             return View("~/Views/Error/CustomError.cshtml", thisViewModel);
+            //string ViewName = "~/Views/Error/CustomError.cshtml";
         }
 
         public ActionResult InDevelopment()

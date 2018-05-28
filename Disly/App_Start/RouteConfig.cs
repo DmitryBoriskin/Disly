@@ -8,6 +8,7 @@ namespace Disly
         public static void RegisterRoutes(RouteCollection routes)
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
+           
 
             //images
             routes.IgnoreRoute("{*jpgfiles}", new { jpgfiles = @".*\.jpg(/.*)?" });
@@ -42,21 +43,54 @@ namespace Disly
 
             //Редирект со старых сайтов
             routes.MapRoute(
-              name: "RedirectFromOld1",
-              url: "pg_{pg}/id_{id}/{action}.aspx",
-              defaults: new { controller = "RedirectFromOld", action = "Index", id = UrlParameter.Optional, pg = UrlParameter.Optional }
-           );
+            name: "RedirectFromOldTotal",
+            url: "{page}.aspx",
+            defaults: new { controller = "Error", action = "Index", id = UrlParameter.Optional, pg = UrlParameter.Optional }
+         );
             routes.MapRoute(
-             name: "RedirectFromOld2",
-             url: "id_{id}/{action}.aspx",
-             defaults: new { controller = "RedirectFromOld", action = "Index", id = UrlParameter.Optional }
+             name: "RedirectFromOldTotal1",
+             url: "{page}.aspx/{*pathInfo}",
+             defaults: new { controller = "Error", action = "Index", id = UrlParameter.Optional, pg = UrlParameter.Optional }
           );
-
             routes.MapRoute(
-               name: "RedirectFromOld",
-               url: "{action}.aspx",
-               defaults: new { controller = "RedirectFromOld", action = "Index" }
-            );
+             name: "RedirectFromOldTotal3",
+             url: "{p1}/{page}.aspx",
+             defaults: new { controller = "Error", action = "Index", id = UrlParameter.Optional, pg = UrlParameter.Optional }
+          );
+            routes.MapRoute(
+             name: "RedirectFromOldTotal4",
+             url: "{p1}/{p2}/{page}.aspx",
+             defaults: new { controller = "Error", action = "Index", id = UrlParameter.Optional, pg = UrlParameter.Optional }
+          );
+            routes.MapRoute(
+            name: "RedirectFromOldTotal5",
+            url: "{p1}/{p2}/{p3}/{page}.aspx",
+            defaults: new { controller = "Error", action = "Index", id = UrlParameter.Optional, pg = UrlParameter.Optional }
+         );
+
+            //  routes.MapRoute(
+            //   name: "RedirectFromOld1",
+            //   url: "pg_{pg}/id_{id}/{action}.aspx",
+            //   defaults: new { controller = "RedirectFromOld", action = "Index", id = UrlParameter.Optional, pg = UrlParameter.Optional }
+            //);
+
+            //  routes.MapRoute(
+            //    name: "RedirectFromOld1",
+            //    url: "pg_{pg}/id_{id}/{action}.aspx",
+            //    defaults: new { controller = "RedirectFromOld", action = "Index", id = UrlParameter.Optional, pg = UrlParameter.Optional }
+            // );
+
+            //  routes.MapRoute(
+            //   name: "RedirectFromOld2",
+            //   url: "id_{id}/{action}.aspx",
+            //   defaults: new { controller = "RedirectFromOld", action = "Index", id = UrlParameter.Optional }
+            //);
+
+            //routes.MapRoute(
+            //   name: "RedirectFromOld",
+            //   url: "{action}.aspx",
+            //    defaults: new { controller = "RedirectFromOld", action = "Index" }
+            //);
 
             routes.MapRoute(
                 name: "Registry",

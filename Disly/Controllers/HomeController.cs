@@ -18,6 +18,7 @@ namespace Disly.Controllers
                 SitesInfo = siteModel,
                 SiteMapArray = siteMapArray,
                 BannerArray = bannerArray,
+           
             };
 
         }
@@ -32,9 +33,9 @@ namespace Disly.Controllers
 
             if (currentPage != null)
             {
-                ViewBag.Title = currentPage.Title;
-                ViewBag.Description = currentPage.Desc;
-                ViewBag.KeyWords = currentPage.Keyw;
+                ViewBag.Title = "Главная";
+                ViewBag.Description = "";
+                ViewBag.KeyWords = "";
             }
             #endregion
 

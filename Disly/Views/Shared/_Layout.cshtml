@@ -2,7 +2,7 @@
 @{
     ViewBag.Version = "1.0.1";
     string currentYear = DateTime.Now.Year.ToString();
-    string theme = Model.SitesInfo.Theme + ".css";
+    string theme = (Model.SitesInfo != null)? Model.SitesInfo.Theme + ".css" : null;
 
     var mainMenu = (Model.SiteMapArray != null)?
                     Model.SiteMapArray

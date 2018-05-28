@@ -118,7 +118,8 @@ namespace Disly.Controllers
             }
 
             //определяем вьюху
-            ViewName = "~/Error/404/";
+            ViewName = "~/Views/Error/CustomError.cshtml";
+
             var allview= _repository.getView(ControllerName);
             if (allview != null)
             {

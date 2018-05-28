@@ -9,6 +9,7 @@ namespace Disly.Models
     /// </summary>
     public class PageViewModel
     {
+        public string Title { get; set; }
         /// <summary>
         /// Информация по ошибками
         /// </summary>
