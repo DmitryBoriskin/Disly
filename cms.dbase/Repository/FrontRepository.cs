@@ -412,18 +412,22 @@ namespace cms.dbase
                         Path = s.c_path,
                         Alias = s.c_alias.ToLower(),
                         Title = s.c_title,
-                        Text = s.c_text,
+                        //Text = s.c_text,
                         Preview = s.c_preview,
                         Url = s.c_url,
-                        Desc = s.c_desc,
-                        Keyw = s.c_keyw,
+                        //Desc = s.c_desc,
+                        //Keyw = s.c_keyw,
                         Disabled = s.b_disabled,
                         DisabledMenu = s.b_disabled_menu,
                         Sort = s.n_sort,
                         ParentId = s.uui_parent,
                         MenuAlias = s.menu_alias,
                         MenuSort = s.menu_sort,
-                        MenuGroups = getSiteMapGroupMenu(s.id),
+                        MenuGroups = db.content_sitemap_menutypess
+                                        .Where(w => w.f_sitemap.Equals(s.id))
+                                        .Select(w => w.f_menutype.ToString())
+                                        .ToArray(),
+                        //MenuGroups = getSiteMapGroupMenu(s.id),
                         Photo = new Photo { Url = s.c_photo }
                     });
 
@@ -454,6 +458,7 @@ namespace cms.dbase
             }
         }
 
+
         /// <summary>
         /// Получение списка баннеров
         /// </summary>
@@ -468,8 +473,7 @@ namespace cms.dbase
                     .Where(b => b.banner_disabled == false)
                     .Where(b => b.banner_date_end > DateTime.Now || b.banner_date_end == null);
 
-                if (query.Any())
-                {
+
                     int itemCount = query.Count();
 
                     var list = query
@@ -490,9 +494,6 @@ namespace cms.dbase
                         });
 
                     return list.ToArray();
-                }
-
-                return null;
             }
         }
 
@@ -797,6 +798,84 @@ namespace cms.dbase
         /// Получаем новости для модуля на главной странице
         /// </summary>
         /// <returns></returns>
+        public List<MaterialFrontModule> getMaterials(string group)
+        {
+            try
+            {
+                using (var db = new CMSdb(_context))
+                {
+                    var contentType = ContentType.MATERIAL.ToString().ToLower();
+
+                    // список id-новостей для данного сайта
+
+                    var materialIds = db.content_content_links
+                        .Where(e => e.f_content_type == contentType)
+                        .Where(e => db.cms_sitess.Any(t => t.c_alias.ToLower() == _domain && t.f_content == e.f_link))
+                        .Select(e => e.f_content);
+                    //.Join(db.cms_sitess.Where(o => o.c_alias.ToLower() == domain),
+                    //        e => e.f_link,
+                    //        o => o.f_content,
+                    //        (e, o) => e.f_content
+                    //        );
+
+                    if (!materialIds.Any())
+                        return null;
+
+                    // список групп
+                    var groups = db.content_materials_groupss
+                        .Select(s => s.id).ToArray();
+
+                    List<MaterialFrontModule> list = new List<MaterialFrontModule>();
+
+                    foreach (var g in groups)
+                    {
+                        var query = db.content_sv_materials_groupss
+                            .Where(w => materialIds.Contains(w.id))
+                            .Where(w => w.group_id.Equals(g));
+
+                        //если не анонсы
+                        if (g != Guid.Parse("651CFEB9-E157-4F42-B40D-DE5A7DC1A8FC"))
+                        {
+                            query = query.Where(w => w.d_date <= DateTime.Now);
+                        }
+
+                        var data = query
+                            .Where(w => w.b_disabled == false)
+                            .OrderByDescending(o => o.d_date)
+                            .Select(s => new MaterialFrontModule
+                            {
+                                Title = s.c_title,
+                                Alias = s.c_alias.ToLower(),
+                                Date = s.d_date,
+                                GroupName = s.group_title,
+                                GroupAlias = s.group_alias,
+                                Photo = s.c_preview,
+                                SmiType = s.c_smi_type
+                            });
+
+
+                        // берём последние 3 новости данной группы
+                        if (data.Any())
+                            list.AddRange(data.Take(2));
+                    }
+
+                    if (list.Any())
+                        return list;
+                }
+            }
+            catch (Exception ex)
+            {
+                var message = String.Format("frontRepository=> getMaterialsModule for \"{0}\" ", _domain);
+                OnDislyEvent(new DislyEventArgs(LogLevelEnum.Debug, message, ex));
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Получаем новости для модуля на главной странице
+        /// </summary>
+        /// <returns></returns>
         public override List<MaterialFrontModule> getMaterialsModule()
         {
             try
@@ -807,6 +886,7 @@ namespace cms.dbase
                     var contentType = ContentType.MATERIAL.ToString().ToLower();
 
                     // список id-новостей для данного сайта
+
                     var materialIds = db.content_content_links
                         .Where(e => e.f_content_type == contentType)
                         .Where(e => db.cms_sitess.Any(t => t.c_alias.ToLower() == domain && t.f_content == e.f_link))
@@ -870,6 +950,7 @@ namespace cms.dbase
 
             return null;
         }
+
 
 
         /// <summary>
@@ -952,18 +1033,23 @@ namespace cms.dbase
             {
                 var contentType = ContentType.MATERIAL.ToString().ToLower();
 
-                var materials = db.content_content_links.Where(e => e.f_content_type == contentType && e.b_important == true)
-                    .Join(db.cms_sitess.Where(o => o.c_alias == _domain),
-                            e => e.f_link,
-                            o => o.f_content,
-                            (e, o) => e.f_content
-                            );
+                var materials = db.content_content_links
+                    .Where(e => e.f_content_type == contentType)
+                    .Where(e => e.b_important == true)
+                    .Where(e => db.cms_sitess.Any(t => t.c_alias.ToLower() == _domain && t.f_content == e.f_link))
+                    .Select(e => e.f_content);
+                    //.Join(db.cms_sitess.Where(o => o.c_alias == _domain),
+                    //        e => e.f_link,
+                    //        o => o.f_content,
+                    //        (e, o) => e.f_content
+                    //        );
 
                 if (!materials.Any())
                     return null;
 
                 var query = db.content_materialss
                         .Where(w => materials.Contains(w.id));
+
                 if (query.Any())
                 {
                     return query.Select(s => new MaterialFrontModule

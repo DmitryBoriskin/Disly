@@ -2,6 +2,7 @@
 using Portal.Code;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -12,6 +13,9 @@ namespace Disly
 {
     public class MvcApplication : System.Web.HttpApplication
     {
+        Stopwatch timer = new Stopwatch();
+        //DateTime dt = DateTime.MinValue;
+
         protected void Application_Start()
         {
             AreaRegistration.RegisterAllAreas();
@@ -42,7 +46,6 @@ namespace Disly
             ExecuteError(httpCode, exception.Message.ToString());
         }
 
-
         private void ExecuteError(Int32? httpCode, String message)
         {
             var routeData = new RouteData();
@@ -65,6 +68,35 @@ namespace Disly
             {
                 //SiteLogger.Fatal("Global.ExecuteError", exception, Context.Request.RequestContext.HttpContext);
                 AppLogger.Fatal("Не предвиденная ошибка", exception);
+            }
+        }
+
+        protected void Application_BeginRequest(Object sender, EventArgs e)
+        {
+            //AppLogger.Warn("BeginRequest");
+
+            timer.Reset();
+            timer.Start();
+
+            //dt = DateTime.Now;
+        }
+
+        protected void Application_EndRequest(Object sender, EventArgs e)
+        {
+            timer.Stop();
+            //var interval = DateTime.Now - dt;
+
+            var timeTaken = timer.ElapsedMilliseconds;
+            //var timeTaken2 = interval.TotalMilliseconds;
+
+            var requestUrl = Request.Url;
+            if (timeTaken > Settings.LongRequestTime)
+                AppLogger.Warn($"{timeTaken} ms: {requestUrl}");
+
+            if (Settings.LongAllRequests)
+            {
+                var ip = Request.UserHostAddress;
+                AppLogger.Info($"{ip} {requestUrl}");
             }
         }
     }

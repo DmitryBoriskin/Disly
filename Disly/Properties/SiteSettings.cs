@@ -7,6 +7,16 @@ using System.Configuration;
 public class Settings
 {
     /// <summary>
+    /// Логирование всех входящих запросов
+    /// </summary>
+    public static bool LongAllRequests = bool.Parse(ConfigurationManager.AppSettings["InfoLongAllRequests"]);
+
+    /// <summary>
+    /// Логирование долгих запросов
+    /// </summary>
+    public static int LongRequestTime = int.Parse(ConfigurationManager.AppSettings["WarnLongRequestTimeInMs"]);
+
+    /// <summary>
     /// Название сайта
     /// </summary>
     public static string SiteTitle = ConfigurationManager.AppSettings["SiteTitle"];

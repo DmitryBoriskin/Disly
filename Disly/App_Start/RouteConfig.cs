@@ -92,6 +92,9 @@ namespace Disly
             //    defaults: new { controller = "RedirectFromOld", action = "Index" }
             //);
 
+
+            //------------------------------------------------------------------------------
+
             routes.MapRoute(
                 name: "Registry",
                 url: "RedirectRegistry/{action}/{id}",
@@ -338,10 +341,10 @@ namespace Disly
                name: "Page",
                url: "{*path}",
                defaults: new { controller = "Page", action = "Index", path = UrlParameter.Optional }
-              // constraints: new { path = @"\d{6}" }
+            // constraints: new { path = @"\d{6}" }
             );
 
-            
+
             routes.MapRoute(
                 name: "Service",
                 url: "Service/{action}/{*id}",
@@ -355,7 +358,13 @@ namespace Disly
                 //constraints: new { path = @"\d{6}" }
             );
 
-            
+            //routes.MapRoute(
+            //    name: "default",
+            //    url: "{controller}/{action}/{id}",
+            //    defaults: new { controller = "Test", action = "Index", id = UrlParameter.Optional }//,
+            //    //constraints: new { path = @"\d{6}" }
+            //);
+
         }
     }
 }

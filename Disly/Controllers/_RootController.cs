@@ -72,7 +72,6 @@ namespace Disly.Controllers
 
             var url = HttpContext.Request.Url.AbsolutePath.ToLower();
 
-            //Сюда попадаем еще, если на странице есть картинки или файлы
             if (url.LastIndexOf(".") > -1)
                 return;
             
