@@ -41,12 +41,7 @@
     });
 
 
-    if ($('.geo_area').length > 0) {
-        $('.geo_area').each(function () {
-            GeoCollection($(this));
-        });
-        
-    }
+    
 
     //Фильтр по новостям
     //$('.filtr_news').submit(function (e) {
@@ -102,19 +97,7 @@
     }
 
 
-    //coords
-    if ($('.buildmap').length > 0) {
-        $('.buildmap').each(function () {
-            var id = $(this).attr('id');
-            var x = $(this).attr('data-x');
-            var y = $(this).attr('data-y');
-            var title = $(this).attr('data-title');
-            var desc = $(this).attr('data-desc');
-            var zoom = $(this).attr('data-zoom');
-            var height = $(this).attr('data-height');
-            Coords(x, y, title, desc, zoom, height, id);
-        });
-    }
+    
 
 
     if ($('.searchform_dop').length > 0) {
