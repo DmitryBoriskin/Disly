@@ -17,10 +17,8 @@ namespace Disly.Controllers
             {
                 SitesInfo = siteModel,
                 SiteMapArray = siteMapArray,
-                BannerArrayLayout = bannerArrayLayout,
-           
+                BannerArrayLayout = bannerArrayLayout,           
             };
-
         }
 
         /// <summary>
@@ -43,6 +41,7 @@ namespace Disly.Controllers
             
             model.Oid = _repository.getOid();
             model.Materials = _repository.getMaterialsModule(); //Domain
+            model.BannerArrayIndex = _repository.getBanners();
 
             if (model.SitesInfo != null && model.SitesInfo.Alias == "main" && !IsSpecVersion)
             {

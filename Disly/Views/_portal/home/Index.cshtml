@@ -1,8 +1,8 @@
 ﻿@model HomePageViewModel
 @{
     Layout = "/views/_portal/shared/_layout.cshtml";
-    var slider = (Model.BannerArray != null) ?
-        Model.BannerArray
+    var slider = (Model.BannerArrayIndex != null) ?
+        Model.BannerArrayIndex
         .Where(w => w.SectionAlias.Equals("slider"))
         .Select(w => w)
         /*.Select(s => new
@@ -31,8 +31,8 @@
         //})
         : null;
 
-    var benefitBanners = (Model.BannerArray != null) ?
-        Model.BannerArray
+    var benefitBanners = (Model.BannerArrayIndex != null) ?
+        Model.BannerArrayIndex
         .Where(w => w.SectionAlias.Equals("benefits"))
         .Select(w => w)
         //.Select(s => new

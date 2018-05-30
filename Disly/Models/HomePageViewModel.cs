@@ -19,6 +19,11 @@ namespace Disly.Models
         public MaterialFrontModule ImportantMaterials { get; set; }
 
         /// <summary>
+        /// Баннеры на главной
+        /// </summary>
+        public BannersModel[] BannerArrayIndex { get; set; }
+
+        /// <summary>
         /// Идентификатор организации
         /// </summary>
         public string Oid { get; set; }
