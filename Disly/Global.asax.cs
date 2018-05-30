@@ -36,14 +36,14 @@ namespace Disly
 
             //Response.Redirect(String.Format("~/Error/Custom/?httpCode={0}", httpCode));
 
-            //var exception = Server.GetLastError();
+            var exception = Server.GetLastError();
 
-            //var httpException = exception as HttpException;
-            //var httpCode = httpException != null ? httpException.GetHttpCode() : 404;
-            //var errMassege = exception.Message.ToString();
-            //AppLogger.Fatal(errMassege, exception);
+            var httpException = exception as HttpException;
+            var httpCode = httpException != null ? httpException.GetHttpCode() : 404;
+            var errMassege = exception.Message.ToString();
+            AppLogger.Fatal(errMassege, exception);
 
-            //ExecuteError(httpCode, exception.Message.ToString());
+            ExecuteError(httpCode, exception.Message.ToString());
         }
 
         private void ExecuteError(Int32? httpCode, String message)
