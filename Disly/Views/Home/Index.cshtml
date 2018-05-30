@@ -261,10 +261,10 @@
                                 title = title.Substring(0, 70);
                             }
 
-                            string benefitbanerfoto = (!string.IsNullOrWhiteSpace(item.Url))
-                                          ? File.Exists(Server.MapPath(item.Url))
-                                              ? item.Url : "/Content/img/nophoto.jpg"
-                                          : "/Content/img/nophoto.jpg";
+                            string benefitbanerfoto = (item.Photo != null && !string.IsNullOrWhiteSpace(item.Photo.Url))
+                                         ? File.Exists(Server.MapPath(item.Photo.Url))
+                                             ? item.Photo.Url : "/Content/img/nophoto.jpg"
+                                         : "/Content/img/nophoto.jpg";
 
                             <div class="linkimg_item col-md-3">
                                 <a href="@link">

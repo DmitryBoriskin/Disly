@@ -266,12 +266,17 @@
                                     title = title.Substring(0, 70);
                                 }
 
+                                string benefitbanerfoto = (item.Photo != null && !string.IsNullOrWhiteSpace(item.Photo.Url))
+                                         ? File.Exists(Server.MapPath(item.Photo.Url))
+                                             ? item.Photo.Url : "/Content/img/nophoto.jpg"
+                                         : "/Content/img/nophoto.jpg";
+
                                 <div class="linkimg_item col-md-3 col-sm-6">
                                     <a href="@link">
                                         <div class="imglink-item">
-                                            @if (!string.IsNullOrEmpty(item.Url))
+                                            @if (item.Photo != null && !string.IsNullOrEmpty(item.Photo.Url))
                                             {
-                                                <img class="imglink-pic" src="@item.Url" />
+                                                <img class="imglink-pic" src="@benefitbanerfoto" />
                                             }
                                             <div class="imglink-title">
                                                 @Html.Raw(title)
