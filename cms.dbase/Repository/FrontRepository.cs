@@ -975,7 +975,6 @@ namespace cms.dbase
 
                     var list = db.content_sv_last2materials_inallgroupss
                             .Where(s => s.c_domain == _domain)
-                            .Where(s => s.c_group_alias != "announcement")
                             .Select(s => new MaterialFrontModule
                             {
                                 Title = s.c_title,

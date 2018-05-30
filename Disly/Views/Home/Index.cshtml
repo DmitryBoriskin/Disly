@@ -73,9 +73,9 @@
                                     string link = "/redirect/link/" + item.Id;
                                     i++;
 
-                                    string sliderfoto = (!string.IsNullOrWhiteSpace(item.Url))
-                                                  ? File.Exists(Server.MapPath(item.Url))
-                                                      ? item.Url : "/Content/img/noslider.jpg"
+                                    string sliderfoto = (item.Photo != null && !string.IsNullOrWhiteSpace(item.Photo.Url))
+                                                  ? File.Exists(Server.MapPath(item.Photo.Url))
+                                                      ? item.Photo.Url : "/Content/img/noslider.jpg"
                                                   : "/Content/img/noslider.jpg";
 
                                 <div class="item @active">

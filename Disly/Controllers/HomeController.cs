@@ -42,6 +42,7 @@ namespace Disly.Controllers
             string _ViewName = (ViewName != String.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";
             
             model.Oid = _repository.getOid();
+
             model.Materials = _repository.getMaterialsModule(); //Domain
 
             if (model.SitesInfo != null && model.SitesInfo.Alias == "main" && !IsSpecVersion)
