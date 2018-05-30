@@ -885,61 +885,74 @@ namespace cms.dbase
                 {
                     var contentType = ContentType.MATERIAL.ToString().ToLower();
 
-                    // список id-новостей для данного сайта
+                    //// список id-новостей для данного сайта
 
-                    var materialIds = db.content_content_links
-                        .Where(e => e.f_content_type == contentType)
-                        .Where(e => db.cms_sitess.Any(t => t.c_alias.ToLower() == domain && t.f_content == e.f_link))
-                        .Select(e => e.f_content);
-                        //.Join(db.cms_sitess.Where(o => o.c_alias.ToLower() == domain),
-                        //        e => e.f_link,
-                        //        o => o.f_content,
-                        //        (e, o) => e.f_content
-                        //        );
+                    //var materialIds = db.content_content_links
+                    //    .Where(e => e.f_content_type == contentType)
+                    //    .Where(e => db.cms_sitess.Any(t => t.c_alias.ToLower() == domain && t.f_content == e.f_link))
+                    //    .Select(e => e.f_content);
+                    ////.Join(db.cms_sitess.Where(o => o.c_alias.ToLower() == domain),
+                    ////        e => e.f_link,
+                    ////        o => o.f_content,
+                    ////        (e, o) => e.f_content
+                    ////        );
 
-                    if (!materialIds.Any())
-                        return null;
+                    //if (!materialIds.Any())
+                    //    return null;
 
-                    // список групп
-                    var groups = db.content_materials_groupss
-                        .Select(s => s.id).ToArray();
+                    //// список групп
+                    //var groups = db.content_materials_groupss
+                    //    .Select(s => s.id).ToArray();
 
-                    List<MaterialFrontModule> list = new List<MaterialFrontModule>();
+                    //List<MaterialFrontModule> list = new List<MaterialFrontModule>();
 
-                    foreach (var g in groups)
-                    {
-                        var query = db.content_sv_materials_groupss
-                            .Where(w => materialIds.Contains(w.id))
-                            .Where(w => w.group_id.Equals(g));
+                    //foreach (var g in groups)
+                    //{
+                    //    var query = db.content_sv_materials_groupss
+                    //        .Where(w => materialIds.Contains(w.id))
+                    //        .Where(w => w.group_id.Equals(g));
 
-                        //если не анонсы
-                        if (g != Guid.Parse("651CFEB9-E157-4F42-B40D-DE5A7DC1A8FC"))
-                        {
-                            query = query.Where(w => w.d_date <= DateTime.Now);
-                        }
+                    //    //если не анонсы
+                    //    if (g != Guid.Parse("651CFEB9-E157-4F42-B40D-DE5A7DC1A8FC"))
+                    //    {
+                    //        query = query.Where(w => w.d_date <= DateTime.Now);
+                    //    }
 
-                        var data = query
-                            .Where(w => w.b_disabled == false)
-                            .OrderByDescending(o => o.d_date)
+                    //    var data = query
+                    //        .Where(w => w.b_disabled == false)
+                    //        .OrderByDescending(o => o.d_date)
+                    //        .Select(s => new MaterialFrontModule
+                    //        {
+                    //            Title = s.c_title,
+                    //            Alias = s.c_alias.ToLower(),
+                    //            Date = s.d_date,
+                    //            GroupName = s.group_title,
+                    //            GroupAlias = s.group_alias,
+                    //            Photo = s.c_preview,
+                    //            SmiType = s.c_smi_type
+                    //        });
+
+                    //    // берём последние 2 новости данной группы
+                    //    if (data.Any())
+                    //        list.AddRange(data.Take(2));
+                    //}
+
+
+                    var list = db.content_sv_last2materials_inallgroupss
+                            .Where(s => s.c_domain == _domain)
+                            .Where(s => s.c_group_alias != "announcement")
                             .Select(s => new MaterialFrontModule
                             {
                                 Title = s.c_title,
-                                Alias = s.c_alias.ToLower(),
+                                Alias = s.c_alias,
                                 Date = s.d_date,
-                                GroupName = s.group_title,
-                                GroupAlias = s.group_alias,
+                                GroupName = s.c_group_title,
+                                GroupAlias = s.c_group_alias,
                                 Photo = s.c_preview,
                                 SmiType = s.c_smi_type
-                            });
+                            }).ToList();
 
-
-                        // берём последние 3 новости данной группы
-                        if (data.Any())
-                            list.AddRange(data.Take(2));
-                    }
-
-                    if (list.Any())
-                        return list;
+                    return list;
                 }
             }
             catch (Exception ex)
@@ -2097,11 +2110,12 @@ namespace cms.dbase
         public override OrgsModel getOrgInfo(string siteId)
         {
             string domain = !string.IsNullOrEmpty(siteId) ? siteId : _domain;
+
             using (var db = new CMSdb(_context))
             {
-                var data = db.cms_sitess.Where(w => w.c_alias.ToLower() == domain)
+                var data = db.cms_sitess.Where(w => w.c_alias == domain)
                              .Join(db.content_orgss, e => e.f_content, o => o.id, (e, o) => o)
-                             .Select(s => new OrgsModel
+                             .Select(s => new OrgsModel()
                              {
                                  Title = !string.IsNullOrEmpty(s.c_title_short) ? s.c_title_short : s.c_title,
                                  Address = s.c_adress,
@@ -2113,10 +2127,32 @@ namespace cms.dbase
                                  GeopointY = s.n_geopoint_y
                              });
 
-                if (data.Any())
-                    return data.First();
 
-                return null;
+                //if (data.Any())
+                    return data.FirstOrDefault();
+
+                //var data = from s in db.cms_sitess
+                //           join o in db.content_orgss on s.f_content equals o.id //into ps from pdl in ps.DefaultIfEmpty()
+                //           where s.c_alias == domain
+                //           select new OrgsModel
+                //           {
+                //               Title = !string.IsNullOrEmpty(o.c_title_short) ? o.c_title_short : o.c_title,
+                //               Address = s.c_adress,
+                //               Phone = s.c_phone,
+                //               Fax = s.c_fax,
+                //               Email = s.c_email,
+                //               PhoneReception = o.c_phone_reception,
+                //               GeopointX = o.n_geopoint_x,
+                //               GeopointY = o.n_geopoint_y
+                //           };
+
+                //if (data != null)
+                //{
+                //    var res = data.SingleOrDefault();
+                //    return res;
+                //}
+
+                //return null;
             }
         }
 

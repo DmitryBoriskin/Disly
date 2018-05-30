@@ -8,7 +8,7 @@ namespace Disly.Models
     /// Модель для страницы контактов
     /// </summary>
     public class ContatcsViewModel : PageViewModel
-    {   
+    {
         /// <summary>
         /// Организация
         /// </summary>
@@ -17,7 +17,7 @@ namespace Disly.Models
         /// <summary>
         /// Список структур
         /// </summary>
-        public StructureModel[] Structures { get; set; }      
+        public StructureModel[] Structures { get; set; }
 
         /// <summary>
         /// Административный персонал

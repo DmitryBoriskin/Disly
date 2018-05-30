@@ -27,46 +27,49 @@
                         break;
                     default:
                         <div>
-                            @if (!string.IsNullOrEmpty(Model.OrgItem.Address))
-                            {
-                                <div class="contact_info_it">
-                                    <strong>Адрес: </strong>
-                                    @Model.OrgItem.Address
-                                </div>
-                            }
-                            @if (!string.IsNullOrEmpty(Model.OrgItem.PhoneReception))
-                            {
-                                <div class="contact_info_it">
-                                    <strong>Телефон регистратуры:</strong>
-                                    @Model.OrgItem.PhoneReception
-                                </div>
-                            }
-                            @if (!string.IsNullOrEmpty(Model.OrgItem.Phone))
-                            {
-                                <div class="contact_info_it">
-                                    <strong>Телефон: </strong>
-                                    @Model.OrgItem.Phone
-                                </div>
-                            }
-                            @if (!string.IsNullOrEmpty(Model.OrgItem.Fax))
-                            {
-                                <div class="contact_info_it">
-                                    <strong>Факс: </strong>
-                                    @Model.OrgItem.Fax
-                                </div>
-                            }
-                            @if (!string.IsNullOrEmpty(Model.OrgItem.Email))
-                            {
-                                <div class="contact_info_it">
-                                    <strong>E-mail приёмной:</strong>
-                                    <a href="mailto:@Model.OrgItem.Email">@Model.OrgItem.Email</a>
-                                </div>
-                            }
-                            @if (!string.IsNullOrWhiteSpace(Model.OrgItem.ExtUrl))
-                            {
-                                <div>
-                                    <strong>Сайт: </strong><a href="http://@Model.OrgItem.ExtUrl" target="_blank">@Model.OrgItem.ExtUrl</a>
-                                </div>
+                            @if(Model.OrgItem != null)
+                            { 
+                                if (!string.IsNullOrEmpty(Model.OrgItem.Address))
+                                {
+                                    <div class="contact_info_it">
+                                        <strong>Адрес: </strong>
+                                        @Model.OrgItem.Address
+                                    </div>
+                                }
+                                if (!string.IsNullOrEmpty(Model.OrgItem.PhoneReception))
+                                {
+                                    <div class="contact_info_it">
+                                        <strong>Телефон регистратуры:</strong>
+                                        @Model.OrgItem.PhoneReception
+                                    </div>
+                                }
+                                if (!string.IsNullOrEmpty(Model.OrgItem.Phone))
+                                {
+                                    <div class="contact_info_it">
+                                        <strong>Телефон: </strong>
+                                        @Model.OrgItem.Phone
+                                    </div>
+                                }
+                                if (!string.IsNullOrEmpty(Model.OrgItem.Fax))
+                                {
+                                    <div class="contact_info_it">
+                                        <strong>Факс: </strong>
+                                        @Model.OrgItem.Fax
+                                    </div>
+                                }
+                                if (!string.IsNullOrEmpty(Model.OrgItem.Email))
+                                {
+                                    <div class="contact_info_it">
+                                        <strong>E-mail приёмной:</strong>
+                                        <a href="mailto:@Model.OrgItem.Email">@Model.OrgItem.Email</a>
+                                    </div>
+                                }
+                                if (!string.IsNullOrWhiteSpace(Model.OrgItem.ExtUrl))
+                                {
+                                    <div>
+                                        <strong>Сайт: </strong><a href="http://@Model.OrgItem.ExtUrl" target="_blank">@Model.OrgItem.ExtUrl</a>
+                                    </div>
+                                }
                             }
                         </div>
                         break;
