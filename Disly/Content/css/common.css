@@ -573,7 +573,7 @@ select.form-control {
     }
 
 .slider-message {
-    padding: 12px 30px 13px;
+    padding: 12px 12px 13px 30px;
     /*margin-bottom: 15px;*/
     font-size: 14px;
     background-color: #fff;

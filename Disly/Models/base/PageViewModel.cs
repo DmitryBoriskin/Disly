@@ -30,11 +30,12 @@ namespace Disly.Models
         /// <summary>
         /// Баннеры
         /// </summary>
-        public BannersModel[] BannerArray { get; set; }
+        //public BannersModel[] BannerArray { get; set; }
         /// <summary>
         /// Баннеры встречающиеся на каждой странице
         /// </summary>
         public BannersModel[] BannerArrayLayout { get; set; }
+        
 
         /// <summary>
         /// Текущая страница
