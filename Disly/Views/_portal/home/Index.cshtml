@@ -4,42 +4,45 @@
     var slider = (Model.BannerArray != null) ?
         Model.BannerArray
         .Where(w => w.SectionAlias.Equals("slider"))
-        .Select(s => new
+        .Select(w => w)
+        /*.Select(s => new
         {
             Id = s.Id,
             Title = s.Title,
             Url = s.Photo.Url,
             Text = s.Text,
             Link = s.Url
-        })
+        })*/
         : null;
 
     var sitemapPlates = (Model.SiteMapArray != null) ?
         Model.SiteMapArray
         .Where(w => w.MenuAlias.Equals("plate"))
-        .OrderBy(o => o.MenuSort)
-        .Select(s => new
-        {
-            Path = s.Path,
-            Alias = s.Alias,
-            Title = s.Title,
-            FrontSection = s.FrontSection,
-            Url = s.Url,
-            Photo = s.Photo
-        })
+        .OrderBy(w => w.MenuSort)
+        .Select(w => w)
+        //.Select(s => new
+        //{
+        //    Path = s.Path,
+        //    Alias = s.Alias,
+        //    Title = s.Title,
+        //    FrontSection = s.FrontSection,
+        //    Url = s.Url,
+        //    Photo = s.Photo
+        //})
         : null;
 
     var benefitBanners = (Model.BannerArray != null) ?
         Model.BannerArray
         .Where(w => w.SectionAlias.Equals("benefits"))
-        .Select(s => new
-        {
-            Id = s.Id,
-            Title = s.Title,
-            Url = s.Photo.Url,
-            Text = s.Text,
-            Link = s.Url
-        })
+        .Select(w => w)
+        //.Select(s => new
+        //{
+        //    Id = s.Id,
+        //    Title = s.Title,
+        //    Url = s.Photo.Url,
+        //    Text = s.Text,
+        //    Link = s.Url
+        //})
         : null;
 
 

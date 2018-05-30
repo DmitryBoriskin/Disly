@@ -7,18 +7,24 @@ namespace Disly
     {
         public static void RegisterRoutes(RouteCollection routes)
         {
+         
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
-           
+            routes.IgnoreRoute("{resource}.ashx/{*pathInfo}");
 
-            //images
-            routes.IgnoreRoute("{*jpgfiles}", new { jpgfiles = @".*\.jpg(/.*)?" });
-            routes.IgnoreRoute("{*jpegfiles}", new { jpegfiles = @".*\.jpeg(/.*)?" });
-            routes.IgnoreRoute("{*pngfiles}", new { pngfiles = @".*\.png(/.*)?" });
-            routes.IgnoreRoute("{*giffiles}", new { pngfiles = @".*\.gif(/.*)?" });
-            //docs
-            routes.IgnoreRoute("{*docfiles}", new { pngfiles = @".*\.doc(/.*)?" });
-            routes.IgnoreRoute("{*docxfiles}", new { pngfiles = @".*\.docx(/.*)?" });
-            //routes.IgnoreRoute("{*docfiles}", new { pngfiles = @".*\.doc(/.*)?" });
+            //Потом будет редирект
+            routes.IgnoreRoute("{resource}.aspx/{*pathInfo}");
+           
+            //Все с точкой
+            routes.IgnoreRoute("{*routesWithDot}", new { routesWithDot = @".*\..*(/.*)?" });
+            
+            //Конкретные примеры
+            routes.IgnoreRoute("{*files}", new { files = @".*\.(jpeg|gif|jpg|png|doc|docx|dat)(/.)?" });
+            routes.IgnoreRoute("{*staticfile}", new { staticfile = @".*\.(css|js)(/.*)?" });
+            ////images
+            //routes.IgnoreRoute("{*jpgfiles}", new { jpgfiles = @".*\.jpg(/.*)?" });
+            ////docs
+            //routes.IgnoreRoute("{*docfiles}", new { docfiles = @".*\.doc(/.*)?" });
+
 
             // Ошибка
             routes.MapRoute(
