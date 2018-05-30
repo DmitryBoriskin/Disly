@@ -22,7 +22,7 @@ namespace Disly.Controllers
                 SitesInfo = siteModel,
                 SiteMapArray = siteMapArray,
                 Breadcrumbs = new List<Breadcrumbs>(),
-                BannerArray = bannerArray,
+                BannerArrayLayout = bannerArrayLayout,
                 CurrentPage = currentPage
             };
 

@@ -18,7 +18,7 @@ namespace Disly.Controllers
             {
                 SitesInfo = siteModel,
                 SiteMapArray = siteMapArray,
-                BannerArray = bannerArray,
+                BannerArrayLayout = bannerArrayLayout,
                 CurrentPage = currentPage,
                 Breadcrumbs = new List<Breadcrumbs>()
             };

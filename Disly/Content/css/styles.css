@@ -1024,7 +1024,7 @@ a.button.icon-cancel{
  }
 
 .depart_phone_wr{position:relative}
-.depart_phone_del{position:absolute;top:30px; right:7px;display:block;cursor:pointer;}
+.depart_phone_del{position:absolute;top:7px; right:7px;display:block;cursor:pointer;}
 .depart_phone_del:hover{text-decoration:none;}
 .depart_phone_del:before{content:'\ec5b';font-family:fontello;color:red;}
 .depart_phone_del:hover:before{color:#c50505;}

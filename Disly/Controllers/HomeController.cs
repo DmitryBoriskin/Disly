@@ -17,7 +17,7 @@ namespace Disly.Controllers
             {
                 SitesInfo = siteModel,
                 SiteMapArray = siteMapArray,
-                BannerArray = bannerArray,
+                BannerArrayLayout = bannerArrayLayout,
            
             };
 

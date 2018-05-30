@@ -497,6 +497,41 @@ namespace cms.dbase
             }
         }
 
+        public override BannersModel[] getBanners(string section)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var query = db.sv_sites_bannerss
+                    .Where(b => b.site_alias == _domain)
+                    .Where(b => b.section_alias == section)
+                    .Where(b => b.banner_disabled == false)
+                    .Where(b => b.banner_date_end > DateTime.Now || b.banner_date_end == null)
+                    .OrderBy(o=>o.banner_sort);
+
+                var list = query
+                    .OrderBy(b => b.banner_sort)
+                    .Select(s => new BannersModel()
+                    {
+                        Id = s.banner_id,
+                        Title = s.banner_title,
+                        Url = s.banner_url,
+                        //Text = s.banner_text,
+                        //Date = s.banner_date,
+                        //Sort = s.banner_sort,
+                        //SectionAlias = s.section_alias,
+                        //Photo = new Photo
+                        //{
+                        //    Url = s.banner_image
+                        //}
+                    });
+                if (list.Any())
+                {
+                    return list.ToArray();
+                }
+                return null;
+            }
+        }
+
         /// <summary>
         /// Получаем баннер
         /// </summary>

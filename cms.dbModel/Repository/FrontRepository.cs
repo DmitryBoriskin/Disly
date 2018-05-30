@@ -32,6 +32,7 @@ namespace cms.dbModel
 
         //Banners
         public abstract BannersModel[] getBanners(); //string domain
+        public abstract BannersModel[] getBanners(string section); //string domain
         public abstract BannersModel getBanner(Guid id);
 
         //Materials
