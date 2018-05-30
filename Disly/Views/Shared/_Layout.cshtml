@@ -159,24 +159,15 @@
 
         <div class="bottom_block">
             <div class="container">
-                @if (Model != null && Model.BannerArray != null && Model.BannerArray.Count() > 0)
+                @if (Model != null && Model.BannerArrayLayout != null && Model.BannerArrayLayout.Count() > 0)
                 {
-                    var bannerBottom = Model.BannerArray
-                                .Where(w => w.SectionAlias.Equals("text"))
-                                .OrderBy(o => o.Sort)
-                                .Select(s => new
-                                {
-                                    Id = s.Id,
-                                    Title = s.Title,
-                                    Url = s.Photo.Url,
-                                    Text = s.Text
-                                });
+                 
 
                     <div class="row bottom-linkimg noprint">
                         @*<div class="col-sm-2">
                                 <div class="bottom-linkimg_head">Официальные сетевые ресурсы</div>
                             </div>*@
-                        @foreach (var item in bannerBottom)
+                        @foreach (var item in Model.BannerArrayLayout)
                         {
                             string redirectLink = "/redirect/link/" + item.Id;
                             <div class="col-sm-2">

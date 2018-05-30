@@ -33,7 +33,7 @@ namespace Disly.Controllers
 
         protected SitesModel siteModel;
         protected SiteMapModel[] siteMapArray;
-        protected BannersModel[] bannerArray;
+        protected BannersModel[] bannerArrayLayout;
         protected List<Breadcrumbs> breadcrumb;
         protected SiteMapModel currentPage;
 
@@ -129,7 +129,7 @@ namespace Disly.Controllers
             
             siteMapArray = _repository.getSiteMapList(); //Domain
 
-            bannerArray = _repository.getBanners(); //Domain
+            bannerArrayLayout = _repository.getBanners("text"); //Domain
 
             ViewBag.MedCap = MedCap = Settings.MedCap;
             ViewBag.Quote = Quote = Settings.Quote;

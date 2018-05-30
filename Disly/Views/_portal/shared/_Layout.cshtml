@@ -157,33 +157,18 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="portal_footer">
+                            
 
-                            @if (Model != null && Model.BannerArray != null && Model.BannerArray.Count() > 0)
+                            @if (Model != null && Model.BannerArrayLayout != null && Model.BannerArrayLayout.Count() > 0)
                             {
-                                var bannerBottom = Model.BannerArray
-                                            .Where(w => w.SectionAlias.Equals("text"))
-                                            .OrderBy(o => o.Sort)
-                                            .Select(s => new
-                                            {
-                                                Id = s.Id,
-                                                Title = s.Title,
-                                                Url = s.Photo.Url,
-                                                Text = s.Text
-                                            });
-
-                                <div class="row bottom-linkimg noprint">
-                                    <div class="col-md-12">
-                                        @*<div class="col-sm-2">
-                                            <div class="bottom-linkimg_head">Официальные сетевые ресурсы</div>
-                                        </div>*@
-                                        @foreach (var item in bannerBottom)
-                                        {
-                                            string redirectLink = "/redirect/link/" + item.Id;
-                                            <div class="col-md-2 col-sm-3">
-                                                <a href="@redirectLink" class="bottom-linkimg-item">@item.Title</a>
-                                            </div>
-                                        }
-                                    </div>                                    
+                                <div class="row bottom-linkimg noprint">                        
+                                    @foreach (var item in Model.BannerArrayLayout)
+                                    {
+                                        string redirectLink = "/redirect/link/" + item.Id;
+                                        <div class="col-sm-2">
+                                            <a href="@redirectLink" class="bottom-linkimg-item">@item.Title</a>
+                                        </div>
+                                    }
                                 </div>
                             }
 
