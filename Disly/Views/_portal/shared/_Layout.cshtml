@@ -1,27 +1,5 @@
 ﻿@model PageViewModel
-@{
-    ViewBag.Version = "1.0.1";
-    string currentYear = DateTime.Now.Year.ToString();
-    string theme = Model.SitesInfo.Theme + ".css";
-
-    var mainMenu = (Model.SiteMapArray != null)?
-                    Model.SiteMapArray
-                              .Where(w => w.MenuAlias.Equals("main"))
-                              .OrderBy(o => o.MenuSort)
-                              .Select(s => new
-                              {
-                                  Path = s.Path,
-                                  Alias = s.Alias,
-                                  Title = s.Title,
-                                  FrontSection = s.FrontSection,
-                                  Url = s.Url
-                              }).ToArray()
-                      : null;
-    
-}
-
 <!DOCTYPE html>
-
 <html>
 <head>
     <meta charset="utf-8" />
@@ -107,10 +85,10 @@
                                 <button class="searchform_btn" type="submit">Найти</button>
                                 <div class="searchform_input_wr"><input id="search_focus" class="search-input" type="search" name="q" placeholder="Поиск по сайту" /></div>
                             </form>
-                            @if (mainMenu != null)
+                            @if (Model.MainMenu != null)
                         {
                         <ul class="nav navbar-nav navbar-left">
-                            @foreach (var item in mainMenu)
+                            @foreach (var item in Model.MainMenu)
                                 {
                                     string fullPath = "/";
                                     if (!string.IsNullOrEmpty(item.Url))
@@ -247,7 +225,7 @@
                             <div class="footer-copyright">
                                 <div class="row">
                                     <div class="col-md-6">
-                                        &copy;&nbsp;2009-@currentYear&nbsp;@ViewBag.MedCap<br />
+                                        &copy;&nbsp;2009-@DateTime.Today.ToString("yyyy")&nbsp;@ViewBag.MedCap<br />
                                         @ViewBag.Quote
                                     </div>
                                     <div class="col-md-4">

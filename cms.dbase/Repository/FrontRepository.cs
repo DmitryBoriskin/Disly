@@ -1112,11 +1112,7 @@ namespace cms.dbase
                 var query = db.content_sv_materials_groupss                         
                          .Where(w => w.b_disabled == false)
                          .Where(w => w.group_id.Equals(Guid.Parse("6303B7C5-5404-4EC0-AED2-1C308992C78A")))
-                         .Join(db.content_content_links.Where(w=>w.f_link== fcontent && w.f_content_type== contentType),n=>n.id,m=>m.f_content,(n,m)=>n);
-
-
-
-
+                         .Join(db.content_content_links.Where(w=>w.f_link== fcontent && w.f_content_type== contentType),n=>n.id,m=>m.f_content,(n,m)=>n);                
 
                 if (query.Any())
                 {
