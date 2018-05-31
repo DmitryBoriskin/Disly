@@ -20,10 +20,24 @@ namespace Disly.Areas.Admin.Service
             string url = "http://geocode-maps.yandex.ru/1.x/?format=json&results=1&geocode=" + addres;
             string html = string.Empty;
             // Отправляем GET запрос и получаем в ответ JSON с данным об адресе
-            HttpWebRequest myHttpWebRequest = (HttpWebRequest)HttpWebRequest.Create(url);
-            HttpWebResponse myHttpWebResponse = (HttpWebResponse)myHttpWebRequest.GetResponse();
-            StreamReader myStreamReader = new StreamReader(myHttpWebResponse.GetResponseStream());
-            html = myStreamReader.ReadToEnd();
+            try
+            {
+                HttpWebRequest myHttpWebRequest = (HttpWebRequest)HttpWebRequest.Create(url);
+                HttpWebResponse myHttpWebResponse = (HttpWebResponse)myHttpWebRequest.GetResponse();
+                StreamReader myStreamReader = new StreamReader(myHttpWebResponse.GetResponseStream());
+                html = myStreamReader.ReadToEnd();
+            }
+            catch(Exception ex)
+            {
+                //Mailer letter = new Mailer();
+                //letter.isSsl = true;
+                //letter.Domain = "error";
+                //letter.Theme = "error";
+                //letter.Text = ex.Message;                
+                //letter.MailTo = "alex92ailo@mail.ru";
+                //letter.SendMail();
+            }
+            
 
             //[^{"pos":"]\S*[^"}]
             string coord = String.Empty;
