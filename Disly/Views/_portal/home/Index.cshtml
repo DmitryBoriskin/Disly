@@ -14,7 +14,9 @@
                 var ev = Model.ModuleEvents.FirstOrDefault();
 
                 string link = "/press/" + ev.Date.Year + "/" + ev.Date.Month + "/" + ev.Date.Day + "/" + ev.Alias;
-                string photo = !string.IsNullOrEmpty(ev.Photo) ? ev.Photo : "~/Content/img/temporal.jpg";
+                string photo = (!string.IsNullOrEmpty(ev.Photo) &&
+                                File.Exists(Server.MapPath(ev.Photo)))
+                                ? ev.Photo : "/Content/img/temporal.jpg";
 
                 <div class="event-item-module">
                     <div class="event-item-module-opacity top-op">
@@ -158,7 +160,9 @@
                 var news_it = Model.ImportantMaterials;
 
                 string link = "/press/" + news_it.Date.Year + "/" + news_it.Date.Month + "/" + news_it.Date.Day + "/" + news_it.Alias;
-                string photo = !string.IsNullOrEmpty(news_it.Photo) ? news_it.Photo : "~/Content/img/temporal.jpg";
+                string photo = (!string.IsNullOrEmpty(news_it.Photo) &&
+                                File.Exists(Server.MapPath(news_it.Photo)))
+                                ? news_it.Photo : "/Content/img/temporal.jpg";
 
                 <div class="event-item-module">
                     <div class="event-item-module-opacity top-op">

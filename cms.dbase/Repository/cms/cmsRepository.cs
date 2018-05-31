@@ -54,10 +54,7 @@ namespace cms.dbase
 
                 try
                 {
-                    if(query.Count() > 1)
-                        return query.Select(p => p.c_domain).First();
-
-                    return query.Select(p => p.c_domain).Single();
+                    return query.Select(p => p.c_domain).FirstOrDefault();
                 }
                 catch (Exception ex)
                 {
