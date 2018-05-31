@@ -62,9 +62,13 @@ namespace Disly.Controllers
                 model.ImportantMaterials = _repository.getMaterialsImportant();
 
                 var NewInMedicine = _repository.getMaterialsGroupNewInMedicin();
-                model.ModuleNewsWorld = NewInMedicine.Where(w => w.SmiType == "world").FirstOrDefault();
-                model.ModuleNewsChuv = NewInMedicine.Where(w => w.SmiType == "chuvashia").FirstOrDefault();
-                model.ModuleNewsRus = NewInMedicine.Where(w => w.SmiType == "russia").FirstOrDefault();
+                if (NewInMedicine != null)
+                {
+                    model.ModuleNewsWorld = NewInMedicine.Where(w => w.SmiType == "world").FirstOrDefault();
+                    model.ModuleNewsChuv = NewInMedicine.Where(w => w.SmiType == "chuvashia").FirstOrDefault();
+                    model.ModuleNewsRus = NewInMedicine.Where(w => w.SmiType == "russia").FirstOrDefault();
+                }
+                
 
                 _ViewName = _ViewName.ToLower().Replace("views/", "views/_portal/");//спец вьюха для главного сайта 
             }
