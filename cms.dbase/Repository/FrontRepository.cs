@@ -395,14 +395,15 @@ namespace cms.dbase
         /// Получение меню из карты сайта
         /// </summary>
         /// <returns></returns>
-        public override SiteMapModel[] getSiteMapList() //string domain
+        public override SiteMapModel[] getSiteMapList()
         {
             string domain = _domain;
             using (var db = new CMSdb(_context))
             {
                 var data = db.content_sv_sitemap_menus
                     .Where(w => w.f_site.Equals(domain))
-                    .Where(w => !w.b_disabled)
+                    .Where(w => !w.b_disabled && !w.b_disabled_menu)
+                    .Where(w => w.menu_alias != "plate") /*исключения*/
                     .OrderBy(o => o.n_sort)
                     .Select(s => new SiteMapModel
                     {
@@ -417,8 +418,8 @@ namespace cms.dbase
                         Url = s.c_url,
                         //Desc = s.c_desc,
                         //Keyw = s.c_keyw,
-                        Disabled = s.b_disabled,
-                        DisabledMenu = s.b_disabled_menu,
+                        //Disabled = s.b_disabled,
+                        //DisabledMenu = s.b_disabled_menu,
                         Sort = s.n_sort,
                         ParentId = s.uui_parent,
                         MenuAlias = s.menu_alias,
@@ -428,6 +429,40 @@ namespace cms.dbase
                                         .Select(w => w.f_menutype.ToString())
                                         .ToArray(),
                         //MenuGroups = getSiteMapGroupMenu(s.id),
+                        Photo = new Photo { Url = s.c_photo }
+                    });
+
+                if (data.Any())
+                    return data.ToArray();
+
+                return null;
+            }
+        }
+
+        public SiteMapModel[] getSiteMapList(string group)
+        {            
+            using (var db = new CMSdb(_context))
+            {
+                var data = db.content_sv_sitemap_menus
+                    .Where(w => w.f_site.Equals(_domain))
+                    .Where(w => !w.b_disabled && !w.b_disabled_menu)
+                    .Where(w=>w.menu_alias == group)
+                    .OrderBy(o => o.menu_sort)
+                    .Select(s => new SiteMapModel
+                    {
+                        Id = s.id,                        
+                        FrontSection = s.f_front_section,
+                        Path = s.c_path,
+                        Alias = s.c_alias.ToLower(),
+                        Title = s.c_title,                        
+                        Preview = s.c_preview,
+                        Url = s.c_url,                                                
+                        ParentId = s.uui_parent,
+                        MenuAlias = s.menu_alias,                        
+                        MenuGroups = db.content_sitemap_menutypess
+                                        .Where(w => w.f_sitemap.Equals(s.id))
+                                        .Select(w => w.f_menutype.ToString())
+                                        .ToArray(),                        
                         Photo = new Photo { Url = s.c_photo }
                     });
 
@@ -515,14 +550,14 @@ namespace cms.dbase
                         Id = s.banner_id,
                         Title = s.banner_title,
                         Url = s.banner_url,
-                        //Text = s.banner_text,
+                        Text = s.banner_text,
                         //Date = s.banner_date,
                         //Sort = s.banner_sort,
                         //SectionAlias = s.section_alias,
-                        //Photo = new Photo
-                        //{
-                        //    Url = s.banner_image
-                        //}
+                        Photo = new Photo
+                        {
+                            Url = s.banner_image
+                        }
                     });
                 if (list.Any())
                 {
@@ -918,19 +953,14 @@ namespace cms.dbase
                 string domain = _domain;
                 using (var db = new CMSdb(_context))
                 {
-                    var contentType = ContentType.MATERIAL.ToString().ToLower();
+                    //var contentType = ContentType.MATERIAL.ToString().ToLower();
 
                     //// список id-новостей для данного сайта
 
                     //var materialIds = db.content_content_links
                     //    .Where(e => e.f_content_type == contentType)
                     //    .Where(e => db.cms_sitess.Any(t => t.c_alias.ToLower() == domain && t.f_content == e.f_link))
-                    //    .Select(e => e.f_content);
-                    ////.Join(db.cms_sitess.Where(o => o.c_alias.ToLower() == domain),
-                    ////        e => e.f_link,
-                    ////        o => o.f_content,
-                    ////        (e, o) => e.f_content
-                    ////        );
+                    //    .Select(e => e.f_content);            
 
                     //if (!materialIds.Any())
                     //    return null;
@@ -1083,13 +1113,8 @@ namespace cms.dbase
                 var materials = db.content_content_links
                     .Where(e => e.f_content_type == contentType)
                     .Where(e => e.b_important == true)
-                    .Where(e => db.cms_sitess.Any(t => t.c_alias.ToLower() == _domain && t.f_content == e.f_link))
+                    .Where(e => db.cms_sitess.Any(t => t.c_alias== _domain && t.f_content == e.f_link))
                     .Select(e => e.f_content);
-                    //.Join(db.cms_sitess.Where(o => o.c_alias == _domain),
-                    //        e => e.f_link,
-                    //        o => o.f_content,
-                    //        (e, o) => e.f_content
-                    //        );
 
                 if (!materials.Any())
                     return null;
@@ -1108,9 +1133,6 @@ namespace cms.dbase
                     }).Single();
                 }
                 return null;
-
-
-
             }
         }
 

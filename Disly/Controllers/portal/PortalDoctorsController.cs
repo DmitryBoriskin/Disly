@@ -20,7 +20,7 @@ namespace Disly.Controllers
             model = new PortalDoctorsViewModel
             {
                 SitesInfo = siteModel,
-                SiteMapArray = siteMapArray,
+                MainMenu= mainMenu,
                 Breadcrumbs = breadcrumb,
                 BannerArrayLayout = bannerArrayLayout,
                 CurrentPage = currentPage

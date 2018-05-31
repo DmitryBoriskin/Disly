@@ -18,7 +18,7 @@ namespace Disly.Controllers
             model = new SpecialistsViewModel
             {
                 SitesInfo = siteModel,
-                SiteMapArray = siteMapArray,
+                MainMenu= mainMenu,
                 BannerArrayLayout = bannerArrayLayout,
                 Breadcrumbs = new List<Breadcrumbs>(),
                 CurrentPage = currentPage

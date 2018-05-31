@@ -24,7 +24,7 @@ namespace Disly.Controllers
             model = new FeedbackViewModel
             {
                 SitesInfo = siteModel,
-                SiteMapArray = siteMapArray,
+                MainMenu= mainMenu,
                 Breadcrumbs = breadcrumb,
                 BannerArrayLayout = bannerArrayLayout,
                 CurrentPage = currentPage
