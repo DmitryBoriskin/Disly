@@ -20,8 +20,9 @@ namespace Disly.Controllers
             model = new TypePageViewModel
             {
                 SitesInfo = siteModel,
-                SiteMapArray = siteMapArray,
-                Breadcrumbs= breadcrumb,
+                MainMenu = mainMenu,
+                //MainMenu= mainMenu,
+                Breadcrumbs = breadcrumb,
                 BannerArrayLayout = bannerArrayLayout,
                 CurrentPage = currentPage
             };
@@ -70,7 +71,7 @@ namespace Disly.Controllers
             }
             else
             {
-                return new HttpNotFoundResult();
+                return new HttpNotFoundResult();                
             }
             return View(_ViewName,model);
         }

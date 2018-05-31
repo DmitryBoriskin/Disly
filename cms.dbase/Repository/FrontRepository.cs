@@ -395,14 +395,15 @@ namespace cms.dbase
         /// Получение меню из карты сайта
         /// </summary>
         /// <returns></returns>
-        public override SiteMapModel[] getSiteMapList() //string domain
+        public override SiteMapModel[] getSiteMapList()
         {
             string domain = _domain;
             using (var db = new CMSdb(_context))
             {
                 var data = db.content_sv_sitemap_menus
                     .Where(w => w.f_site.Equals(domain))
-                    .Where(w => !w.b_disabled)
+                    .Where(w => !w.b_disabled && !w.b_disabled_menu)
+                    .Where(w => w.menu_alias != "plate") /*исключения*/
                     .OrderBy(o => o.n_sort)
                     .Select(s => new SiteMapModel
                     {
@@ -417,8 +418,8 @@ namespace cms.dbase
                         Url = s.c_url,
                         //Desc = s.c_desc,
                         //Keyw = s.c_keyw,
-                        Disabled = s.b_disabled,
-                        DisabledMenu = s.b_disabled_menu,
+                        //Disabled = s.b_disabled,
+                        //DisabledMenu = s.b_disabled_menu,
                         Sort = s.n_sort,
                         ParentId = s.uui_parent,
                         MenuAlias = s.menu_alias,
@@ -428,6 +429,40 @@ namespace cms.dbase
                                         .Select(w => w.f_menutype.ToString())
                                         .ToArray(),
                         //MenuGroups = getSiteMapGroupMenu(s.id),
+                        Photo = new Photo { Url = s.c_photo }
+                    });
+
+                if (data.Any())
+                    return data.ToArray();
+
+                return null;
+            }
+        }
+
+        public SiteMapModel[] getSiteMapList(string group)
+        {            
+            using (var db = new CMSdb(_context))
+            {
+                var data = db.content_sv_sitemap_menus
+                    .Where(w => w.f_site.Equals(_domain))
+                    .Where(w => !w.b_disabled && !w.b_disabled_menu)
+                    .Where(w=>w.menu_alias == group)
+                    .OrderBy(o => o.menu_sort)
+                    .Select(s => new SiteMapModel
+                    {
+                        Id = s.id,                        
+                        FrontSection = s.f_front_section,
+                        Path = s.c_path,
+                        Alias = s.c_alias.ToLower(),
+                        Title = s.c_title,                        
+                        Preview = s.c_preview,
+                        Url = s.c_url,                                                
+                        ParentId = s.uui_parent,
+                        MenuAlias = s.menu_alias,                        
+                        MenuGroups = db.content_sitemap_menutypess
+                                        .Where(w => w.f_sitemap.Equals(s.id))
+                                        .Select(w => w.f_menutype.ToString())
+                                        .ToArray(),                        
                         Photo = new Photo { Url = s.c_photo }
                     });
 
@@ -515,14 +550,14 @@ namespace cms.dbase
                         Id = s.banner_id,
                         Title = s.banner_title,
                         Url = s.banner_url,
-                        //Text = s.banner_text,
+                        Text = s.banner_text,
                         //Date = s.banner_date,
                         //Sort = s.banner_sort,
                         //SectionAlias = s.section_alias,
-                        //Photo = new Photo
-                        //{
-                        //    Url = s.banner_image
-                        //}
+                        Photo = new Photo
+                        {
+                            Url = s.banner_image
+                        }
                     });
                 if (list.Any())
                 {
@@ -918,19 +953,14 @@ namespace cms.dbase
                 string domain = _domain;
                 using (var db = new CMSdb(_context))
                 {
-                    var contentType = ContentType.MATERIAL.ToString().ToLower();
+                    //var contentType = ContentType.MATERIAL.ToString().ToLower();
 
                     //// список id-новостей для данного сайта
 
                     //var materialIds = db.content_content_links
                     //    .Where(e => e.f_content_type == contentType)
                     //    .Where(e => db.cms_sitess.Any(t => t.c_alias.ToLower() == domain && t.f_content == e.f_link))
-                    //    .Select(e => e.f_content);
-                    ////.Join(db.cms_sitess.Where(o => o.c_alias.ToLower() == domain),
-                    ////        e => e.f_link,
-                    ////        o => o.f_content,
-                    ////        (e, o) => e.f_content
-                    ////        );
+                    //    .Select(e => e.f_content);            
 
                     //if (!materialIds.Any())
                     //    return null;
@@ -1004,37 +1034,89 @@ namespace cms.dbase
         /// Получаем новости группы 
         /// </summary>
         /// <returns></returns>
+        //public override List<MaterialFrontModule> getMaterialsGroupNewInMedicin()
+        //{
+        //    string domain = _domain;
+        //    using (var db = new CMSdb(_context))
+        //    {
+        //        var contentType = ContentType.MATERIAL.ToString().ToLower();
+
+        //        // список id-новостей для данного сайта
+        //        var materialIds = db.content_content_links.Where(e => e.f_content_type == contentType)
+        //            .Join(db.cms_sitess.Where(o => o.c_alias.ToLower() == domain),
+        //                    e => e.f_link,
+        //                    o => o.f_content,
+        //                    (e, o) => e.f_content
+        //                    ).ToArray();
+
+        //        if (!materialIds.Any())
+        //            return null;
+
+
+
+        //        List<MaterialFrontModule> list = new List<MaterialFrontModule>();
+
+        //        var query = db.content_sv_materials_groupss
+        //                 .Where(w => materialIds.Contains(w.id))
+        //                 .Where(w => w.b_disabled == false)
+        //                 .Where(w => w.group_id.Equals(Guid.Parse("6303B7C5-5404-4EC0-AED2-1C308992C78A")));
+
+
+                
+
+                
+        //        if (query.Any())
+        //        {
+        //            var data = query.OrderByDescending(o => o.d_date).Select(s => new MaterialFrontModule
+        //            {
+        //                Title = s.c_title,
+        //                Alias = s.c_alias.ToLower(),
+        //                Date = s.d_date,
+        //                GroupName = s.group_title,
+        //                GroupAlias = s.group_alias,
+        //                Photo = s.c_preview,
+        //                SmiType = s.c_smi_type
+        //            });
+        //            var world = data.Where(w => w.SmiType == "world");
+        //            if (world.Any())
+        //            {
+        //                list.AddRange(world.Take(1));
+        //            }
+        //            var rus = data.Where(w => w.SmiType == "russia");
+        //            if (rus.Any())
+        //            {
+        //                list.AddRange(rus.Take(1));
+        //            }
+        //            var chuv = data.Where(w => w.SmiType == "chuvashia");
+        //            if (world.Any())
+        //            {
+        //                list.AddRange(chuv.Take(1));
+        //            }
+
+        //            return list;
+        //        }
+        //        return null;
+        //    }
+        //}
+
         public override List<MaterialFrontModule> getMaterialsGroupNewInMedicin()
         {
             string domain = _domain;
             using (var db = new CMSdb(_context))
             {
                 var contentType = ContentType.MATERIAL.ToString().ToLower();
-
-                // список id-новостей для данного сайта
-                var materialIds = db.content_content_links.Where(e => e.f_content_type == contentType)
-                    .Join(db.cms_sitess.Where(o => o.c_alias.ToLower() == domain),
-                            e => e.f_link,
-                            o => o.f_content,
-                            (e, o) => e.f_content
-                            ).ToArray();
-
-                if (!materialIds.Any())
-                    return null;
-
-
+                var fcontent = db.cms_sitess.Where(w => w.c_alias == domain).Single().f_content;
 
                 List<MaterialFrontModule> list = new List<MaterialFrontModule>();
 
-                var query = db.content_sv_materials_groupss
-                         .Where(w => materialIds.Contains(w.id))
-                         .Where(w => w.group_id.Equals(Guid.Parse("6303B7C5-5404-4EC0-AED2-1C308992C78A")));
+                var query = db.content_sv_materials_groupss                         
+                         .Where(w => w.b_disabled == false)
+                         .Where(w => w.group_id.Equals(Guid.Parse("6303B7C5-5404-4EC0-AED2-1C308992C78A")))
+                         .Join(db.content_content_links.Where(w=>w.f_link== fcontent && w.f_content_type== contentType),n=>n.id,m=>m.f_content,(n,m)=>n);                
 
-
-                var data = query
-                    .Where(w => w.b_disabled == false)
-                    .OrderByDescending(o => o.d_date)
-                    .Select(s => new MaterialFrontModule
+                if (query.Any())
+                {
+                    var data = query.OrderByDescending(o => o.d_date).Select(s => new MaterialFrontModule
                     {
                         Title = s.c_title,
                         Alias = s.c_alias.ToLower(),
@@ -1044,9 +1126,6 @@ namespace cms.dbase
                         Photo = s.c_preview,
                         SmiType = s.c_smi_type
                     });
-
-                if (data.Any())
-                {
                     var world = data.Where(w => w.SmiType == "world");
                     if (world.Any())
                     {
@@ -1083,13 +1162,8 @@ namespace cms.dbase
                 var materials = db.content_content_links
                     .Where(e => e.f_content_type == contentType)
                     .Where(e => e.b_important == true)
-                    .Where(e => db.cms_sitess.Any(t => t.c_alias.ToLower() == _domain && t.f_content == e.f_link))
+                    .Where(e => db.cms_sitess.Any(t => t.c_alias== _domain && t.f_content == e.f_link))
                     .Select(e => e.f_content);
-                    //.Join(db.cms_sitess.Where(o => o.c_alias == _domain),
-                    //        e => e.f_link,
-                    //        o => o.f_content,
-                    //        (e, o) => e.f_content
-                    //        );
 
                 if (!materials.Any())
                     return null;
@@ -1108,9 +1182,6 @@ namespace cms.dbase
                     }).Single();
                 }
                 return null;
-
-
-
             }
         }
 

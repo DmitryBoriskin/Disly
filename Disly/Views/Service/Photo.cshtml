@@ -2,6 +2,7 @@
 @{
     Layout = null;
 }
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -9,16 +10,18 @@
     <title>@ViewBag.Title </title>
 </head>
 <body>
-    <div class="gallery__list">
-        @foreach (var item in Model)
+    <div class="gallery__list">        
+        @if (Model != null)
         {
-            if (item.PhotoImage != null && !string.IsNullOrEmpty(item.PhotoImage.Url) && (File.Exists(Server.MapPath(item.PhotoImage.Url))))
+            foreach (var item in Model)
             {
-                //item.PhotoImage = (File.Exists(Server.MapPath(item.PhotoImage.Url))) ? item.PhotoImage : null;
-                <a class="swipebox" title="@item.Title" href="@item.PhotoImage.Url" data-original="@item.PhotoOriginal" data-preview="@item.PreviewImage.Url" target="_parent"></a>
+                if (item.PhotoImage != null && !string.IsNullOrEmpty(item.PhotoImage.Url) && (File.Exists(Server.MapPath(item.PhotoImage.Url))))
+                {
+                    //item.PhotoImage = (File.Exists(Server.MapPath(item.PhotoImage.Url))) ? item.PhotoImage : null;
+                    <a class="swipebox" title="@item.Title" href="@item.PhotoImage.Url" data-original="@item.PhotoOriginal" data-preview="@item.PreviewImage.Url" target="_parent"></a>
+                }
             }
-
-        }
+        }        
     </div>
     <script src="~/Content/plugins/jquery/jquery.js"></script>
     <script type="text/javascript">

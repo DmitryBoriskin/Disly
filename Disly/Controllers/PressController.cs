@@ -18,7 +18,7 @@ namespace Disly.Controllers
             model = new NewsViewModel
             {
                 SitesInfo = siteModel,
-                SiteMapArray = siteMapArray,
+                MainMenu= mainMenu,
                 Breadcrumbs = breadcrumb,
                 BannerArrayLayout = bannerArrayLayout,
                 CurrentPage = currentPage,

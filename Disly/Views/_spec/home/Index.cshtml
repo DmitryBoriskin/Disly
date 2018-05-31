@@ -1,50 +1,8 @@
 ﻿@model HomePageViewModel
 @{
     Layout = ViewBag.Layout;
-    var slider = (Model.BannerArray != null) ?
-    Model.BannerArray
-    .Where(w => w.SectionAlias.Equals("slider"))
-    .Select(s => new
-    {
-        Id = s.Id,
-        Title = s.Title,
-        Url = s.Photo.Url,
-        Text = s.Text,
-        Link = s.Url
-    })
-    : null;
 
-    var sitemapPlates = (Model.SiteMapArray != null) ?
-        Model.SiteMapArray
-        .Where(w => w.MenuAlias.Equals("plate"))
-        .OrderBy(o => o.MenuSort)
-        .Select(s => new
-        {
-            Path = s.Path,
-            Alias = s.Alias,
-            Title = s.Title,
-            FrontSection = s.FrontSection,
-            Url = s.Url,
-            Photo = s.Photo
-        })
-        : null;
 
-    var benefitBanners = (Model.BannerArray != null) ?
-        Model.BannerArray
-        .Where(w => w.SectionAlias.Equals("benefits"))
-        .Select(s => new
-        {
-            Id = s.Id,
-            Title = s.Title,
-            Url = s.Photo.Url,
-            Text = s.Text,
-            Link = s.Url
-        })
-        : null;
-
-    var announcements = (Model.Materials != null) ? Model.Materials.Where(w => w.GroupAlias.Equals("announcement")).OrderByDescending(o=>o.Date) : null;
-    var news = (Model.Materials != null) ? Model.Materials.Where(w => w.GroupAlias.Equals("news")).OrderByDescending(o => o.Date) : null;
-    var actual = (Model.Materials != null) ? Model.Materials.Where(w => w.GroupAlias.Equals("actual")).OrderByDescending(o => o.Date) : null;
     int i = 0;
 }
 
@@ -70,15 +28,15 @@
 
 
 <div class="container">
-    @if (news != null)
+    @if (Model.ModuleNews != null)
     {
         <div class="block">
             <div class="col-md-12">
-                @if (news != null)
+                @if (Model.ModuleNews != null)
                 {
                     <div class="block_category">
                         <h2>Новости</h2>
-                        @foreach (var item in news)
+                        @foreach (var item in Model.ModuleNews)
                     {
                         string link = "/press/" + item.Date.Year + "/" + item.Date.Month + "/" + item.Date.Day + "/" + item.Alias;
                             <div class="block_item">
@@ -89,11 +47,11 @@
                     </div>
                 }
                 
-                @if (actual != null)
+                @if (Model.ModuleActual != null)
                 {
                     <div class="block_category">
                         <h2>Актуально</h2>
-                        @foreach (var item in actual)
+                        @foreach (var item in Model.ModuleActual)
                         {
                             string link = "/press/" + item.Date.Year + "/" + item.Date.Month + "/" + item.Date.Day + "/" + item.Alias;
                             <div class="block_item">
@@ -103,11 +61,11 @@
                         }
                     </div>
                 }
-                @if (announcements != null)
+                @if (Model.ModuleAnnouncement != null)
                 {
                     <div class="block_category">
                         <h2>Объявления</h2>
-                        @foreach (var item in announcements)
+                        @foreach (var item in Model.ModuleAnnouncement)
                         {
                             string link = "/press/" + item.Date.Year + "/" + item.Date.Month + "/" + item.Date.Day + "/" + item.Alias;
                             <div class="block_item">
@@ -123,13 +81,13 @@
 </div>
 
 
-    @if (benefitBanners != null)
+    @if (Model.BenifitBanners != null)
     {     
             <div class="container">
                 <div class="col-md-12 ">
                     <h2 class="module-title">Полезные ресурсы</h2>
                     <div class="bl_column_4">
-                        @foreach (var item in benefitBanners)
+                        @foreach (var item in Model.BenifitBanners)
                         {
                             string link = "/redirect/link/" + item.Id;
 
@@ -146,14 +104,14 @@
                 </div>                
             </div>        
     }
-    @if (sitemapPlates != null && sitemapPlates.Count() > 0)
+    @if (Model.SitemapPlate != null && Model.SitemapPlate.Count() > 0)
     {
         <div class="container">
             <div class="col-md-12">
                 <div class="top_line">
                     <h2 class="module-title">Полезные ссылки</h2>
                     <div class="bl_column_4 ">
-                        @foreach (var item in sitemapPlates)
+                        @foreach (var item in Model.SitemapPlate)
                         {
                             string fullPath = "/";
 
@@ -182,24 +140,19 @@
     }
 
 
-@{
-    var photo = (Model.Materials != null) ? Model.Materials.Where(w => w.GroupAlias.Equals("photo")) : null;
-    var photo_it = (photo != null && photo.Count() > 0) ? photo.FirstOrDefault() : null;
-    var video = (Model.Materials != null) ? Model.Materials.Where(w => w.GroupAlias.Equals("video")) : null;
-    var video_it = (video != null) ? video.FirstOrDefault() : null;
-}
+
 <div class="container">
     <div class="block">
         <div class="col-md-12">
             <h2><a href="/press/photo">Фото</a></h2>
-            @if (photo_it != null)
+            @if (Model.ModulePhoto != null)
             {
-                string _img = photo_it.Photo;
+                string _img = Model.ModulePhoto.Photo;
                 <div class="block_item">
-                    <a href="/press/@photo_it.Date.Year/@photo_it.Date.Month/@photo_it.Date.Day/@photo_it.Alias">
+                    <a href="/press/@Model.ModulePhoto.Date.Year/@Model.ModulePhoto.Date.Month/@Model.ModulePhoto.Date.Day/@Model.ModulePhoto.Alias">
                         <img src="@_img" />
                     </a>                    
-                    <div class="block_item_info"><a href="/press/@photo_it.Date.Year/@photo_it.Date.Month/@photo_it.Date.Day/@photo_it.Alias">@video_it.Title</a></div>
+                    <div class="block_item_info"><a href="/press/@Model.ModulePhoto.Date.Year/@Model.ModulePhoto.Date.Month/@Model.ModulePhoto.Date.Day/@Model.ModulePhoto.Alias">@Model.ModulePhoto.Title</a></div>
                 </div>
                      }
 
@@ -210,14 +163,14 @@
     <div class="block">
         <div class="col-md-12">
             <h2><a href="/press/video">Видео</a></h2>
-            @if (video_it != null)
+            @if (Model.ModuleVideo != null)
             {
-                string _img = video_it.Photo;
+                string _img = Model.ModuleVideo.Photo;
                 <div class="block_item">
-                    <a href="/press/@video_it.Date.Year/@video_it.Date.Month/@video_it.Date.Day/@video_it.Alias">
+                    <a href="/press/@Model.ModuleVideo.Date.Year/@Model.ModuleVideo.Date.Month/@Model.ModuleVideo.Date.Day/@Model.ModuleVideo.Alias">
                         <img src="@_img" />
                     </a>                    
-                    <div class="block_item_info"><a href="/press/@video_it.Date.Year/@video_it.Date.Month/@video_it.Date.Day/@video_it.Alias">@video_it.Title</a></div>
+                    <div class="block_item_info"><a href="/press/@Model.ModuleVideo.Date.Year/@Model.ModuleVideo.Date.Month/@Model.ModuleVideo.Date.Day/@Model.ModuleVideo.Alias">@Model.ModuleVideo.Title</a></div>
                 </div>
             }
 

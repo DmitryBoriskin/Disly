@@ -37,6 +37,8 @@ namespace Disly.Controllers
         protected List<Breadcrumbs> breadcrumb;
         protected SiteMapModel currentPage;
 
+        protected IEnumerable<SiteMapModel> mainMenu;
+
         protected string MedCap;
         protected string Quote;
         protected string Concept;
@@ -93,7 +95,13 @@ namespace Disly.Controllers
                     }
                 }
                 currentPage = _repository.getSiteMap(_path, _alias);
-                breadcrumb = _repository.getBreadCrumbCollection(_path+_alias);
+            //if (currentPage == null && !(_path == "/" && _alias == ""))
+            //{
+            //    //   Response.StatusCode = 404;                
+            //    //throw new HttpException(404, "Not found");
+            //}
+
+            breadcrumb = _repository.getBreadCrumbCollection(_path+_alias);
 
             #endregion
 
@@ -126,7 +134,10 @@ namespace Disly.Controllers
             }
 
             siteModel = _repository.getSiteInfo();
-            
+
+
+            mainMenu = _repository.getSiteMapList("main");
+
             siteMapArray = _repository.getSiteMapList(); //Domain
 
             bannerArrayLayout = _repository.getBanners("text"); //Domain

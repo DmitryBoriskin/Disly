@@ -49,6 +49,11 @@ namespace Disly.Models
         /// Табы
         /// </summary>
         public List<PageTabsViewModel> Nav { get; set; }
+
+        /// <summary>
+        /// Главное меню
+        /// </summary>
+        public IEnumerable<SiteMapModel> MainMenu { get; set; }
     }
 
     /// <summary>

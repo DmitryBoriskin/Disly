@@ -29,13 +29,25 @@
                 <div id="@item.Id" class="collapse in">
                     @foreach (var answer in item.Answer)
                     {
-                        string proc = ((100 / answer.Statistic.AllVoteCount) * answer.Statistic.ThisVoteCount).ToString();
-                        <div class="vote_stat">
-                            <div class="vote_stat_text">@answer.Variant <small>@answer.Statistic.ThisVoteCount из @answer.Statistic.AllVoteCount (@proc&nbsp;%)</small></div>
-                            <div class="vote_stat_load_wr">
-                                <div class="vote_stat_load" style="width:@proc%"></div>
+                        if (answer.Statistic.AllVoteCount > 0)
+                        {
+                            string proc = ((100 / answer.Statistic.AllVoteCount) * answer.Statistic.ThisVoteCount).ToString();
+                            <div class="vote_stat">
+                                <div class="vote_stat_text">@answer.Variant <small>@answer.Statistic.ThisVoteCount из @answer.Statistic.AllVoteCount (@proc&nbsp;%)</small></div>
+                                <div class="vote_stat_load_wr">
+                                    <div class="vote_stat_load" style="width:@proc%"></div>
+                                </div>
                             </div>
-                        </div>
+                        }
+                        else
+                        {                            
+                            <div class="vote_stat">
+                                <div class="vote_stat_text">@answer.Variant <small>0 из 0 (0&nbsp;%)</small></div>
+                                <div class="vote_stat_load_wr">
+                                    <div class="vote_stat_load" style="width:0%"></div>
+                                </div>
+                            </div>
+                        }
                     }
                 </div>
             }

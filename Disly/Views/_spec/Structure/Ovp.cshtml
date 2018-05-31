@@ -88,3 +88,20 @@
         </div>
     </div>
 </div>
+
+<script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU"></script>
+<script>
+    //coords
+    if ($('.buildmap').length > 0) {
+        $('.buildmap').each(function () {
+            var id = $(this).attr('id');
+            var x = $(this).attr('data-x');
+            var y = $(this).attr('data-y');
+            var title = $(this).attr('data-title');
+            var desc = $(this).attr('data-desc');
+            var zoom = $(this).attr('data-zoom');
+            var height = $(this).attr('data-height');
+            Coords(x, y, title, desc, zoom, height, id);
+        });
+    }
+</script>

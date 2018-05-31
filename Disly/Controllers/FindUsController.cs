@@ -20,7 +20,7 @@ namespace Disly.Controllers
             model = new ContatcsViewModel
             {
                 SitesInfo = siteModel,
-                SiteMapArray = siteMapArray,
+                MainMenu= mainMenu,
                 Breadcrumbs = new List<Breadcrumbs>(),
                 BannerArrayLayout = bannerArrayLayout,
                 CurrentPage = currentPage
