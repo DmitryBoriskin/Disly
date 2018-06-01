@@ -540,7 +540,16 @@ namespace cms.dbase
                     .Where(b => b.site_alias == _domain)
                     .Where(b => b.section_alias == section)
                     .Where(b => b.banner_disabled == false)
-                    .Where(b => b.banner_date_end > DateTime.Now || b.banner_date_end == null)
+                    .Where(b => 
+                                (b.banner_date <= DateTime.Now && (b.banner_date_end > DateTime.Now || b.banner_date_end == null))
+                                ||
+                                (
+                                    //признак ежегодности имеет смысл только в случае когда указана "дата окончания показа"
+                                    b.b_annual==true 
+                                    && b.banner_date_end!=null 
+                                    && b.banner_date.DayOfYear<=DateTime.Now.DayOfYear 
+                                    && ((DateTime)b.banner_date_end).DayOfYear>DateTime.Today.DayOfYear)
+                                )
                     .OrderBy(o=>o.banner_sort);
 
                 var list = query

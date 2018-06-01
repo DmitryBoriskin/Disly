@@ -505,6 +505,7 @@ namespace cms.dbase
                     var data = db.content_orgss.Where(w => w.id == id);
                     if (data.Any())
                     {
+
                         string logTitle = data.FirstOrDefault().c_title;
                         int ThisSort = data.FirstOrDefault().n_sort;
                         db.content_orgss.Where(w => w.n_sort > ThisSort).Set(p => p.n_sort, p => p.n_sort - 1).Update();//смещение n_sort

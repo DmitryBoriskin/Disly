@@ -176,6 +176,7 @@ namespace cms.dbase
                         CountClick = s.n_count_click,
                         Date = s.d_date,
                         DateEnd = s.d_date_end,
+                        Annual=s.b_annual,
                         Sort = s.n_sort,
                         Disabled = s.b_disabled,
                         Section = s.f_section,
@@ -238,6 +239,7 @@ namespace cms.dbase
                             .Value(v => v.d_date_end, item.DateEnd)
                             .Value(v => v.n_sort, maxSort)
                             .Value(v => v.b_disabled, item.Disabled)
+                            .Value(v => v.b_annual, item.Annual)
                             .Value(v => v.f_section, item.Section)
                             .Insert();
 
@@ -301,6 +303,7 @@ namespace cms.dbase
                         .Set(s => s.d_date, item.Date)
                         .Set(s => s.d_date_end, item.DateEnd)
                         .Set(s => s.b_disabled, item.Disabled)
+                        .Set(s => s.b_annual, item.Annual)
                         .Set(s => s.f_section, item.Section)
                         .Set(s => s.b_locked, item.Locked)
                         .Update();

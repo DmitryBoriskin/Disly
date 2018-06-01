@@ -61,6 +61,10 @@ namespace cms.dbModel.entity
         /// Флаг запрещённости эл-та для отображения
         /// </summary>
         public bool Disabled { get; set; }
+        /// <summary>
+        /// Признак ежегодного отображения
+        /// </summary>
+        public bool Annual { get; set; }
 
         /// <summary>
         /// Флаг запрещённости эл-та для редактирования
