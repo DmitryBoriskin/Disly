@@ -324,10 +324,11 @@ namespace cms.dbase
                                 Guid menuId = Guid.Parse(m);
 
                                 //реализуем логику что в группу "Плитка"можно добавить только 20 элементов
+                                //реализуем логику что в группу "Плитка"можно добавить только администраторам портала и разработчикам
                                 if (menuId == Guid.Parse("76B9A197-708B-4B48-B851-F2606A5288D5"))
                                 {
-                                    var dop_query = db.content_sitemap_menutypess.Where(w => w.f_site == _domain && w.f_menutype == menuId).Count();
-                                    if (dop_query > 19) break;
+                                    var usergroup = db.cms_userss.Where(w => w.id == _currentUserId).Single().f_group.ToLower();
+                                    if (!(usergroup == "developer" || usergroup == "administrator")) break;
                                 }
 
                                 var _maxSortMenu = db.content_sitemap_menutypess
@@ -479,12 +480,13 @@ namespace cms.dbase
                                     {
 
                                         //реализуем логику что в группу "Плитка"можно добавить только 20 элементов
+                                        //реализуем логику что в группу "Плитка"можно добавить только администраторам портала и разработчикам
                                         if (menuId == Guid.Parse("76B9A197-708B-4B48-B851-F2606A5288D5"))
                                         {
-                                            var dop_query = db.content_sitemap_menutypess.Where(w => w.f_site == _domain && w.f_menutype == menuId).Count();
-                                            if (dop_query > 19) break;                                            
+                                            var usergroup = db.cms_userss.Where(w => w.id == _currentUserId).Single().f_group.ToLower();
+                                            if (!(usergroup == "developer" || usergroup == "administrator")) break;
                                         }
-                                        
+
                                         var maxSortQuery = db.content_sitemap_menutypess
                                                              .Where(w => w.f_site.Equals(item.Site))
                                                              .Where(w => w.f_menutype.Equals(menuId));
@@ -565,11 +567,12 @@ namespace cms.dbase
                                     Guid menuId = Guid.Parse(m);
 
 
-                                    //реализуем логику что в группу "Плитка"можно добавить только 20 элементов
+                                    ////реализуем логику что в группу "Плитка"можно добавить только 20 элементов 
+                                    //реализуем логику что в группу "Плитка"можно добавить только администраторам портала и разработчикам
                                     if (menuId == Guid.Parse("76B9A197-708B-4B48-B851-F2606A5288D5"))
                                     {
-                                        var dop_query = db.content_sitemap_menutypess.Where(w => w.f_site == _domain && w.f_menutype == menuId).Count();
-                                        if (dop_query > 19) break;
+                                        var usergroup = db.cms_userss.Where(w => w.id == _currentUserId).Single().f_group.ToLower();
+                                        if (!(usergroup == "developer" || usergroup == "administrator")) break;
                                     }
 
                                     var _maxSortMenu = db.content_sitemap_menutypess

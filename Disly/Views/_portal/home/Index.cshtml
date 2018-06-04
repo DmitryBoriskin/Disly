@@ -9,9 +9,9 @@
 <div class="news-module">
     <div class="row">
         <div class="col-md-6 col-sm-12">
-            @if (Model.ModuleEvents != null && Model.ModuleEvents.FirstOrDefault() != null)
+            @if (Model.ModuleActual != null && Model.ModuleActual.FirstOrDefault() != null)
             {
-                var ev = Model.ModuleEvents.FirstOrDefault();
+                var ev = Model.ModuleActual.FirstOrDefault();
 
                 string link = "/press/" + ev.Date.Year + "/" + ev.Date.Month + "/" + ev.Date.Day + "/" + ev.Alias;
                 string photo = (!string.IsNullOrEmpty(ev.Photo) &&
