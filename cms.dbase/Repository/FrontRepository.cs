@@ -1248,23 +1248,24 @@ namespace cms.dbase
 
                     if (!String.IsNullOrEmpty(filter.Category))
                     {
-                        if (filter.Category != "announcement")
-                        {
-                            query = query.Where(w => w.d_date <= DateTime.Now);
-                        }
-
-                        var category = db.content_materials_groupss.Where(w => w.c_alias.ToLower() == filter.Category);
-                        if (category.Any())
-                        {
-                            var cat = category.First().id;
-                            query = query
-                                        .Join(
-                                                db.content_materials_groups_links
-                                                .Where(o => o.f_group == cat),
-                                                e => e.id, o => o.f_material, (o, e) => o
-                                             );
-                            //query = query.Where(w => w.d_date <= DateTime.Now && w.);
-                        }
+                        //if (filter.Category != "announcement")
+                        //{
+                        //    //query = query.Where(w => w.d_date <= DateTime.Now);
+                        //}
+                        query = query.Where(g => db.content_materials_groups_links
+                                      .Any(t => t.fkcontentmaterialsgroups.c_alias == filter.Category && t.f_material == g.id));
+                        //var category = db.content_materials_groupss.Where(w => w.c_alias== filter.Category);
+                        //if (category.Any())
+                        //{
+                        //    var cat = category.First().id;
+                        //    query = query
+                        //                .Join(
+                        //                        db.content_materials_groups_links
+                        //                        .Where(o => o.f_group == cat),
+                        //                        e => e.id, o => o.f_material, (o, e) => o
+                        //                     );
+                        //    //query = query.Where(w => w.d_date <= DateTime.Now && w.);
+                        //}
 
                     }
 
