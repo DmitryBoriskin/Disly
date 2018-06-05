@@ -1966,6 +1966,7 @@ namespace cms.dbase
             {
                 return db.content_peoples
                     .Where(w => w.id.Equals(id))
+                    .Where(w => w.testpeoplepostlinkstestpeopless.Any(a => !a.b_deleted))
                     .Select(s => new PeopleModel
                     {
                         Id = s.id,
@@ -1984,12 +1985,6 @@ namespace cms.dbase
                                                     .FirstOrDefault()
                                         }
                                     }).ToArray(),
-                        //GsUrl = getSiteDefaultDomain(_domain),
-                        //MainSpec = s.mainspecialistpeoplecontentpeoples
-                        //                .Select(m => new MainSpecialistModel
-                        //                {
-                        //                    Title = m.mainspecialistpeoplemainspecialists.c_name
-                        //                }).SingleOrDefault(),
                         XmlInfo = s.contentpeopleinfocontentpeoples
                                         .Where(w => w.f_people.Equals(s.id))
                                         .Select(d => d.c_xml)
