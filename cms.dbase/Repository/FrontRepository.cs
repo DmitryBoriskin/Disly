@@ -655,8 +655,8 @@ namespace cms.dbase
             {
                 var query = db.content_sitemaps
                     .Where(w => w.f_site == domain)
-                    .Where(w => w.b_disabled == false)
-                    .Where(w => w.f_front_section.ToLower() == frontSection.ToLower());
+                    .Where(w => w.b_disabled == false);
+                    //.Where(w => w.f_front_section.ToLower() == frontSection.ToLower());
 
                 var data = query.Select(s => new SiteMapModel
                 {
@@ -1014,6 +1014,7 @@ namespace cms.dbase
 
                     var list = db.content_sv_last2materials_inallgroupss
                             .Where(s => s.c_domain == _domain)
+                            .OrderByDescending(o=>o.d_date)
                             .Select(s => new MaterialFrontModule
                             {
                                 Title = s.c_title,
@@ -1248,10 +1249,10 @@ namespace cms.dbase
 
                     if (!String.IsNullOrEmpty(filter.Category))
                     {
-                        //if (filter.Category != "announcement")
-                        //{
-                        //    //query = query.Where(w => w.d_date <= DateTime.Now);
-                        //}
+                        if (filter.Category != "announcement")
+                        {
+                            query = query.Where(w => w.d_date <= DateTime.Now);
+                        }
                         query = query.Where(g => db.content_materials_groups_links
                                       .Any(t => t.fkcontentmaterialsgroups.c_alias == filter.Category && t.f_material == g.id));
                         //var category = db.content_materials_groupss.Where(w => w.c_alias== filter.Category);

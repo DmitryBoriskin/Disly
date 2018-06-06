@@ -154,9 +154,9 @@
                 }
             </div>
             <div class="col-md-6">
-                @if (Model.ModuleEvents != null && Model.ModuleEvents.FirstOrDefault() != null)
+                @if (Model.ModuleActual != null && Model.ModuleActual.FirstOrDefault() != null)
                 {
-                    var ev = Model.ModuleEvents.FirstOrDefault();
+                    var ev = Model.ModuleActual.FirstOrDefault();
                     string link = "/press/" + ev.Date.Year + "/" + ev.Date.Month + "/" + ev.Date.Day + "/" + ev.Alias;
 
                     string eventfoto = (!string.IsNullOrWhiteSpace(ev.Photo))

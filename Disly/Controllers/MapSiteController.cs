@@ -34,19 +34,20 @@ namespace Disly.Controllers
         public ActionResult Index()
         {
             #region currentPage
-            currentPage = _repository.getSiteMap("MapSite");
-            if (currentPage == null)
-                //throw new Exception("model.CurrentPage == null");
-                return RedirectToRoute("Error", new { httpCode = 404 });
+            //currentPage = _repository.getSiteMap("MapSite");
+            //if (currentPage == null)
+            //    //throw new Exception("model.CurrentPage == null");
+            //    return RedirectToRoute("Error", new { httpCode = 404 });
 
-            if (currentPage != null)
-            {
-                ViewBag.Title = currentPage.Title;
-                ViewBag.Description = currentPage.Desc;
-                ViewBag.KeyWords = currentPage.Keyw;
+            //if (currentPage != null)
+            //{
+            //    ViewBag.Title = currentPage.Title;
+            //    ViewBag.Description = currentPage.Desc;
+            //    ViewBag.KeyWords = currentPage.Keyw;
 
-                model.CurrentPage = currentPage;
-            }
+            //    model.CurrentPage = currentPage;
+            //}
+            
             #endregion
 
             model.Breadcrumbs.Add(new Breadcrumbs

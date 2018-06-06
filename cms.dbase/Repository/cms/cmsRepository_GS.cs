@@ -66,10 +66,7 @@ namespace cms.dbase
         {
             using (var db = new CMSdb(_context))
             {
-                var query = db.content_gss.AsQueryable();
-
-                int AllCount = 0;
-                if (query.Any()) AllCount = query.Count();
+                var query = db.content_gss.AsQueryable();                
 
                 if (!string.IsNullOrWhiteSpace(filter.SearchText))
                 {
@@ -120,10 +117,17 @@ namespace cms.dbase
                             Size = filter.Size,
                             ItemsCount = itemCount,
                             //PageCount = (itemCount % filter.Size > 0) ? (itemCount / filter.Size) + 1 : itemCount / filter.Size
-                        },
-                        AllCount = AllCount
+                        }
                     };
                 }
+            }
+        }
+
+        public int CountGS()
+        {
+            using (var db = new CMSdb(_context))
+            {
+                return db.content_gss.Count();
             }
         }
 
