@@ -655,8 +655,8 @@ namespace cms.dbase
             {
                 var query = db.content_sitemaps
                     .Where(w => w.f_site == domain)
-                    .Where(w => w.b_disabled == false);
-                    //.Where(w => w.f_front_section.ToLower() == frontSection.ToLower());
+                    .Where(w => w.b_disabled == false)
+                    .Where(w => w.f_front_section.ToLower() == frontSection.ToLower());
 
                 var data = query.Select(s => new SiteMapModel
                 {
