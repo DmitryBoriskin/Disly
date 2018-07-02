@@ -1,4 +1,5 @@
-﻿using cms.dbModel.entity;
+﻿using cms.dbase.models;
+using cms.dbModel.entity;
 using Disly.Areas.Admin.Models;
 using Disly.Areas.Admin.Service;
 using System;
@@ -464,7 +465,7 @@ namespace Disly.Areas.Admin.Controllers
                 }
             }
 
-            //вывод значений записанных в предыдущем шаге
+            //вывод значений записанных на предыдущем шаге
             model.RssObject = _cmsRepository.getRssObjects();
 
             return View(model);
@@ -528,35 +529,51 @@ namespace Disly.Areas.Admin.Controllers
                 RssImportModel importModel = channel[0];
                 if (importModel.items != null && importModel.items.Count() > 0)
                 {
+                    List<content_rss_materials> list =new List<content_rss_materials>();
                     foreach (RssItem rssItem in importModel.items)
                     {
-                        Guid id = Guid.NewGuid();
-                        Photo Prev = (rssItem.enclosure != null) ? new Photo { Url = rssItem.enclosure } : null;
-                        MaterialsModel item = new MaterialsModel()
-                        {
-                            Id = id,
-                            Title = rssItem.title,
-                            PreviewImage = Prev,
-                            Alias = Transliteration.Translit(rssItem.title),
-                            Desc = rssItem.description,
-                            Date = rssItem.pubDate,
-                            Year = Convert.ToInt32(rssItem.pubDate.ToString("yyyy")),
-                            Month = Convert.ToInt32(rssItem.pubDate.ToString("MM")),
-                            Day = Convert.ToInt32(rssItem.pubDate.ToString("dd")),
-                            Text = rssItem.yandex_full_text,
-                            Url = rssItem.link,
-                            UrlName = importModel.title,
-                            Disabled = false,
-                            ImportRss = true
-                        };
-                        _cmsRepository.insertRssObject(item);
-                    }
-                }
+                        
+                            Guid id = Guid.NewGuid();
+                            Photo Prev = (rssItem.enclosure != null) ? new Photo { Url = rssItem.enclosure } : null;
+                            content_rss_materials item = new content_rss_materials()
+                            {
+                                id=Guid.NewGuid(),
+                                f_site=Domain,
+                                d_date = rssItem.pubDate,
+                                c_title= rssItem.title,
+                                c_preview= (rssItem.enclosure != null) ?  rssItem.enclosure  : null,
+                                c_text=rssItem.yandex_full_text,
+                                c_desc=rssItem.description,
+                                c_url=rssItem.link,
+                                c_url_name= importModel.title
 
+
+
+                                //Id = id,
+                                //Title = rssItem.title,
+                                //PreviewImage = Prev,
+                                //Alias = Transliteration.Translit(rssItem.title),
+                                //Desc = rssItem.description,
+                                //Date = rssItem.pubDate,
+                                //Year = Convert.ToInt32(rssItem.pubDate.ToString("yyyy")),
+                                //Month = Convert.ToInt32(rssItem.pubDate.ToString("MM")),
+                                //Day = Convert.ToInt32(rssItem.pubDate.ToString("dd")),
+                                //Text = rssItem.yandex_full_text,
+                                //Url = rssItem.link,
+                                //UrlName = importModel.title,
+                                //Disabled = false,
+                                //ImportRss = true
+                            };
+
+                            list.Add(item);                            
+                                   
+                    }
+                    _cmsRepository.InsertRssObjectList(list);
+                }
 
             //}
             //catch {
-                
+              
             //}
             
 
