@@ -49,13 +49,17 @@ namespace Disly.Controllers
             model.BenifitBanners = _repository.getBanners("benefits");
 
             var materials= _repository.getMaterialsModule();
-            model.ModuleAnnouncement = materials.Where(w => w.GroupAlias == "announcement");
-            model.ModuleNews = materials.Where(w => w.GroupAlias == "news");
-            model.ModuleActual= materials.Where(w => w.GroupAlias == "actual");
-            model.ModuleEvents = materials.Where(w => w.GroupAlias == "events");
+            if (materials != null)
+            {
+                model.ModuleAnnouncement = materials.Where(w => w.GroupAlias == "announcement");
+                model.ModuleNews = materials.Where(w => w.GroupAlias == "news");
+                model.ModuleActual = materials.Where(w => w.GroupAlias == "actual");
+                model.ModuleEvents = materials.Where(w => w.GroupAlias == "events");
 
-            model.ModulePhoto=materials.Where(w => w.GroupAlias == "photo").FirstOrDefault();
-            model.ModuleVideo = materials.Where(w => w.GroupAlias == "video").FirstOrDefault();
+                model.ModulePhoto = materials.Where(w => w.GroupAlias == "photo").FirstOrDefault();
+                model.ModuleVideo = materials.Where(w => w.GroupAlias == "video").FirstOrDefault();
+            }
+            
 
             if (model.SitesInfo != null && model.SitesInfo.Alias == "main" && !IsSpecVersion)
             {

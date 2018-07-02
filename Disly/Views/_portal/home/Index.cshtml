@@ -81,7 +81,7 @@
     <div class="row">
 
         <div class="col-md-3 col-sm-6">
-            @if (Model.ModuleAnnouncement.First() != null)
+            @if (Model.ModuleAnnouncement!=null && Model.ModuleAnnouncement.First() != null)
             {
                 string link = "/press/" + Model.ModuleAnnouncement.First().Date.Year + "/" + Model.ModuleAnnouncement.First().Date.Month + "/" + Model.ModuleAnnouncement.First().Date.Day + "/" + Model.ModuleAnnouncement.First().Alias;
                 <div class="module-material-item">
