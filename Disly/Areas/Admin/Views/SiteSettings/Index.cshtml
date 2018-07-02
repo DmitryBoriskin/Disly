@@ -25,6 +25,7 @@
     @Html.HiddenFor(m => m.Item.Alias)
     @Html.DropDownListFor(m => m.Item.Theme, new SelectList(Model.Themes, "Value", "Text", "blue"), new { @title = "Выбор темы", @class = "selectpicker" })
     @Html.TextBoxFor(m => m.Item.Site, new { @title = "Ссылка" })
+    @Html.TextBoxFor(m => m.Item.OldUrl, new { @title = "Ссылка на старый сайт" })
 
     @*@Html.TextBox("upload", null, new { type = "file", title = "Логотип:", data_name = logoName, data_size = logoSize, data_url = logoUrl, accept = ".jpg,.jpeg,.png,.gif" })
     @Html.TextBoxFor(m => m.Item.Logo.Url, new { type = "hidden", value = logoUrl })*@

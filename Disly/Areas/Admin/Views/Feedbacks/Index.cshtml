@@ -33,7 +33,16 @@
                     </div>
                     <div class="col-lg-10">
                         <div class="li-title">
-                            <a title="@Item.Title" class="li-caption" href="/admin/feedbacks/item/@Item.Id/@ViewBag.urlQuery">@Item.Title</a><br />
+                            <a title="@Item.Title" class="li-caption" href="/admin/feedbacks/item/@Item.Id/@ViewBag.urlQuery">
+                            @if (Item.Title != null)
+                            {
+                                <span>@Item.Title</span>
+                            }
+                            else
+                            {
+                                <span>[без названия]</span>
+                            }
+                                </a><br />
 
                             @if (!string.IsNullOrEmpty(Item.Text) && Item.Text.Length > maxChars)
                             {

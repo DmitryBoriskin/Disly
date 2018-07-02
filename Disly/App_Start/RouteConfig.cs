@@ -13,10 +13,19 @@ namespace Disly
 
             //Потом будет редирект
             routes.IgnoreRoute("{resource}.aspx/{*pathInfo}");
-           
+
+            //этот роут поднял выше т.к. его блокировал роут с комментарием "все с точкой "
+            routes.MapRoute(
+              name: "Registry",
+              url: "RedirectRegistry/{action}/{id}",
+              defaults: new { controller = "RedirectRegistry", action = "Index", id = UrlParameter.Optional }
+            );
+
             //Все с точкой
             routes.IgnoreRoute("{*routesWithDot}", new { routesWithDot = @".*\..*(/.*)?" });
+
             
+
             //Конкретные примеры
             routes.IgnoreRoute("{*files}", new { files = @".*\.(jpeg|gif|jpg|png|doc|docx|dat)(/.)?" });
             routes.IgnoreRoute("{*staticfile}", new { staticfile = @".*\.(css|js)(/.*)?" });
@@ -24,6 +33,9 @@ namespace Disly
             //routes.IgnoreRoute("{*jpgfiles}", new { jpgfiles = @".*\.jpg(/.*)?" });
             ////docs
             //routes.IgnoreRoute("{*docfiles}", new { docfiles = @".*\.doc(/.*)?" });
+
+
+         
 
 
             // Ошибка
@@ -101,11 +113,7 @@ namespace Disly
 
             //------------------------------------------------------------------------------
 
-            routes.MapRoute(
-                name: "Registry",
-                url: "RedirectRegistry/{action}/{id}",
-                defaults: new { controller = "RedirectRegistry", action = "Index", id = UrlParameter.Optional }
-            );
+         
 
             // карта сайта
             routes.MapRoute(

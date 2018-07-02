@@ -266,6 +266,16 @@
                 </div>
             </div>
         </div>
+
+
+        @if (Model.SitesInfo.OldUrl != null)
+        {
+            <div class="link_old_site_wr noprint hidden-xs">
+                <a class="link_old_site" href="@Model.SitesInfo.OldUrl" target="_blank">Перейти на старую версию сайта</a>
+            </div>
+        }
+        
+
     </div>
 
     <script type="text/javascript">
