@@ -1875,7 +1875,8 @@ namespace cms.dbase
                     var links = db.test_people_post_linkss
                         .Where(w => w.f_org == siteId)
                         .Where(w => w.testpeoplepostlinkstestposts.b_doctor)
-                        .Where(w => !w.b_deleted);
+                        .Where(w => !w.b_deleted)
+                        ;
                     
                     #region filter
 
@@ -2841,6 +2842,49 @@ namespace cms.dbase
                                      Id = ms.id,
                                      Title = ms.c_title,
                                      Sort = ms.n_sort
+                                 });
+
+                    if (query.Any())
+                        return query.ToArray();
+
+                    return null;
+                }
+            }
+        }
+
+
+
+        public MedServiceModel[] getMedicalServicesOptim(Guid? IdOrg)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                if (IdOrg!=null)
+                {
+                    //показываем все услуги
+                    var query = db.content_sv_org_servicess
+                               .Where(w=>w.f_org==IdOrg)
+                               .OrderBy(o=>o.n_sort)
+                               .Select(s=> new MedServiceModel {
+                                   Id=s.id,
+                                   Title=s.c_title,
+                                   Sort=s.n_sort
+                               });   
+                    if (query.Any())
+                        return query.ToArray();
+
+                    return null;
+                }
+                else
+                {
+                    //показываем все услуги
+                    var query = (from ms in db.content_medical_servicess
+                                 orderby ms.n_sort
+                                 select new MedServiceModel
+                                 {
+                                     Id = ms.id,
+                                     Title = ms.c_title
+                                     //,
+                                     //Sort = ms.n_sort
                                  });
 
                     if (query.Any())

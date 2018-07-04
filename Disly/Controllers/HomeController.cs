@@ -3,6 +3,7 @@ using Disly.Models;
 using System;
 using System.Linq;
 using System.Web.Mvc;
+using System.Web.UI;
 
 namespace Disly.Controllers
 {
@@ -27,6 +28,7 @@ namespace Disly.Controllers
         /// Сраница по умолчанию
         /// </summary>
         /// <returns ></returns>
+        //[OutputCache(Duration = 60, Location = OutputCacheLocation.Server)]
         public ActionResult Index()
         {
             #region currentPage
@@ -78,9 +80,6 @@ namespace Disly.Controllers
             }
             else
             {
-                
-
-
                 model.Slider = _repository.getBanners("slider");
             }
             

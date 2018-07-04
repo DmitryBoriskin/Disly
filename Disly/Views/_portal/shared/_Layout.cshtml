@@ -6,7 +6,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="keywords" content="@ViewBag.keywords">
     <meta name="description" content="@ViewBag.description">
-    <title> @ViewBag.Title - @Model.SitesInfo.Title</title>
+    @if (String.IsNullOrEmpty(ViewBag.Title))
+    {
+        <title>@Model.SitesInfo.Title</title>
+    }
+    else
+    {
+        <title>@ViewBag.Title - @Model.SitesInfo.Title</title>
+    }
     <link href="/Content/img/favicon.ico" rel="shortcut icon">
     <link href="/Content/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet">    
     <link href="/Content/plugins/select2/css/select2.css" rel="stylesheet">
