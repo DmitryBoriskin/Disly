@@ -1,9 +1,9 @@
 ﻿using cms.dbModel.entity;
 using Disly.Models;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+using System.Web.UI;
 
 namespace Disly.Controllers
 {
@@ -32,6 +32,7 @@ namespace Disly.Controllers
         }
 
         // GET: GeneralSpecialists
+        [OutputCache(Duration = 240, Location = OutputCacheLocation.Server)]
         public ActionResult Index()
         {
             #region currentPage

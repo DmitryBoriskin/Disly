@@ -34,7 +34,7 @@ namespace Disly.Controllers
         }
 
         // GET: LPU
-        //[OutputCache(Duration = 240, Location = OutputCacheLocation.Server)]
+        [OutputCache(Duration = 240, Location = OutputCacheLocation.Server)]
         public ActionResult Index(string tab, Guid? id)
         {
             #region currentPage

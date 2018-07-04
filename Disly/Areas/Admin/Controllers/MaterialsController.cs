@@ -474,7 +474,7 @@ namespace Disly.Areas.Admin.Controllers
         // Вспомогательный метод для парсинга XML
         public void XmlParser(string Url)
         {
-            //try { 
+            try { 
             string XmlUrl = Url;
             WebClient client = new WebClient();
             client.Encoding = Encoding.UTF8;
@@ -546,23 +546,6 @@ namespace Disly.Areas.Admin.Controllers
                                 c_desc=rssItem.description,
                                 c_url=rssItem.link,
                                 c_url_name= importModel.title
-
-
-
-                                //Id = id,
-                                //Title = rssItem.title,
-                                //PreviewImage = Prev,
-                                //Alias = Transliteration.Translit(rssItem.title),
-                                //Desc = rssItem.description,
-                                //Date = rssItem.pubDate,
-                                //Year = Convert.ToInt32(rssItem.pubDate.ToString("yyyy")),
-                                //Month = Convert.ToInt32(rssItem.pubDate.ToString("MM")),
-                                //Day = Convert.ToInt32(rssItem.pubDate.ToString("dd")),
-                                //Text = rssItem.yandex_full_text,
-                                //Url = rssItem.link,
-                                //UrlName = importModel.title,
-                                //Disabled = false,
-                                //ImportRss = true
                             };
 
                             list.Add(item);                            
@@ -571,14 +554,12 @@ namespace Disly.Areas.Admin.Controllers
                     _cmsRepository.InsertRssObjectList(list);
                 }
 
-            //}
-            //catch {
-              
-            //}
-            
+                //}
+                //catch {
 
-            //}
-            //catch { }
+                //}
+            }
+            catch { }
         }
 
         [HttpPost]

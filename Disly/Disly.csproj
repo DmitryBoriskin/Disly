@@ -590,6 +590,7 @@
     <Content Include="Content\plugins\select2\select2.js" />
     <Content Include="Content\plugins\select2\select2.min.js" />
     <Content Include="gulpfile.js" />
+    <Content Include="robots.txt" />
     <Content Include="scripts\modernizr.js" />
     <Content Include="test.html" />
     <Content Include="scripts\cms\disly_5_popup.js" />

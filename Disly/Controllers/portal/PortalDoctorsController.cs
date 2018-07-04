@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Web.Mvc;
+using System.Web.UI;
 using System.Xml.Serialization;
 
 namespace Disly.Controllers
@@ -34,6 +35,7 @@ namespace Disly.Controllers
         }
 
         // GET: PortalDoctors
+        [OutputCache(Duration = 240, Location = OutputCacheLocation.Server)]
         public ActionResult Index()
         {
             #region currentPage
@@ -64,6 +66,7 @@ namespace Disly.Controllers
         }
 
         // GET: portaldoctors/id
+        [OutputCache(Duration = 240, Location = OutputCacheLocation.Server)]
         public ActionResult Item(Guid id)
         {
             #region currentPage
