@@ -112,9 +112,9 @@
         <p class="module-title">Пресс-центр<span class="ti-folder"></span><a class="link-to-archive" href="/press">Архив</a></p>
         <div class="row">
             <div class="col-md-3">
-                @if (Model.ModuleAnnouncement != null && Model.ModuleAnnouncement.Count() > 0)
+                @if (Model.PressModuleIndex.ModuleAnnouncement != null && Model.PressModuleIndex.ModuleAnnouncement.Count() > 0)
                 {
-                    foreach (var ann in Model.ModuleAnnouncement.ToList()) //for (int j = 0; j < 2; j++)
+                    foreach (var ann in Model.PressModuleIndex.ModuleAnnouncement.ToList()) //for (int j = 0; j < 2; j++)
                     {
                         string link = "/press/" + ann.Date.Year + "/" + ann.Date.Month + "/" + ann.Date.Day + "/" + ann.Alias;
 
@@ -133,9 +133,9 @@
                 }
             </div>
             <div class="col-md-3">
-                @if (Model.ModuleNews != null && Model.ModuleNews.Count() > 0)
+                @if (Model.PressModuleIndex.ModuleNews != null && Model.PressModuleIndex.ModuleNews.Count() > 0)
                 {
-                    foreach (var item in Model.ModuleNews.ToList())
+                    foreach (var item in Model.PressModuleIndex.ModuleNews.ToList())
                     {
                         string link = "/press/" + item.Date.Year + "/" + item.Date.Month + "/" + item.Date.Day + "/" + item.Alias;
 
@@ -154,9 +154,9 @@
                 }
             </div>
             <div class="col-md-6">
-                @if (Model.ModuleActual != null && Model.ModuleActual.FirstOrDefault() != null)
+                @if (Model.PressModuleIndex.ModuleActual != null && Model.PressModuleIndex.ModuleActual.FirstOrDefault() != null)
                 {
-                    var ev = Model.ModuleActual.FirstOrDefault();
+                    var ev = Model.PressModuleIndex.ModuleActual.FirstOrDefault();
                     string link = "/press/" + ev.Date.Year + "/" + ev.Date.Month + "/" + ev.Date.Day + "/" + ev.Alias;
 
                     string eventfoto = (!string.IsNullOrWhiteSpace(ev.Photo))

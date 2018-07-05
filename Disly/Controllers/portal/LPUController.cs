@@ -31,8 +31,7 @@ namespace Disly.Controllers
             ViewBag.KeyWords = "";
             #endregion
 
-        }
-
+        }        
         // GET: LPU
         [OutputCache(Duration = 240, Location = OutputCacheLocation.Server)]
         public ActionResult Index(string tab, Guid? id)

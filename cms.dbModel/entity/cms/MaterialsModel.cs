@@ -230,6 +230,8 @@ namespace cms.dbModel.entity
 
 
 
+
+
     public class RssChannel
     {
         public Guid id { get; set; }
