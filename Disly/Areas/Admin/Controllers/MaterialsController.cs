@@ -492,7 +492,7 @@ namespace Disly.Areas.Admin.Controllers
                                            title = s.Element("title").Value,
                                            link = s.Element("link").Value,
                                            enclosure = (s.Element("enclosure") != null) ? s.Element("enclosure").Attribute("url").Value : null,
-                                           yandex_full_text = (string)s.Element("description"),
+                                           yandex_full_text = (string)s.Element(yandex + "full-text").Value,
                                            pubDate = DateTime.TryParseExact((s.Element("pubDate").Value)
                                            , "ddd, dd MMM yyyy HH:mm:ss +ffff",
                                            System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out dt) ?
@@ -613,6 +613,7 @@ namespace Disly.Areas.Admin.Controllers
             MaterialsModel data = _cmsRepository.getRssMaterial(id);
             data.Alias = Transliteration.Translit(data.Title);
             data.Text = AdaptationXMLForHtml(data.Text);
+            data.Date = DateTime.Now;
             data.Title = AdaptationXMLForHtml(data.Title);
             data.ContentLink = SiteInfo.ContentId;
             data.ContentLinkType = SiteInfo.Type;

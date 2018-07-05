@@ -9,6 +9,10 @@ namespace cms.dbModel.entity
 
     public class IndexModel
     {
+        public BannersModel[] BannerArrayIndex { get; set; }
+        public IEnumerable<SiteMapModel> SitemapPlate { get; set; }
+        public IEnumerable<BannersModel> BenifitBanners { get; set; }
+        public IEnumerable<BannersModel> Slider { get; set; }
 
         #region пресс центр
         public IEnumerable<MaterialFrontModule> ModuleAnnouncement { get; set; }
@@ -21,7 +25,9 @@ namespace cms.dbModel.entity
 
         public MaterialFrontModule ModuleNewsWorld { get; set; }
         public MaterialFrontModule ModuleNewsRus { get; set; }
-        public MaterialFrontModule ModuleNewsChuv { get; set; } 
+        public MaterialFrontModule ModuleNewsChuv { get; set; }
+
+        public MaterialFrontModule ImportantMaterials { get; set; }
         #endregion
 
     }

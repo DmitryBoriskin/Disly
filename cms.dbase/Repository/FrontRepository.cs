@@ -504,8 +504,7 @@ namespace cms.dbase
             using (var db = new CMSdb(_context))
             {
                 var query = db.sv_sites_bannerss
-                    .Where(b => b.site_alias == _domain)
-                    //.Where(b => b.f_section == section)
+                    .Where(b => b.site_alias == _domain)                    
                     .Where(b => b.banner_disabled == false)
                     .Where(b => b.banner_date_end > DateTime.Now || b.banner_date_end == null);
 
@@ -996,6 +995,9 @@ namespace cms.dbase
                 IndexModel model = new IndexModel();
                 using (var db = new CMSdb(_context))
                 {
+                    #region из пресс-центра
+
+
                     var list = db.content_sv_last2materials_inallgroupss
                             .Where(s => s.c_domain == _domain)
                             .OrderByDescending(o => o.d_date)
@@ -1010,22 +1012,23 @@ namespace cms.dbase
                                 SmiType = s.c_smi_type
                             }).ToList();
 
-                    model.ModuleAnnouncement=list.Where(w => w.GroupAlias == "announcement");
+                    model.ModuleAnnouncement = list.Where(w => w.GroupAlias == "announcement");
                     model.ModuleNews = list.Where(w => w.GroupAlias == "news");
                     model.ModuleActual = list.Where(w => w.GroupAlias == "actual");
                     model.ModuleEvents = list.Where(w => w.GroupAlias == "events");
 
                     if (domain == "main")
                     {
-                        #region newinmdicen
+                        Guid ContentIdMain = Guid.Parse("cc8442ef-cece-4cd3-a544-da319e03c981");
 
+                        #region newinmdicen
                         var contentType = ContentType.MATERIAL.ToString().ToLower();
                         List<MaterialFrontModule> listNew = new List<MaterialFrontModule>();
 
                         var query = db.content_sv_materials_groupss
                                  .Where(w => w.b_disabled == false)
                                  .Where(w => w.group_id.Equals(Guid.Parse("6303B7C5-5404-4EC0-AED2-1C308992C78A")))
-                                 .Join(db.content_content_links.Where(w => w.f_link == Guid.Parse("cc8442ef-cece-4cd3-a544-da319e03c981") && w.f_content_type == contentType), n => n.id, m => m.f_content, (n, m) => n);
+                                 .Join(db.content_content_links.Where(w => w.f_link == ContentIdMain && w.f_content_type == contentType), n => n.id, m => m.f_content, (n, m) => n);
 
                         if (query.Any())
                         {
@@ -1042,13 +1045,87 @@ namespace cms.dbase
                             model.ModuleNewsWorld = data.Where(w => w.SmiType == "world").FirstOrDefault();
                             model.ModuleNewsChuv = data.Where(w => w.SmiType == "chuvashia").FirstOrDefault();
                             model.ModuleNewsRus = data.Where(w => w.SmiType == "russia").FirstOrDefault();
-                        } 
+                        }
+                        #endregion
+
+                        #region important
+                        var ImportantMater = db.content_content_links
+                                            .Where(e => e.f_content_type == contentType)
+                                            .Where(e => e.b_important == true)
+                                            .Where(e => db.cms_sitess.Any(t => t.c_alias == _domain && t.f_content == e.f_link))
+                                            .Select(e => e.f_content);
+                        var queryImportantMater = db.content_materialss
+                                      .Where(w => ImportantMater.Contains(w.id));
+                        if (queryImportantMater.Any())
+                        {
+                            model.ImportantMaterials = queryImportantMater.Select(s => new MaterialFrontModule
+                            {
+                                Title = s.c_title,
+                                Alias = s.c_alias,
+                                Date = s.d_date,
+                                Photo = s.c_preview
+                            }).Single();
+                        }
                         #endregion
                     }
                     else
                     {
                         model.ModulePhoto = list.Where(w => w.GroupAlias == "photo").FirstOrDefault();
                         model.ModuleVideo = list.Where(w => w.GroupAlias == "video").FirstOrDefault();
+                    }
+                    #endregion
+
+                    #region banners
+
+                    var queryBanners = db.sv_sites_bannerss
+                    .Where(b => b.site_alias == _domain)
+                    .Where(b => b.banner_disabled == false)
+                    .Where(b => b.banner_date_end > DateTime.Now || b.banner_date_end == null);
+                    if (queryBanners.Any())
+                    {
+                        model.BannerArrayIndex = queryBanners.OrderBy(b => b.banner_sort)
+                                                             .Select(s => new BannersModel()
+                                                             {
+                                                                 Id = s.banner_id,
+                                                                 Title = s.banner_title,
+                                                                 Url = s.banner_url,
+                                                                 Text = s.banner_text,
+                                                                 Date = s.banner_date,
+                                                                 Sort = s.banner_sort,
+                                                                 SectionAlias = s.section_alias,
+                                                                 Photo = new Photo
+                                                                 {
+                                                                     Url = s.banner_image
+                                                                 }
+                                                             }).ToArray();
+                    }
+                    #endregion
+
+                    #region plate
+                    var platepath = "plate";
+                    var queryplate = db.content_sitemaps
+                                      .Where(w => w.f_site.Equals(domain))
+                                      .Where(w => !w.b_disabled)
+                                      .Where(w => string.IsNullOrWhiteSpace(platepath) || w.c_path.Equals(platepath));
+                    if (queryplate.Any())
+                    {
+                        model.SitemapPlate= queryplate.OrderBy(o => o.c_path)
+                                                      .ThenBy(o => o.n_sort)
+                                                      .Select(s => new SiteMapModel
+                                                      {
+                                                          Title = s.c_title,
+                                                          Path = s.c_path,
+                                                          Alias = s.c_alias.ToLower(),
+                                                          FrontSection = s.f_front_section
+                                                      }).ToArray();
+                    }
+
+
+                    #endregion
+                    model.BenifitBanners = getBanners("benefits");
+                    if (domain != "main")
+                    {
+                        model.Slider = getBanners("slider");
                     }
 
                     return model;

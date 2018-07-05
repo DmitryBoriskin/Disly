@@ -8,20 +8,13 @@ namespace Disly.Models
     /// </summary>
     public class HomePageViewModel : PageViewModel
     {
-        /// <summary>
-        /// Список новостей
-        /// </summary>
-        public List<MaterialFrontModule> Materials { get; set; }
 
-        public List<MaterialFrontModule> MaterialsNewInMedicin { get; set; }
-
-
-        public MaterialFrontModule ImportantMaterials { get; set; }
+        //public MaterialFrontModule ImportantMaterials { get; set; }
 
         /// <summary>
         /// Баннеры на главной
         /// </summary>
-        public BannersModel[] BannerArrayIndex { get; set; }
+        //public BannersModel[] BannerArrayIndex { get; set; }
 
         /// <summary>
         /// Идентификатор организации
@@ -31,12 +24,12 @@ namespace Disly.Models
         /// <summary>
         /// Плитки
         /// </summary>
-        public IEnumerable<SiteMapModel> SitemapPlate { get; set; }
+        //public IEnumerable<SiteMapModel> SitemapPlate { get; set; }
         /// <summary>
         /// Слайдер
         /// </summary>
-        public IEnumerable<BannersModel> Slider { get; set; }
-        public IEnumerable<BannersModel> BenifitBanners { get; set; }
+        //public IEnumerable<BannersModel> Slider { get; set; }
+        //public IEnumerable<BannersModel> BenifitBanners { get; set; }
 
 
 

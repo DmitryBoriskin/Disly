@@ -42,23 +42,21 @@ namespace Disly.Controllers
             string _ViewName = (ViewName != String.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";            
             model.Oid = _repository.getOid();
 
-            model.BannerArrayIndex = _repository.getBanners();
-            model.SitemapPlate = _repository.getSiteMapList("plate");
-            model.BenifitBanners = _repository.getBanners("benefits");
+            //model.BannerArrayIndex = _repository.getBanners();
+            //model.SitemapPlate = _repository.getSiteMapList("plate");
+            //model.BenifitBanners = _repository.getBanners("benefits");
 
             //model.PressModuleIndex=_repository.getMaterialsModuleNew();
             model.ModuleIndex = GetPressModuleIndex();
 
             if (model.SitesInfo != null && model.SitesInfo.Alias == "main" && !IsSpecVersion)
             {
-                model.ImportantMaterials = _repository.getMaterialsImportant();
-                
                 _ViewName = _ViewName.ToLower().Replace("views/", "views/_portal/");//спец вьюха для главного сайта 
             }
-            else
-            {
-                model.Slider = _repository.getBanners("slider");
-            }
+            //else
+            //{
+            //    model.Slider = _repository.getBanners("slider");
+            //}
             
             return View(_ViewName, model);
         }
