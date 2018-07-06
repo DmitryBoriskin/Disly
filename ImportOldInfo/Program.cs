@@ -23,6 +23,8 @@ namespace ImportOldInfo
             Console.WriteLine("2 - перенос всех сайтов");
             Console.WriteLine("3 - фикс изображений одного сайта");
             Console.WriteLine("4 - фикс изображений всех сайтов");
+            Console.WriteLine("5 - переделка изображений одного сайта");
+            Console.WriteLine("6 - переделка изображений всех сайтов");
 
             string variant = Console.ReadLine();
 
@@ -35,9 +37,12 @@ namespace ImportOldInfo
                     int count = 0;
                     foreach (int id in orgsIds)
                     {
-                        count++;
-                        ServiceLogger.Info("{work}", $"организация {count} из {orgsIds.Count()}");
-                        Run(repository.GetOrg(id));
+                        if (id != 549)
+                        {
+                            count++;
+                            ServiceLogger.Info("{work}", $"организация {count} из {orgsIds.Count()}");
+                            Run(repository.GetOrg(id));
+                        }
                     }
                     break;
                 case "3":
@@ -51,6 +56,19 @@ namespace ImportOldInfo
                         var org = repository.GetOrg(id);
                         ServiceLogger.Info("{work}", $"организация: {org.Alias} --> {c} из {orgsIds.Count()}");
                         PhotoUpdater.Fix(org, repository, helper);
+                    }
+                    break;
+                case "5":
+                    UpdateImages(orgsIds);
+                    break;
+                case "6":
+                    int i = 0;
+                    foreach (int id in orgsIds)
+                    {
+                        i++;
+                        var org = repository.GetOrg(id);
+                        ServiceLogger.Info("{work}", $"организация: {org.Alias} --> {i} из {orgsIds.Count()}");
+                        PhotoUpdater.PhotoUpdate(org, repository, helper);
                     }
                     break;
             }
@@ -132,6 +150,31 @@ namespace ImportOldInfo
             var org = repository.GetOrg(id);
             ServiceLogger.Info("{work}", $"организация: {org.Alias}");
             PhotoUpdater.Fix(org, repository, helper);
+        }
+
+        /// <summary>
+        /// Обновляем изображения для альбомов
+        /// </summary>
+        /// <param name="orgsIds"></param>
+        private static void UpdateImages(int[] orgsIds)
+        {
+            int id = 0;
+            do
+            {
+                Console.WriteLine("введите id организации: ");
+                try
+                {
+                    id = int.Parse(Console.ReadLine());
+                }
+                catch
+                {
+                    Console.WriteLine("такого id не существует");
+                }
+            } while (!orgsIds.Contains(id));
+
+            var org = repository.GetOrg(id);
+            ServiceLogger.Info("{work}", $"организация: {org.Alias}");
+            PhotoUpdater.PhotoUpdate(org, repository, helper);
         }
     }
 }

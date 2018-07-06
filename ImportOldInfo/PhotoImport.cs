@@ -78,7 +78,7 @@ namespace ImportOldInfo
             // список фотоальбомов
             IEnumerable<PhotoAlbumOld> albums = repository.GetAlbums(org);
 
-            DropAlreadyImportedAlbums(org, repository, helper);
+            //DropAlreadyImportedAlbums(org, repository, helper);
 
             // текущий порядковый номер альбома
             int currentAlbumNumber = 0;
