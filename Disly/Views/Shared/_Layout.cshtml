@@ -27,8 +27,15 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="keywords" content="@ViewBag.keywords">
-    <meta name="description" content="@ViewBag.description">
-    <title> @ViewBag.Title - @Model.SitesInfo.Title</title>
+    <meta name="description" content="@ViewBag.description">    
+     @if (String.IsNullOrEmpty(ViewBag.Title))
+     {
+         <title>@Model.SitesInfo.Title</title>
+     }
+     else
+     {
+         <title>@ViewBag.Title - @Model.SitesInfo.Title</title>
+     }
     <link href="/Content/img/favicon.ico" rel="shortcut icon">
     <link href="/Content/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet">    
     <link href="/Content/plugins/select2/css/select2.css" rel="stylesheet">
@@ -141,12 +148,12 @@
                                         <a href="#" title="Поиск" class="searchform_show seacrh_button__hide icon-search"></a>
                                     </li>
                                 </ul>
-                                <ul class="nav navbar-nav navbar-right menu-mini-icons">
+                                @*<ul class="nav navbar-nav navbar-right menu-mini-icons">
                                     <li><a href="/mapsite" title="Карта сайта"><span class="ti-layers-alt top-icon"></span></a></li>
                                     <li><a href="/press/rsssettings" title="RSS"><span class="ti-rss-alt top-icon"></span></a></li>
                                     <li><a href="http://www.med.cap.ru/" target="_blank" title="Портал med.cap.ru"><span class="ti-new-window top-icon"></span></a></li>
                                     <li><a class="spec_version" href="/spec" title="версия для слабовидящих"><span class="spec-info">Aa</span></a></li>
-                                </ul>
+                                </ul>*@
                             }
                         </div>
                     </div>
@@ -266,6 +273,16 @@
                 </div>
             </div>
         </div>
+
+
+        @if (Model.SitesInfo.OldUrl != null)
+        {
+            <div class="link_old_site_wr noprint hidden-xs">
+                <a class="link_old_site" href="@Model.SitesInfo.OldUrl" target="_blank">Перейти на старую версию сайта</a>
+            </div>
+        }
+        
+
     </div>
 
     <script type="text/javascript">

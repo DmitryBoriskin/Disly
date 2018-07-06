@@ -5,6 +5,8 @@ using cms.dbModel.entity;
 using cms.dbase.models;
 using LinqToDB;
 using System.Web;
+using System.Collections.Generic;
+using LinqToDB.Data;
 
 namespace cms.dbase
 {
@@ -844,10 +846,16 @@ namespace cms.dbase
                    .Value(v => v.c_url_name, ins.UrlName)
                    .Insert();
                 return true;
-
-
             }
+        }
 
+        public bool InsertRssObjectList(List<content_rss_materials> ins)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                db.BulkCopy(ins);                
+                return true;
+            }
         }
 
         public override RssItem[] getRssObjects()

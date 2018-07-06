@@ -435,22 +435,24 @@ namespace Disly.Areas.Admin.Controllers
             filter.Page = page;
             filter.Size = size;
 
-            PhotoAlbumList list = _cmsRepository.getPhotoAlbum(filter);
-            model.List = list;
+            //PhotoAlbumList list = _cmsRepository.getPhotoAlbum(filter);
+            //model.List = list;
 
-            if (model.List == null)
-                model.List = new PhotoAlbumList()
-                {
-                    Data = null,
-                    Pager = new Pager()
-                    {
-                        Page = 1,
-                        Size = 30,
-                        ItemsCount = 0,
-                    }
-                };
+            //if (model.List == null)
+            //    model.List = new PhotoAlbumList()
+            //    {
+            //        Data = null,
+            //        Pager = new Pager()
+            //        {
+            //            Page = 1,
+            //            Size = 30,
+            //            ItemsCount = 0,
+            //        }
+            //    };
 
-            var json = Json(model.List, JsonRequestBehavior.AllowGet);
+
+            var albums = _cmsRepository.getPhotoAlbum(filter);
+            var json = Json(albums, JsonRequestBehavior.AllowGet);
 
             return json;
         }

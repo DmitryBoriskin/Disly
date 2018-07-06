@@ -271,6 +271,7 @@ namespace cms.dbase
                         Odnoklassniki = s.c_odnoklassniki,
                         Twitter = s.c_twitter,
                         Theme = s.c_theme,
+                        OldUrl=s.c_old_url,
                         DefaultDomain = getSiteDefaultDomain(domain),
                         BackGroundImg = new Photo
                         {
@@ -503,8 +504,7 @@ namespace cms.dbase
             using (var db = new CMSdb(_context))
             {
                 var query = db.sv_sites_bannerss
-                    .Where(b => b.site_alias == _domain)
-                    //.Where(b => b.f_section == section)
+                    .Where(b => b.site_alias == _domain)                    
                     .Where(b => b.banner_disabled == false)
                     .Where(b => b.banner_date_end > DateTime.Now || b.banner_date_end == null);
 
@@ -962,58 +962,9 @@ namespace cms.dbase
                 string domain = _domain;
                 using (var db = new CMSdb(_context))
                 {
-                    //var contentType = ContentType.MATERIAL.ToString().ToLower();
-
-                    //// список id-новостей для данного сайта
-
-                    //var materialIds = db.content_content_links
-                    //    .Where(e => e.f_content_type == contentType)
-                    //    .Where(e => db.cms_sitess.Any(t => t.c_alias.ToLower() == domain && t.f_content == e.f_link))
-                    //    .Select(e => e.f_content);            
-
-                    //if (!materialIds.Any())
-                    //    return null;
-
-                    //// список групп
-                    //var groups = db.content_materials_groupss
-                    //    .Select(s => s.id).ToArray();
-
-                    //List<MaterialFrontModule> list = new List<MaterialFrontModule>();
-
-                    //foreach (var g in groups)
-                    //{
-                    //    var query = db.content_sv_materials_groupss
-                    //        .Where(w => materialIds.Contains(w.id))
-                    //        .Where(w => w.group_id.Equals(g));
-
-                    //    //если не анонсы
-                    //    if (g != Guid.Parse("651CFEB9-E157-4F42-B40D-DE5A7DC1A8FC"))
-                    //    {
-                    //        query = query.Where(w => w.d_date <= DateTime.Now);
-                    //    }
-
-                    //    var data = query
-                    //        .Where(w => w.b_disabled == false)
-                    //        .OrderByDescending(o => o.d_date)
-                    //        .Select(s => new MaterialFrontModule
-                    //        {
-                    //            Title = s.c_title,
-                    //            Alias = s.c_alias.ToLower(),
-                    //            Date = s.d_date,
-                    //            GroupName = s.group_title,
-                    //            GroupAlias = s.group_alias,
-                    //            Photo = s.c_preview,
-                    //            SmiType = s.c_smi_type
-                    //        });
-
-                    //    // берём последние 2 новости данной группы
-                    //    if (data.Any())
-                    //        list.AddRange(data.Take(2));
-                    //}
-
-
                     var list = db.content_sv_last2materials_inallgroupss
                             .Where(s => s.c_domain == _domain)
+                            .OrderByDescending(o=>o.d_date)
                             .Select(s => new MaterialFrontModule
                             {
                                 Title = s.c_title,
@@ -1026,6 +977,158 @@ namespace cms.dbase
                             }).ToList();
 
                     return list;
+                }
+            }
+            catch (Exception ex)
+            {
+                var message = String.Format("frontRepository=> getMaterialsModule for \"{0}\" ", _domain);
+                OnDislyEvent(new DislyEventArgs(LogLevelEnum.Debug, message, ex));
+            }
+
+            return null;
+        }
+        public override IndexModel getMaterialsModuleNew()
+        {
+            try
+            {
+                string domain = _domain;
+                IndexModel model = new IndexModel();
+                using (var db = new CMSdb(_context))
+                {
+                    #region из пресс-центра
+
+
+                    var list = db.content_sv_last2materials_inallgroupss
+                            .Where(s => s.c_domain == _domain)
+                            .OrderByDescending(o => o.d_date)
+                            .Select(s => new MaterialFrontModule
+                            {
+                                Title = s.c_title,
+                                Alias = s.c_alias,
+                                Date = s.d_date,
+                                GroupName = s.c_group_title,
+                                GroupAlias = s.c_group_alias,
+                                Photo = s.c_preview,
+                                SmiType = s.c_smi_type
+                            }).ToList();
+
+                    model.ModuleAnnouncement = list.Where(w => w.GroupAlias == "announcement");
+                    model.ModuleNews = list.Where(w => w.GroupAlias == "news");
+                    model.ModuleActual = list.Where(w => w.GroupAlias == "actual");
+                    model.ModuleEvents = list.Where(w => w.GroupAlias == "events");
+
+                    if (domain == "main")
+                    {
+                        Guid ContentIdMain = Guid.Parse("cc8442ef-cece-4cd3-a544-da319e03c981");
+
+                        #region newinmdicen
+                        var contentType = ContentType.MATERIAL.ToString().ToLower();
+                        List<MaterialFrontModule> listNew = new List<MaterialFrontModule>();
+
+                        var query = db.content_sv_materials_groupss
+                                 .Where(w => w.b_disabled == false)
+                                 .Where(w => w.group_id.Equals(Guid.Parse("6303B7C5-5404-4EC0-AED2-1C308992C78A")))
+                                 .Join(db.content_content_links.Where(w => w.f_link == ContentIdMain && w.f_content_type == contentType), n => n.id, m => m.f_content, (n, m) => n);
+
+                        if (query.Any())
+                        {
+                            var data = query.OrderByDescending(o => o.d_date).Select(s => new MaterialFrontModule
+                            {
+                                Title = s.c_title,
+                                Alias = s.c_alias.ToLower(),
+                                Date = s.d_date,
+                                GroupName = s.group_title,
+                                GroupAlias = s.group_alias,
+                                Photo = s.c_preview,
+                                SmiType = s.c_smi_type
+                            });
+                            model.ModuleNewsWorld = data.Where(w => w.SmiType == "world").FirstOrDefault();
+                            model.ModuleNewsChuv = data.Where(w => w.SmiType == "chuvashia").FirstOrDefault();
+                            model.ModuleNewsRus = data.Where(w => w.SmiType == "russia").FirstOrDefault();
+                        }
+                        #endregion
+
+                        #region important
+                        var ImportantMater = db.content_content_links
+                                            .Where(e => e.f_content_type == contentType)
+                                            .Where(e => e.b_important == true)
+                                            .Where(e => db.cms_sitess.Any(t => t.c_alias == _domain && t.f_content == e.f_link))
+                                            .Select(e => e.f_content);
+                        var queryImportantMater = db.content_materialss
+                                      .Where(w => ImportantMater.Contains(w.id));
+                        if (queryImportantMater.Any())
+                        {
+                            model.ImportantMaterials = queryImportantMater.Select(s => new MaterialFrontModule
+                            {
+                                Title = s.c_title,
+                                Alias = s.c_alias,
+                                Date = s.d_date,
+                                Photo = s.c_preview
+                            }).Single();
+                        }
+                        #endregion
+                    }
+                    else
+                    {
+                        model.ModulePhoto = list.Where(w => w.GroupAlias == "photo").FirstOrDefault();
+                        model.ModuleVideo = list.Where(w => w.GroupAlias == "video").FirstOrDefault();
+                    }
+                    #endregion
+
+                    #region banners
+
+                    var queryBanners = db.sv_sites_bannerss
+                    .Where(b => b.site_alias == _domain)
+                    .Where(b => b.banner_disabled == false)
+                    .Where(b => b.banner_date_end > DateTime.Now || b.banner_date_end == null);
+                    if (queryBanners.Any())
+                    {
+                        model.BannerArrayIndex = queryBanners.OrderBy(b => b.banner_sort)
+                                                             .Select(s => new BannersModel()
+                                                             {
+                                                                 Id = s.banner_id,
+                                                                 Title = s.banner_title,
+                                                                 Url = s.banner_url,
+                                                                 Text = s.banner_text,
+                                                                 Date = s.banner_date,
+                                                                 Sort = s.banner_sort,
+                                                                 SectionAlias = s.section_alias,
+                                                                 Photo = new Photo
+                                                                 {
+                                                                     Url = s.banner_image
+                                                                 }
+                                                             }).ToArray();
+                    }
+                    #endregion
+
+                    #region plate
+                    var platepath = "plate";
+                    var queryplate = db.content_sitemaps
+                                      .Where(w => w.f_site.Equals(domain))
+                                      .Where(w => !w.b_disabled)
+                                      .Where(w => string.IsNullOrWhiteSpace(platepath) || w.c_path.Equals(platepath));
+                    if (queryplate.Any())
+                    {
+                        model.SitemapPlate= queryplate.OrderBy(o => o.c_path)
+                                                      .ThenBy(o => o.n_sort)
+                                                      .Select(s => new SiteMapModel
+                                                      {
+                                                          Title = s.c_title,
+                                                          Path = s.c_path,
+                                                          Alias = s.c_alias.ToLower(),
+                                                          FrontSection = s.f_front_section
+                                                      }).ToArray();
+                    }
+
+
+                    #endregion
+                    model.BenifitBanners = getBanners("benefits");
+                    if (domain != "main")
+                    {
+                        model.Slider = getBanners("slider");
+                    }
+
+                    return model;
                 }
             }
             catch (Exception ex)
@@ -1071,9 +1174,9 @@ namespace cms.dbase
         //                 .Where(w => w.group_id.Equals(Guid.Parse("6303B7C5-5404-4EC0-AED2-1C308992C78A")));
 
 
-                
 
-                
+
+
         //        if (query.Any())
         //        {
         //            var data = query.OrderByDescending(o => o.d_date).Select(s => new MaterialFrontModule
@@ -1252,19 +1355,20 @@ namespace cms.dbase
                         {
                             query = query.Where(w => w.d_date <= DateTime.Now);
                         }
-
-                        var category = db.content_materials_groupss.Where(w => w.c_alias.ToLower() == filter.Category);
-                        if (category.Any())
-                        {
-                            var cat = category.First().id;
-                            query = query
-                                        .Join(
-                                                db.content_materials_groups_links
-                                                .Where(o => o.f_group == cat),
-                                                e => e.id, o => o.f_material, (o, e) => o
-                                             );
-                            //query = query.Where(w => w.d_date <= DateTime.Now && w.);
-                        }
+                        query = query.Where(g => db.content_materials_groups_links
+                                      .Any(t => t.fkcontentmaterialsgroups.c_alias == filter.Category && t.f_material == g.id));
+                        //var category = db.content_materials_groupss.Where(w => w.c_alias== filter.Category);
+                        //if (category.Any())
+                        //{
+                        //    var cat = category.First().id;
+                        //    query = query
+                        //                .Join(
+                        //                        db.content_materials_groups_links
+                        //                        .Where(o => o.f_group == cat),
+                        //                        e => e.id, o => o.f_material, (o, e) => o
+                        //                     );
+                        //    //query = query.Where(w => w.d_date <= DateTime.Now && w.);
+                        //}
 
                     }
 
@@ -1872,7 +1976,8 @@ namespace cms.dbase
                     var links = db.test_people_post_linkss
                         .Where(w => w.f_org == siteId)
                         .Where(w => w.testpeoplepostlinkstestposts.b_doctor)
-                        .Where(w => !w.b_deleted);
+                        .Where(w => !w.b_deleted)
+                        ;
                     
                     #region filter
 
@@ -2838,6 +2943,49 @@ namespace cms.dbase
                                      Id = ms.id,
                                      Title = ms.c_title,
                                      Sort = ms.n_sort
+                                 });
+
+                    if (query.Any())
+                        return query.ToArray();
+
+                    return null;
+                }
+            }
+        }
+
+
+
+        public MedServiceModel[] getMedicalServicesOptim(Guid? IdOrg)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                if (IdOrg!=null)
+                {
+                    //показываем все услуги
+                    var query = db.content_sv_org_servicess
+                               .Where(w=>w.f_org==IdOrg)
+                               .OrderBy(o=>o.n_sort)
+                               .Select(s=> new MedServiceModel {
+                                   Id=s.id,
+                                   Title=s.c_title,
+                                   Sort=s.n_sort
+                               });   
+                    if (query.Any())
+                        return query.ToArray();
+
+                    return null;
+                }
+                else
+                {
+                    //показываем все услуги
+                    var query = (from ms in db.content_medical_servicess
+                                 orderby ms.n_sort
+                                 select new MedServiceModel
+                                 {
+                                     Id = ms.id,
+                                     Title = ms.c_title
+                                     //,
+                                     //Sort = ms.n_sort
                                  });
 
                     if (query.Any())

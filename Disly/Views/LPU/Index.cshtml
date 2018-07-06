@@ -16,66 +16,7 @@
             @Html.Partial("part/nav", Model.Nav)
         }
 
-        @if (Model.OrgTypes != null)
-        {
-            <div class="row">
-                <div class="col-md-6">
-                    @foreach (var item in ViewBag.Column1)
-                    {
-                        string link = "/lpu?tab=typelist&id=" + item.Id;
-                        <a class="medical_services" href="@link">@item.Title</a>
-                    }
-                </div>
-                <div class="col-md-6">
-                    @foreach (var item in ViewBag.Column2)
-                    {
-                        string link = "/lpu?tab=typelist&id=" + item.Id;
-                        <a class="medical_services" href="@link">@item.Title</a>
-                    }
-                </div>
-            </div>
-        }
-        @if (Model.DepartmentAffiliations != null)
-        {
-            <div class="row">
-                <div class="col-md-6">
-                    @foreach (var item in ViewBag.Column1)
-                    {
-                        string link = "/lpu?tab=affiliation&id=" + item.Key;
-                        <a class="medical_services" href="@link">@item.Value</a>
-                    }
-                </div>
-                <div class="col-md-6">
-                    @foreach (var item in ViewBag.Column2)
-                    {
-                        string link = "/lpu?tab=affiliation&id=" + item.Key;
-                        <a class="medical_services" href="@link">@item.Value</a>
-                    }
-                </div>
-            </div>
-        }
-
-        @if (Model.MedicalServices != null)
-        {
-            <div class="row">
-                <div class="col-md-6">
-                    @foreach (var item in ViewBag.Column1)
-                    {
-                        string link = "/lpu?tab=services&id=" + item.Id;
-                        <a class="medical_services" href="@link">@item.Title</a>
-                    }
-                </div>
-                <div class="col-md-6">
-                    @foreach (var item in ViewBag.Column2)
-                    {
-                        string link = "/lpu?tab=services&id=" + item.Id;
-                        <a class="medical_services" href="@link">@item.Title</a>
-                    }
-                </div>
-
-
-            </div>
-        }
+        
         @if (!string.IsNullOrWhiteSpace(title))
         {
             <h2>@title</h2>
@@ -85,9 +26,80 @@
             }
 
         }
-
-        @if (Model.OrgList != null)
+        @switch (Model.Type)
         {
+            case "typelist":
+                if (Model.OrgTypes != null)
+                {   
+                    int to = Model.OrgTypes.Length / 2 + Model.OrgTypes.Length % 2;                    
+                    <div class="row">                        
+                        <div class="col-md-6">
+                                @for (int i = 0; i < to; i++)
+                                {
+                                    string link = "/lpu?tab=typelist&id=" + Model.OrgTypes[i].Id;
+                                    <a class="medical_services" href="@link">@Model.OrgTypes[i].Title</a>
+                                }
+                        </div>
+                        <div class="col-md-6">
+                                @for (int i = to; i < Model.OrgTypes.Length; i++)
+                                {
+                                    string link = "/lpu?tab=typelist&id=" + Model.OrgTypes[i].Id;
+                                    <a class="medical_services" href="@link">@Model.OrgTypes[i].Title</a>
+                                }
+                        </div>                    
+                    </div>
+                }
+                break;
+                case "affiliation":
+                    if (Model.DepartmentAffiliations != null)
+                    {
+                        int td = Model.DepartmentAffiliations.Length / 2 + Model.DepartmentAffiliations.Length % 2;
+                            <div class="row">
+                                 <div class="col-md-6">
+                                     @for (int i = 0; i < td; i++)
+                                     {
+                                         string link = "/lpu?tab=affiliation&id=" + Model.DepartmentAffiliations[i].Key;
+                                         <a class="medical_services" href="@link">@Model.DepartmentAffiliations[i].Value</a>
+                                     }                                                
+                                 </div>
+                                 <div class="col-md-6">
+                                     @for (int i = td; i < Model.DepartmentAffiliations.Length; i++)
+                                     {
+                                         string link = "/lpu?tab=affiliation&id=" + Model.DepartmentAffiliations[i].Key;
+                                         <a class="medical_services" href="@link">@Model.DepartmentAffiliations[i].Value</a>
+                                     }
+                                 </div>
+                             </div>
+                        }
+                        break;
+                        case "services": 
+                            if (Model.MedicalServices != null)
+                            {                    
+                                int t = Model.MedicalServices.Length / 2 + Model.MedicalServices.Length % 2;                    
+                                <div class="row">                                    
+                                    <div class="col-md-6">
+                                        @for (int i = 0; i < t; i++)
+                                        {
+                                            string link = "/lpu?tab=services&id=" + Model.MedicalServices[i].Id;
+                                            <a class="medical_services" href="@link">@Model.MedicalServices[i].Title</a>
+                                        }
+                                    </div>
+                                    <div class="col-md-6">
+                                        @for (int i = t; i < Model.MedicalServices.Length; i++)
+                                        {
+                                            string link = "/lpu?tab=services&id=" + Model.MedicalServices[i].Id;
+                                            <a class="medical_services" href="@link">@Model.MedicalServices[i].Title</a>
+                                        }
+                                    </div>
+                                </div>
+                             }
+                        break;
+                        
+
+                }
+
+                @if (Model.OrgList != null)
+                {
             <div class="row">
                 <div class="col-md-12">
                     @foreach (var item in Model.OrgList)
@@ -183,7 +195,7 @@
                     }
                 </div>
             </div>
-        }
+                }
 
     </div>
 </div>

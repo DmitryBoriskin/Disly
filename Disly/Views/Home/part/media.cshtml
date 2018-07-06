@@ -4,35 +4,35 @@
         <div class="cil-md-12">
             <div class="row">
                 <div class="col-md-4">
-                    @if (Model.ModulePhoto != null)
+                    @if (Model.ModuleIndex.ModulePhoto != null)
                     {
-                        string _img = Model.ModulePhoto.Photo;
+                        string _img = Model.ModuleIndex.ModulePhoto.Photo;
                         <div class="module-media_item module-media">
                             <p class="module-title">Фото<span class="ti-folder"></span><a class="link-to-archive" href="/press/photo">Архив</a></p>
-                            <a href="/press/@Model.ModulePhoto.Date.Year/@Model.ModulePhoto.Date.Month/@Model.ModulePhoto.Date.Day/@Model.ModulePhoto.Alias" class="media_item_link" style="background-image:url(@_img);">
+                            <a href="/press/@Model.ModuleIndex.ModulePhoto.Date.Year/@Model.ModuleIndex.ModulePhoto.Date.Month/@Model.ModuleIndex.ModulePhoto.Date.Day/@Model.ModuleIndex.ModulePhoto.Alias" class="media_item_link" style="background-image:url(@_img);">
 
                                 <div class="media_item_info">
                                     <div class="media_item_circle media_item_circle__photo">
                                         <span class="ico"></span>
                                     </div>
-                                    <div class="media_item_title">@Model.ModulePhoto.Title</div>
+                                    <div class="media_item_title">@Html.Raw(Model.ModuleIndex.ModulePhoto.Title)</div>
                                 </div>
                             </a>
                         </div>
                     }
                 </div>
                 <div class="col-md-4">
-                    @if (Model.ModuleVideo != null)
+                    @if (Model.ModuleIndex.ModuleVideo != null)
                     {
-                        string _img = Model.ModuleVideo.Photo;
+                        string _img = Model.ModuleIndex.ModuleVideo.Photo;
                         <div class="module-media_item module-media">
                             <p class="module-title">Видео<span class="ti-folder"></span><a class="link-to-archive" href="/press/video">Архив</a></p>
-                            <a href="/press/@Model.ModuleVideo.Date.Year/@Model.ModuleVideo.Date.Month/@Model.ModuleVideo.Date.Day/@Model.ModuleVideo.Alias" class="media_item_link" style="background-image:url(@_img);">
+                            <a href="/press/@Model.ModuleIndex.ModuleVideo.Date.Year/@Model.ModuleIndex.ModuleVideo.Date.Month/@Model.ModuleIndex.ModuleVideo.Date.Day/@Model.ModuleIndex.ModuleVideo.Alias" class="media_item_link" style="background-image:url(@_img);">
                                 <div class="media_item_info">
                                     <div class="media_item_circle media_item_circle__video">
                                         <span class="ico"></span>
                                     </div>
-                                    <div class="media_item_title">@Model.ModuleVideo.Title</div>
+                                    <div class="media_item_title">@Html.Raw(Model.ModuleIndex.ModuleVideo.Title)</div>
                                 </div>
                             </a>
                         </div>

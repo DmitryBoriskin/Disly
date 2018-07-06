@@ -248,6 +248,7 @@ namespace cms.dbase
                             Odnoklassniki = s.c_odnoklassniki,
                             Twitter = s.c_twitter,
                             Theme = s.c_theme,
+                            OldUrl=s.c_old_url,
                             BackGroundImg = new Photo
                             {
                                 Url = s.c_background_img
@@ -296,6 +297,7 @@ namespace cms.dbase
                             .Set(u => u.c_twitter, item.Twitter)
                             .Set(s => s.c_theme, item.Theme)
                             .Set(s => s.c_logo, item.Logo.Url)
+                            .Set(s => s.c_old_url, item.OldUrl)
                             .Set(s => s.c_background_img, item.BackGroundImg.Url)
                             .Update();
 

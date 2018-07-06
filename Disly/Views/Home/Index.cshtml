@@ -11,14 +11,14 @@
     <div class="top-slider-wrapper" @backgroundSlider>
         <div class="container">
             <div class="row row-15">
-                @if (Model.Slider != null && Model.Slider.Count() > 0)
+                @if (Model.ModuleIndex.Slider != null && Model.ModuleIndex.Slider.Count() > 0)
                 {
                     <div class="col-sm-12 col-md-9 row15-col">
                         <div id="myCarousel" class="carousel slide slider" data-ride="carousel">
                             <!-- Wrapper for slides -->
                             <div class="carousel-inner top-slider top-slider-shadow">
 
-                                @foreach (var item in Model.Slider)
+                                @foreach (var item in Model.ModuleIndex.Slider)
                                 {
                                     string active = i == 0 ? "active" : string.Empty;
                                     string text = !string.IsNullOrEmpty(item.Text) ? item.Text : "&nbsp;";
@@ -45,7 +45,7 @@
                                         </div>
                                     </div>
                                 }
-                                @if (Model.Slider.Count() > 1)
+                                @if (Model.ModuleIndex.Slider.Count() > 1)
                                 {
                                     <div class="slider-controls">
                                         <a class="left" href="#myCarousel" data-slide="prev">
@@ -112,9 +112,9 @@
         <p class="module-title">Пресс-центр<span class="ti-folder"></span><a class="link-to-archive" href="/press">Архив</a></p>
         <div class="row">
             <div class="col-md-3">
-                @if (Model.ModuleAnnouncement != null && Model.ModuleAnnouncement.Count() > 0)
+                @if (Model.ModuleIndex.ModuleAnnouncement != null && Model.ModuleIndex.ModuleAnnouncement.Count() > 0)
                 {
-                    foreach (var ann in Model.ModuleAnnouncement.ToList()) //for (int j = 0; j < 2; j++)
+                    foreach (var ann in Model.ModuleIndex.ModuleAnnouncement.ToList()) //for (int j = 0; j < 2; j++)
                     {
                         string link = "/press/" + ann.Date.Year + "/" + ann.Date.Month + "/" + ann.Date.Day + "/" + ann.Alias;
 
@@ -133,9 +133,9 @@
                 }
             </div>
             <div class="col-md-3">
-                @if (Model.ModuleNews != null && Model.ModuleNews.Count() > 0)
+                @if (Model.ModuleIndex.ModuleNews != null && Model.ModuleIndex.ModuleNews.Count() > 0)
                 {
-                    foreach (var item in Model.ModuleNews.ToList())
+                    foreach (var item in Model.ModuleIndex.ModuleNews.ToList())
                     {
                         string link = "/press/" + item.Date.Year + "/" + item.Date.Month + "/" + item.Date.Day + "/" + item.Alias;
 
@@ -154,9 +154,9 @@
                 }
             </div>
             <div class="col-md-6">
-                @if (Model.ModuleEvents != null && Model.ModuleEvents.FirstOrDefault() != null)
+                @if (Model.ModuleIndex.ModuleActual != null && Model.ModuleIndex.ModuleActual.FirstOrDefault() != null)
                 {
-                    var ev = Model.ModuleEvents.FirstOrDefault();
+                    var ev = Model.ModuleIndex.ModuleActual.FirstOrDefault();
                     string link = "/press/" + ev.Date.Year + "/" + ev.Date.Month + "/" + ev.Date.Day + "/" + ev.Alias;
 
                     string eventfoto = (!string.IsNullOrWhiteSpace(ev.Photo))
@@ -191,14 +191,14 @@
 <!-- конец модуля новостей -->
 <!-- модуль полезные ресурсы -->
 <div>
-    @if (Model.BenifitBanners != null)
+    @if (Model.ModuleIndex.BenifitBanners != null)
     {
         <div class="imglink-benefit-block module-main-page">
             <div class="container">
                 <p class="module-title">Полезные ресурсы<span class="ti-folder"></span><a class="link-to-archive" href="#">Архив</a></p>
                 <div class="ling_img_on carousel slide">
                     <div class="carousel-inner" data-count="4">
-                        @foreach (var item in Model.BenifitBanners)
+                        @foreach (var item in Model.ModuleIndex.BenifitBanners)
                         {
                             string link = "/redirect/link/" + item.Id;
 
@@ -225,7 +225,7 @@
                             </div>
                         }
                     </div>
-                    @if (Model.BenifitBanners.Count() > 4)
+                    @if (Model.ModuleIndex.BenifitBanners.Count() > 4)
                     {
                         <div class="imglink-controlls">
                             <a data-slide="prev" class="ti-angle-left prev"></a>
@@ -241,11 +241,11 @@
 <!-- конец модуля полезные ресурсы -->
 <!-- карта сайта плиткой -->
 <div class="container">
-    @if (Model.SitemapPlate != null && Model.SitemapPlate.Count() > 0)
+    @if (Model.ModuleIndex.SitemapPlate != null && Model.ModuleIndex.SitemapPlate.Count() > 0)
     {
         <div class="sitemap-plates-block">
             <div class="row">
-                @foreach (var item in Model.SitemapPlate)
+                @foreach (var item in Model.ModuleIndex.SitemapPlate)
                 {
                     string fullPath = "/";
 

@@ -95,6 +95,10 @@ namespace cms.dbModel.entity
         /// Ссылка на сайт
         /// </summary>
         public string Site { get; set; }
+        /// <summary>
+        /// ссылка на старый сайт
+        /// </summary>
+        public string OldUrl { get; set; }
 
         /// <summary>
         /// Рабочее время

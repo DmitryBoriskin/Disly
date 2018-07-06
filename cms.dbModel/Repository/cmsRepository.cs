@@ -104,6 +104,10 @@ namespace cms.dbModel
         public abstract bool delRssLink(Guid id);
         public abstract RssChannel[] getRssChannelMiniList();
         public abstract bool insertRssObject(MaterialsModel ins);
+                
+        //public abstract bool insertRssObjectList(List<content_rss_materials> ins);
+        
+
         public abstract RssItem[] getRssObjects();
         public abstract MaterialsModel getRssMaterial(Guid id);
         public abstract string getSpotRssMaterial(string link);

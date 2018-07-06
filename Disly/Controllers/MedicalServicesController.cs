@@ -81,7 +81,9 @@ namespace Disly.Controllers
             }
 
             //Получение перечня прикрепленных к организации услуг
-            model.MedicalServices = _repository.getMedicalServices(Domain);
+            //model.MedicalServices = _repository.getMedicalServices(Domain);
+            model.MedicalServices = _repository.getMedicalServicesOptim(model.SitesInfo.ContentId);
+            
 
             return View(model);
         }

@@ -80,6 +80,7 @@
     <Reference Include="NLog">
       <HintPath>..\packages\NLog.4.4.0\lib\net45\NLog.dll</HintPath>
     </Reference>
+    <Reference Include="System.Runtime.Caching" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -590,6 +591,7 @@
     <Content Include="Content\plugins\select2\select2.js" />
     <Content Include="Content\plugins\select2\select2.min.js" />
     <Content Include="gulpfile.js" />
+    <Content Include="robots.txt" />
     <Content Include="scripts\modernizr.js" />
     <Content Include="test.html" />
     <Content Include="scripts\cms\disly_5_popup.js" />

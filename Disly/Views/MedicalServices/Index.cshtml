@@ -23,13 +23,19 @@
                 case null:
                     if (Model.MedicalServices != null && Model.MedicalServices.Count() > 0)
                     {
-                        foreach (var item in Model.MedicalServices)
-                        {
-                            string link = "/structure";
-                            <div class="col-md-6">
-                                <a href="@link">@item.Title</a>
-                            </div>
-                        }
+                        int t = Model.MedicalServices.Length / 2 + Model.MedicalServices.Length % 2;
+                        <div class="col-md-6">
+                            @for (int i = 0; i < t; i++)
+                            {
+                                <a class="medical_services" href="/structure">@Model.MedicalServices[i].Title</a>
+                            }
+                        </div>
+                        <div class="col-md-6">
+                            @for (int i = t; i < Model.MedicalServices.Length; i++)
+                            {
+                                <a class="medical_services" href="/structure">@Model.MedicalServices[i].Title</a>
+                            }
+                        </div>                                                
                     }
                     break;
                 default:

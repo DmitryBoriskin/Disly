@@ -8,20 +8,13 @@ namespace Disly.Models
     /// </summary>
     public class HomePageViewModel : PageViewModel
     {
-        /// <summary>
-        /// Список новостей
-        /// </summary>
-        public List<MaterialFrontModule> Materials { get; set; }
 
-        public List<MaterialFrontModule> MaterialsNewInMedicin { get; set; }
-
-
-        public MaterialFrontModule ImportantMaterials { get; set; }
+        //public MaterialFrontModule ImportantMaterials { get; set; }
 
         /// <summary>
         /// Баннеры на главной
         /// </summary>
-        public BannersModel[] BannerArrayIndex { get; set; }
+        //public BannersModel[] BannerArrayIndex { get; set; }
 
         /// <summary>
         /// Идентификатор организации
@@ -31,28 +24,32 @@ namespace Disly.Models
         /// <summary>
         /// Плитки
         /// </summary>
-        public IEnumerable<SiteMapModel> SitemapPlate { get; set; }
+        //public IEnumerable<SiteMapModel> SitemapPlate { get; set; }
         /// <summary>
         /// Слайдер
         /// </summary>
-        public IEnumerable<BannersModel> Slider { get; set; }
-        public IEnumerable<BannersModel> BenifitBanners { get; set; }
+        //public IEnumerable<BannersModel> Slider { get; set; }
+        //public IEnumerable<BannersModel> BenifitBanners { get; set; }
 
 
 
-        //press module
-        
-        public IEnumerable<MaterialFrontModule> ModuleAnnouncement { get; set; }
-        public IEnumerable<MaterialFrontModule> ModuleNews { get; set; }
-        public IEnumerable<MaterialFrontModule> ModuleEvents { get; set; }
-        public IEnumerable<MaterialFrontModule> ModuleActual { get; set; }
-
-        public MaterialFrontModule ModulePhoto { get; set; }
-        public MaterialFrontModule ModuleVideo { get; set; }
-        public MaterialFrontModule ModuleNewsWorld { get; set; }
-        public MaterialFrontModule ModuleNewsRus { get; set; }
-        public MaterialFrontModule ModuleNewsChuv { get; set; }
+        //module index
+        public IndexModel ModuleIndex{ get; set; }
 
 
+        //public IEnumerable<MaterialFrontModule> ModuleAnnouncement { get; set; }
+        //public IEnumerable<MaterialFrontModule> ModuleNews { get; set; }
+        //public IEnumerable<MaterialFrontModule> ModuleEvents { get; set; }
+        //public IEnumerable<MaterialFrontModule> ModuleActual { get; set; }
+
+        //public MaterialFrontModule ModulePhoto { get; set; }
+        //public MaterialFrontModule ModuleVideo { get; set; }
+
+        //public MaterialFrontModule ModuleNewsWorld { get; set; }
+        //public MaterialFrontModule ModuleNewsRus { get; set; }
+        //public MaterialFrontModule ModuleNewsChuv { get; set; }
     }
+
+
+   
 }

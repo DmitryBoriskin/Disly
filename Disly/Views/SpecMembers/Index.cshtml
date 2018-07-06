@@ -14,7 +14,7 @@
                         @foreach (var item in Model.SpesialitsList)
                         {
                             var port = (Settings.BaseURL == "localhost") ? ":" + Context.Request.Url.Port : "";
-                            string link = string.Format("http://{0}{1}/portaldoctors/{2}", Settings.BaseURL, port, (item.People != null) ? item.People.Id.ToString() : null);
+                            string link = string.Format("http://www.{0}{1}/portaldoctors/{2}", Settings.BaseURL, port, (item.People != null) ? item.People.Id.ToString() : null);
                             string photo = (item.People != null && !string.IsNullOrWhiteSpace(item.People.Photo))
                                           ? File.Exists(Server.MapPath(item.People.Photo))
                                               ? item.People.Photo : "/Content/img/no_avatar.png"

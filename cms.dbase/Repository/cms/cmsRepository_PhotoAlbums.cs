@@ -52,7 +52,9 @@ namespace cms.dbase
                                                 Title = s.c_title,
                                                 Date = s.d_date,
                                                 Text = s.c_text,
-                                                PreviewImage = new Photo() { Url = s.c_preview }
+                                                PreviewImage = new Photo() { Url = s.c_preview },
+                                                Disabled=s.c_disabled
+
                                             });
                     return new PhotoAlbumList()
                     {

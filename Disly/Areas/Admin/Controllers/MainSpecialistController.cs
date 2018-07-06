@@ -48,6 +48,7 @@ namespace Disly.Areas.Admin.Controllers
             // наполняем модель данными
             var sfilter = FilterParams.Extend<GSFilter>(filter);
             model.List = _cmsRepository.getGSList(sfilter);
+            ViewBag.AllCount = _cmsRepository.CountGS();
 
             #region администратор сайта
             if (model.Account.Group == "admin")
