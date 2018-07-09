@@ -319,6 +319,34 @@ namespace ImportOldInfo
         }
 
         /// <summary>
+        /// Возвращает список новых фотоальбомов, у которых есть папка со старым путём
+        /// </summary>
+        /// <param name="org"></param>
+        /// <returns></returns>
+        public PhotoAlbumNew[] GetNewAlbumsWithPath(Org org)
+        {
+            using (var db = new DbModel(context))
+            {
+                return db.content_photoalbums
+                    .Where(w => w.f_site == org.Alias)
+                    .Where(w => w.c_old_path != null)
+                    .Select(s => new PhotoAlbumNew
+                    {
+                        Id = s.id,
+                        Title = s.c_title,
+                        Text = s.c_text,
+                        Date = s.d_date,
+                        Domain = s.f_site,
+                        Path = s.c_path,
+                        Disabled = s.c_disabled,
+                        OldId = s.n_old_id,
+                        OldPath = s.c_old_path,
+                        Org = s.f_org
+                    }).ToArray();
+            }
+        }
+
+        /// <summary>
         /// Удаляет фотки для альбома
         /// </summary>
         /// <param name="album"></param>

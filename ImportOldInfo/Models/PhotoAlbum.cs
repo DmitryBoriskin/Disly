@@ -51,6 +51,16 @@ namespace ImportOldInfo.Models
         /// Идентификатор в старой БД
         /// </summary>
         public int? OldId { get; set; }
+
+        /// <summary>
+        /// Путь в старой БД
+        /// </summary>
+        public string OldPath { get; set; }
+
+        /// <summary>
+        /// Старый идентификатор организации
+        /// </summary>
+        public int? Org { get; set; }
     }
 
     /// <summary>
