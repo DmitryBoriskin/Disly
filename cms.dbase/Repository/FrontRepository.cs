@@ -3027,7 +3027,8 @@ namespace cms.dbase
                                  Email = o.c_email,
                                  Address = o.c_adress,
                                  Logo = new Photo() { Url = o.c_logo },
-                                 Link = s.c_alias.ToLower(),
+                                 Link = (from d in db.cms_sites_domainss orderby d.b_default descending where d.f_site==s.c_alias select d.c_domain).FirstOrDefault(),
+                                 //s.c_alias.ToLower(),
                                  Leader = new OrgsAdministrative
                                  {
                                      id = p.f_people,
