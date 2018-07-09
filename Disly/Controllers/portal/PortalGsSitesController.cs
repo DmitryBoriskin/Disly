@@ -63,9 +63,23 @@ namespace Disly.Controllers
                 Url = ""
             });
 
+
+            var PageInfo = _repository.getSiteMap(_path, _alias);
+            if (PageInfo != null)
+                model.Child = _repository.getSiteMapChild(PageInfo.Id);
+
+
             //Список объектов "Главный специалист"
             var filter = getFilter();
             filter.Domain = null;
+
+            if (!string.IsNullOrEmpty(filter.SearchText))
+            {
+                ViewBag.SearchText = filter.SearchText;
+            }
+            
+            
+
             model.List = _repository.getGSList(filter);
 
             if(model.List != null && model.List.Count() > 0)

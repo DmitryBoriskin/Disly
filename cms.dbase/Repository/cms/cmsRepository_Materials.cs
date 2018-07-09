@@ -402,34 +402,51 @@ namespace cms.dbase
         {
             using (var db = new CMSdb(_context))
             {
-                // идентификатор главного портала
-                var mainSiteId = db.cms_sitess
-                                .Where(w => w.c_alias.Equals("main"))
-                                .Select(s => s.f_content)
-                                .SingleOrDefault();
+                //using (var tr = db.BeginTransaction())
+                //{
 
-                // существует ли связь новости с главным порталом
-                var link = db.content_content_links
-                                    .Where(w => w.f_content.Equals(id))
-                                    .Where(w => w.f_link.Equals(mainSiteId))
-                                    .Select(s => s)
+                    // идентификатор главного портала
+                    var mainSiteId = db.cms_sitess
+                                    .Where(w => w.c_alias.Equals("main"))
+                                    .Select(s => s.f_content)
                                     .SingleOrDefault();
 
-                bool isExists = link != null;
+                    // существует ли связь новости с главным порталом
+                    var link = db.content_content_links
+                                        .Where(w => w.f_content.Equals(id))
+                                        .Where(w => w.f_link.Equals(mainSiteId))
+                                        .Select(s => s)
+                                        .SingleOrDefault();
 
-                if (isExists)
-                {
-                    return db.Delete(link) > 0;
-                }
-                else
-                {
-                    return db.content_content_links
-                        .Value(v => v.f_content, id)
-                        .Value(v => v.f_content_type, "material")
-                        .Value(v => v.f_link, mainSiteId)
-                        .Value(v => v.f_link_type, "org")
-                        .Insert() > 0;
-                }
+                    bool isExists = link != null;
+                    bool result = false;
+                    if (isExists)
+                    {
+                        //обратно разрешим редатировани 
+                        db.content_materialss.Where(w => w.id == id)
+                          .Set(s => s.b_locked, false)
+                          .Update();
+
+                        result= db.Delete(link) > 0;
+                    }
+                    else
+                    {
+                        //сначало запретим редатировани 
+                        db.content_materialss.Where(w => w.id == id)
+                          .Set(s => s.b_locked, true)
+                          .Update();
+
+                        result= db.content_content_links
+                            .Value(v => v.f_content, id)
+                            .Value(v => v.f_content_type, "material")
+                            .Value(v => v.f_link, mainSiteId)
+                            .Value(v => v.f_link_type, "org")
+                            .Insert() > 0;
+                    }                    
+                    //tr.Commit();
+                    return result;
+                //}
+               
             }
         }
 
@@ -919,11 +936,11 @@ namespace cms.dbase
                 var contentType = ContentType.MATERIAL.ToString().ToLower();
 
                 var materials = db.content_content_links.Where(e => e.f_content_type == contentType)
-                    .Join(db.cms_sitess.Where(o => o.c_alias.ToLower() == _domain),
-                            e => e.f_link,
-                            o => o.f_content,
-                            (e, o) => e.f_content
-                            );
+                                  .Join(db.cms_sitess.Where(o => o.c_alias.ToLower() == _domain),
+                                          e => e.f_link,
+                                          o => o.f_content,
+                                          (e, o) => e.f_content
+                                       );
 
                 if (!materials.Any())
                     return null;
@@ -931,7 +948,7 @@ namespace cms.dbase
                 var query = db.content_materialss.Where(w => materials.Contains(w.id) && w.c_url.ToLower() == link.ToLower());
                 if (query.Count() > 0)
                 {
-                    return query.Single().id.ToString();
+                    return query.First().id.ToString();
                 }
                 return null;
             }

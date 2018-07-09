@@ -59,7 +59,8 @@
                         @foreach (var item in Model.DoctorsList.Doctors)
                         {
                             var port = (Settings.BaseURL == "localhost") ? ":" + Context.Request.Url.Port : "";
-                            string link = string.Format("http://{0}{1}/portaldoctors/{2}", Settings.BaseURL, port, item.Id);
+                            // string link = string.Format("http://{0}{1}/portaldoctors/{2}", Settings.BaseURL, port, item.Id);
+                            string link = "http://www.med.cap.ru/portaldoctors/" + item.Id;
 
 
                             string photo = !string.IsNullOrWhiteSpace(item.Photo)
@@ -73,7 +74,7 @@
                                     </a>
                                 </div>
                                 <div class="col-md-3 col-sm-9 col-xs-7">
-                                    <a class="adminlist_name" href="@link">@item.FIO</a>
+                                    <a class="adminlist_name" target="_blank" href="@link">@item.FIO</a>
                                 </div>
                                 <div class="col-md-7 col-xs-12">
                                     @if (item.Posts != null && item.Posts.Count() > 0)

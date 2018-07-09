@@ -15,7 +15,7 @@ namespace Disly.Models
         /// <summary>
         /// Список врачей из главных специалистов
         /// </summary>
-        public PeopleModel[] Members { get; set; }
+        public PeopleModel[] Members { get; set; }        
 
     }
 }

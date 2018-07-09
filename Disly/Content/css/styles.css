@@ -411,12 +411,12 @@ a.link-close:before {
     margin-top:10px;
     font-size:0.9em;
 }
-.monitor-desc {
+/*.monitor-desc {
     width:80%;
 }
 .monitor-attach {
     width:20%;
-}
+}*/
 .li-divider {
     border-top: 1px solid rgb(245, 248, 250);
     padding-top: 5px;

@@ -1101,27 +1101,28 @@ namespace cms.dbase
                     }
                     #endregion
 
-                    #region plate
-                    var platepath = "plate";
-                    var queryplate = db.content_sitemaps
-                                      .Where(w => w.f_site.Equals(domain))
-                                      .Where(w => !w.b_disabled)
-                                      .Where(w => string.IsNullOrWhiteSpace(platepath) || w.c_path.Equals(platepath));
-                    if (queryplate.Any())
-                    {
-                        model.SitemapPlate= queryplate.OrderBy(o => o.c_path)
-                                                      .ThenBy(o => o.n_sort)
-                                                      .Select(s => new SiteMapModel
-                                                      {
-                                                          Title = s.c_title,
-                                                          Path = s.c_path,
-                                                          Alias = s.c_alias.ToLower(),
-                                                          FrontSection = s.f_front_section
-                                                      }).ToArray();
-                    }
+                    //#region plate
+                    //var platepath = "plate";
+                    //var queryplate = db.content_sitemaps
+                    //                  .Where(w => w.f_site.Equals(domain))
+                    //                  .Where(w => !w.b_disabled)
+                    //                  .Where(w => string.IsNullOrWhiteSpace(platepath) || w.c_path.Equals(platepath));
+                    //if (queryplate.Any())
+                    //{
+                    //    model.SitemapPlate= queryplate.OrderBy(o => o.c_path)
+                    //                                  .ThenBy(o => o.n_sort)
+                    //                                  .Select(s => new SiteMapModel
+                    //                                  {
+                    //                                      Title = s.c_title,
+                    //                                      Path = s.c_path,
+                    //                                      Alias = s.c_alias.ToLower(),
+                    //                                      FrontSection = s.f_front_section
+                    //                                  }).ToArray();
+                    //}
 
 
-                    #endregion
+                    //#endregion
+                    model.SitemapPlate = getSiteMapList("plate");
                     model.BenifitBanners = getBanners("benefits");
                     if (domain != "main")
                     {

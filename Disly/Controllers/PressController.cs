@@ -2,6 +2,7 @@
 using Disly.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
@@ -24,7 +25,10 @@ namespace Disly.Controllers
                 CurrentPage = currentPage,
                 Group = _repository.getMaterialsGroup()
             };
-
+            if (Domain == "main")
+            {
+                model.Group = model.Group.Where(w=>w.Alias!= "master-classes" && w.Alias!= "guests").ToArray();
+            }
             #region Создаем переменные (значения по умолчанию)
             ViewBag.Title = "Страница";
             ViewBag.Description = "Страница без названия";

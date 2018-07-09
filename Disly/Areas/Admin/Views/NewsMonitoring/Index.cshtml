@@ -51,12 +51,13 @@
                             <span>Текст: </span>@Html.Raw(text)<br />
                             <span>Кол-во просмотров: </span>@Item.CountSee
                         </div>
+                        <div class="pull-right monitor-attach">
+                            <button class="btn btn-attach-main @(Item.IsAttacheToMainPortal ? "btn-default" : "btn-primary")" data-item="@Item.Id">
+                                @btnTitle
+                            </button>
+                        </div>
                     </div>
-                    <div class="pull-right monitor-attach">
-                        <button class="btn btn-attach-main @(Item.IsAttacheToMainPortal ? "btn-default" : "btn-primary")" data-item="@Item.Id">
-                            @btnTitle
-                        </button>
-                    </div>
+                    
                 </div>
             }
             if (Model.List != null && Model.List.Pager != null)
