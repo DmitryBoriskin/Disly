@@ -28,15 +28,15 @@
 
 
 <div class="container">
-    @if (Model.ModuleNews != null)
+    @if (Model.ModuleIndex.ModuleNews != null)
     {
         <div class="block">
             <div class="col-md-12">
-                @if (Model.ModuleNews != null)
+                @if (Model.ModuleIndex.ModuleNews != null)
                 {
                     <div class="block_category">
                         <h2>Новости</h2>
-                        @foreach (var item in Model.ModuleNews)
+                        @foreach (var item in Model.ModuleIndex.ModuleNews)
                     {
                         string link = "/press/" + item.Date.Year + "/" + item.Date.Month + "/" + item.Date.Day + "/" + item.Alias;
                             <div class="block_item">
@@ -47,11 +47,11 @@
                     </div>
                 }
                 
-                @if (Model.ModuleActual != null)
+                @if (Model.ModuleIndex.ModuleActual != null)
                 {
                     <div class="block_category">
                         <h2>Актуально</h2>
-                        @foreach (var item in Model.ModuleActual)
+                        @foreach (var item in Model.ModuleIndex.ModuleActual)
                         {
                             string link = "/press/" + item.Date.Year + "/" + item.Date.Month + "/" + item.Date.Day + "/" + item.Alias;
                             <div class="block_item">
@@ -61,11 +61,11 @@
                         }
                     </div>
                 }
-                @if (Model.ModuleAnnouncement != null)
+                @if (Model.ModuleIndex.ModuleAnnouncement != null)
                 {
                     <div class="block_category">
                         <h2>Объявления</h2>
-                        @foreach (var item in Model.ModuleAnnouncement)
+                        @foreach (var item in Model.ModuleIndex.ModuleAnnouncement)
                         {
                             string link = "/press/" + item.Date.Year + "/" + item.Date.Month + "/" + item.Date.Day + "/" + item.Alias;
                             <div class="block_item">
@@ -81,13 +81,13 @@
 </div>
 
 
-    @if (Model.BenifitBanners != null)
+    @if (Model.ModuleIndex.BenifitBanners != null)
     {     
             <div class="container">
                 <div class="col-md-12 ">
                     <h2 class="module-title">Полезные ресурсы</h2>
                     <div class="bl_column_4">
-                        @foreach (var item in Model.BenifitBanners)
+                        @foreach (var item in Model.ModuleIndex.BenifitBanners)
                         {
                             string link = "/redirect/link/" + item.Id;
 
@@ -104,14 +104,14 @@
                 </div>                
             </div>        
     }
-    @if (Model.SitemapPlate != null && Model.SitemapPlate.Count() > 0)
+    @if (Model.ModuleIndex.SitemapPlate != null && Model.ModuleIndex.SitemapPlate.Count() > 0)
     {
         <div class="container">
             <div class="col-md-12">
                 <div class="top_line">
                     <h2 class="module-title">Полезные ссылки</h2>
                     <div class="bl_column_4 ">
-                        @foreach (var item in Model.SitemapPlate)
+                        @foreach (var item in Model.ModuleIndex.SitemapPlate)
                         {
                             string fullPath = "/";
 
@@ -145,14 +145,14 @@
     <div class="block">
         <div class="col-md-12">
             <h2><a href="/press/photo">Фото</a></h2>
-            @if (Model.ModulePhoto != null)
+            @if (Model.ModuleIndex.ModulePhoto != null)
             {
-                string _img = Model.ModulePhoto.Photo;
+                string _img = Model.ModuleIndex.ModulePhoto.Photo;
                 <div class="block_item">
-                    <a href="/press/@Model.ModulePhoto.Date.Year/@Model.ModulePhoto.Date.Month/@Model.ModulePhoto.Date.Day/@Model.ModulePhoto.Alias">
+                    <a href="/press/@Model.ModuleIndex.ModulePhoto.Date.Year/@Model.ModuleIndex.ModulePhoto.Date.Month/@Model.ModuleIndex.ModulePhoto.Date.Day/@Model.ModuleIndex.ModulePhoto.Alias">
                         <img src="@_img" />
                     </a>                    
-                    <div class="block_item_info"><a href="/press/@Model.ModulePhoto.Date.Year/@Model.ModulePhoto.Date.Month/@Model.ModulePhoto.Date.Day/@Model.ModulePhoto.Alias">@Model.ModulePhoto.Title</a></div>
+                    <div class="block_item_info"><a href="/press/@Model.ModuleIndex.ModulePhoto.Date.Year/@Model.ModuleIndex.ModulePhoto.Date.Month/@Model.ModuleIndex.ModulePhoto.Date.Day/@Model.ModuleIndex.ModulePhoto.Alias">@Model.ModuleIndex.ModulePhoto.Title</a></div>
                 </div>
                      }
 
@@ -163,17 +163,16 @@
     <div class="block">
         <div class="col-md-12">
             <h2><a href="/press/video">Видео</a></h2>
-            @if (Model.ModuleVideo != null)
+            @if (Model.ModuleIndex.ModuleVideo != null)
             {
-                string _img = Model.ModuleVideo.Photo;
+                string _img = Model.ModuleIndex.ModuleVideo.Photo;
                 <div class="block_item">
-                    <a href="/press/@Model.ModuleVideo.Date.Year/@Model.ModuleVideo.Date.Month/@Model.ModuleVideo.Date.Day/@Model.ModuleVideo.Alias">
+                    <a href="/press/@Model.ModuleIndex.ModuleVideo.Date.Year/@Model.ModuleIndex.ModuleVideo.Date.Month/@Model.ModuleIndex.ModuleVideo.Date.Day/@Model.ModuleIndex.ModuleVideo.Alias">
                         <img src="@_img" />
                     </a>                    
-                    <div class="block_item_info"><a href="/press/@Model.ModuleVideo.Date.Year/@Model.ModuleVideo.Date.Month/@Model.ModuleVideo.Date.Day/@Model.ModuleVideo.Alias">@Model.ModuleVideo.Title</a></div>
+                    <div class="block_item_info"><a href="/press/@Model.ModuleIndex.ModuleVideo.Date.Year/@Model.ModuleIndex.ModuleVideo.Date.Month/@Model.ModuleIndex.ModuleVideo.Date.Day/@Model.ModuleIndex.ModuleVideo.Alias">@Model.ModuleIndex.ModuleVideo.Title</a></div>
                 </div>
             }
-
         </div>
     </div>
 </div>

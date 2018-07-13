@@ -10,7 +10,7 @@
         <div class="row">
             <div class="col-md-12">
                 @Html.Partial("services/breadcrumbs")
-                <h1>@ViewBag.Title</h1>
+                <h1>@Model.CurrentPage.Title</h1>
                 @if (Model.Item != null)
                 {
                     @Html.Partial("part/Item")

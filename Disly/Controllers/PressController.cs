@@ -100,7 +100,11 @@ namespace Disly.Controllers
             model.Item = _repository.getMaterialsItem(year, month, day, alias); //,Domain
 
             if (model.Item != null)
+            {
                 model.Item.Documents = _repository.getAttachDocuments(model.Item.Id);
+                ViewBag.Title = model.Item.Title;// + " - "+ ViewBag.Title;
+            }
+                
 
             return View(_ViewName, model);
         }
