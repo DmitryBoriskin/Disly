@@ -27,7 +27,7 @@ namespace Disly.Controllers
             };
             if (Domain == "main")
             {
-                model.Group = model.Group.Where(w=>w.Alias!= "master-classes" && w.Alias!= "guests").ToArray();
+                model.Group = model.Group.Where(w=>w.Alias!= "master-classes" && w.Alias!= "guests" && w.Alias!= "smi").ToArray();
             }
             #region Создаем переменные (значения по умолчанию)
             ViewBag.Title = "Страница";

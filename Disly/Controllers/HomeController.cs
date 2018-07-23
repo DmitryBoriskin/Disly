@@ -47,6 +47,7 @@ namespace Disly.Controllers
             //model.BenifitBanners = _repository.getBanners("benefits");
 
             //model.PressModuleIndex=_repository.getMaterialsModuleNew();
+            //model.ModuleIndex = _repository.getMaterialsModuleNew();
             model.ModuleIndex = GetPressModuleIndex();
 
             if (model.SitesInfo != null && model.SitesInfo.Alias == "main" && !IsSpecVersion)
