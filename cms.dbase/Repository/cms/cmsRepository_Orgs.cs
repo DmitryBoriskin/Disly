@@ -1831,44 +1831,83 @@ namespace cms.dbase
             using (var db = new CMSdb(_context))
             {
                 //текущее значение элемента чей приоритет меняется
-                var data = db.content_orgs_adminstrativs
-                    .Where(w => w.id.Equals(id))
-                    .Select(s => new OrgsAdministrative
-                    {
-                        Sort = s.n_sort,
-                        OrgId = s.f_org
-                    });
+                var query = db.content_orgs_adminstrativs
+                    .Where(w => w.id==id);
 
-                if (data.Any())
+                if (query.Any())
                 {
-                    var query = data.FirstOrDefault();
-                    if (num > query.Sort)
+                    int CurrentSort = query.Single().n_sort;
+                    var q = db.content_orgs_adminstrativs
+                        .Where(w => w.f_org.Equals(OrgId) && (w.n_sort < CurrentSort && w.n_sort >= num));
+
+
+                    if (num > CurrentSort)
                     {
                         db.content_orgs_adminstrativs
-                            .Where(w => w.f_org.Equals(OrgId))
-                            .Where(w => w.n_sort > query.Sort && w.n_sort <= num)
+                            .Where(w => w.f_org == OrgId)
+                            .Where(w => w.n_sort > CurrentSort && w.n_sort <= num)
                             .Set(u => u.n_sort, u => u.n_sort - 1)
                             .Update();
                     }
                     else
                     {
                         db.content_orgs_adminstrativs
-                            .Where(w => w.f_org.Equals(OrgId))
-                            .Where(w => w.n_sort < query.Sort && w.n_sort >= num)
+                            .Where(w => w.f_org == OrgId)
+                            .Where(w => w.n_sort < CurrentSort && w.n_sort >= num)
                             .Set(u => u.n_sort, u => u.n_sort + 1)
                             .Update();
                     }
                     db.content_orgs_adminstrativs
-                        .Where(w => w.id.Equals(id))
+                        .Where(w => w.id == id)
                         .Set(u => u.n_sort, num)
                         .Update();
 
                     return true;
                 }
-                else
-                {
-                    return false;
-                }
+                return false;
+
+
+                //try
+                //{
+                //    if (query.Any())
+                //    {
+                //        var data = query.Single();
+                //        if (num > data.n_sort)
+                //        {
+                //            db.content_orgs_adminstrativs
+                //                .Where(w => w.f_org==OrgId)
+                //                .Where(w => w.n_sort > data.n_sort && w.n_sort <= num)
+                //                .Set(u => u.n_sort, u => u.n_sort - 1)
+                //                .Update();
+                //        }
+                //        else
+                //        {
+                //            db.content_orgs_adminstrativs
+                //                .Where(w => w.f_org==OrgId)
+                //                .Where(w => w.n_sort < data.n_sort && w.n_sort >= num)
+                //                .Set(u => u.n_sort, u => u.n_sort + 1)
+                //                .Update();
+                //        }
+                //        db.content_orgs_adminstrativs
+                //            .Where(w => w.id==id)
+                //            .Set(u => u.n_sort, num)
+                //            .Update();
+
+                //        return true;
+                //    }
+                //    else
+                //    {
+                //        return false;
+                //    }
+
+                //}
+                //catch(Exception e)
+                //{
+                //    var r = e.Message;
+                //    int g = 0;
+                //    return false;
+                //}
+
             }
         }
 

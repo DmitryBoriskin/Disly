@@ -4,6 +4,9 @@
     <div class="col-md-8">
         <h2>@Html.Raw(Model.Item.Title)</h2>
         @Html.Raw(Model.Item.Text)
+        
+        @*@Html.Raw(Html.Encode(Model.Item.Text))*@
+        
         <br />
         @if (Model.Item.Documents != null)
         {

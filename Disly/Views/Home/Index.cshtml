@@ -11,8 +11,10 @@
     <div class="top-slider-wrapper" @backgroundSlider>
         <div class="container">
             <div class="row row-15">
-                @if (Model.ModuleIndex.Slider != null && Model.ModuleIndex.Slider.Count() > 0)
+                @if (Model.ModuleIndex != null)
                 {
+                    if (Model.ModuleIndex.Slider != null && Model.ModuleIndex.Slider.Count() > 0)
+                    {
                     <div class="col-sm-12 col-md-9 row15-col">
                         <div id="myCarousel" class="carousel slide slider" data-ride="carousel">
                             <!-- Wrapper for slides -->
@@ -61,7 +63,9 @@
                             </div>
                         </div>
                     </div>
+                    }
                 }
+
                 <div class="col-sm-12 col-md-3  row15-col text-right">
                     <div class="slider-message-block">
                         <a target="_blank" href="/RedirectRegistry/Hospitals/@Model.Oid">
@@ -107,91 +111,98 @@
 </div>
 <!-- конец слайдера -->
 <!-- модуль новостей -->
-<div class="container">
-    <div class="news-module">
-        <p class="module-title">Пресс-центр<span class="ti-folder"></span><a class="link-to-archive" href="/press">Архив</a></p>
-        <div class="row">
-            <div class="col-md-3">
-                @if (Model.ModuleIndex.ModuleAnnouncement != null && Model.ModuleIndex.ModuleAnnouncement.Count() > 0)
+@if (Model.NewsIndex != null)
+{
+    <div class="container">
+        <div class="news-module">
+            <p class="module-title">Пресс-центр<span class="ti-folder"></span><a class="link-to-archive" href="/press">Архив</a></p>
+            <div class="row">
+                <div class="col-md-3">
+                    @if (Model.NewsIndex.ModuleAnnouncement != null && Model.NewsIndex.ModuleAnnouncement.Count() > 0)
                 {
-                    foreach (var ann in Model.ModuleIndex.ModuleAnnouncement.ToList()) //for (int j = 0; j < 2; j++)
+                    foreach (var ann in Model.NewsIndex.ModuleAnnouncement.ToList()) //for (int j = 0; j < 2; j++)
                     {
                         string link = "/press/" + ann.Date.Year + "/" + ann.Date.Month + "/" + ann.Date.Day + "/" + ann.Alias;
 
-                        <div class="module-material-item">
-                            <div class="module-material-item-date">
-                                <div class="module-material-item-day">@ann.Date.Day.ToString()</div>
-                                <div class="module-material-item-otherdate">
-                                    <div>@ann.Date.ToString("MMMM")</div>
-                                    <div>@ann.Date.ToString("yyyy")</div>
+                            <div class="module-material-item">
+                                <div class="module-material-item-date">
+                                    <div class="module-material-item-day">@ann.Date.Day.ToString()</div>
+                                    <div class="module-material-item-otherdate">
+                                        <div>@ann.Date.ToString("MMMM")</div>
+                                        <div>@ann.Date.ToString("yyyy")</div>
+                                    </div>
                                 </div>
+                                <a class="module-material-item-group-link" href="/press/@ann.GroupAlias">@ann.GroupName</a>
+                                <a class="module-material-title" href="@link">@ann.Title</a>
                             </div>
-                            <a class="module-material-item-group-link" href="/press/@ann.GroupAlias">@ann.GroupName</a>
-                            <a class="module-material-title" href="@link">@ann.Title</a>
-                        </div>
+                        }
                     }
-                }
-            </div>
-            <div class="col-md-3">
-                @if (Model.ModuleIndex.ModuleNews != null && Model.ModuleIndex.ModuleNews.Count() > 0)
+                </div>
+                <div class="col-md-3">
+                    @if (Model.NewsIndex.ModuleNews != null && Model.NewsIndex.ModuleNews.Count() > 0)
                 {
-                    foreach (var item in Model.ModuleIndex.ModuleNews.ToList())
+                    foreach (var item in Model.NewsIndex.ModuleNews.ToList())
                     {
                         string link = "/press/" + item.Date.Year + "/" + item.Date.Month + "/" + item.Date.Day + "/" + item.Alias;
 
-                        <div class="module-material-item">
-                            <div class="module-material-item-date">
-                                <div class="module-material-item-day">@item.Date.Day.ToString()</div>
-                                <div class="module-material-item-otherdate">
-                                    <div>@item.Date.ToString("MMMM")</div>
-                                    <div>@item.Date.ToString("yyyy")</div>
+                            <div class="module-material-item">
+                                <div class="module-material-item-date">
+                                    <div class="module-material-item-day">@item.Date.Day.ToString()</div>
+                                    <div class="module-material-item-otherdate">
+                                        <div>@item.Date.ToString("MMMM")</div>
+                                        <div>@item.Date.ToString("yyyy")</div>
+                                    </div>
                                 </div>
+                                <a href="/press/@item.GroupAlias" class="module-material-item-group-link">@item.GroupName</a>
+                                <a href="@link" class="module-material-title">@item.Title</a>
                             </div>
-                            <a href="/press/@item.GroupAlias" class="module-material-item-group-link">@item.GroupName</a>
-                            <a href="@link" class="module-material-title">@item.Title</a>
+                        }
+                    }
+                </div>
+                <div class="col-md-6">
+                    @if (Model.NewsIndex.ModuleActual != null && Model.NewsIndex.ModuleActual.FirstOrDefault() != null)
+                    {
+                        var ev = Model.NewsIndex.ModuleActual.FirstOrDefault();
+                        string link = "/press/" + ev.Date.Year + "/" + ev.Date.Month + "/" + ev.Date.Day + "/" + ev.Alias;
+
+                        string eventfoto =(string.IsNullOrEmpty(ev.Photo))? "/Content/img/temporal.jpg": ev.Photo;
+                        //eventfoto=(!string.IsNullOrEmpty(ev.Photo))
+                        //                     ? File.Exists(Server.MapPath(ev.Photo))
+                        //                         ? ev.Photo : "/Content/img/temporal.jpg"
+                        //                     : "/Content/img/temporal.jpg";
+
+
+
+                        <div class="event-item-module">
+                            <div class="event-item-module-opacity top-op">
+                                <div class="module-material-item-date">
+                                    <div class="module-material-item-day">@ev.Date.Day.ToString()</div>
+                                    <div class="module-material-item-otherdate">
+                                        <div>@ev.Date.ToString("MMMM")</div>
+                                        <div>@ev.Date.ToString("yyyy")</div>
+                                    </div>
+                                </div>
+                                <a href="/press/@ev.GroupAlias" class="module-material-item-group-link">@ev.GroupName</a>
+                            </div>
+                            <a href="@link">
+                                <img src="@eventfoto" alt="@ev.Title" />
+                            </a>
+                            <div class="event-item-module-opacity bottom-op">
+                                <a href="@link">@ev.Title</a>
+                            </div>
                         </div>
                     }
-                }
+                </div>
             </div>
-            <div class="col-md-6">
-                @if (Model.ModuleIndex.ModuleActual != null && Model.ModuleIndex.ModuleActual.FirstOrDefault() != null)
-                {
-                    var ev = Model.ModuleIndex.ModuleActual.FirstOrDefault();
-                    string link = "/press/" + ev.Date.Year + "/" + ev.Date.Month + "/" + ev.Date.Day + "/" + ev.Alias;
 
-                    string eventfoto = (!string.IsNullOrWhiteSpace(ev.Photo))
-                                             ? File.Exists(Server.MapPath(ev.Photo))
-                                                 ? ev.Photo : "/Content/img/temporal.jpg"
-                                             : "/Content/img/temporal.jpg";
-
-                    <div class="event-item-module">
-                        <div class="event-item-module-opacity top-op">
-                            <div class="module-material-item-date">
-                                <div class="module-material-item-day">@ev.Date.Day.ToString()</div>
-                                <div class="module-material-item-otherdate">
-                                    <div>@ev.Date.ToString("MMMM")</div>
-                                    <div>@ev.Date.ToString("yyyy")</div>
-                                </div>
-                            </div>
-                            <a href="/press/@ev.GroupAlias" class="module-material-item-group-link">@ev.GroupName</a>
-                        </div>
-                        <a href="@link">
-                            <img src="@eventfoto" alt="@ev.Title" />
-                        </a>
-                        <div class="event-item-module-opacity bottom-op">
-                            <a href="@link">@ev.Title</a>
-                        </div>
-                    </div>
-                }
-            </div>
         </div>
-
     </div>
-</div>
+}
+
 <!-- конец модуля новостей -->
 <!-- модуль полезные ресурсы -->
 <div>
-    @if (Model.ModuleIndex.BenifitBanners != null)
+    @if (Model.ModuleIndex!=null && Model.ModuleIndex.BenifitBanners != null)
     {
         <div class="imglink-benefit-block module-main-page">
             <div class="container">
@@ -241,7 +252,7 @@
 <!-- конец модуля полезные ресурсы -->
 <!-- карта сайта плиткой -->
 <div class="container">
-    @if (Model.ModuleIndex.SitemapPlate != null && Model.ModuleIndex.SitemapPlate.Count() > 0)
+    @if (Model.ModuleIndex !=null && Model.ModuleIndex.SitemapPlate != null && Model.ModuleIndex.SitemapPlate.Count() > 0)
     {
         <div class="sitemap-plates-block">
             <div class="row">

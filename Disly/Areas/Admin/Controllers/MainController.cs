@@ -1,4 +1,5 @@
 ﻿using Disly.Areas.Admin.Models;
+using System;
 using System.Web.Mvc;
 
 namespace Disly.Areas.Admin.Controllers
@@ -26,7 +27,7 @@ namespace Disly.Areas.Admin.Controllers
                 model.AccountLog = _cmsRepository.getCmsUserLog(AccountInfo.Id);
             }
 
-
+            _cmsRepository.permit_OrgsAdminstrativ(Guid.Parse("c8d42fea-dced-4108-9ae8-fd91f184810a"), Guid.Parse("cc7c029a-a19e-11e1-8e66-b803051cdedb"), 6);
             #region Метатеги
             ViewBag.Title = "Главная";
             ViewBag.Description = "";

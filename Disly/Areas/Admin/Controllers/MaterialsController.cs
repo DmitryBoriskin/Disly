@@ -314,14 +314,12 @@ namespace Disly.Areas.Admin.Controllers
                     bindData.Item.Alias = Transliteration.Translit(bindData.Item.Alias);
                 }
 
-                //Определяем Insert или Update
-               
+                //Определяем Insert или Update               
                 if (getMaterial != null)
                 {
                     userMessage.info = "Запись обновлена";
                     res = _cmsRepository.updateCmsMaterial(bindData.Item);
                 }
-
                 else
                 {
                     userMessage.info = "Запись добавлена";                    

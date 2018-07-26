@@ -48,7 +48,14 @@ namespace Disly.Controllers
 
             //model.PressModuleIndex=_repository.getMaterialsModuleNew();
             //model.ModuleIndex = _repository.getMaterialsModuleNew();
+            //model.NewsIndex = _repository.getNewsIndex();
+            //try
+            //{
+
+            //}
+            //catch { }           
             model.ModuleIndex = GetPressModuleIndex();
+            model.NewsIndex = GetNewsIndex();
 
             if (model.SitesInfo != null && model.SitesInfo.Alias == "main" && !IsSpecVersion)
             {
@@ -71,7 +78,19 @@ namespace Disly.Controllers
             if (d == null)
             {
                 d = _repository.getMaterialsModuleNew();
-                cache.Set("PressModuleIndex" + Domain, d, DateTime.Now.AddMinutes(5));
+                cache.Set("PressModuleIndex" + Domain, d, DateTime.Now.AddMinutes(20));
+            }
+            return d;
+        }
+        private IndexNewsModel GetNewsIndex()
+        {
+            ObjectCache cache = MemoryCache.Default;
+
+            IndexNewsModel d = (IndexNewsModel)cache["NewsIndex" + Domain];
+            if (d == null)
+            {
+                d = _repository.getNewsIndex();
+                cache.Set("NewsIndex" + Domain, d, DateTime.Now.AddMinutes(5));
             }
             return d;
         }

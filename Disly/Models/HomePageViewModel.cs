@@ -36,6 +36,7 @@ namespace Disly.Models
         //module index
         public IndexModel ModuleIndex{ get; set; }
 
+        public IndexNewsModel NewsIndex { get; set; }
 
         //public IEnumerable<MaterialFrontModule> ModuleAnnouncement { get; set; }
         //public IEnumerable<MaterialFrontModule> ModuleNews { get; set; }
