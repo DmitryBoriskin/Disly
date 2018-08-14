@@ -95,7 +95,9 @@ namespace cms.dbModel
         public abstract AnketaModel getLastWorksheetItem();
 
         //Vote
-        public abstract IEnumerable<VoteModel> getVote(string Ip); //string domain,
+        public abstract IEnumerable<VoteModel> getVote(string Ip, bool arhiv); //string domain,
+        public abstract VoteList GetVoteList(VoteFilter filter);
+
         public abstract VoteModel getVoteItem(Guid id, string Ip);
         public abstract VoteAnswer[] getVoteAnswer(Guid VoteId, string Ip);
         public abstract VoteStat getVoteStat(Guid AnswerId, Guid VoteId, string Ip);

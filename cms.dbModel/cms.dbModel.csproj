@@ -97,6 +97,7 @@
     <Compile Include="entity\Filter\MaterialFilter.cs" />
     <Compile Include="entity\Filter\OrgFilter.cs" />
     <Compile Include="entity\Filter\FilterParams.cs" />
+    <Compile Include="entity\Filter\VoteFilter.cs" />
     <Compile Include="entity\IndexModel.cs" />
     <Compile Include="entity\IndexNewsModel.cs" />
     <Compile Include="entity\OnlineRegistry\Registry.cs" />

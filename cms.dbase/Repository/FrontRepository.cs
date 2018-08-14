@@ -1443,6 +1443,8 @@ namespace cms.dbase
             }
         }
 
+
+      
         /// <summary>
         /// Новость
         /// </summary>
@@ -2401,7 +2403,7 @@ namespace cms.dbase
         /// <param name="domain"></param>
         /// <param name="Ip"></param>
         /// <returns></returns>
-        public override IEnumerable<VoteModel> getVote(string Ip)
+        public override IEnumerable<VoteModel> getVote(string Ip, bool archive)
         {
             string domain = _domain;
             using (var db = new CMSdb(_context))
@@ -2409,8 +2411,9 @@ namespace cms.dbase
                 //так добились  того чтобы голосования "тянулись" с главного сайта
                 domain = "main";
                 var query = db.content_votes
-                            .Where(w => w.f_site == domain && w.b_disabled == false)
+                            .Where(w => w.f_site == domain && w.b_disabled == false && w.b_archive== archive)
                             .OrderByDescending(o => o.d_date_start)
+                            //.Take(10)
                             .Select(s => new VoteModel()
                             {
                                 Id = s.id,
@@ -2429,6 +2432,55 @@ namespace cms.dbase
                 return null;
             }
         }
+
+        public override VoteList GetVoteList(VoteFilter filter)
+        {
+            using (var db = new CMSdb(_context))
+            {
+
+                var query = db.content_votes
+                            .Where(w => w.f_site == "main" && w.b_disabled == false);
+                if (filter.Type != null && filter.Type== "archive")
+                {
+                    query = query.Where(w => w.b_archive == true);
+                }
+                else
+                {
+                    query = query.Where(w => w.b_archive == false);
+                }
+                query=query.OrderByDescending(w => w.d_date_start);
+                int itemCount = query.Count();
+                
+
+                var votelist = query.Skip(filter.Size * (filter.Page - 1))
+                                    .Take(filter.Size)
+                                    .Select(s => new VoteModel()
+                                    {
+                                        Id = s.id,
+                                        Header = s.c_header,
+                                        Text = s.c_text,
+                                        Type = s.b_type,
+                                        DateStart = s.d_date_start,
+                                        DateEnd = s.d_date_end,
+                                        Answer = getVoteAnswer(s.id, filter.Ip),
+                                        ShowStatistic = ShowStatic(s.id, filter.Ip)
+                                    });
+                if (votelist.Any())
+                    return new VoteList()
+                    {
+                        Data = votelist.ToArray(),
+                        Pager = new Pager()
+                        {
+                            Page = filter.Page,
+                            Size = filter.Size,
+                            ItemsCount = itemCount,
+                            //PageCount = (itemCount % filter.Size > 0) ? (itemCount / filter.Size) + 1 : itemCount / filter.Size
+                        }
+                    };
+                else return null;
+            }
+        }
+
 
         /// <summary>
         /// определяем показывать статистику или форму голосования

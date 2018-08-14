@@ -3,12 +3,14 @@ using Disly.Models;
 using System;
 using System.Web.Mvc;
 using System.Runtime.Caching;
+using System.Web.UI;
 
 namespace Disly.Controllers
 {
     public class HomeController : RootController
     {
         private HomePageViewModel model;
+        //protected string Id = "";
 
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
@@ -21,13 +23,14 @@ namespace Disly.Controllers
                 //MainMenu= mainMenu,
                 BannerArrayLayout = bannerArrayLayout,           
             };
+            //Id = model.SitesInfo.Id.ToString();
         }
 
         /// <summary>
         /// Сраница по умолчанию
         /// </summary>
         /// <returns ></returns>
-        //[OutputCache(Duration = 60, Location = OutputCacheLocation.Server, VaryByHeader = "host")]
+        //[OutputCache(Duration = 60, Location = OutputCacheLocation.Server, VaryByCustom = "")]
         public ActionResult Index()
         {
             #region currentPage

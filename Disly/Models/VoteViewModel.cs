@@ -8,7 +8,10 @@ namespace Disly.Models
     /// </summary>
     public class VoteViewModel : PageViewModel
     {         
-        public IEnumerable<VoteModel> List { get; set; }        
+        public IEnumerable<VoteModel> List { get; set; }    
+        
+        public VoteList VoteList { get; set; }
+
         public VoteModel Item { get; set; }
         public List<SiteMapModel> Siblings { get; set; }
     }

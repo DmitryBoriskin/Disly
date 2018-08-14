@@ -2,9 +2,18 @@
 @{
     Layout = null;
 }
-@if (Model.List != null)
+@if (Model.VoteList != null && Model.VoteList.Data != null)
 {
-    foreach (var item in Model.List)
+    if (ViewBag.VoteType == "archive")
+    {
+        <a href="/vote" class="btn btn-default ">Назад</a>
+    }
+    else
+    {
+        <a href="/vote?type=archive" class="btn btn-default " >Архив</a>
+    }
+
+    foreach (var item in Model.VoteList.Data)
     {
         string date = item.DateStart.ToString("dd.MM.yyyy");
         date += item.DateEnd != null
@@ -30,12 +39,12 @@
                     @foreach (var answer in item.Answer)
                     {
                         if (answer.Statistic.AllVoteCount > 0)
-                        {
-                            string proc = ((100 / answer.Statistic.AllVoteCount) * answer.Statistic.ThisVoteCount).ToString();
+                        {                            
+                            double proc = (int)((100 / (double)answer.Statistic.AllVoteCount) * answer.Statistic.ThisVoteCount);
                             <div class="vote_stat">
                                 <div class="vote_stat_text">@answer.Variant <small>@answer.Statistic.ThisVoteCount из @answer.Statistic.AllVoteCount (@proc&nbsp;%)</small></div>
                                 <div class="vote_stat_load_wr">
-                                    <div class="vote_stat_load" style="width:@proc%"></div>
+                                    <div class="vote_stat_load" style="width:@(proc)%"></div>
                                 </div>
                             </div>
                         }
@@ -76,5 +85,9 @@
                 </form>
             }
         </div>
+    }
+    if (Model.VoteList.Pager != null)
+    {
+        @Html.Partial("Part/Pager", Model.VoteList.Pager)
     }
 }

@@ -75,6 +75,8 @@ namespace cms.dbModel.entity
         public bool ShowStatistic { get; set; } 
     }
 
+
+
     /// <summary>
     /// Варианты ответов
     /// </summary>
@@ -146,6 +148,14 @@ namespace cms.dbModel.entity
         /// Кол-во ответов на этот вопрос
         /// </summary>
         public int ThisVoteCount { get; set; }
+
+        //public double Proc
+        //{
+        //    get
+        //    {
+        //        return (Proc * 100 / AllVoteCount);
+        //    }
+        //}
     }
 
 }

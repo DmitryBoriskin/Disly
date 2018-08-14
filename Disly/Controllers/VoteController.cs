@@ -71,7 +71,19 @@ namespace Disly.Controllers
                 Url = ""
             });
 
-            model.List = _repository.getVote(_ip); //Domain,
+            var filter = getFilter();
+            filter.Disabled = false;
+            
+            VoteFilter filtervote = FilterParams.Extend<VoteFilter>(filter);            
+            filtervote.Ip = _ip;
+            ViewBag.VoteType = filtervote.Type;
+
+            ViewBag.Title = filtervote.Type == "archive" ? "Архив голосований" : ViewBag.Title;
+
+
+            //model.List = _repository.getVote(_ip,false); //Domain,
+            model.VoteList = _repository.GetVoteList(filtervote);
+
             model.Siblings = (model.CurrentPage != null) ? _repository.getSiteMapSiblingElements("/feedback/") : null;
 
             if (model.Siblings != null && !model.Siblings.Select(p => p.Id).Contains(model.CurrentPage.Id))
